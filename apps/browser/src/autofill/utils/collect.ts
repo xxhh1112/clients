@@ -1,3 +1,4 @@
+import { TYPE_CHECK } from "../constants";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
 /**
@@ -123,7 +124,7 @@ export function isElementVisible(el: any) {
     }
 
     // If the element's computed style includes `display: none` or `visibility: hidden`, we know it's hidden
-    if ("none" === elStyle.display || "hidden" == elStyle.visibility) {
+    if (elStyle.display === "none" || elStyle.visibility === "hidden") {
       return false;
     }
 
@@ -195,8 +196,8 @@ export function isElementViewable(el: FormElement) {
     // If the element we found is a label, and the element we're checking has labels
     if (
       pointEl.tagName &&
-      "string" === typeof pointEl.tagName &&
-      "label" === pointEl.tagName.toLowerCase() &&
+      typeof pointEl.tagName === TYPE_CHECK.STRING &&
+      pointEl.tagName.toLowerCase() === "label" &&
       (el as FillableControl).labels &&
       0 < ((el as FillableControl).labels?.length || 0)
     ) {
@@ -332,13 +333,13 @@ export function focusElement(el: FillableControl, setVal: boolean) {
 export function getElementAttrValue(el: any, attrName: string) {
   let attrVal = el[attrName];
 
-  if ("string" == typeof attrVal) {
+  if (typeof attrVal === TYPE_CHECK.STRING) {
     return attrVal;
   }
 
   attrVal = el.getAttribute(attrName);
 
-  return "string" == typeof attrVal ? attrVal : null;
+  return typeof attrVal == TYPE_CHECK.STRING ? attrVal : null;
 }
 
 /**
@@ -353,7 +354,7 @@ export function getElementValue(el: any) {
     case "hidden":
       el = el.value;
 
-      if (!el || "number" != typeof el.length) {
+      if (!el || typeof el.length != TYPE_CHECK.NUMBER) {
         return "";
       }
 
@@ -456,7 +457,7 @@ export function addProp(obj: Record<string, any>, prop: string, val: any, d?: un
  * @returns Lowercase string
  */
 export function toLowerString(s: string | null) {
-  return typeof s === "string" ? s.toLowerCase() : ("" + s).toLowerCase();
+  return s && typeof s === TYPE_CHECK.STRING ? s.toLowerCase() : ("" + s).toLowerCase();
 }
 
 /**

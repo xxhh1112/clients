@@ -27,6 +27,7 @@
   SOFTWARE.
   */
 
+import { EVENTS, TYPE_CHECK } from "../constants";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript, {
@@ -82,7 +83,7 @@ function collect(document: Document) {
   function doEventOnElement(kedol: HTMLElement, fonor: string) {
     let quebo: any;
     isFirefox
-      ? ((quebo = document.createEvent("KeyboardEvent")),
+      ? ((quebo = document.createEvent(EVENTS.KEYBOARDEVENT)),
         quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
       : ((quebo = kedol.ownerDocument.createEvent("Events")),
         quebo.initEvent(fonor, true, false),
@@ -132,7 +133,7 @@ function collect(document: Document) {
 
         for (; theEl && theEl != (theDoc as any); theEl = theEl.parentNode as HTMLElement) {
           if (
-            "label" === toLowerString(theEl.tagName) &&
+            toLowerString(theEl.tagName) === "label" &&
             -1 === theLabels.indexOf(theEl as HTMLLabelElement)
           ) {
             theLabels.push(theEl as HTMLLabelElement);
@@ -143,9 +144,9 @@ function collect(document: Document) {
       if (0 === theLabels.length) {
         theEl = el.parentNode as HTMLLabelElement;
         if (
-          "dd" === theEl.tagName.toLowerCase() &&
-          null !== theEl.previousElementSibling &&
-          "dt" === theEl.previousElementSibling.tagName.toLowerCase()
+          theEl.tagName.toLowerCase() === "dd" &&
+          theEl.previousElementSibling !== null &&
+          theEl.previousElementSibling.tagName.toLowerCase() === "dt"
         ) {
           theLabels.push(theEl.previousElementSibling as HTMLLabelElement);
         }
@@ -194,9 +195,9 @@ function collect(document: Document) {
         const field: Record<string, any> = {};
         const opId = "__" + elIndex;
         let elMaxLen =
-          -1 == (el as HTMLInputElement).maxLength ? 999 : (el as HTMLInputElement).maxLength;
+          (el as HTMLInputElement).maxLength == -1 ? 999 : (el as HTMLInputElement).maxLength;
 
-        if (!elMaxLen || ("number" === typeof elMaxLen && isNaN(elMaxLen))) {
+        if (!elMaxLen || (typeof elMaxLen === TYPE_CHECK.NUMBER && isNaN(elMaxLen))) {
           elMaxLen = 999;
         }
 
@@ -261,9 +262,9 @@ function collect(document: Document) {
         addProp(field, "disabled", (el as FillableControl).disabled);
         addProp(field, "readonly", (el as any).b || (el as HTMLInputElement).readOnly);
         addProp(field, "selectInfo", getSelectElementOptions(el as HTMLSelectElement));
-        addProp(field, "aria-hidden", "true" == el.getAttribute("aria-hidden"), false);
-        addProp(field, "aria-disabled", "true" == el.getAttribute("aria-disabled"), false);
-        addProp(field, "aria-haspopup", "true" == el.getAttribute("aria-haspopup"), false);
+        addProp(field, "aria-hidden", el.getAttribute("aria-hidden") == "true", false);
+        addProp(field, "aria-disabled", el.getAttribute("aria-disabled") == "true", false);
+        addProp(field, "aria-haspopup", el.getAttribute("aria-haspopup") == "true", false);
         addProp(field, "data-unmasked", el.dataset.unmasked);
         addProp(field, "data-stripe", getElementAttrValue(el, "data-stripe"));
         addProp(
@@ -296,12 +297,12 @@ function collect(document: Document) {
 
         const originalValue = el.value;
         // click it
-        !el || (el && "function" !== typeof el.click) || el.click();
+        !el || (el && typeof el.click !== TYPE_CHECK.FUNCTION) || el.click();
         focusElement(el, false);
 
-        el.dispatchEvent(doEventOnElement(el, "keydown"));
-        el.dispatchEvent(doEventOnElement(el, "keypress"));
-        el.dispatchEvent(doEventOnElement(el, "keyup"));
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
 
         el.value !== originalValue && (el.value = originalValue);
 
@@ -312,14 +313,14 @@ function collect(document: Document) {
 
         const elValue = el.value;
 
-        const event1 = el.ownerDocument.createEvent("HTMLEvents"),
-          event2 = el.ownerDocument.createEvent("HTMLEvents");
-        el.dispatchEvent(doEventOnElement(el, "keydown"));
-        el.dispatchEvent(doEventOnElement(el, "keypress"));
-        el.dispatchEvent(doEventOnElement(el, "keyup"));
-        event2.initEvent("input", true, true);
+        const event1 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS),
+          event2 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS);
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
+        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
+        event2.initEvent(EVENTS.INPUT, true, true);
         el.dispatchEvent(event2);
-        event1.initEvent("change", true, true);
+        event1.initEvent(EVENTS.CHANGE, true, true);
         el.dispatchEvent(event1);
 
         el.blur();
@@ -398,16 +399,16 @@ function fill(document: Document, fillScript: AutofillScript) {
     const doOperation = function (ops: FillScript[], theOperation: () => void): void {
       let op = ops[0];
 
-      if (void 0 === op) {
+      if (op === void 0) {
         theOperation();
       } else {
         // should we delay?
-        if ("delay" === (op as any).operation || "delay" === op[0]) {
+        if ((op as any).operation === "delay" || op[0] === "delay") {
           operationDelayMs = (op as any).parameters ? (op as any).parameters[0] : op[1];
         } else {
           if ((op = normalizeOp(op))) {
             for (let opIndex = 0; opIndex < op.length; opIndex++) {
-              -1 === operationsToDo.indexOf(op[opIndex]) && operationsToDo.push(op[opIndex]);
+              operationsToDo.indexOf(op[opIndex]) && operationsToDo.push(op[opIndex]) === -1;
             }
           }
 
@@ -562,7 +563,7 @@ function fill(document: Document, fillScript: AutofillScript) {
 
           break;
         case "radio":
-          true === checkRadioTrueOps[op.toLowerCase()] && el.click();
+          checkRadioTrueOps[op.toLowerCase()] === true && el.click();
 
           break;
         default:
@@ -638,6 +639,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     const pageDetailsObj: AutofillPageDetails = JSON.parse(pageDetails);
 
     sendResponse(pageDetailsObj);
+
     return true;
   }
 });

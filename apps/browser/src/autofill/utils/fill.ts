@@ -1,8 +1,5 @@
+import { EVENTS, TYPE_CHECK } from "../constants";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
-
-const TYPE_CHECK = {
-  FUNCTION: "function",
-};
 
 // Check if URL is not secure when the original saved one was
 export function urlNotSecure(savedURLs: string[]) {
@@ -38,9 +35,9 @@ export function urlNotSecure(savedURLs: string[]) {
  * @returns {Event} A normalized event
  */
 function normalizeEvent(el: FillableControl, eventName: string) {
-  let ev: any;
+  let ev;
 
-  if ("KeyboardEvent" in window) {
+  if (EVENTS.KEYBOARDEVENT in window) {
     ev = new window.KeyboardEvent(eventName, {
       bubbles: true,
       cancelable: false,
@@ -64,7 +61,7 @@ function normalizeEvent(el: FillableControl, eventName: string) {
  * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
  */
 function clickElement(el: HTMLElement) {
-  if (!el || (el && TYPE_CHECK.FUNCTION !== typeof el.click)) {
+  if (!el || (el && typeof el.click !== TYPE_CHECK.FUNCTION)) {
     return false;
   }
 
@@ -198,16 +195,16 @@ export function getElementByOpId(theOpId: string): FormElement | null {
  * @param {HTMLElement} el
  */
 export function setValueForElementByEvent(el: FillableControl) {
-  const valueToSet = el.value,
-    ev1 = el.ownerDocument.createEvent("HTMLEvents"),
-    ev2 = el.ownerDocument.createEvent("HTMLEvents");
+  const valueToSet = el.value;
+  const ev1 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS);
+  const ev2 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS);
 
-  el.dispatchEvent(normalizeEvent(el, "keydown"));
-  el.dispatchEvent(normalizeEvent(el, "keypress"));
-  el.dispatchEvent(normalizeEvent(el, "keyup"));
-  ev2.initEvent("input", true, true);
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYDOWN));
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYPRESS));
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYUP));
+  ev2.initEvent(EVENTS.INPUT, true, true);
   el.dispatchEvent(ev2);
-  ev1.initEvent("change", true, true);
+  ev1.initEvent(EVENTS.CHANGE, true, true);
   el.dispatchEvent(ev1);
   el.blur();
   el.value !== valueToSet && (el.value = valueToSet);
@@ -239,9 +236,9 @@ export function setValueForElement(el: FillableControl) {
 
   clickElement(el);
   doFocusElement(el, false);
-  el.dispatchEvent(normalizeEvent(el, "keydown"));
-  el.dispatchEvent(normalizeEvent(el, "keypress"));
-  el.dispatchEvent(normalizeEvent(el, "keyup"));
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYDOWN));
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYPRESS));
+  el.dispatchEvent(normalizeEvent(el, EVENTS.KEYUP));
   el.value !== valueToSet && (el.value = valueToSet);
 }
 
@@ -279,8 +276,9 @@ export function doClickByQuery(query: string) {
     Array.prototype.slice.call(query),
     function (el: HTMLInputElement) {
       clickElement(el);
-      TYPE_CHECK.FUNCTION === typeof el.click && el.click();
-      TYPE_CHECK.FUNCTION === typeof el.focus && doFocusElement(el, true);
+      typeof el.click === TYPE_CHECK.FUNCTION && el.click();
+      typeof el.focus === TYPE_CHECK.FUNCTION && doFocusElement(el, true);
+
       return [el];
     },
     this
@@ -296,11 +294,11 @@ export function doFocusByOpId(opId: string): null {
   const el = getElementByOpId(opId) as FillableControl;
 
   if (el) {
-    if (TYPE_CHECK.FUNCTION === typeof el.click) {
+    if (typeof el.click === TYPE_CHECK.FUNCTION) {
       el.click();
     }
 
-    if (TYPE_CHECK.FUNCTION === typeof el.focus) {
+    if (typeof el.focus === TYPE_CHECK.FUNCTION) {
       doFocusElement(el, true);
     }
   }
