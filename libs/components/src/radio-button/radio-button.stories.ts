@@ -1,4 +1,10 @@
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from "@angular/forms";
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -99,7 +105,7 @@ export const InlineHint = InlineHintTemplate.bind({});
 const BlockTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
   props: {
     formObj: new FormGroup({
-      radio: new FormControl(0),
+      radio: new FormControl(null, [Validators.required]),
     }),
   },
   template: `

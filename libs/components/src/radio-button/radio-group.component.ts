@@ -1,5 +1,5 @@
 import { Component, ContentChild, HostBinding, Input, Optional, Self } from "@angular/core";
-import { ControlValueAccessor, NgControl } from "@angular/forms";
+import { ControlValueAccessor, NgControl, Validators } from "@angular/forms";
 
 import { BitLabel } from "../form-control/label.directive";
 
@@ -33,6 +33,10 @@ export class RadioGroupComponent implements ControlValueAccessor {
     if (ngControl != null) {
       ngControl.valueAccessor = this;
     }
+  }
+
+  get required() {
+    return this.ngControl?.control?.hasValidator(Validators.required) ?? false;
   }
 
   // ControlValueAccessor
