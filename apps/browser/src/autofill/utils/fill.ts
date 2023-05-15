@@ -45,11 +45,14 @@ function normalizeEvent(el: FillableControl, eventName: string) {
   } else {
     ev = el.ownerDocument.createEvent("Events");
     ev.initEvent(eventName, true, false);
-    ev.charCode = 0;
-    ev.keyCode = 0;
-    ev.which = 0;
-    ev.srcElement = el;
-    ev.target = el;
+    ev = {
+      ...ev,
+      charCode: 0,
+      keyCode: 0,
+      which: 0,
+      srcElement: el,
+      target: el,
+    };
   }
 
   return ev;
