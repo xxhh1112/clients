@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -38,15 +38,15 @@ export default {
   },
 } as Meta;
 
-const ListTemplate: StoryFn<BadgeListComponent> = (args: BadgeListComponent) => ({
-  props: args,
-  template: `
-    <bit-badge-list [badgeType]="badgeType" [maxItems]="maxItems" [items]="items"></bit-badge-list>
-  `,
-});
+type Story = StoryObj<BadgeListComponent>;
 
-export const Default = {
-  render: ListTemplate,
+export const Default: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-badge-list [badgeType]="badgeType" [maxItems]="maxItems" [items]="items"></bit-badge-list>
+    `,
+  }),
 
   args: {
     badgeType: "info",

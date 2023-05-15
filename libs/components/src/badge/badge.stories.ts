@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { BadgeDirective } from "./badge.directive";
 
@@ -21,59 +21,53 @@ export default {
       url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A16956",
     },
   },
-} as Meta;
+} as Meta<BadgeDirective>;
 
-const Template: StoryFn<BadgeDirective> = (args: BadgeDirective) => ({
-  props: args,
-  template: `
-    <span class="tw-text-main">Span </span><span bitBadge [badgeType]="badgeType">Badge</span>
-    <br><br>
-    <span class="tw-text-main">Link </span><a href="#" bitBadge [badgeType]="badgeType">Badge</a>
-    <br><br>
-    <span class="tw-text-main">Button </span><button bitBadge [badgeType]="badgeType">Badge</button>
-  `,
-});
+type Story = StoryObj<BadgeDirective>;
 
-export const Primary = {
-  render: Template,
-  args: {},
+export const Primary: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <span class="tw-text-main">Span </span><span bitBadge [badgeType]="badgeType">Badge</span>
+      <br><br>
+      <span class="tw-text-main">Link </span><a href="#" bitBadge [badgeType]="badgeType">Badge</a>
+      <br><br>
+      <span class="tw-text-main">Button </span><button bitBadge [badgeType]="badgeType">Badge</button>
+    `,
+  }),
 };
 
-export const Secondary = {
-  render: Template,
-
+export const Secondary: Story = {
+  ...Primary,
   args: {
     badgeType: "secondary",
   },
 };
 
-export const Success = {
-  render: Template,
-
+export const Success: Story = {
+  ...Primary,
   args: {
     badgeType: "success",
   },
 };
 
-export const Danger = {
-  render: Template,
-
+export const Danger: Story = {
+  ...Primary,
   args: {
     badgeType: "danger",
   },
 };
 
-export const Warning = {
-  render: Template,
-
+export const Warning: Story = {
+  ...Primary,
   args: {
     badgeType: "warning",
   },
 };
 
-export const Info = {
-  render: Template,
-
+export const Info: Story = {
+  ...Primary,
   args: {
     badgeType: "info",
   },

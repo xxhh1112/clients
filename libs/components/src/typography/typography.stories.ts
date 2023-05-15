@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj } from "@storybook/angular";
 
 import { TypographyDirective } from "./typography.directive";
 
@@ -10,49 +10,45 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn = (args) => ({
-  props: args,
-  template: `<span [bitTypography]="bitTypography" class="tw-text-main">{{text}}</span>`,
-});
+type Story = StoryObj<TypographyDirective & { text: string }>;
 
-export const H1 = {
-  render: Template,
-
+export const H1: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<span [bitTypography]="bitTypography" class="tw-text-main">{{text}}</span>`,
+  }),
   args: {
     bitTypography: "h1",
     text: "h1. Page Title",
   },
 };
 
-export const H2 = {
-  render: Template,
-
+export const H2: Story = {
+  ...H1,
   args: {
     bitTypography: "h2",
     text: "h2. Page Section",
   },
 };
 
-export const H3 = {
-  render: Template,
-
+export const H3: Story = {
+  ...H1,
   args: {
     bitTypography: "h3",
     text: "h3. Page Section",
   },
 };
 
-export const H4 = {
-  render: Template,
-
+export const H4: Story = {
+  ...H1,
   args: {
     bitTypography: "h4",
     text: "h4. Page Section",
   },
 };
 
-export const H5 = {
-  render: Template,
+export const H5: Story = {
+  ...H1,
 
   args: {
     bitTypography: "h5",
@@ -60,8 +56,8 @@ export const H5 = {
   },
 };
 
-export const H6 = {
-  render: Template,
+export const H6: Story = {
+  ...H1,
 
   args: {
     bitTypography: "h6",
@@ -69,27 +65,24 @@ export const H6 = {
   },
 };
 
-export const Body1 = {
-  render: Template,
-
+export const Body1: Story = {
+  ...H1,
   args: {
     bitTypography: "body1",
     text: "Body 1",
   },
 };
 
-export const Body2 = {
-  render: Template,
-
+export const Body2: Story = {
+  ...H1,
   args: {
     bitTypography: "body2",
     text: "Body 2",
   },
 };
 
-export const Helper = {
-  render: Template,
-
+export const Helper: Story = {
+  ...H1,
   args: {
     bitTypography: "helper",
     text: "Helper Text",
