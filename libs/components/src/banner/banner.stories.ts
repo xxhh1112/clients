@@ -3,6 +3,7 @@ import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { IconButtonModule } from "../icon-button";
+import { LinkModule } from "../link";
 import { SharedModule } from "../shared/shared.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
@@ -13,7 +14,7 @@ export default {
   component: BannerComponent,
   decorators: [
     moduleMetadata({
-      imports: [SharedModule, IconButtonModule],
+      imports: [SharedModule, IconButtonModule, LinkModule],
       providers: [
         {
           provide: I18nService,
@@ -51,10 +52,14 @@ export const Premium: Story = {
     template: `
       <bit-banner [bannerType]="bannerType" (onClose)="onClose($event)">
         Content Really Long Text Lorem Ipsum Ipsum Ipsum
-        <button>Button</button>
+        <button bitLink linkType="contrast">Button</button>
       </bit-banner>
       `,
   }),
+};
+
+Premium.args = {
+  bannerType: "premium",
 };
 
 export const Info: Story = {
