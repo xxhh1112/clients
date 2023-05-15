@@ -32,7 +32,7 @@ const preview: Preview = {
         order: ["Documentation", ["Introduction", "Colors", "Icons"], "Component Library"],
       },
     },
-    docs: { inlineStories: true },
+    docs: { source: { type: "dynamic", excludeDecorators: true } },
   },
 };
 
