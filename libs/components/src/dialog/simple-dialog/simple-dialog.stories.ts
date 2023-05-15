@@ -28,14 +28,14 @@ export const Default: Story = {
   render: (args) => ({
     props: args,
     template: `
-    <bit-simple-dialog>
-      <span bitDialogTitle>Alert Dialog</span>
-      <span bitDialogContent>Message Content</span>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary">Yes</button>
-        <button bitButton buttonType="secondary">No</button>
-      </ng-container>
-    </bit-simple-dialog>
+      <bit-simple-dialog>
+        <span bitDialogTitle>Alert Dialog</span>
+        <span bitDialogContent>Message Content</span>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary">Yes</button>
+          <button bitButton buttonType="secondary">No</button>
+        </ng-container>
+      </bit-simple-dialog>
     `,
   }),
 };
@@ -44,15 +44,15 @@ export const CustomIcon: Story = {
   render: (args) => ({
     props: args,
     template: `
-    <bit-simple-dialog>
-      <i bitDialogIcon class="bwi bwi-star tw-text-3xl tw-text-success" aria-hidden="true"></i>
-      <span bitDialogTitle>Premium Subscription Available</span>
-      <span bitDialogContent> Message Content</span>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary">Yes</button>
-        <button bitButton buttonType="secondary">No</button>
-      </ng-container>
-    </bit-simple-dialog>
+      <bit-simple-dialog>
+        <i bitDialogIcon class="bwi bwi-star tw-text-3xl tw-text-success" aria-hidden="true"></i>
+        <span bitDialogTitle>Premium Subscription Available</span>
+        <span bitDialogContent> Message Content</span>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary">Yes</button>
+          <button bitButton buttonType="secondary">No</button>
+        </ng-container>
+      </bit-simple-dialog>
     `,
   }),
 };
@@ -61,21 +61,21 @@ export const ScrollingContent: Story = {
   render: (args: SimpleDialogComponent) => ({
     props: args,
     template: `
-    <bit-simple-dialog>
-      <span bitDialogTitle>Alert Dialog</span>
-      <span bitDialogContent>
-        Message Content
-        Message text goes here.<br>
-        <ng-container *ngFor="let _ of [].constructor(100)">
-          repeating lines of characters <br>
+      <bit-simple-dialog>
+        <span bitDialogTitle>Alert Dialog</span>
+        <span bitDialogContent>
+          Message Content
+          Message text goes here.<br>
+          <ng-container *ngFor="let _ of [].constructor(100)">
+            repeating lines of characters <br>
+          </ng-container>
+          end of sequence!
+        </span>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary">Yes</button>
+          <button bitButton buttonType="secondary">No</button>
         </ng-container>
-        end of sequence!
-      </span>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary">Yes</button>
-        <button bitButton buttonType="secondary">No</button>
-      </ng-container>
-    </bit-simple-dialog>
+      </bit-simple-dialog>
     `,
   }),
   args: {

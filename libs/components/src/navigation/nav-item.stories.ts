@@ -59,33 +59,33 @@ export const WithChildButtons: Story = {
   render: (args: NavItemComponent) => ({
     props: args,
     template: `
-        <bit-nav-item text="Hello World" [route]="['']" icon="bwi-collection">
-          <button
-            slot-start
-            class="tw-ml-auto"
-            [bitIconButton]="'bwi-clone'"
-            [buttonType]="'contrast'"
-            size="small"
-            aria-label="option 1"
-          ></button>
-          <button
-            slot-end
-            class="tw-ml-auto"
-            [bitIconButton]="'bwi-pencil-square'"
-            [buttonType]="'contrast'"
-            size="small"
-            aria-label="option 2"
-          ></button>
-          <button
-            slot-end
-            class="tw-ml-auto"
-            [bitIconButton]="'bwi-check'"
-            [buttonType]="'contrast'"
-            size="small"
-            aria-label="option 3"
-          ></button>
-        </bit-nav-item>
-      `,
+      <bit-nav-item text="Hello World" [route]="['']" icon="bwi-collection">
+        <button
+          slot-start
+          class="tw-ml-auto"
+          [bitIconButton]="'bwi-clone'"
+          [buttonType]="'contrast'"
+          size="small"
+          aria-label="option 1"
+        ></button>
+        <button
+          slot-end
+          class="tw-ml-auto"
+          [bitIconButton]="'bwi-pencil-square'"
+          [buttonType]="'contrast'"
+          size="small"
+          aria-label="option 2"
+        ></button>
+        <button
+          slot-end
+          class="tw-ml-auto"
+          [bitIconButton]="'bwi-check'"
+          [buttonType]="'contrast'"
+          size="small"
+          aria-label="option 3"
+        ></button>
+      </bit-nav-item>
+    `,
   }),
 };
 

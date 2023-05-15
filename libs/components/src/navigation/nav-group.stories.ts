@@ -40,17 +40,17 @@ export const Default: StoryObj<NavGroupComponent> = {
   render: (args) => ({
     props: args,
     template: `
-        <bit-nav-group text="Hello World (Anchor)" [route]="['']" icon="bwi-filter" [open]="true">
-          <bit-nav-item text="Child A" route="#" icon="bwi-filter"></bit-nav-item>
-          <bit-nav-item text="Child B" route="#"></bit-nav-item>
-          <bit-nav-item text="Child C" route="#" icon="bwi-filter"></bit-nav-item>
-        </bit-nav-group>
-        <bit-nav-group text="Lorem Ipsum (Button)" icon="bwi-filter">
-          <bit-nav-item text="Child A" icon="bwi-filter"></bit-nav-item>
-          <bit-nav-item text="Child B"></bit-nav-item>
-          <bit-nav-item text="Child C" icon="bwi-filter"></bit-nav-item>
-        </bit-nav-group>
-      `,
+      <bit-nav-group text="Hello World (Anchor)" [route]="['']" icon="bwi-filter" [open]="true">
+        <bit-nav-item text="Child A" route="#" icon="bwi-filter"></bit-nav-item>
+        <bit-nav-item text="Child B" route="#"></bit-nav-item>
+        <bit-nav-item text="Child C" route="#" icon="bwi-filter"></bit-nav-item>
+      </bit-nav-group>
+      <bit-nav-group text="Lorem Ipsum (Button)" icon="bwi-filter">
+        <bit-nav-item text="Child A" icon="bwi-filter"></bit-nav-item>
+        <bit-nav-item text="Child B"></bit-nav-item>
+        <bit-nav-item text="Child C" icon="bwi-filter"></bit-nav-item>
+      </bit-nav-group>
+    `,
   }),
 };
 
