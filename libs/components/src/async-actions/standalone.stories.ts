@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { action } from "@storybook/addon-actions";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 import { delay, of } from "rxjs";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -80,25 +80,31 @@ export default {
   ],
 } as Meta;
 
-const PromiseTemplate: Story<PromiseExampleComponent> = (args: PromiseExampleComponent) => ({
+const PromiseTemplate: StoryFn<PromiseExampleComponent> = (args: PromiseExampleComponent) => ({
   props: args,
   template: `<app-promise-example></app-promise-example>`,
 });
 
-export const UsingPromise = PromiseTemplate.bind({});
+export const UsingPromise = {
+  render: PromiseTemplate,
+};
 
-const ObservableTemplate: Story<ObservableExampleComponent> = (
+const ObservableTemplate: StoryFn<ObservableExampleComponent> = (
   args: ObservableExampleComponent
 ) => ({
   template: `<app-observable-example></app-observable-example>`,
 });
 
-export const UsingObservable = ObservableTemplate.bind({});
+export const UsingObservable = {
+  render: ObservableTemplate,
+};
 
-const RejectedPromiseTemplate: Story<ObservableExampleComponent> = (
+const RejectedPromiseTemplate: StoryFn<ObservableExampleComponent> = (
   args: ObservableExampleComponent
 ) => ({
   template: `<app-rejected-promise-example></app-rejected-promise-example>`,
 });
 
-export const RejectedPromise = RejectedPromiseTemplate.bind({});
+export const RejectedPromise = {
+  render: RejectedPromiseTemplate,
+};

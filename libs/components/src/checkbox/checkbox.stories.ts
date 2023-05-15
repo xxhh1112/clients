@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 
@@ -69,25 +69,29 @@ export default {
   },
 } as Meta;
 
-const DefaultTemplate: Story<ExampleComponent> = (args: ExampleComponent) => ({
+const DefaultTemplate: StoryFn<ExampleComponent> = (args: ExampleComponent) => ({
   props: args,
   template: `<app-example [checked]="checked" [disabled]="disabled"></app-example>`,
 });
 
-export const Default = DefaultTemplate.bind({});
-Default.parameters = {
-  docs: {
-    source: {
-      code: template,
+export const Default = {
+  render: DefaultTemplate,
+
+  parameters: {
+    docs: {
+      source: {
+        code: template,
+      },
     },
   },
-};
-Default.args = {
-  checked: false,
-  disabled: false,
+
+  args: {
+    checked: false,
+    disabled: false,
+  },
 };
 
-const CustomTemplate: Story = (args) => ({
+const CustomTemplate: StoryFn = (args) => ({
   props: args,
   template: `
     <div class="tw-flex tw-flex-col tw-w-32">
@@ -108,4 +112,6 @@ const CustomTemplate: Story = (args) => ({
 });
 CustomTemplate.args = {};
 
-export const Custom = CustomTemplate.bind({});
+export const Custom = {
+  render: CustomTemplate,
+};

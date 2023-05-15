@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogModule, DialogRef } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -90,8 +90,10 @@ export default {
   },
 } as Meta;
 
-const Template: Story<StoryDialogComponent> = (args: StoryDialogComponent) => ({
+const Template: StoryFn<StoryDialogComponent> = (args: StoryDialogComponent) => ({
   props: args,
 });
 
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

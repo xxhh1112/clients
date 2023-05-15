@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/angular";
+import { Meta, StoryFn } from "@storybook/angular";
 
 import { ColorPasswordComponent } from "./color-password.component";
 
@@ -19,14 +19,14 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ColorPasswordComponent> = (args: ColorPasswordComponent) => ({
+const Template: StoryFn<ColorPasswordComponent> = (args: ColorPasswordComponent) => ({
   props: args,
   template: `
   <bit-color-password class="tw-text-base" [password]="password" [showCount]="showCount"></bit-color-password>
   `,
 });
 
-const WrappedTemplate: Story<ColorPasswordComponent> = (args: ColorPasswordComponent) => ({
+const WrappedTemplate: StoryFn<ColorPasswordComponent> = (args: ColorPasswordComponent) => ({
   props: args,
   template: `
   <div class="tw-max-w-32">
@@ -35,18 +35,28 @@ const WrappedTemplate: Story<ColorPasswordComponent> = (args: ColorPasswordCompo
   `,
 });
 
-export const ColorPassword = Template.bind({});
-
-export const WrappedColorPassword = WrappedTemplate.bind({});
-
-export const ColorPasswordCount = Template.bind({});
-ColorPasswordCount.args = {
-  password: examplePassword,
-  showCount: true,
+export const ColorPassword = {
+  render: Template,
 };
 
-export const WrappedColorPasswordCount = WrappedTemplate.bind({});
-WrappedColorPasswordCount.args = {
-  password: examplePassword,
-  showCount: true,
+export const WrappedColorPassword = {
+  render: WrappedTemplate,
+};
+
+export const ColorPasswordCount = {
+  render: Template,
+
+  args: {
+    password: examplePassword,
+    showCount: true,
+  },
+};
+
+export const WrappedColorPasswordCount = {
+  render: WrappedTemplate,
+
+  args: {
+    password: examplePassword,
+    showCount: true,
+  },
 };

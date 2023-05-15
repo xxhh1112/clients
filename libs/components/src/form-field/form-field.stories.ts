@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -88,7 +88,7 @@ function submit() {
   defaultFormObj.markAllAsTouched();
 }
 
-const Template: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const Template: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: {
     formObj: defaultFormObj,
     submit: submit,
@@ -105,10 +105,12 @@ const Template: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => 
   `,
 });
 
-export const Default = Template.bind({});
-Default.props = {};
+export const Default = {
+  render: Template,
+  props: {},
+};
 
-const RequiredTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const RequiredTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: {
     formObj: formObj,
     ...args,
@@ -126,10 +128,12 @@ const RequiredTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCompon
   `,
 });
 
-export const Required = RequiredTemplate.bind({});
-Required.props = {};
+export const Required = {
+  render: RequiredTemplate,
+  props: {},
+};
 
-const HintTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const HintTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: {
     formObj: formObj,
     ...args,
@@ -143,10 +147,11 @@ const HintTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent)
   `,
 });
 
-export const Hint = HintTemplate.bind({});
-Required.props = {};
+export const Hint = {
+  render: HintTemplate,
+};
 
-const DisabledTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const DisabledTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -156,10 +161,12 @@ const DisabledTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCompon
   `,
 });
 
-export const Disabled = DisabledTemplate.bind({});
-Disabled.args = {};
+export const Disabled = {
+  render: DisabledTemplate,
+  args: {},
+};
 
-const GroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const GroupTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -171,10 +178,12 @@ const GroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent
   `,
 });
 
-export const InputGroup = GroupTemplate.bind({});
-InputGroup.args = {};
+export const InputGroup = {
+  render: GroupTemplate,
+  args: {},
+};
 
-const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const ButtonGroupTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -189,10 +198,12 @@ const ButtonGroupTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCom
   `,
 });
 
-export const ButtonInputGroup = ButtonGroupTemplate.bind({});
-ButtonInputGroup.args = {};
+export const ButtonInputGroup = {
+  render: ButtonGroupTemplate,
+  args: {},
+};
 
-const DisabledButtonInputGroupTemplate: Story<BitFormFieldComponent> = (
+const DisabledButtonInputGroupTemplate: StoryFn<BitFormFieldComponent> = (
   args: BitFormFieldComponent
 ) => ({
   props: args,
@@ -210,10 +221,12 @@ const DisabledButtonInputGroupTemplate: Story<BitFormFieldComponent> = (
   `,
 });
 
-export const DisabledButtonInputGroup = DisabledButtonInputGroupTemplate.bind({});
-DisabledButtonInputGroup.args = {};
+export const DisabledButtonInputGroup = {
+  render: DisabledButtonInputGroupTemplate,
+  args: {},
+};
 
-const SelectTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const SelectTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -226,10 +239,12 @@ const SelectTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponen
   `,
 });
 
-export const Select = SelectTemplate.bind({});
-Select.args = {};
+export const Select = {
+  render: SelectTemplate,
+  args: {},
+};
 
-const AdvancedSelectTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const AdvancedSelectTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -242,10 +257,13 @@ const AdvancedSelectTemplate: Story<BitFormFieldComponent> = (args: BitFormField
   `,
 });
 
-export const AdvancedSelect = AdvancedSelectTemplate.bind({});
+export const AdvancedSelect = {
+  render: AdvancedSelectTemplate,
+};
+
 AdvancedSelectTemplate.args = {};
 
-const TextareaTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const TextareaTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: args,
   template: `
     <bit-form-field>
@@ -255,5 +273,7 @@ const TextareaTemplate: Story<BitFormFieldComponent> = (args: BitFormFieldCompon
   `,
 });
 
-export const Textarea = TextareaTemplate.bind({});
-Textarea.args = {};
+export const Textarea = {
+  render: TextareaTemplate,
+  args: {},
+};

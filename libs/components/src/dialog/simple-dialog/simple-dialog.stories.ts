@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { ButtonModule } from "../../button";
 import { DialogTitleContainerDirective } from "../directives/dialog-title-container.directive";
@@ -22,7 +22,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
+const Template: StoryFn<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
   props: args,
   template: `
   <bit-simple-dialog>
@@ -36,9 +36,11 @@ const Template: Story<SimpleDialogComponent> = (args: SimpleDialogComponent) => 
   `,
 });
 
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};
 
-const TemplateWithIcon: Story<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
+const TemplateWithIcon: StoryFn<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
   props: args,
   template: `
   <bit-simple-dialog>
@@ -53,9 +55,11 @@ const TemplateWithIcon: Story<SimpleDialogComponent> = (args: SimpleDialogCompon
   `,
 });
 
-export const CustomIcon = TemplateWithIcon.bind({});
+export const CustomIcon = {
+  render: TemplateWithIcon,
+};
 
-const TemplateScroll: Story<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
+const TemplateScroll: StoryFn<SimpleDialogComponent> = (args: SimpleDialogComponent) => ({
   props: args,
   template: `
   <bit-simple-dialog>
@@ -76,7 +80,10 @@ const TemplateScroll: Story<SimpleDialogComponent> = (args: SimpleDialogComponen
   `,
 });
 
-export const ScrollingContent = TemplateScroll.bind({});
-ScrollingContent.args = {
-  useDefaultIcon: true,
+export const ScrollingContent = {
+  render: TemplateScroll,
+
+  args: {
+    useDefaultIcon: true,
+  },
 };

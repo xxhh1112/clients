@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { BadgeDirective } from "./badge.directive";
 
@@ -23,7 +23,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<BadgeDirective> = (args: BadgeDirective) => ({
+const Template: StoryFn<BadgeDirective> = (args: BadgeDirective) => ({
   props: args,
   template: `
     <span class="tw-text-main">Span </span><span bitBadge [badgeType]="badgeType">Badge</span>
@@ -34,30 +34,47 @@ const Template: Story<BadgeDirective> = (args: BadgeDirective) => ({
   `,
 });
 
-export const Primary = Template.bind({});
-Primary.args = {};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  badgeType: "secondary",
+export const Primary = {
+  render: Template,
+  args: {},
 };
 
-export const Success = Template.bind({});
-Success.args = {
-  badgeType: "success",
+export const Secondary = {
+  render: Template,
+
+  args: {
+    badgeType: "secondary",
+  },
 };
 
-export const Danger = Template.bind({});
-Danger.args = {
-  badgeType: "danger",
+export const Success = {
+  render: Template,
+
+  args: {
+    badgeType: "success",
+  },
 };
 
-export const Warning = Template.bind({});
-Warning.args = {
-  badgeType: "warning",
+export const Danger = {
+  render: Template,
+
+  args: {
+    badgeType: "danger",
+  },
 };
 
-export const Info = Template.bind({});
-Info.args = {
-  badgeType: "info",
+export const Warning = {
+  render: Template,
+
+  args: {
+    badgeType: "warning",
+  },
+};
+
+export const Info = {
+  render: Template,
+
+  args: {
+    badgeType: "info",
+  },
 };

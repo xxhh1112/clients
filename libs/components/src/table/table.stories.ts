@@ -1,5 +1,5 @@
 import { ScrollingModule } from "@angular/cdk/scrolling";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { countries } from "../form/countries";
 
@@ -27,7 +27,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => ({
+const Template: StoryFn = (args) => ({
   props: args,
   template: `
     <bit-table>
@@ -59,9 +59,12 @@ const Template: Story = (args) => ({
     `,
 });
 
-export const Default = Template.bind({});
-Default.args = {
-  alignRowContent: "baseline",
+export const Default = {
+  render: Template,
+
+  args: {
+    alignRowContent: "baseline",
+  },
 };
 
 const data = new TableDataSource<{ id: number; name: string; other: string }>();
@@ -72,7 +75,7 @@ data.data = [...Array(5).keys()].map((i) => ({
   other: `other-${i}`,
 }));
 
-const DataSourceTemplate: Story = (args) => ({
+const DataSourceTemplate: StoryFn = (args) => ({
   props: {
     dataSource: data,
     sortFn: (a: any, b: any) => a.id - b.id,
@@ -97,7 +100,9 @@ const DataSourceTemplate: Story = (args) => ({
     `,
 });
 
-export const DataSource = DataSourceTemplate.bind({});
+export const DataSource = {
+  render: DataSourceTemplate,
+};
 
 const data2 = new TableDataSource<{ id: number; name: string; other: string }>();
 
@@ -107,7 +112,7 @@ data2.data = [...Array(100).keys()].map((i) => ({
   other: `other-${i}`,
 }));
 
-const ScrollableTemplate: Story = (args) => ({
+const ScrollableTemplate: StoryFn = (args) => ({
   props: {
     dataSource: data2,
     sortFn: (a: any, b: any) => a.id - b.id,
@@ -134,14 +139,16 @@ const ScrollableTemplate: Story = (args) => ({
     `,
 });
 
-export const Scrollable = ScrollableTemplate.bind({});
+export const Scrollable = {
+  render: ScrollableTemplate,
+};
 
 const data3 = new TableDataSource<{ value: string; name: string }>();
 
 // Chromatic has a max page size, lowering the number of entries to ensure we don't hit it
 data3.data = countries.slice(0, 100);
 
-const FilterableTemplate: Story = (args) => ({
+const FilterableTemplate: StoryFn = (args) => ({
   props: {
     dataSource: data3,
     sortFn: (a: any, b: any) => a.id - b.id,
@@ -167,7 +174,9 @@ const FilterableTemplate: Story = (args) => ({
     `,
 });
 
-export const Filterable = FilterableTemplate.bind({});
+export const Filterable = {
+  render: FilterableTemplate,
+};
 
 const data4 = new TableDataSource<{ name: string }>();
 
@@ -175,7 +184,7 @@ data4.data = [...Array(5).keys()].map((i) => ({
   name: i % 2 == 0 ? `name-${i}`.toUpperCase() : `name-${i}`.toLowerCase(),
 }));
 
-const VariableCaseTemplate: Story = (args) => ({
+const VariableCaseTemplate: StoryFn = (args) => ({
   props: {
     dataSource: data4,
   },
@@ -195,4 +204,6 @@ const VariableCaseTemplate: Story = (args) => ({
     `,
 });
 
-export const VariableCase = VariableCaseTemplate.bind({});
+export const VariableCase = {
+  render: VariableCaseTemplate,
+};

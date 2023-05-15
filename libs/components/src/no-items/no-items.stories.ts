@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { ButtonModule } from "../button";
 
@@ -13,7 +13,7 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = (args) => ({
+const Template: StoryFn = (args) => ({
   props: args,
   template: `
   <bit-no-items class="tw-text-main">
@@ -32,4 +32,6 @@ const Template: Story = (args) => ({
   `,
 });
 
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

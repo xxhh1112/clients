@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { applicationConfig, Meta, moduleMetadata, Story } from "@storybook/angular";
+import { applicationConfig, Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { ButtonModule } from "../button";
 import { FormFieldModule } from "../form-field";
@@ -71,7 +71,7 @@ export default {
   },
 } as Meta;
 
-const ContentTabGroupTemplate: Story<TabGroupComponent> = (args: any) => ({
+const ContentTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
   props: args,
   template: `
     <bit-tab-group label="Main Content Tabs" class="tw-text-main">
@@ -90,9 +90,11 @@ const ContentTabGroupTemplate: Story<TabGroupComponent> = (args: any) => ({
   `,
 });
 
-export const ContentTabs = ContentTabGroupTemplate.bind({});
+export const ContentTabs = {
+  render: ContentTabGroupTemplate,
+};
 
-const NavTabGroupTemplate: Story<TabGroupComponent> = (args: TabGroupComponent) => ({
+const NavTabGroupTemplate: StoryFn<TabGroupComponent> = (args: TabGroupComponent) => ({
   props: args,
   template: `
     <bit-tab-nav-bar label="Main">
@@ -107,9 +109,11 @@ const NavTabGroupTemplate: Story<TabGroupComponent> = (args: TabGroupComponent) 
   `,
 });
 
-export const NavigationTabs = NavTabGroupTemplate.bind({});
+export const NavigationTabs = {
+  render: NavTabGroupTemplate,
+};
 
-const PreserveContentTabGroupTemplate: Story<TabGroupComponent> = (args: any) => ({
+const PreserveContentTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
   props: args,
   template: `
     <bit-tab-group label="Preserve Content Tabs" [preserveContent]="true" class="tw-text-main">
@@ -130,9 +134,11 @@ const PreserveContentTabGroupTemplate: Story<TabGroupComponent> = (args: any) =>
   `,
 });
 
-export const PreserveContentTabs = PreserveContentTabGroupTemplate.bind({});
+export const PreserveContentTabs = {
+  render: PreserveContentTabGroupTemplate,
+};
 
-const KeyboardNavTabGroupTemplate: Story<TabGroupComponent> = (args: any) => ({
+const KeyboardNavTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
   props: args,
   template: `
     <bit-tab-group label="Keyboard Navigation Tabs" class="tw-text-main">
@@ -159,4 +165,6 @@ const KeyboardNavTabGroupTemplate: Story<TabGroupComponent> = (args: any) => ({
 `,
 });
 
-export const KeyboardNavigation = KeyboardNavTabGroupTemplate.bind({});
+export const KeyboardNavigation = {
+  render: KeyboardNavTabGroupTemplate,
+};

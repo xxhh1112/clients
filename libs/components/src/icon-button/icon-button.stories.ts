@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/angular";
+import { Meta, StoryFn } from "@storybook/angular";
 
 import { BitIconButtonComponent, IconButtonType } from "./icon-button.component";
 
@@ -31,7 +31,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
+const Template: StoryFn<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
   props: { ...args, buttonTypes },
   template: `
   <table class="tw-border-spacing-2 tw-text-center tw-text-main">
@@ -87,12 +87,18 @@ const Template: Story<BitIconButtonComponent> = (args: BitIconButtonComponent) =
   `,
 });
 
-export const Default = Template.bind({});
-Default.args = {
-  size: "default",
+export const Default = {
+  render: Template,
+
+  args: {
+    size: "default",
+  },
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
+export const Small = {
+  render: Template,
+
+  args: {
+    size: "small",
+  },
 };

@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -37,7 +37,7 @@ export default {
   },
 } as Meta;
 
-const DefaultTemplate: Story<MultiSelectComponent> = (args: MultiSelectComponent) => ({
+const DefaultTemplate: StoryFn<MultiSelectComponent> = (args: MultiSelectComponent) => ({
   props: {
     ...args,
   },
@@ -49,10 +49,15 @@ const DefaultTemplate: Story<MultiSelectComponent> = (args: MultiSelectComponent
     </bit-select>`,
 });
 
-export const Default = DefaultTemplate.bind({});
-Default.args = {};
+export const Default = {
+  render: DefaultTemplate,
+  args: {},
+};
 
-export const Disabled = DefaultTemplate.bind({});
-Disabled.args = {
-  disabled: true,
+export const Disabled = {
+  render: DefaultTemplate,
+
+  args: {
+    disabled: true,
+  },
 };

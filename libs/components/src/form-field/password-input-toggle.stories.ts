@@ -1,5 +1,5 @@
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -38,7 +38,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<BitPasswordInputToggleDirective> = (
+const Template: StoryFn<BitPasswordInputToggleDirective> = (
   args: BitPasswordInputToggleDirective
 ) => ({
   props: {
@@ -55,10 +55,12 @@ const Template: Story<BitPasswordInputToggleDirective> = (
   `,
 });
 
-export const Default = Template.bind({});
-Default.props = {};
+export const Default = {
+  render: Template,
+  props: {},
+};
 
-const TemplateBinding: Story<BitPasswordInputToggleDirective> = (
+const TemplateBinding: StoryFn<BitPasswordInputToggleDirective> = (
   args: BitPasswordInputToggleDirective
 ) => ({
   props: {
@@ -80,7 +82,10 @@ const TemplateBinding: Story<BitPasswordInputToggleDirective> = (
   `,
 });
 
-export const Binding = TemplateBinding.bind({});
-Binding.props = {
-  toggled: false,
+export const Binding = {
+  render: TemplateBinding,
+
+  props: {
+    toggled: false,
+  },
 };

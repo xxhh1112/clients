@@ -1,5 +1,5 @@
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -36,7 +36,7 @@ export default {
   },
 } as Meta;
 
-const InlineTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
+const InlineTemplate: StoryFn<RadioGroupComponent> = (args: RadioGroupComponent) => ({
   props: {
     formObj: new FormGroup({
       radio: new FormControl(0),
@@ -63,9 +63,11 @@ const InlineTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) =
   `,
 });
 
-export const Inline = InlineTemplate.bind({});
+export const Inline = {
+  render: InlineTemplate,
+};
 
-const BlockTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
+const BlockTemplate: StoryFn<RadioGroupComponent> = (args: RadioGroupComponent) => ({
   props: {
     formObj: new FormGroup({
       radio: new FormControl(0),
@@ -95,4 +97,6 @@ const BlockTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) =>
   `,
 });
 
-export const Block = BlockTemplate.bind({});
+export const Block = {
+  render: BlockTemplate,
+};

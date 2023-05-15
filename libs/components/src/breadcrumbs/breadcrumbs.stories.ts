@@ -1,6 +1,6 @@
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, Story, applicationConfig, moduleMetadata } from "@storybook/angular";
+import { Meta, StoryFn, applicationConfig, moduleMetadata } from "@storybook/angular";
 
 import { IconButtonModule } from "../icon-button";
 import { LinkModule } from "../link";
@@ -48,7 +48,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<BreadcrumbsComponent> = (args: BreadcrumbsComponent) => ({
+const Template: StoryFn<BreadcrumbsComponent> = (args: BreadcrumbsComponent) => ({
   props: args,
   template: `
     <h3 class="tw-text-main">Router links</h3>
@@ -67,28 +67,37 @@ const Template: Story<BreadcrumbsComponent> = (args: BreadcrumbsComponent) => ({
   `,
 });
 
-export const TopLevel = Template.bind({});
-TopLevel.args = {
-  items: [{ icon: "bwi-star", name: "Top Level" }] as Breadcrumb[],
+export const TopLevel = {
+  render: Template,
+
+  args: {
+    items: [{ icon: "bwi-star", name: "Top Level" }] as Breadcrumb[],
+  },
 };
 
-export const SecondLevel = Template.bind({});
-SecondLevel.args = {
-  items: [
-    { name: "Acme Vault", route: "/" },
-    { icon: "bwi-collection", name: "Collection", route: "collection" },
-  ] as Breadcrumb[],
+export const SecondLevel = {
+  render: Template,
+
+  args: {
+    items: [
+      { name: "Acme Vault", route: "/" },
+      { icon: "bwi-collection", name: "Collection", route: "collection" },
+    ] as Breadcrumb[],
+  },
 };
 
-export const Overflow = Template.bind({});
-Overflow.args = {
-  items: [
-    { name: "Acme Vault", route: "" },
-    { icon: "bwi-collection", name: "Collection", route: "collection" },
-    { icon: "bwi-collection", name: "Middle-Collection 1", route: "middle-collection-1" },
-    { icon: "bwi-collection", name: "Middle-Collection 2", route: "middle-collection-2" },
-    { icon: "bwi-collection", name: "Middle-Collection 3", route: "middle-collection-3" },
-    { icon: "bwi-collection", name: "Middle-Collection 4", route: "middle-collection-4" },
-    { icon: "bwi-collection", name: "End Collection", route: "end-collection" },
-  ] as Breadcrumb[],
+export const Overflow = {
+  render: Template,
+
+  args: {
+    items: [
+      { name: "Acme Vault", route: "" },
+      { icon: "bwi-collection", name: "Collection", route: "collection" },
+      { icon: "bwi-collection", name: "Middle-Collection 1", route: "middle-collection-1" },
+      { icon: "bwi-collection", name: "Middle-Collection 2", route: "middle-collection-2" },
+      { icon: "bwi-collection", name: "Middle-Collection 3", route: "middle-collection-3" },
+      { icon: "bwi-collection", name: "Middle-Collection 4", route: "middle-collection-4" },
+      { icon: "bwi-collection", name: "End Collection", route: "end-collection" },
+    ] as Breadcrumb[],
+  },
 };

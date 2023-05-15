@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -81,7 +81,7 @@ function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   };
 }
 
-const FullExampleTemplate: Story = (args) => ({
+const FullExampleTemplate: StoryFn = (args) => ({
   props: {
     formObj: exampleFormObj,
     submit: () => exampleFormObj.markAllAsTouched(),
@@ -141,7 +141,10 @@ const FullExampleTemplate: Story = (args) => ({
   `,
 });
 
-export const FullExample = FullExampleTemplate.bind({});
-FullExample.args = {
-  countries,
+export const FullExample = {
+  render: FullExampleTemplate,
+
+  args: {
+    countries,
+  },
 };

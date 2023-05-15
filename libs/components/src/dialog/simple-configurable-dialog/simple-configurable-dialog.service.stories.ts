@@ -1,6 +1,6 @@
 import { DialogModule } from "@angular/cdk/dialog";
 import { Component } from "@angular/core";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { SimpleDialogType, SimpleDialogOptions } from "@bitwarden/angular/services/dialog";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -239,8 +239,10 @@ export default {
   },
 } as Meta;
 
-const Template: Story<StoryDialogComponent> = (args: StoryDialogComponent) => ({
+const Template: StoryFn<StoryDialogComponent> = (args: StoryDialogComponent) => ({
   props: args,
 });
 
-export const Default = Template.bind({});
+export const Default = {
+  render: Template,
+};

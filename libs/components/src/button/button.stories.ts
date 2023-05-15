@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/angular";
+import { Meta, StoryFn } from "@storybook/angular";
 
 import { ButtonComponent } from "./button.component";
 
@@ -18,7 +18,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ButtonComponent> = (args: ButtonComponent) => ({
+const Template: StoryFn<ButtonComponent> = (args: ButtonComponent) => ({
   props: args,
   template: `
     <button bitButton [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [block]="block">Button</button>
@@ -26,22 +26,31 @@ const Template: Story<ButtonComponent> = (args: ButtonComponent) => ({
   `,
 });
 
-export const Primary = Template.bind({});
-Primary.args = {
-  buttonType: "primary",
+export const Primary = {
+  render: Template,
+
+  args: {
+    buttonType: "primary",
+  },
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  buttonType: "secondary",
+export const Secondary = {
+  render: Template,
+
+  args: {
+    buttonType: "secondary",
+  },
 };
 
-export const Danger = Template.bind({});
-Danger.args = {
-  buttonType: "danger",
+export const Danger = {
+  render: Template,
+
+  args: {
+    buttonType: "danger",
+  },
 };
 
-const AllStylesTemplate: Story = (args) => ({
+const AllStylesTemplate: StoryFn = (args) => ({
   props: args,
   template: `
     <button bitButton [disabled]="disabled" [loading]="loading" [block]="block" buttonType="primary" class="tw-mr-2">Primary</button>
@@ -50,19 +59,25 @@ const AllStylesTemplate: Story = (args) => ({
   `,
 });
 
-export const Loading = AllStylesTemplate.bind({});
-Loading.args = {
-  disabled: false,
-  loading: true,
+export const Loading = {
+  render: AllStylesTemplate,
+
+  args: {
+    disabled: false,
+    loading: true,
+  },
 };
 
-export const Disabled = AllStylesTemplate.bind({});
-Disabled.args = {
-  disabled: true,
-  loading: false,
+export const Disabled = {
+  render: AllStylesTemplate,
+
+  args: {
+    disabled: true,
+    loading: false,
+  },
 };
 
-const DisabledWithAttributeTemplate: Story = (args) => ({
+const DisabledWithAttributeTemplate: StoryFn = (args) => ({
   props: args,
   template: `
     <ng-container *ngIf="disabled">
@@ -78,13 +93,16 @@ const DisabledWithAttributeTemplate: Story = (args) => ({
   `,
 });
 
-export const DisabledWithAttribute = DisabledWithAttributeTemplate.bind({});
-DisabledWithAttribute.args = {
-  disabled: true,
-  loading: false,
+export const DisabledWithAttribute = {
+  render: DisabledWithAttributeTemplate,
+
+  args: {
+    disabled: true,
+    loading: false,
+  },
 };
 
-const BlockTemplate: Story<ButtonComponent> = (args: ButtonComponent) => ({
+const BlockTemplate: StoryFn<ButtonComponent> = (args: ButtonComponent) => ({
   props: args,
   template: `
     <span class="tw-flex">
@@ -97,7 +115,10 @@ const BlockTemplate: Story<ButtonComponent> = (args: ButtonComponent) => ({
   `,
 });
 
-export const Block = BlockTemplate.bind({});
-Block.args = {
-  block: true,
+export const Block = {
+  render: BlockTemplate,
+
+  args: {
+    block: true,
+  },
 };

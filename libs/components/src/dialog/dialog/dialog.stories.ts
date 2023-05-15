@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -50,7 +50,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<DialogComponent> = (args: DialogComponent) => ({
+const Template: StoryFn<DialogComponent> = (args: DialogComponent) => ({
   props: args,
   template: `
     <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
@@ -72,38 +72,53 @@ const Template: Story<DialogComponent> = (args: DialogComponent) => ({
   `,
 });
 
-export const Default = Template.bind({});
-Default.args = {
-  dialogSize: "default",
-  title: "Default",
+export const Default = {
+  render: Template,
+
+  args: {
+    dialogSize: "default",
+    title: "Default",
+  },
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  dialogSize: "small",
-  title: "Small",
+export const Small = {
+  render: Template,
+
+  args: {
+    dialogSize: "small",
+    title: "Small",
+  },
 };
 
-export const LongTitle = Template.bind({});
-LongTitle.args = {
-  dialogSize: "small",
-  title: "Long_Title_That_Should_Be_Truncated",
+export const LongTitle = {
+  render: Template,
+
+  args: {
+    dialogSize: "small",
+    title: "Long_Title_That_Should_Be_Truncated",
+  },
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  dialogSize: "large",
-  title: "Large",
+export const Large = {
+  render: Template,
+
+  args: {
+    dialogSize: "large",
+    title: "Large",
+  },
 };
 
-export const Loading = Template.bind({});
-Loading.args = {
-  dialogSize: "large",
-  loading: true,
-  title: "Loading",
+export const Loading = {
+  render: Template,
+
+  args: {
+    dialogSize: "large",
+    loading: true,
+    title: "Loading",
+  },
 };
 
-const TemplateScrolling: Story<DialogComponent> = (args: DialogComponent) => ({
+const TemplateScrolling: StoryFn<DialogComponent> = (args: DialogComponent) => ({
   props: args,
   template: `
     <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
@@ -123,12 +138,15 @@ const TemplateScrolling: Story<DialogComponent> = (args: DialogComponent) => ({
   `,
 });
 
-export const ScrollingContent = TemplateScrolling.bind({});
-ScrollingContent.args = {
-  dialogSize: "small",
+export const ScrollingContent = {
+  render: TemplateScrolling,
+
+  args: {
+    dialogSize: "small",
+  },
 };
 
-const TemplateTabbed: Story<DialogComponent> = (args: DialogComponent) => ({
+const TemplateTabbed: StoryFn<DialogComponent> = (args: DialogComponent) => ({
   props: args,
   template: `
     <bit-dialog [dialogSize]="dialogSize" [disablePadding]="disablePadding">
@@ -148,12 +166,14 @@ const TemplateTabbed: Story<DialogComponent> = (args: DialogComponent) => ({
   `,
 });
 
-export const TabContent = TemplateTabbed.bind({});
-TabContent.args = {
-  dialogSize: "large",
-  disablePadding: true,
-};
-TabContent.story = {
+export const TabContent = {
+  render: TemplateTabbed,
+
+  args: {
+    dialogSize: "large",
+    disablePadding: true,
+  },
+
   parameters: {
     docs: {
       storyDescription: `An example of using the \`bitTabGroup\` component within the Dialog. The content padding should be

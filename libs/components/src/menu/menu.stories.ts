@@ -1,5 +1,5 @@
 import { OverlayModule } from "@angular/cdk/overlay";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { ButtonModule } from "../button/button.module";
 
@@ -30,7 +30,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
+const Template: StoryFn<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
   props: args,
   template: `
     <bit-menu #myMenu="menuComponent">
@@ -49,7 +49,7 @@ const Template: Story<MenuTriggerForDirective> = (args: MenuTriggerForDirective)
     `,
 });
 
-const TemplateWithButton: Story<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
+const TemplateWithButton: StoryFn<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
   props: args,
   template: `
     <div class="tw-h-40">
@@ -65,5 +65,9 @@ const TemplateWithButton: Story<MenuTriggerForDirective> = (args: MenuTriggerFor
     </bit-menu>`,
 });
 
-export const OpenMenu = Template.bind({});
-export const ClosedMenu = TemplateWithButton.bind({});
+export const OpenMenu = {
+  render: Template,
+};
+export const ClosedMenu = {
+  render: TemplateWithButton,
+};

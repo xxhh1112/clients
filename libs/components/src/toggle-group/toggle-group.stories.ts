@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { BadgeModule } from "../badge";
 
@@ -25,7 +25,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<ToggleGroupComponent> = (args: ToggleGroupComponent) => ({
+const Template: StoryFn<ToggleGroupComponent> = (args: ToggleGroupComponent) => ({
   props: args,
   template: `
     <bit-toggle-group [(selected)]="selected" aria-label="People list filter">
@@ -48,7 +48,10 @@ const Template: Story<ToggleGroupComponent> = (args: ToggleGroupComponent) => ({
   `,
 });
 
-export const Default = Template.bind({});
-Default.args = {
-  selected: "all",
+export const Default = {
+  render: Template,
+
+  args: {
+    selected: "all",
+  },
 };

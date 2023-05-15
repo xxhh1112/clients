@@ -1,5 +1,5 @@
 import { UntypedFormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -50,7 +50,7 @@ function submit() {
   formObj.markAllAsTouched();
 }
 
-const Template: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
+const Template: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
   props: {
     formObj: formObj,
     submit: submit,
@@ -74,5 +74,7 @@ const Template: Story<BitFormFieldComponent> = (args: BitFormFieldComponent) => 
   `,
 });
 
-export const Default = Template.bind({});
-Default.props = {};
+export const Default = {
+  render: Template,
+  props: {},
+};
