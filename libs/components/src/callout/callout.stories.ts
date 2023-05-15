@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -35,42 +35,38 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<CalloutComponent> = (args: CalloutComponent) => ({
-  props: args,
-  template: `
-    <bit-callout [type]="type" [title]="title">Content</bit-callout>
-  `,
-});
+type Story = StoryObj<CalloutComponent>;
 
-export const Success = {
-  render: Template,
-
+export const Success: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-callout [type]="type" [title]="title">Content</bit-callout>
+    `,
+  }),
   args: {
     type: "success",
     title: "Success",
   },
 };
 
-export const Info = {
-  render: Template,
-
+export const Info: Story = {
+  ...Success,
   args: {
     type: "info",
     title: "Info",
   },
 };
 
-export const Warning = {
-  render: Template,
-
+export const Warning: Story = {
+  ...Success,
   args: {
     type: "warning",
   },
 };
 
-export const Danger = {
-  render: Template,
-
+export const Danger: Story = {
+  ...Success,
   args: {
     type: "danger",
   },

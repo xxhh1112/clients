@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { applicationConfig, Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { applicationConfig, Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { ButtonModule } from "../button";
 import { FormFieldModule } from "../form-field";
@@ -71,10 +71,13 @@ export default {
   },
 } as Meta;
 
-const ContentTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
-  props: args,
-  template: `
-    <bit-tab-group label="Main Content Tabs" class="tw-text-main">
+type Story = StoryObj<TabGroupComponent>;
+
+export const ContentTabs: Story = {
+  render: (args: any) => ({
+    props: args,
+    template: `
+      <bit-tab-group label="Main Content Tabs" class="tw-text-main">
         <bit-tab label="First Tab">First Tab Content</bit-tab>
         <bit-tab label="Second Tab">Second Tab Content</bit-tab>
         <bit-tab>
@@ -86,62 +89,54 @@ const ContentTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
         <bit-tab [disabled]="true" label="Disabled">
           Disabled Content
         </bit-tab>
-    </bit-tab-group>
-  `,
-});
-
-export const ContentTabs = {
-  render: ContentTabGroupTemplate,
+      </bit-tab-group>
+    `,
+  }),
 };
 
-const NavTabGroupTemplate: StoryFn<TabGroupComponent> = (args: TabGroupComponent) => ({
-  props: args,
-  template: `
-    <bit-tab-nav-bar label="Main">
-      <bit-tab-link [route]="['active']">Active</bit-tab-link>
-      <bit-tab-link [route]="['item-2']">Item 2</bit-tab-link>
-      <bit-tab-link [route]="['item-3']">Item 3</bit-tab-link>
-      <bit-tab-link [route]="['disable']" [disabled]="true">Disabled</bit-tab-link>
-    </bit-tab-nav-bar>
-    <div class="tw-bg-transparent tw-text-semibold tw-text-center tw-text-main tw-py-10">
-      <router-outlet></router-outlet>
-    </div>
-  `,
-});
-
-export const NavigationTabs = {
-  render: NavTabGroupTemplate,
+export const NavigationTabs: Story = {
+  render: (args: TabGroupComponent) => ({
+    props: args,
+    template: `
+      <bit-tab-nav-bar label="Main">
+        <bit-tab-link [route]="['active']">Active</bit-tab-link>
+        <bit-tab-link [route]="['item-2']">Item 2</bit-tab-link>
+        <bit-tab-link [route]="['item-3']">Item 3</bit-tab-link>
+        <bit-tab-link [route]="['disable']" [disabled]="true">Disabled</bit-tab-link>
+      </bit-tab-nav-bar>
+      <div class="tw-bg-transparent tw-text-semibold tw-text-center tw-text-main tw-py-10">
+        <router-outlet></router-outlet>
+      </div>
+    `,
+  }),
 };
 
-const PreserveContentTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
-  props: args,
-  template: `
-    <bit-tab-group label="Preserve Content Tabs" [preserveContent]="true" class="tw-text-main">
+export const PreserveContentTabs: Story = {
+  render: (args: any) => ({
+    props: args,
+    template: `
+      <bit-tab-group label="Preserve Content Tabs" [preserveContent]="true" class="tw-text-main">
         <bit-tab label="Text Tab">
-          <p>
-            Play the video in the other tab and switch back to hear the video is still playing.
-          </p>
+          <p>Play the video in the other tab and switch back to hear the video is still playing.</p>
         </bit-tab>
         <bit-tab label="Video Tab">
           <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/H0-yWbe5XG4"
-             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-             allowfullscreen></iframe>
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/H0-yWbe5XG4"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
         </bit-tab>
-    </bit-tab-group>
-  `,
-});
-
-export const PreserveContentTabs = {
-  render: PreserveContentTabGroupTemplate,
+      </bit-tab-group>
+    `,
+  }),
 };
 
-const KeyboardNavTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => ({
-  props: args,
-  template: `
-    <bit-tab-group label="Keyboard Navigation Tabs" class="tw-text-main">
+export const KeyboardNavigation: Story = {
+  render: (args: any) => ({
+    props: args,
+    template: `
+      <bit-tab-group label="Keyboard Navigation Tabs" class="tw-text-main">
         <bit-tab label="Form Tab">
           <p>
             You can navigate through all tab labels, form inputs, and the button that is outside the tab group via
@@ -160,11 +155,8 @@ const KeyboardNavTabGroupTemplate: StoryFn<TabGroupComponent> = (args: any) => (
         <bit-tab label="No Focusable Content Tab" [contentTabIndex]="0">
           <p>This tab has no focusable content, but the panel should still be focusable</p>
         </bit-tab>
-    </bit-tab-group>
-    <button bitButton buttonType="primary" class="tw-mt-5">External Button</button>
-`,
-});
-
-export const KeyboardNavigation = {
-  render: KeyboardNavTabGroupTemplate,
+      </bit-tab-group>
+      <button bitButton buttonType="primary" class="tw-mt-5">External Button</button>
+    `,
+  }),
 };

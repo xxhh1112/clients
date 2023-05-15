@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj } from "@storybook/angular";
 
 import { BitIconButtonComponent, IconButtonType } from "./icon-button.component";
 
@@ -31,73 +31,71 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<BitIconButtonComponent> = (args: BitIconButtonComponent) => ({
-  props: { ...args, buttonTypes },
-  template: `
-  <table class="tw-border-spacing-2 tw-text-center tw-text-main">
-    <thead>
-      <tr>
-        <td></td>
-        <td *ngFor="let buttonType of buttonTypes" class="tw-capitalize tw-font-bold tw-p-4"
-          [class.tw-text-contrast]="['contrast', 'light'].includes(buttonType)"
-          [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">{{buttonType}}</td>
-      </tr>
-    </thead>
+type Story = StoryObj<BitIconButtonComponent>;
 
-    <tbody>
-      <tr>
-        <td class="tw-font-bold tw-p-4 tw-text-left">Default</td>
-          <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
-            <button
-              [bitIconButton]="bitIconButton"
-              [buttonType]="buttonType"
-              [size]="size"
-              title="Example icon button"
-              aria-label="Example icon button"></button>
-          </td>
-      </tr>
-
-      <tr>
-        <td class="tw-font-bold tw-p-4 tw-text-left">Disabled</td>
-          <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
-            <button
-              [bitIconButton]="bitIconButton"
-              [buttonType]="buttonType"
-              [size]="size"
-              disabled
-              title="Example icon button"
-              aria-label="Example icon button"></button>
-          </td>
-      </tr>
-
-      <tr>
-        <td class="tw-font-bold tw-p-4 tw-text-left">Loading</td>
-          <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
-            <button
-              [bitIconButton]="bitIconButton"
-              [buttonType]="buttonType"
-              [size]="size"
-              loading="true"
-              title="Example icon button"
-              aria-label="Example icon button"></button>
-          </td>
-      </tr>
-    </tbody>
-  </table>
-  `,
-});
-
-export const Default = {
-  render: Template,
-
+export const Default: Story = {
+  render: (args: BitIconButtonComponent) => ({
+    props: { ...args, buttonTypes },
+    template: `
+    <table class="tw-border-spacing-2 tw-text-center tw-text-main">
+      <thead>
+        <tr>
+          <td></td>
+          <td *ngFor="let buttonType of buttonTypes" class="tw-capitalize tw-font-bold tw-p-4"
+            [class.tw-text-contrast]="['contrast', 'light'].includes(buttonType)"
+            [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">{{buttonType}}</td>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr>
+          <td class="tw-font-bold tw-p-4 tw-text-left">Default</td>
+            <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
+              <button
+                [bitIconButton]="bitIconButton"
+                [buttonType]="buttonType"
+                [size]="size"
+                title="Example icon button"
+                aria-label="Example icon button"></button>
+            </td>
+        </tr>
+  
+        <tr>
+          <td class="tw-font-bold tw-p-4 tw-text-left">Disabled</td>
+            <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
+              <button
+                [bitIconButton]="bitIconButton"
+                [buttonType]="buttonType"
+                [size]="size"
+                disabled
+                title="Example icon button"
+                aria-label="Example icon button"></button>
+            </td>
+        </tr>
+  
+        <tr>
+          <td class="tw-font-bold tw-p-4 tw-text-left">Loading</td>
+            <td *ngFor="let buttonType of buttonTypes" class="tw-p-2" [class.tw-bg-primary-500]="['contrast', 'light'].includes(buttonType)">
+              <button
+                [bitIconButton]="bitIconButton"
+                [buttonType]="buttonType"
+                [size]="size"
+                loading="true"
+                title="Example icon button"
+                aria-label="Example icon button"></button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+    `,
+  }),
   args: {
     size: "default",
   },
 };
 
-export const Small = {
-  render: Template,
-
+export const Small: Story = {
+  ...Default,
   args: {
     size: "small",
   },

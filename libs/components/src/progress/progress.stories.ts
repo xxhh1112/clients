@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj } from "@storybook/angular";
 
 import { ProgressComponent } from "./progress.component";
 
@@ -18,29 +18,21 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<ProgressComponent> = (args: ProgressComponent) => ({
-  props: args,
-});
+type Story = StoryObj<ProgressComponent>;
 
-export const Empty = {
-  render: Template,
-
+export const Empty: Story = {
   args: {
     barWidth: 0,
   },
 };
 
-export const Full = {
-  render: Template,
-
+export const Full: Story = {
   args: {
     barWidth: 100,
   },
 };
 
-export const CustomText = {
-  render: Template,
-
+export const CustomText: Story = {
   args: {
     barWidth: 25,
     text: "Loading...",

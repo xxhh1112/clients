@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -87,193 +87,168 @@ function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
 function submit() {
   defaultFormObj.markAllAsTouched();
 }
+type Story = StoryObj<BitFormFieldComponent>;
 
-const Template: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: {
-    formObj: defaultFormObj,
-    submit: submit,
-    ...args,
-  },
-  template: `
-    <form [formGroup]="formObj">
+export const Default: Story = {
+  render: (args) => ({
+    props: {
+      formObj: defaultFormObj,
+      submit: submit,
+      ...args,
+    },
+    template: `
+      <form [formGroup]="formObj">
+        <bit-form-field>
+          <bit-label>Label</bit-label>
+          <input bitInput formControlName="name" />
+          <bit-hint>Optional Hint</bit-hint>
+        </bit-form-field>
+      </form>
+    `,
+  }),
+};
+
+export const Required: Story = {
+  render: (args) => ({
+    props: {
+      formObj: formObj,
+      ...args,
+    },
+    template: `
       <bit-form-field>
         <bit-label>Label</bit-label>
-        <input bitInput formControlName="name" />
-        <bit-hint>Optional Hint</bit-hint>
+        <input bitInput required placeholder="Placeholder" />
       </bit-form-field>
-    </form>
-  `,
-});
-
-export const Default = {
-  render: Template,
-  props: {},
+  
+      <bit-form-field [formGroup]="formObj">
+        <bit-label>FormControl</bit-label>
+        <input bitInput formControlName="required" placeholder="Placeholder" />
+      </bit-form-field>
+    `,
+  }),
 };
 
-const RequiredTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: {
-    formObj: formObj,
-    ...args,
-  },
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <input bitInput required placeholder="Placeholder" />
-    </bit-form-field>
-
-    <bit-form-field [formGroup]="formObj">
-      <bit-label>FormControl</bit-label>
-      <input bitInput formControlName="required" placeholder="Placeholder" />
-    </bit-form-field>
-  `,
-});
-
-export const Required = {
-  render: RequiredTemplate,
-  props: {},
+export const Hint: Story = {
+  render: (args: BitFormFieldComponent) => ({
+    props: {
+      formObj: formObj,
+      ...args,
+    },
+    template: `
+      <bit-form-field [formGroup]="formObj">
+        <bit-label>FormControl</bit-label>
+        <input bitInput formControlName="required" placeholder="Placeholder" />
+        <bit-hint>Long hint text</bit-hint>
+      </bit-form-field>
+    `,
+  }),
 };
 
-const HintTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: {
-    formObj: formObj,
-    ...args,
-  },
-  template: `
-    <bit-form-field [formGroup]="formObj">
-      <bit-label>FormControl</bit-label>
-      <input bitInput formControlName="required" placeholder="Placeholder" />
-      <bit-hint>Long hint text</bit-hint>
-    </bit-form-field>
-  `,
-});
-
-export const Hint = {
-  render: HintTemplate,
-};
-
-const DisabledTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <input bitInput placeholder="Placeholder" disabled />
-    </bit-form-field>
-  `,
-});
-
-export const Disabled = {
-  render: DisabledTemplate,
+export const Disabled: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Label</bit-label>
+        <input bitInput placeholder="Placeholder" disabled />
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };
 
-const GroupTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <input bitInput placeholder="Placeholder" />
-      <span bitPrefix>$</span>
-      <span bitSuffix>USD</span>
-    </bit-form-field>
-  `,
-});
-
-export const InputGroup = {
-  render: GroupTemplate,
+export const InputGroup: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Label</bit-label>
+        <input bitInput placeholder="Placeholder" />
+        <span bitPrefix>$</span>
+        <span bitSuffix>USD</span>
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };
 
-const ButtonGroupTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <button bitPrefix bitIconButton="bwi-star"></button>
-      <input bitInput placeholder="Placeholder" />
-      <button bitSuffix bitIconButton="bwi-eye"></button>
-      <button bitSuffix bitIconButton="bwi-clone"></button>
-      <button bitSuffix bitButton>
-        Apply
-      </button>
-    </bit-form-field>
-  `,
-});
-
-export const ButtonInputGroup = {
-  render: ButtonGroupTemplate,
+export const ButtonInputGroup: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <button bitPrefix bitIconButton="bwi-star"></button>
+        <input bitInput placeholder="Placeholder" />
+        <button bitSuffix bitIconButton="bwi-eye"></button>
+        <button bitSuffix bitIconButton="bwi-clone"></button>
+        <button bitSuffix bitButton>
+          Apply
+        </button>
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };
 
-const DisabledButtonInputGroupTemplate: StoryFn<BitFormFieldComponent> = (
-  args: BitFormFieldComponent
-) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <button bitPrefix bitIconButton="bwi-star" disabled></button>
-      <input bitInput placeholder="Placeholder" disabled />
-      <button bitSuffix bitIconButton="bwi-eye" disabled></button>
-      <button bitSuffix bitIconButton="bwi-clone" disabled></button>
-      <button bitSuffix bitButton disabled>
-        Apply
-      </button>
-    </bit-form-field>
-  `,
-});
-
-export const DisabledButtonInputGroup = {
-  render: DisabledButtonInputGroupTemplate,
+export const DisabledButtonInputGroup: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Label</bit-label>
+        <button bitPrefix bitIconButton="bwi-star" disabled></button>
+        <input bitInput placeholder="Placeholder" disabled />
+        <button bitSuffix bitIconButton="bwi-eye" disabled></button>
+        <button bitSuffix bitIconButton="bwi-clone" disabled></button>
+        <button bitSuffix bitButton disabled>
+          Apply
+        </button>
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };
 
-const SelectTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <select bitInput>
-        <option>Select</option>
-        <option>Other</option>
-      </select>
-    </bit-form-field>
-  `,
-});
-
-export const Select = {
-  render: SelectTemplate,
+export const Select: Story = {
+  render: (args: BitFormFieldComponent) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Label</bit-label>
+        <select bitInput>
+          <option>Select</option>
+          <option>Other</option>
+        </select>
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };
 
-const AdvancedSelectTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Label</bit-label>
-      <bit-select>
-        <bit-option label="Select"></bit-option>
-        <bit-option label="Other"></bit-option>
-      </bit-select>
-    </bit-form-field>
-  `,
-});
-
-export const AdvancedSelect = {
-  render: AdvancedSelectTemplate,
+export const AdvancedSelect: Story = {
+  render: (args: BitFormFieldComponent) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Label</bit-label>
+        <bit-select>
+          <bit-option label="Select"></bit-option>
+          <bit-option label="Other"></bit-option>
+        </bit-select>
+      </bit-form-field>
+    `,
+  }),
 };
 
-AdvancedSelectTemplate.args = {};
-
-const TextareaTemplate: StoryFn<BitFormFieldComponent> = (args: BitFormFieldComponent) => ({
-  props: args,
-  template: `
-    <bit-form-field>
-      <bit-label>Textarea</bit-label>
-      <textarea bitInput rows="4"></textarea>
-    </bit-form-field>
-  `,
-});
-
-export const Textarea = {
-  render: TextareaTemplate,
+export const Textarea: Story = {
+  render: (args: BitFormFieldComponent) => ({
+    props: args,
+    template: `
+      <bit-form-field>
+        <bit-label>Textarea</bit-label>
+        <textarea bitInput rows="4"></textarea>
+      </bit-form-field>
+    `,
+  }),
   args: {},
 };

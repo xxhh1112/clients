@@ -1,5 +1,5 @@
 import { OverlayModule } from "@angular/cdk/overlay";
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { ButtonModule } from "../button/button.module";
 
@@ -30,44 +30,42 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
-  props: args,
-  template: `
-    <bit-menu #myMenu="menuComponent">
-      <a href="#" bitMenuItem>Anchor link</a>
-      <a href="#" bitMenuItem>Another link</a>
-      <button type="button" bitMenuItem>Button</button>
-      <bit-menu-divider></bit-menu-divider>
-      <button type="button" bitMenuItem>Button after divider</button>
-    </bit-menu>
+type Story = StoryObj<MenuTriggerForDirective>;
 
-    <div class="tw-h-40">
-      <div class="cdk-overlay-pane bit-menu-panel">
-        <ng-container *ngTemplateOutlet="myMenu.templateRef"></ng-container>
+export const OpenMenu: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-menu #myMenu="menuComponent">
+        <a href="#" bitMenuItem>Anchor link</a>
+        <a href="#" bitMenuItem>Another link</a>
+        <button type="button" bitMenuItem>Button</button>
+        <bit-menu-divider></bit-menu-divider>
+        <button type="button" bitMenuItem>Button after divider</button>
+      </bit-menu>
+  
+      <div class="tw-h-40">
+        <div class="cdk-overlay-pane bit-menu-panel">
+          <ng-container *ngTemplateOutlet="myMenu.templateRef"></ng-container>
+        </div>
       </div>
-    </div>
-    `,
-});
-
-const TemplateWithButton: StoryFn<MenuTriggerForDirective> = (args: MenuTriggerForDirective) => ({
-  props: args,
-  template: `
-    <div class="tw-h-40">
-      <button bitButton buttonType="secondary" [bitMenuTriggerFor]="myMenu">Open menu</button>
-    </div>
-
-    <bit-menu #myMenu>
-      <a href="#" bitMenuItem>Anchor link</a>
-      <a href="#" bitMenuItem>Another link</a>
-      <button type="button" bitMenuItem>Button</button>
-      <bit-menu-divider></bit-menu-divider>
-      <button type="button" bitMenuItem>Button after divider</button>
-    </bit-menu>`,
-});
-
-export const OpenMenu = {
-  render: Template,
+      `,
+  }),
 };
-export const ClosedMenu = {
-  render: TemplateWithButton,
+export const ClosedMenu: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-h-40">
+        <button bitButton buttonType="secondary" [bitMenuTriggerFor]="myMenu">Open menu</button>
+      </div>
+  
+      <bit-menu #myMenu>
+        <a href="#" bitMenuItem>Anchor link</a>
+        <a href="#" bitMenuItem>Another link</a>
+        <button type="button" bitMenuItem>Button</button>
+        <bit-menu-divider></bit-menu-divider>
+        <button type="button" bitMenuItem>Button after divider</button>
+      </bit-menu>`,
+  }),
 };

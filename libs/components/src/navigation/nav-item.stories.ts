@@ -1,5 +1,5 @@
 import { RouterTestingModule } from "@angular/router/testing";
-import { StoryObj, Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { StoryObj, Meta, moduleMetadata } from "@storybook/angular";
 
 import { IconButtonModule } from "../icon-button";
 
@@ -23,32 +23,30 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<NavItemComponent> = (args: NavItemComponent) => ({
-  props: args,
-  template: `
-      <bit-nav-item text="${args.text}"  [route]="['']" icon="${args.icon}"></bit-nav-item>
-    `,
-});
+type Story = StoryObj<NavItemComponent>;
 
-export const Default = {
-  render: Template,
-
+export const Default: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+        <bit-nav-item text="${args.text}"  [route]="['']" icon="${args.icon}"></bit-nav-item>
+      `,
+  }),
   args: {
     text: "Hello World",
     icon: "bwi-filter",
   },
 };
 
-export const WithoutIcon = {
-  render: Template,
-
+export const WithoutIcon: Story = {
+  ...Default,
   args: {
     text: "Hello World",
     icon: "",
   },
 };
 
-export const WithoutRoute: StoryObj<NavItemComponent> = {
+export const WithoutRoute: Story = {
   render: (args: NavItemComponent) => ({
     props: args,
     template: `
@@ -57,7 +55,7 @@ export const WithoutRoute: StoryObj<NavItemComponent> = {
   }),
 };
 
-export const WithChildButtons: StoryObj<NavItemComponent> = {
+export const WithChildButtons: Story = {
   render: (args: NavItemComponent) => ({
     props: args,
     template: `
@@ -91,7 +89,7 @@ export const WithChildButtons: StoryObj<NavItemComponent> = {
   }),
 };
 
-export const MultipleItemsWithDivider: StoryObj<NavItemComponent> = {
+export const MultipleItemsWithDivider: Story = {
   render: (args: NavItemComponent) => ({
     props: args,
     template: `

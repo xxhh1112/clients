@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { action } from "@storybook/addon-actions";
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -75,57 +75,54 @@ function submit(formObj: FormGroup) {
   formObj.markAllAsTouched();
 }
 
-const MultiSelectTemplate: StoryFn<MultiSelectComponent> = (args: MultiSelectComponent) => ({
-  props: {
-    formObj: formObjFactory(),
-    submit: submit,
-    ...args,
-    onItemsConfirmed: actionsData.onItemsConfirmed,
-  },
-  template: `
-    <form [formGroup]="formObj" (ngSubmit)="submit(formObj)">
-      <bit-form-field>
-        <bit-label>{{ name }}</bit-label>
-        <bit-multi-select
-          class="tw-w-full"
-          formControlName="select"
-          [baseItems]="baseItems"
-          [removeSelectedItems]="removeSelectedItems"
-          [loading]="loading"
-          [disabled]="disabled"
-          (onItemsConfirmed)="onItemsConfirmed($event)">
-        </bit-multi-select>
-        <bit-hint>{{ hint }}</bit-hint>
-      </bit-form-field>
-      <button type="submit" bitButton buttonType="primary">Submit</button>
-    </form>
-  `,
-});
+type Story = StoryObj<MultiSelectComponent & { name: string; hint: string }>;
 
-export const Loading = {
-  render: MultiSelectTemplate,
-
+export const Loading: Story = {
+  render: (args) => ({
+    props: {
+      formObj: formObjFactory(),
+      submit: submit,
+      ...args,
+      onItemsConfirmed: actionsData.onItemsConfirmed,
+    },
+    template: `
+      <form [formGroup]="formObj" (ngSubmit)="submit(formObj)">
+        <bit-form-field>
+          <bit-label>{{ name }}</bit-label>
+          <bit-multi-select
+            class="tw-w-full"
+            formControlName="select"
+            [baseItems]="baseItems"
+            [removeSelectedItems]="removeSelectedItems"
+            [loading]="loading"
+            [disabled]="disabled"
+            (onItemsConfirmed)="onItemsConfirmed($event)">
+          </bit-multi-select>
+          <bit-hint>{{ hint }}</bit-hint>
+        </bit-form-field>
+        <button type="submit" bitButton buttonType="primary">Submit</button>
+      </form>
+    `,
+  }),
   args: {
     baseItems: [] as any,
     name: "Loading",
     hint: "This is what a loading multi-select looks like",
-    loading: "true",
+    loading: true,
   },
 };
 
-export const Disabled = {
-  render: MultiSelectTemplate,
-
+export const Disabled: Story = {
+  ...Loading,
   args: {
     name: "Disabled",
-    disabled: "true",
+    disabled: true,
     hint: "This is what a disabled multi-select looks like",
   },
 };
 
-export const Groups = {
-  render: MultiSelectTemplate,
-
+export const Groups: Story = {
+  ...Loading,
   args: {
     name: "Select groups",
     hint: "Groups will be assigned to the associated member",
@@ -141,9 +138,8 @@ export const Groups = {
   },
 };
 
-export const Members = {
-  render: MultiSelectTemplate,
-
+export const Members: Story = {
+  ...Loading,
   args: {
     name: "Select members",
     hint: "Members will be assigned to the associated group/collection",
@@ -189,9 +185,8 @@ export const Members = {
   },
 };
 
-export const Collections = {
-  render: MultiSelectTemplate,
-
+export const Collections: Story = {
+  ...Loading,
   args: {
     name: "Select collections",
     hint: "Collections will be assigned to the associated member",
@@ -235,9 +230,8 @@ export const Collections = {
   },
 };
 
-export const MembersAndGroups = {
-  render: MultiSelectTemplate,
-
+export const MembersAndGroups: Story = {
+  ...Loading,
   args: {
     name: "Select groups and members",
     hint: "Members/Groups will be assigned to the associated collection",
@@ -258,9 +252,8 @@ export const MembersAndGroups = {
   },
 };
 
-export const RemoveSelected = {
-  render: MultiSelectTemplate,
-
+export const RemoveSelected: Story = {
+  ...Loading,
   args: {
     name: "Select groups",
     hint: "Groups will be removed from the list once the dropdown is closed",
@@ -273,30 +266,27 @@ export const RemoveSelected = {
       { id: "6", listName: "Group 6", labelName: "Group 6", icon: "bwi-family" },
       { id: "7", listName: "Group 7", labelName: "Group 7", icon: "bwi-family" },
     ],
-    removeSelectedItems: "true",
+    removeSelectedItems: true,
   },
 };
 
-const StandaloneTemplate: StoryFn<MultiSelectComponent> = (args: MultiSelectComponent) => ({
-  props: {
-    ...args,
-    onItemsConfirmed: actionsData.onItemsConfirmed,
-  },
-  template: `
-    <bit-multi-select
-      class="tw-w-full"
-      [baseItems]="baseItems"
-      [removeSelectedItems]="removeSelectedItems"
-      [loading]="loading"
-      [disabled]="disabled"
-      (onItemsConfirmed)="onItemsConfirmed($event)">
-    </bit-multi-select>
-  `,
-});
-
-export const Standalone = {
-  render: StandaloneTemplate,
-
+export const Standalone: Story = {
+  render: (args) => ({
+    props: {
+      ...args,
+      onItemsConfirmed: actionsData.onItemsConfirmed,
+    },
+    template: `
+      <bit-multi-select
+        class="tw-w-full"
+        [baseItems]="baseItems"
+        [removeSelectedItems]="removeSelectedItems"
+        [loading]="loading"
+        [disabled]="disabled"
+        (onItemsConfirmed)="onItemsConfirmed($event)">
+      </bit-multi-select>
+    `,
+  }),
   args: {
     baseItems: [
       { id: "1", listName: "Group 1", labelName: "Group 1", icon: "bwi-family" },
@@ -307,6 +297,6 @@ export const Standalone = {
       { id: "6", listName: "Group 6", labelName: "Group 6", icon: "bwi-family" },
       { id: "7", listName: "Group 7", labelName: "Group 7", icon: "bwi-family" },
     ],
-    removeSelectedItems: "true",
+    removeSelectedItems: true,
   },
 };

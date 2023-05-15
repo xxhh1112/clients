@@ -1,6 +1,6 @@
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, StoryFn, applicationConfig, moduleMetadata } from "@storybook/angular";
+import { Meta, StoryObj, applicationConfig, moduleMetadata } from "@storybook/angular";
 
 import { IconButtonModule } from "../icon-button";
 import { LinkModule } from "../link";
@@ -48,36 +48,35 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<BreadcrumbsComponent> = (args: BreadcrumbsComponent) => ({
-  props: args,
-  template: `
-    <h3 class="tw-text-main">Router links</h3>
-    <p>
-      <bit-breadcrumbs [show]="show">
-        <bit-breadcrumb *ngFor="let item of items" [icon]="item.icon" [route]="[item.route]">{{item.name}}</bit-breadcrumb>
-      </bit-breadcrumbs>
-    </p>
+type Story = StoryObj<BreadcrumbsComponent & { items: Breadcrumb[] }>;
 
-    <h3 class="tw-text-main">Click emit</h3>
-    <p>
-      <bit-breadcrumbs [show]="show">
-        <bit-breadcrumb *ngFor="let item of items" [icon]="item.icon" (click)="click($event)">{{item.name}}</bit-breadcrumb>
-      </bit-breadcrumbs>
-    </p>
-  `,
-});
-
-export const TopLevel = {
-  render: Template,
+export const TopLevel: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <h3 class="tw-text-main">Router links</h3>
+      <p>
+        <bit-breadcrumbs [show]="show">
+          <bit-breadcrumb *ngFor="let item of items" [icon]="item.icon" [route]="[item.route]">{{item.name}}</bit-breadcrumb>
+        </bit-breadcrumbs>
+      </p>
+  
+      <h3 class="tw-text-main">Click emit</h3>
+      <p>
+        <bit-breadcrumbs [show]="show">
+          <bit-breadcrumb *ngFor="let item of items" [icon]="item.icon" (click)="click($event)">{{item.name}}</bit-breadcrumb>
+        </bit-breadcrumbs>
+      </p>
+    `,
+  }),
 
   args: {
     items: [{ icon: "bwi-star", name: "Top Level" }] as Breadcrumb[],
   },
 };
 
-export const SecondLevel = {
-  render: Template,
-
+export const SecondLevel: Story = {
+  ...TopLevel,
   args: {
     items: [
       { name: "Acme Vault", route: "/" },
@@ -86,9 +85,8 @@ export const SecondLevel = {
   },
 };
 
-export const Overflow = {
-  render: Template,
-
+export const Overflow: Story = {
+  ...TopLevel,
   args: {
     items: [
       { name: "Acme Vault", route: "" },

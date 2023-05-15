@@ -1,4 +1,4 @@
-import { Meta, moduleMetadata, StoryFn } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -50,67 +50,62 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<DialogComponent> = (args: DialogComponent) => ({
-  props: args,
-  template: `
-    <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
-      <span bitDialogTitle>{{title}}</span>
-      <ng-container bitDialogContent>Dialog body text goes here.</ng-container>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary" [disabled]="loading">Save</button>
-        <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
-        <button
-          [disabled]="loading"
-          class="tw-ml-auto"
-          bitIconButton="bwi-trash"
-          buttonType="danger"
-          size="default"
-          title="Delete"
-          aria-label="Delete"></button>
-      </ng-container>
-    </bit-dialog>
-  `,
-});
+type Story = StoryObj<DialogComponent & { title: string }>;
 
-export const Default = {
-  render: Template,
-
+export const Default: Story = {
+  render: (args: DialogComponent) => ({
+    props: args,
+    template: `
+      <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
+        <span bitDialogTitle>{{title}}</span>
+        <ng-container bitDialogContent>Dialog body text goes here.</ng-container>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary" [disabled]="loading">Save</button>
+          <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
+          <button
+            [disabled]="loading"
+            class="tw-ml-auto"
+            bitIconButton="bwi-trash"
+            buttonType="danger"
+            size="default"
+            title="Delete"
+            aria-label="Delete"></button>
+        </ng-container>
+      </bit-dialog>
+    `,
+  }),
   args: {
     dialogSize: "default",
     title: "Default",
   },
 };
 
-export const Small = {
-  render: Template,
-
+export const Small: Story = {
+  ...Default,
   args: {
     dialogSize: "small",
     title: "Small",
   },
 };
 
-export const LongTitle = {
-  render: Template,
-
+export const LongTitle: Story = {
+  ...Default,
   args: {
     dialogSize: "small",
     title: "Long_Title_That_Should_Be_Truncated",
   },
 };
 
-export const Large = {
-  render: Template,
-
+export const Large: Story = {
+  ...Default,
   args: {
     dialogSize: "large",
     title: "Large",
   },
 };
 
-export const Loading = {
-  render: Template,
-
+export const Loading: Story = {
+  ...Default,
   args: {
     dialogSize: "large",
     loading: true,
@@ -118,62 +113,55 @@ export const Loading = {
   },
 };
 
-const TemplateScrolling: StoryFn<DialogComponent> = (args: DialogComponent) => ({
-  props: args,
-  template: `
-    <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
-      <span bitDialogTitle>Scrolling Example</span>
-      <span bitDialogContent>
-        Dialog body text goes here.<br>
-        <ng-container *ngFor="let _ of [].constructor(100)">
-          repeating lines of characters <br>
+export const ScrollingContent: Story = {
+  render: (args: DialogComponent) => ({
+    props: args,
+    template: `
+      <bit-dialog [dialogSize]="dialogSize" [loading]="loading" [disablePadding]="disablePadding">
+        <span bitDialogTitle>Scrolling Example</span>
+        <span bitDialogContent>
+          Dialog body text goes here.<br>
+          <ng-container *ngFor="let _ of [].constructor(100)">
+            repeating lines of characters <br>
+          </ng-container>
+          end of sequence!
+        </span>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary" [disabled]="loading">Save</button>
+          <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
         </ng-container>
-        end of sequence!
-      </span>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary" [disabled]="loading">Save</button>
-        <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
-      </ng-container>
-    </bit-dialog>
-  `,
-});
-
-export const ScrollingContent = {
-  render: TemplateScrolling,
-
+      </bit-dialog>
+    `,
+  }),
   args: {
     dialogSize: "small",
   },
 };
 
-const TemplateTabbed: StoryFn<DialogComponent> = (args: DialogComponent) => ({
-  props: args,
-  template: `
-    <bit-dialog [dialogSize]="dialogSize" [disablePadding]="disablePadding">
-      <span bitDialogTitle>Tab Content Example</span>
-      <span bitDialogContent>
-        <bit-tab-group>
-            <bit-tab label="First Tab">First Tab Content</bit-tab>
-            <bit-tab label="Second Tab">Second Tab Content</bit-tab>
-            <bit-tab label="Third Tab">Third Tab Content</bit-tab>
-        </bit-tab-group>
-      </span>
-      <ng-container bitDialogFooter>
-        <button bitButton buttonType="primary" [disabled]="loading">Save</button>
-        <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
-      </ng-container>
-    </bit-dialog>
-  `,
-});
-
-export const TabContent = {
-  render: TemplateTabbed,
-
+export const TabContent: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-dialog [dialogSize]="dialogSize" [disablePadding]="disablePadding">
+        <span bitDialogTitle>Tab Content Example</span>
+        <span bitDialogContent>
+          <bit-tab-group>
+              <bit-tab label="First Tab">First Tab Content</bit-tab>
+              <bit-tab label="Second Tab">Second Tab Content</bit-tab>
+              <bit-tab label="Third Tab">Third Tab Content</bit-tab>
+          </bit-tab-group>
+        </span>
+        <ng-container bitDialogFooter>
+          <button bitButton buttonType="primary" [disabled]="loading">Save</button>
+          <button bitButton buttonType="secondary" [disabled]="loading">Cancel</button>
+        </ng-container>
+      </bit-dialog>
+    `,
+  }),
   args: {
     dialogSize: "large",
     disablePadding: true,
   },
-
   parameters: {
     docs: {
       storyDescription: `An example of using the \`bitTabGroup\` component within the Dialog. The content padding should be
