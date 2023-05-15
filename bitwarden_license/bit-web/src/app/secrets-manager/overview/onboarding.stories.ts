@@ -15,18 +15,14 @@ export default {
   component: OnboardingComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        JslibModule,
-        RouterModule,
-        LinkModule,
-        IconModule,
-        ProgressModule,
-        PreloadedEnglishI18nModule,
-      ],
+      imports: [JslibModule, RouterModule, LinkModule, IconModule, ProgressModule],
       declarations: [OnboardingTaskComponent],
     }),
     applicationConfig({
-      providers: [importProvidersFrom(RouterModule.forRoot([], { useHash: true }))],
+      providers: [
+        importProvidersFrom(RouterModule.forRoot([], { useHash: true })),
+        importProvidersFrom(PreloadedEnglishI18nModule),
+      ],
     }),
   ],
 } as Meta;

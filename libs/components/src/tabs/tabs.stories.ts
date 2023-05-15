@@ -9,7 +9,6 @@ import { FormFieldModule } from "../form-field";
 import { TabGroupComponent } from "./tab-group/tab-group.component";
 import { TabsModule } from "./tabs.module";
 
-// TRigger build
 @Component({
   selector: "bit-tab-active-dummy",
   template: "Router - Active selected",

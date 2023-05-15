@@ -41,7 +41,7 @@ export default {
   component: VaultItemsComponent,
   decorators: [
     moduleMetadata({
-      imports: [VaultItemsModule, PreloadedEnglishI18nModule, RouterModule],
+      imports: [VaultItemsModule, RouterModule],
       providers: [
         {
           provide: EnvironmentService,
@@ -95,7 +95,10 @@ export default {
       ],
     }),
     applicationConfig({
-      providers: [importProvidersFrom(RouterModule.forRoot([], { useHash: true }))],
+      providers: [
+        importProvidersFrom(RouterModule.forRoot([], { useHash: true })),
+        importProvidersFrom(PreloadedEnglishI18nModule),
+      ],
     }),
   ],
   args: {

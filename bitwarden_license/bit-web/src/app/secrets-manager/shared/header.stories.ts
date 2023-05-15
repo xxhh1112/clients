@@ -85,7 +85,6 @@ export default {
         TabsModule,
         TypographyModule,
         NavigationModule,
-        PreloadedEnglishI18nModule,
       ],
       declarations: [HeaderComponent, MockProductSwitcher, MockDynamicAvatar],
       providers: [
@@ -99,7 +98,10 @@ export default {
       ],
     }),
     applicationConfig({
-      providers: [importProvidersFrom(RouterModule.forRoot([], { useHash: true }))],
+      providers: [
+        importProvidersFrom(RouterModule.forRoot([], { useHash: true })),
+        importProvidersFrom(PreloadedEnglishI18nModule),
+      ],
     }),
   ],
 } as Meta;

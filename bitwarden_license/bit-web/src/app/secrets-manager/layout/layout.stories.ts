@@ -28,7 +28,7 @@ export default {
   component: LayoutComponent,
   decorators: [
     moduleMetadata({
-      imports: [RouterModule, LayoutModule, IconModule, PreloadedEnglishI18nModule],
+      imports: [RouterModule, LayoutModule, IconModule],
       declarations: [StoryContentComponent],
       providers: [{ provide: OrganizationService, useClass: MockOrganizationService }],
     }),
@@ -65,6 +65,7 @@ export default {
             { useHash: true }
           )
         ),
+        importProvidersFrom(PreloadedEnglishI18nModule),
       ],
     }),
   ],
