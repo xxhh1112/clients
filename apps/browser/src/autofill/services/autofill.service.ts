@@ -38,6 +38,13 @@ export default class AutofillService implements AutofillServiceInterface {
     private settingsService: SettingsService
   ) {}
 
+  /**
+   * Gets all forms with password fields and formats the data
+   * for both forms and password input elements.
+   *
+   * @param {AutofillPageDetails} pageDetails
+   * @returns {FormData[]}
+   */
   getFormsWithPasswordFields(pageDetails: AutofillPageDetails): FormData[] {
     const formData: FormData[] = [];
 
@@ -102,11 +109,12 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   /**
-   * Autofills a given tab with a given login item
-   * @param options Instructions about the autofill operation, including tab and login item
-   * @returns The TOTP code of the successfully autofilled login, if any
+   * Autofill a given tab with a given login item
+   *
+   * @param {AutoFillOptions} options Instructions about the autofill operation, including tab and login item
+   * @returns {Promise<string>} The TOTP code of the successfully autofilled login, if any
    */
-  async doAutoFill(options: AutoFillOptions): Promise<string> {
+  async doAutoFill(options: AutoFillOptions): Promise<string> | null {
     const tab = options.tab;
     if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
       throw new Error("Nothing to auto-fill.");
