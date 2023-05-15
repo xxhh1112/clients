@@ -3,9 +3,9 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { ButtonModule } from "../button";
-import { InputModule } from "../input/input.module";
-import { I18nMockService } from "../utils/i18n-mock.service";
+import { ButtonModule } from "../../button";
+import { I18nMockService } from "../../utils/i18n-mock.service";
+import { InputModule } from "../input";
 
 import { BitFormFieldComponent } from "./form-field.component";
 import { FormFieldModule } from "./form-field.module";

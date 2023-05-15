@@ -11,12 +11,12 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { BadgeModule } from "../badge";
-import { ButtonModule } from "../button";
-import { InputModule } from "../input/input.module";
+import { BadgeModule } from "../../badge";
+import { ButtonModule } from "../../button";
+import { SharedModule } from "../../shared";
+import { I18nMockService } from "../../utils/i18n-mock.service";
+import { InputModule } from "../input";
 import { MultiSelectComponent } from "../multi-select/multi-select.component";
-import { SharedModule } from "../shared";
-import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { FormFieldModule } from "./form-field.module";
 

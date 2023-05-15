@@ -14,8 +14,8 @@ import {
   IconButtonModule,
   TableModule,
   TabsModule,
+  SelectItemView,
 } from "@bitwarden/components";
-import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
 import { PreloadedEnglishI18nModule } from "../../../../../tests/preloaded-english-i18n.module";
 

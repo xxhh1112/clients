@@ -8,9 +8,8 @@ import { ValidationService } from "@bitwarden/common/abstractions/validation.ser
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
-import { FormFieldModule } from "../form-field";
+import { InputModule, FormFieldModule } from "../form";
 import { IconButtonModule } from "../icon-button";
-import { InputModule } from "../input/input.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BitActionDirective } from "./bit-action.directive";

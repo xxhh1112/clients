@@ -11,14 +11,14 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { AsyncActionsModule } from "../async-actions";
-import { ButtonModule } from "../button";
+import { AsyncActionsModule } from "../../async-actions";
+import { ButtonModule } from "../../button";
+import { IconButtonModule } from "../../icon-button";
+import { I18nMockService } from "../../utils/i18n-mock.service";
 import { CheckboxModule } from "../checkbox";
-import { IconButtonModule } from "../icon-button";
-import { InputModule } from "../input/input.module";
+import { InputModule } from "../input";
 import { RadioButtonModule } from "../radio-button";
 import { SelectModule } from "../select";
-import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BitFormFieldComponent } from "./form-field.component";
 import { FormFieldModule } from "./form-field.module";

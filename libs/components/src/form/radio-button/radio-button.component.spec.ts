@@ -4,7 +4,7 @@ import { By } from "@angular/platform-browser";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { I18nMockService } from "../utils/i18n-mock.service";
+import { I18nMockService } from "../../utils/i18n-mock.service";
 
 import { RadioButtonModule } from "./radio-button.module";
 import { RadioGroupComponent } from "./radio-group.component";

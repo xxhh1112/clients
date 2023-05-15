@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "../shared";
+import { SharedModule } from "../../shared";
 
 import { FormControlComponent } from "./form-control.component";
 import { BitHintComponent } from "./hint.component";

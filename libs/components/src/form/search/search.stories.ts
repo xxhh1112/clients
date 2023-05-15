@@ -4,8 +4,8 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { InputModule } from "../input/input.module";
-import { I18nMockService } from "../utils/i18n-mock.service";
+import { I18nMockService } from "../../utils/i18n-mock.service";
+import { InputModule } from "../input";
 
 import { SearchComponent } from "./search.component";
 

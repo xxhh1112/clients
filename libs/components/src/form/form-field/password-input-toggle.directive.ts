@@ -12,7 +12,7 @@ import {
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { BitIconButtonComponent } from "../icon-button/icon-button.component";
+import { BitIconButtonComponent } from "../../icon-button/icon-button.component";
 
 import { BitFormFieldComponent } from "./form-field.component";
 

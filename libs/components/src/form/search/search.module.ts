@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
-import { InputModule } from "../input/input.module";
-import { SharedModule } from "../shared";
+import { SharedModule } from "../../shared";
+import { InputModule } from "../input";
 
 import { SearchComponent } from "./search.component";
 

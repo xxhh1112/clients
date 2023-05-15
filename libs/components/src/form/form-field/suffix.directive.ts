@@ -1,6 +1,6 @@
 import { Directive, HostBinding, Input, Optional } from "@angular/core";
 
-import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
+import { ButtonLikeAbstraction } from "../../shared/button-like.abstraction";
 
 import { PrefixButtonClasses, PrefixClasses, PrefixStaticContentClasses } from "./prefix.directive";
 

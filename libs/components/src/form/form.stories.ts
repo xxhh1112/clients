@@ -12,15 +12,15 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
-import { CheckboxModule } from "../checkbox";
-import { FormControlModule } from "../form-control";
-import { FormFieldModule } from "../form-field";
-import { InputModule } from "../input/input.module";
-import { RadioButtonModule } from "../radio-button";
-import { SelectModule } from "../select";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
+import { CheckboxModule } from "./checkbox";
 import { countries } from "./countries";
+import { FormControlModule } from "./form-control";
+import { FormFieldModule } from "./form-field";
+import { InputModule } from "./input";
+import { RadioButtonModule } from "./radio-button";
+import { SelectModule } from "./select";
 
 export default {
   title: "Component Library/Form",

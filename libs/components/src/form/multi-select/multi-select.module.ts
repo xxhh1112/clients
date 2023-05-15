@@ -3,8 +3,8 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgSelectModule } from "@ng-select/ng-select";
 
-import { BadgeModule } from "../badge";
-import { SharedModule } from "../shared";
+import { BadgeModule } from "../../badge";
+import { SharedModule } from "../../shared";
 
 import { MultiSelectComponent } from "./multi-select.component";
 

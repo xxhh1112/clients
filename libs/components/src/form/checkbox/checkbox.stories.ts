@@ -4,8 +4,8 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/src/abstractions/i18n.service";
 
+import { I18nMockService } from "../../utils/i18n-mock.service";
 import { FormControlModule } from "../form-control";
-import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { CheckboxModule } from "./checkbox.module";
 

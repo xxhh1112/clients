@@ -17,9 +17,9 @@ let nextId = 0;
 
 @Directive({
   selector: "input[bitInput], select[bitInput], textarea[bitInput]",
-  providers: [{ provide: BitFormFieldControl, useExisting: BitInputDirective }],
+  providers: [{ provide: BitFormFieldControl, useExisting: InputDirective }],
 })
-export class BitInputDirective implements BitFormFieldControl {
+export class InputDirective implements BitFormFieldControl {
   @HostBinding("class") @Input() get classList() {
     return [
       "tw-block",

@@ -1,6 +1,6 @@
 import { Directive, HostBinding, Input, OnInit, Optional } from "@angular/core";
 
-import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
+import { ButtonLikeAbstraction } from "../../shared/button-like.abstraction";
 
 export const PrefixClasses = [
   "tw-bg-background-alt",

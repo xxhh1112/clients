@@ -16,8 +16,8 @@ import {
   NavigationModule,
   TabsModule,
   TypographyModule,
+  InputModule,
 } from "@bitwarden/components";
-import { InputModule } from "@bitwarden/components/src/input/input.module";
 import { PreloadedEnglishI18nModule } from "@bitwarden/web-vault/app/tests/preloaded-english-i18n.module";
 
 import { HeaderComponent } from "./header.component";

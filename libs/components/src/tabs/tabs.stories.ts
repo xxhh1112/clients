@@ -4,7 +4,7 @@ import { RouterModule } from "@angular/router";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { ButtonModule } from "../button";
-import { FormFieldModule } from "../form-field";
+import { FormFieldModule } from "../form";
 
 import { TabGroupComponent } from "./tab-group/tab-group.component";
 import { TabsModule } from "./tabs.module";

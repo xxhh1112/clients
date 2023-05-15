@@ -2,8 +2,8 @@ import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
+import { I18nMockService } from "../../utils/i18n-mock.service";
 import { MultiSelectComponent } from "../multi-select/multi-select.component";
-import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { SelectComponent } from "./select.component";
 import { SelectModule } from "./select.module";

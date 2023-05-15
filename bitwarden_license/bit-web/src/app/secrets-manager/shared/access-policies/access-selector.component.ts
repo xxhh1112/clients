@@ -13,7 +13,7 @@ import {
 } from "rxjs";
 
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
+import { SelectItemView } from "@bitwarden/components";
 
 import { BaseAccessPolicyView } from "../../models/view/access-policy.view";
 

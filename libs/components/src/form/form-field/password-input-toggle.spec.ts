@@ -4,10 +4,10 @@ import { By } from "@angular/platform-browser";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
-import { IconButtonModule } from "../icon-button";
-import { BitIconButtonComponent } from "../icon-button/icon-button.component";
-import { InputModule } from "../input/input.module";
-import { I18nMockService } from "../utils/i18n-mock.service";
+import { IconButtonModule } from "../../icon-button";
+import { BitIconButtonComponent } from "../../icon-button/icon-button.component";
+import { I18nMockService } from "../../utils/i18n-mock.service";
+import { InputModule } from "../input";
 
 import { BitFormFieldControl } from "./form-field-control";
 import { BitFormFieldComponent } from "./form-field.component";

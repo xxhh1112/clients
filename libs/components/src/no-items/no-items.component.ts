@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { Icons } from "..";
+import { Icons } from "../icon";
 
 /**
  * Component for displaying a message when there are no items to display. Expects title, description and button slots.
