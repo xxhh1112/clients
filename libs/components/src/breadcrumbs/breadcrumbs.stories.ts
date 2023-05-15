@@ -38,6 +38,7 @@ export default {
   ],
   args: {
     items: [],
+    show: 3,
   },
   argTypes: {
     breadcrumbs: {
