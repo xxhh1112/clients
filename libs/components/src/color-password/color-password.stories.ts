@@ -25,7 +25,7 @@ export const ColorPassword: Story = {
   render: (args) => ({
     props: args,
     template: `
-    <bit-color-password class="tw-text-base" [password]="password" [showCount]="showCount"></bit-color-password>
+      <bit-color-password class="tw-text-base" [password]="password" [showCount]="showCount"></bit-color-password>
     `,
   }),
 };
@@ -34,9 +34,9 @@ export const WrappedColorPassword: Story = {
   render: (args) => ({
     props: args,
     template: `
-    <div class="tw-max-w-32">
-      <bit-color-password class="tw-text-base" [password]="password" [showCount]="showCount"></bit-color-password>
-    </div>
+      <div class="tw-max-w-32">
+        <bit-color-password class="tw-text-base" [password]="password" [showCount]="showCount"></bit-color-password>
+      </div>
     `,
   }),
 };
