@@ -8,85 +8,20 @@ import { TotpService } from "@bitwarden/common/services/totp.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
+import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
+import {
+  triggerTestFailure,
+  createInputFieldDataItem,
+  createAutofillPageDetailsMock,
+  createChromeTabMock,
+} from "../../../utils/testing-utils";
 import { BrowserStateService } from "../../services/browser-state.service";
 import AutofillPageDetails from "../models/autofill-page-details";
 
 import { AutoFillOptions } from "./abstractions/autofill.service";
 import AutofillService from "./autofill.service";
-
-function triggerTestFailure() {
-  expect(true).toBe(false);
-}
-
-function createAutofillPageDetailsMock(customFields = {}): AutofillPageDetails {
-  return {
-    documentUUID: "documentUUID",
-    title: "title",
-    url: "url",
-    documentUrl: "documentUrl",
-    forms: {
-      validFormId: {
-        opid: "opid",
-        htmlName: "htmlName",
-        htmlID: "htmlID",
-        htmlAction: "htmlAction",
-        htmlMethod: "htmlMethod",
-      },
-    },
-    fields: [createInputFieldDataItem({ opid: "non-password-field" })],
-    collectedTimestamp: 0,
-    ...customFields,
-  };
-}
-
-function createInputFieldDataItem(customFields = {}) {
-  return {
-    opid: "default-input-field-opid",
-    elementNumber: 0,
-    visible: true,
-    viewable: true,
-    htmlID: "default-htmlID",
-    htmlName: "default-htmlName",
-    htmlClass: "default-htmlClass",
-    "label-left": "default-label-left",
-    "label-right": "default-label-right",
-    "label-top": "default-label-top",
-    "label-tag": "default-label-tag",
-    "label-aria": "default-label-aria",
-    placeholder: "default-placeholder",
-    type: "text",
-    value: "default-value",
-    disabled: false,
-    readonly: false,
-    onePasswordFieldType: "",
-    form: "invalidFormId",
-    autoCompleteType: "off",
-    selectInfo: "",
-    maxLength: 0,
-    tagName: "input",
-    ...customFields,
-  };
-}
-
-function createChromeTabMock(customFields = {}): chrome.tabs.Tab {
-  return {
-    id: 1,
-    index: 1,
-    pinned: false,
-    highlighted: false,
-    windowId: 2,
-    active: true,
-    incognito: false,
-    selected: true,
-    discarded: false,
-    autoDiscardable: false,
-    groupId: 2,
-    url: "https://tacos.com",
-    ...customFields,
-  };
-}
 
 describe("AutofillService", function () {
   let autofillService: AutofillService;
@@ -99,6 +34,7 @@ describe("AutofillService", function () {
   const settingsService = mock<SettingsService>();
 
   beforeEach(function () {
+    jest.clearAllMocks();
     mockReset(cipherService);
 
     autofillService = new AutofillService(
@@ -121,7 +57,7 @@ describe("AutofillService", function () {
       pageDetailsMock = createAutofillPageDetailsMock();
     });
 
-    it("should return an empty FormData array if no password fields are found", function () {
+    it("returns an empty FormData array if no password fields are found", function () {
       jest.spyOn(AutofillService, "loadPasswordFields");
 
       const formData = autofillService.getFormsWithPasswordFields(pageDetailsMock);
@@ -136,7 +72,7 @@ describe("AutofillService", function () {
       expect(formData).toStrictEqual([]);
     });
 
-    it("should return an FormData array containing a form with it's autofill data", function () {
+    it("returns an FormData array containing a form with it's autofill data", function () {
       const usernameInputField = createInputFieldDataItem({
         opid: "username-field",
         form: "validFormId",
@@ -162,7 +98,7 @@ describe("AutofillService", function () {
       ]);
     });
 
-    it("should narrow down three passwords that are present on a page to a single password field to autofill when only one form element is present on the page", function () {
+    it("narrows down three passwords that are present on a page to a single password field to autofill when only one form element is present on the page", function () {
       const usernameInputField = createInputFieldDataItem({
         opid: "username-field",
         form: "validFormId",
@@ -212,41 +148,46 @@ describe("AutofillService", function () {
 
   describe("doAutoFill", function () {
     let autofillOptions: AutoFillOptions;
+    const nothingToAutofillError = "Nothing to auto-fill.";
+    const didNotAutofillError = "Did not auto-fill.";
 
     beforeEach(function () {
-      const pageDetailsMock = createAutofillPageDetailsMock({
-        fields: [
-          createInputFieldDataItem({
-            opid: "username-field",
-            form: "validFormId",
-            elementNumber: 1,
-          }),
-          createInputFieldDataItem({
-            opid: "password-field",
-            type: "password",
-            form: "validFormId",
-            elementNumber: 2,
-          }),
-        ],
-      });
       autofillOptions = {
-        cipher: mock<CipherView>(),
+        cipher: mock<CipherView>({
+          id: "cipherId",
+          type: CipherType.Login,
+        }),
         pageDetails: [
           {
             frameId: 1,
             tab: createChromeTabMock(),
-            details: pageDetailsMock,
+            details: createAutofillPageDetailsMock({
+              fields: [
+                createInputFieldDataItem({
+                  opid: "username-field",
+                  form: "validFormId",
+                  elementNumber: 1,
+                }),
+                createInputFieldDataItem({
+                  opid: "password-field",
+                  type: "password",
+                  form: "validFormId",
+                  elementNumber: 2,
+                }),
+              ],
+            }),
           },
         ],
         tab: createChromeTabMock(),
       };
+      autofillOptions.cipher.fields = [mock<FieldView>({ name: "username" })];
+      autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
+      autofillOptions.cipher.login.username = "username";
+      autofillOptions.cipher.login.password = "password";
     });
 
-    describe("should throw an error when the following occurs", function () {
-      const nothingToAutofillError = "Nothing to auto-fill.";
-      const didNotAutofillError = "Did not auto-fill.";
-
-      it("the tab is not provided", async function () {
+    describe("given a set of autofill options that are incomplete", function () {
+      it("throws an error if the tab is not provided", async function () {
         autofillOptions.tab = undefined;
 
         try {
@@ -257,7 +198,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("the cipher is not provided", async function () {
+      it("throws an error if the cipher is not provided", async function () {
         autofillOptions.cipher = undefined;
 
         try {
@@ -268,7 +209,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("the page details are not provided", async function () {
+      it("throws an error if the page details are not provided", async function () {
         autofillOptions.pageDetails = undefined;
 
         try {
@@ -279,7 +220,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("the page details are empty", async function () {
+      it("throws an error if the page details are empty", async function () {
         autofillOptions.pageDetails = [];
 
         try {
@@ -290,7 +231,9 @@ describe("AutofillService", function () {
         }
       });
 
-      it("if an autofill did not occur for any of the passed pages", async function () {
+      it("throws an error if an autofill did not occur for any of the passed pages", async function () {
+        autofillOptions.tab.url = "https://a-different-url.com";
+
         try {
           await autofillService.doAutoFill(autofillOptions);
           triggerTestFailure();
@@ -300,16 +243,9 @@ describe("AutofillService", function () {
       });
     });
 
-    it("should autofill login data for a page", async function () {
-      const mockFieldView = mock<FieldView>({
-        name: "username",
-      });
-      autofillOptions.cipher.fields = [mockFieldView];
-      autofillOptions.cipher.id = "cipherId";
-      autofillOptions.cipher.type = CipherType.Login;
-      autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(true);
-      autofillOptions.cipher.login.username = "username";
-      autofillOptions.cipher.login.password = "password";
+    // TODO: Given login data to autofill
+
+    it("will autofill login data for a page", async function () {
       jest.spyOn(stateService, "getCanAccessPremium");
       jest.spyOn(stateService, "getDefaultUriMatch");
       jest.spyOn(logService, "info");
@@ -361,8 +297,77 @@ describe("AutofillService", function () {
       expect(autofillResult).toBeNull();
     });
 
-    it.todo("should return a TOTP value", function () {
-      // TODO: Implement a test that shows that a TOTP value is returned when doing autofill.
+    // TODO: will autofill card data for a page
+
+    // TODO: will autofill identity data for a page
+
+    it("blocks autofill on an untrusted iframe", async function () {
+      autofillOptions.allowUntrustedIframe = false;
+      autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(false);
+      jest.spyOn(logService, "info");
+
+      try {
+        await autofillService.doAutoFill(autofillOptions);
+        triggerTestFailure();
+      } catch (error) {
+        expect(logService.info).toHaveBeenCalledWith(
+          "Auto-fill on page load was blocked due to an untrusted iframe."
+        );
+        expect(error.message).toBe(didNotAutofillError);
+      }
+    });
+
+    it("allows autofill on an untrusted iframe if the passed option is set to true", async function () {
+      autofillOptions.allowUntrustedIframe = true;
+      autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValue(false);
+      jest.spyOn(logService, "info");
+
+      await autofillService.doAutoFill(autofillOptions);
+
+      expect(logService.info).not.toHaveBeenCalledWith(
+        "Auto-fill on page load was blocked due to an untrusted iframe."
+      );
+    });
+
+    it("skips updating the cipher's last used date if the passed options indicate that we should skip the last used cipher", async function () {
+      autofillOptions.skipLastUsed = true;
+      jest.spyOn(cipherService, "updateLastUsedDate");
+
+      await autofillService.doAutoFill(autofillOptions);
+
+      expect(cipherService.updateLastUsedDate).not.toHaveBeenCalled();
+    });
+
+    it("returns a TOTP value", async function () {
+      const totpCode = "123456";
+      autofillOptions.cipher.login.totp = "totp";
+      jest.spyOn(stateService, "getDisableAutoTotpCopy").mockResolvedValueOnce(false);
+      jest.spyOn(totpService, "getCode").mockReturnValueOnce(Promise.resolve(totpCode));
+
+      const autofillResult = await autofillService.doAutoFill(autofillOptions);
+
+      expect(stateService.getDisableAutoTotpCopy).toHaveBeenCalled();
+      expect(totpService.getCode).toHaveBeenCalledWith(autofillOptions.cipher.login.totp);
+      expect(autofillResult).toBe(totpCode);
+    });
+
+    it("returns a null value if the cipher type is not for a Login", async function () {
+      autofillOptions.cipher.type = CipherType.Identity;
+      autofillOptions.cipher.identity = mock<IdentityView>();
+
+      const autofillResult = await autofillService.doAutoFill(autofillOptions);
+
+      expect(autofillResult).toBeNull();
+    });
+
+    it("returns a null value if the user cannot access premium and the organization does not use TOTP", async function () {
+      autofillOptions.cipher.login.totp = "totp";
+      autofillOptions.cipher.organizationUseTotp = false;
+      jest.spyOn(stateService, "getCanAccessPremium").mockResolvedValueOnce(false);
+
+      const autofillResult = await autofillService.doAutoFill(autofillOptions);
+
+      expect(autofillResult).toBeNull();
     });
   });
 });
