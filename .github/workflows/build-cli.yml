@@ -172,7 +172,7 @@ jobs:
       - name: Pkgbuild
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          pkgbuild --identifier com.bitwarden.bwcli --install-location /usr/local/bin/ --root ./bw bw.pkg
+          pkgbuild --identifier com.bitwarden.bwcli --install-location /usr/local/bin/ --root ./ bw.pkg
 
       - name: Sign bw CLI for MacOS
         run: |
