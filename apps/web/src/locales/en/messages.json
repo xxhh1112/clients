@@ -664,6 +664,9 @@
   "supportsEncryption": {
     "message": "supports encryption"
   },
+  "loginWithPasskeyEnabled": {
+    "message": "Log in with passkey turned on"
+  },
   "passkeySaved": {
     "message": "$NAME$ saved",
     "placeholders": {

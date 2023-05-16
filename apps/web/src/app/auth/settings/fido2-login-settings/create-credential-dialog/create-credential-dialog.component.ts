@@ -1,7 +1,7 @@
 import { DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { map, Observable } from "rxjs";
+import { firstValueFrom, map, Observable } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -144,7 +144,19 @@ export class CreateCredentialDialogComponent implements OnInit {
       return;
     }
 
-    this.platformUtilsService.showToast("success", null, this.i18nService.t("passkeySaved", name));
+    if (firstValueFrom(this.hasPasskeys$)) {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("passkeySaved", name)
+      );
+    } else {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("loginWithPasskeyEnabled")
+      );
+    }
 
     this.dialogRef.close(CreateCredentialDialogResult.Success);
   }
