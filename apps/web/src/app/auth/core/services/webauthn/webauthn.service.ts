@@ -1,10 +1,7 @@
 import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
@@ -31,8 +28,6 @@ export class WebauthnService {
 
   constructor(
     private apiService: WebauthnApiService,
-    private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService,
     @Optional() navigatorCredentials?: CredentialsContainer,
     @Optional() private logService?: LogService
   ) {
@@ -43,22 +38,8 @@ export class WebauthnService {
   async getCredentialCreateOptions(
     verification: Verification
   ): Promise<CredentialCreateOptionsView | undefined> {
-    try {
-      const response = await this.apiService.getCredentialCreateOptions(verification);
-      return new CredentialCreateOptionsView(response.options, response.token);
-    } catch (error) {
-      if (error instanceof ErrorResponse && error.statusCode === 400) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("error"),
-          this.i18nService.t("invalidMasterPassword")
-        );
-      } else {
-        this.logService?.error(error);
-        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
-      }
-      return undefined;
-    }
+    const response = await this.apiService.getCredentialCreateOptions(verification);
+    return new CredentialCreateOptionsView(response.options, response.token);
   }
 
   async createCredential(
@@ -85,24 +66,12 @@ export class WebauthnService {
     deviceResponse: PublicKeyCredential,
     name: string
   ) {
-    try {
-      const request = new SaveCredentialRequest();
-      request.deviceResponse = new WebauthnAttestationResponseRequest(deviceResponse);
-      request.token = credentialOptions.token;
-      request.name = name;
-      await this.apiService.saveCredential(request);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("passkeySaved", name)
-      );
-      this.refresh();
-      return true;
-    } catch (error) {
-      this.logService?.error(error);
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
-      return false;
-    }
+    const request = new SaveCredentialRequest();
+    request.deviceResponse = new WebauthnAttestationResponseRequest(deviceResponse);
+    request.token = credentialOptions.token;
+    request.name = name;
+    await this.apiService.saveCredential(request);
+    this.refresh();
   }
 
   getCredential$(credentialId: string): Observable<WebauthnCredentialView> {
@@ -114,25 +83,9 @@ export class WebauthnService {
     );
   }
 
-  async deleteCredential(credentialId: string, verification: Verification): Promise<boolean> {
-    try {
-      await this.apiService.deleteCredential(credentialId, verification);
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("passkeyRemoved"));
-      this.refresh();
-      return true;
-    } catch (error) {
-      if (error instanceof ErrorResponse && error.statusCode === 400) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("error"),
-          this.i18nService.t("invalidMasterPassword")
-        );
-      } else {
-        this.logService?.error(error);
-        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
-      }
-      return false;
-    }
+  async deleteCredential(credentialId: string, verification: Verification): Promise<void> {
+    await this.apiService.deleteCredential(credentialId, verification);
+    this.refresh();
   }
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {

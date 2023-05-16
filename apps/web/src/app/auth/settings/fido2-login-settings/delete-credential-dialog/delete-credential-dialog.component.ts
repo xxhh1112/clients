@@ -4,7 +4,11 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
 import { WebauthnService } from "../../../core";
 import { WebauthnCredentialView } from "../../../core/views/webauth-credential.view";
@@ -28,7 +32,10 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: DeleteCredentialDialogParams,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnService
+    private webauthnService: WebauthnService,
+    private platformUtilsService: PlatformUtilsService,
+    private i18nService: I18nService,
+    private logService: LogService
   ) {}
 
   ngOnInit(): void {
@@ -44,14 +51,28 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
     }
 
     this.dialogRef.disableClose = true;
-    const success = await this.webauthnService.deleteCredential(this.credential.id, {
-      type: VerificationType.MasterPassword,
-      secret: this.formGroup.value.masterPassword,
-    });
-    if (!success) {
+    try {
+      await this.webauthnService.deleteCredential(this.credential.id, {
+        type: VerificationType.MasterPassword,
+        secret: this.formGroup.value.masterPassword,
+      });
+      this.platformUtilsService.showToast("success", null, this.i18nService.t("passkeyRemoved"));
+    } catch (error) {
+      if (error instanceof ErrorResponse && error.statusCode === 400) {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("error"),
+          this.i18nService.t("invalidMasterPassword")
+        );
+      } else {
+        this.logService.error(error);
+        this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+      }
+      return false;
+    } finally {
       this.dialogRef.disableClose = false;
-      return;
     }
+
     this.dialogRef.close();
   };
 
