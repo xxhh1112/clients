@@ -5,6 +5,7 @@ import { BehaviorSubject } from "rxjs";
 
 import { AvatarUpdateService } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationUserType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -68,6 +69,15 @@ export default {
               return false;
             },
           } as Partial<StateService>,
+        },
+        {
+          provide: SettingsService,
+          useValue: {
+            disableFavicon$: new BehaviorSubject(false).asObservable(),
+            getDisableFavicon() {
+              return false;
+            },
+          } as Partial<SettingsService>,
         },
         {
           provide: AvatarUpdateService,
@@ -264,14 +274,14 @@ function createCipherView(i: number, deleted = false): CipherView {
 
   if (i === 0) {
     // Old attachment
-    const attachement = new AttachmentView();
+    const attachment = new AttachmentView();
     view.organizationId = null;
     view.collectionIds = [];
-    view.attachments = [attachement];
+    view.attachments = [attachment];
   } else if (i % 5 === 0) {
-    const attachement = new AttachmentView();
-    attachement.key = new SymmetricCryptoKey(new ArrayBuffer(32));
-    view.attachments = [attachement];
+    const attachment = new AttachmentView();
+    attachment.key = new SymmetricCryptoKey(new ArrayBuffer(32));
+    view.attachments = [attachment];
   }
 
   return view;

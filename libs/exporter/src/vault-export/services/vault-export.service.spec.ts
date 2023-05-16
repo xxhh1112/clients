@@ -20,7 +20,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
-import { BuildTestObject, GetUniqueString } from "../../../../common/spec/utils";
+import { BuildTestObject, GetUniqueString } from "../../../../common/spec";
 
 import { VaultExportService } from "./vault-export.service";
 
@@ -172,7 +172,7 @@ describe("VaultExportService", () => {
     );
   });
 
-  it("exports unecrypted user ciphers", async () => {
+  it("exports unencrypted user ciphers", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews.slice(0, 1));
 
     const actual = await exportService.getExport("json");
@@ -188,7 +188,7 @@ describe("VaultExportService", () => {
     expectEqualCiphers(UserCipherDomains.slice(0, 1), actual);
   });
 
-  it("does not unecrypted export trashed user items", async () => {
+  it("does not unencrypted export trashed user items", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews);
 
     const actual = await exportService.getExport("json");

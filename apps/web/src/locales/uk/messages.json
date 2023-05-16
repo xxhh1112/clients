@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "View collection - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edit item - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Скопійовано пароль запису $ID$.",
     "placeholders": {
@@ -4813,7 +4831,7 @@
     "message": "Ваш головний пароль не відповідає вимогам політики цієї організації. Щоб приєднатися до організації, необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
   "maximumVaultTimeout": {
     "message": "Час очікування сховища"
@@ -5199,9 +5217,6 @@
     "message": "щоб вимагати в усіх учасників виконувати вхід з SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "Для встановлення розшифрування Key Connector необхідні політики авторизації SSO та єдиної організації."
-  },
   "memberDecryptionOption": {
     "message": "Налаштування розшифрування учасників"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Під'єднайте вхід із SSO до власного сервера ключів розшифрування. Скориставшись цією можливістю, учасникам не потрібен буде головний пароль для розшифрування даних сховища. Для отримання допомоги з налаштуванням зв'яжіться зі службою підтримки Bitwarden."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Вхід із SSO та розшифрування Key Connector\" увімкнено. Ця політика застосовується лише для власників та адміністраторів."
@@ -5428,6 +5452,15 @@
     "message": "Поточна організація",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Налаштування облікового запису"
   },
@@ -5507,7 +5540,7 @@
   },
   "lastSync": {
     "message": "Востаннє синхронізовано",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Власне розміщене спонсорування синхронізовано."
@@ -5650,7 +5683,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Input value must be at least $MIN$.",
+    "message": "Значення має бути принаймні $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -5659,7 +5692,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Input value must not exceed $MAX$.",
+    "message": "Значення не може перевищувати $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -6164,6 +6197,10 @@
     "message": "Токени доступу відкликано",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "No access token selected to revoke",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Підменю"
   },
@@ -6554,11 +6591,8 @@
   "lowKdfIterations": {
     "message": "Низький показник KDF-ітерацій"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Налаштуйте вищий рівень KDF-шифрування для вдосконалення безпеки облікового запису."
-  },
-  "changeKdfSettings": {
-    "message": "Змінити налаштування KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Продовжуючи, ви вийдете з усіх активних сеансів. Необхідно буде повторно виконати вхід і пройти двоетапну перевірку. Перед зміною налаштувань шифрування ми рекомендуємо експортувати ваше сховище, щоб запобігти можливій втраті даних."
@@ -6735,7 +6769,37 @@
   "notAvailableForFreeOrganization": {
     "message": "Ця функція недоступна для безплатних організацій. Зверніться до власника своєї організації для оновлення."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Зверніться до адміністратора організації, щоб керувати секретами для цього проєкту.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
-    "message": "Require existing members to change their passwords"
+    "message": "Вимагати від наявних учасників змінювати паролі"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "У вас немає дозволу на видалення цього проєкту",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Неможливо видалити зазначені проєкти. Бажаєте продовжити?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Update KDF settings"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Trusted device encryption"
+  },
+  "memberDecryptionTdeDescStart": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescEnd": {
+    "message": "with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

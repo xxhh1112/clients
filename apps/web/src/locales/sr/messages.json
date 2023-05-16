@@ -1919,7 +1919,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Go premium for just $PRICE$ /year, or get premium accounts for $FAMILYPLANUSERCOUNT$ users and unlimited family sharing with a ",
+    "message": "Идите на премиум за само $PRICE$ годишње, или набавите премијум налоге за $FAMILYPLANUSERCOUNT$ корисника и неограничено породично дељење са ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -2747,6 +2747,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "Преглед колекције - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Уредити ставку - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -4616,10 +4634,10 @@
     "message": "Јесте ли сигурни да желите да уклоните следеће кориснике? Процес може потрајати неколико секунди да се заврши, и не може се прекинути или отказати."
   },
   "removeOrgUsersConfirmation": {
-    "message": "When member(s) are removed, they no longer have access to organization data and this action is irreversible. To add the member back to the organization, they must be invited and onboarded again. The process may take a few seconds to complete and cannot be interrupted or canceled."
+    "message": "Када се члан уклони, он више нема приступ подацима организације и ова радња је неповратна. Да бисте поново додали члана у организацију, он мора бити позван и поново укључени. Процес може потрајати неколико секунди и не може се прекинути или отказати."
   },
   "revokeUsersWarning": {
-    "message": "When member(s) are revoked, they no longer have access to organization data. To quickly restore member access, go to the Revoked tab. The process may take a few seconds to complete and cannot be interrupted or canceled."
+    "message": "Када се члан опозове, он више нема приступ подацима организације. Да бисте брзо вратили приступ члану, идите на картицу Опозвано. Процес може потрајати неколико секунди и не може се прекинути или отказати."
   },
   "theme": {
     "message": "Тема"
@@ -4813,7 +4831,7 @@
     "message": "Ваша главна лозинка не испуњава услове политике ове организације. Да бисте се придружили организацији, морате одмах ажурирати своју главну лозинку. Ако наставите, одјавићете се из ваше тренутне сесије. Активне сесије на другим уређајима могу да остану активне до један сат."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат."
   },
   "maximumVaultTimeout": {
     "message": "Тајмаут сефа"
@@ -4847,7 +4865,7 @@
     }
   },
   "vaultTimeoutPolicyWithActionInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "message": "Смернице ваше организације утичу на временско ограничење сефа. Максимално дозвољено ограничење сефа је $HOURS$ сат(и) и $MINUTES$ минут(а). Ваша радња временског ограничења сефа је подешена на $ACTION$.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4864,7 +4882,7 @@
     }
   },
   "vaultTimeoutActionPolicyInEffect": {
-    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "message": "Смернице ваше организације су поставиле вашу радњу временског ограничења сефа на $ACTION$.",
     "placeholders": {
       "action": {
         "content": "$1",
@@ -4900,7 +4918,7 @@
     "message": "Активирати ауто-пуњење"
   },
   "activateAutofillPolicyDesc": {
-    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+    "message": "Активирајте ауто-пуњење при учитавању странице на додатку прегледача за све постојеће и нове чланове."
   },
   "experimentalFeature": {
     "message": "Компромитоване или непоуздане веб локације могу да искористе ауто-пуњење при учитавању странице."
@@ -4951,13 +4969,13 @@
     "message": "Прилагођен обим"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Custom user ID claim types"
+    "message": "Типови захтева за кориснички ИД"
   },
   "additionalEmailClaimTypes": {
-    "message": "Email claim types"
+    "message": "Врсте потраживања имејла"
   },
   "additionalNameClaimTypes": {
-    "message": "Custom name claim types"
+    "message": "Типови захтева за корисничко име"
   },
   "acrValues": {
     "message": "Requested authentication context class reference values"
@@ -5199,9 +5217,6 @@
     "message": "да би сви чланови обавезно користили SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
-  },
   "memberDecryptionOption": {
     "message": "Опциј дешифровања члана"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
@@ -5428,6 +5452,15 @@
     "message": "Тренутна организација",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Налог: Пријављено као $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Подешавања налога"
   },
@@ -5507,7 +5540,7 @@
   },
   "lastSync": {
     "message": "Последња синхронизација",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Self-hosted sponsorships synced."
@@ -5650,7 +5683,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Input value must be at least $MIN$.",
+    "message": "Вредност мора бити најмање $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -5659,7 +5692,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Input value must not exceed $MAX$.",
+    "message": "Вредност не сме бити већа од $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -5671,7 +5704,7 @@
     "message": "1 или више имејлова су неважећи"
   },
   "tooManyEmails": {
-    "message": "You can only submit up to $COUNT$ emails at a time",
+    "message": "Можете послати само до $COUNT$ имејла истовремено",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5813,7 +5846,7 @@
     "message": "Трајно избрисати тајне"
   },
   "secretProjectAssociationDescription": {
-    "message": "Select projects that the secret will be associated with. Only organization users with access to these projects will be able to see the secret.",
+    "message": "Изаберите пројекте са којима ће тајна бити повезана. Тајну ће моћи да виде само корисници организације са приступом овим пројектима.",
     "description": "A prompt explaining how secrets can be associated with projects."
   },
   "selectProjects": {
@@ -5885,7 +5918,7 @@
     "description": "Empty state to indicate that there are no secrets to display."
   },
   "secretsNoItemsMessage": {
-    "message": "To get started, add a new secret or import secrets.",
+    "message": "Да бисте започели, додајте нову тајну или увезите тајне.",
     "description": "Message to encourage the user to start adding secrets."
   },
   "secretsTrashNoItemsMessage": {
@@ -6163,6 +6196,10 @@
   "accessTokenRevoked": {
     "message": "Приступ токена опозван",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "Није изабран приступни токен за опозив",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "Под-мени"
@@ -6554,11 +6591,8 @@
   "lowKdfIterations": {
     "message": "Ниска KDF понављања"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Повећајте KDF подешавања шифровања да бисте побољшали безбедност налога."
-  },
-  "changeKdfSettings": {
-    "message": "Променити KDF подешавања"
+  "updateLowKdfIterationsDesc": {
+    "message": "Ажурирајте подешавања шифровања да бисте испунили нове безбедносне препоруке и побољшали заштиту налога."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Ако наставите, одјавићете се са свих активних сесија. Мораћете поново да се пријавите и завршите подешавање пријаве у два корака. Препоручујемо да извезете трезор пре него што промените подешавања шифровања да бисте спречили губитак података."
@@ -6735,7 +6769,37 @@
   "notAvailableForFreeOrganization": {
     "message": "Ова функција није доступна за бесплатне организације. Обратите се власнику организације за надоградњу."
   },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Контактирајте администратора своје организације да бисте управљали тајнама за овај пројекат.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
   "enforceOnLoginDesc": {
     "message": "Захтевајте од постојећих чланова да промене њихове лозинке"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Немате дозволе да избришете овај пројекат",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Следећи пројекти се не могу брисати. Да ли желите да наставите?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Ажурирати KDF подешавања"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Trusted device encryption"
+  },
+  "memberDecryptionTdeDescStart": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescEnd": {
+    "message": "with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

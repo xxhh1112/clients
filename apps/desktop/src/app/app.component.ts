@@ -14,8 +14,10 @@ import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -133,7 +135,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     private modalService: ModalService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private configService: ConfigServiceAbstraction,
+    private dialogService: DialogServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -217,6 +221,7 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           case "syncCompleted":
             await this.updateAppMenu();
+            await this.configService.fetchServerConfig();
             break;
           case "openSettings":
             await this.openModal<SettingsComponent>(SettingsComponent, this.settingsRef);
@@ -228,12 +233,15 @@ export class AppComponent implements OnInit, OnDestroy {
             const fingerprint = await this.cryptoService.getFingerprint(
               await this.stateService.getUserId()
             );
-            const result = await this.platformUtilsService.showDialog(
-              this.i18nService.t("yourAccountsFingerprint") + ":\n" + fingerprint.join("-"),
-              this.i18nService.t("fingerprintPhrase"),
-              this.i18nService.t("learnMore"),
-              this.i18nService.t("close")
-            );
+            const result = await this.dialogService.openSimpleDialog({
+              title: { key: "fingerprintPhrase" },
+              content:
+                this.i18nService.t("yourAccountsFingerprint") + ":\n" + fingerprint.join("-"),
+              acceptButtonText: { key: "learnMore" },
+              cancelButtonText: { key: "close" },
+              type: SimpleDialogType.INFO,
+            });
+
             if (result) {
               this.platformUtilsService.launchUri("https://bitwarden.com/help/fingerprint-phrase/");
             }
@@ -262,24 +270,24 @@ export class AppComponent implements OnInit, OnDestroy {
             });
             break;
           case "premiumRequired": {
-            const premiumConfirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("premiumRequiredDesc"),
-              this.i18nService.t("premiumRequired"),
-              this.i18nService.t("learnMore"),
-              this.i18nService.t("cancel")
-            );
+            const premiumConfirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "premiumRequired" },
+              content: { key: "premiumRequiredDesc" },
+              acceptButtonText: { key: "learnMore" },
+              type: SimpleDialogType.SUCCESS,
+            });
             if (premiumConfirmed) {
               await this.openModal<PremiumComponent>(PremiumComponent, this.premiumRef);
             }
             break;
           }
           case "emailVerificationRequired": {
-            const emailVerificationConfirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("emailVerificationRequiredDesc"),
-              this.i18nService.t("emailVerificationRequired"),
-              this.i18nService.t("learnMore"),
-              this.i18nService.t("cancel")
-            );
+            const emailVerificationConfirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "emailVerificationRequired" },
+              content: { key: "emailVerificationRequiredDesc" },
+              acceptButtonText: { key: "learnMore" },
+              type: SimpleDialogType.INFO,
+            });
             if (emailVerificationConfirmed) {
               this.platformUtilsService.launchUri(
                 "https://bitwarden.com/help/create-bitwarden-account/"
