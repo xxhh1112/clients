@@ -59,57 +59,73 @@ export class CreateCredentialDialogComponent implements OnInit {
     this.dialogRef.disableClose = true;
 
     try {
-      if (this.currentStep === "userVerification") {
-        this.formGroup.controls.userVerification.markAllAsTouched();
-        if (this.formGroup.controls.userVerification.invalid) {
-          return;
-        }
-
-        this.credentialOptions = await this.webauthnService.getCredentialCreateOptions({
-          type: VerificationType.MasterPassword,
-          secret: this.formGroup.value.userVerification.masterPassword,
-        });
-        if (this.credentialOptions === undefined) {
-          return;
-        }
-        this.currentStep = "credentialCreation";
-      }
-
-      if (this.currentStep === "credentialCreationFailed") {
-        this.currentStep = "credentialCreation";
-      }
-
-      if (this.currentStep === "credentialCreation") {
-        this.deviceResponse = await this.webauthnService.createCredential(this.credentialOptions);
-        if (this.deviceResponse === undefined) {
-          this.currentStep = "credentialCreationFailed";
-          return;
-        }
-        this.currentStep = "credentialNaming";
-        return;
-      }
-
-      if (this.currentStep === "credentialNaming") {
-        this.formGroup.controls.credentialNaming.markAllAsTouched();
-        if (this.formGroup.controls.credentialNaming.invalid) {
-          return;
-        }
-
-        const result = await this.webauthnService.saveCredential(
-          this.credentialOptions,
-          this.deviceResponse,
-          this.formGroup.value.credentialNaming.name
-        );
-        if (!result) {
-          return;
-        }
-
-        this.dialogRef.close(CreateCredentialDialogResult.Success);
+      switch (this.currentStep) {
+        case "userVerification":
+          return await this.submitUserVerification();
+        case "credentialCreationFailed":
+          return await this.submitCredentialCreationFailed();
+        case "credentialCreation":
+          return await this.submitCredentialCreation();
+        case "credentialNaming":
+          return await this.submitCredentialNaming();
       }
     } finally {
       this.dialogRef.disableClose = false;
     }
   };
+
+  protected async submitUserVerification() {
+    this.formGroup.controls.userVerification.markAllAsTouched();
+    if (this.formGroup.controls.userVerification.invalid) {
+      return;
+    }
+
+    this.credentialOptions = await this.webauthnService.getCredentialCreateOptions({
+      type: VerificationType.MasterPassword,
+      secret: this.formGroup.value.userVerification.masterPassword,
+    });
+
+    if (this.credentialOptions === undefined) {
+      return;
+    }
+
+    this.currentStep = "credentialCreation";
+    await this.submitCredentialCreation();
+  }
+
+  protected async submitCredentialCreation() {
+    this.deviceResponse = await this.webauthnService.createCredential(this.credentialOptions);
+    if (this.deviceResponse === undefined) {
+      this.currentStep = "credentialCreationFailed";
+      return;
+    }
+
+    this.currentStep = "credentialNaming";
+  }
+
+  protected async submitCredentialCreationFailed() {
+    this.currentStep = "credentialCreation";
+    await this.submitCredentialCreation();
+  }
+
+  protected async submitCredentialNaming() {
+    this.formGroup.controls.credentialNaming.markAllAsTouched();
+    if (this.formGroup.controls.credentialNaming.invalid) {
+      return;
+    }
+
+    const result = await this.webauthnService.saveCredential(
+      this.credentialOptions,
+      this.deviceResponse,
+      this.formGroup.value.credentialNaming.name
+    );
+
+    if (!result) {
+      return;
+    }
+
+    this.dialogRef.close(CreateCredentialDialogResult.Success);
+  }
 }
 
 /**
