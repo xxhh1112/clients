@@ -169,15 +169,14 @@ jobs:
       #     cd ./dist/${{ env.LOWER_RUNNER_OS }}
       #     codesign --remove-signature bw
 
-      - name: Sign bw CLI for MacOS
-        run: |
-          codesign --force -s "Developer ID Application: 8bit Solutions LLC" --entitlements ./entitlements.plist --options=runtime -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw
-
-      - name: Zip macOS
+      - name: Pkgbuild
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
-          # zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+          pkgbuild --identifier com.bitwarden.bwcli --install-location /usr/local/bin/ --root ./bw bw.pkg
+
+      - name: Sign bw CLI for MacOS
+        run: |
+          codesign --force -s "Developer ID Application: 8bit Solutions LLC" --entitlements ./entitlements.plist --options=runtime -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw.pkg
 
       - name: Store notary credentials
         env:
@@ -188,7 +187,14 @@ jobs:
             --password $APPLE_ID_PASSWORD --team-id LTZ2PFU5D6 "CliNotaryProfile"
 
       - name: Notarize bw CLI for MacOS
-        run: xcrun notarytool submit ./dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip --wait --keychain-profile "CliNotaryProfile"
+        run: xcrun notarytool submit ./dist/${{ env.LOWER_RUNNER_OS }}/bw.pkg --wait --keychain-profile "CliNotaryProfile"
+
+      - name: Zip macOS
+        run: |
+          cd ./dist/${{ env.LOWER_RUNNER_OS }}
+          # ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+          zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+          zip ../bw-pkg-installer-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw.pkg
 
       # - name: Version Test
       #   run: |
@@ -212,6 +218,13 @@ jobs:
         with:
           name: bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
           path: apps/cli/dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+          if-no-files-found: error
+
+      - name: Upload macOS pkg installer zip asset
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: bw-pkg-installer-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+          path: apps/cli/dist/bw-pkg-installer-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
           if-no-files-found: error
 
       - name: Upload macOS checksum asset
