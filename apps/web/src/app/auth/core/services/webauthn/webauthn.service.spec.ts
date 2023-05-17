@@ -18,6 +18,7 @@ describe("WebauthnService", () => {
     // Polyfill missing class
     window.PublicKeyCredential = class {} as any;
     window.AuthenticatorAttestationResponse = class {} as any;
+    window.crypto = { subtle: mock<typeof crypto>() } as any;
     apiService = mock<WebauthnApiService>();
     cryptoService = mock<CryptoService>();
     credentials = mock<CredentialsContainer>();

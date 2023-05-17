@@ -18,12 +18,22 @@
     <td class="tw-p-2 tw-pl-0 tw-font-semibold">{{ credential.name }}</td>
     <td class="tw-p-2 tw-pr-0">
       <ng-container *ngIf="credential.prfStatus === WebauthnCredentialPrfStatus.Enabled">
-        <i class="bwi bwi-lock-encrypted"></i>
-        {{ "supportsEncryption" | i18n }}
+        <i class="bwi bwi-lock"></i>
+        <span bitTypography="body1" class="tw-text-muted">
+          {{ "usedForEncryption" | i18n }}
+        </span>
       </ng-container>
-      <ng-container *ngIf="credential.prfStatus !== WebauthnCredentialPrfStatus.Enabled"
-        >-</ng-container
-      >
+      <ng-container *ngIf="credential.prfStatus === WebauthnCredentialPrfStatus.Supported">
+        <button type="button" bitLink>
+          <i class="bwi bwi-lock"></i>
+          {{ "setUpEncryption" | i18n }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="credential.prfStatus === WebauthnCredentialPrfStatus.Unsupported">
+        <span bitTypography="body1" class="tw-text-muted">
+          {{ "encryptionNotSupported" | i18n }}
+        </span>
+      </ng-container>
     </td>
     <td class="tw-py-2 tw-pl-10 tw-pr-0">
       <button

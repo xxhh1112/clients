@@ -661,8 +661,14 @@
   "customPasskeyNameInfo": {
     "message": "Name your passkey to help you identify it."
   },
-  "supportsEncryption": {
-    "message": "supports encryption"
+  "usedForEncryption": {
+    "message": "Used for encryption"
+  },
+  "setUpEncryption": {
+    "message": "Set up encryption"
+  },
+  "encryptionNotSupported": {
+    "message": "Encryption not supported"
   },
   "loginWithPasskeyEnabled": {
     "message": "Log in with passkey turned on"
