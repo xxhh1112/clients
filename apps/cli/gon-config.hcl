@@ -2,7 +2,7 @@ source = ["./bw"]
 bundle_id = "com.bitwarden.bwcli"
 
 apple_id {
-  username = "mmartin@bitwarden.com"
+  username = "kyle@bitwarden.com"
   password = "@env:APPLE_ID_PASSWORD"
 }
 
