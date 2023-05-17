@@ -6,7 +6,8 @@ import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
-import { WebauthnCredentialView } from "../../views/webauth-credential.view";
+import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
+import { WebauthnCredentialView } from "../../views/webauthn-credential.view";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
@@ -44,31 +45,33 @@ export class WebauthnService {
 
   async createCredential(
     credentialOptions: CredentialCreateOptionsView
-  ): Promise<PublicKeyCredential | undefined> {
+  ): Promise<PendingWebauthnCredentialView | undefined> {
     const nativeOptions: CredentialCreationOptions = {
       publicKey: credentialOptions.options,
     };
+    // TODO: Remove `any` when typescript typings add support for PRF
+    nativeOptions.publicKey.extensions = {
+      prf: {},
+    } as any;
 
     try {
       const response = await this.navigatorCredentials.create(nativeOptions);
       if (!(response instanceof PublicKeyCredential)) {
         return undefined;
       }
-      return response;
+      // TODO: Remove `any` when typescript typings add support for PRF
+      const supportsPrf = Boolean((response.getClientExtensionResults() as any).prf?.enabled);
+      return new PendingWebauthnCredentialView(credentialOptions.token, response, supportsPrf);
     } catch (error) {
       this.logService?.error(error);
       return undefined;
     }
   }
 
-  async saveCredential(
-    credentialOptions: CredentialCreateOptionsView,
-    deviceResponse: PublicKeyCredential,
-    name: string
-  ) {
+  async saveCredential(credential: PendingWebauthnCredentialView, name: string) {
     const request = new SaveCredentialRequest();
-    request.deviceResponse = new WebauthnAttestationResponseRequest(deviceResponse);
-    request.token = credentialOptions.token;
+    request.deviceResponse = new WebauthnAttestationResponseRequest(credential.deviceResponse);
+    request.token = credential.token;
     request.name = name;
     await this.apiService.saveCredential(request);
     this.refresh();

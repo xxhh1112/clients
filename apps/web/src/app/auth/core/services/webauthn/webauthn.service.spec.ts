@@ -1,6 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
+import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 
 import { WebauthnApiService } from "./webauthn-api.service";
 import { WebauthnService } from "./webauthn.service";
@@ -30,13 +31,27 @@ describe("WebauthnService", () => {
     });
 
     it("should return credential when navigator.credentials does not throw", async () => {
-      const credential = createDeviceResponse();
+      const credential = createDeviceResponse({ prf: false });
       credentials.create.mockResolvedValue(credential as PublicKeyCredential);
       const options = createCredentialCreateOptions();
 
       const result = await webauthnService.createCredential(options);
 
-      expect(result).toBe(credential);
+      expect(result).toEqual({
+        deviceResponse: credential,
+        token: options.token,
+        supportsPrf: false,
+      } as PendingWebauthnCredentialView);
+    });
+
+    it("should return prfSupport=true when extensions contain prf", async () => {
+      const credential = createDeviceResponse({ prf: true });
+      credentials.create.mockResolvedValue(credential as PublicKeyCredential);
+      const options = createCredentialCreateOptions();
+
+      const result = await webauthnService.createCredential(options);
+
+      expect(result.supportsPrf).toBe(true);
     });
   });
 });
@@ -45,7 +60,7 @@ function createCredentialCreateOptions(): CredentialCreateOptionsView {
   return new CredentialCreateOptionsView(Symbol() as any, Symbol() as any);
 }
 
-function createDeviceResponse(): PublicKeyCredential {
+function createDeviceResponse({ prf = false }: { prf?: boolean } = {}): PublicKeyCredential {
   const credential = {
     id: "dGVzdA==",
     rawId: new Uint8Array([0x74, 0x65, 0x73, 0x74]),
@@ -53,6 +68,17 @@ function createDeviceResponse(): PublicKeyCredential {
     response: {
       attestationObject: new Uint8Array([0, 0, 0]),
       clientDataJSON: "eyJ0ZXN0IjoidGVzdCJ9",
+    },
+    getClientExtensionResults: () => {
+      if (!prf) {
+        return {};
+      }
+
+      return {
+        prf: {
+          enabled: true,
+        },
+      };
     },
   } as any;
 

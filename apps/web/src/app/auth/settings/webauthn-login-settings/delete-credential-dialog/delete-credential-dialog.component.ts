@@ -11,7 +11,7 @@ import { VerificationType } from "@bitwarden/common/auth/enums/verification-type
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
 import { WebauthnService } from "../../../core";
-import { WebauthnCredentialView } from "../../../core/views/webauth-credential.view";
+import { WebauthnCredentialView } from "../../../core/views/webauthn-credential.view";
 
 export interface DeleteCredentialDialogParams {
   credentialId: string;

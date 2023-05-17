@@ -4,7 +4,7 @@ import { Subject, takeUntil } from "rxjs";
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
 import { WebauthnService } from "../../core";
-import { WebauthnCredentialView } from "../../core/views/webauth-credential.view";
+import { WebauthnCredentialView } from "../../core/views/webauthn-credential.view";
 
 import { openCreateCredentialDialog } from "./create-credential-dialog/create-credential-dialog.component";
 import { openDeleteCredentialDialogComponent } from "./delete-credential-dialog/delete-credential-dialog.component";

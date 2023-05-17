@@ -12,6 +12,7 @@ import { ErrorResponse } from "@bitwarden/common/models/response/error.response"
 
 import { WebauthnService } from "../../../core";
 import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
+import { PendingWebauthnCredentialView } from "../../../core/views/pending-webauthn-credential.view";
 
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
@@ -44,7 +45,7 @@ export class CreateCredentialDialogComponent implements OnInit {
     }),
   });
   protected credentialOptions?: CredentialCreateOptionsView;
-  protected deviceResponse?: PublicKeyCredential;
+  protected pendingCredential?: PendingWebauthnCredentialView;
   protected hasPasskeys$?: Observable<boolean>;
 
   constructor(
@@ -111,8 +112,8 @@ export class CreateCredentialDialogComponent implements OnInit {
   }
 
   protected async submitCredentialCreation() {
-    this.deviceResponse = await this.webauthnService.createCredential(this.credentialOptions);
-    if (this.deviceResponse === undefined) {
+    this.pendingCredential = await this.webauthnService.createCredential(this.credentialOptions);
+    if (this.pendingCredential === undefined) {
       this.currentStep = "credentialCreationFailed";
       return;
     }
@@ -134,8 +135,7 @@ export class CreateCredentialDialogComponent implements OnInit {
     const name = this.formGroup.value.credentialNaming.name;
     try {
       await this.webauthnService.saveCredential(
-        this.credentialOptions,
-        this.deviceResponse,
+        this.pendingCredential,
         this.formGroup.value.credentialNaming.name
       );
     } catch (error) {
