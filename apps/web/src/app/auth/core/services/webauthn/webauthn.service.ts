@@ -107,24 +107,32 @@ export class WebauthnService {
       const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
       const symmetricPrfKey = this.createSymmetricKeyFromPrf(prfResult);
       const [publicKey, privateKey] = await this.cryptoService.makeKeyPair(symmetricPrfKey);
-      const rawVaultkey = await this.cryptoService.getEncKey();
-      const vaultKey = await this.cryptoService.rsaEncrypt(
-        rawVaultkey.key,
+      const rawUserKey = await this.cryptoService.getEncKey();
+      const userKey = await this.cryptoService.rsaEncrypt(
+        rawUserKey.key,
         Utils.fromB64ToArray(publicKey)
       );
 
-      return new PendingWebauthnCryptoKeysView(vaultKey, publicKey, privateKey);
+      return new PendingWebauthnCryptoKeysView(userKey, publicKey, privateKey);
     } catch (error) {
       this.logService?.error(error);
       return undefined;
     }
   }
 
-  async saveCredential(credential: PendingWebauthnCredentialView, name: string) {
+  async saveCredential(
+    name: string,
+    credential: PendingWebauthnCredentialView,
+    cryptoKeys?: PendingWebauthnCryptoKeysView
+  ) {
     const request = new SaveCredentialRequest();
     request.deviceResponse = new WebauthnAttestationResponseRequest(credential.deviceResponse);
-    request.token = credential.createOptions.token;
     request.name = name;
+    request.token = credential.createOptions.token;
+    request.supportsPrf = credential.supportsPrf;
+    request.prfPublicKey = cryptoKeys?.publicKey;
+    request.prfPrivateKey = cryptoKeys?.privateKey.encryptedString;
+    request.userKey = cryptoKeys?.userKey.encryptedString;
     await this.apiService.saveCredential(request);
     this.refresh();
   }
@@ -144,7 +152,14 @@ export class WebauthnService {
   }
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
-    return from(this.apiService.getCredentials()).pipe(map((response) => response.data));
+    return from(this.apiService.getCredentials()).pipe(
+      map((response) =>
+        response.data.map(
+          (credential) =>
+            new WebauthnCredentialView(credential.id, credential.name, credential.prfStatus)
+        )
+      )
+    );
   }
 
   private createSymmetricKeyFromPrf(prf: ArrayBuffer) {

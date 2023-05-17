@@ -151,8 +151,9 @@ export class CreateCredentialDialogComponent implements OnInit {
     const name = this.formGroup.value.credentialNaming.name;
     try {
       await this.webauthnService.saveCredential(
+        this.formGroup.value.credentialNaming.name,
         this.pendingCredential,
-        this.formGroup.value.credentialNaming.name
+        this.pendingCryptoKeys
       );
     } catch (error) {
       this.logService?.error(error);
