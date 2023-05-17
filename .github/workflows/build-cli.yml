@@ -161,32 +161,41 @@ jobs:
           cp $HOME/secrets/Bitwarden_bw_CLI.provisionprofile \
             $GITHUB_WORKSPACE/apps/desktop/Bitwarden_bw_CLI.provisionprofile
 
-      # - name: Remove ad-hoc signature
-      #   run: |
-      #     cd ./dist/${{ env.LOWER_RUNNER_OS }}
-      #     codesign --remove-signature bw
-
-      - name: Sign bw CLI for MacOS
+      - name: Remove ad-hoc signature
         run: |
-          codesign --force -s "Developer ID Application: 8bit Solutions LLC" --entitlements ./entitlements.plist --options=runtime -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw
-
-      - name: Zip macOS
-        run: |
-          cp Info.plist ./dist/${{ env.LOWER_RUNNER_OS }}
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
-          # zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+          codesign --remove-signature bw
 
-      - name: Store notary credentials
-        env:
-          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      - name: Install gon
+        run: brew install mitchellh/gon/gon
+
+      - name: gon sign and notarize bw cli
         run: |
-          xcrun notarytool store-credentials --apple-id $APPLE_ID_USERNAME \
-            --password $APPLE_ID_PASSWORD --team-id LTZ2PFU5D6 "CliNotaryProfile"
+          cd ./dist/${{ env.LOWER_RUNNER_OS }}
+          gon ../../gon-config.hcl
+          cp bw.zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
 
-      - name: Notarize bw CLI for MacOS
-        run: xcrun notarytool submit ./dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip --wait --keychain-profile "CliNotaryProfile"
+      # - name: Sign bw CLI for MacOS
+      #   run: |
+      #     codesign --force -s "Developer ID Application: 8bit Solutions LLC" --entitlements ./entitlements.plist --options=runtime -v ./dist/${{ env.LOWER_RUNNER_OS }}/bw
+
+      # - name: Zip macOS
+      #   run: |
+      #     cp Info.plist ./dist/${{ env.LOWER_RUNNER_OS }}
+      #     cd ./dist/${{ env.LOWER_RUNNER_OS }}
+      #     ditto -c -k --rsrc --keepParent ./bw ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+      #     # zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip ./bw
+
+      # - name: Store notary credentials
+      #   env:
+      #     APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+      #     APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #   run: |
+      #     xcrun notarytool store-credentials --apple-id $APPLE_ID_USERNAME \
+      #       --password $APPLE_ID_PASSWORD --team-id LTZ2PFU5D6 "CliNotaryProfile"
+
+      # - name: Notarize bw CLI for MacOS
+      #   run: xcrun notarytool submit ./dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip --wait --keychain-profile "CliNotaryProfile"
 
       # - name: Version Test
       #   run: |
@@ -204,6 +213,13 @@ jobs:
           cd ./dist
           shasum -a 256 bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip \
             | awk '{split($0, a); print a[1]}' > bw-${{ env.LOWER_RUNNER_OS }}-sha256-${{ env._PACKAGE_VERSION }}.txt
+
+      - name: Upload macOS dmg asset
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: bw-${{ env.LOWER_RUNNER_OS }}-dmg-${{ env._PACKAGE_VERSION }}.zip
+          path: apps/cli/dist/bw.dmg
+          if-no-files-found: error
 
       - name: Upload macOS zip asset
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
