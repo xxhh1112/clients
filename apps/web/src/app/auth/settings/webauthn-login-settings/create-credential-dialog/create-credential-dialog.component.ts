@@ -13,6 +13,7 @@ import { ErrorResponse } from "@bitwarden/common/models/response/error.response"
 import { WebauthnService } from "../../../core";
 import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../../core/views/pending-webauthn-credential.view";
+import { PendingWebauthnCryptoKeysView } from "../../../core/views/pending-webauthn-crypto-keys.view";
 
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
@@ -25,6 +26,7 @@ type Step =
   | "userVerification"
   | "credentialCreation"
   | "credentialCreationFailed"
+  | "prfSetup"
   | "credentialNaming";
 
 @Component({
@@ -46,6 +48,7 @@ export class CreateCredentialDialogComponent implements OnInit {
   });
   protected credentialOptions?: CredentialCreateOptionsView;
   protected pendingCredential?: PendingWebauthnCredentialView;
+  protected pendingCryptoKeys?: PendingWebauthnCryptoKeysView;
   protected hasPasskeys$?: Observable<boolean>;
 
   constructor(
@@ -74,6 +77,8 @@ export class CreateCredentialDialogComponent implements OnInit {
           return await this.submitCredentialCreationFailed();
         case "credentialCreation":
           return await this.submitCredentialCreation();
+        case "prfSetup":
+          return await this.submitPrfSetup();
         case "credentialNaming":
           return await this.submitCredentialNaming();
       }
@@ -118,12 +123,23 @@ export class CreateCredentialDialogComponent implements OnInit {
       return;
     }
 
+    if (this.pendingCredential.supportsPrf) {
+      this.currentStep = "prfSetup";
+      await this.submitPrfSetup();
+      return;
+    }
+
     this.currentStep = "credentialNaming";
   }
 
   protected async submitCredentialCreationFailed() {
     this.currentStep = "credentialCreation";
     await this.submitCredentialCreation();
+  }
+
+  protected async submitPrfSetup() {
+    this.pendingCryptoKeys = await this.webauthnService.createCryptoKeys(this.pendingCredential);
+    this.currentStep = "credentialNaming";
   }
 
   protected async submitCredentialNaming() {

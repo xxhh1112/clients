@@ -1,5 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 
@@ -8,6 +10,7 @@ import { WebauthnService } from "./webauthn.service";
 
 describe("WebauthnService", () => {
   let apiService!: MockProxy<WebauthnApiService>;
+  let cryptoService!: MockProxy<CryptoService>;
   let credentials: MockProxy<CredentialsContainer>;
   let webauthnService!: WebauthnService;
 
@@ -16,8 +19,9 @@ describe("WebauthnService", () => {
     window.PublicKeyCredential = class {} as any;
     window.AuthenticatorAttestationResponse = class {} as any;
     apiService = mock<WebauthnApiService>();
+    cryptoService = mock<CryptoService>();
     credentials = mock<CredentialsContainer>();
-    webauthnService = new WebauthnService(apiService, credentials);
+    webauthnService = new WebauthnService(apiService, cryptoService, credentials);
   });
 
   describe("createCredential", () => {
@@ -38,8 +42,8 @@ describe("WebauthnService", () => {
       const result = await webauthnService.createCredential(options);
 
       expect(result).toEqual({
+        createOptions: options,
         deviceResponse: credential,
-        token: options.token,
         supportsPrf: false,
       } as PendingWebauthnCredentialView);
     });
@@ -54,10 +58,34 @@ describe("WebauthnService", () => {
       expect(result.supportsPrf).toBe(true);
     });
   });
+
+  describe("createCrypoKeys", () => {
+    it("should return undefined when navigator.credentials throws", async () => {
+      credentials.get.mockRejectedValue(new Error("Mocked error"));
+      const pendingCredential = createPendingWebauthnCredentialView();
+
+      const result = await webauthnService.createCryptoKeys(pendingCredential);
+
+      expect(result).toBeUndefined();
+    });
+
+    // TODO: Fill out with crypto tests
+  });
 });
 
 function createCredentialCreateOptions(): CredentialCreateOptionsView {
-  return new CredentialCreateOptionsView(Symbol() as any, Symbol() as any);
+  const challenge = {
+    publicKey: {
+      extensions: {},
+    },
+    rp: {
+      id: "bitwarden.com",
+    },
+    authenticatorSelection: {
+      userVerification: "preferred",
+    },
+  };
+  return new CredentialCreateOptionsView(challenge as any, Symbol() as any);
 }
 
 function createDeviceResponse({ prf = false }: { prf?: boolean } = {}): PublicKeyCredential {
@@ -86,4 +114,12 @@ function createDeviceResponse({ prf = false }: { prf?: boolean } = {}): PublicKe
   Object.setPrototypeOf(credential.response, AuthenticatorAttestationResponse.prototype);
 
   return credential;
+}
+
+function createPendingWebauthnCredentialView() {
+  return new PendingWebauthnCredentialView(
+    createCredentialCreateOptions(),
+    createDeviceResponse({ prf: true }),
+    true
+  );
 }

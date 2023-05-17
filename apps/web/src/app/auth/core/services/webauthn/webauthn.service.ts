@@ -1,17 +1,23 @@
 import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
+import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
 import { WebauthnCredentialView } from "../../views/webauthn-credential.view";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
 import { WebauthnApiService } from "./webauthn-api.service";
+
+const LoginWithPrfSalt = "passwordless-login";
 
 @Injectable({ providedIn: CoreAuthModule })
 export class WebauthnService {
@@ -29,6 +35,7 @@ export class WebauthnService {
 
   constructor(
     private apiService: WebauthnApiService,
+    private cryptoService: CryptoService,
     @Optional() navigatorCredentials?: CredentialsContainer,
     @Optional() private logService?: LogService
   ) {
@@ -61,7 +68,52 @@ export class WebauthnService {
       }
       // TODO: Remove `any` when typescript typings add support for PRF
       const supportsPrf = Boolean((response.getClientExtensionResults() as any).prf?.enabled);
-      return new PendingWebauthnCredentialView(credentialOptions.token, response, supportsPrf);
+      return new PendingWebauthnCredentialView(credentialOptions, response, supportsPrf);
+    } catch (error) {
+      this.logService?.error(error);
+      return undefined;
+    }
+  }
+
+  async createCryptoKeys(
+    pendingCredential: PendingWebauthnCredentialView
+  ): Promise<PendingWebauthnCryptoKeysView | undefined> {
+    const nativeOptions: CredentialRequestOptions = {
+      publicKey: {
+        // TODO: Maybe don't reuse challenge
+        challenge: pendingCredential.createOptions.options.challenge,
+        allowCredentials: [{ id: pendingCredential.deviceResponse.rawId, type: "public-key" }],
+        rpId: pendingCredential.createOptions.options.rp.id,
+        timeout: pendingCredential.createOptions.options.timeout,
+        userVerification:
+          pendingCredential.createOptions.options.authenticatorSelection.userVerification,
+        // TODO: Remove `any` when typescript typings add support for PRF
+        extensions: {
+          prf: {
+            eval: {
+              first: await this.getLoginWithPrfSalt(),
+            },
+          },
+        } as any,
+      },
+    };
+
+    try {
+      const response = await this.navigatorCredentials.get(nativeOptions);
+      if (!(response instanceof PublicKeyCredential)) {
+        return undefined;
+      }
+      // TODO: Remove `any` when typescript typings add support for PRF
+      const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
+      const symmetricPrfKey = this.createSymmetricKeyFromPrf(prfResult);
+      const [publicKey, privateKey] = await this.cryptoService.makeKeyPair(symmetricPrfKey);
+      const rawVaultkey = await this.cryptoService.getEncKey();
+      const vaultKey = await this.cryptoService.rsaEncrypt(
+        rawVaultkey.key,
+        Utils.fromB64ToArray(publicKey)
+      );
+
+      return new PendingWebauthnCryptoKeysView(vaultKey, publicKey, privateKey);
     } catch (error) {
       this.logService?.error(error);
       return undefined;
@@ -71,7 +123,7 @@ export class WebauthnService {
   async saveCredential(credential: PendingWebauthnCredentialView, name: string) {
     const request = new SaveCredentialRequest();
     request.deviceResponse = new WebauthnAttestationResponseRequest(credential.deviceResponse);
-    request.token = credential.token;
+    request.token = credential.createOptions.token;
     request.name = name;
     await this.apiService.saveCredential(request);
     this.refresh();
@@ -93,6 +145,14 @@ export class WebauthnService {
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
     return from(this.apiService.getCredentials()).pipe(map((response) => response.data));
+  }
+
+  private createSymmetricKeyFromPrf(prf: ArrayBuffer) {
+    return new SymmetricCryptoKey(prf);
+  }
+
+  private async getLoginWithPrfSalt(): Promise<ArrayBuffer> {
+    return await crypto.subtle.digest("sha-256", Utils.fromUtf8ToArray(LoginWithPrfSalt));
   }
 
   private refresh() {
