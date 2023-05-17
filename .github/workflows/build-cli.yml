@@ -175,7 +175,7 @@ jobs:
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
-          gon ../../gon-config.hcl
+          gon -log-level=debug ../../gon-config.hcl
           cp bw.zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
 
       # - name: Sign bw CLI for MacOS
