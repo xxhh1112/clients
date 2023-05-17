@@ -10,13 +10,13 @@ import { openCreateCredentialDialog } from "./create-credential-dialog/create-cr
 import { openDeleteCredentialDialogComponent } from "./delete-credential-dialog/delete-credential-dialog.component";
 
 @Component({
-  selector: "app-fido2-login-settings",
-  templateUrl: "fido2-login-settings.component.html",
+  selector: "app-webauthn-login-settings",
+  templateUrl: "webauthn-login-settings.component.html",
   host: {
     "aria-live": "polite",
   },
 })
-export class Fido2LoginSettingsComponent implements OnInit, OnDestroy {
+export class WebauthnLoginSettingsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   protected readonly MaxCredentialCount = 5;

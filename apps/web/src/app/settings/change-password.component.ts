@@ -46,7 +46,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   checkForBreaches = true;
   characterMinimumMessage = "";
 
-  protected showFido2LoginSettings$: Observable<boolean>;
+  protected showWebauthnLoginSettings$: Observable<boolean>;
 
   constructor(
     i18nService: I18nService,
@@ -83,7 +83,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   async ngOnInit() {
-    this.showFido2LoginSettings$ = from(
+    this.showWebauthnLoginSettings$ = from(
       this.configService.getFeatureFlagBool(FeatureFlag.PasswordlessLogin)
     );
 
