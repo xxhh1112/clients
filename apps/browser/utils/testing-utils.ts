@@ -1,10 +1,16 @@
+import { mock } from "jest-mock-extended";
+
+import { UriMatchType } from "@bitwarden/common/enums";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+
 import AutofillPageDetails from "../src/autofill/models/autofill-page-details";
+import { GenerateFillScriptOptions } from "../src/autofill/services/abstractions/autofill.service";
 
 function triggerTestFailure() {
   expect(true).toBe("Test has failed.");
 }
 
-function createInputFieldDataItem(customFields = {}) {
+function createInputFieldDataItemMock(customFields = {}) {
   return {
     opid: "default-input-field-opid",
     elementNumber: 0,
@@ -48,7 +54,7 @@ function createAutofillPageDetailsMock(customFields = {}): AutofillPageDetails {
         htmlMethod: "htmlMethod",
       },
     },
-    fields: [createInputFieldDataItem({ opid: "non-password-field" })],
+    fields: [createInputFieldDataItemMock({ opid: "non-password-field" })],
     collectedTimestamp: 0,
     ...customFields,
   };
@@ -72,9 +78,23 @@ function createChromeTabMock(customFields = {}): chrome.tabs.Tab {
   };
 }
 
+function createGenerateFillScriptOptionsMock(customFields = {}): GenerateFillScriptOptions {
+  return {
+    skipUsernameOnlyFill: false,
+    onlyEmptyFields: false,
+    onlyVisibleFields: false,
+    fillNewPassword: false,
+    cipher: mock<CipherView>(),
+    tabUrl: "https://tacos.com",
+    defaultUriMatch: UriMatchType.Domain,
+    ...customFields,
+  };
+}
+
 export {
   triggerTestFailure,
-  createInputFieldDataItem,
+  createInputFieldDataItemMock,
   createAutofillPageDetailsMock,
   createChromeTabMock,
+  createGenerateFillScriptOptionsMock,
 };

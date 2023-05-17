@@ -807,9 +807,11 @@ export default class AutofillService implements AutofillServiceInterface {
 
   /**
    * Determines whether an iframe is potentially dangerous ("untrusted") to autofill
-   * @param pageUrl The url of the page/iframe, usually from AutofillPageDetails
-   * @param options The GenerateFillScript options
-   * @returns `true` if the iframe is untrusted and a warning should be shown, `false` otherwise
+   *
+   * @param {string} pageUrl The url of the page/iframe, usually from AutofillPageDetails
+   * @param {GenerateFillScriptOptions} options The GenerateFillScript options
+   * @returns {boolean} `true` if the iframe is untrusted and a warning should be shown, `false` otherwise
+   * @private
    */
   private inUntrustedIframe(pageUrl: string, options: GenerateFillScriptOptions): boolean {
     // If the pageUrl (from the content script) matches the tabUrl (from the sender tab), we are not in an iframe
@@ -1452,6 +1454,12 @@ export default class AutofillService implements AutofillServiceInterface {
     fillScript.script.push(["fill_by_opid", field.opid, value]);
   }
 
+  /**
+   * Identifies if the field is a custom field.
+   *
+   * @param {AutofillField} field
+   * @returns {boolean}
+   */
   static forCustomFieldsOnly(field: AutofillField): boolean {
     return field.tagName === "span";
   }
