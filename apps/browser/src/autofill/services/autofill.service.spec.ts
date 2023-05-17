@@ -331,6 +331,7 @@ describe("AutofillService", function () {
       await autofillService.doAutoFill(autofillOptions);
 
       expect(autofillService["generateCardFillScript"]).toHaveBeenCalled();
+      expect(chrome.tabs.sendMessage).toHaveBeenCalled();
       expect(eventCollectionService.collect).toHaveBeenCalledWith(
         EventType.Cipher_ClientAutofilled,
         autofillOptions.cipher.id
@@ -358,6 +359,7 @@ describe("AutofillService", function () {
       await autofillService.doAutoFill(autofillOptions);
 
       expect(autofillService["generateIdentityFillScript"]).toHaveBeenCalled();
+      expect(chrome.tabs.sendMessage).toHaveBeenCalled();
       expect(eventCollectionService.collect).toHaveBeenCalledWith(
         EventType.Cipher_ClientAutofilled,
         autofillOptions.cipher.id
@@ -380,7 +382,7 @@ describe("AutofillService", function () {
       }
     });
 
-    it("allows autofill on an untrusted iframe if the passed option is set to true", async function () {
+    it("allows autofill on an untrusted iframe if the passed option allowing untrusted iframes is set to true", async function () {
       autofillOptions.allowUntrustedIframe = true;
       autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValue(false);
       jest.spyOn(logService, "info");
@@ -420,6 +422,18 @@ describe("AutofillService", function () {
 
       const autofillResult = await autofillService.doAutoFill(autofillOptions);
 
+      expect(autofillResult).toBeNull();
+    });
+
+    it("returns a null value if the login does not contain a TOTP value", async function () {
+      autofillOptions.cipher.login.totp = undefined;
+      jest.spyOn(stateService, "getDisableAutoTotpCopy");
+      jest.spyOn(totpService, "getCode");
+
+      const autofillResult = await autofillService.doAutoFill(autofillOptions);
+
+      expect(stateService.getDisableAutoTotpCopy).not.toHaveBeenCalled();
+      expect(totpService.getCode).not.toHaveBeenCalled();
       expect(autofillResult).toBeNull();
     });
 
