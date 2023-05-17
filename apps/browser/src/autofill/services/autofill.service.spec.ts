@@ -440,10 +440,51 @@ describe("AutofillService", function () {
       const tabUrl = "https://www.example.com";
       const generateFillScriptOptions = createGenerateFillScriptOptionsMock({ tabUrl });
       generateFillScriptOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(true);
+      jest.spyOn(settingsService, "getEquivalentDomains");
 
       const result = autofillService["inUntrustedIframe"](pageUrl, generateFillScriptOptions);
 
+      expect(settingsService.getEquivalentDomains).not.toHaveBeenCalled();
+      expect(generateFillScriptOptions.cipher.login.matchesUri).not.toHaveBeenCalled();
       expect(result).toBe(false);
+    });
+
+    it("returns a false value if the passed pageUrl matches the domain of the tabUrl", function () {
+      const pageUrl = "https://subdomain.example.com";
+      const tabUrl = "https://www.example.com";
+      const equivalentDomains = new Set(["example.com"]);
+      const generateFillScriptOptions = createGenerateFillScriptOptionsMock({ tabUrl });
+      generateFillScriptOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(true);
+      jest.spyOn(settingsService as any, "getEquivalentDomains").mockReturnValue(equivalentDomains);
+
+      const result = autofillService["inUntrustedIframe"](pageUrl, generateFillScriptOptions);
+
+      expect(settingsService.getEquivalentDomains).toHaveBeenCalledWith(pageUrl);
+      expect(generateFillScriptOptions.cipher.login.matchesUri).toHaveBeenCalledWith(
+        pageUrl,
+        equivalentDomains,
+        generateFillScriptOptions.defaultUriMatch
+      );
+      expect(result).toBe(false);
+    });
+
+    it("returns a true value if the passed pageUrl does not match the domain of the tabUrl", function () {
+      const pageUrl = "https://subdomain.example.com";
+      const tabUrl = "https://www.not-example.com";
+      const equivalentDomains = new Set(["not-example.com"]);
+      const generateFillScriptOptions = createGenerateFillScriptOptionsMock({ tabUrl });
+      generateFillScriptOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(false);
+      jest.spyOn(settingsService as any, "getEquivalentDomains").mockReturnValue(equivalentDomains);
+
+      const result = autofillService["inUntrustedIframe"](pageUrl, generateFillScriptOptions);
+
+      expect(settingsService.getEquivalentDomains).toHaveBeenCalledWith(pageUrl);
+      expect(generateFillScriptOptions.cipher.login.matchesUri).toHaveBeenCalledWith(
+        pageUrl,
+        equivalentDomains,
+        generateFillScriptOptions.defaultUriMatch
+      );
+      expect(result).toBe(true);
     });
   });
 
