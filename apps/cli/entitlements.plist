@@ -6,8 +6,6 @@
 	<string>LTZ2PFU5D6.com.bitwarden.bwcli</string>
 	<key>com.apple.developer.team-identifier</key>
 	<string>LTZ2PFU5D6</string>
-	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
-	<true/>
 	<key>com.apple.security.cs.allow-jit</key>
     <true/>
     <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
