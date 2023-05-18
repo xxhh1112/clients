@@ -161,6 +161,9 @@ jobs:
           cp $HOME/secrets/Bitwarden_bw_CLI.provisionprofile \
             $GITHUB_WORKSPACE/apps/desktop/Bitwarden_bw_CLI.provisionprofile
 
+      - name: file bw
+        run: file ./dist/${{ env.LOWER_RUNNER_OS }}/bw
+
       - name: Remove ad-hoc signature
         run: |
           cd ./dist/${{ env.LOWER_RUNNER_OS }}
@@ -178,6 +181,9 @@ jobs:
           gon ../../gon-config.hcl
           cp bw.dmg ../bw.dmg
           cp bw.zip ../bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
+
+      - name: file bw
+        run: file ./dist/${{ env.LOWER_RUNNER_OS }}/bw
 
       # - name: Sign bw CLI for MacOS
       #   run: |
