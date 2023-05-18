@@ -4,7 +4,7 @@ import { CheckboxModule } from "@bitwarden/components";
 
 import { SharedModule } from "../../../app/shared";
 
-import { LoginDecryptionOptionsComponent } from "./login-decryption-options.component";
+import { LoginDecryptionOptionsComponent } from "./login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "./login-with-device.component";
 import { LoginComponent } from "./login.component";
 

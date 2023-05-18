@@ -22,15 +22,33 @@
       </form>
 
       <div class="tw-flex tw-flex-col">
-        <button bitButton type="button" buttonType="primary" [block]="true" class="tw-mb-3">
+        <button
+          bitButton
+          type="button"
+          buttonType="primary"
+          [block]="true"
+          class="tw-mb-3"
+          [appA11yTitle]="'approveFromYourOtherDevice' | i18n"
+        >
           {{ "approveFromYourOtherDevice" | i18n }}
         </button>
 
-        <button bitButton type="button" buttonType="secondary" class="tw-mb-3">
+        <button
+          bitButton
+          type="button"
+          buttonType="secondary"
+          class="tw-mb-3"
+          [appA11yTitle]="'requestAdminApproval' | i18n"
+        >
           {{ "requestAdminApproval" | i18n }}
         </button>
 
-        <button bitButton type="button" buttonType="secondary">
+        <button
+          bitButton
+          type="button"
+          buttonType="secondary"
+          [appA11yTitle]="'approveWithMasterPassword' | i18n"
+        >
           {{ "approveWithMasterPassword" | i18n }}
         </button>
       </div>
