@@ -8,7 +8,14 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { BehaviorSubject, combineLatest, firstValueFrom, lastValueFrom, Subject } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  firstValueFrom,
+  lastValueFrom,
+  Observable,
+  Subject,
+} from "rxjs";
 import {
   concatMap,
   debounceTime,
@@ -22,8 +29,10 @@ import {
 } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -38,7 +47,8 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { KdfType, DEFAULT_PBKDF2_ITERATIONS, EventType } from "@bitwarden/common/enums";
+import { DEFAULT_PBKDF2_ITERATIONS, EventType, KdfType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
@@ -47,7 +57,7 @@ import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/pa
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { DialogService, Icons } from "@bitwarden/components";
+import { Icons } from "@bitwarden/components";
 
 import { UpdateKeyComponent } from "../../settings/update-key.component";
 import { VaultItemEvent } from "../components/vault-items/vault-item-event";
@@ -131,9 +141,10 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected collections: CollectionView[];
   protected isEmpty: boolean;
   protected selectedCollection: TreeNode<CollectionView> | undefined;
+  protected currentSearchText$: Observable<string>;
 
-  private refresh$ = new BehaviorSubject<void>(null);
   private searchText$ = new Subject<string>();
+  private refresh$ = new BehaviorSubject<void>(null);
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -143,7 +154,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private i18nService: I18nService,
     private modalService: ModalService,
-    private dialogService: DialogService,
+    private dialogService: DialogServiceAbstraction,
     private tokenService: TokenService,
     private cryptoService: CryptoService,
     private messagingService: MessagingService,
@@ -162,7 +173,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService,
     private searchService: SearchService,
-    private searchPipe: SearchPipe
+    private searchPipe: SearchPipe,
+    private configService: ConfigServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -177,8 +189,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       first(),
       switchMap(async (params: Params) => {
         this.showVerifyEmail = !(await this.tokenService.getEmailVerified());
-        // disable warning for March release -> add await this.isLowKdfIteration(); when ready
-        this.showLowKdf = false;
+        this.showLowKdf = await this.isLowKdfIteration();
         await this.syncService.fullSync(false);
 
         const canAccessPremium = await this.stateService.getCanAccessPremium();
@@ -242,12 +253,12 @@ export class VaultComponent implements OnInit, OnDestroy {
         })
       );
 
-    const querySearchText$ = this.route.queryParams.pipe(map((queryParams) => queryParams.search));
+    this.currentSearchText$ = this.route.queryParams.pipe(map((queryParams) => queryParams.search));
 
     const ciphers$ = combineLatest([
       Utils.asyncToObservable(() => this.cipherService.getAllDecrypted()),
       filter$,
-      querySearchText$,
+      this.currentSearchText$,
     ]).pipe(
       filter(([ciphers, filter]) => ciphers != undefined && filter != undefined),
       concatMap(async ([ciphers, filter, searchText]) => {
@@ -262,7 +273,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       shareReplay({ refCount: true, bufferSize: 1 })
     );
 
-    const collections$ = combineLatest([nestedCollections$, filter$, querySearchText$]).pipe(
+    const collections$ = combineLatest([nestedCollections$, filter$, this.currentSearchText$]).pipe(
       filter(([collections, filter]) => collections != undefined && filter != undefined),
       map(([collections, filter, searchText]) => {
         if (filter.collectionId === undefined || filter.collectionId === Unassigned) {
@@ -577,6 +588,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
     const selectedColId = this.activeFilter.collectionId;
     if (selectedColId !== "AllCollections") {
+      component.organizationId = component.collections.find(
+        (collection) => collection.id === selectedColId
+      )?.organizationId;
       component.collectionIds = [selectedColId];
     }
     component.folderId = this.activeFilter.folderId;
@@ -639,13 +653,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (!c.isDeleted) {
       return;
     }
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("restoreItemConfirmation"),
-      this.i18nService.t("restoreItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "restoreItemConfirmation" },
+      content: { key: "restoreItem" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
@@ -690,15 +704,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
 
     const permanent = c.isDeleted;
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t(
-        permanent ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation"
-      ),
-      this.i18nService.t(permanent ? "permanentlyDeleteItem" : "deleteItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: permanent ? "permanentlyDeleteItem" : "deleteItem" },
+      content: { key: permanent ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
@@ -805,11 +817,10 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
     );
 
-    if (field === "password" || field === "totp") {
-      this.eventCollectionService.collect(
-        EventType.Cipher_ClientToggledHiddenFieldVisible,
-        cipher.id
-      );
+    if (field === "password") {
+      this.eventCollectionService.collect(EventType.Cipher_ClientCopiedPassword, cipher.id);
+    } else if (field === "totp") {
+      this.eventCollectionService.collect(EventType.Cipher_ClientCopiedHiddenField, cipher.id);
     }
   }
 
@@ -846,9 +857,17 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async isLowKdfIteration() {
-    const kdfType = await this.stateService.getKdfType();
-    const kdfOptions = await this.stateService.getKdfConfig();
-    return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
+    const showLowKdfEnabled = await this.configService.getFeatureFlagBool(
+      FeatureFlag.DisplayLowKdfIterationWarningFlag
+    );
+
+    if (showLowKdfEnabled) {
+      const kdfType = await this.stateService.getKdfType();
+      const kdfOptions = await this.stateService.getKdfConfig();
+      return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
+    }
+
+    return showLowKdfEnabled;
   }
 
   protected async repromptCipher(ciphers: CipherView[]) {

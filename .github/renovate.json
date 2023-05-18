@@ -2,27 +2,49 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
-    "schedule:monthly",
-    ":maintainLockFilesMonthly",
-    ":preserveSemverRanges",
+    ":combinePatchMinorReleases",
+    ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
+    ":pinAllExceptPeerDependencies",
     ":rebaseStalePrs",
-    ":disableMajorUpdates"
+    "schedule:weekends",
+    ":separateMajorReleases"
   ],
-  "enabledManagers": ["npm"],
+  "prConcurrentLimit": 3,
+  "enabledManagers": ["cargo", "github-actions", "npm"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["typescript"],
-      "enabled": false
+      "groupName": "cargo minor",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"]
     },
     {
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
       "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "npm"
+      "matchUpdateTypes": ["minor", "patch"]
     },
     {
       "packageNames": ["typescript"],
-      "updateTypes": "patch"
+      "matchUpdateTypes": ["major", "minor"],
+      "enabled": false
+    },
+    {
+      "packageNames": ["typescript"],
+      "matchUpdateTypes": "patch"
     }
   ],
-  "ignoreDeps": ["bootstrap", "electron-builder", "electron", "node-ipc", "regedit", "zone.js"]
+  "ignoreDeps": [
+    "@types/koa-bodyparser",
+    "bootstrap",
+    "electron-builder",
+    "electron",
+    "node-ipc",
+    "regedit",
+    "zone.js"
+  ]
 }

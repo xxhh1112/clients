@@ -1,5 +1,3 @@
-<!-- Please remove this disable statement when editing this file! -->
-<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="content">
   <div class="inner-content" *ngIf="cipher">
     <div class="box">
@@ -532,6 +530,7 @@
 </div>
 <div class="footer" *ngIf="cipher">
   <button
+    type="button"
     class="primary"
     (click)="edit()"
     appA11yTitle="{{ 'edit' | i18n }}"
@@ -541,6 +540,7 @@
     <span class="sm-hide">{{ "edit" | i18n }}</span>
   </button>
   <button
+    type="button"
     class="primary"
     (click)="restore()"
     appA11yTitle="{{ 'restore' | i18n }}"
@@ -550,6 +550,7 @@
     <span class="sm-hide">{{ "restore" | i18n }}</span>
   </button>
   <button
+    type="button"
     class="primary"
     *ngIf="!cipher?.organizationId && !cipher.isDeleted"
     (click)="clone()"

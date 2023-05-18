@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Kayıt otomatik dolduruldu "
   },
+  "insecurePageWarning": {
+    "message": "Uyarı: Bu güvenli olmayan bir HTTP sayfasıdır ve gönderdiğiniz herhangi bir bilgi potansiyel olarak başkaları tarafından görülebilir ve değiştirilebilir. Bu Oturum Açma orijinal olarak güvenli (HTTPS) bir sayfaya kaydedilmiştir."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Hala bu girişi doldurmak istiyor musunuz?"
+  },
+  "autofillIframeWarning": {
+    "message": "Form, kayıtlı girişinizin URI'sinden farklı bir etki alanı tarafından barındırılıyor. Yine de otomatik doldurmak için Tamam'ı veya durdurmak için İptal'i seçin."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Gelecekte bu uyarıyı önlemek için $HOSTNAME$ URI'sini bu site için Bitwarden oturum açma öğenize kaydedin.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ana parolayı belirle"
+  },
+  "currentMasterPass": {
+    "message": "Mevcut ana parola"
+  },
+  "newMasterPass": {
+    "message": "Yeni ana parola"
+  },
+  "confirmNewMasterPass": {
+    "message": "Yeni ana parolayı onaylayın"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Bir veya daha fazla kuruluş ilkesi gereğince ana parolanız aşağıdaki gereksinimleri karşılamalıdır:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ana parolanız kuruluşunuzdaki bir yönetici tarafından yakın zamanda değiştirildi. Kasanıza erişmek için parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Otomatik eklenme"
   },
@@ -1863,7 +1893,7 @@
     "message": "Dakika"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı $HOURS$ saat $MINUTES$ dakikadır",
+    "message": "Kuruluş ilkeleriniz izin verilen maksimum kasa zaman aşımını $HOURS$ saat $MINUTES$ dakika olarak belirlemiş.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı $HOURS$ saat $MINUTES$ dakikadır. Kasa zaman aşımı eyleminiz $ACTION$ olarak ayarlanmış.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Kuruluş ilkeleriniz, kasa zaman aşımı eyleminizi $ACTION$ olarak ayarladı.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2164,5 +2220,8 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "opensInANewWindow": {
+    "message": "Yeni pencerede açılır"
   }
 }

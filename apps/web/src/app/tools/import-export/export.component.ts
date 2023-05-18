@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
-import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/components/export.component";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/tools/export/components/export.component";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { ExportService } from "@bitwarden/common/abstractions/export.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -13,6 +13,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { EncryptedExportType } from "@bitwarden/common/enums";
+import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
 import { UserVerificationPromptComponent } from "../../components/user-verification-prompt.component";
 
@@ -29,14 +30,15 @@ export class ExportComponent extends BaseExportComponent {
     cryptoService: CryptoService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
-    exportService: ExportService,
+    exportService: VaultExportServiceAbstraction,
     eventCollectionService: EventCollectionService,
     policyService: PolicyService,
     logService: LogService,
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    dialogService: DialogServiceAbstraction
   ) {
     super(
       cryptoService,
@@ -49,7 +51,8 @@ export class ExportComponent extends BaseExportComponent {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      dialogService
     );
   }
 

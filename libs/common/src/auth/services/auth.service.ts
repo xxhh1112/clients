@@ -46,7 +46,8 @@ export class AuthService implements AuthServiceAbstraction {
   get email(): string {
     if (
       this.logInStrategy instanceof PasswordLogInStrategy ||
-      this.logInStrategy instanceof PasswordlessLogInStrategy
+      this.logInStrategy instanceof PasswordlessLogInStrategy ||
+      this.logInStrategy instanceof SsoLogInStrategy
     ) {
       return this.logInStrategy.email;
     }
@@ -69,6 +70,12 @@ export class AuthService implements AuthServiceAbstraction {
   get authRequestId(): string {
     return this.logInStrategy instanceof PasswordlessLogInStrategy
       ? this.logInStrategy.authRequestId
+      : null;
+  }
+
+  get ssoEmail2FaSessionToken(): string {
+    return this.logInStrategy instanceof SsoLogInStrategy
+      ? this.logInStrategy.ssoEmail2FaSessionToken
       : null;
   }
 
@@ -277,11 +284,11 @@ export class AuthService implements AuthServiceAbstraction {
     return this.cryptoService.makeKey(masterPassword, email, kdf, kdfConfig);
   }
 
-  async authResponsePushNotifiction(notification: AuthRequestPushNotification): Promise<any> {
+  async authResponsePushNotification(notification: AuthRequestPushNotification): Promise<any> {
     this.pushNotificationSubject.next(notification.id);
   }
 
-  getPushNotifcationObs$(): Observable<any> {
+  getPushNotificationObs$(): Observable<any> {
     return this.pushNotificationSubject.asObservable();
   }
 

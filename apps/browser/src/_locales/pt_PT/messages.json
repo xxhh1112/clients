@@ -80,7 +80,7 @@
     "message": "Copiar URI"
   },
   "copyUsername": {
-    "message": "Copiar Nome de Utilizador"
+    "message": "Copiar nome de utilizador"
   },
   "copyNumber": {
     "message": "Copiar Número"
@@ -568,7 +568,7 @@
     "message": "Tem a certeza de que pretende sobreescrever a palavra-passe atual?"
   },
   "overwriteUsername": {
-    "message": "Sobrescrever Nome de Utilizador"
+    "message": "Sobrescrever nome de utilizador"
   },
   "overwriteUsernameConfirmation": {
     "message": "Tem a certeza de que deseja sobrescrever o nome de utilizador atual?"
@@ -693,7 +693,7 @@
     "message": "Saiba mais sobre as Organizações"
   },
   "learnOrgConfirmation": {
-    "message": "O Bitwarden permite que você compartilhe os itens do seu cofre com outras pessoas usando uma organização. Gostaria de visitar o site bitwarden.com para saber mais?"
+    "message": "O Bitwarden permite-lhe partilhar os itens do seu cofre com outras pessoas ao usar uma organização. Gostaria de visitar o site bitwarden.com para saber mais?"
   },
   "moveToOrganization": {
     "message": "Mudança para Organização"
@@ -1345,7 +1345,7 @@
     "message": "Tem a certeza de que pretende utilizar a opção \"Nunca\"? Definir as suas opções de bloqueio para \"Nunca\" armazena a chave de encriptação do seu cofre no seu dispositivo. Se utilizar esta opção deve assegurar-se de que mantém o seu dispositivo devidamente protegido."
   },
   "noOrganizationsList": {
-    "message": "Você não pertence a nenhuma organização. Organizações permitem-lhe partilhar itens em segurança com outros utilizadores."
+    "message": "Não pertence a nenhuma organização. As organizações permitem-lhe partilhar itens em segurança com outros utilizadores."
   },
   "noCollectionsInList": {
     "message": "Não existem coleções para listar."
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Item auto-preenchido"
   },
+  "insecurePageWarning": {
+    "message": "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Do you still wish to fill this login?"
+  },
+  "autofillIframeWarning": {
+    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+  },
+  "autofillIframeWarningTip": {
+    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Definir palavra-passe mestra"
+  },
+  "currentMasterPass": {
+    "message": "Current master password"
+  },
+  "newMasterPass": {
+    "message": "New master password"
+  },
+  "confirmNewMasterPass": {
+    "message": "Confirm new master password"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Uma ou mais políticas da organização requerem que a sua palavra-passe mestra cumpra aos seguintes requisitos:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Inscrição Automática"
   },
@@ -1863,7 +1893,7 @@
     "message": "Minutos"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1936,13 +1992,13 @@
     "message": "Erro"
   },
   "regenerateUsername": {
-    "message": "Regerar Nome de Utilizador"
+    "message": "Regerar nome de utilizador"
   },
   "generateUsername": {
-    "message": "Gerar Nome de Utilizador"
+    "message": "Gerar nome de utilizador"
   },
   "usernameType": {
-    "message": "Tipo de Nome de Utilizador"
+    "message": "Tipo de nome de utilizador"
   },
   "plusAddressedEmail": {
     "message": "Plus addressed email",
@@ -2164,5 +2220,8 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "opensInANewWindow": {
+    "message": "Opens in a new window"
   }
 }
