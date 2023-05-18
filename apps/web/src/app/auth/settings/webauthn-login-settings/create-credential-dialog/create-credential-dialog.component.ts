@@ -14,9 +14,8 @@ import { WebauthnService } from "../../../core";
 import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../../core/views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../../core/views/pending-webauthn-crypto-keys.view";
-
-import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
-import { CreatePasskeyIcon } from "./create-passkey.icon";
+import { CreatePasskeyFailedIcon } from "../../../shared/icons/create-passkey-failed.icon";
+import { CreatePasskeyIcon } from "../../../shared/icons/create-passkey.icon";
 
 export enum CreateCredentialDialogResult {
   Success,
