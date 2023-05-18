@@ -76,6 +76,12 @@ const systemTimeoutOptions = {
     <ng-template #appGenerator></ng-template>
     <ng-template #loginApproval></ng-template>
     <app-header></app-header>
+
+    <div class="d-flex flex-row justify-content-between">
+      <button class="btn btn-primary mr-2" (click)="goTo('/login')">Login</button>
+      <button class="btn btn-primary" (click)="goTo('/login-initiated')">Login Initiated</button>
+    </div>
+
     <div id="container">
       <div class="loading" *ngIf="loading">
         <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
@@ -139,6 +145,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private configService: ConfigServiceAbstraction,
     private dialogService: DialogServiceAbstraction
   ) {}
+
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
 
   ngOnInit() {
     this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
