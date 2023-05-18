@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
@@ -27,6 +27,7 @@ import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
+import { WebauthnService } from "../core";
 
 @Component({
   selector: "app-login",
@@ -37,6 +38,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: ListResponse<PolicyResponse>;
   showPasswordless = false;
+
+  protected showWebauthnLogin$: Observable<boolean>;
 
   private destroy$ = new Subject<void>();
 
@@ -60,7 +63,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     private routerService: RouterService,
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
-    loginService: LoginService
+    loginService: LoginService,
+    private webauthnService: WebauthnService
   ) {
     super(
       apiService,
@@ -88,6 +92,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   }
 
   async ngOnInit() {
+    this.showWebauthnLogin$ = this.webauthnService.enabled$;
+
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.premium != null) {
