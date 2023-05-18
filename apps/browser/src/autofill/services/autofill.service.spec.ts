@@ -5,6 +5,7 @@ import { EventType } from "@bitwarden/common/enums";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CardView } from "@bitwarden/common/vault/models/view/card.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -18,11 +19,11 @@ import {
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
-} from "../../../utils/testing-utils";
+} from "../../../jest/testing-utils";
 import { BrowserStateService } from "../../services/browser-state.service";
 import AutofillPageDetails from "../models/autofill-page-details";
 
-import { AutoFillOptions } from "./abstractions/autofill.service";
+import { AutoFillOptions, PageDetail } from "./abstractions/autofill.service";
 import AutofillService from "./autofill.service";
 
 describe("AutofillService", function () {
@@ -445,6 +446,173 @@ describe("AutofillService", function () {
       const autofillResult = await autofillService.doAutoFill(autofillOptions);
 
       expect(autofillResult).toBeNull();
+    });
+  });
+
+  describe("doAutoFillOnTab", function () {
+    let pageDetails: PageDetail[];
+    let tab: chrome.tabs.Tab;
+
+    beforeEach(function () {
+      tab = createChromeTabMock();
+      pageDetails = [
+        {
+          frameId: 1,
+          tab: createChromeTabMock(),
+          details: createAutofillPageDetailsMock({
+            fields: [
+              createInputFieldDataItemMock({
+                opid: "username-field",
+                form: "validFormId",
+                elementNumber: 1,
+              }),
+              createInputFieldDataItemMock({
+                opid: "password-field",
+                type: "password",
+                form: "validFormId",
+                elementNumber: 2,
+              }),
+            ],
+          }),
+        },
+      ];
+    });
+
+    describe("given a tab url which does not match a cipher", function () {
+      it("will skip autofill and return a null value when triggering on page load", async function () {
+        jest.spyOn(autofillService, "doAutoFill");
+        jest.spyOn(cipherService, "getNextCipherForUrl");
+        jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(null);
+        jest.spyOn(cipherService, "getLastUsedForUrl").mockResolvedValueOnce(null);
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, false);
+
+        expect(cipherService.getNextCipherForUrl).not.toHaveBeenCalled();
+        expect(cipherService.getLastLaunchedForUrl).toHaveBeenCalledWith(tab.url, true);
+        expect(cipherService.getLastUsedForUrl).toHaveBeenCalledWith(tab.url, true);
+        expect(autofillService.doAutoFill).not.toHaveBeenCalled();
+        expect(result).toBeNull();
+      });
+
+      it("will skip autofill and return a null value when triggering from a keyboard shortcut", async function () {
+        jest.spyOn(autofillService, "doAutoFill");
+        jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(null);
+        jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(null);
+        jest.spyOn(cipherService, "getLastUsedForUrl").mockResolvedValueOnce(null);
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, true);
+
+        expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
+        expect(cipherService.getLastLaunchedForUrl).not.toHaveBeenCalled();
+        expect(cipherService.getLastUsedForUrl).not.toHaveBeenCalled();
+        expect(autofillService.doAutoFill).not.toHaveBeenCalled();
+        expect(result).toBeNull();
+      });
+    });
+
+    describe("given a tab url which matches a cipher", function () {
+      let cipher: CipherView;
+
+      beforeEach(function () {
+        cipher = mock<CipherView>({
+          reprompt: CipherRepromptType.None,
+          localData: {
+            lastLaunched: Date.now().valueOf(),
+          },
+        });
+      });
+
+      it("will autofill the last launched cipher and return a TOTP value when triggering on page load", async function () {
+        const totpCode = "123456";
+        const fromCommand = false;
+        jest.spyOn(autofillService, "doAutoFill").mockResolvedValueOnce(totpCode);
+        jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(cipher);
+        jest.spyOn(cipherService, "getLastUsedForUrl");
+        jest.spyOn(cipherService, "updateLastUsedIndexForUrl");
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, fromCommand);
+
+        expect(cipherService.getLastLaunchedForUrl).toHaveBeenCalledWith(tab.url, true);
+        expect(cipherService.getLastUsedForUrl).not.toHaveBeenCalled();
+        expect(cipherService.updateLastUsedIndexForUrl).not.toHaveBeenCalled();
+        expect(autofillService.doAutoFill).toHaveBeenCalledWith({
+          tab: tab,
+          cipher: cipher,
+          pageDetails: pageDetails,
+          skipLastUsed: !fromCommand,
+          skipUsernameOnlyFill: !fromCommand,
+          onlyEmptyFields: !fromCommand,
+          onlyVisibleFields: !fromCommand,
+          fillNewPassword: fromCommand,
+          allowUntrustedIframe: fromCommand,
+        });
+        expect(result).toBe(totpCode);
+      });
+
+      it("will autofill the last used cipher and return a TOTP value when triggering on page load ", async function () {
+        cipher.localData.lastLaunched = Date.now().valueOf() - 30001;
+        const totpCode = "123456";
+        const fromCommand = false;
+        jest.spyOn(autofillService, "doAutoFill").mockResolvedValueOnce(totpCode);
+        jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(cipher);
+        jest.spyOn(cipherService, "getLastUsedForUrl").mockResolvedValueOnce(cipher);
+        jest.spyOn(cipherService, "updateLastUsedIndexForUrl");
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, fromCommand);
+
+        expect(cipherService.getLastLaunchedForUrl).toHaveBeenCalledWith(tab.url, true);
+        expect(cipherService.getLastUsedForUrl).toHaveBeenCalledWith(tab.url, true);
+        expect(cipherService.updateLastUsedIndexForUrl).not.toHaveBeenCalled();
+        expect(autofillService.doAutoFill).toHaveBeenCalledWith({
+          tab: tab,
+          cipher: cipher,
+          pageDetails: pageDetails,
+          skipLastUsed: !fromCommand,
+          skipUsernameOnlyFill: !fromCommand,
+          onlyEmptyFields: !fromCommand,
+          onlyVisibleFields: !fromCommand,
+          fillNewPassword: fromCommand,
+          allowUntrustedIframe: fromCommand,
+        });
+        expect(result).toBe(totpCode);
+      });
+
+      it("will autofill the next cipher, update the last used cipher index, and return a TOTP value when triggering from a keyboard shortcut", async function () {
+        const totpCode = "123456";
+        const fromCommand = true;
+        jest.spyOn(autofillService, "doAutoFill").mockResolvedValueOnce(totpCode);
+        jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(cipher);
+        jest.spyOn(cipherService, "updateLastUsedIndexForUrl");
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, fromCommand);
+
+        expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
+        expect(cipherService.updateLastUsedIndexForUrl).toHaveBeenCalledWith(tab.url);
+        expect(autofillService.doAutoFill).toHaveBeenCalledWith({
+          tab: tab,
+          cipher: cipher,
+          pageDetails: pageDetails,
+          skipLastUsed: !fromCommand,
+          skipUsernameOnlyFill: !fromCommand,
+          onlyEmptyFields: !fromCommand,
+          onlyVisibleFields: !fromCommand,
+          fillNewPassword: fromCommand,
+          allowUntrustedIframe: fromCommand,
+        });
+        expect(result).toBe(totpCode);
+      });
+
+      it("will skip autofill and return a null value if the cipher re-prompt type is not `None`", async function () {
+        cipher.reprompt = CipherRepromptType.Password;
+        jest.spyOn(autofillService, "doAutoFill");
+        jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(cipher);
+
+        const result = await autofillService.doAutoFillOnTab(pageDetails, tab, true);
+
+        expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
+        expect(autofillService.doAutoFill).not.toHaveBeenCalled();
+        expect(result).toBeNull();
+      });
     });
   });
 

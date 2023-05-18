@@ -203,11 +203,12 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   /**
-   * Autofills the specified tab with the next login item from the cache
-   * @param pageDetails The data scraped from the page
-   * @param tab The tab to be autofilled
-   * @param fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
-   * @returns The TOTP code of the successfully autofilled login, if any
+   * Autofill the specified tab with the next login item from the cache
+   *
+   * @param {PageDetail[]} pageDetails The data scraped from the page
+   * @param {chrome.tabs.Tab} tab The tab to be autofilled
+   * @param {boolean} fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
+   * @returns {Promise<string>} The TOTP code of the successfully autofilled login, if any
    */
   async doAutoFillOnTab(
     pageDetails: PageDetail[],
@@ -245,7 +246,7 @@ export default class AutofillService implements AutofillServiceInterface {
       allowUntrustedIframe: fromCommand,
     });
 
-    // Update last used index as autofill has succeed
+    // Update last used index as autofill has succeeded
     if (fromCommand) {
       this.cipherService.updateLastUsedIndexForUrl(tab.url);
     }
