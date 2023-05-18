@@ -697,6 +697,24 @@
   "tryAgain": {
     "message": "Try again"
   },
+  "readingPasskeyLoading": {
+    "message": "Reading passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "errorReadingPasskey": {
+    "message": "Error reading passkey"
+  },
+  "errorReadingPasskeyInfo": {
+    "message": "There was a problem reading your passkey."
+  },
+  "troubleLoggingIn": {
+    "message": "Trouble logging in?"
+  },
+  "useADifferentLogInMethod": {
+    "message": "Use a different log in method"
+  },
   "createAccount": {
     "message": "Create account"
   },
