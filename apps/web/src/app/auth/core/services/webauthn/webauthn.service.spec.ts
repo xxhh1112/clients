@@ -1,6 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { ConfigService } from "@bitwarden/common/services/config/config.service";
 
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
@@ -11,6 +12,7 @@ import { WebauthnService } from "./webauthn.service";
 describe("WebauthnService", () => {
   let apiService!: MockProxy<WebauthnApiService>;
   let cryptoService!: MockProxy<CryptoService>;
+  let configService!: MockProxy<ConfigService>;
   let credentials: MockProxy<CredentialsContainer>;
   let webauthnService!: WebauthnService;
 
@@ -21,8 +23,12 @@ describe("WebauthnService", () => {
     window.crypto = { subtle: mock<typeof crypto>() } as any;
     apiService = mock<WebauthnApiService>();
     cryptoService = mock<CryptoService>();
+    configService = mock<ConfigService>();
     credentials = mock<CredentialsContainer>();
-    webauthnService = new WebauthnService(apiService, cryptoService, credentials);
+
+    configService.getFeatureFlagBool.mockResolvedValue(Promise.resolve(true));
+
+    webauthnService = new WebauthnService(apiService, cryptoService, configService, credentials);
   });
 
   describe("createCredential", () => {

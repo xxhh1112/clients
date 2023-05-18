@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { firstValueFrom, from, Observable } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -21,7 +20,6 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { EmergencyAccessStatusType } from "@bitwarden/common/auth/enums/emergency-access-status-type";
 import { EmergencyAccessUpdateRequest } from "@bitwarden/common/auth/models/request/emergency-access-update.request";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
@@ -34,6 +32,8 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherWithIdRequest } from "@bitwarden/common/vault/models/request/cipher-with-id.request";
 import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/folder-with-id.request";
+
+import { WebauthnService } from "../auth/core";
 
 @Component({
   selector: "app-change-password",
@@ -68,7 +68,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
     dialogService: DialogServiceAbstraction,
-    private configService: ConfigServiceAbstraction
+    private webauthnService: WebauthnService
   ) {
     super(
       i18nService,
@@ -83,9 +83,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   async ngOnInit() {
-    this.showWebauthnLoginSettings$ = from(
-      this.configService.getFeatureFlagBool(FeatureFlag.PasswordlessLogin)
-    );
+    this.showWebauthnLoginSettings$ = this.webauthnService.enabled$;
 
     if (await this.keyConnectorService.getUsesKeyConnector()) {
       this.router.navigate(["/settings/security/two-factor"]);

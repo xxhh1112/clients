@@ -1,8 +1,10 @@
 import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { Verification } from "@bitwarden/common/types/verification";
@@ -25,6 +27,7 @@ export class WebauthnService {
   private _refresh$ = new BehaviorSubject<void>(undefined);
   private _loading$ = new BehaviorSubject<boolean>(true);
 
+  readonly enabled$: Observable<boolean>;
   readonly credentials$ = this._refresh$.pipe(
     tap(() => this._loading$.next(true)),
     switchMap(() => this.getCredentials$()),
@@ -36,11 +39,13 @@ export class WebauthnService {
   constructor(
     private apiService: WebauthnApiService,
     private cryptoService: CryptoService,
+    private configService: ConfigServiceAbstraction,
     @Optional() navigatorCredentials?: CredentialsContainer,
     @Optional() private logService?: LogService
   ) {
     // Default parameters don't work when used with Angular DI
     this.navigatorCredentials = navigatorCredentials ?? navigator.credentials;
+    this.enabled$ = from(this.configService.getFeatureFlagBool(FeatureFlag.PasswordlessLogin));
   }
 
   async getCredentialCreateOptions(
