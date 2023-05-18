@@ -8,6 +8,7 @@ import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.compo
 import { LoginGuard } from "../auth/guards/login.guard";
 import { HintComponent } from "../auth/hint.component";
 import { LockComponent } from "../auth/lock.component";
+import { LoginDecryptionOptionsComponent } from "../auth/login/login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "../auth/login/login-with-device.component";
 import { LoginComponent } from "../auth/login/login.component";
 import { RegisterComponent } from "../auth/register.component";
@@ -37,6 +38,11 @@ const routes: Routes = [
     component: LoginWithDeviceComponent,
   },
   { path: "2fa", component: TwoFactorComponent },
+  {
+    path: "login-initiated",
+    component: LoginDecryptionOptionsComponent,
+    canActivate: [], // TODO: do I need an unauth guard like web?
+  },
   { path: "register", component: RegisterComponent },
   {
     path: "vault",
