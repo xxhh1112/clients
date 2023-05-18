@@ -2113,7 +2113,7 @@
     "message": "Log in with another device"
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Login initiated"
   },
   "notificationSentDevice": {
     "message": "A notification has been sent to your device."
