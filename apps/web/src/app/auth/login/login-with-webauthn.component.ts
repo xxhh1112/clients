@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { WebauthnService } from "../core";
+import { CredentialAssertionOptionsView } from "../core/views/credential-assertion-options.view";
 import { CreatePasskeyFailedIcon } from "../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../shared/icons/create-passkey.icon";
 
@@ -14,6 +15,7 @@ export class LoginWithWebauthnComponent implements OnInit {
   protected readonly Icons = { CreatePasskeyIcon, CreatePasskeyFailedIcon };
 
   protected currentStep: Step = "assert";
+  protected options?: CredentialAssertionOptionsView;
 
   constructor(private webauthnService: WebauthnService) {}
 
@@ -28,7 +30,11 @@ export class LoginWithWebauthnComponent implements OnInit {
 
   private async authenticate() {
     try {
-      return await new Promise((_, reject) => setTimeout(reject, 5000));
+      if (this.options === undefined) {
+        this.options = await this.webauthnService.getCredentialAssertionOptions();
+      }
+
+      throw new Error("Not implemented");
     } catch {
       this.currentStep = "assertFailed";
     }

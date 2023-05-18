@@ -10,6 +10,7 @@ import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-cr
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
+import { CredentialAssertionOptionsView } from "../../views/credential-assertion-options.view";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
@@ -154,6 +155,11 @@ export class WebauthnService {
   async deleteCredential(credentialId: string, verification: Verification): Promise<void> {
     await this.apiService.deleteCredential(credentialId, verification);
     this.refresh();
+  }
+
+  async getCredentialAssertionOptions(): Promise<CredentialAssertionOptionsView> {
+    const response = await this.apiService.getCredentialAssertionOptions();
+    return new CredentialAssertionOptionsView(response.options, response.token);
   }
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
