@@ -15,6 +15,9 @@ export default {
       options: ["primary", "secondary", "contrast"],
       control: { type: "radio" },
     },
+    block: {
+      control: { type: "boolean" },
+    },
   },
   parameters: {
     design: {
@@ -29,22 +32,22 @@ const ButtonTemplate: Story<ButtonLinkDirective> = (args: ButtonLinkDirective) =
   template: `
   <div class="tw-p-2" [ngClass]="{ 'tw-bg-transparent': linkType != 'contrast', 'tw-bg-primary-500': linkType === 'contrast' }">
     <div class="tw-block tw-p-2">
-      <button bitLink [linkType]="linkType">Button</button>
+      <button bitLink [linkType]="linkType" [block]="block">Button</button>
     </div>
     <div class="tw-block tw-p-2">
-      <button bitLink [linkType]="linkType">
+      <button bitLink [linkType]="linkType" [block]="block">
         <i class="bwi bwi-fw bwi-plus-circle" aria-hidden="true"></i>
         Add Icon Button
       </button>
     </div>
     <div class="tw-block tw-p-2">
-      <button bitLink [linkType]="linkType">
+      <button bitLink [linkType]="linkType" [block]="block">
         <i class="bwi bwi-fw bwi-sm bwi-angle-right" aria-hidden="true"></i>
         Chevron Icon Button
       </button>
     </div>
     <div class="tw-block tw-p-2">
-      <button bitLink [linkType]="linkType" class="tw-text-sm">Small Button</button>
+      <button bitLink [linkType]="linkType" [block]="block" class="tw-text-sm">Small Button</button>
     </div>
   </div>
   `,
@@ -55,22 +58,22 @@ const AnchorTemplate: Story<AnchorLinkDirective> = (args: AnchorLinkDirective) =
   template: `
   <div class="tw-p-2" [ngClass]="{ 'tw-bg-transparent': linkType != 'contrast', 'tw-bg-primary-500': linkType === 'contrast' }">
     <div class="tw-block tw-p-2">
-      <a bitLink [linkType]="linkType" href="#">Anchor</a>
+      <a bitLink [linkType]="linkType" [block]="block" href="#">Anchor</a>
     </div>
     <div class="tw-block tw-p-2">
-      <a bitLink [linkType]="linkType" href="#">
+      <a bitLink [linkType]="linkType" [block]="block" href="#">
         <i class="bwi bwi-fw bwi-plus-circle" aria-hidden="true"></i>
         Add Icon Anchor
       </a>
     </div>
     <div class="tw-block tw-p-2">
-      <a bitLink [linkType]="linkType" href="#">
+      <a bitLink [linkType]="linkType" [block]="block" href="#">
         <i class="bwi bwi-fw bwi-sm bwi-angle-right" aria-hidden="true"></i>
         Chevron Icon Anchor
       </a>
     </div>
     <div class="tw-block tw-p-2">
-      <a bitLink [linkType]="linkType" class="tw-text-sm" href="#">Small Anchor</a>
+      <a bitLink [linkType]="linkType" [block]="block" class="tw-text-sm" href="#">Small Anchor</a>
     </div>
   </div>
   `,
@@ -79,11 +82,13 @@ const AnchorTemplate: Story<AnchorLinkDirective> = (args: AnchorLinkDirective) =
 export const Buttons = ButtonTemplate.bind({});
 Buttons.args = {
   linkType: "primary",
+  block: false,
 };
 
 export const Anchors = AnchorTemplate.bind({});
 Anchors.args = {
   linkType: "primary",
+  block: false,
 };
 
 const InlineTemplate: Story = (args) => ({
@@ -98,15 +103,16 @@ const InlineTemplate: Story = (args) => ({
 export const Inline = InlineTemplate.bind({});
 Inline.args = {
   linkType: "primary",
+  block: false,
 };
 
 const DisabledTemplate: Story = (args) => ({
   props: args,
   template: `
-    <button bitLink disabled linkType="primary" class="tw-mr-2">Primary</button>
-    <button bitLink disabled linkType="secondary" class="tw-mr-2">Secondary</button>
-    <div class="tw-bg-primary-500 tw-p-2 tw-inline-block">
-      <button bitLink disabled linkType="contrast" class="tw-mr-2">Contrast</button>
+    <button bitLink disabled linkType="primary" [block]="block" class="tw-mr-2">Primary</button>
+    <button bitLink disabled linkType="secondary" [block]="block" class="tw-mr-2">Secondary</button>
+    <div class="tw-bg-primary-500 tw-p-2" [class.tw-inline-block]="!block">
+      <button bitLink disabled linkType="contrast" [block]="block" class="tw-mr-2">Contrast</button>
     </div>
   `,
 });
@@ -115,6 +121,31 @@ export const Disabled = DisabledTemplate.bind({});
 Disabled.parameters = {
   controls: {
     exclude: ["linkType"],
-    hideNoControlsWarning: true,
   },
+};
+Disabled.args = {
+  block: false,
+};
+
+const BlockTemplate: Story = (args) => ({
+  props: args,
+  template: `
+    <div class="tw-bg-primary-500 tw-mb-2" [class.tw-bg-primary-500]="linkType ===  'contrast'">
+      <a bitLink [linkType]="linkType" block href="#">Link</a>
+    </div>
+    <div [class.tw-bg-primary-500]="linkType ===  'contrast'">
+      <button bitLink [linkType]="linkType" block class="tw-mr-2">Button</button>
+    </div>
+  `,
+  block: false,
+});
+
+export const Block = BlockTemplate.bind({});
+Block.parameters = {
+  controls: {
+    exclude: ["block"],
+  },
+};
+Block.args = {
+  linkType: "primary",
 };

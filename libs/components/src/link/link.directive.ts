@@ -1,6 +1,8 @@
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Input, HostBinding, Directive } from "@angular/core";
 
 export type LinkType = "primary" | "secondary" | "contrast";
+type BlockType = "block" | "inline";
 
 const linkStyles: Record<LinkType, string[]> = {
   primary: [
@@ -23,9 +25,12 @@ const linkStyles: Record<LinkType, string[]> = {
   ],
 };
 
+const blockStyles: Record<BlockType, string[]> = {
+  block: ["tw-py-1.5", "tw-px-3", "tw-w-full", "tw-block", "tw-text-center"],
+  inline: ["tw-leading-none", "tw-text-unset"],
+};
+
 const commonStyles = [
-  "tw-text-unset",
-  "tw-leading-none",
   "tw-p-0",
   "tw-font-semibold",
   "tw-bg-transparent",
@@ -66,6 +71,16 @@ const commonStyles = [
 abstract class LinkDirective {
   @Input()
   linkType: LinkType = "primary";
+
+  private _block = false;
+  @Input()
+  get block(): boolean {
+    return this._block;
+  }
+
+  set block(value: boolean | "") {
+    this._block = coerceBooleanProperty(value);
+  }
 }
 
 @Directive({
@@ -75,7 +90,8 @@ export class AnchorLinkDirective extends LinkDirective {
   @HostBinding("class") get classList() {
     return ["before:-tw-inset-y-[0.125rem]"]
       .concat(commonStyles)
-      .concat(linkStyles[this.linkType] ?? []);
+      .concat(linkStyles[this.linkType] ?? [])
+      .concat(this.block ? blockStyles.block : blockStyles.inline);
   }
 }
 
@@ -86,6 +102,7 @@ export class ButtonLinkDirective extends LinkDirective {
   @HostBinding("class") get classList() {
     return ["before:-tw-inset-y-[0.25rem]"]
       .concat(commonStyles)
-      .concat(linkStyles[this.linkType] ?? []);
+      .concat(linkStyles[this.linkType] ?? [])
+      .concat(this.block ? blockStyles.block : blockStyles.inline);
   }
 }
