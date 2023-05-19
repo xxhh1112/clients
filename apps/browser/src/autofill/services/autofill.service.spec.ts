@@ -19,11 +19,17 @@ import {
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
+  createAutofillScriptMock,
 } from "../../../jest/testing-utils";
+import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/browser-state.service";
 import AutofillPageDetails from "../models/autofill-page-details";
 
-import { AutoFillOptions, PageDetail } from "./abstractions/autofill.service";
+import {
+  AutoFillOptions,
+  GenerateFillScriptOptions,
+  PageDetail,
+} from "./abstractions/autofill.service";
 import AutofillService from "./autofill.service";
 
 describe("AutofillService", function () {
@@ -613,6 +619,177 @@ describe("AutofillService", function () {
         expect(autofillService.doAutoFill).not.toHaveBeenCalled();
         expect(result).toBeNull();
       });
+    });
+  });
+
+  describe("doAutoFillActiveTab", function () {
+    let pageDetails: PageDetail[];
+    let tab: chrome.tabs.Tab;
+
+    beforeEach(function () {
+      tab = createChromeTabMock();
+      pageDetails = [
+        {
+          frameId: 1,
+          tab: createChromeTabMock(),
+          details: createAutofillPageDetailsMock({
+            fields: [
+              createInputFieldDataItemMock({
+                opid: "username-field",
+                form: "validFormId",
+                elementNumber: 1,
+              }),
+              createInputFieldDataItemMock({
+                opid: "password-field",
+                type: "password",
+                form: "validFormId",
+                elementNumber: 2,
+              }),
+            ],
+          }),
+        },
+      ];
+    });
+
+    it("returns a null value without doing autofill if the active tab cannot be found", async function () {
+      jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(undefined);
+      jest.spyOn(autofillService, "doAutoFill");
+
+      const result = await autofillService.doAutoFillActiveTab(pageDetails, false);
+
+      expect(autofillService["getActiveTab"]).toHaveBeenCalled();
+      expect(autofillService.doAutoFill).not.toHaveBeenCalled();
+      expect(result).toBeNull();
+    });
+
+    it("returns a null value without doing autofill if the active tab url cannot be found", async function () {
+      jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce({
+        id: 1,
+        url: undefined,
+      });
+      jest.spyOn(autofillService, "doAutoFill");
+
+      const result = await autofillService.doAutoFillActiveTab(pageDetails, false);
+
+      expect(autofillService["getActiveTab"]).toHaveBeenCalled();
+      expect(autofillService.doAutoFill).not.toHaveBeenCalled();
+      expect(result).toBeNull();
+    });
+
+    it("queries the active tab and enacts an autofill on that tab", async function () {
+      const totp = "123456";
+      const fromCommand = false;
+      jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(tab);
+      jest.spyOn(autofillService, "doAutoFillOnTab").mockResolvedValueOnce(totp);
+
+      const result = await autofillService.doAutoFillActiveTab(pageDetails, fromCommand);
+
+      expect(autofillService["getActiveTab"]).toHaveBeenCalled();
+      expect(autofillService.doAutoFillOnTab).toHaveBeenCalledWith(pageDetails, tab, fromCommand);
+      expect(result).toBe(totp);
+    });
+  });
+
+  describe("getActiveTab", function () {
+    it("throws are error if a tab cannot be found", async function () {
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindow").mockResolvedValueOnce(undefined);
+
+      try {
+        await autofillService["getActiveTab"]();
+        triggerTestFailure();
+      } catch (error) {
+        expect(BrowserApi.getTabFromCurrentWindow).toHaveBeenCalled();
+        expect(error.message).toBe("No tab found.");
+      }
+    });
+
+    it("returns the active tab from the current window", async function () {
+      const tab = createChromeTabMock();
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindow").mockResolvedValueOnce(tab);
+
+      const result = await autofillService["getActiveTab"]();
+      expect(BrowserApi.getTabFromCurrentWindow).toHaveBeenCalled();
+      expect(result).toBe(tab);
+    });
+  });
+
+  describe("generateFillScript", function () {
+    let generateFillScriptOptions: GenerateFillScriptOptions;
+    let pageDetail: AutofillPageDetails;
+
+    beforeEach(function () {
+      pageDetail = createAutofillPageDetailsMock({
+        fields: [
+          createInputFieldDataItemMock({
+            opid: "username-field",
+            form: "validFormId",
+            elementNumber: 1,
+          }),
+          createInputFieldDataItemMock({
+            opid: "password-field",
+            type: "password",
+            form: "validFormId",
+            elementNumber: 2,
+          }),
+        ],
+      });
+      generateFillScriptOptions = createGenerateFillScriptOptionsMock();
+      generateFillScriptOptions.cipher.fields = [
+        mock<FieldView>({ name: "username" }),
+        mock<FieldView>({ name: "password" }),
+      ];
+    });
+
+    it("returns null if the page details are not provided", function () {
+      const value = autofillService["generateFillScript"](undefined, generateFillScriptOptions);
+
+      expect(value).toBeNull();
+    });
+
+    it("returns null if the passed options do not contain a valid cipher", function () {
+      generateFillScriptOptions.cipher = undefined;
+
+      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+      expect(value).toBeNull();
+    });
+
+    // describe("given a valid set of cipher fields and page detail fields", function () {
+    // it will not attempt to fill by opid duplicate fields found within the page details
+    // it will not attempt to fill by opid fields that are not viewable and are not a `span` element
+    // it will not attempt to fill by opid fields that do not contain a property that matches the field name
+    // it will fill by opid fields that contain a property that matches the field name
+    // it will fill by opid fields of type Linked
+    // it will fill by opid fields of type Boolean
+    // it will fill by opid fields of type Boolean with a value of false if no value is provided
+    // });
+
+    it("returns a fill script generated for a login autofill", function () {
+      const fillScriptMock = createAutofillScriptMock(
+        {},
+        { "username-field": "username-value", "password-value": "password-value" }
+      );
+      generateFillScriptOptions.cipher.type = CipherType.Login;
+      jest
+        .spyOn(autofillService as any, "generateLoginFillScript")
+        .mockReturnValueOnce(fillScriptMock);
+
+      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+      expect(autofillService["generateLoginFillScript"]).toHaveBeenCalled();
+      expect(value).toBe(fillScriptMock);
+    });
+
+    // it("returns a fill script generated for a card autofill", function () {});
+    //
+    // it("returns a fill script generated for an identity autofill", function () {});
+
+    it("returns null if the cipher type is not for a login, card, or identity", function () {
+      generateFillScriptOptions.cipher.type = CipherType.SecureNote;
+
+      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+      expect(value).toBeNull();
     });
   });
 

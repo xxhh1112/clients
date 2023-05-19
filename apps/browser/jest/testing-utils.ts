@@ -4,6 +4,7 @@ import { UriMatchType } from "@bitwarden/common/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import AutofillPageDetails from "../src/autofill/models/autofill-page-details";
+import AutofillScript from "../src/autofill/models/autofill-script";
 import { GenerateFillScriptOptions } from "../src/autofill/services/abstractions/autofill.service";
 
 function triggerTestFailure() {
@@ -91,10 +92,44 @@ function createGenerateFillScriptOptionsMock(customFields = {}): GenerateFillScr
   };
 }
 
+function createAutofillScriptMock(
+  customFields = {},
+  scriptTypes?: Record<string, string>
+): AutofillScript {
+  let script = [
+    ["click_on_opid", "default-field"],
+    ["focus_by_opid", "default-field"],
+    ["fill_by_opid", "default-field", "default"],
+  ];
+  if (scriptTypes) {
+    script = [];
+    for (const scriptType in scriptTypes) {
+      script.push(["click_on_opid", scriptType]);
+      script.push(["focus_by_opid", scriptType]);
+      script.push(["fill_by_opid", scriptType, scriptTypes[scriptType]]);
+    }
+  }
+
+  return {
+    autosubmit: null,
+    documentUUID: "documentUUID",
+    metadata: {},
+    options: {},
+    properties: {
+      delay_between_operations: 20,
+    },
+    savedUrls: [],
+    script,
+    untrustedIframe: false,
+    ...customFields,
+  };
+}
+
 export {
   triggerTestFailure,
   createInputFieldDataItemMock,
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
+  createAutofillScriptMock,
 };

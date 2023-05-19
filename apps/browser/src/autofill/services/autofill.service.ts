@@ -41,7 +41,6 @@ export default class AutofillService implements AutofillServiceInterface {
   /**
    * Gets all forms with password fields and formats the data
    * for both forms and password input elements.
-   *
    * @param {AutofillPageDetails} pageDetails
    * @returns {FormData[]}
    */
@@ -110,11 +109,10 @@ export default class AutofillService implements AutofillServiceInterface {
 
   /**
    * Autofill a given tab with a given login item
-   *
    * @param {AutoFillOptions} options Instructions about the autofill operation, including tab and login item
-   * @returns {Promise<string>} The TOTP code of the successfully autofilled login, if any
+   * @returns {Promise<string | null>} The TOTP code of the successfully autofilled login, if any
    */
-  async doAutoFill(options: AutoFillOptions): Promise<string> | null {
+  async doAutoFill(options: AutoFillOptions): Promise<string | null> {
     const tab = options.tab;
     if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
       throw new Error("Nothing to auto-fill.");
@@ -204,17 +202,16 @@ export default class AutofillService implements AutofillServiceInterface {
 
   /**
    * Autofill the specified tab with the next login item from the cache
-   *
    * @param {PageDetail[]} pageDetails The data scraped from the page
    * @param {chrome.tabs.Tab} tab The tab to be autofilled
    * @param {boolean} fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
-   * @returns {Promise<string>} The TOTP code of the successfully autofilled login, if any
+   * @returns {Promise<string | null>} The TOTP code of the successfully autofilled login, if any
    */
   async doAutoFillOnTab(
     pageDetails: PageDetail[],
     tab: chrome.tabs.Tab,
     fromCommand: boolean
-  ): Promise<string> {
+  ): Promise<string | null> {
     let cipher: CipherView;
     if (fromCommand) {
       cipher = await this.cipherService.getNextCipherForUrl(tab.url);
@@ -255,22 +252,29 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   /**
-   * Autofills the active tab with the next login item from the cache
-   * @param pageDetails The data scraped from the page
-   * @param fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
-   * @returns The TOTP code of the successfully autofilled login, if any
+   * Autofill the active tab with the next login item from the cache
+   * @param {PageDetail[]} pageDetails The data scraped from the page
+   * @param {boolean} fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
+   * @returns {Promise<string | null>} The TOTP code of the successfully autofilled login, if any
    */
-  async doAutoFillActiveTab(pageDetails: PageDetail[], fromCommand: boolean): Promise<string> {
+  async doAutoFillActiveTab(
+    pageDetails: PageDetail[],
+    fromCommand: boolean
+  ): Promise<string | null> {
     const tab = await this.getActiveTab();
     if (!tab || !tab.url) {
-      return;
+      return null;
     }
 
     return await this.doAutoFillOnTab(pageDetails, tab, fromCommand);
   }
 
-  // Helpers
-
+  /**
+   * Gets the active tab from the current window.
+   * Throws an error if no tab is found.
+   * @returns {Promise<chrome.tabs.Tab>}
+   * @private
+   */
   private async getActiveTab(): Promise<chrome.tabs.Tab> {
     const tab = await BrowserApi.getTabFromCurrentWindow();
     if (!tab) {
@@ -280,10 +284,17 @@ export default class AutofillService implements AutofillServiceInterface {
     return tab;
   }
 
+  /**
+   * Generates the autofill script for the specified page details and cipher.
+   * @param {AutofillPageDetails} pageDetails
+   * @param {GenerateFillScriptOptions} options
+   * @returns {AutofillScript | null}
+   * @private
+   */
   private generateFillScript(
     pageDetails: AutofillPageDetails,
     options: GenerateFillScriptOptions
-  ): AutofillScript {
+  ): AutofillScript | null {
     if (!pageDetails || !options.cipher) {
       return null;
     }
@@ -312,6 +323,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         const matchingIndex = this.findMatchingFieldIndex(field, fieldNames);
+        // console.log(matchingIndex);
         if (matchingIndex > -1) {
           const matchingField: FieldView = fields[matchingIndex];
           let val: string;
@@ -1261,6 +1273,7 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   private findMatchingFieldIndex(field: AutofillField, names: string[]): number {
+    // console.log(names, field);
     for (let i = 0; i < names.length; i++) {
       if (names[i].indexOf("=") > -1) {
         if (this.fieldPropertyIsPrefixMatch(field, "htmlID", names[i], "id")) {
@@ -1322,6 +1335,7 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     fieldVal = fieldVal.trim().replace(/(?:\r\n|\r|\n)/g, "");
+    // console.log(fieldVal, name);
     if (name.startsWith("regex=")) {
       try {
         const regexParts = name.split("=", 2);
