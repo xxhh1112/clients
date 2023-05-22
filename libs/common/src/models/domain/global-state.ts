@@ -19,11 +19,7 @@ export class GlobalState {
   disableFavicon?: boolean;
   biometricAwaitingAcceptance?: boolean;
   biometricFingerprintValidated?: boolean;
-  vaultTimeout?: number;
-  vaultTimeoutAction?: string;
-  loginRedirect?: any;
   mainWindowSize?: number;
-  enableBiometrics?: boolean;
   biometricText?: string;
   noAutoPromptBiometricsText?: string;
   stateVersion: StateVersion = StateVersion.One;
