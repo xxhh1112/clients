@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatestWith, map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
 
@@ -16,7 +16,7 @@ import {
   selector: "sm-service-account-projects",
   templateUrl: "./service-account-projects.component.html",
 })
-export class ServiceAccountProjectsComponent {
+export class ServiceAccountProjectsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private serviceAccountId: string;
   private organizationId: string;

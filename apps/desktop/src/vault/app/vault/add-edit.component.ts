@@ -1,4 +1,4 @@
-import { Component, NgZone, OnChanges, OnDestroy, ViewChild } from "@angular/core";
+import { Component, NgZone, OnChanges, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
@@ -25,7 +25,7 @@ const BroadcasterSubscriptionId = "AddEditComponent";
   selector: "app-vault-add-edit",
   templateUrl: "add-edit.component.html",
 })
-export class AddEditComponent extends BaseAddEditComponent implements OnChanges, OnDestroy {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild("form")
   private form: NgForm;
   constructor(

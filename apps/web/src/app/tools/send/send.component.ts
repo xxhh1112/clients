@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -23,7 +23,7 @@ const BroadcasterSubscriptionId = "SendComponent";
   selector: "app-send",
   templateUrl: "send.component.html",
 })
-export class SendComponent extends BaseSendComponent {
+export class SendComponent extends BaseSendComponent implements OnInit, OnDestroy {
   @ViewChild("sendAddEdit", { read: ViewContainerRef, static: true })
   sendAddEditModalRef: ViewContainerRef;
   noItemIcon = Icons.Search;

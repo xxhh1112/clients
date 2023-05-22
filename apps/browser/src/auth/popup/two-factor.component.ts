@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -28,7 +28,7 @@ const BroadcasterSubscriptionId = "TwoFactorComponent";
   selector: "app-two-factor",
   templateUrl: "two-factor.component.html",
 })
-export class TwoFactorComponent extends BaseTwoFactorComponent {
+export class TwoFactorComponent extends BaseTwoFactorComponent implements OnInit, OnDestroy {
   showNewWindowMessage = false;
 
   constructor(

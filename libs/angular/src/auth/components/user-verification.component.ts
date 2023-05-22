@@ -17,7 +17,7 @@ import { Verification } from "@bitwarden/common/types/verification";
   selector: "app-user-verification",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class UserVerificationComponent implements ControlValueAccessor, OnInit {
+export class UserVerificationDirective implements ControlValueAccessor, OnInit {
   usesKeyConnector = false;
   disableRequestOTP = false;
   sentCode = false;

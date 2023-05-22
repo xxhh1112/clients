@@ -1,6 +1,6 @@
 import * as os from "os";
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
@@ -22,7 +22,7 @@ const BroadcasterSubscriptionId = "ExportComponent";
   selector: "app-export",
   templateUrl: "export.component.html",
 })
-export class ExportComponent extends BaseExportComponent implements OnInit {
+export class ExportComponent extends BaseExportComponent implements OnInit, OnDestroy {
   constructor(
     cryptoService: CryptoService,
     i18nService: I18nService,

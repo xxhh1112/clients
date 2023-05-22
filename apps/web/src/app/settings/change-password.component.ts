@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 
@@ -37,7 +37,7 @@ import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/fold
   selector: "app-change-password",
   templateUrl: "change-password.component.html",
 })
-export class ChangePasswordComponent extends BaseChangePasswordComponent {
+export class ChangePasswordComponent extends BaseChangePasswordComponent implements OnInit {
   rotateEncKey = false;
   currentMasterPassword: string;
   masterPasswordHint: string;

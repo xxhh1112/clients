@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -26,7 +26,7 @@ import { ChangePasswordComponent as BaseChangePasswordComponent } from "../auth/
 import { DialogServiceAbstraction } from "../services/dialog";
 
 @Directive()
-export class SetPasswordComponent extends BaseChangePasswordComponent {
+export class SetPasswordComponent extends BaseChangePasswordComponent implements OnInit {
   syncLoading = true;
   showPassword = false;
   hint = "";

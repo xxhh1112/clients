@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -35,7 +35,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
   selector: "app-vault-view",
   templateUrl: "view.component.html",
 })
-export class ViewComponent extends BaseViewComponent {
+export class ViewComponent extends BaseViewComponent implements OnInit, OnDestroy {
   showAttachments = true;
   pageDetails: any[] = [];
   tab: any;

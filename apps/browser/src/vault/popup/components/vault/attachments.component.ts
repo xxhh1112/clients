@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -19,7 +19,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
   templateUrl: "attachments.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AttachmentsComponent extends BaseAttachmentsComponent {
+export class AttachmentsComponent extends BaseAttachmentsComponent implements OnInit {
   openedAttachmentsInPopup: boolean;
 
   constructor(

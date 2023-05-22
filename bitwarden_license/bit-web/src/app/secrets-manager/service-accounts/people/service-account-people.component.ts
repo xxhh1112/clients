@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   combineLatestWith,
@@ -39,7 +39,7 @@ import {
   selector: "sm-service-account-people",
   templateUrl: "./service-account-people.component.html",
 })
-export class ServiceAccountPeopleComponent {
+export class ServiceAccountPeopleComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private serviceAccountId: string;
   private organizationId: string;

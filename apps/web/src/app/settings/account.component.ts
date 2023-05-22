@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -14,7 +14,7 @@ import { PurgeVaultComponent } from "./purge-vault.component";
   selector: "app-account",
   templateUrl: "account.component.html",
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
   @ViewChild("deauthorizeSessionsTemplate", { read: ViewContainerRef, static: true })
   deauthModalRef: ViewContainerRef;
   @ViewChild("purgeVaultTemplate", { read: ViewContainerRef, static: true })

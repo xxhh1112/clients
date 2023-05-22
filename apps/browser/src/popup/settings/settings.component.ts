@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { concatMap, debounceTime, filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
@@ -46,7 +46,7 @@ const RateUrls = {
   templateUrl: "settings.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   @ViewChild("vaultTimeoutActionSelect", { read: ElementRef, static: true })
   vaultTimeoutActionSelectRef: ElementRef;
   vaultTimeoutOptions: any[];

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -10,7 +10,7 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
   templateUrl: "tools.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class ToolsComponent {
+export class ToolsComponent implements OnInit {
   organization: Organization;
   accessReports = false;
   loading = true;

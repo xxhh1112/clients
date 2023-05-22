@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -19,7 +19,7 @@ type TaxInfoView = Omit<TaxInfoResponse, "taxIdType"> & {
   templateUrl: "tax-info.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class TaxInfoComponent {
+export class TaxInfoComponent implements OnInit {
   @Input() trialFlow = false;
   @Output() onCountryChanged = new EventEmitter();
 

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -7,7 +7,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
   selector: "app-subscription",
   templateUrl: "subscription.component.html",
 })
-export class SubscriptionComponent {
+export class SubscriptionComponent implements OnInit {
   hasPremium: boolean;
   selfHosted: boolean;
 

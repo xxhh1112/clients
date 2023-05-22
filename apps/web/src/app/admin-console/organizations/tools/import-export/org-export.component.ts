@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
@@ -22,7 +22,7 @@ import { ExportComponent } from "../../../../tools/import-export/export.componen
   templateUrl: "../../../../tools/import-export/export.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class OrganizationExportComponent extends ExportComponent {
+export class OrganizationExportComponent extends ExportComponent implements OnInit {
   constructor(
     cryptoService: CryptoService,
     i18nService: I18nService,

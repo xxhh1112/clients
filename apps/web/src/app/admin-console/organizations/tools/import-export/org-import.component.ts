@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
@@ -18,7 +18,7 @@ import { ImportComponent } from "../../../../tools/import-export/import.componen
   templateUrl: "../../../../tools/import-export/import.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class OrganizationImportComponent extends ImportComponent {
+export class OrganizationImportComponent extends ImportComponent implements OnInit {
   organizationName: string;
 
   constructor(

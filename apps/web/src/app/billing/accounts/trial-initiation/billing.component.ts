@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -20,7 +20,7 @@ import { OrganizationPlansComponent } from "../../settings/organization-plans.co
   selector: "app-billing",
   templateUrl: "./billing.component.html",
 })
-export class BillingComponent extends OrganizationPlansComponent {
+export class BillingComponent extends OrganizationPlansComponent implements OnInit {
   @Input() orgInfoForm: FormGroup;
   @Output() previousStep = new EventEmitter();
 

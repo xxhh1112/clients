@@ -8,7 +8,7 @@ import { ProviderService } from "@bitwarden/common/admin-console/abstractions/pr
   templateUrl: "settings.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private providerService: ProviderService) {}
 
   ngOnInit() {

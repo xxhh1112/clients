@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 import { concatMap, debounceTime, filter, map, takeUntil, tap } from "rxjs/operators";
@@ -28,7 +28,7 @@ import { SetPinComponent } from "../components/set-pin.component";
   templateUrl: "settings.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   // For use in template
   protected readonly VaultTimeoutAction = VaultTimeoutAction;
 

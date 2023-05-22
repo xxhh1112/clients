@@ -9,7 +9,7 @@ import { Provider } from "@bitwarden/common/models/domain/provider";
   templateUrl: "providers-layout.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class ProvidersLayoutComponent {
+export class ProvidersLayoutComponent implements OnInit {
   provider: Provider;
   private providerId: string;
 

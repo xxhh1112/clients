@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -30,7 +30,7 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
   templateUrl: "add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit {
   currentUris: string[];
   showAttachments = true;
   openAttachmentsInPopup: boolean;

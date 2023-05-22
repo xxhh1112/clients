@@ -1,5 +1,5 @@
 import { DatePipe, Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -22,7 +22,7 @@ import { BrowserStateService } from "../../../services/abstractions/browser-stat
   templateUrl: "send-add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SendAddEditComponent extends BaseAddEditComponent {
+export class SendAddEditComponent extends BaseAddEditComponent implements OnInit {
   // Options header
   showOptions = false;
   // File visibility

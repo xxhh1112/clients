@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -16,7 +16,7 @@ import { TwoFactorSetupComponent as BaseTwoFactorSetupComponent } from "../../..
   templateUrl: "../../../auth/settings/two-factor-setup.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent {
+export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent implements OnInit {
   tabbedHeader = false;
   constructor(
     apiService: ApiService,

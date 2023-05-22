@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -15,7 +15,7 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
   templateUrl: "folder-add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class FolderAddEditComponent extends BaseFolderAddEditComponent {
+export class FolderAddEditComponent extends BaseFolderAddEditComponent implements OnInit {
   constructor(
     folderService: FolderService,
     folderApiService: FolderApiServiceAbstraction,

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
@@ -10,7 +10,7 @@ import { OrganizationSubscriptionUpdateRequest } from "@bitwarden/common/billing
   selector: "app-adjust-subscription",
   templateUrl: "adjust-subscription.component.html",
 })
-export class AdjustSubscription {
+export class AdjustSubscriptionComponent implements OnInit {
   @Input() organizationId: string;
   @Input() maxAutoscaleSeats: number;
   @Input() currentSeatCount: number;

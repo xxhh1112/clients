@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -22,7 +22,7 @@ import { DeleteOrganizationComponent } from "./delete-organization.component";
   templateUrl: "account.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AccountComponent {
+export class AccountComponent implements OnInit {
   @ViewChild("deleteOrganizationTemplate", { read: ViewContainerRef, static: true })
   deleteModalRef: ViewContainerRef;
   @ViewChild("purgeOrganizationTemplate", { read: ViewContainerRef, static: true })

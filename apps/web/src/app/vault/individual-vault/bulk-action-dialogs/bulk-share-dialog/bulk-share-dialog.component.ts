@@ -1,5 +1,5 @@
 import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -41,7 +41,7 @@ export const openBulkShareDialog = (
 @Component({
   templateUrl: "bulk-share-dialog.component.html",
 })
-export class BulkShareDialogComponent implements OnInit {
+export class BulkShareDialogComponent implements OnInit, OnDestroy {
   ciphers: CipherView[] = [];
   organizationId: string;
 
