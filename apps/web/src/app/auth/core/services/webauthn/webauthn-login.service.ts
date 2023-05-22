@@ -4,10 +4,11 @@ import { from, Observable } from "rxjs";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { ExtensionLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
-import { CoreAuthModule } from "../../core.module";
 import { CredentialAssertionOptionsView } from "../../views/credential-assertion-options.view";
 import { WebauthnAssertionView } from "../../views/webauthn-assertion.view";
 
@@ -16,7 +17,7 @@ import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-r
 import { createSymmetricKeyFromPrf, getLoginWithPrfSalt } from "./utils";
 import { WebauthnApiService } from "./webauthn-api.service";
 
-@Injectable({ providedIn: CoreAuthModule })
+@Injectable({ providedIn: "root" })
 export class WebauthnLoginService {
   private navigatorCredentials: CredentialsContainer;
 
@@ -25,6 +26,7 @@ export class WebauthnLoginService {
   constructor(
     private apiService: WebauthnApiService,
     private cryptoService: CryptoService,
+    private authService: AuthService,
     private configService: ConfigServiceAbstraction,
     @Optional() navigatorCredentials?: CredentialsContainer,
     @Optional() private logService?: LogService
@@ -71,5 +73,11 @@ export class WebauthnLoginService {
       this.logService?.error(error);
       return undefined;
     }
+  }
+
+  async logIn(assertion: WebauthnAssertionView) {
+    const credential = new ExtensionLogInCredentials(assertion.token);
+    const result = await this.authService.logIn(credential);
+    return result;
   }
 }

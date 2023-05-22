@@ -8,7 +8,6 @@ import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";
 
-import { CoreAuthModule } from "../../core.module";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
@@ -19,7 +18,7 @@ import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestati
 import { createSymmetricKeyFromPrf, getLoginWithPrfSalt } from "./utils";
 import { WebauthnApiService } from "./webauthn-api.service";
 
-@Injectable({ providedIn: CoreAuthModule })
+@Injectable({ providedIn: "root" })
 export class WebauthnAdminService {
   private navigatorCredentials: CredentialsContainer;
   private _refresh$ = new BehaviorSubject<void>(undefined);

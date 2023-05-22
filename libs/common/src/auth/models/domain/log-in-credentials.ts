@@ -43,3 +43,9 @@ export class PasswordlessLogInCredentials {
     public twoFactor?: TokenTwoFactorRequest
   ) {}
 }
+
+export class ExtensionLogInCredentials {
+  readonly type = AuthenticationType.Extension;
+
+  constructor(public token: string, public twoFactor?: TokenTwoFactorRequest) {}
+}

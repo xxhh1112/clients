@@ -51,6 +51,7 @@ import { EmergencyAccessInviteRequest } from "../auth/models/request/emergency-a
 import { EmergencyAccessPasswordRequest } from "../auth/models/request/emergency-access-password.request";
 import { EmergencyAccessUpdateRequest } from "../auth/models/request/emergency-access-update.request";
 import { DeviceRequest } from "../auth/models/request/identity-token/device.request";
+import { ExtensionTokenRequest } from "../auth/models/request/identity-token/extension-token.request";
 import { PasswordTokenRequest } from "../auth/models/request/identity-token/password-token.request";
 import { SsoTokenRequest } from "../auth/models/request/identity-token/sso-token.request";
 import { TokenTwoFactorRequest } from "../auth/models/request/identity-token/token-two-factor.request";
@@ -188,7 +189,7 @@ export class ApiService implements ApiServiceAbstraction {
   // Auth APIs
 
   async postIdentityToken(
-    request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
+    request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest | ExtensionTokenRequest
   ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse | IdentityCaptchaResponse> {
     const headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",

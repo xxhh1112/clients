@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { WebauthnLoginService } from "../core";
 import { CredentialAssertionOptionsView } from "../core/views/credential-assertion-options.view";
@@ -17,7 +18,7 @@ export class LoginWithWebauthnComponent implements OnInit {
   protected currentStep: Step = "assert";
   protected options?: CredentialAssertionOptionsView;
 
-  constructor(private webauthnService: WebauthnLoginService) {}
+  constructor(private webauthnService: WebauthnLoginService, private router: Router) {}
 
   ngOnInit(): void {
     this.authenticate();
@@ -36,10 +37,15 @@ export class LoginWithWebauthnComponent implements OnInit {
 
       const assertion = await this.webauthnService.assertCredential(this.options);
 
+      await this.webauthnService.logIn(assertion);
+
       if (assertion === undefined) {
         this.currentStep = "assertFailed";
+        return;
       }
-    } catch {
+
+      await this.router.navigate(["/vault"]);
+    } catch (error) {
       // TODO: Fix with better errors
       this.currentStep = "assertFailed";
     }
