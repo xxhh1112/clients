@@ -14,9 +14,12 @@ import { CredentialAssertionOptionsView } from "../../views/credential-assertion
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
+import { WebauthnAssertionView } from "../../views/webauthn-assertion.view";
 import { WebauthnCredentialView } from "../../views/webauthn-credential.view";
 
+import { AuthenticatorAssertionResponseRequest } from "./request/authenticator-assertion-response.request";
 import { SaveCredentialRequest } from "./request/save-credential.request";
+import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-response.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
 import { WebauthnApiService } from "./webauthn-api.service";
 
@@ -94,13 +97,7 @@ export class WebauthnService {
         userVerification:
           pendingCredential.createOptions.options.authenticatorSelection.userVerification,
         // TODO: Remove `any` when typescript typings add support for PRF
-        extensions: {
-          prf: {
-            eval: {
-              first: await this.getLoginWithPrfSalt(),
-            },
-          },
-        } as any,
+        extensions: { prf: { eval: { first: await this.getLoginWithPrfSalt() } } } as any,
       },
     };
 
@@ -160,6 +157,40 @@ export class WebauthnService {
   async getCredentialAssertionOptions(): Promise<CredentialAssertionOptionsView> {
     const response = await this.apiService.getCredentialAssertionOptions();
     return new CredentialAssertionOptionsView(response.options, response.token);
+  }
+
+  async assertCredential(
+    credentialOptions: CredentialAssertionOptionsView
+  ): Promise<WebauthnAssertionView> {
+    const nativeOptions: CredentialRequestOptions = {
+      publicKey: credentialOptions.options,
+    };
+    // TODO: Remove `any` when typescript typings add support for PRF
+    nativeOptions.publicKey.extensions = {
+      prf: { eval: { first: await this.getLoginWithPrfSalt() } },
+    } as any;
+
+    try {
+      const response = await this.navigatorCredentials.get(nativeOptions);
+      if (!(response instanceof PublicKeyCredential)) {
+        return undefined;
+      }
+      // TODO: Remove `any` when typescript typings add support for PRF
+      const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
+      let symmetricPrfKey: SymmetricCryptoKey | undefined;
+      if (prfResult != undefined) {
+        symmetricPrfKey = this.createSymmetricKeyFromPrf(prfResult);
+      }
+
+      const deviceResponse = new AuthenticatorAssertionResponseRequest(response);
+      const request = new WebauthnAssertionResponseRequest(credentialOptions.token, deviceResponse);
+      const token = await this.apiService.assertCredential(request);
+
+      return new WebauthnAssertionView(token, symmetricPrfKey);
+    } catch (error) {
+      this.logService?.error(error);
+      return undefined;
+    }
   }
 
   private getCredentials$(): Observable<WebauthnCredentialView[]> {

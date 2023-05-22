@@ -34,8 +34,13 @@ export class LoginWithWebauthnComponent implements OnInit {
         this.options = await this.webauthnService.getCredentialAssertionOptions();
       }
 
-      throw new Error("Not implemented");
+      const assertion = await this.webauthnService.assertCredential(this.options);
+
+      if (assertion === undefined) {
+        this.currentStep = "assertFailed";
+      }
     } catch {
+      // TODO: Fix with better errors
       this.currentStep = "assertFailed";
     }
   }

@@ -9,8 +9,10 @@ import { Verification } from "@bitwarden/common/types/verification";
 import { CoreAuthModule } from "../../core.module";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
+import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-response.request";
 import { CredentialAssertionOptionsResponse } from "./response/credential-assertion-options.response";
 import { CredentialCreateOptionsResponse } from "./response/credential-create-options.response";
+import { WebauthnAssertionResponse } from "./response/webauthn-assertion.response";
 import { WebauthnCredentialResponse } from "./response/webauthn-credential.response";
 
 @Injectable({ providedIn: CoreAuthModule })
@@ -63,5 +65,18 @@ export class WebauthnApiService {
       this.environmentService.getIdentityUrl()
     );
     return new CredentialAssertionOptionsResponse(response);
+  }
+
+  async assertCredential(request: WebauthnAssertionResponseRequest): Promise<string> {
+    const response = await this.apiService.send(
+      "POST",
+      `/accounts/webauthn-assertion`,
+      request,
+      false,
+      true,
+      this.environmentService.getIdentityUrl()
+    );
+    const responseModel = new WebauthnAssertionResponse(response);
+    return responseModel.token;
   }
 }

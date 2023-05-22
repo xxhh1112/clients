@@ -1,7 +1,10 @@
 import { Utils } from "@bitwarden/common/misc/utils";
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
 
-export class AssertionResponse extends BaseResponse implements PublicKeyCredentialRequestOptions {
+export class AssertionOptionsResponse
+  extends BaseResponse
+  implements PublicKeyCredentialRequestOptions
+{
   allowCredentials?: PublicKeyCredentialDescriptor[];
   challenge: BufferSource;
   extensions?: AuthenticationExtensionsClientInputs;
