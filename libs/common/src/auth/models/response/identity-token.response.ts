@@ -22,6 +22,10 @@ export class IdentityTokenResponse extends BaseResponse {
   apiUseKeyConnector: boolean;
   keyConnectorUrl: string;
 
+  prfPublicKey: string;
+  prfPrivateKey: string;
+  userKey: string; // TODO: Rename this to something else?
+
   constructor(response: any) {
     super(response);
     this.accessToken = response.access_token;
@@ -43,5 +47,9 @@ export class IdentityTokenResponse extends BaseResponse {
     this.masterPasswordPolicy = new MasterPasswordPolicyResponse(
       this.getResponseProperty("MasterPasswordPolicy")
     );
+
+    this.prfPrivateKey = this.getResponseProperty("prfPrivateKey");
+    this.prfPublicKey = this.getResponseProperty("prfPublicKey");
+    this.userKey = this.getResponseProperty("userKey");
   }
 }

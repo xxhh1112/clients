@@ -76,7 +76,7 @@ export class WebauthnLoginService {
   }
 
   async logIn(assertion: WebauthnAssertionView) {
-    const credential = new ExtensionLogInCredentials(assertion.token);
+    const credential = new ExtensionLogInCredentials(assertion.token, assertion.prfKey);
     const result = await this.authService.logIn(credential);
     return result;
   }

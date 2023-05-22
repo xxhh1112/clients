@@ -5,6 +5,8 @@ import { LogService } from "../../abstractions/log.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
+import { EncString } from "../../models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -12,6 +14,7 @@ import { AuthResult } from "../models/domain/auth-result";
 import { ExtensionLogInCredentials } from "../models/domain/log-in-credentials";
 import { ExtensionTokenRequest } from "../models/request/identity-token/extension-token.request";
 import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
+import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 import { LogInStrategy } from "./login.strategy";
 
@@ -33,7 +36,7 @@ export class ExtensionLogInStrategy extends LogInStrategy {
   }
 
   tokenRequest: ExtensionTokenRequest;
-  private passwordlessCredentials: ExtensionLogInCredentials;
+  private credentials: ExtensionLogInCredentials;
 
   constructor(
     cryptoService: CryptoService,
@@ -60,8 +63,14 @@ export class ExtensionLogInStrategy extends LogInStrategy {
     );
   }
 
-  async setUserKey() {
-    // await this.cryptoService.setKey(this.passwordlessCredentials.decKey);
+  async setUserKey(response: IdentityTokenResponse) {
+    const encPrivateKey = new EncString(response.prfPrivateKey);
+    const privateKey = await this.cryptoService.decryptToBytes(
+      encPrivateKey,
+      this.credentials.prfKey
+    );
+    const userKey = await this.cryptoService.rsaDecrypt(response.userKey, privateKey);
+    await this.cryptoService.setKey(new SymmetricCryptoKey(userKey));
     // await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
   }
 
@@ -74,7 +83,7 @@ export class ExtensionLogInStrategy extends LogInStrategy {
   }
 
   async logIn(credentials: ExtensionLogInCredentials) {
-    this.passwordlessCredentials = credentials;
+    this.credentials = credentials;
 
     this.tokenRequest = new ExtensionTokenRequest(
       credentials.token,
