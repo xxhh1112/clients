@@ -3,6 +3,7 @@ import { mock } from "jest-mock-extended";
 import { UriMatchType } from "@bitwarden/common/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import AutofillField from "../src/autofill/models/autofill-field";
 import AutofillPageDetails from "../src/autofill/models/autofill-page-details";
 import AutofillScript, { FillScript } from "../src/autofill/models/autofill-script";
 import { GenerateFillScriptOptions } from "../src/autofill/services/abstractions/autofill.service";
@@ -11,7 +12,7 @@ function triggerTestFailure() {
   expect(true).toBe("Test has failed.");
 }
 
-function createInputFieldDataItemMock(customFields = {}) {
+function createAutofillFieldMock(customFields = {}): AutofillField {
   return {
     opid: "default-input-field-opid",
     elementNumber: 0,
@@ -55,7 +56,7 @@ function createAutofillPageDetailsMock(customFields = {}): AutofillPageDetails {
         htmlMethod: "htmlMethod",
       },
     },
-    fields: [createInputFieldDataItemMock({ opid: "non-password-field" })],
+    fields: [createAutofillFieldMock({ opid: "non-password-field" })],
     collectedTimestamp: 0,
     ...customFields,
   };
@@ -128,7 +129,7 @@ function createAutofillScriptMock(
 
 export {
   triggerTestFailure,
-  createInputFieldDataItemMock,
+  createAutofillFieldMock,
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
