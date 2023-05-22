@@ -4,7 +4,7 @@ import { UriMatchType } from "@bitwarden/common/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import AutofillPageDetails from "../src/autofill/models/autofill-page-details";
-import AutofillScript from "../src/autofill/models/autofill-script";
+import AutofillScript, { FillScript } from "../src/autofill/models/autofill-script";
 import { GenerateFillScriptOptions } from "../src/autofill/services/abstractions/autofill.service";
 
 function triggerTestFailure() {
@@ -96,7 +96,7 @@ function createAutofillScriptMock(
   customFields = {},
   scriptTypes?: Record<string, string>
 ): AutofillScript {
-  let script = [
+  let script: FillScript[] = [
     ["click_on_opid", "default-field"],
     ["focus_by_opid", "default-field"],
     ["fill_by_opid", "default-field", "default"],
@@ -120,6 +120,7 @@ function createAutofillScriptMock(
     },
     savedUrls: [],
     script,
+    itemType: "",
     untrustedIframe: false,
     ...customFields,
   };

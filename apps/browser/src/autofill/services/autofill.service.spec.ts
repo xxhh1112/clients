@@ -1,7 +1,7 @@
 import { mock, mockReset } from "jest-mock-extended";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { EventType } from "@bitwarden/common/enums";
+import { EventType, FieldType, LinkedIdType, LoginLinkedId } from "@bitwarden/common/enums";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
@@ -23,6 +23,7 @@ import {
 } from "../../../jest/testing-utils";
 import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/browser-state.service";
+import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 
 import {
@@ -714,29 +715,42 @@ describe("AutofillService", function () {
   });
 
   describe("generateFillScript", function () {
-    let generateFillScriptOptions: GenerateFillScriptOptions;
+    let defaultUsernameField: AutofillField;
+    let defaultUsernameFieldView: FieldView;
+    let defaultPasswordField: AutofillField;
+    let defaultPasswordFieldView: FieldView;
     let pageDetail: AutofillPageDetails;
+    let generateFillScriptOptions: GenerateFillScriptOptions;
 
     beforeEach(function () {
+      defaultUsernameField = createInputFieldDataItemMock({
+        opid: "username-field",
+        form: "validFormId",
+        htmlID: "username",
+        elementNumber: 1,
+      });
+      defaultUsernameFieldView = mock<FieldView>({
+        name: "username",
+        value: defaultUsernameField.value,
+      });
+      defaultPasswordField = createInputFieldDataItemMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+        htmlID: "password",
+        elementNumber: 2,
+      });
+      defaultPasswordFieldView = mock<FieldView>({
+        name: "password",
+        value: defaultPasswordField.value,
+      });
       pageDetail = createAutofillPageDetailsMock({
-        fields: [
-          createInputFieldDataItemMock({
-            opid: "username-field",
-            form: "validFormId",
-            elementNumber: 1,
-          }),
-          createInputFieldDataItemMock({
-            opid: "password-field",
-            type: "password",
-            form: "validFormId",
-            elementNumber: 2,
-          }),
-        ],
+        fields: [defaultUsernameField, defaultPasswordField],
       });
       generateFillScriptOptions = createGenerateFillScriptOptionsMock();
       generateFillScriptOptions.cipher.fields = [
-        mock<FieldView>({ name: "username" }),
-        mock<FieldView>({ name: "password" }),
+        defaultUsernameFieldView,
+        defaultPasswordFieldView,
       ];
     });
 
@@ -754,15 +768,154 @@ describe("AutofillService", function () {
       expect(value).toBeNull();
     });
 
-    // describe("given a valid set of cipher fields and page detail fields", function () {
-    // it will not attempt to fill by opid duplicate fields found within the page details
-    // it will not attempt to fill by opid fields that are not viewable and are not a `span` element
-    // it will not attempt to fill by opid fields that do not contain a property that matches the field name
-    // it will fill by opid fields that contain a property that matches the field name
-    // it will fill by opid fields of type Linked
-    // it will fill by opid fields of type Boolean
-    // it will fill by opid fields of type Boolean with a value of false if no value is provided
-    // });
+    describe("given a valid set of cipher fields and page detail fields", function () {
+      it("will not attempt to fill by opid duplicate fields found within the page details", function () {
+        const duplicateUsernameField: AutofillField = createInputFieldDataItemMock({
+          opid: "username-field",
+          form: "validFormId",
+          htmlID: "username",
+          elementNumber: 3,
+        });
+        pageDetail.fields.push(duplicateUsernameField);
+        jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
+        jest.spyOn(autofillService as any, "findMatchingFieldIndex");
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
+          expect.anything(),
+          duplicateUsernameField,
+          duplicateUsernameField.value
+        );
+      });
+
+      it("will not attempt to fill by opid fields that are not viewable and are not a `span` element", function () {
+        defaultUsernameField.viewable = false;
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
+          expect.anything(),
+          defaultUsernameField,
+          defaultUsernameField.value
+        );
+      });
+
+      it("will fill by opid fields that are not viewable but are a `span` element", function () {
+        defaultUsernameField.viewable = false;
+        defaultUsernameField.tagName = "span";
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          expect.anything(),
+          defaultUsernameField,
+          defaultUsernameField.value
+        );
+      });
+
+      it("will not attempt to fill by opid fields that do not contain a property that matches the field name", function () {
+        defaultUsernameField.htmlID = "does-not-match-username";
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
+          expect.anything(),
+          defaultUsernameField,
+          defaultUsernameField.value
+        );
+      });
+
+      it("will fill by opid fields that contain a property that matches the field name", function () {
+        jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
+        jest.spyOn(autofillService as any, "findMatchingFieldIndex");
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(autofillService["findMatchingFieldIndex"]).toHaveBeenCalledTimes(2);
+        expect(generateFillScriptOptions.cipher.linkedFieldValue).not.toHaveBeenCalled();
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          expect.anything(),
+          defaultUsernameField,
+          defaultUsernameField.value
+        );
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          2,
+          expect.anything(),
+          defaultPasswordField,
+          defaultPasswordField.value
+        );
+      });
+
+      it("it will fill by opid fields of type Linked", function () {
+        const fieldLinkedId: LinkedIdType = LoginLinkedId.Username;
+        const linkedFieldValue = "linkedFieldValue";
+        defaultUsernameFieldView.type = FieldType.Linked;
+        defaultUsernameFieldView.linkedId = fieldLinkedId;
+        jest
+          .spyOn(generateFillScriptOptions.cipher, "linkedFieldValue")
+          .mockReturnValueOnce(linkedFieldValue);
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(generateFillScriptOptions.cipher.linkedFieldValue).toHaveBeenCalledTimes(1);
+        expect(generateFillScriptOptions.cipher.linkedFieldValue).toHaveBeenCalledWith(
+          fieldLinkedId
+        );
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          expect.anything(),
+          defaultUsernameField,
+          linkedFieldValue
+        );
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          2,
+          expect.anything(),
+          defaultPasswordField,
+          defaultPasswordField.value
+        );
+      });
+
+      it("will fill by opid fields of type Boolean", function () {
+        defaultUsernameFieldView.type = FieldType.Boolean;
+        defaultUsernameFieldView.value = "true";
+        jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(generateFillScriptOptions.cipher.linkedFieldValue).not.toHaveBeenCalled();
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          expect.anything(),
+          defaultUsernameField,
+          defaultUsernameFieldView.value
+        );
+      });
+
+      it("will fill by opid fields of type Boolean with a value of false if no value is provided", function () {
+        defaultUsernameFieldView.type = FieldType.Boolean;
+        defaultUsernameFieldView.value = undefined;
+        jest.spyOn(AutofillService, "fillByOpid");
+
+        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          expect.anything(),
+          defaultUsernameField,
+          "false"
+        );
+      });
+    });
 
     it("returns a fill script generated for a login autofill", function () {
       const fillScriptMock = createAutofillScriptMock(
@@ -776,13 +929,107 @@ describe("AutofillService", function () {
 
       const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
-      expect(autofillService["generateLoginFillScript"]).toHaveBeenCalled();
+      expect(autofillService["generateLoginFillScript"]).toHaveBeenCalledWith(
+        {
+          autosubmit: null,
+          documentUUID: "documentUUID",
+          metadata: {},
+          options: {},
+          properties: {},
+          script: [
+            ["click_on_opid", "username-field"],
+            ["focus_by_opid", "username-field"],
+            ["fill_by_opid", "username-field", "default-value"],
+            ["click_on_opid", "password-field"],
+            ["focus_by_opid", "password-field"],
+            ["fill_by_opid", "password-field", "default-value"],
+          ],
+        },
+        pageDetail,
+        {
+          "password-field": defaultPasswordField,
+          "username-field": defaultUsernameField,
+        },
+        generateFillScriptOptions
+      );
       expect(value).toBe(fillScriptMock);
     });
 
-    // it("returns a fill script generated for a card autofill", function () {});
-    //
-    // it("returns a fill script generated for an identity autofill", function () {});
+    it("returns a fill script generated for a card autofill", function () {
+      const fillScriptMock = createAutofillScriptMock(
+        {},
+        { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
+      );
+      generateFillScriptOptions.cipher.type = CipherType.Card;
+      jest
+        .spyOn(autofillService as any, "generateCardFillScript")
+        .mockReturnValueOnce(fillScriptMock);
+
+      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+      expect(autofillService["generateCardFillScript"]).toHaveBeenCalledWith(
+        {
+          autosubmit: null,
+          documentUUID: "documentUUID",
+          metadata: {},
+          options: {},
+          properties: {},
+          script: [
+            ["click_on_opid", "username-field"],
+            ["focus_by_opid", "username-field"],
+            ["fill_by_opid", "username-field", "default-value"],
+            ["click_on_opid", "password-field"],
+            ["focus_by_opid", "password-field"],
+            ["fill_by_opid", "password-field", "default-value"],
+          ],
+        },
+        pageDetail,
+        {
+          "password-field": defaultPasswordField,
+          "username-field": defaultUsernameField,
+        },
+        generateFillScriptOptions
+      );
+      expect(value).toBe(fillScriptMock);
+    });
+
+    it("returns a fill script generated for an identity autofill", function () {
+      const fillScriptMock = createAutofillScriptMock(
+        {},
+        { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
+      );
+      generateFillScriptOptions.cipher.type = CipherType.Identity;
+      jest
+        .spyOn(autofillService as any, "generateIdentityFillScript")
+        .mockReturnValueOnce(fillScriptMock);
+
+      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+
+      expect(autofillService["generateIdentityFillScript"]).toHaveBeenCalledWith(
+        {
+          autosubmit: null,
+          documentUUID: "documentUUID",
+          metadata: {},
+          options: {},
+          properties: {},
+          script: [
+            ["click_on_opid", "username-field"],
+            ["focus_by_opid", "username-field"],
+            ["fill_by_opid", "username-field", "default-value"],
+            ["click_on_opid", "password-field"],
+            ["focus_by_opid", "password-field"],
+            ["fill_by_opid", "password-field", "default-value"],
+          ],
+        },
+        pageDetail,
+        {
+          "password-field": defaultPasswordField,
+          "username-field": defaultUsernameField,
+        },
+        generateFillScriptOptions
+      );
+      expect(value).toBe(fillScriptMock);
+    });
 
     it("returns null if the cipher type is not for a login, card, or identity", function () {
       generateFillScriptOptions.cipher.type = CipherType.SecureNote;

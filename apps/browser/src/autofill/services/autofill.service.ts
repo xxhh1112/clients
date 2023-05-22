@@ -323,7 +323,6 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         const matchingIndex = this.findMatchingFieldIndex(field, fieldNames);
-        // console.log(matchingIndex);
         if (matchingIndex > -1) {
           const matchingField: FieldView = fields[matchingIndex];
           let val: string;
@@ -1273,7 +1272,6 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   private findMatchingFieldIndex(field: AutofillField, names: string[]): number {
-    // console.log(names, field);
     for (let i = 0; i < names.length; i++) {
       if (names[i].indexOf("=") > -1) {
         if (this.fieldPropertyIsPrefixMatch(field, "htmlID", names[i], "id")) {
@@ -1335,7 +1333,6 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     fieldVal = fieldVal.trim().replace(/(?:\r\n|\r|\n)/g, "");
-    // console.log(fieldVal, name);
     if (name.startsWith("regex=")) {
       try {
         const regexParts = name.split("=", 2);
