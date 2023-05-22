@@ -118,6 +118,7 @@
     },
     {
       "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "parser": "@angular-eslint/template-parser",
       "plugins": ["@angular-eslint/template", "tailwindcss"],
       "rules": {
