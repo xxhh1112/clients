@@ -10,7 +10,7 @@ import { OrganizationSubscriptionUpdateRequest } from "@bitwarden/common/billing
   selector: "app-adjust-subscription",
   templateUrl: "adjust-subscription.component.html",
 })
-export class AdjustSubscriptionComponent implements OnInit {
+export class AdjustSubscription implements OnInit {
   @Input() organizationId: string;
   @Input() maxAutoscaleSeats: number;
   @Input() currentSeatCount: number;
