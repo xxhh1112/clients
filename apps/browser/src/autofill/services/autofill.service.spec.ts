@@ -1,7 +1,13 @@
 import { mock, mockReset } from "jest-mock-extended";
 
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { EventType, FieldType, LinkedIdType, LoginLinkedId } from "@bitwarden/common/enums";
+import {
+  EventType,
+  FieldType,
+  LinkedIdType,
+  LoginLinkedId,
+  UriMatchType,
+} from "@bitwarden/common/enums";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
@@ -11,16 +17,18 @@ import { CardView } from "@bitwarden/common/vault/models/view/card.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
+import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
 import {
-  triggerTestFailure,
   createAutofillFieldMock,
   createAutofillPageDetailsMock,
+  createAutofillScriptMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
-  createAutofillScriptMock,
-} from "../../../jest/testing-utils";
+} from "../../../jest/autofill-mocks";
+import { triggerTestFailure } from "../../../jest/testing-utils";
 import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/browser-state.service";
 import AutofillField from "../models/autofill-field";
@@ -1046,6 +1054,7 @@ describe("AutofillService", function () {
     let pageDetails: AutofillPageDetails;
     let filledFields: { [id: string]: AutofillField };
     let options: GenerateFillScriptOptions;
+    let defaultLoginUriView: LoginUriView;
 
     beforeEach(function () {
       fillScript = createAutofillScriptMock();
@@ -1062,7 +1071,15 @@ describe("AutofillService", function () {
           elementNumber: 2,
         }),
       };
+      defaultLoginUriView = mock<LoginUriView>({
+        uri: "https://www.example.com",
+        match: UriMatchType.Domain,
+      });
       options = createGenerateFillScriptOptionsMock();
+      options.cipher.login = mock<LoginView>({
+        uris: [defaultLoginUriView],
+      });
+      options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
     });
 
     it("returns null if the cipher does not have login data", function () {
@@ -1088,6 +1105,218 @@ describe("AutofillService", function () {
       expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
       expect(AutofillService.setFillScriptForFocus).not.toHaveBeenCalled();
       expect(value).toBeNull();
+    });
+
+    describe("given a list of login uri views", function () {
+      it("returns an empty array of saved login uri views if the login cipher has no login uri views", function () {
+        options.cipher.login.uris = [];
+
+        const value = autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.savedUrls).toStrictEqual([]);
+      });
+
+      it("returns a list of saved login uri views within the fill script", function () {
+        const secondUriView = mock<LoginUriView>({
+          uri: "https://www.second-example.com",
+        });
+        const thirdUriView = mock<LoginUriView>({
+          uri: "https://www.third-example.com",
+        });
+        options.cipher.login.uris = [defaultLoginUriView, secondUriView, thirdUriView];
+
+        const value = autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.savedUrls).toStrictEqual([
+          defaultLoginUriView.uri,
+          secondUriView.uri,
+          thirdUriView.uri,
+        ]);
+      });
+
+      it("skips adding any login uri views that have a UriMatchType of Never to the list of saved urls", function () {
+        const secondUriView = mock<LoginUriView>({
+          uri: "https://www.second-example.com",
+        });
+        const thirdUriView = mock<LoginUriView>({
+          uri: "https://www.third-example.com",
+          match: UriMatchType.Never,
+        });
+        options.cipher.login.uris = [defaultLoginUriView, secondUriView, thirdUriView];
+
+        const value = autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.savedUrls).toStrictEqual([defaultLoginUriView.uri, secondUriView.uri]);
+        expect(value.savedUrls).not.toContain(thirdUriView.uri);
+      });
+    });
+
+    it("returns a value indicating if the page url is in an untrusted iframe", function () {
+      jest.spyOn(autofillService as any, "inUntrustedIframe").mockReturnValueOnce(true);
+
+      const value = autofillService["generateLoginFillScript"](
+        fillScript,
+        pageDetails,
+        filledFields,
+        options
+      );
+
+      expect(value.untrustedIframe).toBe(true);
+    });
+
+    it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", function () {
+      pageDetails.fields = [
+        createAutofillFieldMock({
+          opid: "password-field",
+          type: "password",
+          viewable: true,
+          readonly: true,
+        }),
+      ];
+      jest.spyOn(AutofillService, "loadPasswordFields");
+
+      autofillService["generateLoginFillScript"](fillScript, pageDetails, filledFields, options);
+
+      expect(AutofillService.loadPasswordFields).toHaveBeenCalledTimes(2);
+      expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
+        1,
+        pageDetails,
+        false,
+        false,
+        options.onlyEmptyFields,
+        options.fillNewPassword
+      );
+      expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
+        2,
+        pageDetails,
+        true,
+        true,
+        options.onlyEmptyFields,
+        options.fillNewPassword
+      );
+    });
+
+    describe("given a valid set of page details and autofill options", function () {
+      let usernameField: AutofillField;
+      let usernameFieldView: FieldView;
+      let passwordField: AutofillField;
+      let passwordFieldView: FieldView;
+
+      beforeEach(function () {
+        usernameField = createAutofillFieldMock({
+          opid: "username",
+          form: "validFormId",
+          elementNumber: 1,
+        });
+        usernameFieldView = mock<FieldView>({
+          name: "username",
+        });
+        passwordField = createAutofillFieldMock({
+          opid: "password",
+          type: "password",
+          form: "validFormId",
+          elementNumber: 2,
+        });
+        passwordFieldView = mock<FieldView>({
+          name: "password",
+        });
+        pageDetails.fields = [usernameField, passwordField];
+        options.cipher.fields = [usernameFieldView, passwordFieldView];
+        options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
+        options.cipher.login.username = "username";
+        options.cipher.login.password = "password";
+      });
+
+      it("returns a fill script used to autofill a login item", function () {
+        jest.spyOn(autofillService as any, "inUntrustedIframe");
+        jest.spyOn(AutofillService, "loadPasswordFields");
+        jest.spyOn(autofillService as any, "findUsernameField");
+        jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
+        jest.spyOn(AutofillService, "fillByOpid");
+        jest.spyOn(AutofillService, "setFillScriptForFocus");
+
+        const value = autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(autofillService["inUntrustedIframe"]).toHaveBeenCalledWith(pageDetails.url, options);
+        expect(AutofillService.loadPasswordFields).toHaveBeenCalledWith(
+          pageDetails,
+          false,
+          false,
+          options.onlyEmptyFields,
+          options.fillNewPassword
+        );
+        expect(autofillService["findUsernameField"]).toHaveBeenCalledWith(
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+        expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenCalled();
+        expect(AutofillService.fillByOpid).toHaveBeenCalledTimes(2);
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          1,
+          fillScript,
+          usernameField,
+          options.cipher.login.username
+        );
+        expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
+          2,
+          fillScript,
+          passwordField,
+          options.cipher.login.password
+        );
+        expect(AutofillService.setFillScriptForFocus).toHaveBeenCalledWith(
+          filledFields,
+          fillScript
+        );
+        expect(value).toStrictEqual({
+          autosubmit: null,
+          documentUUID: "documentUUID",
+          metadata: {},
+          options: {},
+          properties: { delay_between_operations: 20 },
+          savedUrls: ["https://www.example.com"],
+          script: [
+            ["click_on_opid", "default-field"],
+            ["focus_by_opid", "default-field"],
+            ["fill_by_opid", "default-field", "default"],
+            ["click_on_opid", "username"],
+            ["focus_by_opid", "username"],
+            ["fill_by_opid", "username", "username"],
+            ["click_on_opid", "password"],
+            ["focus_by_opid", "password"],
+            ["fill_by_opid", "password", "password"],
+            ["focus_by_opid", "password"],
+          ],
+          itemType: "",
+          untrustedIframe: false,
+        });
+      });
+
+      // it skips adding found password fields that are not associated with a specific form
+
+      // it will attempt to fuzzy match a username to a text, email or tel field if no password fields are found and the username fill is not being skipped
     });
   });
 
