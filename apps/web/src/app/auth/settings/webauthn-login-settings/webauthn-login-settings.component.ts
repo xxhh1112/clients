@@ -3,7 +3,7 @@ import { Subject, takeUntil } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
-import { WebauthnService } from "../../core";
+import { WebauthnAdminService } from "../../core";
 import {
   WebauthnCredentialPrfStatus,
   WebauthnCredentialView,
@@ -29,7 +29,7 @@ export class WebauthnLoginSettingsComponent implements OnInit, OnDestroy {
   protected loading = true;
 
   constructor(
-    private webauthnService: WebauthnService,
+    private webauthnService: WebauthnAdminService,
     private dialogService: DialogServiceAbstraction
   ) {}
 

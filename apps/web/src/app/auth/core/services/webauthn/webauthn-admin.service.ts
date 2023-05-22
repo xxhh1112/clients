@@ -6,27 +6,21 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";
-import { CredentialAssertionOptionsView } from "../../views/credential-assertion-options.view";
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
-import { WebauthnAssertionView } from "../../views/webauthn-assertion.view";
 import { WebauthnCredentialView } from "../../views/webauthn-credential.view";
 
-import { AuthenticatorAssertionResponseRequest } from "./request/authenticator-assertion-response.request";
 import { SaveCredentialRequest } from "./request/save-credential.request";
-import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-response.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
+import { createSymmetricKeyFromPrf, getLoginWithPrfSalt } from "./utils";
 import { WebauthnApiService } from "./webauthn-api.service";
 
-const LoginWithPrfSalt = "passwordless-login";
-
 @Injectable({ providedIn: CoreAuthModule })
-export class WebauthnService {
+export class WebauthnAdminService {
   private navigatorCredentials: CredentialsContainer;
   private _refresh$ = new BehaviorSubject<void>(undefined);
   private _loading$ = new BehaviorSubject<boolean>(true);
@@ -97,7 +91,7 @@ export class WebauthnService {
         userVerification:
           pendingCredential.createOptions.options.authenticatorSelection.userVerification,
         // TODO: Remove `any` when typescript typings add support for PRF
-        extensions: { prf: { eval: { first: await this.getLoginWithPrfSalt() } } } as any,
+        extensions: { prf: { eval: { first: await getLoginWithPrfSalt() } } } as any,
       },
     };
 
@@ -108,7 +102,7 @@ export class WebauthnService {
       }
       // TODO: Remove `any` when typescript typings add support for PRF
       const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
-      const symmetricPrfKey = this.createSymmetricKeyFromPrf(prfResult);
+      const symmetricPrfKey = createSymmetricKeyFromPrf(prfResult);
       const [publicKey, privateKey] = await this.cryptoService.makeKeyPair(symmetricPrfKey);
       const rawUserKey = await this.cryptoService.getEncKey();
       const userKey = await this.cryptoService.rsaEncrypt(
@@ -154,45 +148,6 @@ export class WebauthnService {
     this.refresh();
   }
 
-  async getCredentialAssertionOptions(): Promise<CredentialAssertionOptionsView> {
-    const response = await this.apiService.getCredentialAssertionOptions();
-    return new CredentialAssertionOptionsView(response.options, response.token);
-  }
-
-  async assertCredential(
-    credentialOptions: CredentialAssertionOptionsView
-  ): Promise<WebauthnAssertionView> {
-    const nativeOptions: CredentialRequestOptions = {
-      publicKey: credentialOptions.options,
-    };
-    // TODO: Remove `any` when typescript typings add support for PRF
-    nativeOptions.publicKey.extensions = {
-      prf: { eval: { first: await this.getLoginWithPrfSalt() } },
-    } as any;
-
-    try {
-      const response = await this.navigatorCredentials.get(nativeOptions);
-      if (!(response instanceof PublicKeyCredential)) {
-        return undefined;
-      }
-      // TODO: Remove `any` when typescript typings add support for PRF
-      const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
-      let symmetricPrfKey: SymmetricCryptoKey | undefined;
-      if (prfResult != undefined) {
-        symmetricPrfKey = this.createSymmetricKeyFromPrf(prfResult);
-      }
-
-      const deviceResponse = new AuthenticatorAssertionResponseRequest(response);
-      const request = new WebauthnAssertionResponseRequest(credentialOptions.token, deviceResponse);
-      const token = await this.apiService.assertCredential(request);
-
-      return new WebauthnAssertionView(token, symmetricPrfKey);
-    } catch (error) {
-      this.logService?.error(error);
-      return undefined;
-    }
-  }
-
   private getCredentials$(): Observable<WebauthnCredentialView[]> {
     return from(this.apiService.getCredentials()).pipe(
       map((response) =>
@@ -202,14 +157,6 @@ export class WebauthnService {
         )
       )
     );
-  }
-
-  private createSymmetricKeyFromPrf(prf: ArrayBuffer) {
-    return new SymmetricCryptoKey(prf);
-  }
-
-  private async getLoginWithPrfSalt(): Promise<ArrayBuffer> {
-    return await crypto.subtle.digest("sha-256", Utils.fromUtf8ToArray(LoginWithPrfSalt));
   }
 
   private refresh() {

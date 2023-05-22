@@ -10,7 +10,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
-import { WebauthnService } from "../../../core";
+import { WebauthnAdminService } from "../../../core";
 import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../../core/views/pending-webauthn-credential.view";
 import { PendingWebauthnCryptoKeysView } from "../../../core/views/pending-webauthn-crypto-keys.view";
@@ -53,7 +53,7 @@ export class CreateCredentialDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnService,
+    private webauthnService: WebauthnAdminService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private logService: LogService

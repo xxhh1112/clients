@@ -6,15 +6,15 @@ import { ConfigService } from "@bitwarden/common/services/config/config.service"
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
 import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
 
+import { WebauthnAdminService } from "./webauthn-admin.service";
 import { WebauthnApiService } from "./webauthn-api.service";
-import { WebauthnService } from "./webauthn.service";
 
 describe("WebauthnService", () => {
   let apiService!: MockProxy<WebauthnApiService>;
   let cryptoService!: MockProxy<CryptoService>;
   let configService!: MockProxy<ConfigService>;
   let credentials: MockProxy<CredentialsContainer>;
-  let webauthnService!: WebauthnService;
+  let webauthnService!: WebauthnAdminService;
 
   beforeAll(() => {
     // Polyfill missing class
@@ -28,7 +28,12 @@ describe("WebauthnService", () => {
 
     configService.getFeatureFlagBool.mockResolvedValue(Promise.resolve(true));
 
-    webauthnService = new WebauthnService(apiService, cryptoService, configService, credentials);
+    webauthnService = new WebauthnAdminService(
+      apiService,
+      cryptoService,
+      configService,
+      credentials
+    );
   });
 
   describe("createCredential", () => {

@@ -27,7 +27,7 @@ import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
-import { WebauthnService } from "../core";
+import { WebauthnLoginService } from "../core";
 
 @Component({
   selector: "app-login",
@@ -64,7 +64,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     loginService: LoginService,
-    private webauthnService: WebauthnService
+    private webauthnService: WebauthnLoginService
   ) {
     super(
       apiService,

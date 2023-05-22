@@ -10,7 +10,7 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
-import { WebauthnService } from "../../../core";
+import { WebauthnAdminService } from "../../../core";
 import { WebauthnCredentialView } from "../../../core/views/webauthn-credential.view";
 
 export interface DeleteCredentialDialogParams {
@@ -32,7 +32,7 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: DeleteCredentialDialogParams,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnService,
+    private webauthnService: WebauthnAdminService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private logService: LogService

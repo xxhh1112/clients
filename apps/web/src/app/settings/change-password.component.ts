@@ -33,7 +33,7 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { CipherWithIdRequest } from "@bitwarden/common/vault/models/request/cipher-with-id.request";
 import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/folder-with-id.request";
 
-import { WebauthnService } from "../auth/core";
+import { WebauthnAdminService } from "../auth/core";
 
 @Component({
   selector: "app-change-password",
@@ -68,7 +68,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
     dialogService: DialogServiceAbstraction,
-    private webauthnService: WebauthnService
+    private webauthnService: WebauthnAdminService
   ) {
     super(
       i18nService,

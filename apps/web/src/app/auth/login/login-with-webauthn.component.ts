@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import { WebauthnService } from "../core";
+import { WebauthnLoginService } from "../core";
 import { CredentialAssertionOptionsView } from "../core/views/credential-assertion-options.view";
 import { CreatePasskeyFailedIcon } from "../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../shared/icons/create-passkey.icon";
@@ -17,7 +17,7 @@ export class LoginWithWebauthnComponent implements OnInit {
   protected currentStep: Step = "assert";
   protected options?: CredentialAssertionOptionsView;
 
-  constructor(private webauthnService: WebauthnService) {}
+  constructor(private webauthnService: WebauthnLoginService) {}
 
   ngOnInit(): void {
     this.authenticate();
