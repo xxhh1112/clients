@@ -23,7 +23,7 @@ import { Utils } from "../../misc/utils";
 import { ServerConfigData } from "../../models/data/server-config.data";
 
 import { EncString } from "./enc-string";
-import { DeviceKey, SymmetricCryptoKey } from "./symmetric-crypto-key";
+import { DeviceKey, MasterKey, SymmetricCryptoKey, UserSymKey } from "./symmetric-crypto-key";
 
 export class EncryptionPair<TEncrypted, TDecrypted> {
   encrypted?: TEncrypted;
@@ -99,6 +99,14 @@ export class AccountData {
 }
 
 export class AccountKeys {
+  // new keys
+  masterKey?: MasterKey;
+  userSymKey?: UserSymKey;
+  userSymKeyAuto?: string;
+  userSymKeyBiometric?: string;
+  // end new keys
+
+  //deprecated keys
   cryptoMasterKey?: SymmetricCryptoKey;
   cryptoMasterKeyAuto?: string;
   cryptoMasterKeyB64?: string;
@@ -107,6 +115,8 @@ export class AccountKeys {
     string,
     SymmetricCryptoKey
   >();
+  // end deprecated keys
+
   deviceKey?: DeviceKey;
   organizationKeys?: EncryptionPair<
     { [orgId: string]: EncryptedOrganizationKeyData },

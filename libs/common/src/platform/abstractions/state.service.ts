@@ -26,7 +26,12 @@ import { ServerConfigData } from "../models/data/server-config.data";
 import { Account, AccountSettingsSettings } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
 import { StorageOptions } from "../models/domain/storage-options";
-import { DeviceKey, SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import {
+  DeviceKey,
+  MasterKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "../models/domain/symmetric-crypto-key";
 
 export abstract class StateService<T extends Account = Account> {
   accounts$: Observable<{ [userId: string]: T }>;
@@ -71,6 +76,27 @@ export abstract class StateService<T extends Account = Account> {
   setCollapsedGroupings: (value: string[], options?: StorageOptions) => Promise<void>;
   getConvertAccountToKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
+
+  // new keys
+  getMasterKey: (options?: StorageOptions) => Promise<MasterKey>;
+  setMasterKey: (value: MasterKey, options?: StorageOptions) => Promise<void>;
+  getUserSymKey: (options?: StorageOptions) => Promise<UserSymKey>;
+  setUserSymKey: (value: UserSymKey, options?: StorageOptions) => Promise<void>;
+  getUserSymKeyAuto: (options?: StorageOptions) => Promise<string>;
+  setUserSymKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
+  getUserSymKeyBiometric: (options?: StorageOptions) => Promise<string>;
+  hasUserSymKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
+  setUserSymKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
+  // end new keys
+
+  // deprecated keys
+  getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
+  setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
+  getDecryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
+  setDecryptedCryptoSymmetricKey: (
+    value: SymmetricCryptoKey,
+    options?: StorageOptions
+  ) => Promise<void>;
   getCryptoMasterKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
   setCryptoMasterKey: (value: SymmetricCryptoKey, options?: StorageOptions) => Promise<void>;
   getCryptoMasterKeyAuto: (options?: StorageOptions) => Promise<string>;
@@ -80,15 +106,12 @@ export abstract class StateService<T extends Account = Account> {
   getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
   hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
+  // end deprecated keys
+
   getDecryptedCiphers: (options?: StorageOptions) => Promise<CipherView[]>;
   setDecryptedCiphers: (value: CipherView[], options?: StorageOptions) => Promise<void>;
   getDecryptedCollections: (options?: StorageOptions) => Promise<CollectionView[]>;
   setDecryptedCollections: (value: CollectionView[], options?: StorageOptions) => Promise<void>;
-  getDecryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
-  setDecryptedCryptoSymmetricKey: (
-    value: SymmetricCryptoKey,
-    options?: StorageOptions
-  ) => Promise<void>;
   getDecryptedOrganizationKeys: (
     options?: StorageOptions
   ) => Promise<Map<string, SymmetricCryptoKey>>;
@@ -205,8 +228,6 @@ export abstract class StateService<T extends Account = Account> {
     value: { [id: string]: CollectionData },
     options?: StorageOptions
   ) => Promise<void>;
-  getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
-  setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this directly, use FolderService
    */

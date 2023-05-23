@@ -50,7 +50,12 @@ import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
-import { DeviceKey, SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import {
+  DeviceKey,
+  MasterKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "../models/domain/symmetric-crypto-key";
 
 const keys = {
   state: "state",
@@ -62,6 +67,10 @@ const keys = {
 };
 
 const partialKeys = {
+  userAutoKey: "_user_auto",
+  userBiometricKey: "_user_biometric",
+  userSymKey: "_user_sym",
+
   autoKey: "_masterkey_auto",
   biometricKey: "_masterkey_biometric",
   masterKey: "_masterkey",
@@ -515,6 +524,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Do not save the Master Key. Use the User Symmetric Key instead
+   */
   async getCryptoMasterKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -522,6 +534,9 @@ export class StateService<
     return account?.keys?.cryptoMasterKey;
   }
 
+  /**
+   * @deprecated Do not save the Master Key. Use the User Symmetric Key instead
+   */
   async setCryptoMasterKey(value: SymmetricCryptoKey, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -542,6 +557,138 @@ export class StateService<
     }
   }
 
+  async getMasterKey(options?: StorageOptions): Promise<MasterKey> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    return account?.keys?.masterKey;
+  }
+  async setMasterKey(value: MasterKey, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.keys.masterKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
+  /**
+   * User's symmetric key used to encrypt/decrypt data
+   */
+  async getUserSymKey(options?: StorageOptions): Promise<UserSymKey> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    return account?.keys?.userSymKey as UserSymKey;
+  }
+
+  /**
+   * User's symmetric key used to encrypt/decrypt data
+   */
+  async setUserSymKey(value: UserSymKey, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.keys.userSymKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+
+    if (options.userId == this.activeAccountSubject.getValue()) {
+      const nextValue = value != null;
+
+      // Avoid emitting if we are already unlocked
+      if (this.activeAccountUnlockedSubject.getValue() != nextValue) {
+        this.activeAccountUnlockedSubject.next(nextValue);
+      }
+    }
+  }
+
+  /**
+   * User's symmetric key when using the "never" option of vault timeout
+   */
+  async getUserSymKeyAuto(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "auto" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return null;
+    }
+    return await this.secureStorageService.get<string>(
+      `${options.userId}${partialKeys.userAutoKey}`,
+      options
+    );
+  }
+
+  /**
+   * User's symmetric key when using the "never" option of vault timeout
+   */
+  async setUserSymKeyAuto(value: string, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "auto" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return;
+    }
+    await this.saveSecureStorageKey(partialKeys.userAutoKey, value, options);
+  }
+
+  /**
+   * User's encrypted symmetric key when using biometrics
+   */
+  async getUserSymKeyBiometric(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return null;
+    }
+    return await this.secureStorageService.get<string>(
+      `${options.userId}${partialKeys.userBiometricKey}`,
+      options
+    );
+  }
+
+  /**
+   * User's encrypted symmetric key when using biometrics
+   */
+  async hasUserSymKeyBiometric(options?: StorageOptions): Promise<boolean> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return false;
+    }
+    return await this.secureStorageService.has(
+      `${options.userId}${partialKeys.userBiometricKey}`,
+      options
+    );
+  }
+
+  /**
+   * User's encrypted symmetric key when using biometrics
+   */
+  async setUserSymKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return;
+    }
+    await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
+  }
+
+  /**
+   * @deprecated Use UserSymKeyAuto instead
+   */
   async getCryptoMasterKeyAuto(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
@@ -556,6 +703,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserSymKeyAuto instead
+   */
   async setCryptoMasterKeyAuto(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
@@ -567,6 +717,9 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.autoKey, value, options);
   }
 
+  /**
+   * @deprecated I don't see where this is even used
+   */
   async getCryptoMasterKeyB64(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(options, await this.defaultSecureStorageOptions());
     if (options?.userId == null) {
@@ -578,6 +731,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated I don't see where this is even used
+   */
   async setCryptoMasterKeyB64(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultSecureStorageOptions());
     if (options?.userId == null) {
@@ -586,6 +742,9 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.masterKey, value, options);
   }
 
+  /**
+   * @deprecated Use UserSymKeyBiometric instead
+   */
   async getCryptoMasterKeyBiometric(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -600,6 +759,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserSymKeyBiometric instead
+   */
   async hasCryptoMasterKeyBiometric(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -614,6 +776,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserSymKeyBiometric instead
+   */
   async setCryptoMasterKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -661,6 +826,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserSymKey instead
+   */
   async getDecryptedCryptoSymmetricKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -668,6 +836,9 @@ export class StateService<
     return account?.keys?.cryptoSymmetricKey?.decrypted;
   }
 
+  /**
+   * @deprecated Use UserSymKey instead
+   */
   async setDecryptedCryptoSymmetricKey(
     value: SymmetricCryptoKey,
     options?: StorageOptions
@@ -1366,12 +1537,18 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserSymKey instead
+   */
   async getEncryptedCryptoSymmetricKey(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.keys.cryptoSymmetricKey.encrypted;
   }
 
+  /**
+   * @deprecated Use UserSymKey instead
+   */
   async setEncryptedCryptoSymmetricKey(value: string, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
