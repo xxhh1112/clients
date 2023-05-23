@@ -79,7 +79,7 @@ export class ExtensionLogInStrategy extends LogInStrategy {
     captchaResponse: string
   ): Promise<AuthResult> {
     // this.tokenRequest.captchaResponse = captchaResponse ?? this.captchaBypassToken;
-    return super.logInTwoFactor(twoFactor);
+    return super.logInTwoFactor(twoFactor, captchaResponse);
   }
 
   async logIn(credentials: ExtensionLogInCredentials) {

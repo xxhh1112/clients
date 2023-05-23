@@ -1,8 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+
 import { WebauthnLoginService } from "../core";
 import { CredentialAssertionOptionsView } from "../core/views/credential-assertion-options.view";
+import { WebauthnAssertionView } from "../core/views/webauthn-assertion.view";
 import { CreatePasskeyFailedIcon } from "../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../shared/icons/create-passkey.icon";
 
@@ -18,7 +24,16 @@ export class LoginWithWebauthnComponent implements OnInit {
   protected currentStep: Step = "assert";
   protected options?: CredentialAssertionOptionsView;
 
-  constructor(private webauthnService: WebauthnLoginService, private router: Router) {}
+  protected twoFactorRoute = "/2fa";
+  protected successRoute = "/vault";
+  protected forcePasswordResetRoute = "/update-temp-password";
+
+  constructor(
+    private webauthnService: WebauthnLoginService,
+    private router: Router,
+    private logService: LogService,
+    private validationService: ValidationService
+  ) {}
 
   ngOnInit(): void {
     this.authenticate();
@@ -30,23 +45,35 @@ export class LoginWithWebauthnComponent implements OnInit {
   }
 
   private async authenticate() {
+    let assertion: WebauthnAssertionView;
     try {
       if (this.options === undefined) {
         this.options = await this.webauthnService.getCredentialAssertionOptions();
       }
 
-      const assertion = await this.webauthnService.assertCredential(this.options);
+      assertion = await this.webauthnService.assertCredential(this.options);
+    } catch (error) {
+      this.currentStep = "assertFailed";
+      return;
+    }
 
-      await this.webauthnService.logIn(assertion);
-
-      if (assertion === undefined) {
-        this.currentStep = "assertFailed";
+    try {
+      const authResult = await this.webauthnService.logIn(assertion);
+      if (authResult.requiresTwoFactor) {
+        await this.router.navigate([this.twoFactorRoute]);
+      } else if (authResult.forcePasswordReset != ForceResetPasswordReason.None) {
+        await this.router.navigate([this.forcePasswordResetRoute]);
+      } else {
+        await this.router.navigate([this.successRoute]);
+      }
+    } catch (error) {
+      if (error instanceof ErrorResponse) {
+        await this.router.navigate(["/login"]);
+        this.validationService.showError(error);
         return;
       }
 
-      await this.router.navigate(["/vault"]);
-    } catch (error) {
-      // TODO: Fix with better errors
+      this.logService.error(error);
       this.currentStep = "assertFailed";
     }
   }

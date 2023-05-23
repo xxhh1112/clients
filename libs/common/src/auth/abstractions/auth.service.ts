@@ -39,6 +39,7 @@ export abstract class AuthService {
   authingWithSso: () => boolean;
   authingWithPassword: () => boolean;
   authingWithPasswordless: () => boolean;
+  authingWithExtension: () => boolean;
   getAuthStatus: (userId?: string) => Promise<AuthenticationStatus>;
   authResponsePushNotification: (notification: AuthRequestPushNotification) => Promise<any>;
   passwordlessLogin: (
