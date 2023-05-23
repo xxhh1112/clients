@@ -1,6 +1,5 @@
 import { Directive, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import * as DuoWebSDK from "duo_web_sdk";
 import { first } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -131,20 +130,30 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
         break;
       case TwoFactorProviderType.Duo:
       case TwoFactorProviderType.OrganizationDuo:
-        setTimeout(() => {
-          DuoWebSDK.init({
-            iframe: undefined,
-            host: providerData.Host,
-            sig_request: providerData.Signature,
-            submit_callback: async (f: HTMLFormElement) => {
-              const sig = f.querySelector('input[name="sig_response"]') as HTMLInputElement;
-              if (sig != null) {
-                this.token = sig.value;
-                await this.submit();
-              }
-            },
-          });
-        }, 0);
+        // setTimeout(() => {
+        //   DuoWebSDK.init({
+        //     iframe: undefined,
+        //     host: providerData.Host,
+        //     sig_request: providerData.Signature,
+        //     submit_callback: async (f: HTMLFormElement) => {
+        //       const sig = f.querySelector('input[name="sig_response"]') as HTMLInputElement;
+        //       if (sig != null) {
+        //         this.token = sig.value;
+        //         await this.submit();
+        //       }
+        //     },
+        //   });
+        // }, 0);
+        // const clientId = "DIULVKMWEKD7WL5037N2";
+        // const clientSecret = "qeA4rbPWXdt13R1fsSpGNeC7a6nTVjYMT4heEwMe";
+        // const apiHost = "api-71241cc8.duosecurity.com";
+        // const redirectUrl = "https://localhost:8080/duo-connector.html";
+        // let duoClient = new DuoUniversal.Client({ clientId, clientSecret, apiHost, redirectUrl });
+        // const state = duoClient.generateState();
+        // const promptUri = duoClient.createAuthUrl("jfink@bitwarden.com", state);
+        // const promptUri = this.apiService.getDuoUri("https://localhost:8080/duo-connector.html");
+        // console.log(promptUri);
+        // this.platformUtilsService.launchUri(promptUri);
         break;
       case TwoFactorProviderType.Email:
         this.twoFactorEmail = providerData.Email;
@@ -232,20 +241,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       return;
     }
 
-    if (this.authService.email == null) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("sessionTimeout")
-      );
-      return;
-    }
-
     try {
       const request = new TwoFactorEmailRequest();
       request.email = this.authService.email;
       request.masterPasswordHash = this.authService.masterPasswordHash;
-      request.ssoEmail2FaSessionToken = this.authService.ssoEmail2FaSessionToken;
       request.deviceIdentifier = await this.appIdService.getAppId();
       request.authRequestAccessCode = this.authService.accessCode;
       request.authRequestId = this.authService.authRequestId;
