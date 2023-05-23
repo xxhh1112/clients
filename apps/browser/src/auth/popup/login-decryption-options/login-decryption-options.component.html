@@ -1,0 +1,52 @@
+<!-- <div class="center-content">
+  <div class="content login-page">
+    <div class="logo-image"></div>
+    <p class="lead text-center">{{ "loginOrCreateNewAccount" | i18n }}</p>
+  </div>
+</div> -->
+
+<div id="login-initiated">
+  <header>
+    <h1 class="margin-auto">
+      <span class="title">{{ "logInInitiated" | i18n }}</span>
+    </h1>
+  </header>
+
+  <div class="content login-page">
+    <div class="standard-x-margin">
+      <p class="lead">{{ "logInInitiated" | i18n }}</p>
+      <h6 class="standard-bottom-margin">{{ "deviceApprovalRequired" | i18n }}</h6>
+    </div>
+
+    <form
+      id="rememberDeviceForm"
+      class="standard-bottom-margin standard-x-margin"
+      [formGroup]="rememberDeviceForm"
+    >
+      <div class="">
+        <input
+          type="checkbox"
+          id="rememberDevice"
+          name="rememberDevice"
+          formControlName="rememberDevice"
+        />
+        <label for="rememberDevice">
+          {{ "rememberThisDevice" | i18n }}
+        </label>
+        <p id="rememberThisDeviceHintText">{{ "uncheckIfPublicDevice" | i18n }}</p>
+      </div>
+    </form>
+
+    <div class="box">
+      <button type="button" class="btn primary block btn-bottom-margin">
+        <b>{{ "approveFromYourOtherDevice" | i18n }}</b>
+      </button>
+      <button type="button" class="btn block btn-bottom-margin">
+        {{ "requestAdminApproval" | i18n }}
+      </button>
+      <button type="button" class="btn block">
+        {{ "approveWithMasterPassword" | i18n }}
+      </button>
+    </div>
+  </div>
+</div>

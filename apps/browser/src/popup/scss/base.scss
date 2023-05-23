@@ -646,3 +646,26 @@ main {
     }
   }
 }
+
+#login-initiated {
+  .margin-auto {
+    margin: auto;
+  }
+  .standard-bottom-margin {
+    margin-bottom: 20px;
+  }
+
+  .standard-x-margin {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .btn-bottom-margin {
+    margin-bottom: 12px;
+  }
+
+  #rememberThisDeviceHintText {
+    font-size: $font-size-small;
+    color: $text-muted;
+  }
+}
