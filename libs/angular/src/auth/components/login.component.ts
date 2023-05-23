@@ -177,6 +177,11 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     }
   }
 
+  async startWebauthnLogin() {
+    this.setFormValues();
+    this.router.navigate(["/login-with-passkey"]);
+  }
+
   async startPasswordlessLogin() {
     this.formGroup.get("masterPassword")?.clearValidators();
     this.formGroup.get("masterPassword")?.updateValueAndValidity();

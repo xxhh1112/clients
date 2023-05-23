@@ -44,16 +44,6 @@ export class WebauthnApiService {
   }
 
   async getCredentialAssertionOptions(email?: string): Promise<CredentialAssertionOptionsResponse> {
-    // const response = await this.apiService.fetch(
-    //   new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
-    //     body: this.qsStringify(identityToken),
-    //     credentials: this.getCredentials(),
-    //     cache: "no-store",
-    //     headers: headers,
-    //     method: "POST",
-    //   })
-    // );
-
     const response = await this.apiService.send(
       "POST",
       `/accounts/webauthn-assertion-options`,

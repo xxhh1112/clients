@@ -116,7 +116,8 @@
               type="button"
               [block]="true"
               buttonType="secondary"
-              (click)="startPasswordlessLogin()"
+              (click)="startWebauthnLogin()"
+              (mousedown)="$event.preventDefault()"
             >
               <span> <i class="bwi bwi-mobile"></i> {{ "loginWithPasskey" | i18n }} </span>
             </button>

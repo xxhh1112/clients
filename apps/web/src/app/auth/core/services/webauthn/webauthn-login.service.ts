@@ -36,8 +36,8 @@ export class WebauthnLoginService {
     this.enabled$ = from(this.configService.getFeatureFlagBool(FeatureFlag.PasswordlessLogin));
   }
 
-  async getCredentialAssertionOptions(): Promise<CredentialAssertionOptionsView> {
-    const response = await this.apiService.getCredentialAssertionOptions();
+  async getCredentialAssertionOptions(email?: string): Promise<CredentialAssertionOptionsView> {
+    const response = await this.apiService.getCredentialAssertionOptions(email);
     return new CredentialAssertionOptionsView(response.options, response.token);
   }
 
