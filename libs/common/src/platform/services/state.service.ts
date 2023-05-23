@@ -557,23 +557,6 @@ export class StateService<
     }
   }
 
-  async getMasterKey(options?: StorageOptions): Promise<MasterKey> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
-    );
-    return account?.keys?.masterKey;
-  }
-  async setMasterKey(value: MasterKey, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
-    );
-    account.keys.masterKey = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
-    );
-  }
-
   /**
    * User's symmetric key used to encrypt/decrypt data
    */
@@ -605,6 +588,57 @@ export class StateService<
         this.activeAccountUnlockedSubject.next(nextValue);
       }
     }
+  }
+
+  /**
+   * User's master key derived from MP, saved only if we decrypted with MP
+   */
+  async getMasterKey(options?: StorageOptions): Promise<MasterKey> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    return account?.keys?.masterKey;
+  }
+
+  /**
+   * User's master key derived from MP, saved only if we decrypted with MP
+   */
+  async setMasterKey(value: MasterKey, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.keys.masterKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
+  /**
+   * The master key encrypted User symmetric key, saved on every auth
+   * so we can unlock with MP offline
+   */
+  async getUserSymKeyMasterKey(options?: StorageOptions): Promise<string> {
+    // TODO: defaultOnDiskOptions? Other's are saved in secure storage
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.keys.userSymKeyMasterKey;
+  }
+
+  /**
+   * The master key encrypted User symmetric key, saved on every auth
+   * so we can unlock with MP offline
+   */
+  async setUserSymKeyMasterKey(value: string, options?: StorageOptions): Promise<void> {
+    // TODO: defaultOnDiskOptions? Other's are saved in secure storage
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.keys.userSymKeyMasterKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
   }
 
   /**

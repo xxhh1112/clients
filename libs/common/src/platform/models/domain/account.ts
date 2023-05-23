@@ -100,8 +100,9 @@ export class AccountData {
 
 export class AccountKeys {
   // new keys
-  masterKey?: MasterKey;
   userSymKey?: UserSymKey;
+  masterKey?: MasterKey;
+  userSymKeyMasterKey?: string;
   userSymKeyAuto?: string;
   userSymKeyBiometric?: string;
   // end new keys

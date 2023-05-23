@@ -78,10 +78,12 @@ export abstract class StateService<T extends Account = Account> {
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
 
   // new keys
-  getMasterKey: (options?: StorageOptions) => Promise<MasterKey>;
-  setMasterKey: (value: MasterKey, options?: StorageOptions) => Promise<void>;
   getUserSymKey: (options?: StorageOptions) => Promise<UserSymKey>;
   setUserSymKey: (value: UserSymKey, options?: StorageOptions) => Promise<void>;
+  getMasterKey: (options?: StorageOptions) => Promise<MasterKey>;
+  setMasterKey: (value: MasterKey, options?: StorageOptions) => Promise<void>;
+  getUserSymKeyMasterKey: (options?: StorageOptions) => Promise<string>;
+  setUserSymKeyMasterKey: (value: string, options?: StorageOptions) => Promise<void>;
   getUserSymKeyAuto: (options?: StorageOptions) => Promise<string>;
   setUserSymKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
   getUserSymKeyBiometric: (options?: StorageOptions) => Promise<string>;
