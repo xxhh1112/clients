@@ -417,13 +417,6 @@ export default class AutofillService implements AutofillServiceInterface {
         continue;
       }
 
-      const passwordFieldsForForm: AutofillField[] = [];
-      passwordFields.forEach((passField) => {
-        if (formKey === passField.form) {
-          passwordFieldsForForm.push(passField);
-        }
-      });
-
       passwordFields.forEach((passField) => {
         pf = passField;
         passwords.push(pf);
@@ -822,7 +815,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
   /**
    * Determines whether an iframe is potentially dangerous ("untrusted") to autofill
-   *
    * @param {string} pageUrl The url of the page/iframe, usually from AutofillPageDetails
    * @param {GenerateFillScriptOptions} options The GenerateFillScript options
    * @returns {boolean} `true` if the iframe is untrusted and a warning should be shown, `false` otherwise

@@ -40,6 +40,7 @@ import {
   GenerateFillScriptOptions,
   PageDetail,
 } from "./abstractions/autofill.service";
+import { AutoFillConstants } from "./autofill-constants";
 import AutofillService from "./autofill.service";
 
 describe("AutofillService", function () {
@@ -1166,51 +1167,6 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns a value indicating if the page url is in an untrusted iframe", function () {
-      jest.spyOn(autofillService as any, "inUntrustedIframe").mockReturnValueOnce(true);
-
-      const value = autofillService["generateLoginFillScript"](
-        fillScript,
-        pageDetails,
-        filledFields,
-        options
-      );
-
-      expect(value.untrustedIframe).toBe(true);
-    });
-
-    it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", function () {
-      pageDetails.fields = [
-        createAutofillFieldMock({
-          opid: "password-field",
-          type: "password",
-          viewable: true,
-          readonly: true,
-        }),
-      ];
-      jest.spyOn(AutofillService, "loadPasswordFields");
-
-      autofillService["generateLoginFillScript"](fillScript, pageDetails, filledFields, options);
-
-      expect(AutofillService.loadPasswordFields).toHaveBeenCalledTimes(2);
-      expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
-        1,
-        pageDetails,
-        false,
-        false,
-        options.onlyEmptyFields,
-        options.fillNewPassword
-      );
-      expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
-        2,
-        pageDetails,
-        true,
-        true,
-        options.onlyEmptyFields,
-        options.fillNewPassword
-      );
-    });
-
     describe("given a valid set of page details and autofill options", function () {
       let usernameField: AutofillField;
       let usernameFieldView: FieldView;
@@ -1240,6 +1196,279 @@ describe("AutofillService", function () {
         options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
         options.cipher.login.username = "username";
         options.cipher.login.password = "password";
+      });
+
+      it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", function () {
+        pageDetails.fields = [
+          createAutofillFieldMock({
+            opid: "password-field",
+            type: "password",
+            viewable: true,
+            readonly: true,
+          }),
+        ];
+        jest.spyOn(AutofillService, "loadPasswordFields");
+
+        autofillService["generateLoginFillScript"](fillScript, pageDetails, filledFields, options);
+
+        expect(AutofillService.loadPasswordFields).toHaveBeenCalledTimes(2);
+        expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
+          1,
+          pageDetails,
+          false,
+          false,
+          options.onlyEmptyFields,
+          options.fillNewPassword
+        );
+        expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
+          2,
+          pageDetails,
+          true,
+          true,
+          options.onlyEmptyFields,
+          options.fillNewPassword
+        );
+      });
+
+      describe("given a valid list of forms within the passed page details", function () {
+        beforeEach(function () {
+          usernameField.viewable = false;
+          usernameField.readonly = true;
+          jest.spyOn(autofillService as any, "findUsernameField");
+        });
+
+        it("will attempt to find a username field from hidden fields if no visible username fields are found", function () {
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledTimes(2);
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            false
+          );
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            false
+          );
+        });
+
+        it("will not attempt to find a username field from hidden fields if the passed options indicate only visible fields should be referenced", function () {
+          options.onlyVisibleFields = true;
+
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledTimes(1);
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            false
+          );
+          expect(autofillService["findUsernameField"]).not.toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            false
+          );
+        });
+      });
+
+      describe("given an empty list of fields within the passed page details", function () {
+        beforeEach(function () {
+          pageDetails.forms = undefined;
+          jest.spyOn(autofillService as any, "findUsernameField");
+        });
+
+        it("will attempt to match a password field that does not contain a form to a username field", function () {
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledTimes(1);
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledWith(
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            true
+          );
+        });
+
+        it("will attempt to match a password field that does not contain a form to a username field that is not visible", function () {
+          usernameField.viewable = false;
+          usernameField.readonly = true;
+
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledTimes(2);
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            true
+          );
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            true
+          );
+        });
+
+        it("will not attempt to match a password field that does not contain a form to a username field that is not visible if the passed options indicate only visible fields", function () {
+          usernameField.viewable = false;
+          usernameField.readonly = true;
+          options.onlyVisibleFields = true;
+
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findUsernameField"]).toHaveBeenCalledTimes(1);
+          expect(autofillService["findUsernameField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            true
+          );
+          expect(autofillService["findUsernameField"]).not.toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            true
+          );
+        });
+      });
+
+      describe("given a set of page details that does not contain a password field", function () {
+        let emailField: AutofillField;
+        let emailFieldView: FieldView;
+        let telephoneField: AutofillField;
+        let telephoneFieldView: FieldView;
+        let nonViewableField: AutofillField;
+        let nonViewableFieldView: FieldView;
+
+        beforeEach(function () {
+          emailField = createAutofillFieldMock({
+            opid: "email",
+            type: "email",
+            form: "validFormId",
+            elementNumber: 2,
+          });
+          emailFieldView = mock<FieldView>({
+            name: "email",
+          });
+          telephoneField = createAutofillFieldMock({
+            opid: "telephone",
+            type: "tel",
+            form: "validFormId",
+            elementNumber: 3,
+          });
+          telephoneFieldView = mock<FieldView>({
+            name: "telephone",
+          });
+          nonViewableField = createAutofillFieldMock({
+            opid: "non-viewable",
+            form: "validFormId",
+            viewable: false,
+            elementNumber: 4,
+          });
+          nonViewableFieldView = mock<FieldView>({
+            name: "non-viewable",
+          });
+          pageDetails.fields = [usernameField, emailField, telephoneField, nonViewableField];
+          options.cipher.fields = [
+            usernameFieldView,
+            emailFieldView,
+            telephoneFieldView,
+            nonViewableFieldView,
+          ];
+          jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
+        });
+
+        it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", function () {
+          autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenCalledTimes(3);
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenNthCalledWith(
+            1,
+            usernameField,
+            AutoFillConstants.UsernameFieldNames
+          );
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenNthCalledWith(
+            2,
+            emailField,
+            AutoFillConstants.UsernameFieldNames
+          );
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenNthCalledWith(
+            3,
+            telephoneField,
+            AutoFillConstants.UsernameFieldNames
+          );
+          expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenNthCalledWith(
+            4,
+            nonViewableField,
+            AutoFillConstants.UsernameFieldNames
+          );
+        });
+      });
+
+      it("returns a value indicating if the page url is in an untrusted iframe", function () {
+        jest.spyOn(autofillService as any, "inUntrustedIframe").mockReturnValueOnce(true);
+
+        const value = autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.untrustedIframe).toBe(true);
       });
 
       it("returns a fill script used to autofill a login item", function () {
@@ -1313,10 +1542,6 @@ describe("AutofillService", function () {
           untrustedIframe: false,
         });
       });
-
-      // it skips adding found password fields that are not associated with a specific form
-
-      // it will attempt to fuzzy match a username to a text, email or tel field if no password fields are found and the username fill is not being skipped
     });
   });
 
