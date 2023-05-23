@@ -4,21 +4,24 @@ import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType } from "@bitwarden/common/enums";
 import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { BitwardenPasswordProtectedFileFormat } from "@bitwarden/exporter/vault-export/bitwarden-password-protected-types";
 
 import { ImportResult } from "../../models/import-result";
 import { Importer } from "../importer";
 
 import { BitwardenJsonImporter } from "./bitwarden-json-importer";
+
 export class BitwardenPasswordProtectedImporter extends BitwardenJsonImporter implements Importer {
   private key: SymmetricCryptoKey;
 
   constructor(
     cryptoService: CryptoService,
     i18nService: I18nService,
+    cipherService: CipherService,
     private promptForPassword_callback: () => Promise<string>
   ) {
-    super(cryptoService, i18nService);
+    super(cryptoService, i18nService, cipherService);
   }
 
   async parse(data: string): Promise<ImportResult> {

@@ -513,6 +513,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(sendKey);
   }
 
+  async makeCipherKey(): Promise<SymmetricCryptoKey> {
+    const randomBytes = await this.cryptoFunctionService.randomBytes(64);
+    return new SymmetricCryptoKey(randomBytes);
+  }
+
   async hashPassword(
     password: string,
     key: SymmetricCryptoKey,

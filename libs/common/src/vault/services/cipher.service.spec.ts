@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
+import { makeStaticByteArray } from "../../../spec/utils";
 import { ApiService } from "../../abstractions/api.service";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EncryptService } from "../../abstractions/encrypt.service";
@@ -11,8 +12,11 @@ import { StateService } from "../../abstractions/state.service";
 import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
 import { EncString } from "../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
+import { ContainerService } from "../../services/container.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
+import { CipherType } from "../enums/cipher-type";
 import { Cipher } from "../models/domain/cipher";
+import { CipherView } from "../models/view/cipher.view";
 
 import { CipherService } from "./cipher.service";
 
@@ -44,6 +48,8 @@ describe("Cipher Service", () => {
     cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
     cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
 
+    (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
+
     cipherService = new CipherService(
       cryptoService,
       settingsService,
@@ -61,10 +67,74 @@ describe("Cipher Service", () => {
     const fileData = new Uint8Array(10).buffer;
     cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
 
+    process.env.FLAGS = JSON.stringify({
+      enableCipherKeyEncryption: false,
+    });
+
     await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
 
     cipherFileUploadService
       .received(1)
       .upload(Arg.any(), Arg.any(), ENCRYPTED_BYTES, Arg.any(), Arg.any());
+  });
+
+  describe("encrypt", () => {
+    let cipherView: CipherView;
+
+    beforeEach(() => {
+      cipherView = new CipherView();
+      cipherView.type = CipherType.Login;
+      cipherView.key = null;
+
+      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
+    });
+
+    describe("cipher.key", () => {
+      it("is null when enableCipherKeyEncryption flag is false", async () => {
+        process.env.FLAGS = JSON.stringify({
+          enableCipherKeyEncryption: false,
+        });
+
+        const cipher = await cipherService.encrypt(cipherView);
+
+        expect(cipher.key).toBeUndefined();
+      });
+
+      it("is defined when enableCipherKeyEncryption flag is true", async () => {
+        process.env.FLAGS = JSON.stringify({
+          enableCipherKeyEncryption: true,
+        });
+
+        const cipher = await cipherService.encrypt(cipherView);
+
+        expect(cipher.key).toBeDefined();
+      });
+    });
+
+    describe("encryptWithCipherKey", () => {
+      beforeEach(() => {
+        jest.spyOn<any, string>(cipherService, "encryptWithCipherKey");
+      });
+
+      it("is called when enableCipherKeyEncryption is false", async () => {
+        process.env.FLAGS = JSON.stringify({
+          enableCipherKeyEncryption: false,
+        });
+
+        await cipherService.encrypt(cipherView);
+
+        expect(cipherService["encryptWithCipherKey"]).not.toHaveBeenCalled();
+      });
+
+      it("is called when enableCipherKeyEncryption is true", async () => {
+        process.env.FLAGS = JSON.stringify({
+          enableCipherKeyEncryption: true,
+        });
+
+        await cipherService.encrypt(cipherView);
+
+        expect(cipherService["encryptWithCipherKey"]).toHaveBeenCalled();
+      });
+    });
   });
 });

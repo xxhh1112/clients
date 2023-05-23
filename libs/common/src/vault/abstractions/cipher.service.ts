@@ -77,4 +77,5 @@ export abstract class CipherService {
   ) => Promise<any>;
   restoreWithServer: (id: string, asAdmin?: boolean) => Promise<any>;
   restoreManyWithServer: (ids: string[]) => Promise<any>;
+  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<SymmetricCryptoKey>;
 }

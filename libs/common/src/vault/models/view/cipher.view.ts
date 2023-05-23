@@ -2,6 +2,7 @@ import { Jsonify } from "type-fest";
 
 import { LinkedIdType } from "../../../enums";
 import { InitializerMetadata } from "../../../interfaces/initializer-metadata.interface";
+import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
 import { View } from "../../../models/view/view";
 import { InitializerKey } from "../../../services/cryptography/initializer-key";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
@@ -43,6 +44,7 @@ export class CipherView implements View, InitializerMetadata {
   creationDate: Date = null;
   deletedDate: Date = null;
   reprompt: CipherRepromptType = CipherRepromptType.None;
+  key: SymmetricCryptoKey;
 
   constructor(c?: Cipher) {
     if (!c) {

@@ -6,6 +6,7 @@ import { SearchService } from "../../abstractions/search.service";
 import { SettingsService } from "../../abstractions/settings.service";
 import { StateService } from "../../abstractions/state.service";
 import { FieldType, UriMatchType } from "../../enums";
+import { flagEnabled } from "../../misc/flags";
 import { sequentialize } from "../../misc/sequentialize";
 import { Utils } from "../../misc/utils";
 import Domain from "../../models/domain/domain-base";
@@ -90,7 +91,9 @@ export class CipherService implements CipherServiceAbstraction {
         originalCipher = await this.get(model.id);
       }
       if (originalCipher != null) {
-        const existingCipher = await originalCipher.decrypt();
+        const existingCipher = await originalCipher.decrypt(
+          await this.getKeyForCipherKeyDecryption(originalCipher)
+        );
         model.passwordHistory = existingCipher.passwordHistory || [];
         if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
           if (
@@ -157,29 +160,12 @@ export class CipherService implements CipherServiceAbstraction {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-    await Promise.all([
-      this.encryptObjProperty(
-        model,
-        cipher,
-        {
-          name: null,
-          notes: null,
-        },
-        key
-      ),
-      this.encryptCipherData(cipher, model, key),
-      this.encryptFields(model.fields, key).then((fields) => {
-        cipher.fields = fields;
-      }),
-      this.encryptPasswordHistories(model.passwordHistory, key).then((ph) => {
-        cipher.passwordHistory = ph;
-      }),
-      this.encryptAttachments(model.attachments, key).then((attachments) => {
-        cipher.attachments = attachments;
-      }),
-    ]);
 
-    return cipher;
+    if (flagEnabled("enableCipherKeyEncryption")) {
+      return this.encryptWithCipherKey(model, cipher, key);
+    }
+
+    return this.encryptCipher(model, cipher, key);
   }
 
   async encryptAttachments(
@@ -633,10 +619,14 @@ export class CipherService implements CipherServiceAbstraction {
     data: ArrayBuffer,
     admin = false
   ): Promise<Cipher> {
-    const key = await this.cryptoService.getOrgKey(cipher.organizationId);
-    const encFileName = await this.cryptoService.encrypt(filename, key);
+    const key = await this.getKeyForCipherKeyDecryption(cipher);
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
+    const cipherEncKey = flagEnabled("enableCipherKeyEncryption")
+      ? new SymmetricCryptoKey(await this.encryptService.decryptToBytes(cipher.key, key))
+      : key;
+    const encFileName = await this.cryptoService.encrypt(filename, cipherEncKey);
+
+    const dataEncKey = await this.cryptoService.makeEncKey(cipherEncKey);
     const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
 
     const response = await this.cipherFileUploadService.upload(
@@ -930,6 +920,12 @@ export class CipherService implements CipherServiceAbstraction {
     await this.restore(restores);
   }
 
+  async getKeyForCipherKeyDecryption(cipher: Cipher): Promise<SymmetricCryptoKey> {
+    return await (cipher.organizationId != null
+      ? this.cryptoService.getOrgKey(cipher.organizationId)
+      : this.cryptoService.getKeyForUserEncryption());
+  }
+
   // Helpers
 
   private async shareAttachmentWithServer(
@@ -1155,5 +1151,49 @@ export class CipherService implements CipherServiceAbstraction {
 
   private clearSortedCiphers() {
     this.sortedCiphersCache.clear();
+  }
+
+  private async encryptWithCipherKey(
+    model: CipherView,
+    cipher: Cipher,
+    key: SymmetricCryptoKey
+  ): Promise<Cipher> {
+    if (model.key == null) {
+      model.key = await this.cryptoService.makeCipherKey();
+    }
+    cipher.key = await this.cryptoService.encrypt(model.key.key, key);
+    key = model.key;
+
+    return this.encryptCipher(model, cipher, key);
+  }
+
+  private async encryptCipher(
+    model: CipherView,
+    cipher: Cipher,
+    key: SymmetricCryptoKey
+  ): Promise<Cipher> {
+    await Promise.all([
+      this.encryptObjProperty(
+        model,
+        cipher,
+        {
+          name: null,
+          notes: null,
+        },
+        key
+      ),
+      this.encryptCipherData(cipher, model, key),
+      this.encryptFields(model.fields, key).then((fields) => {
+        cipher.fields = fields;
+      }),
+      this.encryptPasswordHistories(model.passwordHistory, key).then((ph) => {
+        cipher.passwordHistory = ph;
+      }),
+      this.encryptAttachments(model.attachments, key).then((attachments) => {
+        cipher.attachments = attachments;
+      }),
+    ]);
+
+    return cipher;
   }
 }

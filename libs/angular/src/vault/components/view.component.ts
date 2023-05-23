@@ -114,7 +114,9 @@ export class ViewComponent implements OnDestroy, OnInit {
     this.cleanUp();
 
     const cipher = await this.cipherService.get(this.cipherId);
-    this.cipher = await cipher.decrypt();
+    this.cipher = await cipher.decrypt(
+      await this.cipherService.getKeyForCipherKeyDecryption(cipher)
+    );
     this.canAccessPremium = await this.stateService.getCanAccessPremium();
     this.showPremiumRequiredTotp =
       this.cipher.login.totp && !this.canAccessPremium && !this.cipher.organizationUseTotp;
