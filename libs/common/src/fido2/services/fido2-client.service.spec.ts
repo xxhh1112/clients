@@ -1,5 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { Utils } from "../../misc/utils";
 import {
   Fido2AutenticatorError,
@@ -10,6 +11,7 @@ import {
 import {
   AssertCredentialParams,
   CreateCredentialParams,
+  FallbackRequestedError,
 } from "../abstractions/fido2-client.service.abstraction";
 import { Fido2Utils } from "../abstractions/fido2-utils";
 
@@ -20,11 +22,14 @@ const RpId = "bitwarden.com";
 
 describe("FidoAuthenticatorService", () => {
   let authenticator!: MockProxy<Fido2AuthenticatorService>;
+  let configService!: MockProxy<ConfigServiceAbstraction>;
   let client!: Fido2ClientService;
 
   beforeEach(async () => {
     authenticator = mock<Fido2AuthenticatorService>();
-    client = new Fido2ClientService(authenticator);
+    configService = mock<ConfigServiceAbstraction>();
+    client = new Fido2ClientService(authenticator, configService);
+    configService.getFeatureFlagBool.mockResolvedValue(true);
   });
 
   describe("createCredential", () => {
@@ -188,6 +193,16 @@ describe("FidoAuthenticatorService", () => {
         await rejects.toMatchObject({ name: "NotAllowedError" });
         await rejects.toBeInstanceOf(DOMException);
       });
+
+      it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
+        const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(false);
+
+        const result = async () => await client.createCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toThrow(FallbackRequestedError);
+      });
     });
 
     function createParams(params: Partial<CreateCredentialParams> = {}): CreateCredentialParams {
@@ -314,6 +329,16 @@ describe("FidoAuthenticatorService", () => {
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotAllowedError" });
         await rejects.toBeInstanceOf(DOMException);
+      });
+
+      it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
+        const params = createParams();
+        configService.getFeatureFlagBool.mockResolvedValue(false);
+
+        const result = async () => await client.assertCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toThrow(FallbackRequestedError);
       });
     });
 

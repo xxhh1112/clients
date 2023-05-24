@@ -112,6 +112,19 @@ describe("Login DTO", () => {
         password: "myPassword",
         passwordRevisionDate: passwordRevisionDate.toISOString(),
         totp: "myTotp",
+        fido2Key: {
+          nonDiscoverableId: "keyId",
+          keyType: "keyType",
+          keyAlgorithm: "keyAlgorithm",
+          keyCurve: "keyCurve",
+          keyValue: "keyValue",
+          rpId: "rpId",
+          userHandle: "userHandle",
+          counter: "counter",
+          rpName: "rpName",
+          userName: "userName",
+          origin: "origin",
+        },
       });
 
       expect(actual).toEqual({
@@ -120,6 +133,19 @@ describe("Login DTO", () => {
         password: "myPassword_fromJSON",
         passwordRevisionDate: passwordRevisionDate,
         totp: "myTotp_fromJSON",
+        fido2Key: {
+          nonDiscoverableId: "keyId_fromJSON",
+          keyType: "keyType_fromJSON",
+          keyAlgorithm: "keyAlgorithm_fromJSON",
+          keyCurve: "keyCurve_fromJSON",
+          keyValue: "keyValue_fromJSON",
+          rpId: "rpId_fromJSON",
+          userHandle: "userHandle_fromJSON",
+          counter: "counter_fromJSON",
+          rpName: "rpName_fromJSON",
+          userName: "userName_fromJSON",
+          origin: "origin_fromJSON",
+        },
       });
       expect(actual).toBeInstanceOf(Login);
     });

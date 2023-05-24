@@ -2,7 +2,6 @@ import { Observable } from "rxjs";
 
 import { DeviceType } from "@bitwarden/common/enums/device-type.enum";
 
-
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 import { TabMessage } from "../types/tab-messages";
 

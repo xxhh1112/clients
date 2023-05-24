@@ -1,6 +1,8 @@
 import { parse } from "tldts";
 
+import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
 import { LogService } from "../../abstractions/log.service";
+import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { Utils } from "../../misc/utils";
 import {
   Fido2AutenticatorError,
@@ -26,12 +28,25 @@ import { Fido2Utils } from "../abstractions/fido2-utils";
 import { isValidRpId } from "./domain-utils";
 
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
-  constructor(private authenticator: Fido2AuthenticatorService, private logService?: LogService) {}
+  constructor(
+    private authenticator: Fido2AuthenticatorService,
+    private configService: ConfigServiceAbstraction,
+    private logService?: LogService
+  ) {}
 
   async createCredential(
     params: CreateCredentialParams,
     abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
+    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
+      FeatureFlag.Fido2VaultCredentials
+    );
+
+    if (!enableFido2VaultCredentials) {
+      this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
+      throw new FallbackRequestedError();
+    }
+
     if (!params.sameOriginWithAncestors) {
       this.logService?.warning(
         `[Fido2Client] Invalid 'sameOriginWithAncestors' value: ${params.sameOriginWithAncestors}`
@@ -176,6 +191,15 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     params: AssertCredentialParams,
     abortController = new AbortController()
   ): Promise<AssertCredentialResult> {
+    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
+      FeatureFlag.Fido2VaultCredentials
+    );
+
+    if (!enableFido2VaultCredentials) {
+      this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
+      throw new FallbackRequestedError();
+    }
+
     const { domain: effectiveDomain } = parse(params.origin, { allowPrivateDomains: true });
     if (effectiveDomain == undefined) {
       this.logService?.warning(`[Fido2Client] Invalid origin: ${params.origin}`);
