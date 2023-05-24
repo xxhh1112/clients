@@ -6,7 +6,6 @@ import { Messenger } from "./messaging/messenger";
 const BrowserPublicKeyCredential = window.PublicKeyCredential;
 
 const browserNativeWebauthnSupport = window.PublicKeyCredential != undefined;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let browserNativeWebauthnPlatformAuthenticatorSupport = false;
 if (!browserNativeWebauthnSupport) {
   // Polyfill webauthn support
