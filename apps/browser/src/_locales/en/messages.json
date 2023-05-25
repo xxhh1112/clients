@@ -2221,6 +2221,9 @@
       }
     }
   },
+  "region": {
+    "message": "Region"
+  },
   "opensInANewWindow": {
     "message": "Opens in a new window"
   },
@@ -2241,5 +2244,13 @@
   },
   "approveWithMasterPassword": {
     "message": "Approve with master password" 
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }

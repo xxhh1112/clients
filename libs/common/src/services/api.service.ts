@@ -1111,14 +1111,6 @@ export class ApiService implements ApiServiceAbstraction {
     return new DeviceVerificationResponse(r);
   }
 
-  async getKnownDevice(email: string, deviceIdentifier: string): Promise<boolean> {
-    const r = await this.send("GET", "/devices/knowndevice", null, false, true, null, (headers) => {
-      headers.set("X-Device-Identifier", deviceIdentifier);
-      headers.set("X-Request-Email", Utils.fromUtf8ToUrlB64(email));
-    });
-    return r as boolean;
-  }
-
   // TODO: move this method to new devices-api.service once it's merged to master
   async getDevices(): Promise<ListResponse<DeviceResponse>> {
     const r = await this.send("GET", "/devices", null, true, true, null);

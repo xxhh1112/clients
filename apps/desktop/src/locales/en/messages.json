@@ -2269,6 +2269,20 @@
   },
   "approveWithMasterPassword": {
     "message": "Approve with master password" 
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
   }
   
 }
