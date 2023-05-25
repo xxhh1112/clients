@@ -69,17 +69,21 @@ import {
 } from "../utils";
 
 function collect(document: Document) {
+  /** DEAD CODE **/
   const isFirefox =
     navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
+  /** END DEAD CODE  **/
 
   (document as AutofillDocument).elementsByOPID = {};
 
+  /** DEAD CODE */
   /**
    * Do the event on the element.
    * @param {HTMLElement} kedol The element to do the event on
    * @param {string} fonor The event name
    * @returns
    */
+
   function doEventOnElement(kedol: HTMLElement, fonor: string) {
     let quebo: any;
     isFirefox
@@ -95,6 +99,7 @@ function collect(document: Document) {
 
     return quebo;
   }
+  /** END DEAD CODE **/
 
   function getPageDetails(theDoc: Document, oneShotId: string) {
     /**
@@ -286,6 +291,7 @@ function collect(document: Document) {
         return field;
       });
 
+    /** DEAD CODE **/
     // test form fields
     theFields
       .filter(function (f: any) {
@@ -326,6 +332,7 @@ function collect(document: Document) {
         el.blur();
         el.value !== elValue && (el.value = elValue);
       });
+    /** END DEAD CODE **/
 
     // build out the page details object. this is the final result
     const pageDetails: AutofillPageDetails = {
