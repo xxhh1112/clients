@@ -1,6 +1,7 @@
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { Utils } from "../../misc/utils";
+import { ListResponse } from "../../models/response/list.response";
 import { ApiService } from "../api.service";
 
 import { TrustedDeviceKeysRequest } from "./requests/trusted-device-keys.request";
@@ -37,6 +38,11 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
       true
     );
     return new DeviceResponse(r);
+  }
+
+  async getDevices(): Promise<ListResponse<DeviceResponse>> {
+    const r = await this.apiService.send("GET", "/devices", null, true, true, null);
+    return new ListResponse(r, DeviceResponse);
   }
 
   async updateTrustedDeviceKeys(

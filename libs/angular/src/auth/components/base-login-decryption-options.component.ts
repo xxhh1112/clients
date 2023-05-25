@@ -2,7 +2,7 @@ import { Directive, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { Subject } from "rxjs";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { DevicesApiServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
@@ -27,7 +27,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     protected formBuilder: FormBuilder,
-    protected apiService: ApiService,
+    protected devicesApiService: DevicesApiServiceAbstraction,
     protected organizationService: OrganizationService,
     protected policyService: PolicyService
   ) {}
@@ -50,7 +50,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
     // Determine if the user has any mobile or desktop devices
     // to determine if we should show the approve from other device button
-    const devicesListResponse = await this.apiService.getDevices();
+    const devicesListResponse = await this.devicesApiService.getDevices();
     for (const device of devicesListResponse.data) {
       if (
         device.type === DeviceType.Android ||
