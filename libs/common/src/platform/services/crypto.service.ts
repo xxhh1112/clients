@@ -43,20 +43,18 @@ export class CryptoService implements CryptoServiceAbstraction {
   ) {}
 
   /**
-   * TODO: We probably can't remove this. We need to have logic to choose the correct key.
+   * Use for encryption/decryption of data in order to support legacy
+   * encryption models. It will return the user symmetric key if available,
+   * if not it will return the master key.
    */
-  async getKeyForUserEncryption(key?: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
-    if (key != null) {
-      return key;
-    }
-
-    const encKey = await this.getEncKey();
-    if (encKey != null) {
-      return encKey;
+  async getKeyForUserEncryption(): Promise<SymmetricCryptoKey> {
+    const userKey = await this.getUserKey();
+    if (userKey != null) {
+      return userKey;
     }
 
     // Legacy support: encryption used to be done with the master key (derived from master password).
-    // Users who have not migrated will have a null encKey and must use the master key instead.
+    // Users who have not migrated will have a null user key and must use the master key instead.
     return await this.stateService.getCryptoMasterKey();
   }
 
@@ -996,7 +994,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * and then call encryptService.encrypt
    */
   async encrypt(plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncString> {
-    key = await this.getKeyForUserEncryption(key);
+    key ||= await this.getKeyForUserEncryption();
     return await this.encryptService.encrypt(plainValue, key);
   }
 
@@ -1005,7 +1003,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * and then call encryptService.encryptToBytes
    */
   async encryptToBytes(plainValue: ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncArrayBuffer> {
-    key = await this.getKeyForUserEncryption(key);
+    key ||= await this.getKeyForUserEncryption();
     return this.encryptService.encryptToBytes(plainValue, key);
   }
 
@@ -1014,8 +1012,8 @@ export class CryptoService implements CryptoServiceAbstraction {
    * and then call encryptService.decryptToBytes
    */
   async decryptToBytes(encString: EncString, key?: SymmetricCryptoKey): Promise<ArrayBuffer> {
-    const keyForEnc = await this.getKeyForUserEncryption(key);
-    return this.encryptService.decryptToBytes(encString, keyForEnc);
+    key ||= await this.getKeyForUserEncryption();
+    return this.encryptService.decryptToBytes(encString, key);
   }
 
   /**
@@ -1023,7 +1021,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * and then call encryptService.decryptToUtf8
    */
   async decryptToUtf8(encString: EncString, key?: SymmetricCryptoKey): Promise<string> {
-    key = await this.getKeyForUserEncryption(key);
+    key ||= await this.getKeyForUserEncryption();
     return await this.encryptService.decryptToUtf8(encString, key);
   }
 
@@ -1036,7 +1034,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       throw new Error("No buffer provided for decryption.");
     }
 
-    key = await this.getKeyForUserEncryption(key);
+    key ||= await this.getKeyForUserEncryption();
 
     return this.encryptService.decryptToBytes(encBuffer, key);
   }

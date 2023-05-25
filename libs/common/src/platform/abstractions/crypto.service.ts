@@ -13,7 +13,7 @@ import {
 } from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
-  // TODO: Update logic for this method
+  // TODO: This works right?
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
   setUserKey: (key: SymmetricCryptoKey) => Promise<void>;
