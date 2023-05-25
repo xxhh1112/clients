@@ -5,82 +5,85 @@ import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { KeySuffixOptions, KdfType, HashPurpose } from "../../enums";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  PinKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
-  setKey: (key: SymmetricCryptoKey) => Promise<any>;
+  // TODO: Update logic for this method
+  getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
+
+  setUserKey: (key: SymmetricCryptoKey) => Promise<void>;
+  getUserKey: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
+  getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
+  hasUserKey: () => Promise<boolean>;
+  hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
+  hasUserKeyStored: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<boolean>;
+  makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[SymmetricCryptoKey, EncString]>;
+  clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
+  clearUserKeyFromStorage: (keySuffix: KeySuffixOptions) => Promise<void>;
+  setMasterKey: (key: MasterKey, userId?: string) => Promise<void>;
+  getMasterKey: (userId?: string) => Promise<MasterKey>;
+  makeMasterKey: (
+    password: string,
+    email: string,
+    kdf: KdfType,
+    KdfConfig: KdfConfig
+  ) => Promise<MasterKey>;
+  encryptUserSymKeyWithMasterKey: (
+    masterKey: MasterKey,
+    userSymKey?: UserSymKey
+  ) => Promise<[UserSymKey, EncString]>;
+  hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
   setKeyHash: (keyHash: string) => Promise<void>;
-  setEncKey: (encKey: string) => Promise<void>;
-  setEncPrivateKey: (encPrivateKey: string) => Promise<void>;
+  getKeyHash: () => Promise<string>;
+  clearKeyHash: () => Promise<void>;
+  compareAndUpdateKeyHash: (masterPassword: string, key: MasterKey) => Promise<boolean>;
   setOrgKeys: (
     orgs: ProfileOrganizationResponse[],
     providerOrgs: ProfileProviderOrganizationResponse[]
   ) => Promise<void>;
+  getOrgKey: (orgId: string) => Promise<SymmetricCryptoKey>;
+  getOrgKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  clearOrgKeys: (memoryOnly?: boolean, userId?: string) => Promise<void>;
   setProviderKeys: (orgs: ProfileProviderResponse[]) => Promise<void>;
-  getKey: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<SymmetricCryptoKey>;
-  getKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<SymmetricCryptoKey>;
-  getKeyHash: () => Promise<string>;
-  compareAndUpdateKeyHash: (masterPassword: string, key: SymmetricCryptoKey) => Promise<boolean>;
-  getEncKey: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
+  getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
+  getProviderKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  clearProviderKeys: (memoryOnly?: boolean) => Promise<void>;
   getPublicKey: () => Promise<ArrayBuffer>;
+  makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
+  setPrivateKey: (encPrivateKey: string) => Promise<void>;
   getPrivateKey: () => Promise<ArrayBuffer>;
   getFingerprint: (fingerprintMaterial: string, publicKey?: ArrayBuffer) => Promise<string[]>;
-  getOrgKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
-  getOrgKey: (orgId: string) => Promise<SymmetricCryptoKey>;
-  getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
-  getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
-  hasKey: () => Promise<boolean>;
-  hasKeyInMemory: (userId?: string) => Promise<boolean>;
-  hasKeyStored: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<boolean>;
-  hasEncKey: () => Promise<boolean>;
-  clearKey: (clearSecretStorage?: boolean, userId?: string) => Promise<any>;
-  clearKeyHash: () => Promise<any>;
-  clearEncKey: (memoryOnly?: boolean, userId?: string) => Promise<any>;
-  clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<any>;
-  clearOrgKeys: (memoryOnly?: boolean, userId?: string) => Promise<any>;
-  clearProviderKeys: (memoryOnly?: boolean) => Promise<any>;
-  clearPinProtectedKey: () => Promise<any>;
-  clearKeys: (userId?: string) => Promise<any>;
-  toggleKey: () => Promise<any>;
-  makeKey: (
-    password: string,
-    salt: string,
-    kdf: KdfType,
-    kdfConfig: KdfConfig
-  ) => Promise<SymmetricCryptoKey>;
-  makeKeyFromPin: (
+  makeKeyPair: (key?: UserSymKey) => Promise<[string, EncString]>;
+  clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<void[]>;
+  makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
+  clearPinProtectedKey: () => Promise<void>;
+  decryptUserSymKeyWithPin: (
     pin: string,
     salt: string,
     kdf: KdfType,
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
-  ) => Promise<SymmetricCryptoKey>;
-  makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
-  makeKeyPair: (key?: SymmetricCryptoKey) => Promise<[string, EncString]>;
-  makePinKey: (
-    pin: string,
-    salt: string,
-    kdf: KdfType,
-    kdfConfig: KdfConfig
-  ) => Promise<SymmetricCryptoKey>;
+  ) => Promise<UserSymKey>;
   makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
-  hashPassword: (
-    password: string,
-    key: SymmetricCryptoKey,
-    hashPurpose?: HashPurpose
-  ) => Promise<string>;
-  makeEncKey: (key: SymmetricCryptoKey) => Promise<[SymmetricCryptoKey, EncString]>;
-  remakeEncKey: (
-    key: SymmetricCryptoKey,
-    encKey?: SymmetricCryptoKey
-  ) => Promise<[SymmetricCryptoKey, EncString]>;
-  encrypt: (plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncString>;
-  encryptToBytes: (plainValue: ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncArrayBuffer>;
+  clearKeys: (userId?: string) => Promise<any>;
   rsaEncrypt: (data: ArrayBuffer, publicKey?: ArrayBuffer) => Promise<EncString>;
   rsaDecrypt: (encValue: string, privateKeyValue?: ArrayBuffer) => Promise<ArrayBuffer>;
+  randomNumber: (min: number, max: number) => Promise<number>;
+
+  // deprecate
+  encrypt: (plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncString>;
+  encryptToBytes: (plainValue: ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncArrayBuffer>;
   decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   decryptToUtf8: (encString: EncString, key?: SymmetricCryptoKey) => Promise<string>;
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
-  randomNumber: (min: number, max: number) => Promise<number>;
-  validateKey: (key: SymmetricCryptoKey) => Promise<boolean>;
+  setEncKey: (encKey: string) => Promise<void>;
+  getEncKey: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
+  hasEncKey: () => Promise<boolean>;
+  clearEncKey: (memoryOnly?: boolean, userId?: string) => Promise<any>;
+  toggleKey: () => Promise<any>;
 }

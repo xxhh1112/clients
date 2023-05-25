@@ -26,7 +26,12 @@ import { sequentialize } from "../misc/sequentialize";
 import { EFFLongWordList } from "../misc/wordlist";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  PinKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "../models/domain/symmetric-crypto-key";
 
 export class CryptoService implements CryptoServiceAbstraction {
   constructor(
@@ -37,110 +42,248 @@ export class CryptoService implements CryptoServiceAbstraction {
     protected stateService: StateService
   ) {}
 
-  async setKey(key: SymmetricCryptoKey, userId?: string): Promise<any> {
-    await this.stateService.setCryptoMasterKey(key, { userId: userId });
-    await this.storeKey(key, userId);
-  }
-
-  async setKeyHash(keyHash: string): Promise<void> {
-    await this.stateService.setKeyHash(keyHash);
-  }
-
-  async setEncKey(encKey: string): Promise<void> {
-    if (encKey == null) {
-      return;
+  /**
+   * TODO: We probably can't remove this. We need to have logic to choose the correct key.
+   */
+  async getKeyForUserEncryption(key?: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
+    if (key != null) {
+      return key;
     }
 
-    await this.stateService.setDecryptedCryptoSymmetricKey(null);
-    await this.stateService.setEncryptedCryptoSymmetricKey(encKey);
-  }
-
-  async setEncPrivateKey(encPrivateKey: string): Promise<void> {
-    if (encPrivateKey == null) {
-      return;
+    const encKey = await this.getEncKey();
+    if (encKey != null) {
+      return encKey;
     }
 
-    await this.stateService.setDecryptedPrivateKey(null);
-    await this.stateService.setEncryptedPrivateKey(encPrivateKey);
+    // Legacy support: encryption used to be done with the master key (derived from master password).
+    // Users who have not migrated will have a null encKey and must use the master key instead.
+    return await this.stateService.getCryptoMasterKey();
   }
 
-  async setOrgKeys(
-    orgs: ProfileOrganizationResponse[] = [],
-    providerOrgs: ProfileProviderOrganizationResponse[] = []
-  ): Promise<void> {
-    const encOrgKeyData: { [orgId: string]: EncryptedOrganizationKeyData } = {};
-
-    orgs.forEach((org) => {
-      encOrgKeyData[org.id] = {
-        type: "organization",
-        key: org.key,
-      };
-    });
-
-    providerOrgs.forEach((org) => {
-      encOrgKeyData[org.id] = {
-        type: "provider",
-        providerId: org.providerId,
-        key: org.key,
-      };
-    });
-
-    await this.stateService.setDecryptedOrganizationKeys(null);
-    return await this.stateService.setEncryptedOrganizationKeys(encOrgKeyData);
+  /**
+   * Sets the provided user symmetric key and stores
+   * any other necessary versions, such as biometrics
+   * @param key The user symmetric key to set
+   * @param userId The desired user
+   */
+  async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
+    await this.stateService.setUserSymKey(key, { userId: userId });
+    await this.storeAdditionalKeys(key, userId);
   }
 
-  async setProviderKeys(providers: ProfileProviderResponse[]): Promise<void> {
-    const providerKeys: any = {};
-    providers.forEach((provider) => {
-      providerKeys[provider.id] = provider.key;
-    });
+  /**
+   * Retrieves the user's symmetric key
+   * @param keySuffix The desired version of the user's key to retrieve
+   * from storage if it is not available in memory
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
+  async getUserKey(keySuffix?: KeySuffixOptions, userId?: string): Promise<UserSymKey> {
+    const userKey = await this.stateService.getUserSymKey({ userId: userId });
 
-    await this.stateService.setDecryptedProviderKeys(null);
-    return await this.stateService.setEncryptedProviderKeys(providerKeys);
-  }
-
-  async getKey(keySuffix?: KeySuffixOptions, userId?: string): Promise<SymmetricCryptoKey> {
-    const inMemoryKey = await this.stateService.getCryptoMasterKey({ userId: userId });
-
-    if (inMemoryKey != null) {
-      return inMemoryKey;
+    if (userKey != null) {
+      return userKey;
     }
 
     keySuffix ||= KeySuffixOptions.Auto;
-    const symmetricKey = await this.getKeyFromStorage(keySuffix, userId);
-
-    if (symmetricKey != null) {
-      // TODO: Refactor here so get key doesn't also set key
-      this.setKey(symmetricKey, userId);
-    }
-
-    return symmetricKey;
+    return (await this.getUserKeyFromStorage(keySuffix, userId)) as UserSymKey;
   }
 
-  async getKeyFromStorage(
-    keySuffix: KeySuffixOptions,
-    userId?: string
-  ): Promise<SymmetricCryptoKey> {
-    const key = await this.retrieveKeyFromStorage(keySuffix, userId);
-    if (key != null) {
-      const symmetricKey = new SymmetricCryptoKey(Utils.fromB64ToArray(key).buffer);
-
-      if (!(await this.validateKey(symmetricKey))) {
+  /**
+   * Retrieves the user's symmetric key from storage
+   * @param keySuffix The desired version of the user's key to retrieve
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
+  async getUserKeyFromStorage(keySuffix: KeySuffixOptions, userId?: string): Promise<UserSymKey> {
+    const userKey = await this.retrieveUserKeyFromStorage(keySuffix, userId);
+    if (userKey != null) {
+      if (!(await this.validateUserKey(userKey))) {
         this.logService.warning("Wrong key, throwing away stored key");
-        await this.clearSecretKeyStore(userId);
+        await this.clearStoredUserKeys(userId);
         return null;
       }
 
-      return symmetricKey;
+      return userKey;
     }
     return null;
   }
 
+  /**
+   * @returns True if any version of the user symmetric key is available
+   */
+  async hasUserKey(): Promise<boolean> {
+    return (
+      (await this.hasUserKeyInMemory()) ||
+      (await this.hasUserKeyStored(KeySuffixOptions.Auto)) ||
+      (await this.hasUserKeyStored(KeySuffixOptions.Biometric))
+    );
+  }
+
+  /**
+   * @param userId The desired user
+   * @returns True if the user symmetric key is set in memory
+   */
+  async hasUserKeyInMemory(userId?: string): Promise<boolean> {
+    return (await this.stateService.getUserSymKey({ userId: userId })) != null;
+  }
+
+  /**
+   * @param keySuffix The desired version of the user's key to check
+   * @param userId The desired user
+   * @returns True if the provided version of the user symmetric key is stored
+   */
+  async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
+    switch (keySuffix) {
+      case KeySuffixOptions.Auto:
+        return (await this.stateService.getUserSymKeyAuto({ userId: userId })) != null;
+      case KeySuffixOptions.Biometric:
+        return (await this.stateService.hasUserSymKeyBiometric({ userId: userId })) === true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Generates a new user symmetric key
+   * @param masterKey The user's master key
+   * @returns A new user symmetric key and the master key protected version of it
+   */
+  async makeUserSymKey(masterKey: MasterKey): Promise<[UserSymKey, EncString]> {
+    masterKey ||= await this.getMasterKey();
+    if (masterKey == null) {
+      throw new Error("No Master Key found.");
+    }
+
+    const newUserSymKey = await this.cryptoFunctionService.randomBytes(64);
+    return this.buildProtectedUserSymKey(masterKey, newUserSymKey);
+  }
+
+  /**
+   * Clears the user's symmetric key
+   * @param clearSecretStorage Clears all stored versions of the user keys as well,
+   * such as the biometrics key
+   * @param userId The desired user
+   */
+  async clearUserKey(clearSecretStorage = true, userId?: string): Promise<void> {
+    await this.stateService.setUserSymKey(null, { userId: userId });
+    if (clearSecretStorage) {
+      await this.clearStoredUserKeys(userId);
+    }
+  }
+
+  /**
+   * Clears the specified version of the user's symmetric key from storage
+   * @param keySuffix The desired version of the user's key to clear
+   */
+  async clearUserKeyFromStorage(keySuffix: KeySuffixOptions): Promise<void> {
+    keySuffix === KeySuffixOptions.Auto
+      ? await this.stateService.setUserSymKeyAuto(null)
+      : await this.stateService.setUserSymKeyBiometric(null);
+  }
+
+  /**
+   * Sets the user's master key
+   * @param key The user's master key to set
+   * @param userId The desired user
+   */
+  async setMasterKey(key: MasterKey, userId?: string): Promise<void> {
+    await this.stateService.setMasterKey(key, { userId: userId });
+  }
+
+  /**
+   * @param userId The desired user
+   * @returns The user's master key
+   */
+  async getMasterKey(userId?: string): Promise<MasterKey> {
+    return await this.stateService.getMasterKey({ userId: userId });
+  }
+
+  /**
+   * Generates a master key from the provided password
+   * @param password The user's master password
+   * @param email The user's email
+   * @param kdf The user's selected key derivation function to use
+   * @param KdfConfig The user's key derivation function configuration
+   * @returns A master key derived from the provided password
+   */
+  async makeMasterKey(
+    password: string,
+    email: string,
+    kdf: KdfType,
+    KdfConfig: KdfConfig
+  ): Promise<MasterKey> {
+    return (await this.makeKey(password, email, kdf, KdfConfig)) as MasterKey;
+  }
+
+  /**
+   * Encrypts the existing (or provided) user symmetric key with the
+   * provided master key
+   * @param masterKey The user's master key
+   * @param userSymKey The user's symmetric key
+   * @returns The user's symmetric key and the master key protected version of it
+   */
+  async encryptUserSymKeyWithMasterKey(
+    masterKey: MasterKey,
+    userSymKey?: UserSymKey
+  ): Promise<[UserSymKey, EncString]> {
+    userSymKey ||= await this.getUserKey();
+    return this.buildProtectedUserSymKey(masterKey, userSymKey.key);
+  }
+
+  /**
+   * Creates a master password hash from the user's master password. Can
+   * be used for local authentication or for server authentication depending
+   * on the hashPurpose provided.
+   * @param password The user's master password
+   * @param key The user's master key
+   * @param hashPurpose The iterations to use for the hash
+   * @returns The user's master password hash
+   */
+  async hashPassword(password: string, key: MasterKey, hashPurpose?: HashPurpose): Promise<string> {
+    key ||= await this.getMasterKey();
+
+    if (password == null || key == null) {
+      throw new Error("Invalid parameters.");
+    }
+
+    const iterations = hashPurpose === HashPurpose.LocalAuthorization ? 2 : 1;
+    const hash = await this.cryptoFunctionService.pbkdf2(key.key, password, "sha256", iterations);
+    return Utils.fromBufferToB64(hash);
+  }
+
+  /**
+   * Sets the user's key hash
+   * @param keyHash The user's key hash to set
+   */
+  async setKeyHash(keyHash: string): Promise<void> {
+    await this.stateService.setKeyHash(keyHash);
+  }
+
+  /**
+   * @returns The user's key hash
+   */
   async getKeyHash(): Promise<string> {
     return await this.stateService.getKeyHash();
   }
 
-  async compareAndUpdateKeyHash(masterPassword: string, key: SymmetricCryptoKey): Promise<boolean> {
+  /**
+   * Clears the user's stored key hash
+   * @param userId The desired user
+   */
+  async clearKeyHash(userId?: string): Promise<void> {
+    return await this.stateService.setKeyHash(null, { userId: userId });
+  }
+
+  /**
+   * Compares the provided master password to the stored key hash and updates
+   * if the stored hash is outdated
+   * @param masterPassword The user's master password
+   * @param key The user's master key
+   * @returns True if the provided master password matches either the stored
+   * key hash
+   */
+  async compareAndUpdateKeyHash(masterPassword: string, key: MasterKey): Promise<boolean> {
     const storedKeyHash = await this.getKeyHash();
     if (masterPassword != null && storedKeyHash != null) {
       const localKeyHash = await this.hashPassword(
@@ -167,60 +310,58 @@ export class CryptoService implements CryptoServiceAbstraction {
     return false;
   }
 
-  @sequentialize(() => "getEncKey")
-  getEncKey(key: SymmetricCryptoKey = null): Promise<SymmetricCryptoKey> {
-    return this.getEncKeyHelper(key);
+  /**
+   * Stores the encrypted organization keys and clears any decrypted
+   * organization keys currently in memory
+   * @param orgs The organizations to set keys for
+   * @param providerOrgs The provider organizations to set keys for
+   */
+  async setOrgKeys(
+    orgs: ProfileOrganizationResponse[] = [],
+    providerOrgs: ProfileProviderOrganizationResponse[] = []
+  ): Promise<void> {
+    const encOrgKeyData: { [orgId: string]: EncryptedOrganizationKeyData } = {};
+
+    orgs.forEach((org) => {
+      encOrgKeyData[org.id] = {
+        type: "organization",
+        key: org.key,
+      };
+    });
+
+    providerOrgs.forEach((org) => {
+      encOrgKeyData[org.id] = {
+        type: "provider",
+        providerId: org.providerId,
+        key: org.key,
+      };
+    });
+
+    await this.stateService.setDecryptedOrganizationKeys(null);
+    return await this.stateService.setEncryptedOrganizationKeys(encOrgKeyData);
   }
 
-  async getPublicKey(): Promise<ArrayBuffer> {
-    const inMemoryPublicKey = await this.stateService.getPublicKey();
-    if (inMemoryPublicKey != null) {
-      return inMemoryPublicKey;
-    }
-
-    const privateKey = await this.getPrivateKey();
-    if (privateKey == null) {
+  /**
+   * Returns the organization's symmetric key
+   * @param orgId The desired organization
+   * @returns The organization's symmetric key
+   */
+  async getOrgKey(orgId: string): Promise<SymmetricCryptoKey> {
+    if (orgId == null) {
       return null;
     }
 
-    const publicKey = await this.cryptoFunctionService.rsaExtractPublicKey(privateKey);
-    await this.stateService.setPublicKey(publicKey);
-    return publicKey;
-  }
-
-  async getPrivateKey(): Promise<ArrayBuffer> {
-    const decryptedPrivateKey = await this.stateService.getDecryptedPrivateKey();
-    if (decryptedPrivateKey != null) {
-      return decryptedPrivateKey;
-    }
-
-    const encPrivateKey = await this.stateService.getEncryptedPrivateKey();
-    if (encPrivateKey == null) {
+    const orgKeys = await this.getOrgKeys();
+    if (orgKeys == null || !orgKeys.has(orgId)) {
       return null;
     }
 
-    const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), null);
-    await this.stateService.setDecryptedPrivateKey(privateKey);
-    return privateKey;
+    return orgKeys.get(orgId);
   }
 
-  async getFingerprint(fingerprintMaterial: string, publicKey?: ArrayBuffer): Promise<string[]> {
-    if (publicKey == null) {
-      publicKey = await this.getPublicKey();
-    }
-    if (publicKey === null) {
-      throw new Error("No public key available.");
-    }
-    const keyFingerprint = await this.cryptoFunctionService.hash(publicKey, "sha256");
-    const userFingerprint = await this.cryptoFunctionService.hkdfExpand(
-      keyFingerprint,
-      fingerprintMaterial,
-      32,
-      "sha256"
-    );
-    return this.hashPhrase(userFingerprint);
-  }
-
+  /**
+   * @returns A map of the organization Ids to their symmetric keys
+   */
   @sequentialize(() => "getOrgKeys")
   async getOrgKeys(): Promise<Map<string, SymmetricCryptoKey>> {
     const result: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
@@ -255,19 +396,53 @@ export class CryptoService implements CryptoServiceAbstraction {
     return result;
   }
 
-  async getOrgKey(orgId: string): Promise<SymmetricCryptoKey> {
-    if (orgId == null) {
-      return null;
+  /**
+   * Clears the user's stored organization keys
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
+  async clearOrgKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
+    await this.stateService.setDecryptedOrganizationKeys(null, { userId: userId });
+    if (!memoryOnly) {
+      await this.stateService.setEncryptedOrganizationKeys(null, { userId: userId });
     }
-
-    const orgKeys = await this.getOrgKeys();
-    if (orgKeys == null || !orgKeys.has(orgId)) {
-      return null;
-    }
-
-    return orgKeys.get(orgId);
   }
 
+  /**
+   * Stores the encrypted provider keys and clears any decrypted
+   * provider keys currently in memory
+   * @param providers The providers to set keys for
+   */
+  async setProviderKeys(providers: ProfileProviderResponse[]): Promise<void> {
+    const providerKeys: any = {};
+    providers.forEach((provider) => {
+      providerKeys[provider.id] = provider.key;
+    });
+
+    await this.stateService.setDecryptedProviderKeys(null);
+    return await this.stateService.setEncryptedProviderKeys(providerKeys);
+  }
+
+  /**
+   * @param providerId The desired provider
+   * @returns The provider's symmetric key
+   */
+  async getProviderKey(providerId: string): Promise<SymmetricCryptoKey> {
+    if (providerId == null) {
+      return null;
+    }
+
+    const providerKeys = await this.getProviderKeys();
+    if (providerKeys == null || !providerKeys.has(providerId)) {
+      return null;
+    }
+
+    return providerKeys.get(providerId);
+  }
+
+  /**
+   * @returns A map of the provider Ids to their symmetric keys
+   */
   @sequentialize(() => "getProviderKeys")
   async getProviderKeys(): Promise<Map<string, SymmetricCryptoKey>> {
     const providerKeys: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
@@ -301,71 +476,126 @@ export class CryptoService implements CryptoServiceAbstraction {
     return providerKeys;
   }
 
-  async getProviderKey(providerId: string): Promise<SymmetricCryptoKey> {
-    if (providerId == null) {
-      return null;
-    }
-
-    const providerKeys = await this.getProviderKeys();
-    if (providerKeys == null || !providerKeys.has(providerId)) {
-      return null;
-    }
-
-    return providerKeys.get(providerId);
-  }
-
-  async hasKey(): Promise<boolean> {
-    return (
-      (await this.hasKeyInMemory()) ||
-      (await this.hasKeyStored(KeySuffixOptions.Auto)) ||
-      (await this.hasKeyStored(KeySuffixOptions.Biometric))
-    );
-  }
-
-  async hasKeyInMemory(userId?: string): Promise<boolean> {
-    return (await this.stateService.getCryptoMasterKey({ userId: userId })) != null;
-  }
-
-  async hasKeyStored(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
-    switch (keySuffix) {
-      case KeySuffixOptions.Auto:
-        return (await this.stateService.getCryptoMasterKeyAuto({ userId: userId })) != null;
-      case KeySuffixOptions.Biometric:
-        return (await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId })) === true;
-      default:
-        return false;
-    }
-  }
-
-  async hasEncKey(): Promise<boolean> {
-    return (await this.stateService.getEncryptedCryptoSymmetricKey()) != null;
-  }
-
-  async clearKey(clearSecretStorage = true, userId?: string): Promise<any> {
-    await this.stateService.setCryptoMasterKey(null, { userId: userId });
-    if (clearSecretStorage) {
-      await this.clearSecretKeyStore(userId);
-    }
-  }
-
-  async clearStoredKey(keySuffix: KeySuffixOptions) {
-    keySuffix === KeySuffixOptions.Auto
-      ? await this.stateService.setCryptoMasterKeyAuto(null)
-      : await this.stateService.setCryptoMasterKeyBiometric(null);
-  }
-
-  async clearKeyHash(userId?: string): Promise<any> {
-    return await this.stateService.setKeyHash(null, { userId: userId });
-  }
-
-  async clearEncKey(memoryOnly?: boolean, userId?: string): Promise<void> {
-    await this.stateService.setDecryptedCryptoSymmetricKey(null, { userId: userId });
+  /**
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
+  async clearProviderKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
+    await this.stateService.setDecryptedProviderKeys(null, { userId: userId });
     if (!memoryOnly) {
-      await this.stateService.setEncryptedCryptoSymmetricKey(null, { userId: userId });
+      await this.stateService.setEncryptedProviderKeys(null, { userId: userId });
     }
   }
 
-  async clearKeyPair(memoryOnly?: boolean, userId?: string): Promise<any> {
+  /**
+   * Returns the public key from memory. If not available, extracts it
+   * from the private key and stores it in memory
+   * @returns The user's public key
+   */
+  async getPublicKey(): Promise<ArrayBuffer> {
+    const inMemoryPublicKey = await this.stateService.getPublicKey();
+    if (inMemoryPublicKey != null) {
+      return inMemoryPublicKey;
+    }
+
+    const privateKey = await this.getPrivateKey();
+    if (privateKey == null) {
+      return null;
+    }
+
+    const publicKey = await this.cryptoFunctionService.rsaExtractPublicKey(privateKey);
+    await this.stateService.setPublicKey(publicKey);
+    return publicKey;
+  }
+
+  /**
+   * Create's a new 64 byte key and encrypts it with the user's public key
+   * @returns The new encrypted share key and the decrypted key itself
+   */
+  async makeShareKey(): Promise<[EncString, SymmetricCryptoKey]> {
+    const shareKey = await this.cryptoFunctionService.randomBytes(64);
+    const publicKey = await this.getPublicKey();
+    const encShareKey = await this.rsaEncrypt(shareKey, publicKey);
+    return [encShareKey, new SymmetricCryptoKey(shareKey)];
+  }
+
+  /**
+   * Sets the the user's encrypted private key in storage and
+   * clears the decrypted private key from memory
+   * Note: does not clear the private key if null is provided
+   * @param encPrivateKey An encrypted private key
+   */
+  async setPrivateKey(encPrivateKey: string): Promise<void> {
+    if (encPrivateKey == null) {
+      return;
+    }
+
+    await this.stateService.setDecryptedPrivateKey(null);
+    await this.stateService.setEncryptedPrivateKey(encPrivateKey);
+  }
+
+  /**
+   * Returns the private key from memory. If not available, decrypts it
+   * from storage and stores it in memory
+   * @returns The user's private key
+   */
+  async getPrivateKey(): Promise<ArrayBuffer> {
+    const decryptedPrivateKey = await this.stateService.getDecryptedPrivateKey();
+    if (decryptedPrivateKey != null) {
+      return decryptedPrivateKey;
+    }
+
+    const encPrivateKey = await this.stateService.getEncryptedPrivateKey();
+    if (encPrivateKey == null) {
+      return null;
+    }
+
+    const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), null);
+    await this.stateService.setDecryptedPrivateKey(privateKey);
+    return privateKey;
+  }
+
+  /**
+   * Generates a fingerprint phrase for the user based on their public key
+   * @param userId The user's Id
+   * @param publicKey The user's public key
+   * @returns The user's fingerprint phrase
+   */
+  async getFingerprint(fingerprintMaterial: string, publicKey?: ArrayBuffer): Promise<string[]> {
+    if (publicKey == null) {
+      publicKey = await this.getPublicKey();
+    }
+    if (publicKey === null) {
+      throw new Error("No public key available.");
+    }
+    const keyFingerprint = await this.cryptoFunctionService.hash(publicKey, "sha256");
+    const userFingerprint = await this.cryptoFunctionService.hkdfExpand(
+      keyFingerprint,
+      fingerprintMaterial,
+      32,
+      "sha256"
+    );
+    return this.hashPhrase(userFingerprint);
+  }
+
+  /**
+   * Generates a new keypair for the user
+   * @param key The user's symmetric key
+   * @returns A new keypair: [publicKey in Base64, protected privateKey]
+   */
+  async makeKeyPair(key?: UserSymKey): Promise<[string, EncString]> {
+    const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
+    const publicB64 = Utils.fromBufferToB64(keyPair[0]);
+    const privateEnc = await this.encrypt(keyPair[1], key);
+    return [publicB64, privateEnc];
+  }
+
+  /**
+   * Clears the user's key pair
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
+  async clearKeyPair(memoryOnly?: boolean, userId?: string): Promise<void[]> {
     const keysToClear: Promise<void>[] = [
       this.stateService.setDecryptedPrivateKey(null, { userId: userId }),
       this.stateService.setPublicKey(null, { userId: userId }),
@@ -376,132 +606,59 @@ export class CryptoService implements CryptoServiceAbstraction {
     return Promise.all(keysToClear);
   }
 
-  async clearOrgKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
-    await this.stateService.setDecryptedOrganizationKeys(null, { userId: userId });
-    if (!memoryOnly) {
-      await this.stateService.setEncryptedOrganizationKeys(null, { userId: userId });
-    }
+  /**
+   * @param pin The user's pin
+   * @param salt The user's salt
+   * @param kdf The user's kdf
+   * @param kdfConfig The user's kdf config
+   * @returns A key derived from the user's pin
+   */
+  async makePinKey(pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig): Promise<PinKey> {
+    const pinKey = await this.makeKey(pin, salt, kdf, kdfConfig);
+    return (await this.stretchKey(pinKey)) as PinKey;
   }
 
-  async clearProviderKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
-    await this.stateService.setDecryptedProviderKeys(null, { userId: userId });
-    if (!memoryOnly) {
-      await this.stateService.setEncryptedProviderKeys(null, { userId: userId });
-    }
-  }
-
-  async clearPinProtectedKey(userId?: string): Promise<any> {
+  /**
+   * Clears the user's pin protected user symmetric key
+   * @param userId The desired user
+   */
+  async clearPinProtectedKey(userId?: string): Promise<void> {
     return await this.stateService.setEncryptedPinProtected(null, { userId: userId });
   }
 
-  async clearKeys(userId?: string): Promise<any> {
-    await this.clearKey(true, userId);
-    await this.clearKeyHash(userId);
-    await this.clearOrgKeys(false, userId);
-    await this.clearProviderKeys(false, userId);
-    await this.clearEncKey(false, userId);
-    await this.clearKeyPair(false, userId);
-    await this.clearPinProtectedKey(userId);
-  }
-
-  async toggleKey(): Promise<any> {
-    const key = await this.getKey();
-
-    await this.setKey(key);
-  }
-
-  async makeKey(
-    password: string,
-    salt: string,
-    kdf: KdfType,
-    kdfConfig: KdfConfig
-  ): Promise<SymmetricCryptoKey> {
-    let key: ArrayBuffer = null;
-    if (kdf == null || kdf === KdfType.PBKDF2_SHA256) {
-      if (kdfConfig.iterations == null) {
-        kdfConfig.iterations = 5000;
-      } else if (kdfConfig.iterations < 5000) {
-        throw new Error("PBKDF2 iteration minimum is 5000.");
-      }
-      key = await this.cryptoFunctionService.pbkdf2(password, salt, "sha256", kdfConfig.iterations);
-    } else if (kdf == KdfType.Argon2id) {
-      if (kdfConfig.iterations == null) {
-        kdfConfig.iterations = DEFAULT_ARGON2_ITERATIONS;
-      } else if (kdfConfig.iterations < 2) {
-        throw new Error("Argon2 iteration minimum is 2.");
-      }
-
-      if (kdfConfig.memory == null) {
-        kdfConfig.memory = DEFAULT_ARGON2_MEMORY;
-      } else if (kdfConfig.memory < 16) {
-        throw new Error("Argon2 memory minimum is 16 MB");
-      } else if (kdfConfig.memory > 1024) {
-        throw new Error("Argon2 memory maximum is 1024 MB");
-      }
-
-      if (kdfConfig.parallelism == null) {
-        kdfConfig.parallelism = DEFAULT_ARGON2_PARALLELISM;
-      } else if (kdfConfig.parallelism < 1) {
-        throw new Error("Argon2 parallelism minimum is 1.");
-      }
-
-      const saltHash = await this.cryptoFunctionService.hash(salt, "sha256");
-      key = await this.cryptoFunctionService.argon2(
-        password,
-        saltHash,
-        kdfConfig.iterations,
-        kdfConfig.memory * 1024, // convert to KiB from MiB
-        kdfConfig.parallelism
-      );
-    } else {
-      throw new Error("Unknown Kdf.");
-    }
-    return new SymmetricCryptoKey(key);
-  }
-
-  async makeKeyFromPin(
+  /**
+   * Decrypts the user's symmetric key with their pin
+   * @param pin The user's PIN
+   * @param salt The user's salt
+   * @param kdf The user's KDF
+   * @param kdfConfig The user's KDF config
+   * @param pinProtectedUserSymKey The user's PIN protected symmetric key, if not provided
+   * it will be retrieved from storage
+   * @returns The decrypted user's symmetric key
+   */
+  async decryptUserSymKeyWithPin(
     pin: string,
     salt: string,
     kdf: KdfType,
     kdfConfig: KdfConfig,
-    protectedKeyCs: EncString = null
-  ): Promise<SymmetricCryptoKey> {
-    if (protectedKeyCs == null) {
-      const pinProtectedKey = await this.stateService.getEncryptedPinProtected();
-      if (pinProtectedKey == null) {
+    pinProtectedUserSymKey: EncString = null
+  ): Promise<UserSymKey> {
+    if (pinProtectedUserSymKey == null) {
+      const pinProtectedUserSymKeyString = await this.stateService.getEncryptedPinProtected();
+      if (pinProtectedUserSymKeyString == null) {
         throw new Error("No PIN protected key found.");
       }
-      protectedKeyCs = new EncString(pinProtectedKey);
+      pinProtectedUserSymKey = new EncString(pinProtectedUserSymKeyString);
     }
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
-    const decKey = await this.decryptToBytes(protectedKeyCs, pinKey);
-    return new SymmetricCryptoKey(decKey);
+    const userSymKey = await this.decryptToBytes(pinProtectedUserSymKey, pinKey);
+    return new SymmetricCryptoKey(userSymKey) as UserSymKey;
   }
 
-  async makeShareKey(): Promise<[EncString, SymmetricCryptoKey]> {
-    const shareKey = await this.cryptoFunctionService.randomBytes(64);
-    const publicKey = await this.getPublicKey();
-    const encShareKey = await this.rsaEncrypt(shareKey, publicKey);
-    return [encShareKey, new SymmetricCryptoKey(shareKey)];
-  }
-
-  async makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]> {
-    const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
-    const publicB64 = Utils.fromBufferToB64(keyPair[0]);
-    const privateEnc = await this.encrypt(keyPair[1], key);
-    return [publicB64, privateEnc];
-  }
-
-  async makePinKey(
-    pin: string,
-    salt: string,
-    kdf: KdfType,
-    kdfConfig: KdfConfig
-  ): Promise<SymmetricCryptoKey> {
-    const pinKey = await this.makeKey(pin, salt, kdf, kdfConfig);
-    return await this.stretchKey(pinKey);
-  }
-
+  /**
+   * @param keyMaterial The key material to derive the send key from
+   * @returns A new send key
+   */
   async makeSendKey(keyMaterial: ArrayBuffer): Promise<SymmetricCryptoKey> {
     const sendKey = await this.cryptoFunctionService.hkdf(
       keyMaterial,
@@ -513,57 +670,25 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(sendKey);
   }
 
-  async hashPassword(
-    password: string,
-    key: SymmetricCryptoKey,
-    hashPurpose?: HashPurpose
-  ): Promise<string> {
-    if (key == null) {
-      key = await this.getKey();
-    }
-    if (password == null || key == null) {
-      throw new Error("Invalid parameters.");
-    }
-
-    const iterations = hashPurpose === HashPurpose.LocalAuthorization ? 2 : 1;
-    const hash = await this.cryptoFunctionService.pbkdf2(key.key, password, "sha256", iterations);
-    return Utils.fromBufferToB64(hash);
-  }
-
-  async makeEncKey(key: SymmetricCryptoKey): Promise<[SymmetricCryptoKey, EncString]> {
-    const theKey = await this.getKeyForUserEncryption(key);
-    const encKey = await this.cryptoFunctionService.randomBytes(64);
-    return this.buildEncKey(theKey, encKey);
-  }
-
-  async remakeEncKey(
-    key: SymmetricCryptoKey,
-    encKey?: SymmetricCryptoKey
-  ): Promise<[SymmetricCryptoKey, EncString]> {
-    if (encKey == null) {
-      encKey = await this.getEncKey();
-    }
-    return this.buildEncKey(key, encKey.key);
+  /**
+   * Clears all of the user's keys from storage
+   * @param userId The user's Id
+   */
+  async clearKeys(userId?: string): Promise<any> {
+    await this.clearUserKey(true, userId);
+    await this.clearKeyHash(userId);
+    await this.clearOrgKeys(false, userId);
+    await this.clearProviderKeys(false, userId);
+    await this.clearKeyPair(false, userId);
+    await this.clearPinProtectedKey(userId);
   }
 
   /**
-   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
-   * and then call encryptService.encrypt
+   * RSA encrypts a value.
+   * @param data The data to encrypt
+   * @param publicKey The public key to use for encryption, if not provided, the user's public key will be used
+   * @returns The encrypted data
    */
-  async encrypt(plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncString> {
-    key = await this.getKeyForUserEncryption(key);
-    return await this.encryptService.encrypt(plainValue, key);
-  }
-
-  /**
-   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
-   * and then call encryptService.encryptToBytes
-   */
-  async encryptToBytes(plainValue: ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncArrayBuffer> {
-    key = await this.getKeyForUserEncryption(key);
-    return this.encryptService.encryptToBytes(plainValue, key);
-  }
-
   async rsaEncrypt(data: ArrayBuffer, publicKey?: ArrayBuffer): Promise<EncString> {
     if (publicKey == null) {
       publicKey = await this.getPublicKey();
@@ -576,6 +701,12 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Utils.fromBufferToB64(encBytes));
   }
 
+  /**
+   * Decrypts a value using RSA.
+   * @param encValue The encrypted value to decrypt
+   * @param privateKeyValue The private key to use for decryption
+   * @returns The decrypted value
+   */
   async rsaDecrypt(encValue: string, privateKeyValue?: ArrayBuffer): Promise<ArrayBuffer> {
     const headerPieces = encValue.split(".");
     let encType: EncryptionType = null;
@@ -629,38 +760,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.cryptoFunctionService.rsaDecrypt(data, privateKey, alg);
   }
 
-  /**
-   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
-   * and then call encryptService.decryptToBytes
-   */
-  async decryptToBytes(encString: EncString, key?: SymmetricCryptoKey): Promise<ArrayBuffer> {
-    const keyForEnc = await this.getKeyForUserEncryption(key);
-    return this.encryptService.decryptToBytes(encString, keyForEnc);
-  }
-
-  /**
-   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
-   * and then call encryptService.decryptToUtf8
-   */
-  async decryptToUtf8(encString: EncString, key?: SymmetricCryptoKey): Promise<string> {
-    key = await this.getKeyForUserEncryption(key);
-    return await this.encryptService.decryptToUtf8(encString, key);
-  }
-
-  /**
-   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
-   * and then call encryptService.decryptToBytes
-   */
-  async decryptFromBytes(encBuffer: EncArrayBuffer, key: SymmetricCryptoKey): Promise<ArrayBuffer> {
-    if (encBuffer == null) {
-      throw new Error("No buffer provided for decryption.");
-    }
-
-    key = await this.getKeyForUserEncryption(key);
-
-    return this.encryptService.decryptToBytes(encBuffer, key);
-  }
-
   // EFForg/OpenWireless
   // ref https://github.com/EFForg/OpenWireless/blob/master/app/js/diceware.js
   async randomNumber(min: number, max: number): Promise<number> {
@@ -696,15 +795,21 @@ export class CryptoService implements CryptoServiceAbstraction {
     return min + rval;
   }
 
-  async validateKey(key: SymmetricCryptoKey) {
+  // ---HELPERS---
+
+  protected async validateUserKey(key?: UserSymKey): Promise<boolean> {
+    key ||= await this.getUserKey();
+    if (key == null) {
+      return false;
+    }
+
     try {
       const encPrivateKey = await this.stateService.getEncryptedPrivateKey();
-      const encKey = await this.getEncKeyHelper(key);
-      if (encPrivateKey == null || encKey == null) {
+      if (encPrivateKey == null) {
         return false;
       }
 
-      const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), encKey);
+      const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), key);
       await this.cryptoFunctionService.rsaExtractPublicKey(privateKey);
     } catch (e) {
       return false;
@@ -713,20 +818,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     return true;
   }
 
-  // ---HELPERS---
-
-  protected async storeKey(key: SymmetricCryptoKey, userId?: string) {
+  protected async storeAdditionalKeys(key: SymmetricCryptoKey, userId?: string) {
     const storeAuto = await this.shouldStoreKey(KeySuffixOptions.Auto, userId);
 
     if (storeAuto) {
-      await this.storeAutoKey(key, userId);
+      await this.stateService.setUserSymKeyAuto(key.keyB64, { userId: userId });
     } else {
-      await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
+      await this.stateService.setUserSymKeyAuto(null, { userId: userId });
     }
-  }
-
-  protected async storeAutoKey(key: SymmetricCryptoKey, userId?: string) {
-    await this.stateService.setCryptoMasterKeyAuto(key.keyB64, { userId: userId });
   }
 
   protected async shouldStoreKey(keySuffix: KeySuffixOptions, userId?: string) {
@@ -741,25 +840,17 @@ export class CryptoService implements CryptoServiceAbstraction {
     return shouldStoreKey;
   }
 
-  protected async retrieveKeyFromStorage(keySuffix: KeySuffixOptions, userId?: string) {
-    return keySuffix === KeySuffixOptions.Auto
-      ? await this.stateService.getCryptoMasterKeyAuto({ userId: userId })
-      : await this.stateService.getCryptoMasterKeyBiometric({ userId: userId });
-  }
-
-  async getKeyForUserEncryption(key?: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
-    if (key != null) {
-      return key;
+  protected async retrieveUserKeyFromStorage(
+    keySuffix: KeySuffixOptions,
+    userId?: string
+  ): Promise<UserSymKey> {
+    let userKey: string;
+    if (keySuffix === KeySuffixOptions.Auto) {
+      userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
+    } else if (keySuffix === KeySuffixOptions.Biometric) {
+      userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
     }
-
-    const encKey = await this.getEncKey();
-    if (encKey != null) {
-      return encKey;
-    }
-
-    // Legacy support: encryption used to be done with the user key (derived from master password).
-    // Users who have not migrated will have a null encKey and must use the user key instead.
-    return await this.getKey();
+    return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
   }
 
   private async stretchKey(key: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
@@ -791,27 +882,79 @@ export class CryptoService implements CryptoServiceAbstraction {
     return phrase;
   }
 
-  private async buildEncKey(
-    key: SymmetricCryptoKey,
-    encKey: ArrayBuffer
-  ): Promise<[SymmetricCryptoKey, EncString]> {
-    let encKeyEnc: EncString = null;
-    if (key.key.byteLength === 32) {
-      const newKey = await this.stretchKey(key);
-      encKeyEnc = await this.encrypt(encKey, newKey);
-    } else if (key.key.byteLength === 64) {
-      encKeyEnc = await this.encrypt(encKey, key);
+  private async buildProtectedUserSymKey(
+    masterKey: MasterKey,
+    newUserSymKey: ArrayBuffer
+  ): Promise<[UserSymKey, EncString]> {
+    let protectedUserSymKey: EncString = null;
+    if (masterKey.key.byteLength === 32) {
+      const stretchedMasterKey = await this.stretchKey(masterKey);
+      protectedUserSymKey = await this.encrypt(newUserSymKey, stretchedMasterKey);
+    } else if (masterKey.key.byteLength === 64) {
+      protectedUserSymKey = await this.encrypt(newUserSymKey, masterKey);
     } else {
       throw new Error("Invalid key size.");
     }
-    return [new SymmetricCryptoKey(encKey), encKeyEnc];
+    return [new SymmetricCryptoKey(newUserSymKey) as UserSymKey, protectedUserSymKey];
   }
 
-  private async clearSecretKeyStore(userId?: string): Promise<void> {
-    await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
-    await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
+  private async clearStoredUserKeys(userId?: string): Promise<void> {
+    await this.stateService.setUserSymKeyAuto(null, { userId: userId });
+    await this.stateService.setUserSymKeyBiometric(null, { userId: userId });
   }
 
+  async makeKey(
+    password: string,
+    salt: string,
+    kdf: KdfType,
+    kdfConfig: KdfConfig
+  ): Promise<SymmetricCryptoKey> {
+    let key: ArrayBuffer = null;
+    if (kdf == null || kdf === KdfType.PBKDF2_SHA256) {
+      if (kdfConfig.iterations == null) {
+        kdfConfig.iterations = 5000;
+      } else if (kdfConfig.iterations < 5000) {
+        throw new Error("PBKDF2 iteration minimum is 5000.");
+      }
+      key = await this.cryptoFunctionService.pbkdf2(password, salt, "sha256", kdfConfig.iterations);
+    } else if (kdf == KdfType.Argon2id) {
+      if (kdfConfig.iterations == null) {
+        kdfConfig.iterations = DEFAULT_ARGON2_ITERATIONS;
+      } else if (kdfConfig.iterations < 2) {
+        throw new Error("Argon2 iteration minimum is 2.");
+      }
+
+      if (kdfConfig.memory == null) {
+        kdfConfig.memory = DEFAULT_ARGON2_MEMORY;
+      } else if (kdfConfig.memory < 16) {
+        throw new Error("Argon2 memory minimum is 16 MB");
+      } else if (kdfConfig.memory > 1024) {
+        throw new Error("Argon2 memory maximum is 1024 MB");
+      }
+
+      if (kdfConfig.parallelism == null) {
+        kdfConfig.parallelism = DEFAULT_ARGON2_PARALLELISM;
+      } else if (kdfConfig.parallelism < 1) {
+        throw new Error("Argon2 parallelism minimum is 1.");
+      }
+
+      const saltHash = await this.cryptoFunctionService.hash(salt, "sha256");
+      key = await this.cryptoFunctionService.argon2(
+        password,
+        saltHash,
+        kdfConfig.iterations,
+        kdfConfig.memory * 1024, // convert to KiB from MiB
+        kdfConfig.parallelism
+      );
+    } else {
+      throw new Error("Unknown Kdf.");
+    }
+    return new SymmetricCryptoKey(key);
+  }
+
+  /**
+   * @deprecated the UserSymKey is always stored decrypted
+   */
   private async getEncKeyHelper(key: SymmetricCryptoKey = null): Promise<SymmetricCryptoKey> {
     const inMemoryKey = await this.stateService.getDecryptedCryptoSymmetricKey();
     if (inMemoryKey != null) {
@@ -824,7 +967,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     if (key == null) {
-      key = await this.getKey();
+      key = await this.getUserKey();
     }
     if (key == null) {
       return null;
@@ -846,5 +989,100 @@ export class CryptoService implements CryptoServiceAbstraction {
     const symmetricCryptoKey = new SymmetricCryptoKey(decEncKey);
     await this.stateService.setDecryptedCryptoSymmetricKey(symmetricCryptoKey);
     return symmetricCryptoKey;
+  }
+
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.encrypt
+   */
+  async encrypt(plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncString> {
+    key = await this.getKeyForUserEncryption(key);
+    return await this.encryptService.encrypt(plainValue, key);
+  }
+
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.encryptToBytes
+   */
+  async encryptToBytes(plainValue: ArrayBuffer, key?: SymmetricCryptoKey): Promise<EncArrayBuffer> {
+    key = await this.getKeyForUserEncryption(key);
+    return this.encryptService.encryptToBytes(plainValue, key);
+  }
+
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToBytes
+   */
+  async decryptToBytes(encString: EncString, key?: SymmetricCryptoKey): Promise<ArrayBuffer> {
+    const keyForEnc = await this.getKeyForUserEncryption(key);
+    return this.encryptService.decryptToBytes(encString, keyForEnc);
+  }
+
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToUtf8
+   */
+  async decryptToUtf8(encString: EncString, key?: SymmetricCryptoKey): Promise<string> {
+    key = await this.getKeyForUserEncryption(key);
+    return await this.encryptService.decryptToUtf8(encString, key);
+  }
+
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToBytes
+   */
+  async decryptFromBytes(encBuffer: EncArrayBuffer, key: SymmetricCryptoKey): Promise<ArrayBuffer> {
+    if (encBuffer == null) {
+      throw new Error("No buffer provided for decryption.");
+    }
+
+    key = await this.getKeyForUserEncryption(key);
+
+    return this.encryptService.decryptToBytes(encBuffer, key);
+  }
+
+  /**
+   * @deprecated use SetUserKey instead
+   */
+  async setEncKey(encKey: string): Promise<void> {
+    if (encKey == null) {
+      return;
+    }
+
+    await this.stateService.setDecryptedCryptoSymmetricKey(null);
+    await this.stateService.setEncryptedCryptoSymmetricKey(encKey);
+  }
+
+  /**
+   * @deprecated use getUserKey instead
+   */
+  @sequentialize(() => "getEncKey")
+  getEncKey(key: SymmetricCryptoKey = null): Promise<SymmetricCryptoKey> {
+    return this.getEncKeyHelper(key);
+  }
+
+  /**
+   * @deprecated use hasUserKey instead
+   */
+  async hasEncKey(): Promise<boolean> {
+    return (await this.stateService.getEncryptedCryptoSymmetricKey()) != null;
+  }
+
+  /**
+   * @deprecated use clearKey instead
+   */
+  async clearEncKey(memoryOnly?: boolean, userId?: string): Promise<void> {
+    await this.stateService.setDecryptedCryptoSymmetricKey(null, { userId: userId });
+    if (!memoryOnly) {
+      await this.stateService.setEncryptedCryptoSymmetricKey(null, { userId: userId });
+    }
+  }
+
+  /**
+   * @deprecated we wouldn't be saving encrypted/decrypted versions of the user symmetric key
+   */
+  async toggleKey(): Promise<any> {
+    // const key = await this.getKey();
+    // await this.setKey(key);
   }
 }

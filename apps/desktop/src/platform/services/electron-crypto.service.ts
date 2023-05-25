@@ -21,8 +21,8 @@ export class ElectronCryptoService extends CryptoService {
     super(cryptoFunctionService, encryptService, platformUtilsService, logService, stateService);
   }
 
-  protected override async storeKey(key: SymmetricCryptoKey, userId?: string) {
-    await super.storeKey(key, userId);
+  protected override async storeAdditionalKeys(key: SymmetricCryptoKey, userId?: string) {
+    await super.storeAdditionalKeys(key, userId);
 
     const storeBiometricKey = await this.shouldStoreKey(KeySuffixOptions.Biometric, userId);
 

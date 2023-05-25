@@ -80,3 +80,4 @@ export class SymmetricCryptoKey {
 export type DeviceKey = Opaque<SymmetricCryptoKey, "DeviceKey">;
 export type UserSymKey = Opaque<SymmetricCryptoKey, "UserSymKey">;
 export type MasterKey = Opaque<SymmetricCryptoKey, "MasterKey">;
+export type PinKey = Opaque<SymmetricCryptoKey, "PinKey">;
