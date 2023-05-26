@@ -1,4 +1,5 @@
 import { TYPE_CHECK } from "../constants";
+import AutofillField from "../models/autofill-field";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
 /**
@@ -330,7 +331,7 @@ export function focusElement(el: FillableControl, setVal: boolean) {
  * @param {string} attrName
  * @returns {string} The value of the attribute
  */
-export function getElementAttrValue(el: any, attrName: string) {
+export function getElementAttrValue(el: any, attrName: string): string {
   let attrVal = el[attrName];
 
   if (typeof attrVal === TYPE_CHECK.STRING) {
@@ -339,7 +340,7 @@ export function getElementAttrValue(el: any, attrName: string) {
 
   attrVal = el.getAttribute(attrName);
 
-  return typeof attrVal == TYPE_CHECK.STRING ? attrVal : null;
+  return typeof attrVal == TYPE_CHECK.STRING ? attrVal : "";
 }
 
 /**
@@ -474,4 +475,42 @@ export function queryDoc<T extends Element = Element>(doc: Document, query: stri
   }
 
   return els;
+}
+
+export function generateAutofillFieldData(dataOverrides: any): AutofillField {
+  return {
+    opid: undefined,
+    elementNumber: undefined,
+    maxLength: undefined,
+    visible: undefined,
+    viewable: undefined,
+    htmlID: undefined,
+    htmlName: undefined,
+    htmlClass: undefined,
+    tabindex: undefined,
+    title: undefined,
+    tagName: undefined,
+    "label-tag": undefined,
+    "label-data": undefined,
+    "label-aria": undefined,
+    "label-top": undefined,
+    "label-right": undefined,
+    "label-left": undefined,
+    placeholder: undefined,
+    rel: undefined,
+    type: undefined,
+    value: undefined,
+    checked: undefined,
+    autoCompleteType: undefined,
+    disabled: undefined,
+    readonly: undefined,
+    selectInfo: undefined,
+    form: undefined,
+    "aria-hidden": undefined,
+    "aria-disabled": undefined,
+    "aria-haspopup": undefined,
+    "data-unmasked": undefined,
+    "data-stripe": undefined,
+    ...dataOverrides,
+  };
 }

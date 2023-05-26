@@ -2,6 +2,7 @@
  * Represents a single field that is collected from the page source and is potentially autofilled.
  */
 export default class AutofillField {
+  [key: string]: any;
   /**
    * The unique identifier assigned to this field during collection of the page details
    */
@@ -72,12 +73,6 @@ export default class AutofillField {
    */
   readonly: boolean;
   /**
-   * @deprecated
-   * The `onePasswordFieldType` from the `dataset` on the element.
-   * If empty it contains the HTML `type` attribute for the field.
-   */
-  onePasswordFieldType: string;
-  /**
    * The `opid` attribute value of the form that contains the field
    */
   form: string;
@@ -97,5 +92,4 @@ export default class AutofillField {
    * The `tagName` for the field
    */
   tagName: string;
-  [key: string]: any;
 }

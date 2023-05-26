@@ -23,7 +23,9 @@ export default class AutofillScript {
   untrustedIframe: boolean;
   itemType: string; // Appears to be unused, read but not written
 
-  constructor(documentUUID: string) {
-    this.documentUUID = documentUUID;
-  }
+  /** DEAD CODE? documentUUID is not used anywhere */
+  // constructor(documentUUID: string) {
+  //   this.documentUUID = documentUUID;
+  // }
+  /** END DEAD CODE */
 }

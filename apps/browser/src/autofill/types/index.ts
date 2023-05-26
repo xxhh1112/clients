@@ -14,12 +14,12 @@ export type ElementWithOpId<T> = T & {
 };
 
 /**
+ * A Form Element that we can set a value on (fill)
+ */
+export type FillableControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
+/**
  * This script's definition of a Form Element (only a subset of HTML form elements)
  * This is defined by getFormElements
  */
-export type FormElement = HTMLInputElement | HTMLSelectElement | HTMLSpanElement;
-
-/**
- * A Form Element that we can set a value on (fill)
- */
-export type FillableControl = HTMLInputElement | HTMLSelectElement;
+export type FormElement = FillableControl | HTMLSpanElement;

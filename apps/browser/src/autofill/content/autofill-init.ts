@@ -30,7 +30,6 @@ class AutofillInit implements AutofillInitInterface {
    * Initializes the autofill content script, setting up
    * the extension message listeners. This method should
    * be called once when the content script is loaded.
-   *
    * @public
    */
   init() {
@@ -43,7 +42,6 @@ class AutofillInit implements AutofillInitInterface {
    * parameter is set to true, the page details will be
    * returned to facilitate sending the details in the
    * response to the extension message.
-   *
    * @param {AutofillExtensionMessage} message
    * @param {boolean} sendDetailsInResponse
    * @returns {AutofillPageDetails | void}
@@ -69,7 +67,6 @@ class AutofillInit implements AutofillInitInterface {
   /**
    * Sets up the extension message listeners
    * for the content script.
-   *
    * @private
    */
   private setupExtensionMessageListeners() {
@@ -79,7 +76,6 @@ class AutofillInit implements AutofillInitInterface {
   /**
    * Handles the extension messages
    * sent to the content script.
-   *
    * @param {AutofillExtensionMessage} message
    * @param {chrome.runtime.MessageSender} sender
    * @param {(response?: any) => void} sendResponse

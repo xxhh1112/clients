@@ -27,9 +27,7 @@ describe("AutofillCollect", function () {
 
       const labelTag = autofillCollect["getElementLabelTag"](element);
 
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set(element.labels),
-      ]);
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set(element.labels));
       expect(document.querySelectorAll).not.toHaveBeenCalled();
       expect(labelTag).toEqual("Username");
     });
@@ -44,10 +42,8 @@ describe("AutofillCollect", function () {
 
       const labelTag = autofillCollect["getElementLabelTag"](element);
 
-      // expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.id}"]`);
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set([elementLabel]),
-      ]);
+      expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.id}"]`);
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Country");
     });
 
@@ -63,9 +59,7 @@ describe("AutofillCollect", function () {
 
       expect(document.querySelectorAll).not.toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.name}"]`);
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set([elementLabel]),
-      ]);
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Country");
     });
 
@@ -80,11 +74,10 @@ describe("AutofillCollect", function () {
 
       const labelTag = autofillCollect["getElementLabelTag"](element);
 
-      expect(document.querySelectorAll).toHaveBeenNthCalledWith(1, `label[for="${element.id}"]`);
-      expect(document.querySelectorAll).toHaveBeenNthCalledWith(2, `label[for="${element.name}"]`);
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set([elementLabel]),
-      ]);
+      expect(document.querySelectorAll).toHaveBeenCalledWith(
+        `label[for="${element.id}"], label[for="${element.name}"]`
+      );
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Country");
     });
 
@@ -98,9 +91,7 @@ describe("AutofillCollect", function () {
 
       const labelTag = autofillCollect["getElementLabelTag"](element);
 
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set([elementLabel]),
-      ]);
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
     });
 
@@ -118,9 +109,7 @@ describe("AutofillCollect", function () {
 
       const labelTag = autofillCollect["getElementLabelTag"](element);
 
-      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith([
-        ...new Set([elementLabel]),
-      ]);
+      expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
     });
 

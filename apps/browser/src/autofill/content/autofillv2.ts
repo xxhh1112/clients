@@ -27,7 +27,10 @@
   SOFTWARE.
   */
 
-import { EVENTS, TYPE_CHECK } from "../constants";
+import {
+  // EVENTS,
+  TYPE_CHECK,
+} from "../constants";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript, {
@@ -40,7 +43,7 @@ import {
   // collect utils
   addProp,
   checkNodeType,
-  focusElement,
+  // focusElement,
   getElementAttrValue,
   getElementForOPID,
   getElementValue,
@@ -70,11 +73,13 @@ import {
 
 function collect(document: Document) {
   /** DEAD CODE **/
-  const isFirefox =
-    navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
+  // const isFirefox =
+  //   navigator.userAgent.indexOf("Firefox") !== -1 || navigator.userAgent.indexOf("Gecko/") !== -1;
   /** END DEAD CODE  **/
 
-  (document as AutofillDocument).elementsByOPID = {};
+  /** DEAD CODE **/
+  // (document as AutofillDocument).elementsByOPID = {};
+  /** END DEAD CODE **/
 
   /** DEAD CODE */
   /**
@@ -84,21 +89,21 @@ function collect(document: Document) {
    * @returns
    */
 
-  function doEventOnElement(kedol: HTMLElement, fonor: string) {
-    let quebo: any;
-    isFirefox
-      ? ((quebo = document.createEvent(EVENTS.KEYBOARDEVENT)),
-        quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
-      : ((quebo = kedol.ownerDocument.createEvent("Events")),
-        quebo.initEvent(fonor, true, false),
-        (quebo.charCode = 0),
-        (quebo.keyCode = 0),
-        (quebo.which = 0),
-        (quebo.srcElement = kedol),
-        (quebo.target = kedol));
-
-    return quebo;
-  }
+  // function doEventOnElement(kedol: HTMLElement, fonor: string) {
+  //   let quebo: any;
+  //   isFirefox
+  //     ? ((quebo = document.createEvent(EVENTS.KEYBOARDEVENT)),
+  //       quebo.initKeyEvent(fonor, true, false, null, false, false, false, false, 0, 0))
+  //     : ((quebo = kedol.ownerDocument.createEvent("Events")),
+  //       quebo.initEvent(fonor, true, false),
+  //       (quebo.charCode = 0),
+  //       (quebo.keyCode = 0),
+  //       (quebo.which = 0),
+  //       (quebo.srcElement = kedol),
+  //       (quebo.target = kedol));
+  //
+  //   return quebo;
+  // }
   /** END DEAD CODE **/
 
   function getPageDetails(theDoc: Document, oneShotId: string) {
@@ -206,7 +211,9 @@ function collect(document: Document) {
           elMaxLen = 999;
         }
 
-        (theDoc as AutofillDocument).elementsByOPID[opId] = el;
+        /** DEAD CODE */
+        // (theDoc as AutofillDocument).elementsByOPID[opId] = el;
+        /* END DEAD CODE **/
         (el as ElementWithOpId<FormElement>).opid = opId;
         field.opid = opId;
         field.elementNumber = elIndex;
@@ -270,19 +277,21 @@ function collect(document: Document) {
         addProp(field, "aria-hidden", el.getAttribute("aria-hidden") == "true", false);
         addProp(field, "aria-disabled", el.getAttribute("aria-disabled") == "true", false);
         addProp(field, "aria-haspopup", el.getAttribute("aria-haspopup") == "true", false);
-        addProp(field, "data-unmasked", el.dataset.unmasked);
         addProp(field, "data-stripe", getElementAttrValue(el, "data-stripe"));
-        addProp(
-          field,
-          "onepasswordFieldType",
-          el.dataset.onepasswordFieldType || (el as FillableControl).type
-        );
-        addProp(field, "onepasswordDesignation", el.dataset.onepasswordDesignation);
-        addProp(field, "onepasswordSignInUrl", el.dataset.onepasswordSignInUrl);
-        addProp(field, "onepasswordSectionTitle", el.dataset.onepasswordSectionTitle);
-        addProp(field, "onepasswordSectionFieldKind", el.dataset.onepasswordSectionFieldKind);
-        addProp(field, "onepasswordSectionFieldTitle", el.dataset.onepasswordSectionFieldTitle);
-        addProp(field, "onepasswordSectionFieldValue", el.dataset.onepasswordSectionFieldValue);
+        /** DEAD CODE */
+        // addProp(field, "data-unmasked", el.dataset.unmasked);
+        // addProp(
+        //   field,
+        //   "onepasswordFieldType",
+        //   el.dataset.onepasswordFieldType || (el as FillableControl).type
+        // );
+        // addProp(field, "onepasswordDesignation", el.dataset.onepasswordDesignation);
+        // addProp(field, "onepasswordSignInUrl", el.dataset.onepasswordSignInUrl);
+        // addProp(field, "onepasswordSectionTitle", el.dataset.onepasswordSectionTitle);
+        // addProp(field, "onepasswordSectionFieldKind", el.dataset.onepasswordSectionFieldKind);
+        // addProp(field, "onepasswordSectionFieldTitle", el.dataset.onepasswordSectionFieldTitle);
+        // addProp(field, "onepasswordSectionFieldValue", el.dataset.onepasswordSectionFieldValue);
+        /** END DEAD CODE */
 
         if ((el as FillableControl).form) {
           field.form = getElementAttrValue((el as FillableControl).form, "opid");
@@ -292,46 +301,46 @@ function collect(document: Document) {
       });
 
     /** DEAD CODE **/
-    // test form fields
-    theFields
-      .filter(function (f: any) {
-        return f.fakeTested;
-      })
-      .forEach(function (f: any) {
-        const el = (theDoc as AutofillDocument).elementsByOPID[f.opid] as FillableControl;
-        el.getBoundingClientRect();
-
-        const originalValue = el.value;
-        // click it
-        !el || (el && typeof el.click !== TYPE_CHECK.FUNCTION) || el.click();
-        focusElement(el, false);
-
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
-
-        el.value !== originalValue && (el.value = originalValue);
-
-        el.click && el.click();
-        f.postFakeTestVisible = isElementVisible(el);
-        f.postFakeTestViewable = isElementViewable(el);
-        f.postFakeTestType = el.type;
-
-        const elValue = el.value;
-
-        const event1 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS),
-          event2 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS);
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
-        el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
-        event2.initEvent(EVENTS.INPUT, true, true);
-        el.dispatchEvent(event2);
-        event1.initEvent(EVENTS.CHANGE, true, true);
-        el.dispatchEvent(event1);
-
-        el.blur();
-        el.value !== elValue && (el.value = elValue);
-      });
+    // // test form fields
+    // theFields
+    //   .filter(function (f: any) {
+    //     return f.fakeTested;
+    //   })
+    //   .forEach(function (f: any) {
+    //     const el = (theDoc as AutofillDocument).elementsByOPID[f.opid] as FillableControl;
+    //     el.getBoundingClientRect();
+    //
+    //     const originalValue = el.value;
+    //     // click it
+    //     !el || (el && typeof el.click !== TYPE_CHECK.FUNCTION) || el.click();
+    //     focusElement(el, false);
+    //
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
+    //
+    //     el.value !== originalValue && (el.value = originalValue);
+    //
+    //     el.click && el.click();
+    //     f.postFakeTestVisible = isElementVisible(el);
+    //     f.postFakeTestViewable = isElementViewable(el);
+    //     f.postFakeTestType = el.type;
+    //
+    //     const elValue = el.value;
+    //
+    //     const event1 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS),
+    //       event2 = el.ownerDocument.createEvent(EVENTS.HTMLEVENTS);
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYDOWN));
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYPRESS));
+    //     el.dispatchEvent(doEventOnElement(el, EVENTS.KEYUP));
+    //     event2.initEvent(EVENTS.INPUT, true, true);
+    //     el.dispatchEvent(event2);
+    //     event1.initEvent(EVENTS.CHANGE, true, true);
+    //     el.dispatchEvent(event1);
+    //
+    //     el.blur();
+    //     el.value !== elValue && (el.value = elValue);
+    //   });
     /** END DEAD CODE **/
 
     // build out the page details object. this is the final result
