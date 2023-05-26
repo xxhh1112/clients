@@ -52,7 +52,6 @@ import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
-import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
@@ -112,6 +111,7 @@ import { flagEnabled } from "../flags";
 import { UpdateBadge } from "../listeners/update-badge";
 import { Account } from "../models/account";
 import { BrowserStateService as StateServiceAbstraction } from "../services/abstractions/browser-state.service";
+import { BrowserConfigService } from "../services/browser-config.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import { BrowserI18nService } from "../services/browser-i18n.service";
 import { BrowserSendService } from "../services/browser-send.service";
@@ -501,11 +501,12 @@ export default class MainBackground {
 
     this.configApiService = new ConfigApiService(this.apiService);
 
-    this.configService = new ConfigService(
+    this.configService = new BrowserConfigService(
       this.stateService,
       this.configApiService,
       this.authService,
-      this.environmentService
+      this.environmentService,
+      true
     );
 
     const systemUtilsServiceReloadCallback = () => {

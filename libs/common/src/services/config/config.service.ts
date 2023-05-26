@@ -1,5 +1,4 @@
-import { Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, Subject, concatMap, from, takeUntil, timer } from "rxjs";
+import { BehaviorSubject, concatMap, from, timer } from "rxjs";
 
 import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
@@ -11,33 +10,29 @@ import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { ServerConfigData } from "../../models/data/server-config.data";
 
-@Injectable()
-export class ConfigService implements ConfigServiceAbstraction, OnDestroy {
+export class ConfigService implements ConfigServiceAbstraction {
   protected _serverConfig = new BehaviorSubject<ServerConfig | null>(null);
   serverConfig$ = this._serverConfig.asObservable();
-  private destroy$ = new Subject<void>();
 
   constructor(
     private stateService: StateService,
     private configApiService: ConfigApiServiceAbstraction,
     private authService: AuthService,
-    private environmentService: EnvironmentService
+    private environmentService: EnvironmentService,
+    subscribe = true
   ) {
-    // Re-fetch the server config every hour
-    timer(0, 1000 * 3600)
-      .pipe(concatMap(() => from(this.fetchServerConfig())))
-      .subscribe((serverConfig) => {
-        this._serverConfig.next(serverConfig);
+    if (subscribe) {
+      // Re-fetch the server config every hour
+      timer(0, 1000 * 3600)
+        .pipe(concatMap(() => from(this.fetchServerConfig())))
+        .subscribe((serverConfig) => {
+          this._serverConfig.next(serverConfig);
+        });
+
+      this.environmentService.urls.subscribe(() => {
+        this.fetchServerConfig();
       });
-
-    this.environmentService.urls.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.fetchServerConfig();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    }
   }
 
   async fetchServerConfig(): Promise<ServerConfig> {
