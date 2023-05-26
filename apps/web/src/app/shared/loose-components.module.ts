@@ -119,9 +119,9 @@ import { SharedModule } from "./shared.module";
     OrganizationCreateModule,
     RegisterFormModule,
     ProductSwitcherModule,
+    UserVerificationModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
-    UserVerificationModule,
   ],
   declarations: [
     PremiumBadgeComponent,

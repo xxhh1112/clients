@@ -1985,10 +1985,10 @@
     "message": "Vypršel časový limit relace. Vraťte se zpět a zkuste se znovu přihlásit."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exportování individuálního trezoru"
+    "message": "Exportování osobního trezoru"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Budou exportovány pouze jednotlivé položky trezoru spojené s $EMAIL$ . Nebudou zahrnuty položky trezoru v organizaci.",
+    "message": "Budou exportovány jen osobní položky trezoru spojené s účtem $EMAIL$. Nebudou zahrnuty položky trezoru v organizaci.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2226,7 +2226,7 @@
     "message": "Slabé a odhalené hlavní heslo"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Slabeé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?"
+    "message": "Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?"
   },
   "checkForBreaches": {
     "message": "Zkontrolovat heslo, zda nebylo odhaleno"
@@ -2251,5 +2251,19 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Aktualizace doporučených nastavení"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Vlastní hosting"
   }
 }
