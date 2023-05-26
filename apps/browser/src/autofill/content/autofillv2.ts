@@ -345,7 +345,9 @@ function collect(document: Document) {
 
     // build out the page details object. this is the final result
     const pageDetails: AutofillPageDetails = {
-      documentUUID: oneShotId,
+      /** DEAD CODE **/
+      // documentUUID: oneShotId,
+      /** END DEAD CODE **/
       title: theDoc.title,
       url: theView.location.href,
       documentUrl: theDoc.location.href,

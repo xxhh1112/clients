@@ -27,12 +27,11 @@ class AutofillCollect {
    * @returns {AutofillPageDetails}
    * @public
    */
-  getPageDetails(oneShotId = "oneshotUUID"): AutofillPageDetails {
+  getPageDetails(): AutofillPageDetails {
     this.autofillFormsData = this.buildAutofillFormsData();
     this.autofillFieldsData = this.buildAutofillFieldsData();
 
     return {
-      documentUUID: oneShotId,
       title: document.title,
       url: (document.defaultView || window).location.href,
       documentUrl: document.location.href,

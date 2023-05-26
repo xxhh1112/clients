@@ -8,7 +8,9 @@ export default class AutofillPageDetails {
   /**
    * A unique identifier for the page
    */
-  documentUUID: string;
+  /** DEAD CODE? documentUUID is not used anywhere */
+  // documentUUID: string;
+  /** END DEAD CODE */
   title: string;
   url: string;
   documentUrl: string;

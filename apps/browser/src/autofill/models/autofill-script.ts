@@ -14,7 +14,9 @@ export type AutofillScriptProperties = {
 
 export default class AutofillScript {
   script: FillScript[] = [];
-  documentUUID = "";
+  /** DEAD CODE? documentUUID is not used anywhere */
+  // documentUUID = "";
+  /** END DEAD CODE */
   properties: AutofillScriptProperties = {};
   options: AutofillScriptOptions = {};
   metadata: any = {}; // Unused, not written or read

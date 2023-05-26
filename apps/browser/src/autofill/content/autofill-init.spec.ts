@@ -34,7 +34,6 @@ describe("AutofillInit", function () {
         sender: "sender",
       };
       pageDetails = {
-        documentUUID: "documentUuid",
         title: "title",
         url: "http://example.com",
         documentUrl: "documentUrl",
@@ -119,7 +118,6 @@ describe("AutofillInit", function () {
     it("returns a true value and calls sendResponse if the message handler returns a response", async function () {
       message.command = "collectPageDetailsImmediately";
       const pageDetails: AutofillPageDetails = {
-        documentUUID: "documentUuid",
         title: "title",
         url: "http://example.com",
         documentUrl: "documentUrl",
