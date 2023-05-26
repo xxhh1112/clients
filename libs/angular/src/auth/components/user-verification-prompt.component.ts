@@ -50,11 +50,7 @@ export class UserVerificationPromptComponent {
       this.invalidSecret = false;
     } catch (e) {
       this.invalidSecret = true;
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("error"),
-        this.i18nService.t("invalidMasterPassword")
-      );
+      this.platformUtilsService.showToast("error", this.i18nService.t("error"), e.message);
       return;
     }
 
