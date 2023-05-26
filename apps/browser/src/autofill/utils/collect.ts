@@ -517,7 +517,6 @@ export function generateAutofillFieldData(dataOverrides: any): AutofillField {
     "aria-hidden": undefined,
     "aria-disabled": undefined,
     "aria-haspopup": undefined,
-    "data-unmasked": undefined,
     "data-stripe": undefined,
     ...dataOverrides,
   };

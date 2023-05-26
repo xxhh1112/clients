@@ -38,6 +38,23 @@ class AutofillCollect {
     };
   }
 
+  private buildAutofillFormsData(): AutofillForm[] {
+    const documentFormElements = document.querySelectorAll("form");
+
+    return [...documentFormElements].map((formElement: HTMLFormElement, index: number) => {
+      const formOpid = `__form__${index}`;
+      formElement.opid = formOpid;
+
+      return {
+        opid: formOpid,
+        htmlAction: new URL(formElement.action, window.location.href).href,
+        htmlName: getElementAttrValue(formElement, "name"),
+        htmlID: getElementAttrValue(formElement, "id"),
+        htmlMethod: getElementAttrValue(formElement, "method"),
+      };
+    });
+  }
+
   private buildAutofillFieldsData(): AutofillField[] {
     const formElements = getFormElements(document, this.queriedFieldsLimit);
 
@@ -166,29 +183,11 @@ class AutofillCollect {
         const textContent: string | null = labelElement
           ? labelElement.textContent || labelElement.innerText
           : null;
-        return (textContent || "")
-          .replace(/^\s+|\s+$/g, "") // trim leading and trailing whitespace
-          .replace(/\s{2,}/g, " "); // replace multiple spaces with a single space
+
+        return this.trimAndRemoveNonPrintableText(textContent || "");
       })
       .join("");
   };
-
-  private buildAutofillFormsData(): AutofillForm[] {
-    const documentFormElements = document.querySelectorAll("form");
-
-    return [...documentFormElements].map((formElement: HTMLFormElement, index: number) => {
-      const formOpid = `__form__${index}`;
-      formElement.opid = formOpid;
-
-      return {
-        opid: formOpid,
-        htmlAction: new URL(formElement.action, window.location.href).href,
-        htmlName: getElementAttrValue(formElement, "name"),
-        htmlID: getElementAttrValue(formElement, "id"),
-        htmlMethod: getElementAttrValue(formElement, "method"),
-      };
-    });
-  }
 
   private getAutofillFieldMaxLength(element: ElementWithOpId<FormElement>): number | null {
     const elementHasMaxLengthProperty =
