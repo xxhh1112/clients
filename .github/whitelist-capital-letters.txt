@@ -32,6 +32,8 @@
 ./libs/common/src/factories/accountFactory.ts
 ./libs/common/src/factories/globalStateFactory.ts
 ./libs/common/src/factories/stateFactory.ts
+./libs/common/src/abstractions/userVerification/userVerification.service.abstraction.ts
+./libs/common/src/abstractions/userVerification/userVerification-api.service.abstraction.ts
 ./libs/common/src/abstractions/platformUtils.service.ts
 ./libs/common/src/abstractions/stateMigration.service.ts
 ./libs/common/src/abstractions/fileDownload/fileDownloadBuilder.ts
