@@ -51,6 +51,7 @@ import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-u
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
+import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
 import { ConfigService } from "@bitwarden/common/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
@@ -497,6 +498,8 @@ export default class MainBackground {
       this.i18nService,
       this.userVerificationApiService
     );
+
+    this.configApiService = new ConfigApiService(this.apiService);
 
     this.configService = new ConfigService(
       this.stateService,
