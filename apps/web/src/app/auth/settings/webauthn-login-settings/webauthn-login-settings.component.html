@@ -21,7 +21,9 @@
         <i class="bwi bwi-lock-encrypted"></i>
         {{ "supportsEncryption" | i18n }}
       </ng-container>
-      <ng-container *ngIf="!credential.prfSupport">-</ng-container>
+      <span bitTypography="body1" class="tw-text-muted">
+        {{ "encryptionNotSupported" | i18n }}
+      </span>
     </td>
     <td class="tw-py-2 tw-pl-10 tw-pr-0">
       <button
