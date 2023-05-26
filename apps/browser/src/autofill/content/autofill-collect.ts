@@ -3,16 +3,14 @@ import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import { ElementWithOpId, FillableControl, FormElement } from "../types";
 import {
-  checkNodeType,
   generateAutofillFieldData,
   getElementAttrValue,
+  getElementValue,
   getFormElements,
   getLabelTop,
   getSelectElementOptions,
   isElementViewable,
   isElementVisible,
-  isKnownTag,
-  shiftForLeftLabel,
 } from "../utils";
 
 class AutofillCollect {
@@ -23,7 +21,6 @@ class AutofillCollect {
   /**
    * Builds the data for all the forms and fields that
    * are found within the page DOM.
-   * @param {string} oneShotId
    * @returns {AutofillPageDetails}
    * @public
    */
@@ -41,18 +38,81 @@ class AutofillCollect {
     };
   }
 
+  private buildAutofillFieldsData(): AutofillField[] {
+    const formElements = getFormElements(document, this.queriedFieldsLimit);
+
+    return [...formElements].map((element: ElementWithOpId<FormElement>, index: number) => {
+      const fieldOpid = `__${index}`;
+      element.opid = fieldOpid;
+
+      let autofillField: AutofillField = generateAutofillFieldData({
+        opid: fieldOpid,
+        elementNumber: index,
+        maxLength: this.getAutofillFieldMaxLength(element),
+        visible: isElementVisible(element),
+        viewable: isElementViewable(element),
+        htmlID: getElementAttrValue(element, "id"),
+        htmlName: getElementAttrValue(element, "name"),
+        htmlClass: getElementAttrValue(element, "class"),
+        tabindex: getElementAttrValue(element, "tabindex"),
+        title: getElementAttrValue(element, "title"),
+        tagName: element.tagName.toLowerCase(),
+      });
+
+      if (element instanceof HTMLSpanElement) {
+        return autofillField;
+      }
+
+      const autoCompleteType =
+        element.getAttribute("x-autocompletetype") ||
+        element.getAttribute("autocompletetype") ||
+        element.getAttribute("autocomplete");
+      const elementHasReadOnlyProperty =
+        element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+      const elementType = String(element.type);
+      if (elementType.toLowerCase() !== "hidden") {
+        autofillField = {
+          ...autofillField,
+          "label-tag": this.getAutofillFieldLabelTag(element),
+          "label-data": getElementAttrValue(element, "data-label"),
+          "label-aria": getElementAttrValue(element, "aria-label"),
+          "label-top": getLabelTop(element),
+          "label-right": this.createAutofillFieldRightLabel(element),
+          "label-left": this.createAutofillFieldLeftLabel(element),
+          placeholder: getElementAttrValue(element, "placeholder"),
+        };
+      }
+
+      return {
+        ...autofillField,
+        rel: getElementAttrValue(element, "rel"),
+        type: elementType,
+        value: getElementValue(element),
+        checked: Boolean(getElementAttrValue(element, "checked")),
+        autoCompleteType: autoCompleteType !== "off" ? autoCompleteType : null,
+        disabled: Boolean(getElementAttrValue(element, "disabled")),
+        readonly: elementHasReadOnlyProperty ? element.readOnly : false,
+        selectInfo: element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
+        form: element.form ? getElementAttrValue(element.form, "opid") : null,
+        "aria-hidden": element.getAttribute("aria-hidden") === "true",
+        "aria-disabled": element.getAttribute("aria-disabled") === "true",
+        "aria-haspopup": element.getAttribute("aria-haspopup") === "true",
+        "data-stripe": getElementAttrValue(element, "data-stripe"),
+      };
+    });
+  }
+
   /**
    * Creates a label tag used to autofill the element pulled from a label
    * associated with the element's id, name, parent element or from an
    * associated description term element if no other labels can be found.
-   * Returns a string containing all the `innerText` or `textContent`
+   * Returns a string containing all the `textContent` or `innerText`
    * values of the label elements.
    * @param {FillableControl} element
    * @returns {string}
    * @private
    */
-  private getElementLabelTag(element: ElementWithOpId<FillableControl>): string {
-    let labelElements: NodeListOf<HTMLLabelElement> = element.labels;
+  private getAutofillFieldLabelTag(element: ElementWithOpId<FillableControl>): string {
     const labelElementsSet: Set<HTMLElement> = new Set(element.labels);
 
     if (labelElementsSet.size) {
@@ -68,7 +128,8 @@ class AutofillCollect {
     }
 
     if (labelQuerySelectors) {
-      labelElements = document.querySelectorAll(labelQuerySelectors);
+      const labelElements: NodeListOf<HTMLLabelElement> =
+        document.querySelectorAll(labelQuerySelectors);
       labelElements.forEach((labelElement) => labelElementsSet.add(labelElement));
     }
 
@@ -102,17 +163,12 @@ class AutofillCollect {
   private createLabelElementsTag = (labelElementsSet: Set<HTMLElement>): string => {
     return [...labelElementsSet]
       .map((labelElement) => {
-        if (!labelElement) {
-          return "";
-        }
-
-        const textContent = labelElement.textContent || labelElement.innerText;
+        const textContent: string | null = labelElement
+          ? labelElement.textContent || labelElement.innerText
+          : null;
         return (textContent || "")
-          .trim() // trim whitespace from the beginning and end of the string
-          .replace(/^\\s+/, "") // trim instances of "\s" at the beginning of the string
-          .replace(/\\s+$/, "") // trim instances of "\s" at the end of the string
-          .replace("\\n", "") // trim first instance of a newline character
-          .replace(/\\s{2,}/, " "); // replace instances of "\s" in the middle of the string with a single space
+          .replace(/^\s+|\s+$/g, "") // trim leading and trailing whitespace
+          .replace(/\s{2,}/g, " "); // replace multiple spaces with a single space
       })
       .join("");
   };
@@ -134,102 +190,135 @@ class AutofillCollect {
     });
   }
 
-  private buildAutofillFieldsData(): AutofillField[] {
-    const formElements = getFormElements(document, this.queriedFieldsLimit);
-
-    return [...formElements].map((element: ElementWithOpId<FormElement>, index: number) => {
-      const fieldOpid = `__${index}`;
-      element.opid = fieldOpid;
-
-      let autofillField: AutofillField = generateAutofillFieldData({
-        opid: fieldOpid,
-        elementNumber: index,
-        maxLength: this.getAutofillFieldMaxLength(element),
-        visible: isElementVisible(element),
-        viewable: isElementViewable(element),
-        htmlID: getElementAttrValue(element, "id"),
-        htmlName: getElementAttrValue(element, "name"),
-        htmlClass: getElementAttrValue(element, "class"),
-        tabindex: getElementAttrValue(element, "tabindex"),
-        title: getElementAttrValue(element, "title"),
-        tagName: element.tagName.toLowerCase(),
-      });
-
-      if (autofillField.tagName === "span" || element instanceof HTMLSpanElement) {
-        return autofillField;
-      }
-
-      const autoCompleteType =
-        element.getAttribute("x-autocompletetype") ||
-        element.getAttribute("autocompletetype") ||
-        element.getAttribute("autocomplete");
-      const elementHasReadOnlyProperty =
-        element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
-      const elementType = String(element.type);
-      if (elementType.toLowerCase() !== "hidden") {
-        autofillField = {
-          ...autofillField,
-          "label-tag": this.getElementLabelTag(element),
-          "label-data": getElementAttrValue(element, "data-label"),
-          "label-aria": getElementAttrValue(element, "aria-label"),
-          "label-top": getLabelTop(element),
-          "label-right": this.createElementRightLabel(element),
-          "label-left": this.createElementLeftLabel(element),
-          placeholder: getElementAttrValue(element, "placeholder"),
-        };
-      }
-
-      return {
-        ...autofillField,
-        rel: getElementAttrValue(element, "rel"),
-        type: elementType,
-        value: getElementAttrValue(element, "value"),
-        checked: Boolean(getElementAttrValue(element, "checked")),
-        autoCompleteType: autoCompleteType || "off",
-        disabled: Boolean(getElementAttrValue(element, "disabled")),
-        readonly: elementHasReadOnlyProperty ? element.readOnly : false,
-        selectInfo: element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
-        form: element.form ? getElementAttrValue(element.form, "opid") : null,
-        "aria-hidden": element.getAttribute("aria-hidden") == "true",
-        "aria-disabled": element.getAttribute("aria-disabled") == "true",
-        "aria-haspopup": element.getAttribute("aria-haspopup") == "true",
-        "data-stripe": getElementAttrValue(element, "data-stripe"),
-      };
-    });
-  }
-
-  private getAutofillFieldMaxLength(element: ElementWithOpId<FormElement>): number {
+  private getAutofillFieldMaxLength(element: ElementWithOpId<FormElement>): number | null {
     const elementHasMaxLengthProperty =
       element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
-    const elementMaxLength =
+    let elementMaxLength =
       elementHasMaxLengthProperty && Number(element.maxLength) > -1
         ? Number(element.maxLength)
         : 999;
+    elementMaxLength = Math.min(elementMaxLength, 999);
 
-    return Math.min(elementMaxLength, 999);
+    return elementMaxLength !== 999 ? elementMaxLength : null;
   }
 
-  private createElementRightLabel(element: ElementWithOpId<FormElement>): string {
+  private createAutofillFieldRightLabel(element: ElementWithOpId<FormElement>): string {
     const labelTextContent: string[] = [];
     let currentElement = element;
 
     while (currentElement && currentElement.nextElementSibling) {
       currentElement = currentElement.nextElementSibling as ElementWithOpId<HTMLElement>;
-      if (isKnownTag(currentElement)) {
+      if (this.isTransitionalElement(currentElement)) {
         break;
       }
 
-      checkNodeType(labelTextContent, currentElement);
+      const textContent = this.getTextContentFromElement(currentElement);
+      if (textContent) {
+        labelTextContent.push(textContent);
+      }
     }
 
     return labelTextContent.join("");
   }
 
-  private createElementLeftLabel(element: ElementWithOpId<FormElement>): string {
-    const labelTextContent: string[] = [];
-    shiftForLeftLabel(element, labelTextContent);
+  private createAutofillFieldLeftLabel(element: ElementWithOpId<FormElement>): string {
+    const labelTextContent: string[] =
+      this.recursivelyGetTextContentFromElementPreviousSiblings(element);
 
     return labelTextContent.reverse().join("");
+  }
+
+  /**
+   * Check if the element's tag indicates that a transition to a new section of the
+   * page is occurring. If so, we should not use the element or its children in order
+   * to get autofill context for the previous element.
+   * @param {HTMLElement} currentElement
+   * @returns {boolean}
+   * @private
+   */
+  private isTransitionalElement(currentElement: HTMLElement): boolean {
+    if (!currentElement) {
+      return true;
+    }
+
+    const transitionalElementTagsSet = new Set([
+      "html",
+      "body",
+      "button",
+      "form",
+      "head",
+      "iframe",
+      "input",
+      "option",
+      "script",
+      "select",
+      "table",
+      "textarea",
+    ]);
+    return transitionalElementTagsSet.has(currentElement.tagName.toLowerCase());
+  }
+
+  private getTextContentFromElement(element: Node | HTMLElement): string {
+    if (element.nodeType === Node.TEXT_NODE) {
+      return this.trimAndRemoveNonPrintableText(element.nodeValue);
+    }
+
+    if (element.nodeType === Node.ELEMENT_NODE) {
+      return this.trimAndRemoveNonPrintableText(element.textContent);
+    }
+
+    return element instanceof HTMLElement
+      ? this.trimAndRemoveNonPrintableText(element.innerText)
+      : "";
+  }
+
+  private trimAndRemoveNonPrintableText(textContent: string): string {
+    return (textContent || "")
+      .replace(/[^\x20-\x7E]+|\s+/g, " ") // Strip out non-primitive characters and replace multiple spaces with a single space
+      .trim(); // Trim leading and trailing whitespace
+  }
+
+  private recursivelyGetTextContentFromElementPreviousSiblings(element: FormElement): string[] {
+    const textContentItems: string[] = [];
+    let currentElement: HTMLElement | null = element;
+    while (currentElement && currentElement.previousElementSibling) {
+      currentElement = currentElement.previousElementSibling as HTMLElement;
+
+      if (this.isTransitionalElement(currentElement)) {
+        return textContentItems;
+      }
+
+      const textContent = this.getTextContentFromElement(currentElement);
+      if (textContent) {
+        textContentItems.push(textContent);
+      }
+    }
+
+    if (!currentElement || textContentItems.length) {
+      return textContentItems;
+    }
+
+    currentElement = currentElement.parentElement;
+    let siblingElement = currentElement.previousElementSibling as HTMLElement | null;
+    while (
+      siblingElement &&
+      siblingElement.lastElementChild &&
+      !this.isTransitionalElement(siblingElement)
+    ) {
+      siblingElement = siblingElement.lastElementChild as HTMLElement;
+    }
+
+    if (this.isTransitionalElement(siblingElement)) {
+      return textContentItems;
+    }
+
+    const textContent = this.getTextContentFromElement(siblingElement);
+    if (textContent) {
+      textContentItems.push(textContent);
+      return textContentItems;
+    }
+
+    return this.recursivelyGetTextContentFromElementPreviousSiblings(siblingElement);
   }
 
   private buildPageDetailsFormData(forms: AutofillForm[]): Record<string, AutofillForm> {

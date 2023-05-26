@@ -11,7 +11,7 @@ describe("AutofillCollect", function () {
     autofillCollect = new AutofillCollect();
   });
 
-  describe("getElementLabelTag", function () {
+  describe("getAutofillFieldLabelTag", function () {
     beforeEach(function () {
       jest.spyOn(autofillCollect, "createLabelElementsTag");
       jest.spyOn(document, "querySelectorAll");
@@ -25,7 +25,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set(element.labels));
       expect(document.querySelectorAll).not.toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#country-id") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-id']");
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
@@ -55,7 +55,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("select") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).not.toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.name}"]`);
@@ -72,7 +72,7 @@ describe("AutofillCollect", function () {
       element.name = "country-name";
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(
         `label[for="${element.id}"], label[for="${element.name}"]`
@@ -89,7 +89,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = element.parentElement;
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
@@ -107,7 +107,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = document.querySelector("#label-element");
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
@@ -119,7 +119,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["getElementLabelTag"](element);
+      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(labelTag).toEqual("");
     });

@@ -73,6 +73,7 @@ export function isKnownTag(el: any) {
 export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
   let sib;
 
+  // For all previous siblings, add their text to the array
   for (steps || (steps = 0); el && el.previousSibling; ) {
     el = el.previousSibling;
 
@@ -83,20 +84,27 @@ export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
     checkNodeType(arr, el);
   }
 
+  // If no previous siblings were found and no textItems were found, check the parent element
   if (el && 0 === arr.length) {
+    // While no sibilings are found
     for (sib = null; !sib; ) {
       el = el.parentElement || el.parentNode;
 
+      // If no parent element is found, return
       if (!el) {
         return;
       }
 
+      // If the parent element has a previous sibling, and the previous sibling is not a known tag, and the sibling has at least one child, then set the sibling to the last child
       for (sib = el.previousSibling; sib && !isKnownTag(sib) && sib.lastChild; ) {
         sib = sib.lastChild;
       }
     }
 
     // base case and recurse
+    // If the sibling is a known tag, do not attempt to recurse.
+    // Otherwise, add the sibling to the array of text values
+    // If the array length is equal to zero, recurse with the sibling as the new element
     isKnownTag(sib) ||
       (checkNodeType(arr, sib), 0 === arr.length && shiftForLeftLabel(sib, arr, steps + 1));
   }
