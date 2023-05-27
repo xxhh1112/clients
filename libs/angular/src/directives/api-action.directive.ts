@@ -5,6 +5,8 @@ import { ValidationService } from "@bitwarden/common/abstractions/validation.ser
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 
 /**
+ * @deprecated Please use `bitSubmit` or `bitAction` instead.
+ *
  * Provides error handling, in particular for any error returned by the server in an api call.
  * Attach it to a <form> element and provide the name of the class property that will hold the api call promise.
  * e.g. <form [appApiAction]="this.formPromise">

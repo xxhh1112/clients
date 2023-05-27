@@ -3,8 +3,8 @@ import { Subject, takeUntil } from "rxjs";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 
-import { BitActionDirective } from "./bit-action.directive";
-import { BitSubmitDirective } from "./bit-submit.directive";
+import { ActionDirective } from "./bit-action.directive";
+import { SubmitDirective } from "./bit-submit.directive";
 
 /**
  * This directive has two purposes:
@@ -24,7 +24,7 @@ import { BitSubmitDirective } from "./bit-submit.directive";
 @Directive({
   selector: "button[bitFormButton]",
 })
-export class BitFormButtonDirective implements OnDestroy {
+export class FormButtonDirective implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   @Input() type: string;
@@ -32,8 +32,8 @@ export class BitFormButtonDirective implements OnDestroy {
 
   constructor(
     buttonComponent: ButtonLikeAbstraction,
-    @Optional() submitDirective?: BitSubmitDirective,
-    @Optional() actionDirective?: BitActionDirective
+    @Optional() submitDirective?: SubmitDirective,
+    @Optional() actionDirective?: ActionDirective
   ) {
     if (submitDirective && buttonComponent) {
       submitDirective.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {

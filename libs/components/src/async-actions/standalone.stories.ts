@@ -9,7 +9,7 @@ import { ValidationService } from "@bitwarden/common/abstractions/validation.ser
 import { ButtonModule } from "../button";
 import { IconButtonModule } from "../icon-button";
 
-import { BitActionDirective } from "./bit-action.directive";
+import { ActionDirective } from "./bit-action.directive";
 
 const template = `
   <button bitButton buttonType="primary" [bitAction]="action" class="tw-mr-2">
@@ -56,7 +56,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [
-        BitActionDirective,
+        ActionDirective,
         PromiseExampleComponent,
         ObservableExampleComponent,
         RejectedPromiseExampleComponent,

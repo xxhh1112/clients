@@ -1,0 +1,32 @@
+import { Meta, Story, Primary, Controls } from "@storybook/addon-docs";
+
+import * as stories from "./standalone.stories";
+
+<Meta title="Component Library/Async Actions" />
+
+# Async Actions
+
+The _Async Actions_ directives makes it easier for developers to reflect the progress of async
+actions in the UI when using buttons, while also providing robust and standardized error handling.
+These directives replaces the older `appApiAction` directive.
+
+There are primarily two categories of _Async Actions_,
+[in-form](?path=/docs/component-library-async-actions-in-forms--docs) for usage within a form, and
+[standaline](?path=/docs/component-library-async-actions-standalone--docs) when used outside forms
+on non form related actions.
+
+<div class="!tw-mb-2">
+  <Story of={stories.UsingPromise} />
+</div>
+
+## When to use?
+
+When building a button that triggers a long running task in the background eg. server API calls.
+
+## Why?
+
+To better visualize that the application is processing their request.
+
+## What does it do?
+
+It disables buttons and show a spinning animation.

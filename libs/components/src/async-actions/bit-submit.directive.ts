@@ -13,7 +13,7 @@ import { FunctionReturningAwaitable, functionToObservable } from "../utils/funct
 @Directive({
   selector: "[formGroup][bitSubmit]",
 })
-export class BitSubmitDirective implements OnInit, OnDestroy {
+export class SubmitDirective implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private _loading$ = new BehaviorSubject<boolean>(false);
   private _disabled$ = new BehaviorSubject<boolean>(false);

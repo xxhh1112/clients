@@ -13,9 +13,9 @@ import { IconButtonModule } from "../icon-button";
 import { InputModule } from "../input/input.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
-import { BitActionDirective } from "./bit-action.directive";
-import { BitSubmitDirective } from "./bit-submit.directive";
-import { BitFormButtonDirective } from "./form-button.directive";
+import { ActionDirective } from "./bit-action.directive";
+import { SubmitDirective } from "./bit-submit.directive";
+import { FormButtonDirective } from "./form-button.directive";
 
 const template = `
   <form [formGroup]="formObj" [bitSubmit]="submit">
@@ -109,11 +109,11 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [
-        BitSubmitDirective,
-        BitFormButtonDirective,
+        SubmitDirective,
+        FormButtonDirective,
         PromiseExampleComponent,
         ObservableExampleComponent,
-        BitActionDirective,
+        ActionDirective,
       ],
       imports: [
         FormsModule,
