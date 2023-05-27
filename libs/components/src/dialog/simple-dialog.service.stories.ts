@@ -10,8 +10,8 @@ import { SharedModule } from "../shared/shared.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { DialogService } from "./dialog.service";
-import { DialogCloseDirective } from "./directives/dialog-close.directive";
-import { DialogTitleContainerDirective } from "./directives/dialog-title-container.directive";
+import { DialogCloseDirective } from "./shared/dialog-close.directive";
+import { DialogTitleContainerDirective } from "./shared/dialog-title-container.directive";
 import { SimpleDialogComponent } from "./simple-dialog/simple-dialog.component";
 
 interface Animal {

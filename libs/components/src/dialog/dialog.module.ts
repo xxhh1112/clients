@@ -9,8 +9,8 @@ import { SharedModule } from "../shared";
 
 import { DialogComponent } from "./dialog/dialog.component";
 import { DialogService } from "./dialog.service";
-import { DialogCloseDirective } from "./directives/dialog-close.directive";
-import { DialogTitleContainerDirective } from "./directives/dialog-title-container.directive";
+import { DialogCloseDirective } from "./shared/dialog-close.directive";
+import { DialogTitleContainerDirective } from "./shared/dialog-title-container.directive";
 import { SimpleConfigurableDialogComponent } from "./simple-configurable-dialog/simple-configurable-dialog.component";
 import { IconDirective, SimpleDialogComponent } from "./simple-dialog/simple-dialog.component";
 

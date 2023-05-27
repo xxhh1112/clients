@@ -1,17 +1,17 @@
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { ButtonModule } from "../../button";
-import { DialogTitleContainerDirective } from "../directives/dialog-title-container.directive";
+import { DialogModule } from "../dialog.module";
 
-import { IconDirective, SimpleDialogComponent } from "./simple-dialog.component";
+import { SimpleDialogComponent } from "./simple-dialog.component";
 
 export default {
   title: "Component Library/Dialogs/Simple Dialog",
   component: SimpleDialogComponent,
   decorators: [
     moduleMetadata({
-      imports: [ButtonModule],
-      declarations: [IconDirective, DialogTitleContainerDirective],
+      imports: [DialogModule, ButtonModule],
+      declarations: [],
     }),
   ],
   parameters: {
