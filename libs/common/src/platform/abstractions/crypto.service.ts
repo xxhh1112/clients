@@ -25,6 +25,7 @@ export abstract class CryptoService {
   makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[SymmetricCryptoKey, EncString]>;
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   clearUserKeyFromStorage: (keySuffix: KeySuffixOptions) => Promise<void>;
+  setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;
   setMasterKey: (key: MasterKey, userId?: string) => Promise<void>;
   getMasterKey: (userId?: string) => Promise<MasterKey>;
   makeMasterKey: (

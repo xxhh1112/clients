@@ -181,6 +181,16 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
+   * Stores the master key encrypted user symmetric key
+   * @param userSymKeyMasterKey The master key encrypted user symmetric key to set
+   * @param userId The desired user
+   */
+  async setUserSymKeyMasterKey(userSymKeyMasterKey: string, userId?: string): Promise<void> {
+    // TODO: is this the best way to handle this from the identity token?
+    await this.stateService.setUserSymKeyMasterKey(userSymKeyMasterKey, { userId: userId });
+  }
+
+  /**
    * Sets the user's master key
    * @param key The user's master key to set
    * @param userId The desired user
