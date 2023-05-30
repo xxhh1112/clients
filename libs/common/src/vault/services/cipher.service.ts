@@ -325,9 +325,9 @@ export class CipherService implements CipherServiceAbstraction {
       return await this.getDecryptedCipherCache();
     }
 
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
-      throw new Error("No key.");
+      throw new Error("No user key found.");
     }
 
     const ciphers = await this.getAll();
@@ -636,7 +636,7 @@ export class CipherService implements CipherServiceAbstraction {
     const key = await this.cryptoService.getOrgKey(cipher.organizationId);
     const encFileName = await this.cryptoService.encrypt(filename, key);
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
+    const dataEncKey = await this.cryptoService.makeUserSymKey(key);
     const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
 
     const response = await this.cipherFileUploadService.upload(
@@ -949,7 +949,7 @@ export class CipherService implements CipherServiceAbstraction {
     const key = await this.cryptoService.getOrgKey(organizationId);
     const encFileName = await this.cryptoService.encrypt(attachmentView.fileName, key);
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
+    const dataEncKey = await this.cryptoService.makeUserSymKey(key);
     const encData = await this.cryptoService.encryptToBytes(decBuf, dataEncKey[0]);
 
     const fd = new FormData();
