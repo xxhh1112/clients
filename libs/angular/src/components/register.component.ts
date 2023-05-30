@@ -271,8 +271,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     const hint = this.formGroup.value.hint;
     const kdf = DEFAULT_KDF_TYPE;
     const kdfConfig = DEFAULT_KDF_CONFIG;
-    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfConfig);
-    const encKey = await this.cryptoService.makeEncKey(key);
+    const key = await this.cryptoService.makeMasterKey(masterPassword, email, kdf, kdfConfig);
+    const newUserSymKey = await this.cryptoService.makeUserSymKey(key);
     const hashedPassword = await this.cryptoService.hashPassword(masterPassword, key);
     const keys = await this.cryptoService.makeKeyPair(newUserSymKey[0]);
     const request = new RegisterRequest(
@@ -280,7 +280,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       name,
       hashedPassword,
       hint,
-      encKey[1].encryptedString,
+      newUserSymKey[1].encryptedString,
       this.referenceData,
       this.captchaToken,
       kdf,
