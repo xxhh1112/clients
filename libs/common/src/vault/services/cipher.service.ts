@@ -621,9 +621,10 @@ export class CipherService implements CipherServiceAbstraction {
   ): Promise<Cipher> {
     const key = await this.getKeyForCipherKeyDecryption(cipher);
 
-    const cipherEncKey = flagEnabled("enableCipherKeyEncryption")
-      ? new SymmetricCryptoKey(await this.encryptService.decryptToBytes(cipher.key, key))
-      : key;
+    const cipherEncKey =
+      flagEnabled("enableCipherKeyEncryption") && cipher.key != null
+        ? new SymmetricCryptoKey(await this.encryptService.decryptToBytes(cipher.key, key))
+        : key;
     const encFileName = await this.cryptoService.encrypt(filename, cipherEncKey);
 
     const dataEncKey = await this.cryptoService.makeEncKey(cipherEncKey);
