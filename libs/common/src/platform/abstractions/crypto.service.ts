@@ -34,6 +34,7 @@ export abstract class CryptoService {
     kdf: KdfType,
     KdfConfig: KdfConfig
   ) => Promise<MasterKey>;
+  clearMasterKey: (userId?: string) => Promise<void>;
   encryptUserSymKeyWithMasterKey: (
     masterKey: MasterKey,
     userSymKey?: UserSymKey

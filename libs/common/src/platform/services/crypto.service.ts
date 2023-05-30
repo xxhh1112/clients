@@ -66,7 +66,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    */
   async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
     await this.stateService.setUserSymKey(key, { userId: userId });
-    // TODO: Should we include additional keys here? When we set the memory key from storage,
+    // TODO(Jake): Should we include additional keys here? When we set the memory key from storage,
     // it will reset the keys in storage as well
     await this.storeAdditionalKeys(key, userId);
   }
@@ -181,7 +181,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param userId The desired user
    */
   async setUserSymKeyMasterKey(userSymKeyMasterKey: string, userId?: string): Promise<void> {
-    // TODO: is this the best way to handle this from the identity token?
+    // TODO(Jake): is this the best way to handle this from the identity token?
     await this.stateService.setUserSymKeyMasterKey(userSymKeyMasterKey, { userId: userId });
   }
 
@@ -220,6 +220,14 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
+   * Clears the user's master key
+   * @param userId The desired user
+   */
+  async clearMasterKey(userId?: string): Promise<void> {
+    await this.stateService.setMasterKey(null, { userId: userId });
+  }
+
+  /**
    * Encrypts the existing (or provided) user symmetric key with the
    * provided master key
    * @param masterKey The user's master key
@@ -246,7 +254,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       throw new Error("No Master Key found.");
     }
 
-    // TODO: Do we need to let this be passed in as well?
+    // TODO(Jake): Do we need to let this be passed in as well?
     const userSymKeyMasterKey = await this.stateService.getUserSymKeyMasterKey({ userId: userId });
     if (userSymKeyMasterKey == null) {
       throw new Error("No User Key found.");
@@ -266,7 +274,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       return null;
     }
 
-    // TODO: Do we want to set the user key here?
+    // TODO(Jake): Do we want to set the user key here?
     return new SymmetricCryptoKey(decUserKey) as UserSymKey;
   }
 
