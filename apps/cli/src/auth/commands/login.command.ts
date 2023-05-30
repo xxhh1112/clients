@@ -475,8 +475,8 @@ export class LoginCommand {
 
   /**
    * Collect new master password and hint from the CLI. The collected password
-   * is validated against any applicable master password policies and a new encryption
-   * key is generated
+   * is validated against any applicable master password policies, a new master
+   * key is generated, and we use it to re-encrypt the user symmetric key
    * @param prompt - Message that is displayed during the initial prompt
    * @param error
    */
@@ -576,7 +576,10 @@ export class LoginCommand {
     const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newMasterKey);
 
     // Grab user's symmetric key
-    const userSymKey = await this.cryptoService.getUserKey();
+    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
+    if (!userSymKey) {
+      throw new Error("User key not found.");
+    }
 
     // Re-encrypt user's symmetric key with new master key
     const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
