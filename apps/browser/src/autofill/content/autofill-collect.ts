@@ -136,19 +136,8 @@ class AutofillCollect {
       return this.createLabelElementsTag(labelElementsSet);
     }
 
-    let labelQuerySelectors = element.id ? `label[for="${element.id}"]` : "";
-    if (element.name) {
-      const forElementNameSelector = `label[for="${element.name}"]`;
-      labelQuerySelectors = labelQuerySelectors
-        ? `${labelQuerySelectors}, ${forElementNameSelector}`
-        : forElementNameSelector;
-    }
-
-    if (labelQuerySelectors) {
-      const labelElements: NodeListOf<HTMLLabelElement> =
-        document.querySelectorAll(labelQuerySelectors);
-      labelElements.forEach((labelElement) => labelElementsSet.add(labelElement));
-    }
+    const labelElements: NodeListOf<HTMLLabelElement> | null = this.queryElementLabels(element);
+    labelElements?.forEach((labelElement) => labelElementsSet.add(labelElement));
 
     let currentElement: HTMLElement | null = element;
     while (currentElement && currentElement !== document.documentElement) {
@@ -168,6 +157,22 @@ class AutofillCollect {
     }
 
     return this.createLabelElementsTag(labelElementsSet);
+  }
+
+  private queryElementLabels(element: FillableControl): NodeListOf<HTMLLabelElement> | null {
+    let labelQuerySelectors = element.id ? `label[for="${element.id}"]` : "";
+    if (element.name) {
+      const forElementNameSelector = `label[for="${element.name}"]`;
+      labelQuerySelectors = labelQuerySelectors
+        ? `${labelQuerySelectors}, ${forElementNameSelector}`
+        : forElementNameSelector;
+    }
+
+    if (!labelQuerySelectors) {
+      return null;
+    }
+
+    return document.querySelectorAll(labelQuerySelectors);
   }
 
   /**
