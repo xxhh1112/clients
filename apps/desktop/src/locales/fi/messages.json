@@ -238,6 +238,9 @@
   "ms": {
     "message": "Nti"
   },
+  "mx": {
+    "message": "Neutraali"
+  },
   "dr": {
     "message": "Tri"
   },
@@ -539,7 +542,14 @@
     "message": "Pääsalasanan uudelleensyöttö vaaditaan."
   },
   "masterPasswordMinlength": {
-    "message": "Pääsalasanan tulee sisältää ainakin 8 merkkiä."
+    "message": "Pääsalasanan tulee sisältää vähintään $VALUE$ merkkiä.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Pääsalasanan vahvistus ei täsmää."
@@ -760,6 +770,9 @@
   "contactUs": {
     "message": "Ota yhteyttä"
   },
+  "helpAndFeedback": {
+    "message": "Tuki ja palaute"
+  },
   "getHelp": {
     "message": "Hanki apua"
   },
@@ -827,7 +840,7 @@
     "message": "Virheellinen pääsalasana"
   },
   "twoStepLoginConfirmation": {
-    "message": "Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvista. Haluatko avata sivuston nyt?"
+    "message": "Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?"
   },
   "twoStepLogin": {
     "message": "Kaksivaiheinen kirjautuminen"
@@ -1074,7 +1087,7 @@
     "message": "Kaksivaiheisen kirjautumisen (2FA) TOTP-todennuskoodien generaattori holvisi kirjautumistiedoille."
   },
   "premiumSignUpSupport": {
-    "message": "Ensisijainen asiakastuki."
+    "message": "Ensisijainen asiakaspalvelu."
   },
   "premiumSignUpFuture": {
     "message": "Kaikki tulossa olevat Premium-toiminnot. Lisää tulossa pian!"
@@ -1271,7 +1284,7 @@
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
-    "message": "Salasana päivitettiin",
+    "message": "Salasana vaihdettiin",
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Avaa Windows Hellolla"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Windows Hello -lisäasetukset"
+  },
   "windowsHelloConsentMessage": {
     "message": "Vahvista Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Avaa Touch ID:llä"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Touch ID -lisäasetukset"
   },
   "touchIdConsentMessage": {
     "message": "avaa holvisi"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Pyydä Touch ID -todennusta käynnistettäessä"
+  },
+  "requirePasswordOnStart": {
+    "message": "Pyydä salasana tai PIN-koodi sovelluksen käynnistyessä"
+  },
+  "recommendedForSecurity": {
+    "message": "Suositeltavaa parempaa suojausta varten."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lukitse pääsalasanalla uudelleenkäynnistyksen yhteydessä"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Kirjautuaksesi sisään käyttäen kertakirjautumista (SSO), ole hyvä ja aseta holvillesi pääsalasana."
+  },
+  "currentMasterPass": {
+    "message": "Nykyinen pääsalasana"
   },
   "newMasterPass": {
     "message": "Uusi pääsalasana"
@@ -1822,13 +1850,16 @@
     "message": "Toiminto on suojattu. Jatka vahvistamalla henkilöllisyytesi syöttämällä pääsalasanasi uudelleen."
   },
   "updatedMasterPassword": {
-    "message": "Pääsalasana päivitettiin"
+    "message": "Pääsalasanasi on vaihdettu"
   },
   "updateMasterPassword": {
-    "message": "Vaihda pääsalasana"
+    "message": "Päivitä pääsalasana"
   },
   "updateMasterPasswordWarning": {
-    "message": "Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi. Käyttääksesi holvia, on sinun päivitettävä se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
+    "message": "Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi ja käyttääksesi holvia sinun on päivitettävä se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
+  },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
   },
   "hours": {
     "message": "Tuntia"
@@ -1837,7 +1868,7 @@
     "message": "Minuuttia"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisaatiokäytännöt vaikuttavat holvin aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) ja $MINUTES$ minuutti(a)",
+    "message": "Organisaatiokäytännöt ovat määrittäneet holvisi aikakatkaisun enimmäisajaksi $HOURS$ tunti(a) $MINUTES$ minuutti(a).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisaatiokäytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on $HOURS$ tunti(a) $MINUTES$ minuutti(a). Holvillesi määritetty aikakatkaisutoiminto on $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisaatiokäytännöt ovat määrittäneet holville aikakatkaisutoiminnon $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Haluatko varmasti käyttää asetusta \"Ei koskaan\"? Se tallentaa holvisi salausavaimen laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Holvi"
   },
@@ -2056,10 +2110,160 @@
     }
   },
   "logInWithAnotherDevice": {
-    "message": "Kirjaudu toisella laitteella"
+    "message": "Laitteella kirjautuminen"
+  },
+  "logInInitiated": {
+    "message": "Kirjautuminen aloitettu"
+  },
+  "notificationSentDevice": {
+    "message": "Laitteellesi on lähetetty ilmoitus."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Varmista, että holvisi on avattu ja tunnistelauseke täsmää toisella laitteella."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Tunnistelauseke"
+  },
+  "needAnotherOption": {
+    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-mobiilisovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Näytä kaikki kirjautumisvaihtoehdot"
+  },
+  "resendNotification": {
+    "message": "Lähetä ilmoitus uudelleen"
   },
   "toggleCharacterCount": {
-    "message": "Kytke merkkimäärä",
+    "message": "Näytä/piilota merkkikohtainen numerointi",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Yritätkö kirjautua sisään?"
+  },
+  "logInAttemptBy": {
+    "message": "Kirjautumisyritys tunnuksella $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Laitteen tyyppi"
+  },
+  "ipAddress": {
+    "message": "IP-osoite"
+  },
+  "time": {
+    "message": "Aika"
+  },
+  "confirmLogIn": {
+    "message": "Vahvista kirjautuminen"
+  },
+  "denyLogIn": {
+    "message": "Estä kirjautuminen"
+  },
+  "approveLoginRequests": {
+    "message": "Hyväksy kirjautumispyyntöjä"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Kirjautuminen vahvistettu tunnuksella $EMAIL$ alustalla $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Estit toisen laitteen lähettämän kirjautumispyynnön. Jos kuitenkin tunnistit kirjautumisyrityksen, suorita kirjautuminen uudelleen."
+  },
+  "justNow": {
+    "message": "Juuri nyt"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Pyydetty $MINUTES$ minuuttia sitten",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Kirjautumispyyntö on jo erääntynyt."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Pyyntö ei ole enää voimassa."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Hyväksy muiden laitteiden kirjautumispyynnöt tältä laitteelta."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Vahvista kirjautuminen tunnuksella $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Kirjautumista pyydetty"
+  },
+  "exposedMasterPassword": {
+    "message": "Paljastunut pääsalasana"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Salasana löytyi tietovuodosta. Sinun tulisi suojata tilisi ainutlaatuisella salasanalla. Haluatko varmasti käyttää paljastunutta salasanaa?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Heikko ja paljastunut pääsalasana"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Havaittiin heikko ja tietovuodosta löytynyt salasana. Sinun tulisi suojata tilisi vahvalla ja ainutlaatuisella salasanalla. Haluatko varmasti käyttää tätä salasanaa?"
+  },
+  "checkForBreaches": {
+    "message": "Tarkasta esiintyykö salasanaa tunnetuissa tietovuodoissa"
+  },
+  "important": {
+    "message": "Tärkeää:"
+  },
+  "masterPasswordHint": {
+    "message": "Pääsalasanasi palauttaminen ei ole mahdollista, jos unohdat sen!"
+  },
+  "characterMinimum": {
+    "message": "Vähintään $LENGTH$ merkkiä",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden suosittelee biometrisen kirjautumisen asetustesi muuttamista niin, että pääsalasana (tai PIN-koodi) on syötettävä ensimmäisellä avauskerralla. Haluatko muuttaa asetuksia nyt?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Suositeltava asetusmuutos"
+  },
+  "region": {
+    "message": "Alue"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Itse ylläpidetty"
   }
 }

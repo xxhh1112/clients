@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Помощь и обратная связь"
   },
+  "helpCenter": {
+    "message": "Справочный центр Bitwarden"
+  },
+  "communityForums": {
+    "message": "Посетите форумы сообщества Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Свяжитесь со службой поддержки Bitwarden"
+  },
   "sync": {
     "message": "Синхронизация"
   },
@@ -309,7 +318,7 @@
     "message": "Папка"
   },
   "deleteItem": {
-    "message": "Удаление элемента"
+    "message": "Удалить элемент"
   },
   "viewItem": {
     "message": "Просмотр элемента"
@@ -430,7 +439,14 @@
     "message": "Необходимо повторно ввести мастер-пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Мастер-пароль должен содержать не менее 8 символов."
+    "message": "Мастер-пароль должен содержать не менее $VALUE$ символов.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Мастер-пароли не совпадают."
@@ -960,7 +976,10 @@
     "message": "Если обнаружена форма входа, автозаполнение выполняется при загрузке веб-страницы."
   },
   "experimentalFeature": {
-    "message": "Это экспериментальная функция. Используйте на свой страх и риск."
+    "message": "Взломанные или недоверенные сайты могут внедрить вредоносный код во время автозаполнения при загрузке страницы."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Узнать больше об автозаполнении"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Настройка автозаполнения по умолчанию для логинов"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Тов."
+  },
+  "mx": {
+    "message": "Микстер"
   },
   "firstName": {
     "message": "Имя"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Элемент заполнен "
   },
+  "insecurePageWarning": {
+    "message": "Предупреждение: это незащищенная HTTP-страница, и любая информация, которую вы отправляете, потенциально может быть просмотрена и изменена кем угодно. Этот логин изначально был сохранен на защищенной (HTTPS) странице."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Вы по-прежнему хотите заполнить этот логин?"
+  },
+  "autofillIframeWarning": {
+    "message": "Форма размещена в домене, отличном от URI вашего сохраненного логина. Выберите OK для автозаполнения в любом случае или Отмена для остановки действия."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Чтобы больше не получать это предупреждение, сохраните этот URI, $HOSTNAME$, в соответствующем логине.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Задать мастер-пароль"
+  },
+  "currentMasterPass": {
+    "message": "Текущий мастер-пароль"
+  },
+  "newMasterPass": {
+    "message": "Новый мастер-пароль"
+  },
+  "confirmNewMasterPass": {
+    "message": "Подтвердите новый мастер-пароль"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Согласно одной или нескольким политикам организации необходимо, чтобы ваш мастер-пароль отвечал следующим требованиям:"
@@ -1805,7 +1854,7 @@
     "message": "Подтверждение мастер-пароля"
   },
   "passwordConfirmationDesc": {
-    "message": "Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность."
+    "message": "Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности."
   },
   "emailVerificationRequired": {
     "message": "Требуется подтверждение электронной почты"
@@ -1821,6 +1870,9 @@
   },
   "updateMasterPasswordWarning": {
     "message": "Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить его сейчас. В результате текущий сеанс будет завершен, потребуется повторный вход. Сеансы на других устройствах могут оставаться активными в течение одного часа."
+  },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматическое развертывание"
@@ -1841,7 +1893,7 @@
     "message": "Мин."
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Политики вашей организации влияют на тайм-аут хранилища. Максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин.",
+    "message": "В соответствии с политиками вашей организации максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Политики вашей организации влияют на тайм-аут хранилища. Максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин. Для вашего хранилища задан тайм-аут $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Политики вашей организации установили тайм-аут хранилища на $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1981,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Доступ к элементам в отключенных организациях невозможен. Обратитесь за помощью к владельцу организации."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Вход в $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "Запомнить email"
+  },
+  "loginWithDevice": {
+    "message": "Войти с помощью устройства"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Вход с устройства должен быть настроен в настройках мобильного приложения Bitwarden. Нужен другой вариант?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза отпечатка"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве."
+  },
+  "resendNotification": {
+    "message": "Отправить уведомление повторно"
+  },
+  "viewAllLoginOptions": {
+    "message": "Посмотреть все варианты авторизации"
+  },
+  "notificationSentDevice": {
+    "message": "На ваше устройство отправлено уведомление."
+  },
+  "logInInitiated": {
+    "message": "Вход инициирован"
+  },
+  "exposedMasterPassword": {
+    "message": "Мастер-пароль скомпрометирован"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабый и скомпрометированный мастер-пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Проверьте известные случаи утечки данных для этого пароля"
+  },
+  "important": {
+    "message": "Важно:"
+  },
+  "masterPasswordHint": {
+    "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
+  },
+  "characterMinimum": {
+    "message": "Минимум символов: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Автозаполнение при загрузке страницы было активировано политиками вашей организации."
+  },
+  "howToAutofill": {
+    "message": "Как использовать автозаполнение"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Выберите элемент на этой странице или используйте сочетание клавиш: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Выберите элемент на этой странице или задайте сочетание клавиш в настройках."
+  },
+  "gotIt": {
+    "message": "Понятно"
+  },
+  "autofillSettings": {
+    "message": "Настройки автозаполнения"
+  },
+  "autofillShortcut": {
+    "message": "Сочетание клавиш для автозаполнения"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Сочетание клавиш для автозаполнения не установлено. Установите его в настройках браузера."
+  },
+  "autofillShortcutText": {
+    "message": "Сочетание клавиш для автозаполнения: $COMMAND$. Измените его в настройках браузера.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Сочетание клавиш для автозаполнения по умолчанию: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Регион"
+  },
+  "opensInANewWindow": {
+    "message": "Откроется в новом окне"
+  },
+  "eu": {
+    "message": "Европа",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
   }
 }

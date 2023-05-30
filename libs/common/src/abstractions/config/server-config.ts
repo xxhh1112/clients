@@ -1,3 +1,5 @@
+import { Jsonify } from "type-fest";
+
 import {
   ServerConfigData,
   ThirdPartyServerConfigData,
@@ -13,6 +15,7 @@ export class ServerConfig {
   server?: ThirdPartyServerConfigData;
   environment?: EnvironmentServerConfigData;
   utcDate: Date;
+  featureStates: { [key: string]: string } = {};
 
   constructor(serverConfigData: ServerConfigData) {
     this.version = serverConfigData.version;
@@ -20,6 +23,7 @@ export class ServerConfig {
     this.server = serverConfigData.server;
     this.utcDate = new Date(serverConfigData.utcDate);
     this.environment = serverConfigData.environment;
+    this.featureStates = serverConfigData.featureStates;
 
     if (this.server?.name == null && this.server?.url == null) {
       this.server = null;
@@ -36,5 +40,13 @@ export class ServerConfig {
 
   expiresSoon(): boolean {
     return this.getAgeInMilliseconds() >= eighteenHoursInMilliseconds;
+  }
+
+  static fromJSON(obj: Jsonify<ServerConfig>): ServerConfig {
+    if (obj == null) {
+      return null;
+    }
+
+    return new ServerConfig(obj);
   }
 }

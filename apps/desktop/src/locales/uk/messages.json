@@ -6,7 +6,7 @@
     "message": "Фільтри"
   },
   "allItems": {
-    "message": "Всі елементи"
+    "message": "Усі записи"
   },
   "favorites": {
     "message": "Обране"
@@ -238,6 +238,9 @@
   "ms": {
     "message": "Міс"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Доктор"
   },
@@ -260,7 +263,7 @@
     "message": "Тип"
   },
   "firstName": {
-    "message": "Ім’я"
+    "message": "Ім'я"
   },
   "middleName": {
     "message": "По батькові"
@@ -539,7 +542,14 @@
     "message": "Необхідно повторно ввести головний пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Довжина головного пароля має бути принаймні 8 символів."
+    "message": "Довжина головного пароля має бути принаймні $VALUE$ символів.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Підтвердження головного пароля не збігається."
@@ -737,7 +747,7 @@
     "message": "Новий вхід"
   },
   "addNewItem": {
-    "message": "Новий елемент"
+    "message": "Новий запис"
   },
   "addNewFolder": {
     "message": "Нова тека"
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Зв'язатися з нами"
+  },
+  "helpAndFeedback": {
+    "message": "Допомога та зворотний зв'язок"
   },
   "getHelp": {
     "message": "Отримати допомогу"
@@ -937,7 +950,7 @@
     "message": "Запускати в згорнутому вигляді"
   },
   "startToTrayDesc": {
-    "message": "При першому запуску програми відображатиметься лише піктограма в системному лотку."
+    "message": "Під час першого запуску програми показувати лише піктограму в системному лотку."
   },
   "startToMenuBar": {
     "message": "Запускати в панелі завдань"
@@ -1331,7 +1344,7 @@
     "message": "Ключі шифрування унікальні для кожного облікового запису користувача Bitwarden, тому ви не можете імпортувати зашифрований експорт до іншого облікового запису."
   },
   "noOrganizationsList": {
-    "message": "Ви не входите до жодної організації. Організації дозволяють безпечно обмінюватися елементами з іншими користувачами."
+    "message": "Ви не входите до жодної організації. Організації дозволяють безпечно обмінюватися записами з іншими користувачами."
   },
   "noCollectionsInList": {
     "message": "Немає збірок."
@@ -1340,7 +1353,7 @@
     "message": "Власник"
   },
   "whoOwnsThisItem": {
-    "message": "Хто є власником цього елемента?"
+    "message": "Хто є власником цього запису?"
   },
   "strong": {
     "message": "Надійний",
@@ -1379,20 +1392,32 @@
   "unlockWithWindowsHello": {
     "message": "Розблокувати з Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Додаткові налаштування Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Перевірити на Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Розблокувати з Touch ID"
   },
+  "additionalTouchIdSettings": {
+    "message": "Додаткові налаштування Touch ID"
+  },
   "touchIdConsentMessage": {
     "message": "розблокувати сховище"
   },
   "autoPromptWindowsHello": {
-    "message": "Ініціювати Windows Hello під час запуску"
+    "message": "Запитувати Windows Hello під час запуску"
   },
   "autoPromptTouchId": {
-    "message": "Ініціювати Touch ID під час запуску"
+    "message": "Запитувати Touch ID під час запуску"
+  },
+  "requirePasswordOnStart": {
+    "message": "Вимагати пароль чи PIN під час запуску"
+  },
+  "recommendedForSecurity": {
+    "message": "Рекомендовано для безпеки."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Блокувати головним паролем при перезапуску"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Щоб завершити налаштування входу з SSO, встановіть головний пароль для доступу і захисту сховища."
+  },
+  "currentMasterPass": {
+    "message": "Поточний головний пароль"
   },
   "newMasterPass": {
     "message": "Новий головний пароль"
@@ -1662,7 +1690,7 @@
     "message": "Текст"
   },
   "deletionDate": {
-    "message": "Дата видалення"
+    "message": "Термін дії"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -1752,7 +1780,7 @@
     "message": "1 день"
   },
   "custom": {
-    "message": "Спеціальний"
+    "message": "Власний"
   },
   "deleteSendConfirmation": {
     "message": "Ви дійсно хочете видалити це відправлення?",
@@ -1789,7 +1817,7 @@
     "message": "Ви дійсно хочете вилучити пароль?"
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів"
+    "message": "Досягнуто максимальної кількості доступів"
   },
   "expired": {
     "message": "Термін дії завершився"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, вам необхідно оновити його зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
+  },
   "hours": {
     "message": "Годин"
   },
@@ -1837,7 +1868,7 @@
     "message": "Хвилин"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин",
+    "message": "Політикою вашої організації встановлено максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин. Для часу очікування вашого сховища встановлена дія $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Політикою вашої організації встановлено дію для часу очікування сховища $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Ви впевнені, що ніколи не хочете блокувати? Встановивши параметр блокування \"Ніколи\", ключ шифрування сховища зберігатиметься на вашому пристрої. Користуючись цим параметром, ви маєте бути впевнені в тому, що ваш пристрій надійно захищений."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Сховище"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Увійти з іншого пристрою"
   },
+  "logInInitiated": {
+    "message": "Ініційовано вхід"
+  },
+  "notificationSentDevice": {
+    "message": "Сповіщення було надіслано на ваш пристрій."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Переконайтеся, що ваше сховище розблоковане, а фраза відбитка збігається з іншим пристроєм."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза відбитка"
+  },
+  "needAnotherOption": {
+    "message": "Потрібно увімкнути схвалення запитів на вхід у налаштуваннях програми Bitwarden. Потрібен інший варіант?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Переглянути всі варіанти входу"
+  },
+  "resendNotification": {
+    "message": "Надіслати сповіщення ще раз"
+  },
   "toggleCharacterCount": {
     "message": "Перемкнути лічильник символів",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Ви намагаєтесь увійти?"
+  },
+  "logInAttemptBy": {
+    "message": "Спроба входу з $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Тип пристрою"
+  },
+  "ipAddress": {
+    "message": "IP-адреса"
+  },
+  "time": {
+    "message": "Час"
+  },
+  "confirmLogIn": {
+    "message": "Підтвердити вхід"
+  },
+  "denyLogIn": {
+    "message": "Заборонити вхід"
+  },
+  "approveLoginRequests": {
+    "message": "Схвалювати запити на вхід"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Підтверджено вхід для $EMAIL$ на $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Ви відхилили спробу входу з іншого пристрою. Якщо це були дійсно ви, спробуйте увійти з пристроєм знову."
+  },
+  "justNow": {
+    "message": "Щойно"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Запитано $MINUTES$ хвилин тому",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Термін дії запиту на вхід завершився."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Цей запит більше недійсний."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Використовувати цей пристрій для схвалення запитів на вхід, виконаних з інших пристроїв."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Підтвердити спробу входу для $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Виконано запит входу"
+  },
+  "exposedMasterPassword": {
+    "message": "Головний пароль викрито"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знайдено у витоку даних. Використовуйте унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати викритий пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабкий і викритий головний пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Виявлено слабкий пароль, який знайдено у витоку даних. Використовуйте надійний та унікальний пароль для захисту свого облікового запису. Ви дійсно хочете використати цей пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Перевірити відомі витоки даних для цього пароля"
+  },
+  "important": {
+    "message": "Важливо:"
+  },
+  "masterPasswordHint": {
+    "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
+  },
+  "characterMinimum": {
+    "message": "Мінімум $LENGTH$ символів",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden рекомендує оновити ваші біометричні налаштування, щоб вимагати головний пароль (або PIN) під час першого розблокування. Чи бажаєте оновити налаштування зараз?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Оновлення рекомендованих налаштувань"
+  },
+  "region": {
+    "message": "Регіон"
+  },
+  "eu": {
+    "message": "ЄС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Власне розміщення"
   }
 }

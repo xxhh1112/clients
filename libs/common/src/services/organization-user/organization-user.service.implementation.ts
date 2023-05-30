@@ -1,6 +1,7 @@
 import { ApiService } from "../../abstractions/api.service";
 import { OrganizationUserService } from "../../abstractions/organization-user/organization-user.service";
 import {
+  OrganizationUserAcceptInitRequest,
   OrganizationUserAcceptRequest,
   OrganizationUserBulkConfirmRequest,
   OrganizationUserConfirmRequest,
@@ -14,7 +15,7 @@ import {
   OrganizationUserBulkPublicKeyResponse,
   OrganizationUserBulkResponse,
   OrganizationUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
+  OrganizationUserResetPasswordDetailsResponse,
   OrganizationUserUserDetailsResponse,
 } from "../../abstractions/organization-user/responses";
 import { ListResponse } from "../../models/response/list.response";
@@ -26,11 +27,20 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
 
   async getOrganizationUser(
     organizationId: string,
-    id: string
+    id: string,
+    options?: {
+      includeGroups?: boolean;
+    }
   ): Promise<OrganizationUserDetailsResponse> {
+    const params = new URLSearchParams();
+
+    if (options?.includeGroups) {
+      params.set("includeGroups", "true");
+    }
+
     const r = await this.apiService.send(
       "GET",
-      "/organizations/" + organizationId + "/users/" + id,
+      `/organizations/${organizationId}/users/${id}?${params.toString()}`,
       null,
       true,
       true
@@ -50,11 +60,24 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
   }
 
   async getAllUsers(
-    organizationId: string
+    organizationId: string,
+    options?: {
+      includeCollections?: boolean;
+      includeGroups?: boolean;
+    }
   ): Promise<ListResponse<OrganizationUserUserDetailsResponse>> {
+    const params = new URLSearchParams();
+
+    if (options?.includeCollections) {
+      params.set("includeCollections", "true");
+    }
+    if (options?.includeGroups) {
+      params.set("includeGroups", "true");
+    }
+
     const r = await this.apiService.send(
       "GET",
-      "/organizations/" + organizationId + "/users",
+      `/organizations/${organizationId}/users?${params.toString()}`,
       null,
       true,
       true
@@ -65,7 +88,7 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
   async getOrganizationUserResetPasswordDetails(
     organizationId: string,
     id: string
-  ): Promise<OrganizationUserResetPasswordDetailsReponse> {
+  ): Promise<OrganizationUserResetPasswordDetailsResponse> {
     const r = await this.apiService.send(
       "GET",
       "/organizations/" + organizationId + "/users/" + id + "/reset-password-details",
@@ -73,7 +96,7 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
       true,
       true
     );
-    return new OrganizationUserResetPasswordDetailsReponse(r);
+    return new OrganizationUserResetPasswordDetailsResponse(r);
   }
 
   postOrganizationUserInvite(
@@ -111,6 +134,20 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
       true
     );
     return new ListResponse(r, OrganizationUserBulkResponse);
+  }
+
+  postOrganizationUserAcceptInit(
+    organizationId: string,
+    id: string,
+    request: OrganizationUserAcceptInitRequest
+  ): Promise<void> {
+    return this.apiService.send(
+      "POST",
+      "/organizations/" + organizationId + "/users/" + id + "/accept-init",
+      request,
+      true,
+      false
+    );
   }
 
   postOrganizationUserAccept(

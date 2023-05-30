@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjälp & Feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hjälpcenter"
+  },
+  "communityForums": {
+    "message": "Utforska Bitwardens communityforum"
+  },
+  "contactSupport": {
+    "message": "Kontakta Bitwarden support"
+  },
   "sync": {
     "message": "Synkronisera"
   },
@@ -430,7 +439,14 @@
     "message": "Huvudlösenord måste anges igen."
   },
   "masterPasswordMinlength": {
-    "message": "Huvudlösenordet måste vara minst 8 tecken långt."
+    "message": "Huvudlösenordet måste vara minst $VALUE$ tecken långt.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Bekräftelsen för huvudlösenordet stämde ej."
@@ -960,7 +976,10 @@
     "message": "Utför automatisk ifyllnad om ett inloggningsformulär upptäcks när webbsidan laddas."
   },
   "experimentalFeature": {
-    "message": "Detta är för närvarande en experimentell funktion. Använd på egen risk."
+    "message": "Komprometterade eller ej betrodda webbplatser kan utnyttja automatisk ifyllnad vid sidladdning."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Läs mer om automatisk ifyllnad"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardinställning för autofyll för inloggningsobjekt"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Vederbörande"
   },
   "firstName": {
     "message": "Förnamn"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Fyllde i objektet automatiskt"
   },
+  "insecurePageWarning": {
+    "message": "Varning: Detta är en icke säkrad HTTP-sida, och all information du skickar kan potentiellt ses och ändras av andra. Denna inloggning sparades ursprungligen på en säker (HTTPS) sida."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Vill du fortfarande fylla i denna inloggning?"
+  },
+  "autofillIframeWarning": {
+    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+  },
+  "autofillIframeWarningTip": {
+    "message": "För att förhindra denna varning i framtiden, spara denna URI, $HOSTNAME$, till ditt Bitwarden inloggningsobjekt för denna webbplats.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ange huvudlösenord"
+  },
+  "currentMasterPass": {
+    "message": "Nuvarande huvudlösenord"
+  },
+  "newMasterPass": {
+    "message": "Nytt huvudlösenord"
+  },
+  "confirmNewMasterPass": {
+    "message": "Bekräfta nytt huvudlösenord"
   },
   "masterPasswordPolicyInEffect": {
     "message": "En eller flera organisationspolicyer kräver att ditt huvudlösenord uppfyller följande krav:"
@@ -1822,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera det nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatiskt deltagande"
   },
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1981,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Objekt i inaktiverade organisationer är inte åtkomliga. Kontakta organisationens ägare för att få hjälp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Loggar in på $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "Kom ihåg e-postadress"
+  },
+  "loginWithDevice": {
+    "message": "Logga in med enhet"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "\"Logga in med enhet\" måste ställas in i inställningarna i Bitwardens app. Behöver du ett annat alternativ?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrycksfras"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten."
+  },
+  "resendNotification": {
+    "message": "Skicka avisering igen"
+  },
+  "viewAllLoginOptions": {
+    "message": "Visa alla inloggningsalternativ"
+  },
+  "notificationSentDevice": {
+    "message": "En avisering har skickats till din enhet."
+  },
+  "logInInitiated": {
+    "message": "Inloggning påbörjad"
+  },
+  "exposedMasterPassword": {
+    "message": "Huvudlösenordet har exponerats"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Huvudlösenordet är svagt och har exponerats"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?"
+  },
+  "checkForBreaches": {
+    "message": "Kontrollera kända dataintrång för detta lösenord"
+  },
+  "important": {
+    "message": "Viktigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Ditt huvudlösenord kan inte återställas om du glömmer det!"
+  },
+  "characterMinimum": {
+    "message": "Minst $LENGTH$ tecken",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Dina organisationspolicyer har aktiverat automatisk ifyllnad vid sidladdning."
+  },
+  "howToAutofill": {
+    "message": "Hur du fyller i automatiskt"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Välj ett objekt från denna sida eller använd genvägen: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Välj ett objekt från den här sidan eller ange en genväg i inställningarna."
+  },
+  "gotIt": {
+    "message": "Förstått"
+  },
+  "autofillSettings": {
+    "message": "Inställningar för automatisk ifyllnad"
+  },
+  "autofillShortcut": {
+    "message": "Tangentbordsgenväg för automatisk ifyllnad"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Genvägen för automatisk ifyllnad är inte satt. Ändra detta i webbläsarens inställningar."
+  },
+  "autofillShortcutText": {
+    "message": "Genvägen för automatisk ifyllnad är: $COMMAND$. Ändra detta i webbläsarens inställningar.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standardgenväg för automatisk ifyllnad: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Öppnas i ett nytt fönster"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }

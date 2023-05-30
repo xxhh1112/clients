@@ -238,6 +238,9 @@
   "ms": {
     "message": "gđica."
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "dr."
   },
@@ -539,7 +542,14 @@
     "message": "Potreban je ponovni unos glavne lozinke."
   },
   "masterPasswordMinlength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+    "message": "Glavna lozinka mora imati najmanje $VALUE$ znakova.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontaktiraj nas"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Potraži pomoć"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Otključaj koristeći Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Additional Windows Hello settings"
+  },
   "windowsHelloConsentMessage": {
     "message": "Otključaj trezor."
   },
   "unlockWithTouchId": {
     "message": "Otključaj koristeći Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Additional Touch ID settings"
   },
   "touchIdConsentMessage": {
     "message": "Otključaj trezor"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Zahtijevaj Touch ID pri pokretanju"
+  },
+  "requirePasswordOnStart": {
+    "message": "Require password or PIN on app start"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommended for security."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Zaključaj glavnom lozinkom kod svakog pokretanja"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Za dovršetak jedinstvene prijave na razini tvrtke (SSO), postavi glavnu lozinku za pristup i zaštitu tvog trezora."
+  },
+  "currentMasterPass": {
+    "message": "Current master password"
   },
   "newMasterPass": {
     "message": "Nova glavna lozinka"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "hours": {
     "message": "sat(i)"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Sigurno želiš koristiti opciju „Nikada”? Postavljanje opcija zaključavanja na „Nikada” pohranjuje šifru tvojeg trezora na tvom uređaju. Ako koristiš ovu opciju, trebalo bi osigurati da je uređaj pravilno zaštićen."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Trezor"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Prijava drugim uređajem"
   },
+  "logInInitiated": {
+    "message": "Pokrenuta prijava"
+  },
+  "notificationSentDevice": {
+    "message": "Obavijest je poslana na tvoj uređaj."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Provjeri je li trezor otključan i slaže li se jedinstvena fraza s drugim uređajem."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Jedinstvena fraza"
+  },
+  "needAnotherOption": {
+    "message": "Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije. Trebaš drugu opciju?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Pogledaj sve mogućnosti prijave"
+  },
+  "resendNotification": {
+    "message": "Ponovno pošalji obavijest"
+  },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Prikaži/Sakrij broj znakova",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Pokušavaš li se prijaviti?"
+  },
+  "logInAttemptBy": {
+    "message": "$EMAIL$ se pokušava prijaviti",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Vrsta uređaja"
+  },
+  "ipAddress": {
+    "message": "IP Adresa"
+  },
+  "time": {
+    "message": "Vrijeme"
+  },
+  "confirmLogIn": {
+    "message": "Potvrdi prijavu"
+  },
+  "denyLogIn": {
+    "message": "Odbij prijavu"
+  },
+  "approveLoginRequests": {
+    "message": "Odobri pokušaje prijave"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Prijava za $EMAIL$ potvrđena na uređaju $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Odbijena je prijava na drugom uređaju. Ako si ovo stvarno ti, pokušaj se ponovno prijaviti uređajem."
+  },
+  "justNow": {
+    "message": "Upravo"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Zatraženo prije $MINUTES$ minute/a",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Zahtjev za prijavu je već istekao."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Ovaj zahtjev više nije valjan."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Koristi ovaj uređaj za odobrenje zahtjeva za prijavu na drugim uređajima."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Potvrdi pokušaj prijave za $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Zatražena je prijava"
+  },
+  "exposedMasterPassword": {
+    "message": "Ukradena glavna lozinka"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jedinstvenu lozinku. Želiš li svejedno korisiti ukradenu lozinku?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Slaba i ukradena glavna lozinka"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Slaba lozinka je nađena među ukradenima tijekom krađa podataka. Za zaštitu svog računa koristi jaku i jedinstvenu lozinku. Želiš li svejedno korisiti slabu, ukradenu lozinku?"
+  },
+  "checkForBreaches": {
+    "message": "Provjeri je li lozinka ukradena prilikom krađe podataka"
+  },
+  "important": {
+    "message": "Važno:"
+  },
+  "masterPasswordHint": {
+    "message": "Glavnu lozinku nije moguće oporaviti ako ju zaboraviš!"
+  },
+  "characterMinimum": {
+    "message": "najmanje $LENGTH$ znakova",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
   }
 }

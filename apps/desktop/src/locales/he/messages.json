@@ -238,6 +238,9 @@
   "ms": {
     "message": "העלמה"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "דוקטור"
   },
@@ -539,7 +542,14 @@
     "message": "נדרשת חזרה על הסיסמה הראשית."
   },
   "masterPasswordMinlength": {
-    "message": "הסיסמת הראשית חייבת להכיל 8 תווים לפחות."
+    "message": "סיסמאת המאסטר חייבת להיות באורך $VALUE$ תווים.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "אימות סיסמה ראשית אינו תואם."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "יצירת קשר אתנו"
+  },
+  "helpAndFeedback": {
+    "message": "עזרה ומשוב"
   },
   "getHelp": {
     "message": "קבלת עזרה"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "שחרור נעילה עם Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Additional Windows Hello settings"
+  },
   "windowsHelloConsentMessage": {
     "message": "אימות עבור Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "שחרור נעילה עם Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Additional Touch ID settings"
   },
   "touchIdConsentMessage": {
     "message": "פתח את הכספת שלך"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "הצג בקשה של Touch ID בעת האתחול"
+  },
+  "requirePasswordOnStart": {
+    "message": "Require password or PIN on app start"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommended for security."
   },
   "lockWithMasterPassOnRestart": {
     "message": "נעל בעזרת הסיסמה הראשית בהפעלה מחדש"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "כדי להשלים את הכניסה עם SSO, נא להגדיר סיסמה ראשית כדי לגשת ולהגן על הכספת שלך."
+  },
+  "currentMasterPass": {
+    "message": "Current master password"
   },
   "newMasterPass": {
     "message": "סיסמה ראשית חדשה"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "הסיסמה הראשית שלך שונתה לאחרונה על ידי מנהל הארגון שלך. כדי לגשת לכספת, עליך לעדכן אותה כעת. בהמשך תנותק מההפעלה הנוכחית שלך ותידרש להיכנס שוב. הפעלות אחרות הפתוחות במכשירים שונים ימשיכו להיות פעילים עד משך שעה אחת."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "hours": {
     "message": "שעות"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "האם אתה בטוח שברצונך להשתמש באפשרות \"לעולם לא\"? על ידי הגדרת אפשרויות הנעילה ל\"לעולם לא\", מפתח ההצפנה של הכספת שלך יישמר במכשיר שלך. אם אתה משתמש באפשרות זו, ודא שאתה שומר על המכשיר שלך מוגן כראוי."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "כספת"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "התחבר עם מכשיר אחר"
   },
+  "logInInitiated": {
+    "message": "התחברות החלה"
+  },
+  "notificationSentDevice": {
+    "message": "התראה נשלחה למכשירך."
+  },
+  "fingerprintMatchInfo": {
+    "message": "וודא שהכספת שלך לא נעולה ושם המזהה שלך מתאים למכשיר השני."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "שם מזהה"
+  },
+  "needAnotherOption": {
+    "message": "התחברות עם מכשיר צריכה להיות מוגדרת בהגדרות האפליקציה. זקוק/ה לאפשרות נוספת?"
+  },
+  "viewAllLoginOptions": {
+    "message": "צפייה בכל אפשרות ההתחברות"
+  },
+  "resendNotification": {
+    "message": "שליחת התראה מחדש"
+  },
   "toggleCharacterCount": {
     "message": "החלפת מצב ספירת תווים",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "האם את/ה מנסה להתחבר? "
+  },
+  "logInAttemptBy": {
+    "message": "ניסיון התחברות של $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "סוג מכשיר"
+  },
+  "ipAddress": {
+    "message": "‏כתובת IP"
+  },
+  "time": {
+    "message": "זמן"
+  },
+  "confirmLogIn": {
+    "message": "אישור ההתחברות"
+  },
+  "denyLogIn": {
+    "message": "ביטול התחברות"
+  },
+  "approveLoginRequests": {
+    "message": "אישור בקשות התחברות"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "התחברות אושרה עבור $EMAIL$ במכשיר $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
   }
 }

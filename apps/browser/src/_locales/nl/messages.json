@@ -193,7 +193,16 @@
     "message": "Er zijn geen mappen om weer te geven."
   },
   "helpFeedback": {
-    "message": "Hulp en reacties"
+    "message": "Help & reacties"
+  },
+  "helpCenter": {
+    "message": "Bitwarden Hulpcentrum"
+  },
+  "communityForums": {
+    "message": "Ontdek Bitwarden community-forums"
+  },
+  "contactSupport": {
+    "message": "Contacteer Bitwarden support"
   },
   "sync": {
     "message": "Synchroniseren"
@@ -430,7 +439,14 @@
     "message": "Type je hoofdwachtwoord opnieuw in."
   },
   "masterPasswordMinlength": {
-    "message": "Het hoofdwachtwoord moet minimaal 8 tekens lang zijn."
+    "message": "Hoofdwachtwoord moet minstens $VALUE$ tekens lang zijn.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De hoofdwachtwoorden komen niet overeen."
@@ -960,7 +976,10 @@
     "message": "Als een inlogformulier wordt gedetecteerd, dan worden de inloggegevens automatisch ingevuld."
   },
   "experimentalFeature": {
-    "message": "Dit is momenteel een experimentele functie; gebruik hiervan is op eigen risico."
+    "message": "Gehackte of onbetrouwbare websites kunnen auto-invullen tijdens het laden van de pagina misbruiken."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Lees meer over automatisch invullen"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standaardinstelling voor automatisch invullen login-items"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr."
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Voornaam"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Automatisch gevuld item"
   },
+  "insecurePageWarning": {
+    "message": "Waarschuwing: Dit is een onbeveiligde HTTP-pagina waardoor anderen alle informatie die je verstuurt kunnen zien en wijzigen. Deze login is oorspronkelijk opgeslagen op een beveiligde (HTTPS) pagina."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Wil je je inloggegevens nog steeds invullen?"
+  },
+  "autofillIframeWarning": {
+    "message": "Dit formulier wordt door een ander domein gehost dan de URI van jouw opgeslagen login. Kies OK voor toch automatisch invullen, of Annuleren om te stoppen."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Om deze waarschuwing in de toekomst te voorkomen, bewaar je deze URI, $HOSTNAME$, bij je Bitwarden-login voor deze site.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Hoofdwachtwoord instellen"
+  },
+  "currentMasterPass": {
+    "message": "Huidig hoofdwachtwoord"
+  },
+  "newMasterPass": {
+    "message": "Nieuw hoofdwachtwoord"
+  },
+  "confirmNewMasterPass": {
+    "message": "Nieuw hoofdwachtwoord bevestigen"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Een of meer organisatiebeleidseisen verlangen dat je hoofdwachtwoord voldoet aan:"
@@ -1822,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Je hoofdwachtwoord is onlangs veranderd door een beheerder in jouw organisatie. Om toegang te krijgen tot de kluis, moet je deze nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatische inschrijving"
   },
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "De beleidsinstellingen van je organisatie hebben invloed op de time-out van je kluis. De maximale toegestane kluis time-out is $HOURS$ uur en $MINUTES$ minuten. Jouw time-out is ingesteld op $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "De beleidsinstellingen van je organisatie hebben je kluis time-out ingesteld op $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1981,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Je kunt uitgeschakelde items in een organisatie niet benaderen. Neem contact op met de eigenaar van je organisatie voor hulp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Inloggen op $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "E-mailadres onthouden"
+  },
+  "loginWithDevice": {
+    "message": "Inloggen met apparaat"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Inloggen met apparaat moet aangezet worden in de instellingen van de Bitwarden app. Nood aan een andere optie?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Vingerafdrukzin"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Zorg ervoor dat je kluis is ontgrendeld en de vingerafdrukzin hetzelfde is op het andere apparaat."
+  },
+  "resendNotification": {
+    "message": "Melding opnieuw verzenden"
+  },
+  "viewAllLoginOptions": {
+    "message": "Alle loginopties bekijken"
+  },
+  "notificationSentDevice": {
+    "message": "Er is een melding naar je apparaat verzonden."
+  },
+  "logInInitiated": {
+    "message": "Inloggen gestart"
+  },
+  "exposedMasterPassword": {
+    "message": "Gelekt hoofdwachtwoord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Wachtwoord gevonden in een datalek. Gebruik een uniek wachtwoord om je account te beschermen. Weet je zeker dat je een gelekt wachtwoord wilt gebruiken?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zwak en gelekt hoofdwachtwoord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Zwak wachtwoord geïdentificeerd en gevonden in een datalek. Gebruik een sterk en uniek wachtwoord om je account te beschermen. Weet je zeker dat je dit wachtwoord wilt gebruiken?"
+  },
+  "checkForBreaches": {
+    "message": "Bekende datalekken voor dit wachtwoord controleren"
+  },
+  "important": {
+    "message": "Belangrijk:"
+  },
+  "masterPasswordHint": {
+    "message": "Je hoofdwachtwoord kan niet hersteld worden als je het vergeet!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ tekens minimaal",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Je organisatiebeleid heeft het automatisch invullen bij laden van pagina ingeschakeld."
+  },
+  "howToAutofill": {
+    "message": "Hoe automatisch aanvullen"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Selecteer een item op deze pagina of gebruik de snelkoppeling: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Selecteer een item op deze pagina of stel een snelkoppeling in via instellingen."
+  },
+  "gotIt": {
+    "message": "Ik snap het"
+  },
+  "autofillSettings": {
+    "message": "Instellingen automatisch invullen"
+  },
+  "autofillShortcut": {
+    "message": "Snelkoppeling automatisch invullen"
+  },
+  "autofillShortcutNotSet": {
+    "message": "De sneltoets voor automatisch invullen is niet ingesteld. Wijzig dit in de instellingen van de browser."
+  },
+  "autofillShortcutText": {
+    "message": "De sneltoets voor automatisch invullen is: $COMMAND$. Wijzig dit in de instellingen van de browser.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standaard snelkoppeling voor automatisch invullen:: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Regio"
+  },
+  "opensInANewWindow": {
+    "message": "Opent in een nieuw venster"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }

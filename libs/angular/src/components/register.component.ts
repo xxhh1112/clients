@@ -3,7 +3,7 @@ import { AbstractControl, UntypedFormBuilder, ValidatorFn, Validators } from "@a
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
+import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import {
@@ -12,20 +12,22 @@ import {
 } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums/kdfType";
-import { PasswordLogInCredentials } from "@bitwarden/common/models/domain/log-in-credentials";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
+import { RegisterResponse } from "@bitwarden/common/auth/models/response/register.response";
+import { DEFAULT_KDF_CONFIG, DEFAULT_KDF_TYPE } from "@bitwarden/common/enums";
+import { Utils } from "@bitwarden/common/misc/utils";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 import { RegisterRequest } from "@bitwarden/common/models/request/register.request";
-import { RegisterResponse } from "@bitwarden/common/models/response/authentication/register.response";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
+import { CaptchaProtectedComponent } from "../auth/components/captcha-protected.component";
+import { DialogServiceAbstraction, SimpleDialogType } from "../services/dialog";
 import { PasswordColorText } from "../shared/components/password-strength/password-strength.component";
 import { InputsFieldMatch } from "../validators/inputsFieldMatch.validator";
-
-import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
 @Directive()
 export class RegisterComponent extends CaptchaProtectedComponent implements OnInit {
@@ -38,6 +40,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   showTerms = true;
   showErrorSummary = false;
   passwordStrengthResult: any;
+  characterMinimumMessage: string;
+  minimumLength = Utils.minimumPasswordLength;
   color: string;
   text: string;
 
@@ -45,8 +49,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     {
       email: ["", [Validators.required, Validators.email]],
       name: [""],
-      masterPassword: ["", [Validators.required, Validators.minLength(8)]],
-      confirmMasterPassword: ["", [Validators.required, Validators.minLength(8)]],
+      masterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
+      confirmMasterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
       hint: [
         null,
         [
@@ -56,6 +60,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
           ),
         ],
       ],
+      checkForBreaches: [true],
       acceptPolicies: [false, [this.acceptPoliciesValidation()]],
     },
     {
@@ -83,12 +88,15 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
     protected apiService: ApiService,
     protected stateService: StateService,
     platformUtilsService: PlatformUtilsService,
-    protected passwordGenerationService: PasswordGenerationService,
+    protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     environmentService: EnvironmentService,
-    protected logService: LogService
+    protected logService: LogService,
+    protected auditService: AuditService,
+    protected dialogService: DialogServiceAbstraction
   ) {
     super(environmentService, i18nService, platformUtilsService);
     this.showTerms = !platformUtilsService.isSelfHost();
+    this.characterMinimumMessage = this.i18nService.t("characterMinimum", this.minimumLength);
   }
 
   async ngOnInit() {
@@ -165,6 +173,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
           return this.i18nService.t("masterPassDoesntMatch");
         case "inputsMatchError":
           return this.i18nService.t("hintEqualsPassword");
+        case "minlength":
+          return this.i18nService.t("masterPasswordMinlength", Utils.minimumPasswordLength);
         default:
           return this.i18nService.t(this.errorTag(error));
       }
@@ -212,18 +222,44 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       return { isValid: false };
     }
 
-    if (this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3) {
-      const result = await this.platformUtilsService.showDialog(
-        this.i18nService.t("weakMasterPasswordDesc"),
-        this.i18nService.t("weakMasterPassword"),
-        this.i18nService.t("yes"),
-        this.i18nService.t("no"),
-        "warning"
-      );
+    const passwordWeak =
+      this.passwordStrengthResult != null && this.passwordStrengthResult.score < 3;
+    const passwordLeak =
+      this.formGroup.controls.checkForBreaches.value &&
+      (await this.auditService.passwordLeaked(this.formGroup.controls.masterPassword.value)) > 0;
+
+    if (passwordWeak && passwordLeak) {
+      const result = await this.dialogService.openSimpleDialog({
+        title: { key: "weakAndExposedMasterPassword" },
+        content: { key: "weakAndBreachedMasterPasswordDesc" },
+        type: SimpleDialogType.WARNING,
+      });
+
+      if (!result) {
+        return { isValid: false };
+      }
+    } else if (passwordWeak) {
+      const result = await this.dialogService.openSimpleDialog({
+        title: { key: "weakMasterPassword" },
+        content: { key: "weakMasterPasswordDesc" },
+        type: SimpleDialogType.WARNING,
+      });
+
+      if (!result) {
+        return { isValid: false };
+      }
+    } else if (passwordLeak) {
+      const result = await this.dialogService.openSimpleDialog({
+        title: { key: "exposedMasterPassword" },
+        content: { key: "exposedMasterPasswordDesc" },
+        type: SimpleDialogType.WARNING,
+      });
+
       if (!result) {
         return { isValid: false };
       }
     }
+
     return { isValid: true };
   }
 
@@ -234,8 +270,8 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   ): Promise<RegisterRequest> {
     const hint = this.formGroup.value.hint;
     const kdf = DEFAULT_KDF_TYPE;
-    const kdfIterations = DEFAULT_KDF_ITERATIONS;
-    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfIterations);
+    const kdfConfig = DEFAULT_KDF_CONFIG;
+    const key = await this.cryptoService.makeKey(masterPassword, email, kdf, kdfConfig);
     const encKey = await this.cryptoService.makeEncKey(key);
     const hashedPassword = await this.cryptoService.hashPassword(masterPassword, key);
     const keys = await this.cryptoService.makeKeyPair(encKey[0]);
@@ -245,10 +281,12 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
       hashedPassword,
       hint,
       encKey[1].encryptedString,
-      kdf,
-      kdfIterations,
       this.referenceData,
-      this.captchaToken
+      this.captchaToken,
+      kdf,
+      kdfConfig.iterations,
+      kdfConfig.memory,
+      kdfConfig.parallelism
     );
     request.keys = new KeysRequest(keys[0], keys[1].encryptedString);
     const orgInvite = await this.stateService.getOrganizationInvitation();

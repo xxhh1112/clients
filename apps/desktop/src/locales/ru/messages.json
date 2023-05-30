@@ -238,6 +238,9 @@
   "ms": {
     "message": "Проф."
   },
+  "mx": {
+    "message": "Микстер"
+  },
   "dr": {
     "message": "Тов."
   },
@@ -539,7 +542,14 @@
     "message": "Необходимо повторно ввести мастер-пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Мастер-пароль должен содержать не менее 8 символов."
+    "message": "Мастер-пароль должен содержать не менее $VALUE$ символов.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Мастер-пароли не совпадают."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Связаться с нами"
+  },
+  "helpAndFeedback": {
+    "message": "Помощь и обратная связь"
   },
   "getHelp": {
     "message": "Получить помощь"
@@ -1379,20 +1392,32 @@
   "unlockWithWindowsHello": {
     "message": "Разблокировать с Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Дополнительные настройки Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Верификация для Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Разблокировать с Touch ID"
   },
+  "additionalTouchIdSettings": {
+    "message": "Дополнительные настройки Touch ID"
+  },
   "touchIdConsentMessage": {
     "message": "разблокировать ваше хранилище"
   },
   "autoPromptWindowsHello": {
-    "message": "Запрашивать Windows Hello при запуске"
+    "message": "Запрашивать Windows Hello при запуске приложения"
   },
   "autoPromptTouchId": {
-    "message": "Запрашивать Touch ID при запуске"
+    "message": "Запрашивать Touch ID при запуске приложения"
+  },
+  "requirePasswordOnStart": {
+    "message": "Требовать пароль или PIN-код при запуске приложения"
+  },
+  "recommendedForSecurity": {
+    "message": "Рекомендуется для обеспечения безопасности."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Блокировать мастер-паролем при перезапуске"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Для завершения процесса авторизации при помощи SSO, установите мастер-пароль для доступа к вашему хранилищу и его защиты."
+  },
+  "currentMasterPass": {
+    "message": "Текущий мастер-пароль"
   },
   "newMasterPass": {
     "message": "Новый мастер-пароль"
@@ -1819,7 +1847,7 @@
     "message": "Подтверждение мастер-пароля"
   },
   "passwordConfirmationDesc": {
-    "message": "Это действие защищено. Для продолжения введите свой мастер-пароль, чтобы подтвердить свою личность."
+    "message": "Это действие защищено. Чтобы продолжить, введите ваш мастер-пароль для подтверждения личности."
   },
   "updatedMasterPassword": {
     "message": "Мастер-пароль обновлен"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Мастер-пароль недавно был изменен администратором вашей организации. Чтобы получить доступ к хранилищу, вы должны обновить его сейчас. В результате текущий сеанс будет завершен, потребуется повторный вход. Сеансы на других устройствах могут оставаться активными в течение одного часа."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа."
+  },
   "hours": {
     "message": "Час."
   },
@@ -1837,7 +1868,7 @@
     "message": "Мин."
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Политики вашей организации влияют на тайм-аут хранилища. Максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин.",
+    "message": "В соответствии с политиками вашей организации максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Политики вашей организации влияют на тайм-аут хранилища. Максимально допустимый тайм-аут хранилища составляет $HOURS$ час. и $MINUTES$ мин. Для вашего хранилища задан тайм-аут $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Политики вашей организации установили тайм-аут хранилища на $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Вы действительно хотите отключить блокировку хранилища? В этом случае ключ шифрования вашего хранилища будет сохранен на вашем устройстве. Отключая блокировку, вы должны убедиться, что ваше устройство надежно защищено."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Хранилище"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Войти с другого устройства"
   },
+  "logInInitiated": {
+    "message": "Вход инициирован"
+  },
+  "notificationSentDevice": {
+    "message": "На ваше устройство отправлено уведомление."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза отпечатка"
+  },
+  "needAnotherOption": {
+    "message": "Вход с устройства должен быть настроен в настройках мобильного приложения Bitwarden. Нужен другой вариант?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Посмотреть все варианты авторизации"
+  },
+  "resendNotification": {
+    "message": "Отправить уведомление повторно"
+  },
   "toggleCharacterCount": {
     "message": "Показать количество символов",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Вы пытаетесь войти?"
+  },
+  "logInAttemptBy": {
+    "message": "Попытка авторизации через $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Тип устройства"
+  },
+  "ipAddress": {
+    "message": "IP-адрес"
+  },
+  "time": {
+    "message": "Время"
+  },
+  "confirmLogIn": {
+    "message": "Подтвердить вход"
+  },
+  "denyLogIn": {
+    "message": "Запретить вход"
+  },
+  "approveLoginRequests": {
+    "message": "Одобрение запросов на вход"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Вход подтвержден для $EMAIL$ на $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Вы отклонили попытку авторизации с другого устройства. Если это действительно были вы, попробуйте авторизоваться с этого устройства еще раз."
+  },
+  "justNow": {
+    "message": "Только что"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Запрошено $MINUTES$ мин назад",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Запрос на вход истек."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Этот запрос больше не действителен."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Подтвердите попытку входа для $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Запрошено разрешение на вход"
+  },
+  "exposedMasterPassword": {
+    "message": "Мастер-пароль скомпрометирован"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль найден в утечке данных. Используйте уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать скомпрометированный пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Слабый и скомпрометированный мастер-пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Обнаружен слабый пароль, найденный в утечке данных. Используйте надежный и уникальный пароль для защиты вашего аккаунта. Вы уверены, что хотите использовать этот пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Проверьте известные случаи утечки данных для этого пароля"
+  },
+  "important": {
+    "message": "Важно:"
+  },
+  "masterPasswordHint": {
+    "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
+  },
+  "characterMinimum": {
+    "message": "Минимум символов: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden рекомендует обновить настройки биометрии, чтобы при первой разблокировке требовался мастер-пароль (или PIN-код). Хотите обновить настройки прямо сейчас?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Рекомендуемое обновление настроек"
+  },
+  "region": {
+    "message": "Регион"
+  },
+  "eu": {
+    "message": "Европа",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Собственный хостинг"
   }
 }

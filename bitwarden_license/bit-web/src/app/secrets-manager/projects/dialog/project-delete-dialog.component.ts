@@ -8,16 +8,16 @@ import {
   AbstractControl,
 } from "@angular/forms";
 
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { DialogService } from "@bitwarden/components";
 
+import { ProjectListView } from "../../models/view/project-list.view";
 import {
   BulkOperationStatus,
   BulkStatusDetails,
   BulkStatusDialogComponent,
-} from "../../layout/dialogs/bulk-status-dialog.component";
-import { ProjectListView } from "../../models/view/project-list.view";
+} from "../../shared/dialogs/bulk-status-dialog.component";
 import { ProjectService } from "../project.service";
 
 export interface ProjectDeleteOperation {
@@ -25,7 +25,6 @@ export interface ProjectDeleteOperation {
 }
 
 @Component({
-  selector: "sm-project-delete-dialog",
   templateUrl: "./project-delete-dialog.component.html",
 })
 export class ProjectDeleteDialogComponent implements OnInit {
@@ -39,7 +38,7 @@ export class ProjectDeleteDialogComponent implements OnInit {
     private projectService: ProjectService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private dialogService: DialogService
+    private dialogService: DialogServiceAbstraction
   ) {}
 
   ngOnInit(): void {

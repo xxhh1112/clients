@@ -238,6 +238,9 @@
   "ms": {
     "message": "Srta"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -760,6 +770,9 @@
   "contactUs": {
     "message": "Contáctenos"
   },
+  "helpAndFeedback": {
+    "message": "Ayuda y comentarios"
+  },
   "getHelp": {
     "message": "Obtener ayuda"
   },
@@ -833,7 +846,7 @@
     "message": "Autenticación en dos pasos"
   },
   "vaultTimeout": {
-    "message": "Tiempo de espera de la caja fuerte"
+    "message": "Tiempo de espera de la caja fuerte excedido"
   },
   "vaultTimeoutDesc": {
     "message": "Elije cuando se agotará el tiempo de espera de tu caja fuerte y se ejecutará la acción seleccionada."
@@ -1319,7 +1332,7 @@
     "description": "WARNING (should stay in capitalized letters if the language permits)"
   },
   "confirmVaultExport": {
-    "message": "Confirmar la exportación de la bóveda"
+    "message": "Confirmar la exportación de la caja fuerte"
   },
   "exportWarningDesc": {
     "message": "Esta exportación contiene tus datos de la caja fuerte en un formato no cifrado. No deberías almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínalo inmediatamente cuando termines de utilizarlo."
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Desbloquear con Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Ajustes adicionales de Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verificar para Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Desbloquear con Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Ajustes adicionales de Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "Verificar para Bitwarden."
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Solicitar Touch ID al iniciar"
+  },
+  "requirePasswordOnStart": {
+    "message": "Solicitar contraseña o PIN al iniciar la aplicación"
+  },
+  "recommendedForSecurity": {
+    "message": "Recomendado por seguridad."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bloquear con contraseña maestra al reiniciar"
@@ -1514,6 +1539,9 @@
   "ssoCompleteRegistration": {
     "message": "Para completar el inicio de sesión con SSO, por favor establezca una contraseña maestra para acceder y proteger su caja fuerte."
   },
+  "currentMasterPass": {
+    "message": "Contraseña maestra actual"
+  },
   "newMasterPass": {
     "message": "Nueva contraseña maestra"
   },
@@ -1578,7 +1606,7 @@
     "message": "Permitir integración con el navegador DuckDuckGo"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Usa tu bóveda de Bitwarden cuando navegas con DuckDuckGo."
+    "message": "Usa tu caja fuerte de Bitwarden cuando navegas con DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "La integración con el navegador no está soportada"
@@ -1629,7 +1657,7 @@
     "message": "La biometría del navegador requiere habilitar primero la biometría de escritorio en los ajustes."
   },
   "personalOwnershipSubmitError": {
-    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su bóveda personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
+    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
   },
   "hintEqualsPassword": {
     "message": "La pista para la contraseña no puede ser igual que la contraseña."
@@ -1656,7 +1684,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "Mi bóveda"
+    "message": "Mi caja fuerte"
   },
   "text": {
     "message": "Texto"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Su contraseña maestra ha sido cambiada recientemente por un administrador de su organización. Para acceder a la caja fuerte, debe actualizarla ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante una hora."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Su contraseña maestra no cumple con una o más de las políticas de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
+  },
   "hours": {
     "message": "Horas"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Las políticas de su organización están afectando al tiempo de espera de tu caja fuerte. El tiempo de espera de tu caja fuerte máximo permitido es de $HOURS$ hora(s) y $MINUTES$ minuto(s). La acción de tiempo de espera de tu caja fuerte está establecida en $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Las políticas de su organización han establecido su acción de tiempo de espera de tu caja fuerte en $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1928,10 +1985,10 @@
     "message": "Su sesión ha expirado. Por favor, vuelva e intente iniciar sesión de nuevo."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exportando bóveda personal"
+    "message": "Exportando caja fuerte personal"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Solo se exportarán los elementos de la bóveda personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
+    "message": "Solo se exportarán los elementos de la caja fuerte personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "¿Está seguro de que quieres usar la opción \"Nunca\"? Al ajustar las opciones de bloqueo a \"Nunca\", la clave de cifrado de su caja fuerte se guardará en tu dispositivo. Si usas esta opción, asegúrate de mantener tu dispositivo debidamente protegido."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Caja fuerte"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Iniciar sesión con otro dispositivo"
   },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide con el otro dispositivo."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella dactilar"
+  },
+  "needAnotherOption": {
+    "message": "Iniciar sesión con el dispositivo debe estar habilitado en los ajustes de la aplicación móvil Bitwarden. ¿Necesitas otra opción?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de inicio de sesión"
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
+  },
   "toggleCharacterCount": {
     "message": "Activar recuento de caracteres",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "¿Estás intentando iniciar sesión?"
+  },
+  "logInAttemptBy": {
+    "message": "Intento de inicio de sesión de $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Tipo de dispositivo"
+  },
+  "ipAddress": {
+    "message": "Dirección IP"
+  },
+  "time": {
+    "message": "Hora"
+  },
+  "confirmLogIn": {
+    "message": "Confirmar inicio de sesión"
+  },
+  "denyLogIn": {
+    "message": "Denegar inicio de sesión"
+  },
+  "approveLoginRequests": {
+    "message": "Aprobar solicitudes de inicio de sesión"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Inicio de sesión confirmado para $EMAIL$ en $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Has denegado un intento de inicio de sesión desde otro dispositivo. Si realmente fuiste tú, intenta iniciar sesión con el dispositivo de nuevo."
+  },
+  "justNow": {
+    "message": "Justo ahora"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Solicitado hace $MINUTES$ minutos",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "La solicitud de acceso ya ha caducado."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Esta solicitud ya no es válida."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Utilice este dispositivo para aprobar las peticiones de inicio de sesión realizadas desde otros dispositivos."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirmar intento de inicio de sesión para $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Inicio de sesión solicitado"
+  },
+  "exposedMasterPassword": {
+    "message": "Contraseña maestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Contraseña encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contraseña maestra débil y comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contraseña débil encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "checkForBreaches": {
+    "message": "Comprobar filtración de datos conocidos para esta contraseña"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Tu contraseña maestra no se puede recuperar si la olvidas"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimo",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recomienda actualizar su configuración biométrica para requerir su contraseña maestra (o PIN) en el primer desbloqueo. ¿Le gustaría actualizar su configuración ahora?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Actualización de ajustes recomendados"
+  },
+  "region": {
+    "message": "Región"
+  },
+  "eu": {
+    "message": "Unión Europea",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EE.UU.",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Autoalojado"
   }
 }

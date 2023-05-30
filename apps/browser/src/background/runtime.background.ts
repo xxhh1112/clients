@@ -1,3 +1,4 @@
+import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
@@ -5,8 +6,8 @@ import { NotificationsService } from "@bitwarden/common/abstractions/notificatio
 import { SystemService } from "@bitwarden/common/abstractions/system.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 
+import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../browser/browserApi";
-import { AutofillService } from "../services/abstractions/autofill.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 
@@ -28,7 +29,8 @@ export default class RuntimeBackground {
     private systemService: SystemService,
     private environmentService: BrowserEnvironmentService,
     private messagingService: MessagingService,
-    private logService: LogService
+    private logService: LogService,
+    private configService: ConfigServiceAbstraction
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -56,19 +58,15 @@ export default class RuntimeBackground {
     }
   }
 
-  async processMessage(msg: any, sender: any, sendResponse: any) {
+  async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
         let item: LockedVaultPendingNotificationsItem;
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
-          await BrowserApi.closeLoginTab();
-
           item = this.lockedVaultPendingNotifications.pop();
-          if (item.commandToRetry.sender?.tab?.id) {
-            await BrowserApi.focusSpecifiedTab(item.commandToRetry.sender.tab.id);
-          }
+          BrowserApi.closeBitwardenExtensionTab();
         }
 
         await this.main.refreshBadge();
@@ -77,6 +75,8 @@ export default class RuntimeBackground {
         this.systemService.cancelProcessReload();
 
         if (item) {
+          await BrowserApi.focusWindow(item.commandToRetry.sender.tab.windowId);
+          await BrowserApi.focusTab(item.commandToRetry.sender.tab.id);
           await BrowserApi.tabSendMessageData(
             item.commandToRetry.sender.tab,
             "unlockCompleted",
@@ -98,16 +98,28 @@ export default class RuntimeBackground {
             await this.main.refreshMenu();
           }, 2000);
           this.main.avatarUpdateService.loadColorFromState();
+          this.configService.fetchServerConfig();
         }
         break;
       case "openPopup":
         await this.main.openPopup();
         break;
       case "promptForLogin":
-        await BrowserApi.createNewTab("popup/index.html?uilocation=popout", true, true);
+        BrowserApi.openBitwardenExtensionTab("popup/index.html", true);
         break;
-      case "showDialogResolve":
-        this.platformUtilsService.resolveDialogPromise(msg.dialogId, msg.confirmed);
+      case "openAddEditCipher": {
+        const addEditCipherUrl =
+          msg.data?.cipherId == null
+            ? "popup/index.html#/edit-cipher"
+            : "popup/index.html#/edit-cipher?cipherId=" + msg.data.cipherId;
+
+        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
+        break;
+      }
+      case "closeTab":
+        setTimeout(() => {
+          BrowserApi.closeBitwardenExtensionTab();
+        }, msg.delay ?? 0);
         break;
       case "bgCollectPageDetails":
         await this.main.collectPageDetailsForContentScript(sender.tab, msg.sender, sender.frameId);
@@ -183,11 +195,7 @@ export default class RuntimeBackground {
         const params =
           `webAuthnResponse=${encodeURIComponent(msg.data)};` +
           `remember=${encodeURIComponent(msg.remember)}`;
-        BrowserApi.createNewTab(
-          `popup/index.html?uilocation=popout#/2fa;${params}`,
-          undefined,
-          false
-        );
+        BrowserApi.openBitwardenExtensionTab(`popup/index.html#/2fa;${params}`, false);
         break;
       }
       case "reloadPopup":
@@ -195,10 +203,10 @@ export default class RuntimeBackground {
         break;
       case "emailVerificationRequired":
         this.messagingService.send("showDialog", {
-          dialogId: "emailVerificationRequired",
-          title: this.i18nService.t("emailVerificationRequired"),
-          text: this.i18nService.t("emailVerificationRequiredDesc"),
-          confirmText: this.i18nService.t("ok"),
+          title: { key: "emailVerificationRequired" },
+          content: { key: "emailVerificationRequiredDesc" },
+          acceptButtonText: { key: "ok" },
+          cancelButtonText: null,
           type: "info",
         });
         break;

@@ -178,7 +178,7 @@
     "message": "Vyžaduje prémiový účet"
   },
   "premiumRequiredDesc": {
-    "message": "Pre použitie tejto funkcie je potrebné prémiové členstvo."
+    "message": "Na použitie tejto funkcie je potrebné prémiové členstvo."
   },
   "errorOccurred": {
     "message": "Vyskytla sa chyba."
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "Slečna"
+  },
+  "mx": {
+    "message": "Vážený"
   },
   "dr": {
     "message": "Dr."
@@ -539,7 +542,14 @@
     "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
   },
   "masterPasswordMinlength": {
-    "message": "Hlavné heslo musí obsahovať aspoň 8 znakov."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrdenie hlavného hesla sa nezhoduje."
@@ -760,6 +770,9 @@
   "contactUs": {
     "message": "Kontaktujte nás"
   },
+  "helpAndFeedback": {
+    "message": "Pomoc a spätná väzba"
+  },
   "getHelp": {
     "message": "Získať pomoc"
   },
@@ -910,7 +923,7 @@
     "message": "Namiesto minimalizácie okna zobraziť ikonu v systémovej lište."
   },
   "enableMinToMenuBar": {
-    "message": "Minimalizovať na panel úloh"
+    "message": "Minimalizovať do lišty"
   },
   "enableMinToMenuBarDesc": {
     "message": "Namiesto minimalizácie okna zobraziť ikonu na paneli úloh."
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Odomknúť pomocou Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Ďalšie nastavenia Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Overiť sa pre Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Odomknúť s Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Ďalšie nastavenia Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "odomknúť svoj trezor"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Pri spustení požiadať o Touch ID"
+  },
+  "requirePasswordOnStart": {
+    "message": "Pri spustení aplikácie vyžadovať heslo alebo PIN"
+  },
+  "recommendedForSecurity": {
+    "message": "Odporúča sa z hľadiska bezpečnosti."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Pri reštarte zamknúť s hlavným heslom"
@@ -1422,7 +1447,7 @@
     "message": "Vždy zobraziť ikonu na paneli úloh."
   },
   "hideToMenuBar": {
-    "message": "Skryť do panela úloh"
+    "message": "Skryť do lišty"
   },
   "selectOneCollection": {
     "message": "Musíte vybrať aspoň jednu zbierku."
@@ -1514,6 +1539,9 @@
   "ssoCompleteRegistration": {
     "message": "Aby ste dokončili nastavenie prihlasovacieho portálu (SSO), prosím nastavte hlavné heslo na prístup a ochranu vášho trezora."
   },
+  "currentMasterPass": {
+    "message": "Súčasné hlavné heslo"
+  },
   "newMasterPass": {
     "message": "Nové hlavné heslo"
   },
@@ -1587,7 +1615,7 @@
     "message": "Bohužiaľ, integrácia v prehliadači je zatiaľ podporovaná iba vo verzii Mac App Store."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Bohužiaľ, integrácia v prehliadači je zatiaľ podporovaná iba vo verzii Windows Store."
+    "message": "Bohužiaľ, integrácia v prehliadači zatiaľ nie je podporovaná, ak je aplikácia nainštalovaná cez Microsoft Store."
   },
   "browserIntegrationLinuxDesc": {
     "message": "Bohužiaľ, integrácia prehliadača nie je v súčasnosti podporovaná vo verzii pre Linux."
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Vaše hlavné heslo nedávno zmenil správca vo vašej organizácii. Ak chcete získať prístup k trezoru, musíte ho teraz aktualizovať. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
+  },
   "hours": {
     "message": "Hodiny"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je $HOURS$ h a $MINUTES$ m. Nastavenie akcie pri vypršaní časového limitu je $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Zásady vašej organizácie nastavili akciu pri vypršaní časového limitu trezora na $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Ste si istí, že chcete použiť možnosť \"Nikdy\"? Táto predvoľba ukladá šifrovací kľúč od trezora priamo na zariadení. Ak použijete túto možnosť, mali by ste svoje zariadenie náležite zabezpečiť."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Trezor"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Prihlásenie pomocou iného zariadenia"
   },
+  "logInInitiated": {
+    "message": "Iniciované prihlásenie"
+  },
+  "notificationSentDevice": {
+    "message": "Do vášho zariadenia bolo odoslané upozornenie."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Skontrolujte, či je trezor odomknutý a či sa fráza odtlačku prsta zhoduje s druhým zariadením."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fráza odtlačku prsta"
+  },
+  "needAnotherOption": {
+    "message": "Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobraziť všetky možnosti prihlásenia"
+  },
+  "resendNotification": {
+    "message": "Znova odoslať upozornenie"
+  },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Prepnúť počítadlo znakov",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Snažíte sa prihlásiť?"
+  },
+  "logInAttemptBy": {
+    "message": "Pokus o prihlásenie pomocou $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Typ zariadenia"
+  },
+  "ipAddress": {
+    "message": "IP adresa"
+  },
+  "time": {
+    "message": "Čas"
+  },
+  "confirmLogIn": {
+    "message": "Potvrdiť prihlásenie"
+  },
+  "denyLogIn": {
+    "message": "Odmietnuť prihlásenie"
+  },
+  "approveLoginRequests": {
+    "message": "Schvaľovanie žiadostí o prihlásenie"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Potvrdené prihlásenie pomocou $EMAIL$ na $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Odmietli ste pokus o prihlásenie z iného zariadenia. Ak ste to boli naozaj vy, skúste sa prihlásiť pomocou zariadenia znova."
+  },
+  "justNow": {
+    "message": "Práve teraz"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Vyžiadané pred $MINUTES$ minútami",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Platnosť žiadosti o prihlásenie už vypršala."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Táto žiadosť už nie je platná."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Potvrdiť pokus o prihlásenie pomocou $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Požadované prihlásenie"
+  },
+  "exposedMasterPassword": {
+    "message": "Odhalené hlavné heslo"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Nájdené heslo v uniknuných údajoch. Na ochranu svojho účtu používajte jedinečné heslo. Naozaj chcete používať odhalené heslo?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Slabé a odhalené hlavné heslo"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?"
+  },
+  "checkForBreaches": {
+    "message": "Skontrolovať známe úniky údajov pre toto heslo"
+  },
+  "important": {
+    "message": "Dôležité:"
+  },
+  "masterPasswordHint": {
+    "message": "Vaše hlavné heslo sa nebude dať obnoviť, ak ho zabudnete!"
+  },
+  "characterMinimum": {
+    "message": "Minimálny počet znakov $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden odporúča aktualizovať biometrické nastavenia tak, aby sa pri prvom odomknutí vyžadovalo hlavné heslo (alebo PIN). Chcete teraz aktualizovať svoje nastavenia?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Odporúčaná aktualizácia nastavenia"
+  },
+  "region": {
+    "message": "Región"
+  },
+  "eu": {
+    "message": "EÚ",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "USA",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Vlastný hosting"
   }
 }

@@ -1,5 +1,6 @@
 import { DecryptParameters } from "../models/domain/decrypt-parameters";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { CsprngArray } from "../types/csprng";
 
 export abstract class CryptoFunctionService {
   pbkdf2: (
@@ -7,6 +8,13 @@ export abstract class CryptoFunctionService {
     salt: string | ArrayBuffer,
     algorithm: "sha256" | "sha512",
     iterations: number
+  ) => Promise<ArrayBuffer>;
+  argon2: (
+    password: string | ArrayBuffer,
+    salt: string | ArrayBuffer,
+    iterations: number,
+    memory: number,
+    parallelism: number
   ) => Promise<ArrayBuffer>;
   hkdf: (
     ikm: ArrayBuffer,
@@ -58,5 +66,5 @@ export abstract class CryptoFunctionService {
   ) => Promise<ArrayBuffer>;
   rsaExtractPublicKey: (privateKey: ArrayBuffer) => Promise<ArrayBuffer>;
   rsaGenerateKeyPair: (length: 1024 | 2048 | 4096) => Promise<[ArrayBuffer, ArrayBuffer]>;
-  randomBytes: (length: number) => Promise<ArrayBuffer>;
+  randomBytes: (length: number) => Promise<CsprngArray>;
 }

@@ -238,6 +238,9 @@
   "ms": {
     "message": "Пані"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Доктар"
   },
@@ -539,7 +542,14 @@
     "message": "Неабходна паўторна ўвесці асноўны пароль."
   },
   "masterPasswordMinlength": {
-    "message": "Асноўны пароль павінен змяшчаць прынамсі 8 сімвалаў."
+    "message": "Асноўны пароль павінен змяшчаць прынамсі $VALUE$ сімвалаў.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Пацвярджэнне асноўнага пароля не супадае."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Звязацца з намі"
+  },
+  "helpAndFeedback": {
+    "message": "Даведка і зваротная сувязь"
   },
   "getHelp": {
     "message": "Атрымаць даведку"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Разблакіраваць з Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Дадатковыя налады Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Праверыць на Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Разблакіраваць з Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Дадатковыя налады Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "разблакіраваць ваша сховішча"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Пытацца пра Touch ID пры запуску"
+  },
+  "requirePasswordOnStart": {
+    "message": "Патрабаваць пароль або PIN пры запуску праграмы"
+  },
+  "recommendedForSecurity": {
+    "message": "Рэкамендуецца ў мэтах бяспекі."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Блакіраваць асноўным паролем пры перазапуску"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Для завяршэння працэсу ўваходу з дапамогай SSO, прызначце асноўны пароль для доступу да вашага сховішча і яго абароны."
+  },
+  "currentMasterPass": {
+    "message": "Бягучы асноўны пароль"
   },
   "newMasterPass": {
     "message": "Новы асноўны пароль"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ваш асноўны пароль нядаўна быў зменены адміністратарам арганізацыі. Для таго, каб атрымаць доступ да вашага сховішча, вы павінны абнавіць яго зараз. Гэта прывядзе да завяршэння бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
+  },
   "hours": {
     "message": "Гадзіны"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае гадзін: $HOURS$; хвілін: $MINUTES$. Для часу чакання вашага сховішча прызначана дзеянне $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Палітыкай вашай арганізацыі прызначана дзеянне $ACTION$ для часу чакання вашага сховішча.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Вы сапраўды хочаце адключыць блакіроўку сховішча? Прызначыўшы параметр блакіравання \"Ніколі\", ключ шыфравання будзе захоўвацца на вашай прыладзе. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Сховішча"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Увайсці з іншай прылады"
   },
+  "logInInitiated": {
+    "message": "Ініцыяваны ўваход"
+  },
+  "notificationSentDevice": {
+    "message": "Апавяшчэнне было адпраўлена на вашу прыладу."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Пераканайцеся, што ваша сховішча разблакіравана, а фраза адбітка пальца супадае з іншай прыладай."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Фраза адбітка пальца"
+  },
+  "needAnotherOption": {
+    "message": "Неабходна наладзіць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Патрабуецца іншы варыянт?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Паглядзець усе параметры ўваходу"
+  },
+  "resendNotification": {
+    "message": "Адправіць апавяшчэнне паўторна"
+  },
   "toggleCharacterCount": {
     "message": "Пераключыць лічыльнік сімвалаў",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Вы спрабуеце ўвайсці?"
+  },
+  "logInAttemptBy": {
+    "message": "Спроба ўваходу $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Тып прылады"
+  },
+  "ipAddress": {
+    "message": "IP-адрас"
+  },
+  "time": {
+    "message": "Час"
+  },
+  "confirmLogIn": {
+    "message": "Пацвердзіць уваход"
+  },
+  "denyLogIn": {
+    "message": "Адхіліць уваход"
+  },
+  "approveLoginRequests": {
+    "message": "Ухваліць запыт уваходу"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Уваход пацверджаны для $EMAIL$ на $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Вы адхілілі спробу ўваходу з іншай прылады. Калі гэта сапраўды былі вы, паспрабуйце ўвайсці з прыладай яшчэ раз."
+  },
+  "justNow": {
+    "message": "Толькі што"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Запытана (хвілін таму: $MINUTES$)",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Запыт на ўваход пратэрмінаваны."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Гэты запыт больш не дзейнічае."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Выкарыстоўваць гэту прыладу для ўхвалення запытаў на ўваход, якія зроблены з іншых прылад."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Пацвердзіць спробу ўваходу для $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Запытаны ўваход"
+  },
+  "exposedMasterPassword": {
+    "message": "Скампраметаваны асноўны пароль"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Пароль знойдзены ва ўцечках даных. Выкарыстоўвайце ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць скампраметаваны пароль?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Ненадзейны і скампраметаваны асноўны пароль"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Вызначаны ненадзейны пароль, які знойдзены ва ўцечках даных. Выкарыстоўвайце надзейныя і ўнікальныя паролі для абароны свайго ўліковага запісу. Вы сапраўды хочаце выкарыстоўваць гэты пароль?"
+  },
+  "checkForBreaches": {
+    "message": "Праверыць у вядомых уцечках даных для гэтага пароля"
+  },
+  "important": {
+    "message": "Важна:"
+  },
+  "masterPasswordHint": {
+    "message": "Ваш асноўны пароль немагчыма будзе аднавіць, калі вы яго забудзеце!"
+  },
+  "characterMinimum": {
+    "message": "Мінімальная колькасць сімвалаў: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden рэкамендуе абнавіць вашы налады біяметрыі, каб пры першай разблакіроўцы патрабаваўся асноўны пароль (або PIN). Вы сапраўды хочаце абнавіць вашы налады?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Рэкамендаваныя налады абнаўлення"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
   }
 }

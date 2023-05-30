@@ -33,7 +33,7 @@
     "message": "Coleções"
   },
   "searchVault": {
-    "message": "Pesquisar cofre"
+    "message": "Procurar no cofre"
   },
   "addItem": {
     "message": "Adicionar item"
@@ -238,6 +238,9 @@
   "ms": {
     "message": "Sra"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -269,7 +272,7 @@
     "message": "Último nome"
   },
   "fullName": {
-    "message": "Nome Completo"
+    "message": "Nome completo"
   },
   "address1": {
     "message": "Endereço 1"
@@ -358,7 +361,7 @@
     "message": "Eliminar pasta"
   },
   "deleteAttachment": {
-    "message": "Eliminar Anexo"
+    "message": "Eliminar anexo"
   },
   "deleteItemConfirmation": {
     "message": "Tem a certeza de que pretende eliminar?"
@@ -370,13 +373,13 @@
     "message": "Tem a certeza de que pretende sobreescrever a palavra-passe atual?"
   },
   "overwriteUsername": {
-    "message": "Overwrite username"
+    "message": "Sobrescrever nome de utilizador"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Tem a certeza de que deseja sobrescrever o nome de utilizador atual?"
   },
   "noneFolder": {
-    "message": "Nenhuma pasta",
+    "message": "Em nenhuma pasta",
     "description": "This is the folder for uncategorized items"
   },
   "addFolder": {
@@ -410,7 +413,7 @@
     "message": "Números (0-9)"
   },
   "specialCharacters": {
-    "message": "Caracteres Especiais (!@#$%^&*)"
+    "message": "Caracteres especiais (!@#$%^&*)"
   },
   "numWords": {
     "message": "Número de palavras"
@@ -506,7 +509,7 @@
     "message": "A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não existe maneira de recuperar a palavra-passe no caso de a esquecer."
   },
   "masterPassHintDesc": {
-    "message": "Uma dica da palavra-passe mestra pode ajudar a lembrar-se da sua palavra-passe se a esquecer."
+    "message": "Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela."
   },
   "reTypeMasterPass": {
     "message": "Reescreva a palavra-passe mestra"
@@ -533,13 +536,20 @@
     "message": "Endereço de email inválido."
   },
   "masterPasswordRequired": {
-    "message": "A palavra-passe mestra é necessária."
+    "message": "É necessária a palavra-passe mestra."
   },
   "confirmMasterPasswordRequired": {
     "message": "É necessário reescrever a palavra-passe mestra."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "A confirmação da palavra-passe mestra não corresponde."
@@ -560,7 +570,7 @@
     "message": "Não existem itens para listar."
   },
   "sendVerificationCode": {
-    "message": "Envie um código de verificação para o seu e-mail"
+    "message": "Enviar um código de verificação para o seu e-mail"
   },
   "sendCode": {
     "message": "Enviar o código"
@@ -611,7 +621,7 @@
     "message": "Enviar código de verificação novamente"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Utilizar outro método de início de sessão de dois passos"
+    "message": "Utilizar outro método de verificação de dois passos"
   },
   "insertYubiKey": {
     "message": "Introduza a sua YubiKey na porta USB do seu computador, depois toque no botão da mesma."
@@ -662,13 +672,13 @@
     "message": "Início de sessão indisponível"
   },
   "noTwoStepProviders": {
-    "message": "Esta conta tem o início de sessão de dois passos ativado, no entanto, nenhum dos provedores de início de sessão de dois passos configurados são suportados por este dispositivo."
+    "message": "Esta conta tem a verificação de dois passos configurada, no entanto, nenhum dos fornecedores de dois passos configurados é suportado por este dispositivo."
   },
   "noTwoStepProviders2": {
     "message": "Por favor adicione provedores adicionais que são melhor suportados entre dispositivos (como uma aplicação de autenticador)."
   },
   "twoStepOptions": {
-    "message": "Opções de início de sessão de dois passos"
+    "message": "Opções de verificação de dois passos"
   },
   "selfHostedEnvironment": {
     "message": "Ambiente auto-hospedado"
@@ -740,7 +750,7 @@
     "message": "Adicionar novo item"
   },
   "addNewFolder": {
-    "message": "Adicionar nova pasta"
+    "message": "Nova pasta"
   },
   "view": {
     "message": "Ver"
@@ -752,7 +762,7 @@
     "message": "A carregar..."
   },
   "lockVault": {
-    "message": "Bloquear Cofre"
+    "message": "Bloquear cofre"
   },
   "passwordGenerator": {
     "message": "Gerador de palavras-passe"
@@ -760,8 +770,11 @@
   "contactUs": {
     "message": "Contacte-nos"
   },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
+  },
   "getHelp": {
-    "message": "Obter Ajuda"
+    "message": "Obter ajuda"
   },
   "fileBugReport": {
     "message": "Submeter um relatório de bug"
@@ -827,10 +840,10 @@
     "message": "Palavra-passe mestra inválida"
   },
   "twoStepLoginConfirmation": {
-    "message": "O início de sessão de dois passos torna a sua conta mais segura ao requerer que verifique o seu início de sessão com outro dispositivo como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica, ou email. O início de sessão de dois passos pode ser ativado no cofre web bitwarden.com. Pretende visitar o website agora?"
+    "message": "A verificação de dois passos torna a sua conta mais segura, exigindo que verifique o seu início de sessão com outro dispositivo, como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica ou e-mail. A verificação de dois passos pode ser configurada em bitwarden.com. Pretende visitar o site agora?"
   },
   "twoStepLogin": {
-    "message": "Início de sessão de dois passos"
+    "message": "Verificação de dois passos"
   },
   "vaultTimeout": {
     "message": "Expiração do cofre"
@@ -1065,7 +1078,7 @@
     "message": "1 GB de armazenamento encriptado para anexos de ficheiros."
   },
   "premiumSignUpTwoStep": {
-    "message": "Opções de início de sessão de dois passos adicionais como YubiKey, FIDO U2F, e Duo."
+    "message": "Opções adicionais de verificação de dois passos, como YubiKey, FIDO U2F e Duo."
   },
   "premiumSignUpReports": {
     "message": "Higiene de palavras-passe, saúde das contas, e relatórios de brechas de dados para manter o seu cofre seguro."
@@ -1252,7 +1265,7 @@
     "message": "Sair"
   },
   "showHide": {
-    "message": "Mostrar / ocultar",
+    "message": "Mostrar / Ocultar",
     "description": "Text for a button that toggles the visibility of the window. Shows the window when it is hidden or hides the window if it is currently open."
   },
   "hideToTray": {
@@ -1331,7 +1344,7 @@
     "message": "Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account."
   },
   "noOrganizationsList": {
-    "message": "Você não pertence a nenhuma organização. Organizações permitem-lhe partilhar itens em segurança com outros utilizadores."
+    "message": "Não pertence a nenhuma organização. As organizações permitem-lhe partilhar itens em segurança com outros utilizadores."
   },
   "noCollectionsInList": {
     "message": "Não existem coleções para exibir."
@@ -1379,20 +1392,32 @@
   "unlockWithWindowsHello": {
     "message": "Desbloquear com Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Additional Windows Hello settings"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verificar para Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Desbloquear com Touch ID"
   },
+  "additionalTouchIdSettings": {
+    "message": "Additional Touch ID settings"
+  },
   "touchIdConsentMessage": {
     "message": "Verificar para Bitwarden."
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "Ask for Windows Hello on app start"
   },
   "autoPromptTouchId": {
-    "message": "Ask for Touch ID on launch"
+    "message": "Ask for Touch ID on app start"
+  },
+  "requirePasswordOnStart": {
+    "message": "Require password or PIN on app start"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommended for security."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bloquear com palavra-passe mestra ao reiniciar"
@@ -1428,7 +1453,7 @@
     "message": "Tem de selecionar pelo menos uma coleção."
   },
   "premiumUpdated": {
-    "message": "Atualizou para premium."
+    "message": "Atualizou para o Premium."
   },
   "restore": {
     "message": "Restaurar"
@@ -1514,6 +1539,9 @@
   "ssoCompleteRegistration": {
     "message": "Para concluir o início de sessão com SSO, por favor defina uma palavra-passe mestra para aceder e proteger o seu cofre."
   },
+  "currentMasterPass": {
+    "message": "Current master password"
+  },
   "newMasterPass": {
     "message": "Nova palavra-passe mestra"
   },
@@ -1590,7 +1618,7 @@
     "message": "Unfortunately browser integration is currently not supported in the Microsoft Store version."
   },
   "browserIntegrationLinuxDesc": {
-    "message": "Infelizmente, a integração com o navegador não é, atualmente, suportada para a versão linux."
+    "message": "Infelizmente, a integração com o navegador não é atualmente suportada na versão Linux."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Require verification for browser integration"
@@ -1599,7 +1627,7 @@
     "message": "Add an additional layer of security by requiring fingerprint phrase confirmation when establishing a link between your desktop and browser. This requires user action and verification each time a connection is created."
   },
   "approve": {
-    "message": "Approve"
+    "message": "Aprovar"
   },
   "verifyBrowserTitle": {
     "message": "Verify browser connection"
@@ -1656,7 +1684,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "O meu Cofre"
+    "message": "O meu cofre"
   },
   "text": {
     "message": "Texto"
@@ -1669,7 +1697,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "Data de Expiração"
+    "message": "Data de expiração"
   },
   "expirationDateDesc": {
     "message": "If set, access to this Send will expire on the specified date and time.",
@@ -1822,13 +1850,16 @@
     "message": "Esta ação está protegida. Para continuar, por favor reinsira a sua palavra-passe mestra para verificarmos a sua identidade."
   },
   "updatedMasterPassword": {
-    "message": "Palavra-passe Mestra Atualizada"
+    "message": "Palavra-passe mestra atualizada"
   },
   "updateMasterPassword": {
     "message": "Atualizar palavra-passe mestra"
   },
   "updateMasterPasswordWarning": {
     "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "hours": {
     "message": "Horas"
@@ -1837,7 +1868,7 @@
     "message": "Minutos"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1865,7 +1922,7 @@
     "message": "Uma ou mais políticas da organização impedem que exporte o seu cofre pessoal."
   },
   "addAccount": {
-    "message": "Adicionar Conta"
+    "message": "Adicionar conta"
   },
   "removeMasterPassword": {
     "message": "Remover palavra-passe mestra"
@@ -1895,16 +1952,16 @@
     "message": "Key connector error: make sure key connector is available and working correctly."
   },
   "lockAllVaults": {
-    "message": "Bloquear Todos os Cofres"
+    "message": "Bloquear todos os cofres"
   },
   "accountLimitReached": {
-    "message": "Não é possível iniciar sessão com mais de 5 contas ao mesmo tempo."
+    "message": "Não é possível ter a sessão iniciada com mais de 5 contas ao mesmo tempo."
   },
   "accountPreferences": {
     "message": "Preferências"
   },
   "appPreferences": {
-    "message": "Definições da Aplicação (Todas as Contas)"
+    "message": "Definições da aplicação (todas as contas)"
   },
   "accountSwitcherLimitReached": {
     "message": "Limite de contas atingido. Termine a sessão de uma das contas para adicionar outra."
@@ -1919,7 +1976,7 @@
     }
   },
   "switchAccount": {
-    "message": "Mudar de Conta"
+    "message": "Mudar de conta"
   },
   "options": {
     "message": "Opções"
@@ -1928,10 +1985,10 @@
     "message": "A sua sessão expirou. Por favor, volte atrás e tente iniciar sessão novamente."
   },
   "exportingPersonalVaultTitle": {
-    "message": "A Exportar Cofre Pessoal"
+    "message": "A exportar cofre pessoal"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Apenas os itens do cofre pessoal associado ao $EMAIL$ serão exportados. Os itens do cofre da organização não serão incluídos.",
+    "message": "Apenas os itens do cofre pessoal associado a $EMAIL$ serão exportados. Os itens do cofre da organização não serão incluídos.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1949,19 +2006,19 @@
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "O que é que gostaria de gerar?"
   },
   "passwordType": {
     "message": "Password type"
   },
   "regenerateUsername": {
-    "message": "Regenerate username"
+    "message": "Regerar nome de utilizador"
   },
   "generateUsername": {
-    "message": "Generate username"
+    "message": "Gerar nome de utilizador"
   },
   "usernameType": {
-    "message": "Username type"
+    "message": "Tipo de nome de utilizador"
   },
   "plusAddressedEmail": {
     "message": "Plus addressed email",
@@ -1989,13 +2046,13 @@
     "message": "Service"
   },
   "allVaults": {
-    "message": "Todos os Cofres"
+    "message": "Todos os cofres"
   },
   "searchOrganization": {
-    "message": "Procurar Organização"
+    "message": "Procurar organização"
   },
   "searchMyVault": {
-    "message": "Procurar no meu Cofre"
+    "message": "Procurar no meu cofre"
   },
   "forwardedEmail": {
     "message": "Forwarded email alias"
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Tem a certeza de que deseja utilizar a opção \"Nunca\"? Ao definir as opções de bloqueio para \"Nunca\" armazena a chave de encriptação do seu cofre no seu dispositivo. Se utilizar esta opção deve assegurar-se de que mantém o seu dispositivo devidamente protegido."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Vault"
   },
@@ -2038,13 +2092,13 @@
     "message": "A iniciar sessão como"
   },
   "rememberEmail": {
-    "message": "Relembrar e-mail"
+    "message": "Lembrar e-mail"
   },
   "notYou": {
     "message": "Utilizador incorreto?"
   },
   "newAroundHere": {
-    "message": "Novo por aqui?"
+    "message": "É novo por cá?"
   },
   "loggingInTo": {
     "message": "A iniciar sessão em $DOMAIN$",
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Iniciar sessão com outro dispositivo"
   },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
   "toggleCharacterCount": {
     "message": "Toggle character count",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "region": {
+    "message": "Região"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EUA",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Auto-hospedado"
   }
 }

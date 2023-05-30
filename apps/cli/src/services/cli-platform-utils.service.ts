@@ -1,8 +1,7 @@
 import * as child_process from "child_process";
 
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { ClientType } from "@bitwarden/common/enums/clientType";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ClientType, DeviceType } from "@bitwarden/common/enums";
 
 // eslint-disable-next-line
 const open = require("open");
@@ -113,16 +112,6 @@ export class CliPlatformUtilsService implements PlatformUtilsService {
     throw new Error("Not implemented.");
   }
 
-  showDialog(
-    text: string,
-    title?: string,
-    confirmText?: string,
-    cancelText?: string,
-    type?: string
-  ): Promise<boolean> {
-    throw new Error("Not implemented.");
-  }
-
   isDev(): boolean {
     return process.env.BWCLI_ENV === "development";
   }
@@ -149,5 +138,9 @@ export class CliPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage(): boolean {
     return false;
+  }
+
+  getAutofillKeyboardShortcut(): Promise<string> {
+    return null;
   }
 }

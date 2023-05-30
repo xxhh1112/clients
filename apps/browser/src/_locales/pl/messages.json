@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Pomoc i opinie"
   },
+  "helpCenter": {
+    "message": "Centrum pomocy Bitwarden"
+  },
+  "communityForums": {
+    "message": "Przeglądaj fora społeczności Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Skontaktuj się z pomocą techniczną Bitwarden"
+  },
   "sync": {
     "message": "Synchronizacja"
   },
@@ -430,7 +439,14 @@
     "message": "Wymagane jest ponowne wpisanie hasła głównego."
   },
   "masterPasswordMinlength": {
-    "message": "Hasło główne musi zawierać co najmniej 8 znaków."
+    "message": "Hasło główne musi zawierać co najmniej $VALUE$ znaki(-ów).",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hasła nie pasują do siebie."
@@ -960,7 +976,10 @@
     "message": "Jeśli zostanie wykryty formularz logowania, automatycznie uzupełnij dane logowania po załadowaniu strony."
   },
   "experimentalFeature": {
-    "message": "Obecnie jest to funkcja eksperymentalna. Używaj na własne ryzyko."
+    "message": "Zaatakowane lub niezaufane witryny internetowe mogą wykorzystać funkcję autouzupełniania podczas wczytywania strony, aby wyrządzić szkody."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Dowiedz się więcej o autouzupełnianiu"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Domyślne ustawienie autouzupełniania"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Doktor"
+  },
+  "mx": {
+    "message": "Pan(i)"
   },
   "firstName": {
     "message": "Imię"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Element został automatycznie uzupełniony"
   },
+  "insecurePageWarning": {
+    "message": "Ostrzeżenie: Jest to niezabezpieczona strona HTTP i wszelkie przekazane informacje mogą być potencjalnie widoczne i zmienione przez innych. Ten login został pierwotnie zapisany na stronie bezpiecznej (HTTPS)."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Nadal chcesz uzupełnić ten login?"
+  },
+  "autofillIframeWarning": {
+    "message": "Formularz jest hostowany przez inną domenę niż zapisany adres URI dla tego loginu. Wybierz OK, aby i tak automatycznie wypełnić lub anuluj aby zatrzymać."
+  },
+  "autofillIframeWarningTip": {
+    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ustaw hasło główne"
+  },
+  "currentMasterPass": {
+    "message": "Aktualne hasło główne"
+  },
+  "newMasterPass": {
+    "message": "Nowe hasło główne"
+  },
+  "confirmNewMasterPass": {
+    "message": "Potwierdź nowe hasło główne"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Co najmniej jedna zasada organizacji wymaga, aby hasło główne spełniało następujące wymagania:"
@@ -1822,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Hasło główne zostało zmienione przez administratora Twojej organizacji. Musisz je zaktualizować, aby uzyskać dostęp do sejfu. Ta czynność spowoduje wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatyczne rejestrowanie użytkowników"
   },
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi $HOURS$ godz. i $MINUTES$ min. Twój czas blokowania sejfu to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Zasady organizacji ustawiły czas blokowania sejfu na $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1954,10 +2032,10 @@
     "message": "Usługa"
   },
   "forwardedEmail": {
-    "message": "Alias przekazywanego adresu"
+    "message": "Alias przekierowania"
   },
   "forwardedEmailDesc": {
-    "message": "Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania."
+    "message": "Wygeneruj alias adresu e-mail z zewnętrznej usługi przekierowania."
   },
   "hostname": {
     "message": "Nazwa hosta",
@@ -1980,9 +2058,6 @@
   },
   "disabledOrganizationFilterError": {
     "message": "Nie można uzyskać dostępu do elementów w zawieszonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "loggingInTo": {
     "message": "Logowanie do $DOMAIN$",
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "Zapamiętaj adres e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Zaloguj się za pomocą urządzenia"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden. Potrzebujesz innej opcji?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Unikalny identyfikator konta"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Upewnij się, że sejf jest odblokowany, a unikalny identyfikator konta pasuje do drugiego urządzenia."
+  },
+  "resendNotification": {
+    "message": "Wyślij ponownie powiadomienie"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobacz wszystkie sposoby logowania"
+  },
+  "notificationSentDevice": {
+    "message": "Powiadomienie zostało wysłane na urządzenie."
+  },
+  "logInInitiated": {
+    "message": "Logowanie rozpoczęte"
+  },
+  "exposedMasterPassword": {
+    "message": "Ujawnione hasło główne"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Hasło ujawnione w wyniku naruszenia ochrony danych. Użyj unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć ujawnionego hasła?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Słabe i ujawnione hasło główne"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?"
+  },
+  "checkForBreaches": {
+    "message": "Sprawdź znane naruszenia ochrony danych tego hasła"
+  },
+  "important": {
+    "message": "Ważne:"
+  },
+  "masterPasswordHint": {
+    "message": "Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz!"
+  },
+  "characterMinimum": {
+    "message": "Minimum znaków: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Twoja organizacji włączyła autouzupełnianie podczas wczytywania strony."
+  },
+  "howToAutofill": {
+    "message": "Jak autouzupełniać"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Wybierz element z tej strony lub użyj skrótu: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Wybierz element z tej strony lub ustaw skrót w ustawieniach."
+  },
+  "gotIt": {
+    "message": "Rozumiem"
+  },
+  "autofillSettings": {
+    "message": "Ustawienia autouzupełniania"
+  },
+  "autofillShortcut": {
+    "message": "Skrót klawiaturowy autouzupełniania"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Skrót autouzupełniania nie jest ustawiony. Zmień to w ustawieniach przeglądarki."
+  },
+  "autofillShortcutText": {
+    "message": "Skrót autouzupełniania to: $COMMAND$. Zmień to w ustawieniach przeglądarki.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Domyślny skrót autouzupełniania: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Otwiera w nowym oknie"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }

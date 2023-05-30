@@ -1,11 +1,11 @@
 import { firstValueFrom } from "rxjs";
 
-import { AuthService } from "../abstractions/auth.service";
 import { MessagingService } from "../abstractions/messaging.service";
 import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { StateService } from "../abstractions/state.service";
 import { SystemService as SystemServiceAbstraction } from "../abstractions/system.service";
-import { AuthenticationStatus } from "../enums/authenticationStatus";
+import { AuthService } from "../auth/abstractions/auth.service";
+import { AuthenticationStatus } from "../auth/enums/authentication-status";
 import { Utils } from "../misc/utils";
 
 export class SystemService implements SystemServiceAbstraction {
@@ -45,34 +45,23 @@ export class SystemService implements SystemServiceAbstraction {
     }
 
     this.cancelProcessReload();
-    this.reloadInterval = setInterval(async () => await this.executeProcessReload(), 10000);
-  }
-
-  private async inactiveMoreThanSeconds(seconds: number): Promise<boolean> {
-    const lastActive = await this.stateService.getLastActive();
-    if (lastActive != null) {
-      const diffMs = new Date().getTime() - lastActive;
-      return diffMs >= seconds * 1000;
-    }
-    return true;
+    await this.executeProcessReload();
   }
 
   private async executeProcessReload() {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    const doRefresh =
-      accounts == null ||
-      Object.keys(accounts).length == 0 ||
-      (await this.inactiveMoreThanSeconds(5));
-
     const biometricLockedFingerprintValidated =
       await this.stateService.getBiometricFingerprintValidated();
-    if (doRefresh && !biometricLockedFingerprintValidated) {
+    if (!biometricLockedFingerprintValidated) {
       clearInterval(this.reloadInterval);
       this.reloadInterval = null;
       this.messagingService.send("reloadProcess");
       if (this.reloadCallback != null) {
         await this.reloadCallback();
       }
+      return;
+    }
+    if (this.reloadInterval == null) {
+      this.reloadInterval = setInterval(async () => await this.executeProcessReload(), 1000);
     }
   }
 

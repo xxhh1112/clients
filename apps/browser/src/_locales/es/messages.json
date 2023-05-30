@@ -195,11 +195,20 @@
   "helpFeedback": {
     "message": "Ayuda y comentarios"
   },
+  "helpCenter": {
+    "message": "Centro de ayuda de Bitwarden"
+  },
+  "communityForums": {
+    "message": "Explorar los foros de la comunidad Bitwarden"
+  },
+  "contactSupport": {
+    "message": "Contactar al soporte de Bitwarden"
+  },
   "sync": {
     "message": "Sincronizar"
   },
   "syncVaultNow": {
-    "message": "Sincronizar caja fuerte ahora"
+    "message": "Sincronizar caja fuerte"
   },
   "lastSync": {
     "message": "Última sincronización:"
@@ -430,7 +439,14 @@
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -960,7 +976,10 @@
     "message": "Si se detecta un formulario, realizar automáticamente un autorellenado cuando la web cargue."
   },
   "experimentalFeature": {
-    "message": "Esta es una característica experimental. Úsala bajo tu propio riesgo."
+    "message": "Los sitios web vulnerados o no confiables pueden explotar el autorelleno al cargar la página."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Más información sobre el relleno automático"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Configuración de autorrelleno por defecto para elementos de inicio de sesión"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "firstName": {
     "message": "Nombre"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Objeto autorellenado"
   },
+  "insecurePageWarning": {
+    "message": "Atención: Esta es una página HTTP no segura, y cualquier información que envíes puede ser vista y cambiada por otros. Este inicio de sesión fue guardado originalmente en una página segura (HTTPS)."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "¿Sigue deseando rellenar este inicio de sesión?"
+  },
+  "autofillIframeWarning": {
+    "message": "El formulario está alojado por un dominio diferente al URI de su registro guardado. Elija OK para autorrellenar de todos modos, o Cancelar para parar."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Para prevenir esta advertencia en el futuro, guarde esta URI, $HOSTNAME$, en su elemento de inicio de sesión de Bitwarden para este sitio.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Establecer contraseña maestra"
+  },
+  "currentMasterPass": {
+    "message": "Contraseña maestra actual"
+  },
+  "newMasterPass": {
+    "message": "Nueva contraseña maestra"
+  },
+  "confirmNewMasterPass": {
+    "message": "Confirma la nueva contraseña maestra"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Una o más políticas de la organización requieren que su contraseña maestra cumpla con los siguientes requisitos:"
@@ -1563,7 +1612,7 @@
     "message": "Esta acción no se puede realizar en la barra lateral, por favor, vuelve a intentar la acción en la ventana emergente o popout."
   },
   "personalOwnershipSubmitError": {
-    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su bóveda personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
+    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Una política de organización está afectando a sus opciones de propiedad."
@@ -1811,7 +1860,7 @@
     "message": "Verificación de correo electrónico requerida"
   },
   "emailVerificationRequiredDesc": {
-    "message": "Debes verificar tu correo electrónico para usar esta función. Puedes verificar tu correo electrónico en la bóveda web."
+    "message": "Debes verificar tu correo electrónico para usar esta función. Puedes verificar tu correo electrónico en la caja fuerte web."
   },
   "updatedMasterPassword": {
     "message": "Contraseña maestra actualizada"
@@ -1821,6 +1870,9 @@
   },
   "updateMasterPasswordWarning": {
     "message": "Su contraseña maestra ha sido cambiada recientemente por un administrador de su organización. Para acceder a la caja fuerte, debe actualizarla ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante una hora."
+  },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Su contraseña maestra no cumple con una o más de las políticas de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Inscripción automática"
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Las políticas de su organización están afectando al tiempo de espera de tu caja fuerte. El tiempo de espera de tu caja fuerte máximo permitido es de $HOURS$ hora(s) y $MINUTES$ minuto(s). La acción de tiempo de espera de tu caja fuerte está establecida en $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Las políticas de su organización han establecido su acción de tiempo de espera de tu caja fuerte en $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1981,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Póngase en contacto con el personal propietario de la organización para obtener ayuda."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Iniciando sesión en $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "Recordar email"
+  },
+  "loginWithDevice": {
+    "message": "Acceder con un dispositivo"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "El acceso con dispositivo debe prepararse en la configuración de la aplicación Bitwarden. ¿Necesita otra opción?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo."
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de acceso"
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
+  },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
+  },
+  "exposedMasterPassword": {
+    "message": "Contraseña maestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Contraseña encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contraseña maestra débil y comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contraseña débil encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "checkForBreaches": {
+    "message": "Comprobar filtración de datos conocidos para esta contraseña"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Tu contraseña maestra no se puede recuperar si la olvidas"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimo",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Las políticas de su organización han activado autocompletar al cargar la página."
+  },
+  "howToAutofill": {
+    "message": "Cómo autorellenar"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Seleccione un elemento de esta página o utilice el acceso directo: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Seleccione un elemento de esta página o establezca un acceso directo en los ajustes."
+  },
+  "gotIt": {
+    "message": "Entendido"
+  },
+  "autofillSettings": {
+    "message": "Ajustes de autocompletar"
+  },
+  "autofillShortcut": {
+    "message": "Atajo de teclado para autocompletar"
+  },
+  "autofillShortcutNotSet": {
+    "message": "El atajo de autocompletar no está establecido. Cambie esto en los ajustes del navegador."
+  },
+  "autofillShortcutText": {
+    "message": "El atajo de autocompletar es $COMMAND$. Cambie esto en los ajustes del navegador.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Atajo de autocompletar predeterminado: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Región"
+  },
+  "opensInANewWindow": {
+    "message": "Abre en una nueva ventana"
+  },
+  "eu": {
+    "message": "Unión Europea",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EE.UU.",
+    "description": "United States"
   }
 }

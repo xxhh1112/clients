@@ -4,11 +4,11 @@ import { NgModule } from "@angular/core";
 
 import { FormFieldModule } from "@bitwarden/components";
 
-import { OrganizationCreateModule } from "../../organizations/create/organization-create.module";
+import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
+import { RegisterFormModule } from "../../auth/register-form/register-form.module";
+import { BillingComponent } from "../../billing/accounts/trial-initiation/billing.component";
 import { LooseComponentsModule, SharedModule } from "../../shared";
-import { RegisterFormModule } from "../register-form/register-form.module";
 
-import { BillingComponent } from "./billing.component";
 import { ConfirmationDetailsComponent } from "./confirmation-details.component";
 import { AbmEnterpriseContentComponent } from "./content/abm-enterprise-content.component";
 import { AbmTeamsContentComponent } from "./content/abm-teams-content.component";

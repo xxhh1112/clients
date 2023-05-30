@@ -1,9 +1,10 @@
-import { awaitAsync, awaitAsync as flushAsyncObservables } from "@bitwarden/angular/../test-utils";
+import { awaitAsync } from "@bitwarden/angular/../test-utils";
 import { mock, MockProxy } from "jest-mock-extended";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
 
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
+
 import { BrowserApi } from "../../browser/browserApi";
-import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 
 import { SessionSyncer } from "./session-syncer";
 import { SyncedItemMetadata } from "./sync-item-metadata";
@@ -17,7 +18,7 @@ describe("session syncer", () => {
     initializer: (s: string) => s,
     initializeAs: "object",
   };
-  let stateService: MockProxy<BrowserStateService>;
+  let storageService: MockProxy<MemoryStorageService>;
   let sut: SessionSyncer;
   let behaviorSubject: BehaviorSubject<string>;
 
@@ -29,9 +30,9 @@ describe("session syncer", () => {
       manifest_version: 3,
     });
 
-    stateService = mock<BrowserStateService>();
-    stateService.hasInSessionMemory.mockResolvedValue(false);
-    sut = new SessionSyncer(behaviorSubject, stateService, metaData);
+    storageService = mock();
+    storageService.has.mockResolvedValue(false);
+    sut = new SessionSyncer(behaviorSubject, storageService, metaData);
   });
 
   afterEach(() => {
@@ -43,21 +44,21 @@ describe("session syncer", () => {
   describe("constructor", () => {
     it("should throw if subject is not an instance of Subject", () => {
       expect(() => {
-        new SessionSyncer({} as any, stateService, null);
+        new SessionSyncer({} as any, storageService, null);
       }).toThrowError("subject must inherit from Subject");
     });
 
     it("should create if either ctor or initializer is provided", () => {
       expect(
-        new SessionSyncer(behaviorSubject, stateService, {
+        new SessionSyncer(behaviorSubject, storageService, {
           propertyKey,
           sessionKey,
-          ctor: String,
           initializeAs: "object",
+          initializer: () => null,
         })
       ).toBeDefined();
       expect(
-        new SessionSyncer(behaviorSubject, stateService, {
+        new SessionSyncer(behaviorSubject, storageService, {
           propertyKey,
           sessionKey,
           initializer: (s: any) => s,
@@ -67,12 +68,13 @@ describe("session syncer", () => {
     });
     it("should throw if neither ctor or initializer is provided", () => {
       expect(() => {
-        new SessionSyncer(behaviorSubject, stateService, {
+        new SessionSyncer(behaviorSubject, storageService, {
           propertyKey,
           sessionKey,
           initializeAs: "object",
+          initializer: null,
         });
-      }).toThrowError("ctor or initializer must be provided");
+      }).toThrowError("initializer must be provided");
     });
   });
 
@@ -82,7 +84,7 @@ describe("session syncer", () => {
       replaySubject.next("1");
       replaySubject.next("2");
       replaySubject.next("3");
-      sut = new SessionSyncer(replaySubject, stateService, metaData);
+      sut = new SessionSyncer(replaySubject, storageService, metaData);
       // block observing the subject
       jest.spyOn(sut as any, "observe").mockImplementation();
 
@@ -93,7 +95,7 @@ describe("session syncer", () => {
 
     it("should ignore BehaviorSubject's initial value", () => {
       const behaviorSubject = new BehaviorSubject<string>("initial");
-      sut = new SessionSyncer(behaviorSubject, stateService, metaData);
+      sut = new SessionSyncer(behaviorSubject, storageService, metaData);
       // block observing the subject
       jest.spyOn(sut as any, "observe").mockImplementation();
 
@@ -103,9 +105,9 @@ describe("session syncer", () => {
     });
 
     it("should grab an initial value from storage if it exists", async () => {
-      stateService.hasInSessionMemory.mockResolvedValue(true);
+      storageService.has.mockResolvedValue(true);
       //Block a call to update
-      const updateSpy = jest.spyOn(sut as any, "update").mockImplementation();
+      const updateSpy = jest.spyOn(sut as any, "updateFromMemory").mockImplementation();
 
       sut.init();
       await awaitAsync();
@@ -114,7 +116,7 @@ describe("session syncer", () => {
     });
 
     it("should not grab an initial value from storage if it does not exist", async () => {
-      stateService.hasInSessionMemory.mockResolvedValue(false);
+      storageService.has.mockResolvedValue(false);
       //Block a call to update
       const updateSpy = jest.spyOn(sut as any, "update").mockImplementation();
 
@@ -127,20 +129,15 @@ describe("session syncer", () => {
 
   describe("a value is emitted on the observable", () => {
     let sendMessageSpy: jest.SpyInstance;
+    const value = "test";
+    const serializedValue = JSON.stringify(value);
 
     beforeEach(() => {
       sendMessageSpy = jest.spyOn(BrowserApi, "sendMessage");
 
       sut.init();
 
-      behaviorSubject.next("test");
-    });
-
-    it("should update the session memory", async () => {
-      // await finishing of fire-and-forget operation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      expect(stateService.setInSessionMemory).toHaveBeenCalledTimes(1);
-      expect(stateService.setInSessionMemory).toHaveBeenCalledWith(sessionKey, "test");
+      behaviorSubject.next(value);
     });
 
     it("should update sessionSyncers in other contexts", async () => {
@@ -148,7 +145,10 @@ describe("session syncer", () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(sendMessageSpy).toHaveBeenCalledTimes(1);
-      expect(sendMessageSpy).toHaveBeenCalledWith(`${sessionKey}_update`, { id: sut.id });
+      expect(sendMessageSpy).toHaveBeenCalledWith(`${sessionKey}_update`, {
+        id: sut.id,
+        serializedValue,
+      });
     });
   });
 
@@ -170,34 +170,118 @@ describe("session syncer", () => {
     it("should ignore messages with the wrong command", async () => {
       await sut.updateFromMessage({ command: "wrong_command", id: sut.id });
 
-      expect(stateService.getFromSessionMemory).not.toHaveBeenCalled();
+      expect(storageService.getBypassCache).not.toHaveBeenCalled();
       expect(nextSpy).not.toHaveBeenCalled();
     });
 
     it("should ignore messages from itself", async () => {
       await sut.updateFromMessage({ command: `${sessionKey}_update`, id: sut.id });
 
-      expect(stateService.getFromSessionMemory).not.toHaveBeenCalled();
+      expect(storageService.getBypassCache).not.toHaveBeenCalled();
       expect(nextSpy).not.toHaveBeenCalled();
     });
 
     it("should update from message on emit from another instance", async () => {
       const builder = jest.fn();
       jest.spyOn(SyncedItemMetadata, "builder").mockReturnValue(builder);
-      stateService.getFromSessionMemory.mockResolvedValue("test");
+      const value = "test";
+      const serializedValue = JSON.stringify(value);
+      builder.mockReturnValue(value);
 
-      await sut.updateFromMessage({ command: `${sessionKey}_update`, id: "different_id" });
-      await flushAsyncObservables();
+      // Expect no circular messaging
+      await awaitAsync();
+      expect(sendMessageSpy).toHaveBeenCalledTimes(0);
 
-      expect(stateService.getFromSessionMemory).toHaveBeenCalledTimes(1);
-      expect(stateService.getFromSessionMemory).toHaveBeenCalledWith(sessionKey, builder);
+      await sut.updateFromMessage({
+        command: `${sessionKey}_update`,
+        id: "different_id",
+        serializedValue,
+      });
+      await awaitAsync();
+
+      expect(storageService.getBypassCache).toHaveBeenCalledTimes(0);
 
       expect(nextSpy).toHaveBeenCalledTimes(1);
-      expect(nextSpy).toHaveBeenCalledWith("test");
-      expect(behaviorSubject.value).toBe("test");
+      expect(nextSpy).toHaveBeenCalledWith(value);
+      expect(behaviorSubject.value).toBe(value);
 
       // Expect no circular messaging
       expect(sendMessageSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe("memory storage", () => {
+    const value = "test";
+    const serializedValue = JSON.stringify(value);
+    let saveSpy: jest.SpyInstance;
+    const builder = jest.fn().mockReturnValue(value);
+    const manifestVersionSpy = jest.spyOn(BrowserApi, "manifestVersion", "get");
+    const isBackgroundPageSpy = jest.spyOn(BrowserApi, "isBackgroundPage");
+
+    beforeEach(async () => {
+      jest.spyOn(SyncedItemMetadata, "builder").mockReturnValue(builder);
+      saveSpy = jest.spyOn(storageService, "save");
+
+      sut.init();
+      await awaitAsync();
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it("should always store on observed next for manifest version 3", async () => {
+      manifestVersionSpy.mockReturnValue(3);
+      isBackgroundPageSpy.mockReturnValueOnce(true).mockReturnValueOnce(false);
+      behaviorSubject.next(value);
+      await awaitAsync();
+      behaviorSubject.next(value);
+      await awaitAsync();
+
+      expect(saveSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it("should not store on message receive for manifest version 3", async () => {
+      manifestVersionSpy.mockReturnValue(3);
+      isBackgroundPageSpy.mockReturnValueOnce(true).mockReturnValueOnce(false);
+      await sut.updateFromMessage({
+        command: `${sessionKey}_update`,
+        id: "different_id",
+        serializedValue,
+      });
+      await awaitAsync();
+
+      expect(saveSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should store on message receive for manifest version 2 for background page only", async () => {
+      manifestVersionSpy.mockReturnValue(2);
+      isBackgroundPageSpy.mockReturnValueOnce(true).mockReturnValueOnce(false);
+      await sut.updateFromMessage({
+        command: `${sessionKey}_update`,
+        id: "different_id",
+        serializedValue,
+      });
+      await awaitAsync();
+      await sut.updateFromMessage({
+        command: `${sessionKey}_update`,
+        id: "different_id",
+        serializedValue,
+      });
+      await awaitAsync();
+
+      expect(saveSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should store on observed next for manifest version 2 for background page only", async () => {
+      manifestVersionSpy.mockReturnValue(2);
+      isBackgroundPageSpy.mockReturnValueOnce(true).mockReturnValueOnce(false);
+      behaviorSubject.next(value);
+      await awaitAsync();
+      behaviorSubject.next(value);
+      await awaitAsync();
+
+      expect(saveSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -2,25 +2,28 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
-import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+  ProviderUserStatusType,
+  ProviderUserType,
+} from "@bitwarden/common/admin-console/enums";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
 
-import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
+import { OrganizationUserView } from "../admin-console/organizations/core/views/organization-user.view";
+import { UserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 
 type StatusType = OrganizationUserStatusType | ProviderUserStatusType;
 
@@ -28,7 +31,7 @@ const MaxCheckedCount = 500;
 
 @Directive()
 export abstract class BasePeopleComponent<
-  UserType extends ProviderUserUserDetailsResponse | OrganizationUserUserDetailsResponse
+  UserType extends ProviderUserUserDetailsResponse | OrganizationUserView
 > {
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
   confirmModalRef: ViewContainerRef;
@@ -106,11 +109,12 @@ export abstract class BasePeopleComponent<
     private logService: LogService,
     private searchPipe: SearchPipe,
     protected userNamePipe: UserNamePipe,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected dialogService: DialogServiceAbstraction
   ) {}
 
   abstract edit(user: UserType): void;
-  abstract getUsers(): Promise<ListResponse<UserType>>;
+  abstract getUsers(): Promise<ListResponse<UserType> | UserType[]>;
   abstract deleteUser(id: string): Promise<void>;
   abstract revokeUser(id: string): Promise<void>;
   abstract restoreUser(id: string): Promise<void>;
@@ -125,9 +129,14 @@ export abstract class BasePeopleComponent<
       this.statusMap.set(status, []);
     }
 
-    this.allUsers = response.data != null && response.data.length > 0 ? response.data : [];
+    if (response instanceof ListResponse) {
+      this.allUsers = response.data != null && response.data.length > 0 ? response.data : [];
+    } else if (Array.isArray(response)) {
+      this.allUsers = response;
+    }
+
     this.allUsers.sort(
-      Utils.getSortFunction<ProviderUserUserDetailsResponse | OrganizationUserUserDetailsResponse>(
+      Utils.getSortFunction<ProviderUserUserDetailsResponse | OrganizationUserView>(
         this.i18nService,
         "email"
       )
@@ -176,7 +185,7 @@ export abstract class BasePeopleComponent<
     this.didScroll = this.pagedUsers.length > this.pageSize;
   }
 
-  checkUser(user: OrganizationUserUserDetailsResponse, select?: boolean) {
+  checkUser(user: UserType, select?: boolean) {
     (user as any).checked = select == null ? !(user as any).checked : select;
   }
 
@@ -210,13 +219,11 @@ export abstract class BasePeopleComponent<
   }
 
   protected async removeUserConfirmationDialog(user: UserType) {
-    return this.platformUtilsService.showDialog(
-      this.i18nService.t("removeUserConfirmation"),
-      this.userNamePipe.transform(user),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    return this.dialogService.openSimpleDialog({
+      title: this.userNamePipe.transform(user),
+      content: { key: "removeUserConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
   }
 
   async remove(user: UserType) {
@@ -241,13 +248,12 @@ export abstract class BasePeopleComponent<
   }
 
   async revoke(user: UserType) {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.revokeWarningMessage(),
-      this.i18nService.t("revokeUserId", this.userNamePipe.transform(user)),
-      this.i18nService.t("revokeAccess"),
-      this.i18nService.t("cancel"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "revokeAccess", placeholders: [this.userNamePipe.transform(user)] },
+      content: this.revokeWarningMessage(),
+      acceptButtonText: { key: "revokeAccess" },
+      type: SimpleDialogType.WARNING,
+    });
 
     if (!confirmed) {
       return false;

@@ -1,3 +1,4 @@
+<!-- eslint-disable tailwindcss/no-custom-classname -->
 <div *ngIf="accountCreateOnly" class="">
   <h1 class="tw-mt-12 tw-text-center tw-text-xl">{{ "createAccount" | i18n }}</h1>
   <div
@@ -73,6 +74,7 @@
             <app-vertical-step label="Organization Information" [subLabel]="orgInfoSubLabel">
               <app-org-info [nameOnly]="true" [formGroup]="orgInfoFormGroup"></app-org-info>
               <button
+                type="button"
                 bitButton
                 buttonType="primary"
                 [disabled]="orgInfoFormGroup.get('name').invalid"
@@ -97,10 +99,11 @@
                 [orgLabel]="orgLabel"
               ></app-trial-confirmation-details>
               <div class="tw-mb-3 tw-flex">
-                <button bitButton buttonType="primary" (click)="navigateToOrgVault()">
+                <button type="button" bitButton buttonType="primary" (click)="navigateToOrgVault()">
                   Get Started
                 </button>
                 <button
+                  type="button"
                   bitButton
                   buttonType="secondary"
                   (click)="navigateToOrgInvite()"

@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, map, Observable } from "rxjs";
 
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import type { Organization } from "@bitwarden/common/models/domain/organization";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import type { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 
 @Component({
   selector: "org-switcher",
@@ -35,6 +35,13 @@ export class OrgSwitcherComponent {
   open = false;
   @Output()
   openChange = new EventEmitter<boolean>();
+
+  /**
+   * Visibility of the New Organization button
+   * (Temporary; will be removed when ability to create organizations is added to SM.)
+   */
+  @Input()
+  hideNewButton = false;
 
   constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 

@@ -1,8 +1,8 @@
+import { clearClipboardAlarmName } from "../autofill/clipboard";
 import { BrowserApi } from "../browser/browserApi";
-import { clearClipboardAlarmName } from "../clipboard";
 
 export const alarmKeys = [clearClipboardAlarmName] as const;
-export type AlarmKeys = typeof alarmKeys[number];
+export type AlarmKeys = (typeof alarmKeys)[number];
 
 type AlarmState = { [T in AlarmKeys]: number | undefined };
 

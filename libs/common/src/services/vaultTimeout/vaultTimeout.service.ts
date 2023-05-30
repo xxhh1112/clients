@@ -1,18 +1,19 @@
 import { firstValueFrom } from "rxjs";
 
-import { AuthService } from "../../abstractions/auth.service";
-import { CipherService } from "../../abstractions/cipher.service";
-import { CollectionService } from "../../abstractions/collection.service";
 import { CryptoService } from "../../abstractions/crypto.service";
-import { FolderService } from "../../abstractions/folder/folder.service.abstraction";
-import { KeyConnectorService } from "../../abstractions/keyConnector.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { SearchService } from "../../abstractions/search.service";
 import { StateService } from "../../abstractions/state.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "../../abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "../../abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { AuthenticationStatus } from "../../enums/authenticationStatus";
+import { CollectionService } from "../../admin-console/abstractions/collection.service";
+import { AuthService } from "../../auth/abstractions/auth.service";
+import { KeyConnectorService } from "../../auth/abstractions/key-connector.service";
+import { AuthenticationStatus } from "../../auth/enums/authentication-status";
+import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
+import { CipherService } from "../../vault/abstractions/cipher.service";
+import { FolderService } from "../../vault/abstractions/folder/folder.service.abstraction";
 
 export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
   private inited = false;
@@ -132,7 +133,9 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
   }
 
   private async executeTimeoutAction(userId: string): Promise<void> {
-    const timeoutAction = await this.stateService.getVaultTimeoutAction({ userId: userId });
-    timeoutAction === "logOut" ? await this.logOut(userId) : await this.lock(userId);
+    const timeoutAction = await this.vaultTimeoutSettingsService.getVaultTimeoutAction(userId);
+    timeoutAction === VaultTimeoutAction.LogOut
+      ? await this.logOut(userId)
+      : await this.lock(userId);
   }
 }

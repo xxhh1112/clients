@@ -16,26 +16,24 @@ import {
   TemplateRef,
 } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
-import { filter, Subject, switchMap, takeUntil } from "rxjs";
+import { filter, firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
-import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
+import {
+  DialogServiceAbstraction,
+  SimpleDialogCloseType,
+} from "@bitwarden/angular/services/dialog";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
+import { SimpleDialogOptions } from "../../../angular/src/services/dialog/simple-dialog-options";
+
+import { SimpleConfigurableDialogComponent } from "./simple-configurable-dialog/simple-configurable-dialog.component";
 
 @Injectable()
-export class DialogService extends Dialog implements OnDestroy {
+export class DialogService extends Dialog implements OnDestroy, DialogServiceAbstraction {
   private _destroy$ = new Subject<void>();
 
-  override open<R = unknown, D = unknown, C = unknown>(
-    componentOrTemplateRef: ComponentType<C> | TemplateRef<C>,
-    config?: DialogConfig<D, DialogRef<R, C>>
-  ): DialogRef<R, C> {
-    config = {
-      backdropClass: ["tw-fixed", "tw-bg-black", "tw-bg-opacity-30", "tw-inset-0", "tw-z-40"],
-      ...config,
-    };
-
-    return super.open(componentOrTemplateRef, config);
-  }
+  private backDropClasses = ["tw-fixed", "tw-bg-black", "tw-bg-opacity-30", "tw-inset-0"];
 
   constructor(
     /** Parent class constructor */
@@ -69,5 +67,50 @@ export class DialogService extends Dialog implements OnDestroy {
     this._destroy$.next();
     this._destroy$.complete();
     super.ngOnDestroy();
+  }
+
+  override open<R = unknown, D = unknown, C = unknown>(
+    componentOrTemplateRef: ComponentType<C> | TemplateRef<C>,
+    config?: DialogConfig<D, DialogRef<R, C>>
+  ): DialogRef<R, C> {
+    config = {
+      backdropClass: this.backDropClasses,
+      ...config,
+    };
+
+    return super.open(componentOrTemplateRef, config);
+  }
+
+  /**
+   * Opens a simple dialog, returns true if the user accepted the dialog.
+   *
+   * @param {SimpleDialogOptions} simpleDialogOptions - An object containing options for the dialog.
+   * @returns `boolean` - True if the user accepted the dialog, false otherwise.
+   */
+  async openSimpleDialog(simpleDialogOptions: SimpleDialogOptions): Promise<boolean> {
+    const dialogRef = this.open(SimpleConfigurableDialogComponent, {
+      data: simpleDialogOptions,
+      disableClose: simpleDialogOptions.disableClose,
+    });
+
+    return (await firstValueFrom(dialogRef.closed)) == SimpleDialogCloseType.ACCEPT;
+  }
+
+  /**
+   * Opens a simple dialog.
+   *
+   * @deprecated Use `openSimpleDialog` instead. If you find a use case for the `dialogRef`
+   * please let #wg-component-library know and we can un-deprecate this method.
+   *
+   * @param {SimpleDialogOptions} simpleDialogOptions - An object containing options for the dialog.
+   * @returns `DialogRef` - The reference to the opened dialog.
+   * Contains a closed observable which can be subscribed to for determining which button
+   * a user pressed (see `SimpleDialogCloseType`)
+   */
+  openSimpleDialogRef(simpleDialogOptions: SimpleDialogOptions): DialogRef {
+    return this.open(SimpleConfigurableDialogComponent, {
+      data: simpleDialogOptions,
+      disableClose: simpleDialogOptions.disableClose,
+    });
   }
 }

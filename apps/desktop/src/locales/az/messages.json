@@ -238,6 +238,9 @@
   "ms": {
     "message": "Hörmətli"
   },
+  "mx": {
+    "message": "Hörmətli"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "Ana parolun yenidən yazılması lazımdır."
   },
   "masterPasswordMinlength": {
-    "message": "Ana parol ən azı 8 simvol uzunluğunda olmalıdır."
+    "message": "Ana parol ən azı $VALUE$ simvol uzunluğunda olmalıdır.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ana parol təsdiqləməsi uyğun gəlmir."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Bizimlə əlaqə"
+  },
+  "helpAndFeedback": {
+    "message": "Kömək və əks-əlaqə"
   },
   "getHelp": {
     "message": "Kömək alın"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Windows Hello ilə kilidi aç"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Əlavə Windows Hello tənzimləmələri"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden üçün təsdiqlə."
   },
   "unlockWithTouchId": {
     "message": "Touch ID kilidini aç"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Əlavə Touch ID tənzimləmələri"
   },
   "touchIdConsentMessage": {
     "message": "anbarınızın kilidini açın"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Açılışda Touch ID-ni soruşun"
+  },
+  "requirePasswordOnStart": {
+    "message": "Tətbiq başladılanda parolu və ya PIN-i tələb et"
+  },
+  "recommendedForSecurity": {
+    "message": "Güvənlik üçün tövsiyə olunur."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Yenidən başladılanda ana parol ilə kilidlə"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "SSO ilə giriş prosesini tamamlamaq üçün zəhmət olmasa anbarınıza müraciət etmək və onu qorumaq üçün bir ana parol tənzimləyin."
+  },
+  "currentMasterPass": {
+    "message": "Hazırkı ana parol"
   },
   "newMasterPass": {
     "message": "Yeni ana parol"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ana parolunuz təzəlikcə təşkilatınızdakı bir administrator tərəfindən dəyişdirildi. Anbara müraciət üçün indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
   "hours": {
     "message": "Saat"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt $HOURS$ saat $MINUTES$ dəqiqədir. Anbar vaxt bitişi əməliyyatı $ACTION$ olaraq tənzimləndi.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı $ACTION$ olaraq tənzimlədi.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "\"Heç vaxt\" seçimini istifadə etmək istədiyinizə əminsiniz? Kilid seçimini \"Heç vaxt\" olaraq tənzimləsəniz, anbarınızın şifrələmə açarı cihazınızda saxlanılacaq. Bu seçimi istifadə etsəniz, cihazınızı daha yaxşı mühafizə etməlisiniz."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Anbar"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Başqa cihazla giriş et"
   },
+  "logInInitiated": {
+    "message": "Giriş etmə başladıldı"
+  },
+  "notificationSentDevice": {
+    "message": "Cihazınıza bir bildiriş göndərildi."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Zəhmət olmasa anbarınızın kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazla uyğunlaşdığına əmin olun."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Barmaq izi ifadəsi"
+  },
+  "needAnotherOption": {
+    "message": "Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Bütün giriş seçimlərinə bax"
+  },
+  "resendNotification": {
+    "message": "Bildirişi təkrar göndər"
+  },
   "toggleCharacterCount": {
     "message": "Simvol sayını dəyişdir",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Giriş etməyə çalışırsınız?"
+  },
+  "logInAttemptBy": {
+    "message": "$EMAIL$ tərəfindən giriş cəhdi",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Cihaz növü"
+  },
+  "ipAddress": {
+    "message": "IP Ünvan"
+  },
+  "time": {
+    "message": "Vaxt"
+  },
+  "confirmLogIn": {
+    "message": "Girişi təsdiqlə"
+  },
+  "denyLogIn": {
+    "message": "Girişi rədd et"
+  },
+  "approveLoginRequests": {
+    "message": "Giriş tələblərini təsdiqlə"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "$DEVICE$ cihazında $EMAIL$ üçün giriş təsdiqləndi",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Başqa bir cihazdan giriş cəhdini rədd etdiniz. Bu həqiqətən siz idinizsə, cihazla yenidən giriş etməyə çalışın."
+  },
+  "justNow": {
+    "message": "İndicə"
+  },
+  "requestedXMinutesAgo": {
+    "message": "$MINUTES$ dəqiqə əvvəl tələb göndərildi",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Giriş tələbinin müddəti artıq bitib."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Bu tələb artıq yararsızdır."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Digər cihazlardan edilən giriş tələblərini təsdiqləmək üçün bu cihazı istifadə edin."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "$EMAIL$ üçün giriş cəhdini təsdiqlə",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Giriş tələb olundu"
+  },
+  "exposedMasterPassword": {
+    "message": "İfşa olunmuş ana parol"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Parol, məlumat pozuntusunda tapıldı. Hesabınızı qorumaq üçün unikal bir parol istifadə edin. İfşa olunmuş bir parol istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Zəif və ifşa olunmuş ana parol"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Zəif parol məlumat pozuntusunda aşkarlandı və tapıldı. Hesabınızı qorumaq üçün güclü və unikal bir parol istifadə edin. Bu parolu istifadə etmək istədiyinizə əminsiniz?"
+  },
+  "checkForBreaches": {
+    "message": "Bu parol üçün bilinən məlumat pozuntularını yoxlayın"
+  },
+  "important": {
+    "message": "Vacib:"
+  },
+  "masterPasswordHint": {
+    "message": "Unutsanız, ana parolunuz bərpa edilə bilməz!"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ simvol",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden, kilidi ilk açanda ana parolunuzu (və ya PIN-inizi) tələb edəcək biometrik tənzimləmələri güncəlləməyi tövsiyə edir. Tənzimləmələrinizi indi güncəlləmək istəyirsiniz?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Tövsiyə edilən Tənzimləmələr Güncəlləməsi"
+  },
+  "region": {
+    "message": "Bölgə"
+  },
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABŞ",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Öz-özünə sahiblik edən"
   }
 }

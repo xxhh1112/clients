@@ -31,7 +31,7 @@ const moduleRules = [
     test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
     exclude: /loading(|-white).svg/,
     generator: {
-      filename: "fonts/[name][ext]",
+      filename: "fonts/[name].[contenthash][ext]",
     },
     type: "asset/resource",
   },
@@ -78,6 +78,11 @@ const moduleRules = [
   {
     test: /\.[jt]sx?$/,
     loader: "@ngtools/webpack",
+  },
+  {
+    test: /\.wasm$/,
+    loader: "base64-loader",
+    type: "javascript/auto",
   },
 ];
 
@@ -223,6 +228,7 @@ const devServer =
                 default-src 'self'
                 ;script-src
                   'self'
+                  'wasm-unsafe-eval'
                   'sha256-ryoU+5+IUZTuUyTElqkrQGBJXr1brEv6r2CA62WUw8w='
                   https://js.stripe.com
                   https://js.braintreegateway.com
@@ -234,6 +240,7 @@ const devServer =
                   'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
                   'sha256-JVRXyYPueLWdwGwY9m/7u4QlZ1xeQdqUj2t8OVIzZE4='
                   'sha256-or0p3LaHetJ4FRq+flVORVFFNsOjQGWrDvX8Jf7ACWg='
+                  'sha256-jvLh2uL2/Pq/gpvNJMaEL4C+TNhBeGadLIUyPcVRZvY='
                   'sha256-Oca9ZYU1dwNscIhdNV7tFBsr4oqagBhZx9/p4w8GOcg='
                 ;img-src
                   'self'
@@ -348,13 +355,19 @@ const webpackConfig = {
       util: require.resolve("util/"),
       assert: false,
       url: false,
+      fs: false,
+      process: false,
+      path: require.resolve("path-browserify"),
     },
   },
   output: {
     filename: "[name].[contenthash].js",
     path: path.resolve(__dirname, "build"),
   },
-  module: { rules: moduleRules },
+  module: {
+    noParse: /\.wasm$/,
+    rules: moduleRules,
+  },
   plugins: plugins,
 };
 

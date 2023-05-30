@@ -2,7 +2,7 @@ import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { DialogService } from "@bitwarden/components";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 
 import { ServiceAccountView } from "../../../models/view/service-account.view";
 import { AccessTokenView } from "../../models/view/access-token.view";
@@ -16,7 +16,6 @@ export interface AccessTokenOperation {
 }
 
 @Component({
-  selector: "sm-access-token-create-dialog",
   templateUrl: "./access-token-create-dialog.component.html",
 })
 export class AccessTokenCreateDialogComponent implements OnInit {
@@ -31,7 +30,7 @@ export class AccessTokenCreateDialogComponent implements OnInit {
   constructor(
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: AccessTokenOperation,
-    private dialogService: DialogService,
+    private dialogService: DialogServiceAbstraction,
     private accessService: AccessService
   ) {}
 
@@ -79,6 +78,24 @@ export class AccessTokenCreateDialogComponent implements OnInit {
         subTitle: serviceAccountName,
         expirationDate: expirationDate,
         accessToken: accessToken,
+      },
+    });
+  }
+
+  static openNewAccessTokenDialog(
+    dialogService: DialogServiceAbstraction,
+    serviceAccountId: string,
+    organizationId: string
+  ) {
+    // TODO once service account names are implemented in service account contents page pass in here.
+    const serviceAccountView = new ServiceAccountView();
+    serviceAccountView.id = serviceAccountId;
+    serviceAccountView.name = "placeholder";
+
+    return dialogService.open<unknown, AccessTokenOperation>(AccessTokenCreateDialogComponent, {
+      data: {
+        organizationId: organizationId,
+        serviceAccountView: serviceAccountView,
       },
     });
   }

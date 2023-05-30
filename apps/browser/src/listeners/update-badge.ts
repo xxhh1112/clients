@@ -1,22 +1,21 @@
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
-import { AuthenticationStatus } from "@bitwarden/common/enums/authenticationStatus";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { ContainerService } from "@bitwarden/common/services/container.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
-import IconDetails from "../background/models/iconDetails";
-import { authServiceFactory } from "../background/service_factories/auth-service.factory";
-import { cipherServiceFactory } from "../background/service_factories/cipher-service.factory";
-import { searchServiceFactory } from "../background/service_factories/search-service.factory";
+import { authServiceFactory } from "../auth/background/service-factories/auth-service.factory";
 import { stateServiceFactory } from "../background/service_factories/state-service.factory";
 import { BrowserApi } from "../browser/browserApi";
 import { Account } from "../models/account";
 import { BrowserStateService } from "../services/abstractions/browser-state.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
+import IconDetails from "../vault/background/models/icon-details";
+import { cipherServiceFactory } from "../vault/background/service_factories/cipher-service.factory";
 
 export type BadgeOptions = {
   tab?: chrome.tabs.Tab;
@@ -27,7 +26,7 @@ export class UpdateBadge {
   private authService: AuthService;
   private stateService: BrowserStateService;
   private cipherService: CipherService;
-  private badgeAction: typeof chrome.action;
+  private badgeAction: typeof chrome.action | typeof chrome.browserAction;
   private sidebarAction: OperaSidebarAction | FirefoxSidebarAction;
   private inited = false;
   private win: Window & typeof globalThis;
@@ -221,10 +220,12 @@ export class UpdateBadge {
       return;
     }
 
-    if (this.useSyncApiCalls) {
-      this.sidebarAction.setIcon(options);
+    if (this.isOperaSidebar(this.sidebarAction)) {
+      await new Promise<void>((resolve) =>
+        (this.sidebarAction as OperaSidebarAction).setIcon(options, () => resolve())
+      );
     } else {
-      await new Promise<void>((resolve) => this.sidebarAction.setIcon(options, () => resolve()));
+      await this.sidebarAction.setIcon(options);
     }
   }
 
@@ -279,12 +280,7 @@ export class UpdateBadge {
     };
     this.stateService = await stateServiceFactory(serviceCache, opts);
     this.authService = await authServiceFactory(serviceCache, opts);
-    const searchService = await searchServiceFactory(serviceCache, opts);
-
-    this.cipherService = await cipherServiceFactory(serviceCache, {
-      ...opts,
-      cipherServiceOptions: { searchServiceFactory: () => searchService },
-    });
+    this.cipherService = await cipherServiceFactory(serviceCache, opts);
 
     // Needed for cipher decryption
     if (!self.bitwardenContainerService) {

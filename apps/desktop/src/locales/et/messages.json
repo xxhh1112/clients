@@ -238,6 +238,9 @@
   "ms": {
     "message": "Pr"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "Vajalik on ülemparooli uuesti sisestamine."
   },
   "masterPasswordMinlength": {
-    "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
+    "message": "Ülemparool peab olema vähemalt $VALUE$ tähemärgi pikkune.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ülemparoolid ei ühti."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Võta ühendust"
+  },
+  "helpAndFeedback": {
+    "message": "Abi ja tagasiside"
   },
   "getHelp": {
     "message": "Klienditugi"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Lukusta lahti Windows Helloga"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Additional Windows Hello settings"
+  },
   "windowsHelloConsentMessage": {
     "message": "Kinnita Bitwardenisse sisselogimine."
   },
   "unlockWithTouchId": {
     "message": "Lukusta lahti Touch ID-ga"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Additional Touch ID settings"
   },
   "touchIdConsentMessage": {
     "message": "Kinnita Bitwardenisse sisselogimine."
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Küsi avamisel Touch ID tuvastust"
+  },
+  "requirePasswordOnStart": {
+    "message": "Require password or PIN on app start"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommended for security."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lukusta ülemparooliga, kui rakendus taaskäivitatakse"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "SSO-ga sisselogimise kinnitamiseks tuleb määrata ülemparool. See kaitseb sinu hoidlat ning võimaldab sellele ligi pääseda."
+  },
+  "currentMasterPass": {
+    "message": "Praegune ülemparool"
   },
   "newMasterPass": {
     "message": "Uus ülemparool"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead seda nüüd uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul."
+  },
   "hours": {
     "message": "Tundi"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on $HOURS$ tund(i) ja $MINUTES$ minut(it). Sinu hoidla ajalõpu tegevus on $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisatsiooni poliitika on sinu hoidla ajalõpu tegevuse seadistanud $ACTION$ peale.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Oled kindel, et soovid kasutada valikut \"Mitte kunagi\"? Sellega talletatakse sinu hoidla krüpteerimise võtit seadme mälus. Peaksid olema väga hoolas ja kindel, et seade on ohutu ja selles ei ole pahavara."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Hoidla"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Logi sisse läbi teise seadme"
   },
+  "logInInitiated": {
+    "message": "Sisselogimine on käivitatud"
+  },
+  "notificationSentDevice": {
+    "message": "Sinu seadmesse saadeti teavitus."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Sõrmejälje fraas"
+  },
+  "needAnotherOption": {
+    "message": "Bitwardeni rakenduse seadistuses peab olema konfigureeritud sisselogimine läbi seadme. Vajad teist valikut?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vaata kõiki valikuid"
+  },
+  "resendNotification": {
+    "message": "Saada märguanne uuesti"
+  },
   "toggleCharacterCount": {
-    "message": "Toggle character count",
+    "message": "Loenda kirjatähtede hulka",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Oled sisse logimas?"
+  },
+  "logInAttemptBy": {
+    "message": "Sisselogimise päring $EMAIL$-lt",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Seadme tüüp"
+  },
+  "ipAddress": {
+    "message": "IP aadress"
+  },
+  "time": {
+    "message": "Aeg"
+  },
+  "confirmLogIn": {
+    "message": "Kinnita sisselogimine"
+  },
+  "denyLogIn": {
+    "message": "Tühista sisselogimine"
+  },
+  "approveLoginRequests": {
+    "message": "Sisselogimise päringute kinnitamine"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "$EMAIL$ sisselogimine seadmes $DEVICE$ on kinnitatud",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Sisselogimise päring on tühistatud. Vajadusel proovi uuesti."
+  },
+  "justNow": {
+    "message": "Just praegu"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Päring saabus $MINUTES$ minuti eest",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Sisselogimise päring on juba aegunud."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "See päring ei ole enam kehtiv."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Kasuta seda seadet, et kinnitada teistes seadmetes tehtavad sisselogimised."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Kinnita sisselogimise katse $EMAIL$-le",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Sisselogimise päring on saadetud"
+  },
+  "exposedMasterPassword": {
+    "message": "Ülemparool on haavatav"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Nõrk ja haavatav ülemparool"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?"
+  },
+  "checkForBreaches": {
+    "message": "Otsi seda parooli teadaolevatest andmeleketest"
+  },
+  "important": {
+    "message": "Tähtis:"
+  },
+  "masterPasswordHint": {
+    "message": "Ülemparooli ei saa taastada, kui sa selle unustama peaksid!"
+  },
+  "characterMinimum": {
+    "message": "Minimaalselt $LENGTH$ tähemärki",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
   }
 }

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand navbar-dark" [ngClass]="{ 'nav-background-alt': selfHosted }">
   <div class="container">
-    <a class="navbar-brand" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n: 'Bitwarden' }}">
+    <a class="navbar-brand" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n : 'Bitwarden' }}">
       <i class="bwi bwi-shield" aria-hidden="true"></i>
     </a>
     <div class="collapse navbar-collapse">
@@ -42,20 +42,27 @@
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
       <li>
         <button
+          type="button"
           [bitMenuTriggerFor]="accountMenu"
           class="tw-border-0 tw-bg-transparent tw-text-alt2 tw-opacity-70 hover:tw-opacity-90"
+          attr.aria-label="{{ 'accountLoggedInAsName' | i18n : name }}"
         >
-          <dynamic-avatar [text]="name" size="xsmall" aria-hidden="true"></dynamic-avatar>
+          <dynamic-avatar
+            [text]="name"
+            [id]="userId"
+            size="xsmall"
+            aria-hidden="true"
+          ></dynamic-avatar>
           <i class="bwi bwi-caret-down bwi-sm" aria-hidden="true"></i>
         </button>
         <bit-menu class="dropdown-menu" #accountMenu>
           <div class="tw-flex tw-min-w-[200px] tw-max-w-[300px] tw-flex-col">
             <div
-              class="tw-flex tw-items-center tw-py-1 tw-px-4 tw-leading-tight tw-text-info"
+              class="tw-flex tw-items-center tw-px-4 tw-py-1 tw-leading-tight tw-text-info"
               *ngIf="name"
               appStopProp
             >
-              <dynamic-avatar [text]="name" size="small"></dynamic-avatar>
+              <dynamic-avatar [text]="name" [id]="userId" size="small"></dynamic-avatar>
               <div class="tw-ml-2 tw-block tw-overflow-hidden tw-whitespace-nowrap">
                 <span>{{ "loggedInAs" | i18n }}</span>
                 <small class="tw-block tw-overflow-hidden tw-whitespace-nowrap tw-text-muted">{{

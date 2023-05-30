@@ -1,4 +1,13 @@
-import { Directive, ElementRef, HostBinding, Input, NgZone, Optional, Self } from "@angular/core";
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  NgZone,
+  Optional,
+  Self,
+} from "@angular/core";
 import { NgControl, Validators } from "@angular/forms";
 
 import { BitFormFieldControl, InputTypes } from "../form-field/form-field-control";
@@ -63,12 +72,27 @@ export class BitInputDirective implements BitFormFieldControl {
   @Input() hasPrefix = false;
   @Input() hasSuffix = false;
 
+  @Input() showErrorsWhenDisabled? = false;
+
   get labelForId(): string {
     return this.id;
   }
 
+  @HostListener("input")
+  onInput() {
+    this.ngControl?.control?.markAsUntouched();
+  }
+
   get hasError() {
-    return this.ngControl?.status === "INVALID" && this.ngControl?.touched;
+    if (this.showErrorsWhenDisabled) {
+      return (
+        (this.ngControl?.status === "INVALID" || this.ngControl?.status === "DISABLED") &&
+        this.ngControl?.touched &&
+        this.ngControl?.errors != null
+      );
+    } else {
+      return this.ngControl?.status === "INVALID" && this.ngControl?.touched;
+    }
   }
 
   get error(): [string, any] {

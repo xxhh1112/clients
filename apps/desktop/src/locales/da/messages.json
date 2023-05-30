@@ -238,6 +238,9 @@
   "ms": {
     "message": "Frk."
   },
+  "mx": {
+    "message": "Neutral"
+  },
   "dr": {
     "message": "Dr."
   },
@@ -539,7 +542,14 @@
     "message": "Angivelse af hovedadgangskode igen er obligatorisk."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedadgangskode skal være mindst 8 tegn."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "Kontakt os"
+  },
+  "helpAndFeedback": {
+    "message": "Help and feedback"
   },
   "getHelp": {
     "message": "Få hjælp"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Oplås med Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Yderligere indstillinger for Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bekræft for Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Oplås med Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Yderligere indstillinger for Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "oplås din boks"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Bed om Touch ID ved start"
+  },
+  "requirePasswordOnStart": {
+    "message": "Kræv adgangskode eller PIN-kode ved app-start"
+  },
+  "recommendedForSecurity": {
+    "message": "Anbefales af sikkerhedshensyn."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lås med hovedadgangskode ved genstart"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "For at fuldføre indlogning vha. SSO skal en hovedadgangskode opsættes for at tilgå og beskytte din boks."
+  },
+  "currentMasterPass": {
+    "message": "Aktuel hovedadgangskode"
   },
   "newMasterPass": {
     "message": "Ny hovedadgangskode"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Din hovedadgangskode blev for nylig ændret af en organisations-admin. For at tilgå boksen, så opdatér din hovedadgangskode nu. Fortsættes, logges du ud af den nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Din hovedadgangskode overholder ikke en eller flere organisationspolitikker. For at få adgang til boksen skal hovedadgangskode opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
+  },
   "hours": {
     "message": "Timer"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter). Boks-timeouthandlingen er pt. sat til $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisationspolitikker har sat boks-timeouthandlingen til $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Sikker på, at indstillingen \"Aldrig\" skal bruges? Sættes låseindstillinger til \"Aldrig\", gemmes din bokskrypteringsnøgle på enheden. Bruges denne indstilling, så sørg for at holde din enhed ordentligt beskyttet."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Boks"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "Log ind med en anden enhed"
   },
+  "logInInitiated": {
+    "message": "Indlogning påbegyndt"
+  },
+  "notificationSentDevice": {
+    "message": "En notifikation er sendt til din enhed."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Sørg for, at din boks er oplåst, og at fingeraftrykssætningen matcher den anden enheds."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeraftrykssætning"
+  },
+  "needAnotherOption": {
+    "message": "Log ind med enhed skal være opsat i indstillingerne i Bitwarden mobil-appen. Behov for en anden mulighed?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vis alle indlogningsmuligheder"
+  },
+  "resendNotification": {
+    "message": "Gensend notifikation"
+  },
   "toggleCharacterCount": {
     "message": "Vis/skjul tegnantal",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Forsøges at logge ind?"
+  },
+  "logInAttemptBy": {
+    "message": "Loginforsøg fra $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Enhedstype"
+  },
+  "ipAddress": {
+    "message": "IP-adresse"
+  },
+  "time": {
+    "message": "Tid"
+  },
+  "confirmLogIn": {
+    "message": "Bekræft login"
+  },
+  "denyLogIn": {
+    "message": "Afvis login"
+  },
+  "approveLoginRequests": {
+    "message": "Godkend loginanmodninger"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login bekræftet for $EMAIL$ på $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Du nægtede et loginforsøg fra en anden enhed. Hvis dette virkelig var dig, så prøv at logge ind med enheden igen."
+  },
+  "justNow": {
+    "message": "Netop nu"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Anmodet for $MINUTES$ minutter siden",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Loginanmodning er allerede udløbet."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Anmodningen er ikke længere gyldig."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Brug denne enhed til at godkende loginanmodninger fra andre enheder."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bekræft loginforsøg for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Login anmodet"
+  },
+  "exposedMasterPassword": {
+    "message": "Kompromitteret hovedadgangskode"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Adgangskode fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at en kompromitteret adgangskode skal benyttes?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Svag og kompromitteret hovedadgangskode"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Svag adgangskode identificeret og fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at at denne adgangskode skal bruges?"
+  },
+  "checkForBreaches": {
+    "message": "Tjek kendte datalæk for denne adgangskode"
+  },
+  "important": {
+    "message": "Vigtigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Hovedadgangskoden kan ikke gendannes, hvis den glemmes!"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ tegn",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden anbefaler, af de biometriske indstillinger opdateres til at kræve hovedadgangskode (eller PIN-kode) ved første oplåsning. Opdatér indstillingerne nu?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Anbefalet indstillingsopdatering"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "USA",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Selv-hostet"
   }
 }

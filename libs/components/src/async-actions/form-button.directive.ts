@@ -3,9 +3,8 @@ import { Subject, takeUntil } from "rxjs";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 
+import { BitActionDirective } from "./bit-action.directive";
 import { BitSubmitDirective } from "./bit-submit.directive";
-
-import { BitActionDirective } from ".";
 
 /**
  * This directive has two purposes:
@@ -18,6 +17,9 @@ import { BitActionDirective } from ".";
  * - Disables the button while the `bitSubmit` directive is processing an async submit action.
  * - Disables the button while a `bitAction` directive on another button is being processed.
  * - Disables form submission while the `bitAction` directive is processing an async action.
+ *
+ * Note: you must use a directive that implements the ButtonLikeAbstraction (bitButton or bitIconButton for example)
+ * along with this one in order to avoid provider errors.
  */
 @Directive({
   selector: "button[bitFormButton]",
@@ -26,6 +28,7 @@ export class BitFormButtonDirective implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   @Input() type: string;
+  @Input() disabled?: boolean;
 
   constructor(
     buttonComponent: ButtonLikeAbstraction,
@@ -42,7 +45,9 @@ export class BitFormButtonDirective implements OnDestroy {
       });
 
       submitDirective.disabled$.pipe(takeUntil(this.destroy$)).subscribe((disabled) => {
-        buttonComponent.disabled = disabled;
+        if (this.disabled !== false) {
+          buttonComponent.disabled = disabled;
+        }
       });
     }
 

@@ -1,4 +1,4 @@
-import { HostBinding, Component, Input } from "@angular/core";
+import { Component, HostBinding, Input } from "@angular/core";
 
 import { ToggleGroupComponent } from "./toggle-group.component";
 
@@ -9,12 +9,12 @@ let nextId = 0;
   templateUrl: "./toggle.component.html",
   preserveWhitespaces: false,
 })
-export class ToggleComponent {
+export class ToggleComponent<TValue> {
   id = nextId++;
 
-  @Input() value?: string;
+  @Input() value?: TValue;
 
-  constructor(private groupComponent: ToggleGroupComponent) {}
+  constructor(private groupComponent: ToggleGroupComponent<TValue>) {}
 
   @HostBinding("tabIndex") tabIndex = "-1";
   @HostBinding("class") classList = ["tw-group"];
@@ -67,8 +67,11 @@ export class ToggleComponent {
       "tw-py-1.5",
       "tw-px-3",
 
+      // Fix for bootstrap styles that add bottom margin
+      "!tw-mb-0",
+
       // Fix for badge being pushed slightly lower when inside a button.
-      // Insipired by bootstrap, which does the same.
+      // Inspired by bootstrap, which does the same.
       "[&>[bitBadge]]:tw-relative",
       "[&>[bitBadge]]:tw--top-px",
     ];

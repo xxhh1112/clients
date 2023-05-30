@@ -8,9 +8,9 @@ import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
-import { BulkOperationStatus } from "../layout/dialogs/bulk-status-dialog.component";
 import { ProjectListView } from "../models/view/project-list.view";
 import { ProjectView } from "../models/view/project.view";
+import { BulkOperationStatus } from "../shared/dialogs/bulk-status-dialog.component";
 
 import { ProjectRequest } from "./models/requests/project.request";
 import { ProjectListItemResponse } from "./models/responses/project-list-item.response";
@@ -96,7 +96,7 @@ export class ProjectService {
     return request;
   }
 
-  private async createProjectView(projectResponse: ProjectResponse): Promise<ProjectView> {
+  private async createProjectView(projectResponse: ProjectResponse) {
     const orgKey = await this.getOrganizationKey(projectResponse.organizationId);
 
     const projectView = new ProjectView();
@@ -104,11 +104,12 @@ export class ProjectService {
     projectView.organizationId = projectResponse.organizationId;
     projectView.creationDate = projectResponse.creationDate;
     projectView.revisionDate = projectResponse.revisionDate;
+    projectView.read = projectResponse.read;
+    projectView.write = projectResponse.write;
     projectView.name = await this.encryptService.decryptToUtf8(
       new EncString(projectResponse.name),
       orgKey
     );
-
     return projectView;
   }
 
@@ -122,6 +123,8 @@ export class ProjectService {
         const projectListView = new ProjectListView();
         projectListView.id = s.id;
         projectListView.organizationId = s.organizationId;
+        projectListView.read = s.read;
+        projectListView.write = s.write;
         projectListView.name = await this.encryptService.decryptToUtf8(
           new EncString(s.name),
           orgKey

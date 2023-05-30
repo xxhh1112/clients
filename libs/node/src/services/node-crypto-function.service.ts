@@ -1,11 +1,13 @@
 import * as crypto from "crypto";
 
+import * as argon2 from "argon2";
 import * as forge from "node-forge";
 
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { DecryptParameters } from "@bitwarden/common/models/domain/decrypt-parameters";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CsprngArray } from "@bitwarden/common/types/csprng";
 
 export class NodeCryptoFunctionService implements CryptoFunctionService {
   pbkdf2(
@@ -26,6 +28,28 @@ export class NodeCryptoFunctionService implements CryptoFunctionService {
         }
       });
     });
+  }
+
+  async argon2(
+    password: string | ArrayBuffer,
+    salt: string | ArrayBuffer,
+    iterations: number,
+    memory: number,
+    parallelism: number
+  ): Promise<ArrayBuffer> {
+    const nodePassword = this.toNodeValue(password);
+    const nodeSalt = this.toNodeBuffer(this.toArrayBuffer(salt));
+
+    const hash = await argon2.hash(nodePassword, {
+      salt: nodeSalt,
+      raw: true,
+      hashLength: 32,
+      timeCost: iterations,
+      memoryCost: memory,
+      parallelism: parallelism,
+      type: argon2.argon2id,
+    });
+    return this.toArrayBuffer(hash);
   }
 
   // ref: https://tools.ietf.org/html/rfc5869
@@ -247,13 +271,13 @@ export class NodeCryptoFunctionService implements CryptoFunctionService {
     });
   }
 
-  randomBytes(length: number): Promise<ArrayBuffer> {
-    return new Promise<ArrayBuffer>((resolve, reject) => {
+  randomBytes(length: number): Promise<CsprngArray> {
+    return new Promise<CsprngArray>((resolve, reject) => {
       crypto.randomBytes(length, (error, bytes) => {
         if (error != null) {
           reject(error);
         } else {
-          resolve(this.toArrayBuffer(bytes));
+          resolve(this.toArrayBuffer(bytes) as CsprngArray);
         }
       });
     });

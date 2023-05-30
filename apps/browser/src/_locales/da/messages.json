@@ -195,6 +195,15 @@
   "helpFeedback": {
     "message": "Hjælp & feedback"
   },
+  "helpCenter": {
+    "message": "Bitwarden Hjælpecenter"
+  },
+  "communityForums": {
+    "message": "Tjek Bitwardens fællesskabsfora ud"
+  },
+  "contactSupport": {
+    "message": "Kontakt Bitwarden-support"
+  },
   "sync": {
     "message": "Synkronisér"
   },
@@ -430,7 +439,14 @@
     "message": "Hovedadgangskode kræves angivet igen."
   },
   "masterPasswordMinlength": {
-    "message": "Hovedadgangskode skal være mindst 8 tegn."
+    "message": "Hovedadgangskoden skal udgøre minimum $VALUE$ tegn.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "De to adgangskoder matcher ikke."
@@ -960,7 +976,10 @@
     "message": "Hvis der registreres en loginformular, så auto-udfyld, når websiden indlæses."
   },
   "experimentalFeature": {
-    "message": "Dette er i øjeblikket en eksperimentel funktion. Brug på egen risiko."
+    "message": "Kompromitterede eller ikke-betroede websteder kan udnytte autoudfyldning ved sideindlæsning."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Læs mere om autoudfyldning"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardindstilling for autofyld for loginelementer"
@@ -1122,6 +1141,9 @@
   },
   "dr": {
     "message": "Dr"
+  },
+  "mx": {
+    "message": "Neutral"
   },
   "firstName": {
     "message": "Fornavn"
@@ -1439,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Autoudfyldte element"
   },
+  "insecurePageWarning": {
+    "message": "Advarsel: Dette er en ikke-sikret HTTP side, og alle indsendte oplysninger kan potentielt ses og ændres af andre. Dette login blev oprindeligt gemt på en sikker (HTTPS) side."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Do you still wish to fill this login?"
+  },
+  "autofillIframeWarning": {
+    "message": "Formularen hostes af et andet domæne end URI'en for det gemte login. Vælg OK for at autoudfylde alligevel, eller Afbryd for at stoppe."
+  },
+  "autofillIframeWarningTip": {
+    "message": "For at forhindre denne advarsel i fremtiden, så gem denne URI, $HOSTNAME$, til Bitwarden login-emnet for dette websted.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Indstil hovedadgangskode"
+  },
+  "currentMasterPass": {
+    "message": "Aktuel hovedadgangskode"
+  },
+  "newMasterPass": {
+    "message": "Ny hovedadgangskode"
+  },
+  "confirmNewMasterPass": {
+    "message": "Bekræft ny hovedadgangskode"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Én eller flere organisationspolitikker kræver, at din hovedadgangskode opfylder flg. krav:"
@@ -1822,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Dit hovedadgangskode blev for nylig ændret af en administrator i din organisation. For at få adgang til boksen skal du opdatere den nu. Hvis du fortsætter, logges du ud af din nuværende session, hvilket kræver, at du logger ind igen. Aktive sessioner på andre enheder kan fortsætte med at være aktive i op til én time."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Din hovedadgangskode overholder ikke en eller flere organisationspolitikker. For at få adgang til boksen skal hovedadgangskode opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatisk tilmelding"
   },
@@ -1841,7 +1893,7 @@
     "message": "Minutter"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Din organisations politikker påvirker din boks-timeout. Maksimalt tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter)",
+    "message": "Organisationspolitikker har sat maks. tilladt boks-timeout. til $HOURS$ time(r) og $MINUTES$ minut(ter).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1850,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter). Boks-timeouthandlingen er sat til $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisationspolitikkerne har sat boks-timeouthandlingen til $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1981,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Elementer i suspenderede organisationer kan ikke tilgås. Kontakt din organisationsejer for at få hjælp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logger ind på $DOMAIN$",
     "placeholders": {
@@ -2043,5 +2118,121 @@
   },
   "rememberEmail": {
     "message": "Husk e-mail"
+  },
+  "loginWithDevice": {
+    "message": "Log ind med enhed"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Log ind med enhed skal være opsat i indstillingerne i Bitwarden mobil-appen. Behov for en anden mulighed?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeraftrykssætning"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Sørg for, at din boks er oplåst, samt at Fingeraftrykssætningen på den anden enhed matcher."
+  },
+  "resendNotification": {
+    "message": "Gensend notifikation"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vis alle indlogningsmuligheder"
+  },
+  "notificationSentDevice": {
+    "message": "En notifikation er sendt til din enhed."
+  },
+  "logInInitiated": {
+    "message": "Indlogning påbegyndt"
+  },
+  "exposedMasterPassword": {
+    "message": "Kompromitteret hovedadgangskode"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Adgangskode fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at du vil bruge en kompromitteret adgangskode?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Svag eller kompromitteret hovedadgangskode"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Svag adgangskode identificeret og fundet i datalæk. Brug en unik adgangskode til at beskytte din konto. Sikker på, at at denne adgangskode skal bruges?"
+  },
+  "checkForBreaches": {
+    "message": "Tjek kendte datalæk for denne adgangskode"
+  },
+  "important": {
+    "message": "Vigtigt:"
+  },
+  "masterPasswordHint": {
+    "message": "Hovedadgangskoden kan ikke gendannes, hvis den glemmes!"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ tegn",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Organisationspolitikkerne har aktiveret autoudfyldning ved sideindlæsning."
+  },
+  "howToAutofill": {
+    "message": "Sådan autoudfyldes"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vælg et element fra denne side eller brug genvejen: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vælg et element fra denne side eller opret en genvej i Indstillinger."
+  },
+  "gotIt": {
+    "message": "Forstået"
+  },
+  "autofillSettings": {
+    "message": "Autoudfyldelsesindstillinger"
+  },
+  "autofillShortcut": {
+    "message": "Autoudfyld-tastaturgenvej"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Autoudfyldningsgenvejen er ikke opsat. Ændr dette i browserens indstillinger."
+  },
+  "autofillShortcutText": {
+    "message": "Autoudfyldningsgenvejen er: $COMMAND$. Ændr dette i browserens indstillinger.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Standard autoudfyldningsgenvej: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Åbnes i et nyt vindue"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "USA",
+    "description": "United States"
   }
 }

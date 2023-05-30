@@ -25,14 +25,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Set up Node
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a  # v3.0.0
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-          node-version: '16'
+          node-version: '18'
 
       - name: Print environment
         run: |
@@ -46,15 +46,19 @@ jobs:
       # Tests in apps/ are typechecked when their app is built, so we just do it here for libs/
       # See https://bitwarden.atlassian.net/browse/EC-497
       - name: Run typechecking
-        run: |
-          for p in libs/**/tsconfig.spec.json; do
-            echo "Typechecking $p"
-            npx tsc --noEmit --project $p
-          done
+        run: npm run test:types
 
       - name: Run tests
-        run: |
-          npm run test
+        run: npm run test
+
+      - name: Report test results
+        uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226 # v1.6.0
+        if: always()
+        with:
+          name: Test Results
+          path: "junit.xml"
+          reporter: jest-junit
+          fail-on-error: true
 
   rust:
     name: rust - ${{ matrix.os }}
@@ -75,10 +79,10 @@ jobs:
           sudo apt-get install -y gnome-keyring dbus-x11
 
       - name: Checkout repo
-        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Install rust
-        uses: actions-rs/toolchain@88dc2356392166efad76775c878094f4e83ff746
+        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
         with:
           toolchain: stable
           profile: minimal
@@ -102,6 +106,4 @@ jobs:
       - name: Test Windows / macOS
         if: ${{ matrix.os!='ubuntu-latest' }}
         working-directory: ./apps/desktop/desktop_native
-        run: |
-          cargo test -- --test-threads=1
-
+        run: cargo test -- --test-threads=1

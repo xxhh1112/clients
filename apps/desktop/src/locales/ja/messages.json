@@ -238,6 +238,9 @@
   "ms": {
     "message": "Ms"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -539,7 +542,14 @@
     "message": "マスターパスワードの再入力が必要です。"
   },
   "masterPasswordMinlength": {
-    "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
+    "message": "マスターパスワードは少なくとも $VALUE$ 文字以上でなければなりません。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "マスターパスワードが一致しません。"
@@ -759,6 +769,9 @@
   },
   "contactUs": {
     "message": "お問い合わせ"
+  },
+  "helpAndFeedback": {
+    "message": "ヘルプとフィードバック"
   },
   "getHelp": {
     "message": "ヘルプ"
@@ -1379,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Windows Hello でロック解除"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "追加の Windows Hello 設定"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden の認証を行います。"
   },
   "unlockWithTouchId": {
     "message": "Touch ID でロック解除"
+  },
+  "additionalTouchIdSettings": {
+    "message": "追加の Touch ID 設定"
   },
   "touchIdConsentMessage": {
     "message": "Bitwarden の認証を行います。"
@@ -1393,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "起動時に Touch ID を要求する"
+  },
+  "requirePasswordOnStart": {
+    "message": "アプリ起動時にパスワードまたは PIN を要求"
+  },
+  "recommendedForSecurity": {
+    "message": "セキュリティ向上のためおすすめします。"
   },
   "lockWithMasterPassOnRestart": {
     "message": "再起動時にマスターパスワードでロック"
@@ -1513,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "SSO ログインを完了するには、保管庫にアクセス・保護するためのマスターパスワードを設定してください。"
+  },
+  "currentMasterPass": {
+    "message": "現在のマスターパスワード"
   },
   "newMasterPass": {
     "message": "新しいマスターパスワード"
@@ -1830,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "マスターパスワードは最近組織の管理者によって変更されました。保管庫にアクセスするには、今すぐ更新する必要があります。 続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイスでのアクティブなセッションは、最大1時間アクティブになり続けることがあります。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
+  },
   "hours": {
     "message": "時間"
   },
@@ -1846,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "組織のポリシーがデータ保管庫のタイムアウトに影響しています。保管庫のタイムアウトの最大許容値は、$HOURS$時間$MINUTES$分です。保管庫タイムアウト時のアクションは、$ACTION$に設定されています。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "組織のポリシーで、保管庫のタイムアウトアクションが$ACTION$に設定されています。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2025,9 +2082,6 @@
   "neverLockWarning": {
     "message": "本当に「なし」オプションを使用しますか？ロックオプションを「なし」に設定すると、保管庫の暗号化キーがデバイスに保存されます。 このオプションを使用する場合は、デバイスを適切に保護する必要があります。"
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "保管庫"
   },
@@ -2058,8 +2112,158 @@
   "logInWithAnotherDevice": {
     "message": "別のデバイスでログイン"
   },
+  "logInInitiated": {
+    "message": "ログイン開始"
+  },
+  "notificationSentDevice": {
+    "message": "デバイスに通知を送信しました。"
+  },
+  "fingerprintMatchInfo": {
+    "message": "保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "パスフレーズ"
+  },
+  "needAnotherOption": {
+    "message": "Bitwarden アプリの設定でデバイスでログインする必要があります。別のオプションが必要ですか？"
+  },
+  "viewAllLoginOptions": {
+    "message": "すべてのログインオプションを表示"
+  },
+  "resendNotification": {
+    "message": "通知を再送信する"
+  },
   "toggleCharacterCount": {
     "message": "文字カウントを切り替える",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "ログインしようとしていますか？"
+  },
+  "logInAttemptBy": {
+    "message": "$EMAIL$ によるログインの試行",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "デバイス種別"
+  },
+  "ipAddress": {
+    "message": "IP アドレス"
+  },
+  "time": {
+    "message": "時間"
+  },
+  "confirmLogIn": {
+    "message": "ログインを承認"
+  },
+  "denyLogIn": {
+    "message": "ログインを拒否"
+  },
+  "approveLoginRequests": {
+    "message": "ログインリクエストを承認する"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "$EMAIL$ に $DEVICE$ でのログインを承認しました",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "別のデバイスからのログイン試行を拒否しました。本当にあなたであった場合は、もう一度デバイスでログインしてみてください。"
+  },
+  "justNow": {
+    "message": "たった今"
+  },
+  "requestedXMinutesAgo": {
+    "message": "$MINUTES$ 分前",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "ログインリクエストの有効期限が切れています。"
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "このリクエストは無効になりました。"
+  },
+  "approveLoginRequestDesc": {
+    "message": "このデバイスを使用して、他のデバイスからのログインリクエストを承認します。"
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "$EMAIL$ のログイン試行を確認",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "ログインリクエスト済み"
+  },
+  "exposedMasterPassword": {
+    "message": "流出したマスターパスワード"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "入力したパスワードはデータ流出結果に含まれていました。アカウントを保護するためには一意のパスワードを使用してください。本当に流出済みのパスワードを使用しますか？"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "脆弱で流出済みのマスターパスワード"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？"
+  },
+  "checkForBreaches": {
+    "message": "このパスワードの既知のデータ流出を確認"
+  },
+  "important": {
+    "message": "重要"
+  },
+  "masterPasswordHint": {
+    "message": "マスターパスワードを忘れた場合は復元できません！"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ 文字以上",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden は最初のロック解除時にマスターパスワード（または PIN）を要求するよう生体認証設定を更新することをおすすめします。今すぐ設定を更新しますか？"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "設定の更新を推奨"
+  },
+  "region": {
+    "message": "リージョン"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "米国",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "自己ホスト型"
   }
 }
