@@ -17,7 +17,7 @@ export abstract class CryptoService {
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
   setUserKey: (key: UserSymKey) => Promise<void>;
-  getUserKey: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
+  getUserKeyFromMemory: (userId?: string) => Promise<UserSymKey>;
   getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
   hasUserKey: () => Promise<boolean>;
   hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
@@ -84,7 +84,6 @@ export abstract class CryptoService {
   decryptToUtf8: (encString: EncString, key?: SymmetricCryptoKey) => Promise<string>;
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   setEncKey: (encKey: string) => Promise<void>;
-  getEncKey: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
   hasEncKey: () => Promise<boolean>;
   clearEncKey: (memoryOnly?: boolean, userId?: string) => Promise<any>;
   toggleKey: () => Promise<any>;

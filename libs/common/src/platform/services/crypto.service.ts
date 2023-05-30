@@ -48,7 +48,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * if not it will return the master key.
    */
   async getKeyForUserEncryption(): Promise<SymmetricCryptoKey> {
-    const userKey = await this.getUserKey();
+    const userKey = await this.getUserKeyFromMemory();
     if (userKey != null) {
       return userKey;
     }
@@ -66,6 +66,8 @@ export class CryptoService implements CryptoServiceAbstraction {
    */
   async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
     await this.stateService.setUserSymKey(key, { userId: userId });
+    // TODO: Should we include additional keys here? When we set the memory key from storage,
+    // it will reset the keys in storage as well
     await this.storeAdditionalKeys(key, userId);
   }
 
@@ -76,15 +78,8 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param userId The desired user
    * @returns The user's symmetric key
    */
-  async getUserKey(keySuffix?: KeySuffixOptions, userId?: string): Promise<UserSymKey> {
-    const userKey = await this.stateService.getUserSymKey({ userId: userId });
-
-    if (userKey != null) {
-      return userKey;
-    }
-
-    keySuffix ||= KeySuffixOptions.Auto;
-    return (await this.getUserKeyFromStorage(keySuffix, userId)) as UserSymKey;
+  async getUserKeyFromMemory(userId?: string): Promise<UserSymKey> {
+    return await this.stateService.getUserSymKey({ userId: userId });
   }
 
   /**
@@ -235,7 +230,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     masterKey: MasterKey,
     userSymKey?: UserSymKey
   ): Promise<[UserSymKey, EncString]> {
-    userSymKey ||= await this.getUserKey();
+    userSymKey ||= await this.getUserKeyFromMemory();
     return this.buildProtectedUserSymKey(masterKey, userSymKey.key);
   }
 
@@ -629,7 +624,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
    */
   async makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]> {
-    key ||= await this.getUserKey();
+    key ||= await this.getUserKeyFromMemory();
 
     const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const publicB64 = Utils.fromBufferToB64(keyPair[0]);
@@ -845,7 +840,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   // ---HELPERS---
 
   protected async validateUserKey(key?: UserSymKey): Promise<boolean> {
-    key ||= await this.getUserKey();
+    key ||= await this.getUserKeyFromMemory();
     if (key == null) {
       return false;
     }
