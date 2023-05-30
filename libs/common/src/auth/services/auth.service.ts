@@ -246,15 +246,15 @@ export class AuthService implements AuthServiceAbstraction {
     // Keys aren't stored for a device that is locked or logged out
     // Make sure we're logged in before checking this, otherwise we could mix up those states
     const neverLock =
-      (await this.cryptoService.hasKeyStored(KeySuffixOptions.Auto, userId)) &&
+      (await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Auto, userId)) &&
       !(await this.stateService.getEverBeenUnlocked({ userId: userId }));
     if (neverLock) {
-      // TODO: This also _sets_ the key so when we check memory in the next line it finds a key.
-      // We should refactor here.
-      await this.cryptoService.getKey(KeySuffixOptions.Auto, userId);
+      // Get the key from storage and set it in memory
+      const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Auto, userId);
+      await this.cryptoService.setUserKey(userKey);
     }
 
-    const hasKeyInMemory = await this.cryptoService.hasKeyInMemory(userId);
+    const hasKeyInMemory = await this.cryptoService.hasUserKeyInMemory(userId);
     if (!hasKeyInMemory) {
       return AuthenticationStatus.Locked;
     }
@@ -281,7 +281,7 @@ export class AuthService implements AuthServiceAbstraction {
         throw e;
       }
     }
-    return this.cryptoService.makeKey(masterPassword, email, kdf, kdfConfig);
+    return await this.cryptoService.makeMasterKey(masterPassword, email, kdf, kdfConfig);
   }
 
   async authResponsePushNotification(notification: AuthRequestPushNotification): Promise<any> {
@@ -298,19 +298,19 @@ export class AuthService implements AuthServiceAbstraction {
     requestApproved: boolean
   ): Promise<AuthRequestResponse> {
     const pubKey = Utils.fromB64ToArray(key);
-    const encryptedKey = await this.cryptoService.rsaEncrypt(
-      (
-        await this.cryptoService.getKey()
-      ).encKey,
-      pubKey.buffer
-    );
-    const encryptedMasterPassword = await this.cryptoService.rsaEncrypt(
+    // TODO(Jake): Do we need to support old encryption model here?
+    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
+    if (!userSymKey) {
+      throw new Error("User key not found");
+    }
+    const encryptedKey = await this.cryptoService.rsaEncrypt(userSymKey.encKey, pubKey.buffer);
+    const encryptedMasterPasswordHash = await this.cryptoService.rsaEncrypt(
       Utils.fromUtf8ToArray(await this.stateService.getKeyHash()),
       pubKey.buffer
     );
     const request = new PasswordlessAuthRequest(
       encryptedKey.encryptedString,
-      encryptedMasterPassword.encryptedString,
+      encryptedMasterPasswordHash.encryptedString,
       await this.appIdService.getAppId(),
       requestApproved
     );
