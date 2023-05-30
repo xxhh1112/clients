@@ -77,6 +77,7 @@ const systemTimeoutOptions = {
     <ng-template #loginApproval></ng-template>
     <app-header></app-header>
 
+    <!-- TODO: remove these new buttons and new goTo method -->
     <div class="d-flex flex-row justify-content-between">
       <button class="btn btn-primary mr-2" (click)="goTo('/login')">Login</button>
       <button class="btn btn-primary" (click)="goTo('/login-initiated')">Login Initiated</button>
