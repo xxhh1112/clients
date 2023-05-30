@@ -1,12 +1,8 @@
 import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
-import { ElementWithOpId, FillableControl, FormElement } from "../types";
+import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 import {
-  generateAutofillFieldData,
-  getElementAttrValue,
-  getElementValue,
-  getFormElements,
   getLabelTop,
   getSelectElementOptions,
   isElementViewable,
@@ -38,6 +34,12 @@ class AutofillCollect {
     };
   }
 
+  /**
+   * Queries the DOM for all the forms elements and
+   * returns a collection of AutofillForm objects.
+   * @returns {Record<string, AutofillForm>}
+   * @private
+   */
   private buildAutofillFormsData(): Record<string, AutofillForm> {
     const autofillForms: Record<string, AutofillForm> = {};
     const documentFormElements = document.querySelectorAll("form");
@@ -58,72 +60,156 @@ class AutofillCollect {
     return autofillForms;
   }
 
+  /**
+   * Queries the DOM for all the field elements and
+   * returns a list of AutofillField objects.
+   * @returns {AutofillField[]}
+   * @private
+   */
   private buildAutofillFieldsData(): AutofillField[] {
-    const formElements = getFormElements(document, this.queriedFieldsLimit);
+    const autofillFieldElements = this.getAutofillFieldElements(this.queriedFieldsLimit);
 
-    return [...formElements].map(
-      (element: ElementWithOpId<FormElement>, index: number): AutofillField => {
-        const fieldOpid = `__${index}`;
-        element.opid = fieldOpid;
+    return autofillFieldElements.map(this.buildAutofillFieldDataItem);
+  }
 
-        const autofillFieldBase = {
-          opid: fieldOpid,
-          elementNumber: index,
-          maxLength: this.getAutofillFieldMaxLength(element),
-          visible: isElementVisible(element),
-          viewable: isElementViewable(element),
-          htmlID: getElementAttrValue(element, "id"),
-          htmlName: getElementAttrValue(element, "name"),
-          htmlClass: getElementAttrValue(element, "class"),
-          tabindex: getElementAttrValue(element, "tabindex"),
-          title: getElementAttrValue(element, "title"),
-          tagName: element.tagName.toLowerCase(),
-        };
+  private getAutofillFieldElements(fieldsLimit?: number): FormElement[] {
+    const formFieldElements: FormElement[] = [
+      ...(document.querySelectorAll(
+        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
+          "span[data-bwautofill], " +
+          "select, " +
+          "textarea"
+      ) as NodeListOf<FormElement>),
+    ];
 
-        if (element instanceof HTMLSpanElement) {
-          return generateAutofillFieldData(autofillFieldBase);
-        }
+    if (!fieldsLimit || formFieldElements.length <= fieldsLimit) {
+      return formFieldElements;
+    }
 
-        const autoCompleteType =
-          element.getAttribute("x-autocompletetype") ||
-          element.getAttribute("autocompletetype") ||
-          element.getAttribute("autocomplete");
-        const elementHasReadOnlyProperty =
-          element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
-        let autofillFieldLabels = {};
-        const elementType = String(element.type);
-        if (elementType.toLowerCase() !== "hidden") {
-          autofillFieldLabels = {
-            "label-tag": this.getAutofillFieldLabelTag(element),
-            "label-data": getElementAttrValue(element, "data-label"),
-            "label-aria": getElementAttrValue(element, "aria-label"),
-            "label-top": getLabelTop(element),
-            "label-right": this.createAutofillFieldRightLabel(element),
-            "label-left": this.createAutofillFieldLeftLabel(element),
-            placeholder: getElementAttrValue(element, "placeholder"),
-          };
-        }
-
-        return generateAutofillFieldData({
-          ...autofillFieldBase,
-          ...autofillFieldLabels,
-          rel: getElementAttrValue(element, "rel"),
-          type: elementType,
-          value: getElementValue(element),
-          checked: Boolean(getElementAttrValue(element, "checked")),
-          autoCompleteType: autoCompleteType !== "off" ? autoCompleteType : null,
-          disabled: Boolean(getElementAttrValue(element, "disabled")),
-          readonly: elementHasReadOnlyProperty ? element.readOnly : false,
-          selectInfo:
-            element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
-          form: element.form ? getElementAttrValue(element.form, "opid") : null,
-          "aria-hidden": element.getAttribute("aria-hidden") === "true",
-          "aria-disabled": element.getAttribute("aria-disabled") === "true",
-          "aria-haspopup": element.getAttribute("aria-haspopup") === "true",
-          "data-stripe": getElementAttrValue(element, "data-stripe"),
-        });
+    const priorityFormFields: FormElement[] = [];
+    const unimportantFormFields: FormElement[] = [];
+    const unimportantFieldTypesSet = new Set(["checkbox", "radio"]);
+    for (const element of formFieldElements) {
+      if (priorityFormFields.length >= fieldsLimit) {
+        break;
       }
-    );
+
+      const fieldType = this.getElementAttribute(element, "type").toLowerCase();
+      if (unimportantFieldTypesSet.has(fieldType)) {
+        unimportantFormFields.push(element);
+        continue;
+      }
+
+      priorityFormFields.push(element);
+    }
+
+    const numberOfUnimportantFieldsToInclude = fieldsLimit - priorityFormFields.length;
+    if (numberOfUnimportantFieldsToInclude > 0) {
+      priorityFormFields.concat(unimportantFormFields.slice(0, numberOfUnimportantFieldsToInclude));
+    }
+
+    return priorityFormFields;
+  }
+
+  private buildAutofillFieldDataItem = (
+    element: ElementWithOpId<FormElement>,
+    index: number
+  ): AutofillField => {
+    const fieldOpid = `__${index}`;
+    element.opid = fieldOpid;
+
+    const autofillFieldBase = {
+      opid: fieldOpid,
+      elementNumber: index,
+      maxLength: this.getAutofillFieldMaxLength(element),
+      visible: isElementVisible(element),
+      viewable: isElementViewable(element),
+      htmlID: this.getElementAttribute(element, "id"),
+      htmlName: this.getElementAttribute(element, "name"),
+      htmlClass: this.getElementAttribute(element, "class"),
+      tabindex: this.getElementAttribute(element, "tabindex"),
+      title: this.getElementAttribute(element, "title"),
+      tagName: element.tagName.toLowerCase(),
+    };
+
+    if (element instanceof HTMLSpanElement) {
+      return this.generateAutofillFieldDataContainer(autofillFieldBase);
+    }
+
+    const autoCompleteType =
+      this.getElementAttribute(element, "x-autocompletetype") ||
+      this.getElementAttribute(element, "autocompletetype") ||
+      this.getElementAttribute(element, "autocomplete");
+    const elementHasReadOnlyProperty =
+      element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+    let autofillFieldLabels = {};
+    const elementType = String(element.type);
+    if (elementType.toLowerCase() !== "hidden") {
+      autofillFieldLabels = {
+        "label-tag": this.getAutofillFieldLabelTag(element),
+        "label-data": this.getElementAttribute(element, "data-label"),
+        "label-aria": this.getElementAttribute(element, "aria-label"),
+        "label-top": getLabelTop(element),
+        "label-right": this.createAutofillFieldRightLabel(element),
+        "label-left": this.createAutofillFieldLeftLabel(element),
+        placeholder: this.getElementAttribute(element, "placeholder"),
+      };
+    }
+
+    return this.generateAutofillFieldDataContainer({
+      ...autofillFieldBase,
+      ...autofillFieldLabels,
+      rel: this.getElementAttribute(element, "rel"),
+      type: elementType,
+      value: this.getElementValue(element),
+      checked: Boolean(this.getElementAttribute(element, "checked")),
+      autoCompleteType: autoCompleteType !== "off" ? autoCompleteType : null,
+      disabled: Boolean(this.getElementAttribute(element, "disabled")),
+      readonly: elementHasReadOnlyProperty ? element.readOnly : false,
+      selectInfo: element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
+      form: element.form ? this.getElementAttribute(element.form, "opid") : null,
+      "aria-hidden": this.getElementAttribute(element, "aria-hidden") === "true",
+      "aria-disabled": this.getElementAttribute(element, "aria-disabled") === "true",
+      "aria-haspopup": this.getElementAttribute(element, "aria-haspopup") === "true",
+      "data-stripe": this.getElementAttribute(element, "data-stripe"),
+    });
+  };
+
+  private generateAutofillFieldDataContainer(dataOverrides: Record<string, any>): AutofillField {
+    return {
+      opid: undefined,
+      elementNumber: undefined,
+      maxLength: undefined,
+      visible: undefined,
+      viewable: undefined,
+      htmlID: undefined,
+      htmlName: undefined,
+      htmlClass: undefined,
+      tabindex: undefined,
+      title: undefined,
+      tagName: undefined,
+      "label-tag": undefined,
+      "label-data": undefined,
+      "label-aria": undefined,
+      "label-top": undefined,
+      "label-right": undefined,
+      "label-left": undefined,
+      placeholder: undefined,
+      rel: undefined,
+      type: undefined,
+      value: undefined,
+      checked: undefined,
+      autoCompleteType: undefined,
+      disabled: undefined,
+      readonly: undefined,
+      selectInfo: undefined,
+      form: undefined,
+      "aria-hidden": undefined,
+      "aria-disabled": undefined,
+      "aria-haspopup": undefined,
+      "data-stripe": undefined,
+      ...dataOverrides,
+    };
   }
 
   /**
@@ -325,6 +411,34 @@ class AutofillCollect {
     }
 
     return this.recursivelyGetTextFromPreviousSiblings(siblingElement);
+  }
+
+  private getElementAttribute(element: FormElement, attributeName: string): string {
+    if (attributeName in element) {
+      return (element as FormElementWithAttribute)[attributeName] || "";
+    }
+
+    return element.getAttribute(attributeName) || "";
+  }
+
+  private getElementValue(element: FormElement): string {
+    if (element instanceof HTMLSpanElement) {
+      return element.innerText;
+    }
+
+    const elementValue = element.value || "";
+    const elementType = String(element.type).toLowerCase();
+    if ("checked" in element && elementType === "checkbox") {
+      return element.checked ? "✓" : "";
+    }
+
+    if (elementType === "hidden") {
+      return elementValue.length > 254
+        ? `${elementValue.substring(0, 254)}...SNIPPED`
+        : elementValue;
+    }
+
+    return elementValue;
   }
 }
 

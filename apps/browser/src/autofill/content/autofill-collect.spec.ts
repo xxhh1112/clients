@@ -77,7 +77,7 @@ describe("AutofillCollect", function () {
             type: "text",
             value: "",
             checked: false,
-            autoCompleteType: null,
+            autoCompleteType: "",
             disabled: false,
             readonly: false,
             selectInfo: null,
@@ -110,7 +110,7 @@ describe("AutofillCollect", function () {
             type: "password",
             value: "",
             checked: false,
-            autoCompleteType: null,
+            autoCompleteType: "",
             disabled: false,
             readonly: false,
             selectInfo: null,
@@ -122,6 +122,52 @@ describe("AutofillCollect", function () {
           },
         ],
         collectedTimestamp: expect.any(Number),
+      });
+    });
+  });
+
+  describe("buildAutofillFormsData", function () {
+    it("returns an object of AutofillForm objects with the form id as a key", function () {
+      const documentTitle = "Test Page";
+      const formId1 = "validFormId";
+      const formAction1 = "https://example.com/";
+      const formMethod1 = "post";
+      const formName1 = "validFormName";
+      const formId2 = "validFormId2";
+      const formAction2 = "https://example2.com/";
+      const formMethod2 = "get";
+      const formName2 = "validFormName2";
+      document.title = documentTitle;
+      document.body.innerHTML = `
+        <form id="${formId1}" action="${formAction1}" method="${formMethod1}" name="${formName1}">
+            <label for="usernameFieldId">usernameFieldLabel</label>
+            <input type="text" id="usernameFieldId" name="usernameFieldName" />
+            <label for="passwordFieldId">passwordFieldLabel</label>
+            <input type="password" id="passwordFieldId" name="passwordFieldName" />
+        </form>
+        <form id="${formId2}" action="${formAction2}" method="${formMethod2}" name="${formName2}">
+            <label for="searchField">searchFieldLabel</label>
+            <input type="search" id="searchField" name="searchFieldName" />
+        </form>
+      `;
+
+      const autofillFormsData = autofillCollect["buildAutofillFormsData"]();
+
+      expect(autofillFormsData).toStrictEqual({
+        __form__0: {
+          opid: "__form__0",
+          htmlAction: formAction1,
+          htmlName: formName1,
+          htmlID: formId1,
+          htmlMethod: formMethod1,
+        },
+        __form__1: {
+          opid: "__form__1",
+          htmlAction: formAction2,
+          htmlName: formName2,
+          htmlID: formId2,
+          htmlMethod: formMethod2,
+        },
       });
     });
   });

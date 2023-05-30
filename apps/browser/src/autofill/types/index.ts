@@ -23,3 +23,7 @@ export type FillableControl = HTMLInputElement | HTMLSelectElement | HTMLTextAre
  * This is defined by getFormElements
  */
 export type FormElement = FillableControl | HTMLSpanElement;
+
+export type FormElementWithAttribute = FormElement & {
+  [key: string]: string | undefined;
+};

@@ -38,14 +38,23 @@ import AutofillScript, {
   FillScript,
   FillScriptOp,
 } from "../models/autofill-script";
-import { AutofillDocument, ElementWithOpId, FillableControl, FormElement } from "../types";
+import {
+  /** DEAD CODE ?? **/
+  // AutofillDocument,
+  /** END DEAD CODE **/
+  ElementWithOpId,
+  FillableControl,
+  FormElement,
+} from "../types";
 import {
   // collect utils
   addProp,
   checkNodeType,
   // focusElement,
   getElementAttrValue,
-  getElementForOPID,
+  /** DEAD CODE ?? **/
+  // getElementForOPID,
+  /** END DEAD CODE **/
   getElementValue,
   getFormElements,
   getLabelTop,
@@ -365,7 +374,9 @@ function collect(document: Document) {
     return pageDetails;
   }
 
-  (document as AutofillDocument).elementForOPID = getElementForOPID;
+  /** DEAD CODE ?? **/
+  // (document as AutofillDocument).elementForOPID = getElementForOPID;
+  /** END DEAD CODE **/
 
   return JSON.stringify(getPageDetails(document, "oneshotUUID"));
 }
@@ -623,7 +634,9 @@ function fill(document: Document, fillScript: AutofillScript) {
     }
   }
 
-  (document as AutofillDocument).elementForOPID = getElementByOpId;
+  /** DEAD CODE ?? **/
+  // (document as AutofillDocument).elementForOPID = getElementByOpId;
+  /** END DEAD CODE **/
 
   doFill(fillScript);
 
