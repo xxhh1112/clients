@@ -37,6 +37,7 @@ export abstract class CryptoService {
     masterKey: MasterKey,
     userSymKey?: UserSymKey
   ) => Promise<[UserSymKey, EncString]>;
+  decryptUserSymKeyWithMasterKey: (masterKey: MasterKey, userId?: string) => Promise<UserSymKey>;
   hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
   setKeyHash: (keyHash: string) => Promise<void>;
   getKeyHash: () => Promise<string>;

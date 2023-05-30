@@ -230,6 +230,42 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
+   * Decrypts the user symmetric key with the provided master key
+   * @param masterKey The user's master key
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
+  async decryptUserSymKeyWithMasterKey(masterKey: MasterKey, userId?: string): Promise<UserSymKey> {
+    masterKey ||= await this.getMasterKey();
+    if (masterKey == null) {
+      throw new Error("No Master Key found.");
+    }
+
+    // TODO: Do we need to let this be passed in as well?
+    const userSymKeyMasterKey = await this.stateService.getUserSymKeyMasterKey({ userId: userId });
+    if (userSymKeyMasterKey == null) {
+      throw new Error("No User Key found.");
+    }
+
+    let decUserKey: ArrayBuffer;
+    const encUserKey = new EncString(userSymKeyMasterKey);
+    if (encUserKey.encryptionType === EncryptionType.AesCbc256_B64) {
+      decUserKey = await this.decryptToBytes(encUserKey, masterKey);
+    } else if (encUserKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
+      const newKey = await this.stretchKey(masterKey);
+      decUserKey = await this.decryptToBytes(encUserKey, newKey);
+    } else {
+      throw new Error("Unsupported encryption type.");
+    }
+    if (decUserKey == null) {
+      return null;
+    }
+
+    // TODO: Do we want to set the user key here?
+    return new SymmetricCryptoKey(decUserKey) as UserSymKey;
+  }
+
+  /**
    * Creates a master password hash from the user's master password. Can
    * be used for local authentication or for server authentication depending
    * on the hashPurpose provided.
