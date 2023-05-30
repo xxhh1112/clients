@@ -59,7 +59,7 @@ export abstract class CryptoService {
   setPrivateKey: (encPrivateKey: string) => Promise<void>;
   getPrivateKey: () => Promise<ArrayBuffer>;
   getFingerprint: (fingerprintMaterial: string, publicKey?: ArrayBuffer) => Promise<string[]>;
-  makeKeyPair: (key?: UserSymKey) => Promise<[string, EncString]>;
+  makeKeyPair: (key?: SymmetricCryptoKey) => Promise<[string, EncString]>;
   clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<void[]>;
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
   clearPinProtectedKey: () => Promise<void>;

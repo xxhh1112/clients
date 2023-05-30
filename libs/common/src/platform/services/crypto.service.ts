@@ -613,11 +613,14 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
-   * Generates a new keypair for the user
-   * @param key The user's symmetric key
-   * @returns A new keypair: [publicKey in Base64, protected privateKey]
+   * Generates a new keypair
+   * @param key A key to encrypt the private key with. If not provided,
+   * defaults to the user's symmetric key
+   * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
    */
-  async makeKeyPair(key?: UserSymKey): Promise<[string, EncString]> {
+  async makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]> {
+    key ||= await this.getUserKey();
+
     const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const publicB64 = Utils.fromBufferToB64(keyPair[0]);
     const privateEnc = await this.encrypt(keyPair[1], key);
