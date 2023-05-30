@@ -16,7 +16,7 @@ export abstract class CryptoService {
   // TODO: This works right?
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
-  setUserKey: (key: SymmetricCryptoKey) => Promise<void>;
+  setUserKey: (key: UserSymKey) => Promise<void>;
   getUserKey: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
   getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
   hasUserKey: () => Promise<boolean>;
