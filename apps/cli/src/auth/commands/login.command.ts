@@ -406,7 +406,11 @@ export class LoginCommand {
     }
 
     try {
-      const { newPasswordHash, newEncKey, hint } = await this.collectNewMasterPasswordDetails(
+      const {
+        newPasswordHash,
+        newUserSymKey: newEncKey,
+        hint,
+      } = await this.collectNewMasterPasswordDetails(
         "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now."
       );
 
@@ -444,7 +448,11 @@ export class LoginCommand {
     }
 
     try {
-      const { newPasswordHash, newEncKey, hint } = await this.collectNewMasterPasswordDetails(
+      const {
+        newPasswordHash,
+        newUserSymKey: newEncKey,
+        hint,
+      } = await this.collectNewMasterPasswordDetails(
         "An organization administrator recently changed your master password. In order to access the vault, you must update your master password now."
       );
 
@@ -477,7 +485,7 @@ export class LoginCommand {
     error?: string
   ): Promise<{
     newPasswordHash: string;
-    newEncKey: [SymmetricCryptoKey, EncString];
+    newUserSymKey: [SymmetricCryptoKey, EncString];
     hint?: string;
   }> {
     if (this.email == null || this.email === "undefined") {
@@ -559,21 +567,24 @@ export class LoginCommand {
     const kdfConfig = await this.stateService.getKdfConfig();
 
     // Create new key and hash new password
-    const newKey = await this.cryptoService.makeKey(
+    const newMasterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
       this.email.trim().toLowerCase(),
       kdf,
       kdfConfig
     );
-    const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newKey);
+    const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newMasterKey);
 
-    // Grab user's current enc key
-    const userEncKey = await this.cryptoService.getEncKey();
+    // Grab user's symmetric key
+    const userSymKey = await this.cryptoService.getUserKey();
 
-    // Create new encKey for the User
-    const newEncKey = await this.cryptoService.remakeEncKey(newKey, userEncKey);
+    // Re-encrypt user's symmetric key with new master key
+    const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
+      newMasterKey,
+      userSymKey
+    );
 
-    return { newPasswordHash, newEncKey, hint: masterPasswordHint };
+    return { newPasswordHash, newUserSymKey, hint: masterPasswordHint };
   }
 
   private async handleCaptchaRequired(
