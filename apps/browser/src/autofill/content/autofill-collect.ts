@@ -77,6 +77,7 @@ class AutofillCollect {
       ...(document.querySelectorAll(
         'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
           "span[data-bwautofill], " +
+          // @TODO `select` and `textarea` should also have `data-bwignore` qualifier
           "select, " +
           "textarea"
       ) as NodeListOf<FormElement>),

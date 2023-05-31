@@ -2,41 +2,51 @@ import { TYPE_CHECK } from "../constants";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
 /**
- * Clean up the string `s` to remove non-printable characters and whitespace.
- * @param {string} s
+ * Clean up the string `unformattedString` to remove non-printable characters and whitespace.
+ * @param {string} unformattedString
  * @returns {string} Clean text
  */
-function cleanText(s: string | null): string | null {
-  let sVal: string | null = null;
-  s && ((sVal = s.replace(/^\\s+|\\s+$|\\r?\\n.*$/gm, "")), (sVal = 0 < sVal.length ? sVal : null));
+function cleanText(unformattedString: string | null): string | null {
+  let newString = "";
 
-  return sVal;
+  if (unformattedString) {
+    newString = unformattedString.trim();
+  }
+
+  return newString.length ? newString : null;
 }
 
 /**
- * If `el` is a text node, add the node's text to `arr`.
- * If `el` is an element node, add the element's `textContent or `innerText` to `arr`.
- * @param {string[]} arr An array of `textContent` or `innerText` values
- * @param {HTMLElement} el The element to push to the array
+ * If `element` is a text node, add the node's text to `siblingTexts`.
+ * If `element` is an element node, add the element's `textContent or `innerText` to `siblingTexts`.
+ * @param {string[]} siblingTexts An array of `textContent` or `innerText` values
+ * @param {HTMLElement} element The element to push to the array
  */
-export function checkNodeType(arr: string[], el: Node) {
+export function getInnerText(siblingTexts: string[], element: Node) {
   let theText: string | Node["nodeValue"] = "";
 
-  3 === el.nodeType
-    ? (theText = el.nodeValue)
-    : 1 === el.nodeType && (theText = el.textContent || (el as HTMLElement).innerText);
+  if (element.nodeType === Node.TEXT_NODE) {
+    theText = element.nodeValue;
+  } else if (element.nodeType === Node.ELEMENT_NODE) {
+    theText = element.textContent || (element as HTMLElement).innerText;
+  }
 
-  (theText = cleanText(theText)) && arr.push(theText);
+  theText = cleanText(theText);
+
+  if (theText) {
+    siblingTexts.push(theText);
+  }
 }
 
 /**
- * Check if `el` is a type that indicates the transition to a new section of the page.
- * If so, this indicates that we should not use `el` or its children for getting autofill context for the previous element.
- * @param {HTMLElement} el The element to check
- * @returns {boolean} Returns `true` if `el` is an HTML element from a known set and `false` otherwise
+ * Check if `element` is a type that indicates the transition to a new section of the page.
+ * If so, this indicates that we should not use `element` or its children for getting autofill context for the previous element.
+ * @param {HTMLElement} element The element to check
+ * @returns {boolean} Returns `true` if `element` is an HTML element from a known set and `false` otherwise
  */
-export function isKnownTag(el: any) {
-  if (el && void 0 !== el) {
+// @TODO fix `element` typing: "`tagName` doesn't exist on Node"
+export function isNewSectionTag(element: any) {
+  if (element) {
     const tags = [
       "body",
       "button",
@@ -51,83 +61,89 @@ export function isKnownTag(el: any) {
       "textarea",
     ];
 
-    if (el) {
-      const elTag = el ? (el.tagName || "").toLowerCase() : "";
+    const elementTag = (element.tagName || "").toLowerCase();
 
-      return tags.constructor == Array ? 0 <= tags.indexOf(elTag) : elTag === tags;
-    } else {
-      return false;
-    }
+    return tags.includes(elementTag);
   } else {
     return true;
   }
 }
 
 /**
- * Recursively gather all of the text values from the elements preceding `el` in the DOM
- * @param {HTMLElement} el
- * @param {string[]} arr An array of `textContent` or `innerText` values
- * @param {number} steps The number of steps to take up the DOM tree
+ * Recursively gather all of the text values from the elements preceding `element` in the DOM
+ * @param {HTMLElement} element
+ * @param {string[]} siblingTexts An array of `textContent` or `innerText` values
  */
-export function shiftForLeftLabel(el: any, arr: string[], steps?: number) {
-  let sib;
+export function getAdjacentElementLabelValues(
+  element: any,
+  siblingTexts: string[]
+) {
+  let sibling;
 
-  // For all previous siblings, add their text to the array
-  for (steps || (steps = 0); el && el.previousSibling; ) {
-    el = el.previousSibling;
+  // While the current element exists and has `previousSibling`
+  while (element && element.previousSibling) {
+    element = element.previousSibling;
 
-    if (isKnownTag(el)) {
+    if (isNewSectionTag(element)) {
       return;
     }
 
-    checkNodeType(arr, el);
+    getInnerText(siblingTexts, element);
   }
 
-  // If no previous siblings were found and no textItems were found, check the parent element
-  if (el && 0 === arr.length) {
-    // While no sibilings are found
-    for (sib = null; !sib; ) {
-      el = el.parentElement || el.parentNode;
+  // If the current element exists and no valid sibling texts have been found
+  if (element && !siblingTexts.length) {
+    // Move up to parent element/node
+    sibling = null;
 
-      // If no parent element is found, return
-      if (!el) {
+    while (!sibling) {
+      element = element.parentElement || element.parentNode;
+      // If there is no parent element/node, exit loop
+      if (!element) {
         return;
       }
 
-      // If the parent element has a previous sibling, and the previous sibling is not a known tag, and the sibling has at least one child, then set the sibling to the last child
-      for (sib = el.previousSibling; sib && !isKnownTag(sib) && sib.lastChild; ) {
-        sib = sib.lastChild;
+      // Look at parent element/node siblings; if not a new section tag, and the sibling has `lastChild`, sibling becomes `lastChild`, loop ends
+      sibling = element.previousSibling;
+
+      while (sibling && !isNewSectionTag(sibling) && sibling.lastChild) {
+        sibling = sibling.lastChild;
       }
     }
 
     // base case and recurse
-    // If the sibling is a known tag, do not attempt to recurse.
-    // Otherwise, add the sibling to the array of text values
-    // If the array length is equal to zero, recurse with the sibling as the new element
-    isKnownTag(sib) ||
-      (checkNodeType(arr, sib), 0 === arr.length && shiftForLeftLabel(sib, arr, steps + 1));
+    if (!isNewSectionTag(sibling)) {
+      getInnerText(siblingTexts, sibling);
+
+      if (!siblingTexts.length) {
+        getAdjacentElementLabelValues(sibling, siblingTexts);
+      }
+    }
   }
 }
 
 /**
  * Determine if the element is visible.
- * Visible is define as not having `display: none` or `visibility: hidden`.
- * @param {HTMLElement} el
+ * Visible is defined as not having `display: none;` or `visibility: hidden;`.
+ * @param {HTMLElement} element
  * @returns {boolean} Returns `true` if the element is visible and `false` otherwise
  */
-export function isElementVisible(el: any) {
-  let theEl = el;
+export function isElementVisible(element: any) {
+  let theEl = element;
   // Get the top level document
   // eslint-disable-next-line no-cond-assign
-  el = (el = el.ownerDocument) ? el.defaultView : {};
+  element = (element = element.ownerDocument) ? element.defaultView : {};
 
   // walk the dom tree until we reach the top
   for (let elStyle; theEl && theEl !== document; ) {
     // Calculate the style of the element
-    elStyle = el.getComputedStyle ? el.getComputedStyle(theEl, null) : theEl.style;
+    elStyle = element.getComputedStyle
+      ? element.getComputedStyle(theEl, null)
+      : theEl.style;
 
     // If there's no computed style at all, we're done, as we know that it's not hidden
     if (!elStyle) {
+      // @TODO reachable?
       return true;
     }
 
@@ -146,32 +162,39 @@ export function isElementVisible(el: any) {
 /**
  * Determine if the element is "viewable" on the screen.
  * "Viewable" is defined as being visible in the DOM and being within the confines of the viewport.
- * @param {HTMLElement} el
+ * @param {HTMLElement} element
  * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
  */
-export function isElementViewable(el: FormElement) {
-  const theDoc = el.ownerDocument.documentElement;
-  const rect = el.getBoundingClientRect(); // getBoundingClientRect is relative to the viewport
+export function isElementViewable(element: FormElement) {
+  const theDoc = element.ownerDocument.documentElement;
+  const rect = element.getBoundingClientRect(); // getBoundingClientRect is relative to the viewport
   const docScrollWidth = theDoc.scrollWidth; // scrollWidth is the width of the document including any overflow
   const docScrollHeight = theDoc.scrollHeight; // scrollHeight is the height of the document including any overflow
   const leftOffset = rect.left - theDoc.clientLeft; // How far from the left of the viewport is the element, minus the left border width?
   const topOffset = rect.top - theDoc.clientTop; // How far from the top of the viewport is the element, minus the top border width?
   let theRect;
 
-  if (!isElementVisible(el) || !el.offsetParent || 10 > el.clientWidth || 10 > el.clientHeight) {
+  if (
+    !isElementVisible(element) ||
+    !element.offsetParent ||
+    element.clientWidth < 10 ||
+    element.clientHeight < 10
+  ) {
     return false;
   }
 
-  const rects = el.getClientRects();
+  const rects = element.getClientRects();
 
-  if (0 === rects.length) {
+  if (rects.length) {
     return false;
   }
 
   // If any of the rects have a left side that is further right than the document width or a right side that is
   // further left than the origin (i.e. is negative), we consider the element to be not viewable
   for (let i = 0; i < rects.length; i++) {
-    if (((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)) {
+    if (
+      ((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)
+    ) {
       return false;
     }
   }
@@ -193,25 +216,40 @@ export function isElementViewable(el: FormElement) {
   // If the bottom of the bounding rectangle is outside the viewport, the y coordinate of the center point is the window height (minus offset) divided by 2.
   // If the bottom side of the bounding rectangle is inside the viewport, the y coordinate of the center point is the height of the bounding rectangle divided by
   // We then use elementFromPoint to find the element at that point.
-  let pointEl = el.ownerDocument.elementFromPoint(
+  let pointEl = element.ownerDocument.elementFromPoint(
     leftOffset +
-      (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2),
+      (rect.right > window.innerWidth
+        ? (window.innerWidth - leftOffset) / 2
+        : rect.width / 2),
     topOffset +
-      (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)
+      (rect.bottom > window.innerHeight
+        ? (window.innerHeight - topOffset) / 2
+        : rect.height / 2)
   );
 
-  for (; pointEl && pointEl !== el && pointEl !== (document as unknown as Element); ) {
+  for (
+    ;
+    pointEl &&
+    pointEl !== element &&
+    pointEl !== (document as unknown as Element);
+
+  ) {
     // If the element we found is a label, and the element we're checking has labels
     if (
       pointEl.tagName &&
       typeof pointEl.tagName === TYPE_CHECK.STRING &&
       pointEl.tagName.toLowerCase() === "label" &&
-      (el as FillableControl).labels &&
-      0 < ((el as FillableControl).labels?.length || 0)
+      (element as FillableControl).labels &&
+      0 < ((element as FillableControl).labels?.length || 0)
     ) {
       // Return true if the element we found is one of the labels for the element we're checking.
       // This means that the element we're looking for is considered viewable
-      return 0 <= Array.prototype.slice.call((el as FillableControl).labels).indexOf(pointEl);
+      return (
+        0 <=
+        Array.prototype.slice
+          .call((element as FillableControl).labels)
+          .indexOf(pointEl)
+      );
     }
 
     // Walk up the DOM tree to check the parent element
@@ -220,208 +258,293 @@ export function isElementViewable(el: FormElement) {
 
   // If the for loop exited because we found the element we're looking for, return true, as it's viewable
   // If the element that we found isn't the element we're looking for, it means the element we're looking for is not viewable
-  return pointEl === el;
+  return pointEl === element;
 }
 
 /**
- * Retrieve the element from the document with the specified `opid` property
- * @param {number} opId
- * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
+ * Determine if we can apply styling to `element` to indicate that it was filled.
+ * @param {HTMLElement} element
+ * @param {HTMLElement} animateTheFilling
+ * @returns {boolean} Returns true if we can see the element to apply styling.
  */
-export function getElementForOPID(opId: string): Element | null {
-  let theEl;
+export function canSeeElementToStyle(
+  element: HTMLElement,
+  animateTheFilling: boolean
+) {
+  let currentElement: any = animateTheFilling;
 
-  if (void 0 === opId || null === opId) {
+  if (currentElement) {
+    a: {
+      currentElement = element;
+
+      // Check the parent tree of `element` for display/visibility
+      for (
+        let owner: any = element.ownerDocument.defaultView, theStyle;
+        currentElement && currentElement !== document;
+
+      ) {
+        theStyle = owner.getComputedStyle
+          ? owner.getComputedStyle(currentElement, null)
+          : currentElement.style;
+
+        if (!theStyle) {
+          currentElement = true;
+
+          break a;
+        }
+
+        if (theStyle.display === "none" || theStyle.visibility === "hidden") {
+          currentElement = false;
+
+          break a;
+        }
+
+        currentElement = currentElement.parentNode;
+      }
+
+      currentElement = currentElement === document;
+    }
+  }
+
+  if (
+    animateTheFilling &&
+    currentElement &&
+    !(element as FillableControl)?.type &&
+    element.tagName.toLowerCase() === "span"
+  ) {
+    return true;
+  }
+
+  return currentElement
+    ? ["email", "text", "password", "number", "tel", "url"].includes(
+        (element as FillableControl).type || ""
+      )
+    : false;
+}
+
+/**
+ * Helper for `document.querySelectorAll`
+ * @param {string} selector
+ * @return {NodeListOf<Element>}
+ */
+export function selectAllFromDoc(selector: string): NodeListOf<Element> {
+  try {
+    return document.querySelectorAll(selector);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("An unexpected error occurred: " + error);
+
+    return [] as unknown as NodeListOf<Element>;
+  }
+}
+
+/**
+ * Find the first element for the given `opid`, falling back to the first relevant unmatched
+ * element if non is found.
+ * @param {number} targetOpId
+ * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
+ */
+export function getElementByOpId(
+  targetOpId?: string | null
+): HTMLButtonElement | FillableControl | null | undefined {
+  let currentElement;
+
+  // @TODO do this check at the callsite(s)
+  if (!targetOpId) {
     return null;
   }
 
   try {
-    const formEls = Array.prototype.slice.call(getFormElements(document));
-    const filteredFormEls = formEls.filter(function (el: ElementWithOpId<FormElement>) {
-      return el.opid == opId;
-    });
+    const elements = Array.from(
+      selectAllFromDoc("input, select, button, textarea, span[data-bwautofill]")
+    ) as Array<FillableControl | HTMLButtonElement>;
 
-    if (0 < filteredFormEls.length) {
-      (theEl = filteredFormEls[0]),
+    const filteredElements = elements.filter(
+      (element) =>
+        (element as ElementWithOpId<FillableControl | HTMLButtonElement>)
+          .opid === targetOpId
+    );
+
+    if (filteredElements.length) {
+      currentElement = filteredElements[0];
+
+      if (filteredElements.length > 1) {
         // eslint-disable-next-line no-console
-        1 < filteredFormEls.length && console.warn(`More than one element found with opid ${opId}`);
+        console.warn("More than one element found with opid " + targetOpId);
+      }
     } else {
-      const theIndex = parseInt(opId.split("__")[1], 10);
+      const elementIndex = parseInt(targetOpId.split("__")[1], 10);
 
-      isNaN(theIndex) || (theEl = formEls[theIndex]);
+      if (isNaN(elementIndex) || !elements[elementIndex]) {
+        currentElement = null;
+      } else {
+        currentElement = elements[elementIndex];
+      }
     }
-  } catch (e) {
+  } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(`An unexpected error occurred: ${e}`);
+    console.error("An unexpected error occurred: " + error);
   } finally {
     // eslint-disable-next-line no-unsafe-finally
-    return theEl;
+    return currentElement;
   }
 }
 
 /**
- * Query `theDoc` for form elements that we can use for autofill, ranked by importance and limited by `limit`
- * @param {Document} theDoc The Document to query
+ * Query `targetDocument` for form elements that we can use for autofill, limited and
+ * ranked for importance by `limit`.
+ * @param {Document} targetDocument The Document to query
  * @param {number} limit The maximum number of elements to return
- * @returns An array of HTMLElements
+ * @returns {FormElement[]}
  */
-export function getFormElements(theDoc: Document, limit?: number): FormElement[] {
-  let els: FormElement[] = [];
+export function getFormElements(
+  targetDocument: Document,
+  limit?: number
+): FormElement[] {
+  let elementList: HTMLInputElement[] = [];
 
   try {
-    const elsList = theDoc.querySelectorAll(
-      'input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
-        ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, textarea, ' +
-        "span[data-bwautofill]"
+    // @TODO `select` and `textarea` should also have `data-bwignore` qualifier
+    elementList = Array.from(
+      targetDocument.querySelectorAll(
+        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
+          ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
+          "select:not([data-bwignore]), textarea:not([data-bwignore]), " +
+          "span[data-bwautofill]"
+      )
     );
-    els = Array.prototype.slice.call(elsList);
   } catch (e) {
     /* no-op */
   }
 
-  if (!limit || els.length <= limit) {
-    return els;
+  if (!limit || elementList.length <= limit) {
+    return elementList;
   }
 
-  // non-checkboxes/radios have higher priority
-  let returnEls: FormElement[] = [];
-  const unimportantEls: FormElement[] = [];
+  const returnElements: FormElement[] = [];
+  const unimportantElements: FormElement[] = [];
 
-  for (let i = 0; i < els.length; i++) {
-    if (returnEls.length >= limit) {
-      break;
+  elementList.every((element: HTMLInputElement) => {
+    if (returnElements.length >= limit) {
+      return false; // stop iterating
     }
 
-    const el = els[i];
-    const type = (el as HTMLInputElement).type
-      ? (el as HTMLInputElement).type.toLowerCase()
-      : (el as HTMLInputElement).type;
+    const elementType = element.type?.toLowerCase();
 
-    if (type === "checkbox" || type === "radio") {
-      unimportantEls.push(el);
+    if (["checkbox", "radio"].includes(elementType)) {
+      unimportantElements.push(element);
     } else {
-      returnEls.push(el);
+      returnElements.push(element);
     }
-  }
 
-  const unimportantElsToAdd = limit - returnEls.length;
+    return true;
+  });
 
-  if (unimportantElsToAdd > 0) {
-    returnEls = returnEls.concat(unimportantEls.slice(0, unimportantElsToAdd));
-  }
-
-  return returnEls;
+  return [...returnElements, ...unimportantElements].slice(0, limit);
 }
 
 /**
- * Focus the element `el` and optionally restore its original value
- * @param {HTMLElement} el
- * @param {boolean} setVal Set the value of the element to its original value
- */
-export function focusElement(el: FillableControl, setVal: boolean) {
-  if (setVal) {
-    const initialValue = el.value;
-
-    el.focus();
-
-    if (el.value !== initialValue) {
-      el.value = initialValue;
-    }
-  } else {
-    el.focus();
-  }
-}
-
-/**
- * For a given element `el`, returns the value of the attribute `attrName`.
- * @param {HTMLElement} el
- * @param {string} attrName
+ * For a given element `element`, returns the value of the attribute `attributeName`.
+ * @param {HTMLElement} element
+ * @param {string} attributeName
  * @returns {string} The value of the attribute
  */
-export function getElementAttrValue(el: any, attrName: string): string {
-  let attrVal = el[attrName];
+export function getPropertyOrAttribute(element: any, attributeName: string) {
+  let targetValue = element[attributeName];
 
-  if (typeof attrVal === TYPE_CHECK.STRING) {
-    return attrVal;
+  if (typeof targetValue === TYPE_CHECK.STRING) {
+    return targetValue;
   }
 
-  attrVal = el.getAttribute(attrName);
+  targetValue = element.getAttribute(attributeName);
 
-  return typeof attrVal == TYPE_CHECK.STRING ? attrVal : "";
+  return typeof targetValue == TYPE_CHECK.STRING ? targetValue : null;
 }
 
 /**
  * Returns the value of the given element.
- * @param {HTMLElement} el
+ * @param {HTMLElement} element
  * @returns {any} Value of the element
  */
-export function getElementValue(el: any) {
-  switch (toLowerString(el.type)) {
-    case "checkbox":
-      return el.checked ? "✓" : "";
-    case "hidden":
-      el = el.value;
+export function getElementValue(element: any) {
+  switch (toLowerString(element.type)) {
+    case "checkbox": {
+      return element.checked ? "✓" : "";
+    }
+    case "hidden": {
+      let elementValue = element.value;
 
-      if (!el || typeof el.length != TYPE_CHECK.NUMBER) {
+      if (!elementValue || typeof elementValue.length !== TYPE_CHECK.NUMBER) {
         return "";
       }
 
-      254 < el.length && (el = el.substr(0, 254) + "...SNIPPED");
+      const inputValueMaxLength = 254;
 
-      return el;
-    default:
-      if (!el.type && el.tagName.toLowerCase() === "span") {
-        return el.innerText;
+      if (elementValue.length > inputValueMaxLength) {
+        elementValue =
+          elementValue.substr(0, inputValueMaxLength) + "...SNIPPED";
       }
 
-      return el.value;
+      return elementValue;
+    }
+    default: {
+      if (!element.type && element.tagName.toLowerCase() === "span") {
+        return element.innerText;
+      }
+
+      return element.value;
+    }
   }
 }
 
 /**
- * If `el` is a `<select>` element, return an array of all of the options' `text` properties.
+ * If `element` is a `<select>` element, return an array of all of the options' `text` properties.
+ * @param {HTMLSelectElement} element
+ * @return {{ options: string[][] }} array of text values from all the passed `select` options
  */
-export function getSelectElementOptions(el: HTMLSelectElement): null | { options: string[] } {
-  if (!el.options) {
-    return null;
-  }
-
-  const options = Array.prototype.slice.call(el.options).map(function (option: HTMLOptionElement) {
+export function getSelectElementOptions(element: HTMLSelectElement): {
+  options: (string | null)[][];
+} {
+  const options = Array.from(element.options).map(function (
+    option: HTMLOptionElement
+  ) {
     const optionText = option.text
       ? toLowerString(option.text)
-          .replace(/\\s/gm, "")
-          // eslint-disable-next-line no-useless-escape
-          .replace(/[~`!@$%^&*()\\-_+=:;'\"\\[\\]|\\\\,<.>\\?]/gm, "")
+          // remove whitespace and punctuation
+          .replace(/[\s~`!@$%^&*()\-_+=:;'"[\]|\\,<.>?]/gm, "")
       : null;
 
-    return [optionText ? optionText : null, option.value];
+    return [optionText, option.value];
   });
 
-  return {
-    options: options,
-  };
+  return { options };
 }
 
 /**
- * If `el` is in a data table, get the label in the row directly above it
- * @param {HTMLElement} el
+ * If `element` is in a data table, get the label in the row directly above it
+ * @param {HTMLElement} element
  * @returns {string} A string containing the label, or null if not found
  */
-export function getLabelTop(el: any) {
+// @TODO handle cases where the table layout utilizes `thead` and `tbody`?
+export function getLabelTop(element: any) {
   let parent;
 
   // Traverse up the DOM until we reach either the top or the table data element containing our field
-  for (el = el.parentElement || el.parentNode; el && "td" != toLowerString(el.tagName); ) {
-    el = el.parentElement || el.parentNode;
+  for (
+    element = element.parentElement || element.parentNode;
+    element && "td" != toLowerString(element.tagName);
+
+  ) {
+    element = element.parentElement || element.parentNode;
   }
 
   // If we reached the top, return null
-  if (!el || void 0 === el) {
+  if (!element || void 0 === element) {
     return null;
   }
 
   // Establish the parent of the table and make sure it's a table row
-  parent = el.parentElement || el.parentNode;
+  parent = element.parentElement || element.parentNode;
   if ("tr" != parent.tagName.toLowerCase()) {
     return null;
   }
@@ -432,31 +555,19 @@ export function getLabelTop(el: any) {
   if (
     !parent ||
     "tr" != (parent.tagName + "").toLowerCase() ||
-    (parent.cells && el.cellIndex >= parent.cells.length)
+    (parent.cells && element.cellIndex >= parent.cells.length)
   ) {
     return null;
   }
 
   // Parent is established as the row above the table data element containing our field
   // Now let's traverse over to the cell in the same column as our field
-  el = parent.cells[el.cellIndex];
+  element = parent.cells[element.cellIndex];
 
   // Get the contents of this label
-  let elText = el.textContent || el.innerText;
+  let elText = element.textContent || element.innerText;
 
   return (elText = cleanText(elText));
-}
-
-/**
- * Add property `prop` with value `val` to the object `obj`
- * @param {*} d unknown
- */
-export function addProp(obj: Record<string, any>, prop: string, val: any, d?: unknown) {
-  if ((0 !== d && d === val) || null === val || void 0 === val) {
-    return;
-  }
-
-  obj[prop] = val;
 }
 
 /**
@@ -465,21 +576,30 @@ export function addProp(obj: Record<string, any>, prop: string, val: any, d?: un
  * @returns Lowercase string
  */
 export function toLowerString(s: string | null) {
-  return s && typeof s === TYPE_CHECK.STRING ? s.toLowerCase() : ("" + s).toLowerCase();
+  return s && typeof s === TYPE_CHECK.STRING
+    ? s.toLowerCase()
+    : ("" + s).toLowerCase();
 }
 
 /**
- * Query the document `doc` for elements matching the selector `selector`
+ * Query the document `targetDocument` for elements matching the selector `selector`
+ * @param {Document} targetDocument
+ * @param {string} selector
+ * @return {*}  {HTMLElement[]}
  */
-export function queryDoc<T extends Element = Element>(doc: Document, query: string): Array<T> {
-  let els: Array<T> = [];
+export function queryDocument(
+  targetDocument: Document,
+  selector: string
+): HTMLElement[] {
+  let elements: HTMLElement[] = [];
 
   try {
-    // Technically this returns a NodeListOf<Element> but it's ducktyped as an Array everywhere, so return it as an array here
-    els = doc.querySelectorAll(query) as unknown as Array<T>;
-  } catch (e) {
+    elements = Array.from(
+      targetDocument.querySelectorAll(selector)
+    ) as HTMLElement[];
+  } catch (error) {
     /* no-op */
   }
 
-  return els;
+  return elements;
 }
