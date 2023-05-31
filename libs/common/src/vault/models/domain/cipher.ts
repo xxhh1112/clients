@@ -216,7 +216,7 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
     c.creationDate = this.creationDate != null ? this.creationDate.toISOString() : null;
     c.deletedDate = this.deletedDate != null ? this.deletedDate.toISOString() : null;
     c.reprompt = this.reprompt;
-    c.key = this.key.encryptedString;
+    c.key = this.key?.encryptedString;
 
     this.buildDataModel(this, c, {
       name: null,
