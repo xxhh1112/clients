@@ -16,9 +16,7 @@ export function urlNotSecure(savedURLs?: string[] | null): boolean {
 
   const confirmationWarning = [
     chrome.i18n.getMessage("insecurePageWarning"),
-    chrome.i18n.getMessage("insecurePageWarningFillPrompt", [
-      window.location.hostname,
-    ]),
+    chrome.i18n.getMessage("insecurePageWarningFillPrompt", [window.location.hostname]),
   ].join("\n\n");
 
   if (
@@ -107,9 +105,7 @@ function getAllPasswordFields() {
   );
 
   // @TODO Check password input type as well?
-  const fields = Array.from(
-    selectAllFromDoc("input[type='text']")
-  ) as HTMLInputElement[];
+  const fields = Array.from(selectAllFromDoc("input[type='text']")) as HTMLInputElement[];
 
   return fields.filter((element) => {
     const { value } = element;
@@ -185,10 +181,7 @@ export function doClickByQuery(selector: string) {
  * @param {HTMLElement} element
  * @param {boolean} shouldResetValue Reset the value after focusing
  */
-export function doFocusElement(
-  element: FillableControl,
-  shouldResetValue: boolean
-): void {
+export function doFocusElement(element: FillableControl, shouldResetValue: boolean): void {
   if (shouldResetValue) {
     const initialValue = element.value;
 
@@ -248,10 +241,7 @@ export function setValueForElement(element: FillableControl) {
  * @param {string} valueToSet
  * @returns {Array} Array of elements that were set.
  */
-export function doSimpleSetByQuery(
-  selector: string,
-  valueToSet: string
-): FillableControl[] {
+export function doSimpleSetByQuery(selector: string, valueToSet: string): FillableControl[] {
   const elements = Array.from(selectAllFromDoc(selector)) as FillableControl[];
 
   return elements.filter((element) => {

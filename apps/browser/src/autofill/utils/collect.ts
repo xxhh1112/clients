@@ -74,10 +74,7 @@ export function isNewSectionTag(element: any) {
  * @param {HTMLElement} element
  * @param {string[]} siblingTexts An array of `textContent` or `innerText` values
  */
-export function getAdjacentElementLabelValues(
-  element: any,
-  siblingTexts: string[]
-) {
+export function getAdjacentElementLabelValues(element: any, siblingTexts: string[]) {
   let sibling;
 
   // While the current element exists and has `previousSibling`
@@ -137,9 +134,7 @@ export function isElementVisible(element: any) {
   // walk the dom tree until we reach the top
   for (let elStyle; theEl && theEl !== document; ) {
     // Calculate the style of the element
-    elStyle = element.getComputedStyle
-      ? element.getComputedStyle(theEl, null)
-      : theEl.style;
+    elStyle = element.getComputedStyle ? element.getComputedStyle(theEl, null) : theEl.style;
 
     // If there's no computed style at all, we're done, as we know that it's not hidden
     if (!elStyle) {
@@ -192,9 +187,7 @@ export function isElementViewable(element: FormElement) {
   // If any of the rects have a left side that is further right than the document width or a right side that is
   // further left than the origin (i.e. is negative), we consider the element to be not viewable
   for (let i = 0; i < rects.length; i++) {
-    if (
-      ((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)
-    ) {
+    if (((theRect = rects[i]), theRect.left > docScrollWidth || 0 > theRect.right)) {
       return false;
     }
   }
@@ -218,22 +211,12 @@ export function isElementViewable(element: FormElement) {
   // We then use elementFromPoint to find the element at that point.
   let pointEl = element.ownerDocument.elementFromPoint(
     leftOffset +
-      (rect.right > window.innerWidth
-        ? (window.innerWidth - leftOffset) / 2
-        : rect.width / 2),
+      (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2),
     topOffset +
-      (rect.bottom > window.innerHeight
-        ? (window.innerHeight - topOffset) / 2
-        : rect.height / 2)
+      (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)
   );
 
-  for (
-    ;
-    pointEl &&
-    pointEl !== element &&
-    pointEl !== (document as unknown as Element);
-
-  ) {
+  for (; pointEl && pointEl !== element && pointEl !== (document as unknown as Element); ) {
     // If the element we found is a label, and the element we're checking has labels
     if (
       pointEl.tagName &&
@@ -244,12 +227,7 @@ export function isElementViewable(element: FormElement) {
     ) {
       // Return true if the element we found is one of the labels for the element we're checking.
       // This means that the element we're looking for is considered viewable
-      return (
-        0 <=
-        Array.prototype.slice
-          .call((element as FillableControl).labels)
-          .indexOf(pointEl)
-      );
+      return 0 <= Array.prototype.slice.call((element as FillableControl).labels).indexOf(pointEl);
     }
 
     // Walk up the DOM tree to check the parent element
@@ -267,10 +245,7 @@ export function isElementViewable(element: FormElement) {
  * @param {HTMLElement} animateTheFilling
  * @returns {boolean} Returns true if we can see the element to apply styling.
  */
-export function canSeeElementToStyle(
-  element: HTMLElement,
-  animateTheFilling: boolean
-) {
+export function canSeeElementToStyle(element: HTMLElement, animateTheFilling: boolean) {
   let currentElement: any = animateTheFilling;
 
   if (currentElement) {
@@ -361,8 +336,7 @@ export function getElementByOpId(
 
     const filteredElements = elements.filter(
       (element) =>
-        (element as ElementWithOpId<FillableControl | HTMLButtonElement>)
-          .opid === targetOpId
+        (element as ElementWithOpId<FillableControl | HTMLButtonElement>).opid === targetOpId
     );
 
     if (filteredElements.length) {
@@ -397,10 +371,7 @@ export function getElementByOpId(
  * @param {number} limit The maximum number of elements to return
  * @returns {FormElement[]}
  */
-export function getFormElements(
-  targetDocument: Document,
-  limit?: number
-): FormElement[] {
+export function getFormElements(targetDocument: Document, limit?: number): FormElement[] {
   let elementList: HTMLInputElement[] = [];
 
   try {
@@ -481,8 +452,7 @@ export function getElementValue(element: any) {
       const inputValueMaxLength = 254;
 
       if (elementValue.length > inputValueMaxLength) {
-        elementValue =
-          elementValue.substr(0, inputValueMaxLength) + "...SNIPPED";
+        elementValue = elementValue.substr(0, inputValueMaxLength) + "...SNIPPED";
       }
 
       return elementValue;
@@ -505,9 +475,7 @@ export function getElementValue(element: any) {
 export function getSelectElementOptions(element: HTMLSelectElement): {
   options: (string | null)[][];
 } {
-  const options = Array.from(element.options).map(function (
-    option: HTMLOptionElement
-  ) {
+  const options = Array.from(element.options).map(function (option: HTMLOptionElement) {
     const optionText = option.text
       ? toLowerString(option.text)
           // remove whitespace and punctuation
@@ -576,9 +544,7 @@ export function getLabelTop(element: any) {
  * @returns Lowercase string
  */
 export function toLowerString(s: string | null) {
-  return s && typeof s === TYPE_CHECK.STRING
-    ? s.toLowerCase()
-    : ("" + s).toLowerCase();
+  return s && typeof s === TYPE_CHECK.STRING ? s.toLowerCase() : ("" + s).toLowerCase();
 }
 
 /**
@@ -587,16 +553,11 @@ export function toLowerString(s: string | null) {
  * @param {string} selector
  * @return {*}  {HTMLElement[]}
  */
-export function queryDocument(
-  targetDocument: Document,
-  selector: string
-): HTMLElement[] {
+export function queryDocument(targetDocument: Document, selector: string): HTMLElement[] {
   let elements: HTMLElement[] = [];
 
   try {
-    elements = Array.from(
-      targetDocument.querySelectorAll(selector)
-    ) as HTMLElement[];
+    elements = Array.from(targetDocument.querySelectorAll(selector)) as HTMLElement[];
   } catch (error) {
     /* no-op */
   }
