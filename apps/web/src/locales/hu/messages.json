@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "Gyűjtemény megtekintése - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Elem szerkesztése - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "$ID$ azonosítójú elem jelszava másolásra került.",
     "placeholders": {
@@ -5199,9 +5217,6 @@
     "message": "szolgáltatást az összes tag bejelentkezéséhez SSO szolgáltatással.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "A kulcscsatlakozó visszafejtésének beállításához SSO hitelesítés és egy önálló szervezeti szabályzat szükséges."
-  },
   "memberDecryptionOption": {
     "message": "Tagi visszafejtési opciók"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "Kulcskapcsoló"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "SSO bejelentkezés bekapcsolása a saját üzemeltetésű kulcskiszolgálón. Ezzel az opcióval a tagoknak nem kell használniuk a mesterjelszavukat az adatok visszafejtéséhez. Segítségért keressük a Bitwarden ügyfélszolgálatot."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Kapcsoljuk az egyszeri bejelentkezést a saját üzemeltetésű visszafejtési kulcsszerveréhez. Ezzel a lehetőséggel a tagoknak nem kell használniuk fő jelszavaikat a tárolóadatok visszafejtéséhez.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "SSO-hitelesítést és önálló szervezeti szabályzatot igényelnek",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "szükségesek a Key Connector visszafejtésének beállításához. Beállítási segítségért forduljunk a Bitwarden ügyfélszolgálatához.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "A „Bejelentkezés SSO szolgáltatással és a kulcskapcsoló visszafejtésével” engedélyezve van. Ez a szabály csak a tulajdonosokra és a rendszergazdákra vonatkozik."
@@ -5516,7 +5540,7 @@
   },
   "lastSync": {
     "message": "Utolsó szinkronizálás",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "A saját üzemeltetésű szponzorálások szinkronizálásra kerültek."
@@ -6173,6 +6197,10 @@
     "message": "Az elérési vezérjel visszavonásra került.",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Nincs kiválasztva elérési vezérjel a visszavonáshoz.",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Almenü"
   },
@@ -6524,6 +6552,18 @@
   "billingSyncHelp": {
     "message": "Számlázási szinkronizálás súgó"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Licensz fizetős funkciók súgó"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "Az előfizetés lejárta után 60 nap áll rendelkezésére a frissített licenszfájl alkalmazásához a szervezetben. A türelmi időszak lejárata: $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Licensz letöltése"
   },
@@ -6748,6 +6788,17 @@
   "enforceOnLoginDesc": {
     "message": "A meglévő tagoknak meg kell változtatniuk jelszavaikat."
   },
+  "region": {
+    "message": "Régió"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "Nincs jogosulltság ezen projekt törléséhez.",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6758,5 +6809,20 @@
   },
   "updateKdfSettings": {
     "message": "KDF beállítások frissítése"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Megbízható eszköztitkosítás"
+  },
+  "memberDecryptionTdeDescStart": {
+    "message": "A hitelesítés után a tagok az eszközükön tárolt kulccsal visszafejtik a tároló adatait.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescLink": {
+    "message": "mesterjelszó alaphelyzetbe állítási szabályzat",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescEnd": {
+    "message": "automatikus regisztrációval bekapcsolásra kerül ezen opció használatával.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

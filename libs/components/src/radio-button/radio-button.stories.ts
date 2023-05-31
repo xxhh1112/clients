@@ -1,11 +1,5 @@
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from "@angular/forms";
+import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
@@ -40,44 +34,47 @@ export default {
       url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=3930%3A16850&t=xXPx6GJYsJfuMQPE-4",
     },
   },
-} as Meta;
+} as Meta<RadioGroupComponent>;
 
-const InlineTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
-  props: {
-    formObj: new FormGroup({
-      radio: new FormControl(0),
-    }),
-  },
-  template: `
-    <form [formGroup]="formObj">
-      <bit-radio-group formControlName="radio" aria-label="Example radio group">
-        <bit-label>Group of radio buttons</bit-label>
+type Story = StoryObj<RadioGroupComponent>;
 
-        <bit-radio-button id="radio-first" [value]="0">
-          <bit-label>First</bit-label>
-        </bit-radio-button>
+export const Inline: Story = {
+  render: () => ({
+    props: {
+      formObj: new FormGroup({
+        radio: new FormControl(0),
+      }),
+    },
+    template: `
+      <form [formGroup]="formObj">
+        <bit-radio-group formControlName="radio" aria-label="Example radio group">
+          <bit-label>Group of radio buttons</bit-label>
+  
+          <bit-radio-button id="radio-first" [value]="0">
+            <bit-label>First</bit-label>
+          </bit-radio-button>
+  
+          <bit-radio-button id="radio-second" [value]="1">
+            <bit-label>Second</bit-label>
+          </bit-radio-button>
+  
+          <bit-radio-button id="radio-third" [value]="2">
+            <bit-label>Third</bit-label>
+          </bit-radio-button>
+        </bit-radio-group>
+      </form>
+    `,
+  }),
+};
 
-        <bit-radio-button id="radio-second" [value]="1">
-          <bit-label>Second</bit-label>
-        </bit-radio-button>
-
-        <bit-radio-button id="radio-third" [value]="2">
-          <bit-label>Third</bit-label>
-        </bit-radio-button>
-      </bit-radio-group>
-    </form>
-  `,
-});
-
-export const Inline = InlineTemplate.bind({});
-
-const InlineHintTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
-  props: {
-    formObj: new FormGroup({
-      radio: new FormControl(0),
-    }),
-  },
-  template: `
+export const InlineHint: Story = {
+  render: () => ({
+    props: {
+      formObj: new FormGroup({
+        radio: new FormControl(0),
+      }),
+    },
+    template: `
     <form [formGroup]="formObj">
       <bit-radio-group formControlName="radio" aria-label="Example radio group">
         <bit-label>Group of radio buttons</bit-label>
@@ -97,75 +94,73 @@ const InlineHintTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponen
         <bit-hint>This is a hint for the radio group</bit-hint>
       </bit-radio-group>
     </form>
-  `,
-});
+    `,
+  }),
+};
 
-export const InlineHint = InlineHintTemplate.bind({});
+export const Block: Story = {
+  render: () => ({
+    props: {
+      formObj: new FormGroup({
+        radio: new FormControl(0),
+      }),
+    },
+    template: `
+      <form [formGroup]="formObj">
+        <bit-radio-group formControlName="radio" aria-label="Example radio group">
+          <bit-label>Group of radio buttons</bit-label>
+  
+          <bit-radio-button id="radio-first" class="tw-block" [value]="0">
+            <bit-label>First</bit-label>
+            <bit-hint>This is a hint for the first option</bit-hint>
+          </bit-radio-button>
+  
+          <bit-radio-button id="radio-second" class="tw-block" [value]="1">
+            <bit-label>Second</bit-label>
+            <bit-hint>This is a hint for the second option</bit-hint>
+          </bit-radio-button>
+  
+          <bit-radio-button id="radio-third" class="tw-block" [value]="2">
+            <bit-label>Third</bit-label>
+            <bit-hint>This is a hint for the third option</bit-hint>
+          </bit-radio-button>
+        </bit-radio-group>
+      </form>
+    `,
+  }),
+};
 
-const BlockTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
-  props: {
-    formObj: new FormGroup({
-      radio: new FormControl(null, [Validators.required]),
-    }),
-  },
-  template: `
-    <form [formGroup]="formObj">
-      <bit-radio-group formControlName="radio" aria-label="Example radio group" [block]="true">
-        <bit-label>Group of radio buttons</bit-label>
+export const BlockHint: Story = {
+  render: () => ({
+    props: {
+      formObj: new FormGroup({
+        radio: new FormControl(0),
+      }),
+    },
+    template: `
+      <form [formGroup]="formObj">
+        <bit-radio-group formControlName="radio" aria-label="Example radio group" [block]="true">
+          <bit-label>Group of radio buttons</bit-label>
 
-        <bit-radio-button id="radio-first" [value]="0">
+          <bit-radio-button id="radio-first" [value]="0">
 
-          <bit-label>First</bit-label>
-          <bit-hint>This is a hint for the first option</bit-hint>
-        </bit-radio-button>
+            <bit-label>First</bit-label>
+            <bit-hint>This is a hint for the first option</bit-hint>
+          </bit-radio-button>
 
-        <bit-radio-button id="radio-second" [value]="1">
-          <bit-label>Second</bit-label>
-          <bit-hint>This is a hint for the second option</bit-hint>
-        </bit-radio-button>
+          <bit-radio-button id="radio-second" [value]="1">
+            <bit-label>Second</bit-label>
+            <bit-hint>This is a hint for the second option</bit-hint>
+          </bit-radio-button>
 
-        <bit-radio-button id="radio-third" [value]="2">
-          <bit-label>Third</bit-label>
-          <bit-hint>This is a hint for the third option</bit-hint>
-        </bit-radio-button>
-      </bit-radio-group>
-    </form>
-  `,
-});
+          <bit-radio-button id="radio-third" [value]="2">
+            <bit-label>Third</bit-label>
+            <bit-hint>This is a hint for the third option</bit-hint>
+          </bit-radio-button>
 
-export const Block = BlockTemplate.bind({});
-
-const BlockHintTemplate: Story<RadioGroupComponent> = (args: RadioGroupComponent) => ({
-  props: {
-    formObj: new FormGroup({
-      radio: new FormControl(0),
-    }),
-  },
-  template: `
-    <form [formGroup]="formObj">
-      <bit-radio-group formControlName="radio" aria-label="Example radio group" [block]="true">
-        <bit-label>Group of radio buttons</bit-label>
-
-        <bit-radio-button id="radio-first" [value]="0">
-
-          <bit-label>First</bit-label>
-          <bit-hint>This is a hint for the first option</bit-hint>
-        </bit-radio-button>
-
-        <bit-radio-button id="radio-second" [value]="1">
-          <bit-label>Second</bit-label>
-          <bit-hint>This is a hint for the second option</bit-hint>
-        </bit-radio-button>
-
-        <bit-radio-button id="radio-third" [value]="2">
-          <bit-label>Third</bit-label>
-          <bit-hint>This is a hint for the third option</bit-hint>
-        </bit-radio-button>
-
-        <bit-hint>This is a hint for the radio group</bit-hint>
-      </bit-radio-group>
-    </form>
-  `,
-});
-
-export const BlockHint = BlockHintTemplate.bind({});
+          <bit-hint>This is a hint for the radio group</bit-hint>
+        </bit-radio-group>
+      </form>
+    `,
+  }),
+};
