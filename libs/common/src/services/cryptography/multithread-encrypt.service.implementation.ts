@@ -34,6 +34,8 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
 
     this.worker ??= new Worker(
       new URL(
+        // This is required to get a consistent webpack chunk name. This is particularly important for Safari
+        // which needs a consistent file name to include in its bundle. Do not change the next line.
         /* webpackChunkName: 'encrypt-worker' */
         "@bitwarden/common/services/cryptography/encrypt.worker.ts",
         import.meta.url
