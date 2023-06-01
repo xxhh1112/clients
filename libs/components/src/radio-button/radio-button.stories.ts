@@ -143,7 +143,6 @@ export const BlockHint: Story = {
           <bit-label>Group of radio buttons</bit-label>
 
           <bit-radio-button id="radio-first" [value]="0">
-
             <bit-label>First</bit-label>
             <bit-hint>This is a hint for the first option</bit-hint>
           </bit-radio-button>
