@@ -49,18 +49,6 @@ export class SsoLogInStrategy extends LogInStrategy {
     );
   }
 
-  async setUserKey(tokenResponse: IdentityTokenResponse) {
-    const newSsoUser = tokenResponse.key == null;
-
-    if (tokenResponse.keyConnectorUrl != null) {
-      if (!newSsoUser) {
-        await this.keyConnectorService.getAndSetKey(tokenResponse.keyConnectorUrl);
-      } else {
-        await this.keyConnectorService.convertNewSsoUserToKeyConnector(tokenResponse, this.orgId);
-      }
-    }
-  }
-
   async logIn(credentials: SsoLogInCredentials) {
     this.orgId = credentials.orgId;
     this.tokenRequest = new SsoTokenRequest(
@@ -77,5 +65,44 @@ export class SsoLogInStrategy extends LogInStrategy {
     this.ssoEmail2FaSessionToken = ssoAuthResult.ssoEmail2FaSessionToken;
 
     return ssoAuthResult;
+  }
+
+  protected override async setMasterKey(tokenResponse: IdentityTokenResponse) {
+    const newSsoUser = tokenResponse.key == null;
+
+    if (tokenResponse.keyConnectorUrl != null) {
+      if (!newSsoUser) {
+        await this.keyConnectorService.getAndSetMasterKey(tokenResponse.keyConnectorUrl);
+      } else {
+        await this.keyConnectorService.convertNewSsoUserToKeyConnector(tokenResponse, this.orgId);
+      }
+    }
+  }
+
+  protected override async setUserKey(tokenResponse: IdentityTokenResponse): Promise<void> {
+    const newSsoUser = tokenResponse.key == null;
+
+    if (!newSsoUser) {
+      await this.cryptoService.setUserSymKeyMasterKey(tokenResponse.key);
+
+      if (tokenResponse.keyConnectorUrl != null) {
+        const masterKey = await this.cryptoService.getMasterKey();
+        if (!masterKey) {
+          throw new Error("Master key not found");
+        }
+        const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(masterKey);
+        await this.cryptoService.setUserKey(userKey);
+      }
+    }
+  }
+
+  protected override async setPrivateKey(tokenResponse: IdentityTokenResponse): Promise<void> {
+    const newSsoUser = tokenResponse.key == null;
+
+    if (!newSsoUser) {
+      await this.cryptoService.setPrivateKey(
+        tokenResponse.privateKey ?? (await this.createKeyPairForOldAccount())
+      );
+    }
   }
 }

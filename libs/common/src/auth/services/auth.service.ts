@@ -16,8 +16,8 @@ import { MessagingService } from "../../platform/abstractions/messaging.service"
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { PasswordStrengthServiceAbstraction } from "../../tools/password-strength";
+import { MasterKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
@@ -262,7 +262,7 @@ export class AuthService implements AuthServiceAbstraction {
     return AuthenticationStatus.Unlocked;
   }
 
-  async makePreloginKey(masterPassword: string, email: string): Promise<SymmetricCryptoKey> {
+  async makePreloginKey(masterPassword: string, email: string): Promise<MasterKey> {
     email = email.trim().toLowerCase();
     let kdf: KdfType = null;
     let kdfConfig: KdfConfig = null;

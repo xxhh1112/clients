@@ -7,7 +7,7 @@ import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { LogService } from "../../platform/abstractions/log.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { MasterKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { KdfConfig } from "../models/domain/kdf-config";
@@ -60,12 +60,13 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     await this.apiService.postConvertToKeyConnector();
   }
 
-  async getAndSetKey(url: string) {
+  // TODO: UserKey should be renamed to MasterKey and typed accordingly
+  async getAndSetMasterKey(url: string) {
     try {
-      const userKeyResponse = await this.apiService.getUserKeyFromKeyConnector(url);
-      const keyArr = Utils.fromB64ToArray(userKeyResponse.key);
-      const k = new SymmetricCryptoKey(keyArr);
-      await this.cryptoService.setKey(k);
+      const masterKeyResponse = await this.apiService.getUserKeyFromKeyConnector(url);
+      const keyArr = Utils.fromB64ToArray(masterKeyResponse.key);
+      const masterKey = new SymmetricCryptoKey(keyArr) as MasterKey;
+      await this.cryptoService.setMasterKey(masterKey);
     } catch (e) {
       this.handleKeyConnectorError(e);
     }

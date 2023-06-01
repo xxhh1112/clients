@@ -9,6 +9,12 @@ import { MessagingService } from "../../platform/abstractions/messaging.service"
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "../../platform/models/domain/symmetric-crypto-key";
+import { CsprngArray } from "../../types/csprng";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -101,7 +107,18 @@ describe("UserApiLogInStrategy", () => {
     expect(stateService.addAccount).toHaveBeenCalled();
   });
 
-  it("gets and sets the Key Connector key from environmentUrl", async () => {
+  it("sets the encrypted user symmetric key and private key from the identity token response", async () => {
+    const tokenResponse = identityTokenResponseFactory();
+
+    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+
+    await apiLogInStrategy.logIn(credentials);
+
+    expect(cryptoService.setUserSymKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
+  });
+
+  it("gets and sets the master key if Key Connector is enabled", async () => {
     const tokenResponse = identityTokenResponseFactory();
     tokenResponse.apiUseKeyConnector = true;
 
@@ -110,6 +127,26 @@ describe("UserApiLogInStrategy", () => {
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(keyConnectorService.getAndSetKey).toHaveBeenCalledWith(keyConnectorUrl);
+    expect(keyConnectorService.getAndSetMasterKey).toHaveBeenCalledWith(keyConnectorUrl);
+  });
+
+  it("decrypts and sets the user symmetric key if Key Connector is enabled", async () => {
+    const userSymKey = new SymmetricCryptoKey(
+      new Uint8Array(64).buffer as CsprngArray
+    ) as UserSymKey;
+    const masterKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as MasterKey;
+
+    const tokenResponse = identityTokenResponseFactory();
+    tokenResponse.apiUseKeyConnector = true;
+
+    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    environmentService.getKeyConnectorUrl.mockReturnValue(keyConnectorUrl);
+    cryptoService.getMasterKey.mockResolvedValue(masterKey);
+    cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+
+    await apiLogInStrategy.logIn(credentials);
+
+    expect(cryptoService.decryptUserSymKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userSymKey);
   });
 });
