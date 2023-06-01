@@ -1,7 +1,13 @@
 import { KdfType } from "../../../enums";
 import { BaseResponse } from "../../../models/response/base.response";
+import { UserDecryptionOption } from "../../enums/user-decryption-option.enum";
+import { UserDecryptionOptionResponseType } from "../../types/user-decryption-option-response";
 
+import { KeyConnectorDecryptionOptionResponse } from "./key-connector-decryption-option.response";
+import { MasterPasswordDecryptionOptionResponse } from "./master-password-decryption-option.response";
 import { MasterPasswordPolicyResponse } from "./master-password-policy.response";
+import { TrustedDeviceDecryptionOptionResponse } from "./trusted-device-decryption-option.response";
+import { UserDecryptionOptionResponse } from "./user-decryption-option.response";
 
 export class IdentityTokenResponse extends BaseResponse {
   accessToken: string;
@@ -21,6 +27,8 @@ export class IdentityTokenResponse extends BaseResponse {
   masterPasswordPolicy: MasterPasswordPolicyResponse;
   apiUseKeyConnector: boolean;
   keyConnectorUrl: string;
+
+  userDecryptionOptions: Array<UserDecryptionOptionResponseType>;
 
   constructor(response: any) {
     super(response);
@@ -43,5 +51,27 @@ export class IdentityTokenResponse extends BaseResponse {
     this.masterPasswordPolicy = new MasterPasswordPolicyResponse(
       this.getResponseProperty("MasterPasswordPolicy")
     );
+
+    const serverUserDecryptionOptions = this.getResponseProperty("UserDecryptionOptions");
+
+    if (serverUserDecryptionOptions) {
+      this.userDecryptionOptions = serverUserDecryptionOptions.map(
+        (serverUserDecryptionOption: any) => {
+          const response = new UserDecryptionOptionResponse(serverUserDecryptionOption);
+
+          switch (response.object) {
+            case UserDecryptionOption.MASTER_PASSWORD: {
+              return new MasterPasswordDecryptionOptionResponse(serverUserDecryptionOption);
+            }
+            case UserDecryptionOption.TRUSTED_DEVICE: {
+              return new TrustedDeviceDecryptionOptionResponse(serverUserDecryptionOption);
+            }
+            case UserDecryptionOption.KEY_CONNECTOR: {
+              return new KeyConnectorDecryptionOptionResponse(serverUserDecryptionOption);
+            }
+          }
+        }
+      );
+    }
   }
 }
