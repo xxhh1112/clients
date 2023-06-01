@@ -107,20 +107,20 @@ export const Block: Story = {
     },
     template: `
       <form [formGroup]="formObj">
-        <bit-radio-group formControlName="radio" aria-label="Example radio group">
+        <bit-radio-group formControlName="radio" aria-label="Example radio group" [block]="true">
           <bit-label>Group of radio buttons</bit-label>
   
-          <bit-radio-button id="radio-first" class="tw-block" [value]="0">
+          <bit-radio-button id="radio-first" [value]="0">
             <bit-label>First</bit-label>
             <bit-hint>This is a hint for the first option</bit-hint>
           </bit-radio-button>
   
-          <bit-radio-button id="radio-second" class="tw-block" [value]="1">
+          <bit-radio-button id="radio-second" [value]="1">
             <bit-label>Second</bit-label>
             <bit-hint>This is a hint for the second option</bit-hint>
           </bit-radio-button>
   
-          <bit-radio-button id="radio-third" class="tw-block" [value]="2">
+          <bit-radio-button id="radio-third" [value]="2">
             <bit-label>Third</bit-label>
             <bit-hint>This is a hint for the third option</bit-hint>
           </bit-radio-button>
