@@ -2,12 +2,7 @@ import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
-import {
-  getLabelTop,
-  getSelectElementOptions,
-  isElementViewable,
-  isElementVisible,
-} from "../utils";
+import { isElementViewable, isElementVisible } from "../utils";
 
 class AutofillCollect {
   private autofillFormsData: Record<string, AutofillForm> = {};
@@ -153,7 +148,7 @@ class AutofillCollect {
         "label-tag": this.getAutofillFieldLabelTag(element),
         "label-data": this.getPropertyOrAttribute(element, "data-label"),
         "label-aria": this.getPropertyOrAttribute(element, "aria-label"),
-        "label-top": getLabelTop(element),
+        "label-top": this.createAutofillFieldTopLabel(element),
         "label-right": this.createAutofillFieldRightLabel(element),
         "label-left": this.createAutofillFieldLeftLabel(element),
         placeholder: this.getPropertyOrAttribute(element, "placeholder"),
@@ -170,7 +165,8 @@ class AutofillCollect {
       autoCompleteType: autoCompleteType !== "off" ? autoCompleteType : null,
       disabled: Boolean(this.getPropertyOrAttribute(element, "disabled")),
       readonly: Boolean(this.getPropertyOrAttribute(element, "readOnly")),
-      selectInfo: element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
+      selectInfo:
+        element instanceof HTMLSelectElement ? this.getSelectElementOptions(element) : null,
       form: element.form ? this.getPropertyOrAttribute(element.form, "opid") : null,
       "aria-hidden": this.getPropertyOrAttribute(element, "aria-hidden") === "true",
       "aria-disabled": this.getPropertyOrAttribute(element, "aria-disabled") === "true",
@@ -205,7 +201,7 @@ class AutofillCollect {
         labelElementsSet.add(currentElement);
       }
 
-      currentElement = currentElement.parentElement;
+      currentElement = currentElement.closest("label");
     }
 
     if (
@@ -272,7 +268,7 @@ class AutofillCollect {
 
     while (currentElement && currentElement.nextElementSibling) {
       currentElement = currentElement.nextElementSibling as ElementWithOpId<HTMLElement>;
-      if (this.isTransitionalElement(currentElement)) {
+      if (this.isNewSectionElement(currentElement)) {
         break;
       }
 
@@ -291,7 +287,30 @@ class AutofillCollect {
     return labelTextContent.reverse().join("");
   }
 
-  // CG - METHOD MIGRATED FROM utils/collect.ts - isNewSectionTag
+  /**
+   * Assumes that the input elements that are to be autofilled are within a
+   * table structure. Queries the previous sibling of the parent row that
+   * the input element is in and returns the text content of the cell that
+   * is in the same column as the input element.
+   * @param {ElementWithOpId<FormElement>} element
+   * @returns {string | null}
+   * @private
+   */
+  private createAutofillFieldTopLabel(element: ElementWithOpId<FormElement>): string | null {
+    const tableDataElement = element.closest("td");
+    if (!tableDataElement) {
+      return null;
+    }
+
+    const tableDataElementIndex = tableDataElement.cellIndex;
+    const parentSiblingTableRowElement = tableDataElement.closest("tr")
+      ?.previousElementSibling as HTMLTableRowElement;
+
+    return parentSiblingTableRowElement?.cells?.length > tableDataElementIndex
+      ? this.getTextContentFromElement(parentSiblingTableRowElement.cells[tableDataElementIndex])
+      : null;
+  }
+
   /**
    * Check if the element's tag indicates that a transition to a new section of the
    * page is occurring. If so, we should not use the element or its children in order
@@ -300,7 +319,7 @@ class AutofillCollect {
    * @returns {boolean}
    * @private
    */
-  private isTransitionalElement(currentElement: HTMLElement | Node): boolean {
+  private isNewSectionElement(currentElement: HTMLElement | Node): boolean {
     if (!currentElement) {
       return true;
     }
@@ -325,20 +344,30 @@ class AutofillCollect {
     );
   }
 
+  /**
+   * Gets the text content from a passed element, regardless of whether it is a
+   * text node, an element node or an HTMLElement.
+   * @param {Node | HTMLElement} element
+   * @returns {string}
+   * @private
+   */
   private getTextContentFromElement(element: Node | HTMLElement): string {
     if (element.nodeType === Node.TEXT_NODE) {
       return this.trimAndRemoveNonPrintableText(element.nodeValue);
     }
 
-    if (element.nodeType === Node.ELEMENT_NODE) {
-      return this.trimAndRemoveNonPrintableText(element.textContent);
-    }
-
-    return element instanceof HTMLElement
-      ? this.trimAndRemoveNonPrintableText(element.innerText)
-      : "";
+    return this.trimAndRemoveNonPrintableText(
+      element.textContent || (element as HTMLElement).innerText
+    );
   }
 
+  /**
+   * Removes non-printable characters from the passed text
+   * content and trims leading and trailing whitespace.
+   * @param {string} textContent
+   * @returns {string}
+   * @private
+   */
   private trimAndRemoveNonPrintableText(textContent: string): string {
     return (textContent || "")
       .replace(/[^\x20-\x7E]+|\s+/g, " ") // Strip out non-primitive characters and replace multiple spaces with a single space
@@ -357,9 +386,10 @@ class AutofillCollect {
     const textContentItems: string[] = [];
     let currentElement = element;
     while (currentElement && currentElement.previousSibling) {
+      // Ensure we are capturing text content from nodes and elements.
       currentElement = currentElement.previousSibling;
 
-      if (this.isTransitionalElement(currentElement)) {
+      if (this.isNewSectionElement(currentElement)) {
         return textContentItems;
       }
 
@@ -373,18 +403,18 @@ class AutofillCollect {
       return textContentItems;
     }
 
-    // Prioritize capturing content from elements rather than text nodes.
+    // Prioritize capturing text content from elements rather than nodes.
     currentElement = currentElement.parentElement || currentElement.parentNode;
 
     let siblingElement =
       currentElement instanceof HTMLElement
         ? currentElement.previousElementSibling
         : currentElement.previousSibling;
-    while (siblingElement?.lastChild && !this.isTransitionalElement(siblingElement)) {
+    while (siblingElement?.lastChild && !this.isNewSectionElement(siblingElement)) {
       siblingElement = siblingElement.lastChild;
     }
 
-    if (this.isTransitionalElement(siblingElement)) {
+    if (this.isNewSectionElement(siblingElement)) {
       return textContentItems;
     }
 
@@ -412,9 +442,19 @@ class AutofillCollect {
     return element.getAttribute(attributeName);
   }
 
+  /**
+   * Gets the value of the element. If the element is a checkbox, returns a checkmark if the
+   * checkbox is checked, or an empty string if it is not checked. If the element is a hidden
+   * input, returns the value of the input if it is less than 254 characters, or a truncated
+   * value if it is longer than 254 characters.
+   * @param {FormElement} element
+   * @returns {string}
+   * @private
+   */
   private getElementValue(element: FormElement): string {
     if (element instanceof HTMLSpanElement) {
-      return element.innerText;
+      const spanTextContent = element.textContent || element.innerText;
+      return spanTextContent || "";
     }
 
     const elementValue = element.value || "";
@@ -430,6 +470,27 @@ class AutofillCollect {
     }
 
     return elementValue;
+  }
+
+  /**
+   * Get the options from a select element and return them as an array
+   * of arrays indicating the select element option text and value.
+   * @param {HTMLSelectElement} element
+   * @returns {{options: (string | null)[][]}}
+   * @private
+   */
+  private getSelectElementOptions(element: HTMLSelectElement): { options: (string | null)[][] } {
+    const options = [...element.options].map((option) => {
+      const optionText = option.text
+        ? String(option.text)
+            .toLowerCase()
+            .replace(/[\s~`!@$%^&#*()\-_+=:;'"[\]|\\,<.>?]/gm, "") // Remove whitespace and punctuation
+        : null;
+
+      return [optionText, option.value];
+    });
+
+    return { options };
   }
 }
 

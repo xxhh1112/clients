@@ -434,7 +434,7 @@ describe("AutofillCollect", function () {
     });
   });
 
-  describe("isTransitionalElement", function () {
+  describe("isNewSectionElement", function () {
     const validElementTags = [
       "html",
       "body",
@@ -456,7 +456,7 @@ describe("AutofillCollect", function () {
         const element = document.createElement(tag);
 
         it(`returns true if the element tag is a ${tag}`, function () {
-          expect(autofillCollect["isTransitionalElement"](element)).toEqual(true);
+          expect(autofillCollect["isNewSectionElement"](element)).toEqual(true);
         });
       });
     });
@@ -466,13 +466,76 @@ describe("AutofillCollect", function () {
         const element = document.createElement(tag);
 
         it(`returns false if the element tag is a ${tag}`, function () {
-          expect(autofillCollect["isTransitionalElement"](element)).toEqual(false);
+          expect(autofillCollect["isNewSectionElement"](element)).toEqual(false);
         });
       });
     });
 
     it(`returns true if the provided element is falsy`, function () {
-      expect(autofillCollect["isTransitionalElement"](undefined)).toEqual(true);
+      expect(autofillCollect["isNewSectionElement"](undefined)).toEqual(true);
+    });
+  });
+
+  describe("getTextContentFromElement", function () {
+    it("returns the node value for a text node", function () {
+      document.body.innerHTML = `
+        <div>
+          <label>
+            Username Label
+            <input type="text" id="username-id">
+          </label>
+        </div>
+      `;
+      const element = document.querySelector("#username-id");
+      const textNode = element.previousSibling;
+      const parsedTextContent = autofillCollect["trimAndRemoveNonPrintableText"](
+        textNode.nodeValue
+      );
+      jest.spyOn(autofillCollect as any, "trimAndRemoveNonPrintableText");
+
+      const textContent = autofillCollect["getTextContentFromElement"](textNode);
+
+      expect(textNode.nodeType).toEqual(Node.TEXT_NODE);
+      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
+        textNode.nodeValue
+      );
+      expect(textContent).toEqual(parsedTextContent);
+    });
+
+    it("returns the text content for an element node", function () {
+      document.body.innerHTML = `
+        <div>
+          <label for="username-id">Username Label</label>
+          <input type="text" id="username-id">
+        </div>
+      `;
+      const element = document.querySelector('label[for="username-id"]');
+      jest.spyOn(autofillCollect as any, "trimAndRemoveNonPrintableText");
+
+      const textContent = autofillCollect["getTextContentFromElement"](element);
+
+      expect(element.nodeType).toEqual(Node.ELEMENT_NODE);
+      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
+        element.textContent
+      );
+      expect(textContent).toEqual(element.textContent);
+    });
+  });
+
+  describe("trimAndRemoveNonPrintableText", function () {
+    it("returns an empty string if no text content is passed", function () {
+      const textContent = autofillCollect["trimAndRemoveNonPrintableText"](undefined);
+
+      expect(textContent).toEqual("");
+    });
+
+    it("returns a trimmed string with all non-printable text removed", function () {
+      const nonParsedText = `Hello!\nThis is a \t
+      test   string.\x0B\x08`;
+
+      const parsedText = autofillCollect["trimAndRemoveNonPrintableText"](nonParsedText);
+
+      expect(parsedText).toEqual("Hello! This is a test string.");
     });
   });
 
@@ -628,6 +691,234 @@ describe("AutofillCollect", function () {
 
       expect(textInputNonExistentAttribute).toEqual(null);
       expect(textInput.getAttribute).toHaveBeenCalledWith("non-existent-attribute");
+    });
+  });
+
+  describe("getElementValue", function () {
+    it("returns an empty string of passed input elements whose value is not set", function () {
+      document.body.innerHTML += `
+        <input type="checkbox" value="aTestValue" />
+        <input id="hidden-input" type="hidden" />
+        <span id="span-input"></span>
+      `;
+      const textInput = document.querySelector("#username") as HTMLInputElement;
+      const checkboxInput = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const hiddenInput = document.querySelector("#hidden-input") as HTMLInputElement;
+      const spanInput = document.querySelector("#span-input") as HTMLInputElement;
+
+      const textInputValue = autofillCollect["getElementValue"](textInput);
+      const checkboxInputValue = autofillCollect["getElementValue"](checkboxInput);
+      const hiddenInputValue = autofillCollect["getElementValue"](hiddenInput);
+      const spanInputValue = autofillCollect["getElementValue"](spanInput);
+
+      expect(textInputValue).toEqual("");
+      expect(checkboxInputValue).toEqual("");
+      expect(hiddenInputValue).toEqual("");
+      expect(spanInputValue).toEqual("");
+    });
+
+    it("returns the value of the passed input element", function () {
+      document.body.innerHTML += `
+        <input type="checkbox" value="aTestValue" />
+        <input id="hidden-input" type="hidden" />
+        <span id="span-input">A span input value</span>
+      `;
+      const textInput = document.querySelector("#username") as HTMLInputElement;
+      textInput.value = "jsmith";
+      const checkboxInput = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      checkboxInput.checked = true;
+      const hiddenInput = document.querySelector("#hidden-input") as HTMLInputElement;
+      hiddenInput.value = "aHiddenInputValue";
+      const spanInput = document.querySelector("#span-input") as HTMLInputElement;
+
+      const textInputValue = autofillCollect["getElementValue"](textInput);
+      const checkboxInputValue = autofillCollect["getElementValue"](checkboxInput);
+      const hiddenInputValue = autofillCollect["getElementValue"](hiddenInput);
+      const spanInputValue = autofillCollect["getElementValue"](spanInput);
+
+      expect(textInputValue).toEqual("jsmith");
+      expect(checkboxInputValue).toEqual("✓");
+      expect(hiddenInputValue).toEqual("aHiddenInputValue");
+      expect(spanInputValue).toEqual("A span input value");
+    });
+
+    it("return the truncated value of the passed hidden input type if the value length exceeds 256 characters", function () {
+      document.body.innerHTML += `
+        <input id="long-value-hidden-input" type="hidden" value="’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe. | “Beware the Jabberwock, my son! | The jaws that bite, the claws that catch! | Beware the Jubjub bird, and shun | The frumious Bandersnatch!” | He took his vorpal sword in hand; | Long time the manxome foe he sought— | So rested he by the Tumtum tree | And stood awhile in thought. | And, as in uffish thought he stood, | The Jabberwock, with eyes of flame, | Came whiffling through the tulgey wood, | And burbled as it came! | One, two! One, two! And through and through | The vorpal blade went snicker-snack! | He left it dead, and with its head | He went galumphing back. | “And hast thou slain the Jabberwock? | Come to my arms, my beamish boy! | O frabjous day! Callooh! Callay!” | He chortled in his joy. | ’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe." />
+      `;
+      const longValueHiddenInput = document.querySelector(
+        "#long-value-hidden-input"
+      ) as HTMLInputElement;
+
+      const longHiddenValue = autofillCollect["getElementValue"](longValueHiddenInput);
+
+      expect(longHiddenValue).toEqual(
+        "’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe. | “Beware the Jabberwock, my son! | The jaws that bite, the claws that catch! | Beware the Jubjub bird, and shun | The f...SNIPPED"
+      );
+    });
+  });
+
+  describe("getSelectElementOptions", function () {
+    it("returns the inner text and values of each `option` within the passed `select`", function () {
+      document.body.innerHTML = `
+        <select id="select-without-options"></select>
+        <select id="select-with-options">
+          <option value="1">Option: 1</option>
+          <option value="b">Option - B</option>
+          <option value="iii">Option III.</option>
+          <option value="four"></option>
+        </select>
+      `;
+      const selectWithOptions = document.querySelector("#select-with-options") as HTMLSelectElement;
+      const selectWithoutOptions = document.querySelector(
+        "#select-without-options"
+      ) as HTMLSelectElement;
+
+      const selectWithOptionsOptions =
+        autofillCollect["getSelectElementOptions"](selectWithOptions);
+      const selectWithoutOptionsOptions =
+        autofillCollect["getSelectElementOptions"](selectWithoutOptions);
+
+      expect(selectWithOptionsOptions).toEqual({
+        options: [
+          ["option1", "1"],
+          ["optionb", "b"],
+          ["optioniii", "iii"],
+          [null, "four"],
+        ],
+      });
+      expect(selectWithoutOptionsOptions).toEqual({ options: [] });
+    });
+  });
+
+  describe("createAutofillFieldTopLabel", function () {
+    it("returns the table column header value for the passed table element", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Login code</th>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual("Password");
+    });
+
+    it("will attempt to return the value for the previous sibling row as the label if a `th` cell is not found", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+              <td>Login code</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="auth-code"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual("Login code");
+    });
+
+    it("returns null for the passed table element it's parent row has no previous sibling row", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
+    });
+
+    it("returns null if the input element is not structured within a `td` element", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+              <td>Login code</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <div><input type="password" name="password" /></div>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
+    });
+
+    it("returns null if the index of the `td` element is larger than the length of cells in the sibling row", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="auth-code"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
     });
   });
 });

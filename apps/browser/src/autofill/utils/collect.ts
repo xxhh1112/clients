@@ -1,6 +1,7 @@
 import { TYPE_CHECK } from "../constants";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
+// CG - METHOD MIGRATED TO AutofillCollect.trimAndRemoveNonPrintableText
 /**
  * Clean up the string `unformattedString` to remove non-printable characters and whitespace.
  * @param {string} unformattedString
@@ -16,6 +17,7 @@ function cleanText(unformattedString: string | null): string | null {
   return newString.length ? newString : null;
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.getTextContentFromElement
 /**
  * If `element` is a text node, add the node's text to `siblingTexts`.
  * If `element` is an element node, add the element's `textContent or `innerText` to `siblingTexts`.
@@ -38,7 +40,7 @@ export function getInnerText(siblingTexts: string[], element: Node) {
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.isTransitionalElement
+// CG - METHOD MIGRATED TO AutofillCollect.isNewSectionElement
 /**
  * Check if `element` is a type that indicates the transition to a new section of the page.
  * If so, this indicates that we should not use `element` or its children for getting autofill context for the previous element.
@@ -316,6 +318,7 @@ export function selectAllFromDoc(selector: string): NodeListOf<Element> {
   }
 }
 
+// CG - CONSIDERING MOVING THIS METHOD TO SHARED AutofillInit CLASS
 /**
  * Find the first element for the given `opid`, falling back to the first relevant unmatched
  * element if non is found.
@@ -437,6 +440,7 @@ export function getPropertyOrAttribute(element: any, attributeName: string) {
   return typeof targetValue == TYPE_CHECK.STRING ? targetValue : null;
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.getElementValue
 /**
  * Returns the value of the given element.
  * @param {HTMLElement} element
@@ -472,6 +476,7 @@ export function getElementValue(element: any) {
   }
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.getSelectElementOptions
 /**
  * If `element` is a `<select>` element, return an array of all of the options' `text` properties.
  * @param {HTMLSelectElement} element
@@ -493,6 +498,7 @@ export function getSelectElementOptions(element: HTMLSelectElement): {
   return { options };
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.createAutofillFieldTopLabel
 /**
  * If `element` is in a data table, get the label in the row directly above it
  * @param {HTMLElement} element
@@ -543,6 +549,7 @@ export function getLabelTop(element: any) {
   return (elText = cleanText(elText));
 }
 
+// CG - CONSIDERING DEPRECATING THIS METHOD
 /**
  * Converts the string `s` to lowercase
  * @param {string} s
@@ -552,6 +559,7 @@ export function toLowerString(s: string | null) {
   return s && typeof s === TYPE_CHECK.STRING ? s.toLowerCase() : ("" + s).toLowerCase();
 }
 
+// CG - CONSIDERING DEPRECATING THIS METHOD
 /**
  * Query the document `targetDocument` for elements matching the selector `selector`
  * @param {Document} targetDocument

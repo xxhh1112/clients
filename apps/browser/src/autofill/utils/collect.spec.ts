@@ -32,7 +32,7 @@ describe("collect utils", () => {
     document.body.innerHTML = mockLoginForm;
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.isTransitionalElement
+  // CG - TESTS MIGRATED TO AutofillCollect.isNewSectionElement
   describe("isNewSectionTag", () => {
     const validTags = [
       "body",
@@ -247,6 +247,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - CONSIDERING MOVING THIS METHOD TO SHARED AutofillInit CLASS
   describe("getElementByOpId", () => {
     it("should return the element with the opid property value matching the passed value", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
@@ -570,6 +571,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.getElementValue
   describe("getElementValue", () => {
     it("should return the value of the passed input element", () => {
       // @TODO cannot test `span` `innerText` case, as jsdom has no layout engine
@@ -611,6 +613,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.getSelectElementOptions
   describe("getSelectElementOptions", () => {
     it("should return the inner text and values of each `option` within the passed `select`", () => {
       document.body.innerHTML = `
@@ -642,6 +645,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.createAutofillFieldTopLabel
   describe("getLabelTop", () => {
     it("should return the table column header value for the passed table element", () => {
       document.body.innerHTML = `
@@ -698,6 +702,7 @@ describe("collect utils", () => {
   //   });
   // });
 
+  // CG - CONSIDERING DEPRECATING THIS METHOD
   describe("queryDoc", () => {
     it("should return a list of queried elements", () => {
       const documentBodyRootElements = queryDocument(document, "body input");
