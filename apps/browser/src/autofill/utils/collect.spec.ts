@@ -552,6 +552,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.getPropertyOrAttribute
   describe("getPropertyOrAttribute", () => {
     it("should get the value of the named property or attribute of the target element, if the value is a string", () => {
       document.body.innerHTML += '<input type="checkbox" value="userWouldLikeToCheck" checked />';

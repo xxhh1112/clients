@@ -27,9 +27,7 @@ export type FillableControl = HTMLInputElement | HTMLSelectElement | HTMLTextAre
 
 export type FormElement = FillableControl | HTMLSpanElement;
 
-export type FormElementWithAttribute = FormElement & {
-  [key: string]: string | undefined;
-};
+export type FormElementWithAttribute = FormElement & Record<string, string | null | undefined>;
 
 // @TODO deprecate in favor of FormElementWithAttribute?
 // export type FormElementExtended = FormElement & { opid?: string };

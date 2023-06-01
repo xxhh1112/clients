@@ -418,6 +418,7 @@ export function getFormElements(targetDocument: Document, limit?: number): FormE
   return [...returnElements, ...unimportantElements].slice(0, limit);
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.getPropertyOrAttribute
 /**
  * For a given element `element`, returns the value of the attribute `attributeName`.
  * @param {HTMLElement} element

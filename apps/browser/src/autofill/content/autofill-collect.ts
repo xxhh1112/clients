@@ -50,10 +50,13 @@ class AutofillCollect {
 
       autofillForms[formOpid] = {
         opid: formOpid,
-        htmlAction: new URL(formElement.action, window.location.href).href,
-        htmlName: formElement.name,
-        htmlID: formElement.id,
-        htmlMethod: formElement.method,
+        htmlAction: new URL(
+          this.getPropertyOrAttribute(formElement, "action"),
+          window.location.href
+        ).href,
+        htmlName: this.getPropertyOrAttribute(formElement, "name"),
+        htmlID: this.getPropertyOrAttribute(formElement, "id"),
+        htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
       };
     });
 
@@ -102,7 +105,7 @@ class AutofillCollect {
         break;
       }
 
-      const fieldType = this.getElementAttribute(element, "type").toLowerCase();
+      const fieldType = this.getPropertyOrAttribute(element, "type")?.toLowerCase();
       if (unimportantFieldTypesSet.has(fieldType)) {
         unimportantFormFields.push(element);
         continue;
@@ -127,93 +130,54 @@ class AutofillCollect {
       maxLength: this.getAutofillFieldMaxLength(element),
       visible: isElementVisible(element),
       viewable: isElementViewable(element),
-      htmlID: this.getElementAttribute(element, "id"),
-      htmlName: this.getElementAttribute(element, "name"),
-      htmlClass: this.getElementAttribute(element, "class"),
-      tabindex: this.getElementAttribute(element, "tabindex"),
-      title: this.getElementAttribute(element, "title"),
-      tagName: element.tagName.toLowerCase(),
+      htmlID: this.getPropertyOrAttribute(element, "id"),
+      htmlName: this.getPropertyOrAttribute(element, "name"),
+      htmlClass: this.getPropertyOrAttribute(element, "class"),
+      tabindex: this.getPropertyOrAttribute(element, "tabindex"),
+      title: this.getPropertyOrAttribute(element, "title"),
+      tagName: this.getPropertyOrAttribute(element, "tagName")?.toLowerCase(),
     };
 
     if (element instanceof HTMLSpanElement) {
-      return this.generateAutofillFieldDataContainer(autofillFieldBase);
+      return autofillFieldBase;
     }
 
     const autoCompleteType =
-      this.getElementAttribute(element, "x-autocompletetype") ||
-      this.getElementAttribute(element, "autocompletetype") ||
-      this.getElementAttribute(element, "autocomplete");
-    const elementHasReadOnlyProperty =
-      element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+      this.getPropertyOrAttribute(element, "x-autocompletetype") ||
+      this.getPropertyOrAttribute(element, "autocompletetype") ||
+      this.getPropertyOrAttribute(element, "autocomplete");
     let autofillFieldLabels = {};
-    const elementType = String(element.type);
-    if (elementType.toLowerCase() !== "hidden") {
+    const elementType = this.getPropertyOrAttribute(element, "type")?.toLowerCase();
+    if (elementType !== "hidden") {
       autofillFieldLabels = {
         "label-tag": this.getAutofillFieldLabelTag(element),
-        "label-data": this.getElementAttribute(element, "data-label"),
-        "label-aria": this.getElementAttribute(element, "aria-label"),
+        "label-data": this.getPropertyOrAttribute(element, "data-label"),
+        "label-aria": this.getPropertyOrAttribute(element, "aria-label"),
         "label-top": getLabelTop(element),
         "label-right": this.createAutofillFieldRightLabel(element),
         "label-left": this.createAutofillFieldLeftLabel(element),
-        placeholder: this.getElementAttribute(element, "placeholder"),
+        placeholder: this.getPropertyOrAttribute(element, "placeholder"),
       };
     }
 
-    return this.generateAutofillFieldDataContainer({
+    return {
       ...autofillFieldBase,
       ...autofillFieldLabels,
-      rel: this.getElementAttribute(element, "rel"),
+      rel: this.getPropertyOrAttribute(element, "rel"),
       type: elementType,
       value: this.getElementValue(element),
-      checked: Boolean(this.getElementAttribute(element, "checked")),
+      checked: Boolean(this.getPropertyOrAttribute(element, "checked")),
       autoCompleteType: autoCompleteType !== "off" ? autoCompleteType : null,
-      disabled: Boolean(this.getElementAttribute(element, "disabled")),
-      readonly: elementHasReadOnlyProperty ? element.readOnly : false,
+      disabled: Boolean(this.getPropertyOrAttribute(element, "disabled")),
+      readonly: Boolean(this.getPropertyOrAttribute(element, "readOnly")),
       selectInfo: element instanceof HTMLSelectElement ? getSelectElementOptions(element) : null,
-      form: element.form ? this.getElementAttribute(element.form, "opid") : null,
-      "aria-hidden": this.getElementAttribute(element, "aria-hidden") === "true",
-      "aria-disabled": this.getElementAttribute(element, "aria-disabled") === "true",
-      "aria-haspopup": this.getElementAttribute(element, "aria-haspopup") === "true",
-      "data-stripe": this.getElementAttribute(element, "data-stripe"),
-    });
-  };
-
-  private generateAutofillFieldDataContainer(dataOverrides: Record<string, any>): AutofillField {
-    return {
-      opid: undefined,
-      elementNumber: undefined,
-      maxLength: undefined,
-      visible: undefined,
-      viewable: undefined,
-      htmlID: undefined,
-      htmlName: undefined,
-      htmlClass: undefined,
-      tabindex: undefined,
-      title: undefined,
-      tagName: undefined,
-      "label-tag": undefined,
-      "label-data": undefined,
-      "label-aria": undefined,
-      "label-top": undefined,
-      "label-right": undefined,
-      "label-left": undefined,
-      placeholder: undefined,
-      rel: undefined,
-      type: undefined,
-      value: undefined,
-      checked: undefined,
-      autoCompleteType: undefined,
-      disabled: undefined,
-      readonly: undefined,
-      selectInfo: undefined,
-      form: undefined,
-      "aria-hidden": undefined,
-      "aria-disabled": undefined,
-      "aria-haspopup": undefined,
-      "data-stripe": undefined,
-      ...dataOverrides,
+      form: element.form ? this.getPropertyOrAttribute(element.form, "opid") : null,
+      "aria-hidden": this.getPropertyOrAttribute(element, "aria-hidden") === "true",
+      "aria-disabled": this.getPropertyOrAttribute(element, "aria-disabled") === "true",
+      "aria-haspopup": this.getPropertyOrAttribute(element, "aria-haspopup") === "true",
+      "data-stripe": this.getPropertyOrAttribute(element, "data-stripe"),
     };
-  }
+  };
 
   /**
    * Creates a label tag used to autofill the element pulled from a label
@@ -433,12 +397,19 @@ class AutofillCollect {
     return this.recursivelyGetTextFromPreviousSiblings(siblingElement);
   }
 
-  private getElementAttribute(element: FormElement, attributeName: string): string {
+  /**
+   * Get the value of a property or attribute from a FormElement.
+   * @param {HTMLElement} element
+   * @param {string} attributeName
+   * @returns {string | null}
+   * @private
+   */
+  private getPropertyOrAttribute(element: HTMLElement, attributeName: string): string | null {
     if (attributeName in element) {
-      return (element as FormElementWithAttribute)[attributeName] || "";
+      return (element as FormElementWithAttribute)[attributeName];
     }
 
-    return element.getAttribute(attributeName) || "";
+    return element.getAttribute(attributeName);
   }
 
   private getElementValue(element: FormElement): string {

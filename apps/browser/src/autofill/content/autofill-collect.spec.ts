@@ -71,18 +71,18 @@ describe("AutofillCollect", function () {
             viewable: false,
             htmlID: usernameFieldId,
             htmlName: usernameFieldName,
-            htmlClass: "",
-            tabindex: "",
+            htmlClass: null,
+            tabindex: null,
             title: "",
             tagName: "input",
             "label-tag": usernameFieldLabel,
-            "label-data": "",
-            "label-aria": "",
+            "label-data": null,
+            "label-aria": null,
             "label-top": null,
             "label-right": passwordFieldLabel,
             "label-left": usernameFieldLabel,
             placeholder: "",
-            rel: "",
+            rel: null,
             type: "text",
             value: "",
             checked: false,
@@ -94,7 +94,7 @@ describe("AutofillCollect", function () {
             "aria-hidden": false,
             "aria-disabled": false,
             "aria-haspopup": false,
-            "data-stripe": "",
+            "data-stripe": null,
           },
           {
             opid: "__1",
@@ -104,18 +104,18 @@ describe("AutofillCollect", function () {
             viewable: false,
             htmlID: passwordFieldId,
             htmlName: passwordFieldName,
-            htmlClass: "",
-            tabindex: "",
+            htmlClass: null,
+            tabindex: null,
             title: "",
             tagName: "input",
             "label-tag": passwordFieldLabel,
-            "label-data": "",
-            "label-aria": "",
+            "label-data": null,
+            "label-aria": null,
             "label-top": null,
             "label-right": "",
             "label-left": passwordFieldLabel,
             placeholder: "",
-            rel: "",
+            rel: null,
             type: "password",
             value: "",
             checked: false,
@@ -127,7 +127,7 @@ describe("AutofillCollect", function () {
             "aria-hidden": false,
             "aria-disabled": false,
             "aria-haspopup": false,
-            "data-stripe": "",
+            "data-stripe": null,
           },
         ],
         collectedTimestamp: expect.any(Number),
@@ -182,7 +182,7 @@ describe("AutofillCollect", function () {
   });
 
   describe("getAutofillFieldElements", function () {
-    it("returns all form elements from the targeted document if no limit is set", () => {
+    it("returns all form elements from the targeted document if no limit is set", function () {
       document.body.innerHTML = mockLoginForm;
 
       const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
@@ -451,11 +451,11 @@ describe("AutofillCollect", function () {
     ];
     const invalidElementTags = ["div", "span"];
 
-    describe("given a transitional element", () => {
+    describe("given a transitional element", function () {
       validElementTags.forEach((tag) => {
         const element = document.createElement(tag);
 
-        it(`returns true if the element tag is a ${tag}`, () => {
+        it(`returns true if the element tag is a ${tag}`, function () {
           expect(autofillCollect["isTransitionalElement"](element)).toEqual(true);
         });
       });
@@ -465,13 +465,13 @@ describe("AutofillCollect", function () {
       invalidElementTags.forEach((tag) => {
         const element = document.createElement(tag);
 
-        it(`returns false if the element tag is a ${tag}`, () => {
+        it(`returns false if the element tag is a ${tag}`, function () {
           expect(autofillCollect["isTransitionalElement"](element)).toEqual(false);
         });
       });
     });
 
-    it(`returns true if the provided element is falsy`, () => {
+    it(`returns true if the provided element is falsy`, function () {
       expect(autofillCollect["isTransitionalElement"](undefined)).toEqual(true);
     });
   });
@@ -573,6 +573,61 @@ describe("AutofillCollect", function () {
         autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual([]);
+    });
+  });
+
+  describe("getPropertyOrAttribute", function () {
+    it("returns the value of the named property of the target element if the property exists within the element", function () {
+      document.body.innerHTML += '<input type="checkbox" value="userWouldLikeToCheck" checked />';
+      const textInput = document.querySelector("#username") as HTMLInputElement;
+      textInput.setAttribute("value", "jsmith");
+      const checkboxInput = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      jest.spyOn(textInput, "getAttribute");
+      jest.spyOn(checkboxInput, "getAttribute");
+
+      const textInputValue = autofillCollect["getPropertyOrAttribute"](textInput, "value");
+      const textInputId = autofillCollect["getPropertyOrAttribute"](textInput, "id");
+      const textInputBaseURI = autofillCollect["getPropertyOrAttribute"](textInput, "baseURI");
+      const textInputAutofocus = autofillCollect["getPropertyOrAttribute"](textInput, "autofocus");
+      const checkboxInputChecked = autofillCollect["getPropertyOrAttribute"](
+        checkboxInput,
+        "checked"
+      );
+
+      expect(textInput.getAttribute).not.toHaveBeenCalled();
+      expect(checkboxInput.getAttribute).not.toHaveBeenCalled();
+      expect(textInputValue).toEqual("jsmith");
+      expect(textInputId).toEqual("username");
+      expect(textInputBaseURI).toEqual("http://localhost/");
+      expect(textInputAutofocus).toEqual(false);
+      expect(checkboxInputChecked).toEqual(true);
+    });
+
+    it("returns the value of the named attribute of the element if it does not exist as a property within the element", function () {
+      const textInput = document.querySelector("#username") as HTMLInputElement;
+      textInput.setAttribute("data-unique-attribute", "unique-value");
+      jest.spyOn(textInput, "getAttribute");
+
+      const textInputUniqueAttribute = autofillCollect["getPropertyOrAttribute"](
+        textInput,
+        "data-unique-attribute"
+      );
+
+      expect(textInputUniqueAttribute).toEqual("unique-value");
+      expect(textInput.getAttribute).toHaveBeenCalledWith("data-unique-attribute");
+    });
+
+    it("returns a null value if the element does not contain the passed attribute name as either a property or attribute value", function () {
+      const textInput = document.querySelector("#username") as HTMLInputElement;
+      jest.spyOn(textInput, "getAttribute");
+
+      const textInputNonExistentAttribute = autofillCollect["getPropertyOrAttribute"](
+        textInput,
+        "non-existent-attribute"
+      );
+
+      expect(textInputNonExistentAttribute).toEqual(null);
+      expect(textInput.getAttribute).toHaveBeenCalledWith("non-existent-attribute");
     });
   });
 });
