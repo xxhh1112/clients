@@ -3,15 +3,8 @@ import { FormBuilder } from "@angular/forms";
 import { Subject } from "rxjs";
 
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices-api.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { DeviceType } from "@bitwarden/common/enums/device-type.enum";
-
-// TODO: clean up these comments
-// Existing patterns for cross client components:
-// 1. Create a new base component here in libs/angular
-// 2. for each client, create a new component that extends the base component with its own client specific logic
 
 @Directive()
 export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
@@ -27,9 +20,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     protected formBuilder: FormBuilder,
-    protected devicesApiService: DevicesApiServiceAbstraction,
-    protected organizationService: OrganizationService,
-    protected policyService: PolicyService
+    protected devicesApiService: DevicesApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -65,33 +56,6 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
         break;
       }
     }
-
-    // this.policyService
-    //   .get$(PolicyType.ResetPassword)
-    //   .pipe(
-    //     filter((policy) => policy != null), // why is this filter needed?
-    //     takeUntil(this.componentDestroyed$)
-    //   )
-    //   .subscribe((policy) => {
-    //     console.log("policy", policy);
-    //     // this.vaultTimeoutPolicy = policy;
-    //   });
-
-    // this.policyService.policies$
-    //   .pipe(
-    //     map((policies) => policies.filter((policy) => policy.type === PolicyType.ResetPassword)),
-    //     takeUntil(this.componentDestroyed$)
-    //   )
-    //   .subscribe((policies) => {
-    //     console.log("policies", policies);
-    //     // this.policies = policies;
-    //     // this.loaded = true;
-    //   });
-
-    // const resetPasswordPolicy = policies
-    //   .filter((policy) => policy.type === PolicyType.ResetPassword)
-    //   .find((p) => p.organizationId === this.organization.id);
-    // this.orgResetPasswordPolicyEnabled = resetPasswordPolicy?.enabled;
   }
 
   ngOnDestroy(): void {
