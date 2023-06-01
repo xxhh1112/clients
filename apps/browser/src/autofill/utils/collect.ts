@@ -38,6 +38,7 @@ export function getInnerText(siblingTexts: string[], element: Node) {
   }
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.isTransitionalElement
 /**
  * Check if `element` is a type that indicates the transition to a new section of the page.
  * If so, this indicates that we should not use `element` or its children for getting autofill context for the previous element.
@@ -69,6 +70,7 @@ export function isNewSectionTag(element: any) {
   }
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.recursivelyGetTextFromPreviousSiblings
 /**
  * Recursively gather all of the text values from the elements preceding `element` in the DOM
  * @param {HTMLElement} element
@@ -297,6 +299,7 @@ export function canSeeElementToStyle(element: HTMLElement, animateTheFilling: bo
     : false;
 }
 
+// CG - CONSIDERING DEPRECATING THIS METHOD
 /**
  * Helper for `document.querySelectorAll`
  * @param {string} selector
@@ -364,6 +367,7 @@ export function getElementByOpId(
   }
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.getAutofillFieldElements
 /**
  * Query `targetDocument` for form elements that we can use for autofill, limited and
  * ranked for importance by `limit`.

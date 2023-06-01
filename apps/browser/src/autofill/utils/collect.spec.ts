@@ -32,6 +32,7 @@ describe("collect utils", () => {
     document.body.innerHTML = mockLoginForm;
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.isTransitionalElement
   describe("isNewSectionTag", () => {
     const validTags = [
       "body",
@@ -233,6 +234,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - CONSIDERING DEPRECATING THIS METHOD
   describe("selectAllFromDoc", () => {
     it("should return an array of all elements in the document which the selector targets", () => {
       let selection = selectAllFromDoc("input");
@@ -314,6 +316,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.recursivelyGetTextFromPreviousSiblings
   describe("getAdjacentElementLabelValues", () => {
     it("should find text adjacent to the target element likely to be a label", () => {
       document.body.innerHTML = `
@@ -411,6 +414,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.getAutofillFieldElements
   describe("getFormElements", () => {
     it("should return all form elements from the targeted document", () => {
       const formElements = getFormElements(document);

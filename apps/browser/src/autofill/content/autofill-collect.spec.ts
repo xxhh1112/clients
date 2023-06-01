@@ -1,13 +1,22 @@
-import { FillableControl } from "../types";
+import { FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
 import AutofillCollect from "./autofill-collect";
+
+const mockLoginForm = `
+  <div id="root">
+    <form>
+      <input type="text" id="username" />
+      <input type="password" />
+    </form>
+  </div>
+`;
 
 describe("AutofillCollect", function () {
   let autofillCollect: any;
 
   beforeEach(function () {
     jest.clearAllMocks();
-    document.body.innerHTML = "";
+    document.body.innerHTML = mockLoginForm;
     autofillCollect = new AutofillCollect();
   });
 
@@ -172,6 +181,145 @@ describe("AutofillCollect", function () {
     });
   });
 
+  describe("getAutofillFieldElements", function () {
+    it("returns all form elements from the targeted document if no limit is set", () => {
+      document.body.innerHTML = mockLoginForm;
+
+      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
+      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
+
+      expect(elementStringsToCheck).toEqual([
+        '<input type="text" id="username">',
+        '<input type="password">',
+      ]);
+    });
+
+    it("returns up to 2 (passed as `limit`) form elements from the targeted document with more than 2 form elements", function () {
+      document.body.innerHTML = `
+        <div>
+          <span data-bwautofill="true">included span</span>
+          <textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>
+          <span>ignored span</span>
+          <select><option value="1">Option 1</option></select>
+          <label for="username">username</label>
+          <input type="text" id="username" />
+          <input type="password" />
+          <span data-bwautofill="true">another included span</span>
+        </div>
+      `;
+
+      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"](2);
+      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
+
+      expect(elementStringsToCheck).toEqual([
+        '<span data-bwautofill="true">included span</span>',
+        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
+      ]);
+    });
+
+    it("returns form elements from the targeted document, ignoring input types `hidden`, `submit`, `reset`, `button`, `image`, `file`, and inputs tagged with `data-bwignore`, while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit", function () {
+      document.body.innerHTML = `
+        <div>
+          <fieldset>
+            <legend>Select an option:</legend>
+            <div>
+              <input type="radio" value="option-a" />
+              <label for="option-a">Option A: Options B & C</label>
+            </div>
+            <div>
+              <input type="radio" value="option-b" />
+              <label for="option-b">Option B: Options A & C</label>
+            </div>
+            <div>
+              <input type="radio" value="option-c" />
+              <label for="option-c">Option C: Options A & B</label>
+            </div>
+          </fieldset>
+          <span data-bwautofill="true">included span</span>
+          <textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>
+          <span>ignored span</span>
+          <input type="checkbox" name="doYouWantToCheck" />
+          <label for="doYouWantToCheck">Do you want to skip checking this box?</label>
+          <select><option value="1">Option 1</option></select>
+          <label for="username">username</label>
+          <input type="text" data-bwignore value="None" />
+          <input type="hidden" value="of" />
+          <input type="submit" value="these" />
+          <input type="reset" value="inputs" />
+          <input type="button" value="should" />
+          <input type="image" src="be" />
+          <input type="file" multiple id="returned" />
+          <input type="text" id="username" />
+          <input type="password" />
+          <span data-bwautofill="true">another included span</span>
+        </div>
+      `;
+
+      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
+      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
+
+      expect(elementStringsToCheck).toEqual([
+        '<input type="radio" value="option-a">',
+        '<input type="radio" value="option-b">',
+        '<input type="radio" value="option-c">',
+        '<span data-bwautofill="true">included span</span>',
+        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
+        '<input type="checkbox" name="doYouWantToCheck">',
+        '<select><option value="1">Option 1</option></select>',
+        '<input type="text" id="username">',
+        '<input type="password">',
+        '<span data-bwautofill="true">another included span</span>',
+      ]);
+    });
+
+    it("returns form elements from the targeted document while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit`", function () {
+      document.body.innerHTML = `
+        <div>
+          <input type="checkbox" name="doYouWantToCheck" />
+          <label for="doYouWantToCheck">Do you want to skip checking this box?</label>
+          <textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>
+          <span>ignored span</span>
+          <fieldset>
+            <legend>Select an option:</legend>
+            <div>
+              <input type="radio" value="option-a" />
+              <label for="option-a">Option A: Options B & C</label>
+            </div>
+            <div>
+              <input type="radio" value="option-b" />
+              <label for="option-b">Option B: Options A & C</label>
+            </div>
+            <div>
+              <input type="radio" value="option-c" />
+              <label for="option-c">Option C: Options A & B</label>
+            </div>
+          </fieldset>
+          <select><option value="1">Option 1</option></select>
+          <label for="username">username</label>
+          <input type="text" id="username" />
+          <input type="password" />
+          <span data-bwautofill="true">another included span</span>
+        </div>
+      `;
+
+      const truncatedFormElements: FormElement[] = autofillCollect["getAutofillFieldElements"](8);
+      const truncatedElementStringsToCheck = truncatedFormElements.map(
+        ({ outerHTML }) => outerHTML
+      );
+
+      expect(truncatedElementStringsToCheck).toEqual([
+        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
+        '<select><option value="1">Option 1</option></select>',
+        '<input type="text" id="username">',
+        '<input type="password">',
+        '<span data-bwautofill="true">another included span</span>',
+        '<input type="checkbox" name="doYouWantToCheck">',
+        '<input type="radio" value="option-a">',
+        '<input type="radio" value="option-b">',
+      ]);
+    });
+  });
+
   describe("getAutofillFieldLabelTag", function () {
     beforeEach(function () {
       jest.spyOn(autofillCollect, "createLabelElementsTag");
@@ -283,6 +431,148 @@ describe("AutofillCollect", function () {
       const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
 
       expect(labelTag).toEqual("");
+    });
+  });
+
+  describe("isTransitionalElement", function () {
+    const validElementTags = [
+      "html",
+      "body",
+      "button",
+      "form",
+      "head",
+      "iframe",
+      "input",
+      "option",
+      "script",
+      "select",
+      "table",
+      "textarea",
+    ];
+    const invalidElementTags = ["div", "span"];
+
+    describe("given a transitional element", () => {
+      validElementTags.forEach((tag) => {
+        const element = document.createElement(tag);
+
+        it(`returns true if the element tag is a ${tag}`, () => {
+          expect(autofillCollect["isTransitionalElement"](element)).toEqual(true);
+        });
+      });
+    });
+
+    describe("given an non-transitional element", function () {
+      invalidElementTags.forEach((tag) => {
+        const element = document.createElement(tag);
+
+        it(`returns false if the element tag is a ${tag}`, () => {
+          expect(autofillCollect["isTransitionalElement"](element)).toEqual(false);
+        });
+      });
+    });
+
+    it(`returns true if the provided element is falsy`, () => {
+      expect(autofillCollect["isTransitionalElement"](undefined)).toEqual(true);
+    });
+  });
+
+  describe("recursivelyGetTextFromPreviousSiblings", function () {
+    it("should find text adjacent to the target element likely to be a label", function () {
+      document.body.innerHTML = `
+        <div>
+          Text about things
+          <div>some things</div>
+          <div>
+            <h3>Stuff Section Header</h3>
+            Other things which are also stuff
+            <div style="display:none;"> Not visible text </div>
+            <label for="input-tag">something else</label>
+            <input id="input-tag" type="text" value="something" />
+          </div>
+        </div>
+      `;
+      const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
+
+      const elementList: string[] =
+        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+
+      expect(elementList).toEqual([
+        "something else",
+        "Not visible text",
+        "Other things which are also stuff",
+        "Stuff Section Header",
+      ]);
+    });
+
+    it("should stop looking at siblings for label values when a 'new section' element is seen", function () {
+      document.body.innerHTML = `
+        <div>
+          Text about things
+          <div>some things</div>
+          <div>
+            <h3>Stuff Section Header</h3>
+            Other things which are also stuff
+            <div style="display:none;">Not a label</div>
+            <input type=text />
+            <label for="input-tag">something else</label>
+            <input id="input-tag" type="text" value="something" />
+          </div>
+        </div>
+      `;
+
+      const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
+      const elementList: string[] =
+        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+
+      expect(elementList).toEqual(["something else"]);
+    });
+
+    it("should keep looking for labels in parents when there are no siblings of the target element", function () {
+      document.body.innerHTML = `
+        <div>
+          Text about things
+          <input type="text" />
+          <div>some things</div>
+          <div>
+            <input id="input-tag" type="text" value="something" />
+          </div>
+        </div>
+      `;
+
+      const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
+      const elementList: string[] =
+        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+
+      expect(elementList).toEqual(["some things"]);
+    });
+
+    it("should find label in parent sibling last child if no other label candidates have been encountered and there are no text nodes along the way", function () {
+      document.body.innerHTML = `
+        <div>
+          <div>
+            <div>not the most relevant things</div>
+            <div>some nested things</div>
+            <div>
+              <input id="input-tag" type="text" value="something" />
+            </div>
+          </div>
+        </div>
+      `;
+
+      const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
+      const elementList: string[] =
+        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+
+      expect(elementList).toEqual(["some nested things"]);
+    });
+
+    it("should exit early if the target element has no parent element/node", function () {
+      const textInput = document.querySelector("html") as HTMLHtmlElement;
+
+      const elementList: string[] =
+        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+
+      expect(elementList).toEqual([]);
     });
   });
 });

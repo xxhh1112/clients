@@ -72,14 +72,21 @@ class AutofillCollect {
     return autofillFieldElements.map(this.buildAutofillFieldDataItem);
   }
 
+  /**
+   * Queries the DOM for all the field elements that can be autofilled,
+   * and returns a list limited to the given `fieldsLimit` number that
+   * is ordered by priority.
+   * @param {number} fieldsLimit - The maximum number of fields to return
+   * @returns {FormElement[]}
+   * @private
+   */
   private getAutofillFieldElements(fieldsLimit?: number): FormElement[] {
     const formFieldElements: FormElement[] = [
       ...(document.querySelectorAll(
         'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
-          "span[data-bwautofill], " +
-          // @TODO `select` and `textarea` should also have `data-bwignore` qualifier
-          "select, " +
-          "textarea"
+          "textarea:not([data-bwignore]), " +
+          "select:not([data-bwignore]), " +
+          "span[data-bwautofill]"
       ) as NodeListOf<FormElement>),
     ];
 
@@ -104,12 +111,7 @@ class AutofillCollect {
       priorityFormFields.push(element);
     }
 
-    const numberOfUnimportantFieldsToInclude = fieldsLimit - priorityFormFields.length;
-    if (numberOfUnimportantFieldsToInclude > 0) {
-      priorityFormFields.concat(unimportantFormFields.slice(0, numberOfUnimportantFieldsToInclude));
-    }
-
-    return priorityFormFields;
+    return [...priorityFormFields, ...unimportantFormFields].slice(0, fieldsLimit);
   }
 
   private buildAutofillFieldDataItem = (
@@ -325,6 +327,7 @@ class AutofillCollect {
     return labelTextContent.reverse().join("");
   }
 
+  // CG - METHOD MIGRATED FROM utils/collect.ts - isNewSectionTag
   /**
    * Check if the element's tag indicates that a transition to a new section of the
    * page is occurring. If so, we should not use the element or its children in order
@@ -333,7 +336,7 @@ class AutofillCollect {
    * @returns {boolean}
    * @private
    */
-  private isTransitionalElement(currentElement: HTMLElement): boolean {
+  private isTransitionalElement(currentElement: HTMLElement | Node): boolean {
     if (!currentElement) {
       return true;
     }
@@ -352,7 +355,10 @@ class AutofillCollect {
       "table",
       "textarea",
     ]);
-    return transitionalElementTagsSet.has(currentElement.tagName.toLowerCase());
+    return (
+      "tagName" in currentElement &&
+      transitionalElementTagsSet.has(currentElement.tagName.toLowerCase())
+    );
   }
 
   private getTextContentFromElement(element: Node | HTMLElement): string {
@@ -375,11 +381,19 @@ class AutofillCollect {
       .trim(); // Trim leading and trailing whitespace
   }
 
-  private recursivelyGetTextFromPreviousSiblings(element: FormElement): string[] {
+  /**
+   * Get the text content from the previous siblings of the element. If
+   * no text content is found, recursively get the text content from the
+   * previous siblings of the parent element.
+   * @param {FormElement} element
+   * @returns {string[]}
+   * @private
+   */
+  private recursivelyGetTextFromPreviousSiblings(element: Node | HTMLElement): string[] {
     const textContentItems: string[] = [];
-    let currentElement: HTMLElement | null = element;
-    while (currentElement && currentElement.previousElementSibling) {
-      currentElement = currentElement.previousElementSibling as HTMLElement;
+    let currentElement = element;
+    while (currentElement && currentElement.previousSibling) {
+      currentElement = currentElement.previousSibling;
 
       if (this.isTransitionalElement(currentElement)) {
         return textContentItems;
@@ -395,10 +409,15 @@ class AutofillCollect {
       return textContentItems;
     }
 
-    currentElement = currentElement.parentElement;
-    let siblingElement = currentElement.previousElementSibling as HTMLElement | null;
-    while (siblingElement?.lastElementChild && !this.isTransitionalElement(siblingElement)) {
-      siblingElement = siblingElement.lastElementChild as HTMLElement;
+    // Prioritize capturing content from elements rather than text nodes.
+    currentElement = currentElement.parentElement || currentElement.parentNode;
+
+    let siblingElement =
+      currentElement instanceof HTMLElement
+        ? currentElement.previousElementSibling
+        : currentElement.previousSibling;
+    while (siblingElement?.lastChild && !this.isTransitionalElement(siblingElement)) {
+      siblingElement = siblingElement.lastChild;
     }
 
     if (this.isTransitionalElement(siblingElement)) {
