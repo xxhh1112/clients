@@ -4,6 +4,7 @@ import * as path from "path";
 import * as program from "commander";
 import * as jsdom from "jsdom";
 
+import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/config/config-api.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
@@ -135,6 +136,7 @@ export class Main {
   organizationApiService: OrganizationApiServiceAbstraction;
   syncNotifierService: SyncNotifierService;
   sendApiService: SendApiService;
+  configApiService: ConfigApiServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -255,7 +257,8 @@ export class Main {
       this.searchService,
       this.stateService,
       this.encryptService,
-      this.cipherFileUploadService
+      this.cipherFileUploadService,
+      this.configApiService
     );
 
     this.broadcasterService = new BroadcasterService();

@@ -1,4 +1,7 @@
+import { SemVer } from "semver";
+
 import { ApiService } from "../../abstractions/api.service";
+import { ConfigApiServiceAbstraction } from "../../abstractions/config/config-api.service.abstraction";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { EncryptService } from "../../abstractions/encrypt.service";
 import { I18nService } from "../../abstractions/i18n.service";
@@ -44,6 +47,8 @@ import { CipherView } from "../models/view/cipher.view";
 import { FieldView } from "../models/view/field.view";
 import { PasswordHistoryView } from "../models/view/password-history.view";
 
+const CIPHER_KEY_ENC_MIN_SERVER_VER = "2023.4.0";
+
 export class CipherService implements CipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
     this.sortCiphersByLastUsed
@@ -57,7 +62,8 @@ export class CipherService implements CipherServiceAbstraction {
     private searchService: SearchService,
     private stateService: StateService,
     private encryptService: EncryptService,
-    private cipherFileUploadService: CipherFileUploadService
+    private cipherFileUploadService: CipherFileUploadService,
+    private configApiService: ConfigApiServiceAbstraction
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -161,7 +167,7 @@ export class CipherService implements CipherServiceAbstraction {
       }
     }
 
-    if (flagEnabled("enableCipherKeyEncryption")) {
+    if (await this.getCipherKeyEncryptionEnabled()) {
       return this.encryptWithCipherKey(model, cipher, key);
     }
 
@@ -622,7 +628,7 @@ export class CipherService implements CipherServiceAbstraction {
     const key = await this.getKeyForCipherKeyDecryption(cipher);
 
     const cipherEncKey =
-      flagEnabled("enableCipherKeyEncryption") && cipher.key != null
+      (await this.getCipherKeyEncryptionEnabled()) && cipher.key != null
         ? new SymmetricCryptoKey(await this.encryptService.decryptToBytes(cipher.key, key))
         : key;
     const encFileName = await this.cryptoService.encrypt(filename, cipherEncKey);
@@ -1196,5 +1202,11 @@ export class CipherService implements CipherServiceAbstraction {
     ]);
 
     return cipher;
+  }
+
+  private async getCipherKeyEncryptionEnabled(): Promise<boolean> {
+    const minVersion = new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER);
+    const serverVersion = new SemVer((await this.configApiService.get()).version);
+    return flagEnabled("enableCipherKeyEncryption") && serverVersion.compare(minVersion) > 0;
   }
 }
