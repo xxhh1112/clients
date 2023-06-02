@@ -414,6 +414,7 @@ export default class MainBackground {
       this.stateService,
       this.authService,
       this.vaultTimeoutSettingsService,
+      this.encryptService,
       lockedCallback,
       logoutCallback
     );

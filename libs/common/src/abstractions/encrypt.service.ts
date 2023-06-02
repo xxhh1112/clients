@@ -18,4 +18,5 @@ export abstract class EncryptService {
     items: Decryptable<T>[],
     key: SymmetricCryptoKey
   ) => Promise<T[]>;
+  abstract clear: () => void;
 }

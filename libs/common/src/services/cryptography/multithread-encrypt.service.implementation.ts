@@ -1,4 +1,4 @@
-import { filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
+import { EmptyError, filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { Decryptable } from "../../interfaces/decryptable.interface";
@@ -9,13 +9,8 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { EncryptServiceImplementation } from "./encrypt.service.implementation";
 import { getClassInitializer } from "./get-class-initializer";
 
-// TTL (time to live) is not strictly required but avoids tying up memory resources if inactive
-const workerTTL = 3 * 60000; // 3 minutes
-
 export class MultithreadEncryptServiceImplementation extends EncryptServiceImplementation {
   private worker: Worker;
-  private timeout: any;
-
   private clear$ = new Subject<void>();
 
   /**
@@ -42,8 +37,6 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
       )
     );
 
-    this.restartTimeout();
-
     const request = {
       id: Utils.newGuid(),
       items: items,
@@ -52,9 +45,6 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
 
     this.worker.postMessage(JSON.stringify(request));
 
-    // Note: if the observable completes early due to takeUntil, it will reject with an EmptyError. This is desirable
-    // because any default value (like defaultIfEmpty(null)) may be mistaken for an empty vault by a caller, which may
-    // cause data loss for sensitive operations like key rotation.
     return await firstValueFrom(
       fromEvent(this.worker, "message").pipe(
         filter((response: MessageEvent) => response.data?.id === request.id),
@@ -67,24 +57,26 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
         ),
         takeUntil(this.clear$)
       )
-    );
+    ).catch((error: Error) => {
+      // If the observable completes early due to takeUntil, it will reject with an EmptyError. This is desirable
+      // because any default value may be mistaken for an empty vault by a caller, which could
+      // cause data loss for sensitive operations like key rotation.
+      if (error instanceof EmptyError) {
+        this.logService.info("Decryption has been aborted due to lock or logout.");
+        return;
+      }
+
+      throw error;
+    });
   }
 
-  private clear() {
+  override clear() {
+    // Fulfill the decryptItems promise so that it's not left hanging for a response from the terminated worker
     this.clear$.next();
+
+    // Terminate the worker. This aborts the current script and any queued tasks in the worker:
+    // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
     this.worker?.terminate();
     this.worker = null;
-    this.clearTimeout();
-  }
-
-  private restartTimeout() {
-    this.clearTimeout();
-    this.timeout = setTimeout(() => this.clear(), workerTTL);
-  }
-
-  private clearTimeout() {
-    if (this.timeout != null) {
-      clearTimeout(this.timeout);
-    }
   }
 }

@@ -449,6 +449,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         AuthServiceAbstraction,
         VaultTimeoutSettingsServiceAbstraction,
+        EncryptService,
         LOCKED_CALLBACK,
         LOGOUT_CALLBACK,
       ],

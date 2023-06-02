@@ -11,6 +11,7 @@ import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/s
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
@@ -27,6 +28,7 @@ import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { EncryptService } from '@bitwarden/common/abstractions/encrypt.service';
 
 import {
   DisableSendPolicy,
@@ -81,7 +83,8 @@ export class AppComponent implements OnDestroy, OnInit {
     protected policyListService: PolicyListService,
     private keyConnectorService: KeyConnectorService,
     private configService: ConfigServiceAbstraction,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    private encryptService: EncryptService
   ) {}
 
   ngOnInit() {
@@ -246,6 +249,7 @@ export class AppComponent implements OnDestroy, OnInit {
       this.keyConnectorService.clear(),
     ]);
 
+    this.encryptService.clear();
     this.searchService.clearIndex();
     this.authService.logOut(async () => {
       if (expired) {
