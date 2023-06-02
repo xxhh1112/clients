@@ -38,6 +38,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
   formPromise: Promise<any>;
   emailPromise: Promise<any>;
   identifier: string = null;
+  broadcastChannel: BroadcastChannel;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
 
@@ -130,30 +131,14 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
         break;
       case TwoFactorProviderType.Duo:
       case TwoFactorProviderType.OrganizationDuo:
-        // setTimeout(() => {
-        //   DuoWebSDK.init({
-        //     iframe: undefined,
-        //     host: providerData.Host,
-        //     sig_request: providerData.Signature,
-        //     submit_callback: async (f: HTMLFormElement) => {
-        //       const sig = f.querySelector('input[name="sig_response"]') as HTMLInputElement;
-        //       if (sig != null) {
-        //         this.token = sig.value;
-        //         await this.submit();
-        //       }
-        //     },
-        //   });
-        // }, 0);
-        // const clientId = "DIULVKMWEKD7WL5037N2";
-        // const clientSecret = "qeA4rbPWXdt13R1fsSpGNeC7a6nTVjYMT4heEwMe";
-        // const apiHost = "api-71241cc8.duosecurity.com";
-        // const redirectUrl = "https://localhost:8080/duo-connector.html";
-        // let duoClient = new DuoUniversal.Client({ clientId, clientSecret, apiHost, redirectUrl });
-        // const state = duoClient.generateState();
-        // const promptUri = duoClient.createAuthUrl("jfink@bitwarden.com", state);
-        // const promptUri = this.apiService.getDuoUri("https://localhost:8080/duo-connector.html");
-        // console.log(promptUri);
-        // this.platformUtilsService.launchUri(promptUri);
+        this.broadcastChannel = new BroadcastChannel("duo-broadcast");
+        this.broadcastChannel.onmessage = (message) => {
+          if (message.data.command && message.data.command === "duoResult") {
+            // TODO: send code to server for validation
+          }
+        };
+
+        this.platformUtilsService.launchUri(providerData.Host);
         break;
       case TwoFactorProviderType.Email:
         this.twoFactorEmail = providerData.Email;
