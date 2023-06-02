@@ -1,4 +1,4 @@
-import { defaultIfEmpty, filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
+import { filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { Decryptable } from "../../interfaces/decryptable.interface";
@@ -52,6 +52,9 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
 
     this.worker.postMessage(JSON.stringify(request));
 
+    // Note: if the observable completes early due to takeUntil, it will reject with an EmptyError. This is desirable
+    // because any default value (like defaultIfEmpty(null)) may be mistaken for an empty vault by a caller, which may
+    // cause data loss for sensitive operations like key rotation.
     return await firstValueFrom(
       fromEvent(this.worker, "message").pipe(
         filter((response: MessageEvent) => response.data?.id === request.id),
@@ -62,8 +65,7 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
             return initializer(jsonItem);
           })
         ),
-        takeUntil(this.clear$),
-        defaultIfEmpty([])
+        takeUntil(this.clear$)
       )
     );
   }
