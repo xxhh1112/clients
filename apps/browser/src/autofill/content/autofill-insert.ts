@@ -1,4 +1,4 @@
-import AutofillScript, { AutofillInsertActions } from "../models/autofill-script";
+import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
 import { FillableControl } from "../types";
 import {
   canSeeElementToStyle,
@@ -7,7 +7,6 @@ import {
   getElementByOpId,
   setValueForElement,
   setValueForElementByEvent,
-  urlNotSecure,
 } from "../utils";
 
 class AutofillInsert {
@@ -19,26 +18,28 @@ class AutofillInsert {
   };
 
   fillForm(fillScript: AutofillScript) {
-    // If the user is within a sandbox or the url is not secure, return early
     if (
       !fillScript?.script ||
-      this.isWithinSandBoxedIframe() ||
-      urlNotSecure(fillScript.savedUrls) ||
-      (fillScript.untrustedIframe && !this.userWillAllowUntrustedIframeAutofill())
+      this.fillingWithinSandBoxedIframe() ||
+      this.urlNotSecure(fillScript.savedUrls) ||
+      !this.userWillAllowUntrustedIframeAutofill(fillScript)
     ) {
       return;
     }
 
-    fillScript.script.forEach(([action, opid, value], index) => {
-      setTimeout(() => {
-        if (!this.autofillInsertActions[action]) {
-          return;
-        }
-
-        this.autofillInsertActions[action]({ opid, value });
-      }, this.delayActionsInMilliseconds * index);
-    });
+    fillScript.script.forEach(this.runFillScriptAction);
   }
+
+  private runFillScriptAction = ([action, opid, value]: FillScript, actionIndex: number): void => {
+    if (!this.autofillInsertActions[action]) {
+      return;
+    }
+
+    setTimeout(
+      () => this.autofillInsertActions[action]({ opid, value }),
+      this.delayActionsInMilliseconds * actionIndex
+    );
+  };
 
   private fillFieldByOpid(opid: string, value: string) {
     const element = getElementByOpId(opid);
@@ -104,11 +105,33 @@ class AutofillInsert {
     });
   }
 
-  private isWithinSandBoxedIframe() {
+  private fillingWithinSandBoxedIframe() {
     return String(self.origin).toLowerCase() === "null";
   }
 
-  private userWillAllowUntrustedIframeAutofill() {
+  private urlNotSecure(savedUrls?: string[] | null): boolean {
+    if (
+      !savedUrls?.length ||
+      !savedUrls.some((url) => url.startsWith("https://")) ||
+      window.location.protocol !== "http:" ||
+      !document.querySelectorAll("input[type=password]")?.length
+    ) {
+      return false;
+    }
+
+    const confirmationWarning = [
+      chrome.i18n.getMessage("insecurePageWarning"),
+      chrome.i18n.getMessage("insecurePageWarningFillPrompt", [window.location.hostname]),
+    ].join("\n\n");
+
+    return !confirm(confirmationWarning);
+  }
+
+  private userWillAllowUntrustedIframeAutofill(fillScript: AutofillScript): boolean {
+    if (!fillScript.untrustedIframe) {
+      return true;
+    }
+
     // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
     // If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
     // The browser may print a message to the console, but this is not a standard error that we can handle.

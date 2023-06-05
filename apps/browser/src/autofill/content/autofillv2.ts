@@ -508,17 +508,13 @@ function fill(document: Document, fillScript: AutofillScript) {
    */
   const thisFill: Record<FillScriptActions | string, any> = {
     fill_by_opid: doFillByOpId,
+    click_on_opid: doClickByOpId,
+    focus_by_opid: doFocusByOpId,
     /** DEAD CODE - We never use this */
     // fill_by_query: doFillByQuery,
-    /** END DEAD CODE */
-    click_on_opid: doClickByOpId,
-    /** DEAD CODE - We never use these actions */
     // click_on_query: doClickByQuery,
     // touch_all_fields: touchAllPasswordFields,
     // simple_set_value_by_query: doSimpleSetByQuery,
-    /** END DEAD CODE */
-    focus_by_opid: doFocusByOpId,
-    /** DEAD CODE - We never use this */
     // delay: null,
     /** END DEAD CODE */
   };
