@@ -2,7 +2,6 @@ import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
-import { isElementViewable, isElementVisible } from "../utils";
 
 class AutofillCollect {
   private autofillFormsData: Record<string, AutofillForm> = {};
@@ -12,12 +11,12 @@ class AutofillCollect {
   /**
    * Builds the data for all the forms and fields
    * that are found within the page DOM.
-   * @returns {AutofillPageDetails}
+   * @returns {Promise<AutofillPageDetails>}
    * @public
    */
-  getPageDetails(): AutofillPageDetails {
+  async getPageDetails(): Promise<AutofillPageDetails> {
     this.autofillFormsData = this.buildAutofillFormsData();
-    this.autofillFieldsData = this.buildAutofillFieldsData();
+    this.autofillFieldsData = await this.buildAutofillFieldsData();
 
     return {
       title: document.title,
@@ -61,13 +60,14 @@ class AutofillCollect {
   /**
    * Queries the DOM for all the field elements and
    * returns a list of AutofillField objects.
-   * @returns {AutofillField[]}
+   * @returns {Promise<AutofillField[]>}
    * @private
    */
-  private buildAutofillFieldsData(): AutofillField[] {
+  private async buildAutofillFieldsData(): Promise<AutofillField[]> {
     const autofillFieldElements = this.getAutofillFieldElements(this.queriedFieldsLimit);
+    const autofillFieldDataPromises = autofillFieldElements.map(this.buildAutofillFieldDataItem);
 
-    return autofillFieldElements.map(this.buildAutofillFieldDataItem);
+    return Promise.all(autofillFieldDataPromises);
   }
 
   /**
@@ -112,10 +112,10 @@ class AutofillCollect {
     return [...priorityFormFields, ...unimportantFormFields].slice(0, fieldsLimit);
   }
 
-  private buildAutofillFieldDataItem = (
+  private buildAutofillFieldDataItem = async (
     element: ElementWithOpId<FormElement>,
     index: number
-  ): AutofillField => {
+  ): Promise<AutofillField> => {
     const fieldOpid = `__${index}`;
     element.opid = fieldOpid;
 
@@ -123,8 +123,7 @@ class AutofillCollect {
       opid: fieldOpid,
       elementNumber: index,
       maxLength: this.getAutofillFieldMaxLength(element),
-      visible: isElementVisible(element),
-      viewable: isElementViewable(element),
+      viewable: await this.isElementCurrentlyViewable(element),
       htmlID: this.getPropertyOrAttribute(element, "id"),
       htmlName: this.getPropertyOrAttribute(element, "name"),
       htmlClass: this.getPropertyOrAttribute(element, "class"),
@@ -491,6 +490,168 @@ class AutofillCollect {
     });
 
     return { options };
+  }
+
+  private async isElementCurrentlyViewable(element: FormElement): Promise<boolean> {
+    // If the element is not intersecting, it is not viewable.
+    const elementObserverEntry = await this.getElementIntersectionObserverEntry(element);
+    if (!elementObserverEntry.isIntersecting) {
+      return false;
+    }
+
+    const targetElement = elementObserverEntry.target as FormElement;
+    const targetElementDocument = targetElement.ownerDocument;
+    const elementBoundingClientRect = elementObserverEntry.boundingClientRect;
+    if (this.isElementAbsentFromViewport(targetElementDocument, elementBoundingClientRect)) {
+      return false;
+    }
+
+    if (this.isElementHiddenByCss(targetElement)) {
+      return false;
+    }
+
+    return this.targetElementIsNotHiddenBehindAnotherElement(
+      targetElement,
+      targetElementDocument,
+      elementBoundingClientRect
+    );
+  }
+
+  // Check the bounds of the element against the element's owner document's viewport. If the
+  // element size is too small or the element is overflowing the viewport, it is not viewable.
+  private isElementAbsentFromViewport(
+    targetElementDocument: Document,
+    elementBoundingClientRect: DOMRectReadOnly
+  ): boolean {
+    const documentElement = targetElementDocument.documentElement;
+    const documentElementHeight = documentElement.scrollHeight;
+    const documentElementWidth = documentElement.scrollWidth;
+    const elementTopOffset = elementBoundingClientRect.top - documentElement.clientTop;
+    const elementLeftOffset = elementBoundingClientRect.left - documentElement.clientLeft;
+    const isElementSizeInsufficient =
+      elementBoundingClientRect.width < 10 || elementBoundingClientRect.height < 10;
+    const isElementOverflowingLeftViewport = elementLeftOffset < 0;
+    const isElementOverflowingRightViewport =
+      elementLeftOffset + elementBoundingClientRect.width > documentElementWidth;
+    const isElementOverflowingTopViewport = elementTopOffset < 0;
+    const isElementOverflowingBottomViewport =
+      elementTopOffset + elementBoundingClientRect.height > documentElementHeight;
+
+    return (
+      isElementSizeInsufficient ||
+      isElementOverflowingLeftViewport ||
+      isElementOverflowingRightViewport ||
+      isElementOverflowingTopViewport ||
+      isElementOverflowingBottomViewport
+    );
+  }
+
+  /**
+   * Check if the target element is hidden using CSS. This is done by checking the opacity, display,
+   * visibility, and clip-path CSS properties of the element. We also check the opacity of all
+   * parent elements to ensure that the target element is not hidden by a parent element.
+   * @param {FormElement} targetElement
+   * @returns {boolean}
+   * @private
+   */
+  private isElementHiddenByCss(targetElement: FormElement): boolean {
+    const targetElementDocument = targetElement.ownerDocument;
+    const targetElementWindow = targetElementDocument.defaultView || window;
+    const documentElement = targetElementDocument.documentElement;
+    let cachedComputedStyle: CSSStyleDeclaration | null = null;
+    const getElementStyle = (element: FormElement, styleProperty: string): string =>
+      element.style.getPropertyValue(styleProperty) ||
+      getCachedComputedStyle(element).getPropertyValue(styleProperty);
+    const getCachedComputedStyle = (element: FormElement): CSSStyleDeclaration => {
+      if (!cachedComputedStyle) {
+        cachedComputedStyle = targetElementWindow.getComputedStyle(element);
+      }
+
+      return cachedComputedStyle;
+    };
+    const isElementInvisible = () => getElementStyle(targetElement, "opacity") === "0";
+    const isElementNotDisplayed = () => getElementStyle(targetElement, "display") === "none";
+    const isElementNotVisible = () =>
+      new Set(["hidden", "collapse"]).has(getElementStyle(targetElement, "visibility"));
+    const isElementClippedByPath = () =>
+      new Set([
+        "circle(0)",
+        "circle(0px)",
+        "circle(0px at 50% 50%)",
+        "polygon(0 0, 0 0, 0 0, 0 0)",
+        "polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px)",
+      ]).has(getElementStyle(targetElement, "clipPath"));
+    if (
+      isElementInvisible() ||
+      isElementNotDisplayed() ||
+      isElementNotVisible() ||
+      isElementClippedByPath()
+    ) {
+      return true;
+    }
+
+    // Check parent elements to identify if the element is invisible through a zero opacity.
+    let parentElement = targetElement.parentElement;
+    while (parentElement && parentElement !== documentElement) {
+      cachedComputedStyle = null;
+      const isParentElementInvisible = getElementStyle(targetElement, "opacity") === "0";
+      if (isParentElementInvisible) {
+        return true;
+      }
+
+      parentElement = parentElement.parentElement;
+    }
+
+    return false;
+  }
+
+  private targetElementIsNotHiddenBehindAnotherElement(
+    targetElement: FormElement,
+    targetElementDocument: Document,
+    elementBoundingClientRect: DOMRectReadOnly
+  ): boolean {
+    // If the element is intersecting, we need to check if it is actually visible on the page. Check the center
+    // point of the element and use elementFromPoint to see if the element is actually returned as the
+    // element at that point. If it is not, the element is not viewable.
+    let elementAtCenterPoint = targetElementDocument.elementFromPoint(
+      elementBoundingClientRect.left + elementBoundingClientRect.width / 2,
+      elementBoundingClientRect.top + elementBoundingClientRect.height / 2
+    );
+
+    //  If the element at the center point is a label, check if the label is for the element.
+    //  If it is, the element is viewable. If it is not, the element is not viewable.
+    while (
+      elementAtCenterPoint &&
+      elementAtCenterPoint !== targetElement &&
+      elementAtCenterPoint instanceof HTMLLabelElement
+    ) {
+      const labelForAttribute = elementAtCenterPoint.getAttribute("for");
+      const elementAssignedToLabel = targetElementDocument.getElementById(labelForAttribute);
+
+      // TODO - Think through cases where a label is a parent of an element and it is implicitly assigned to the label.
+      if (elementAssignedToLabel === targetElement) {
+        return true;
+      }
+
+      elementAtCenterPoint = elementAtCenterPoint.closest("label");
+    }
+
+    return elementAtCenterPoint === targetElement;
+  }
+
+  private async getElementIntersectionObserverEntry(
+    element: FormElement
+  ): Promise<IntersectionObserverEntry> {
+    return new Promise((resolve) => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          resolve(entries[0]);
+          observer.disconnect();
+        },
+        { root: element.ownerDocument }
+      );
+      observer.observe(element);
+    });
   }
 }
 

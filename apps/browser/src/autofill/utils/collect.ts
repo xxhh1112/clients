@@ -123,6 +123,7 @@ export function getAdjacentElementLabelValues(element: any, siblingTexts: string
   }
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.isElementHiddenByCss
 /**
  * Determine if the element is visible.
  * Visible is defined as not having `display: none;` or `visibility: hidden;`.
@@ -184,7 +185,7 @@ export function isElementViewable(element: FormElement) {
 
   const rects = element.getClientRects();
 
-  if (rects.length) {
+  if (!rects.length) {
     return false;
   }
 
@@ -243,6 +244,7 @@ export function isElementViewable(element: FormElement) {
   return pointEl === element;
 }
 
+// CG - CONSIDERING MOVING THIS METHOD TO SHARED SCOPE OF AutofillInit CLASS
 /**
  * Determine if we can apply styling to `element` to indicate that it was filled.
  * @param {HTMLElement} element
@@ -318,7 +320,7 @@ export function selectAllFromDoc(selector: string): NodeListOf<Element> {
   }
 }
 
-// CG - CONSIDERING MOVING THIS METHOD TO SHARED AutofillInit CLASS
+// CG - CONSIDERING MOVING THIS METHOD TO SHARED SCOPE OF AutofillInit CLASS
 /**
  * Find the first element for the given `opid`, falling back to the first relevant unmatched
  * element if non is found.

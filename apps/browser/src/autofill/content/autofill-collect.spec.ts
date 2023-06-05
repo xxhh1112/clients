@@ -21,7 +21,7 @@ describe("AutofillCollect", function () {
   });
 
   describe("getPageDetails", function () {
-    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", function () {
+    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", async function () {
       const documentTitle = "Test Page";
       const formId = "validFormId";
       const formAction = "https://example.com/";
@@ -44,8 +44,9 @@ describe("AutofillCollect", function () {
       `;
       jest.spyOn(autofillCollect, "buildAutofillFormsData");
       jest.spyOn(autofillCollect, "buildAutofillFieldsData");
+      jest.spyOn(autofillCollect, "isElementCurrentlyViewable").mockResolvedValue(true);
 
-      const pageDetails = autofillCollect.getPageDetails();
+      const pageDetails = await autofillCollect.getPageDetails();
 
       expect(autofillCollect["buildAutofillFormsData"]).toHaveBeenCalled();
       expect(autofillCollect["buildAutofillFieldsData"]).toHaveBeenCalled();
@@ -67,8 +68,7 @@ describe("AutofillCollect", function () {
             opid: "__0",
             elementNumber: 0,
             maxLength: null,
-            visible: true,
-            viewable: false,
+            viewable: true,
             htmlID: usernameFieldId,
             htmlName: usernameFieldName,
             htmlClass: null,
@@ -100,8 +100,7 @@ describe("AutofillCollect", function () {
             opid: "__1",
             elementNumber: 1,
             maxLength: null,
-            visible: true,
-            viewable: false,
+            viewable: true,
             htmlID: passwordFieldId,
             htmlName: passwordFieldName,
             htmlClass: null,
@@ -919,6 +918,91 @@ describe("AutofillCollect", function () {
         autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual(null);
+    });
+  });
+
+  describe("isElementHiddenByCss", function () {
+    it("returns true when a non-hidden element is passed", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username" />
+      `;
+      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
+
+      const isElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
+
+      expect(isElementHidden).toEqual(false);
+    });
+
+    it("returns true when the element has a `visibility: hidden;` CSS rule applied to it either inline or in a computed style", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username" style="visibility: hidden;" />
+        <input type="password" name="password" id="password" />
+        <style>
+          #password {
+            visibility: hidden;
+          }
+        </style>
+      `;
+      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
+      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
+      jest.spyOn(usernameElement.style, "getPropertyValue");
+      jest.spyOn(usernameElement.ownerDocument.defaultView, "getComputedStyle");
+      jest.spyOn(passwordElement.style, "getPropertyValue");
+      jest.spyOn(passwordElement.ownerDocument.defaultView, "getComputedStyle");
+
+      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
+      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
+
+      expect(isUsernameElementHidden).toEqual(true);
+      expect(usernameElement.style.getPropertyValue).toHaveBeenCalled();
+      expect(usernameElement.ownerDocument.defaultView.getComputedStyle).toHaveBeenCalledWith(
+        usernameElement
+      );
+      expect(isPasswordElementHidden).toEqual(true);
+      expect(passwordElement.style.getPropertyValue).toHaveBeenCalled();
+      expect(passwordElement.ownerDocument.defaultView.getComputedStyle).toHaveBeenCalledWith(
+        passwordElement
+      );
+    });
+
+    it("returns false when the element has a `display: none;` CSS rule applied to it either inline or in a computed style", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username" style="display: none;" />
+        <input type="password" name="password" id="password" />
+        <style>
+          #password {
+            display: none;
+          }
+        </style>
+      `;
+      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
+      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
+
+      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
+      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
+
+      expect(isUsernameElementHidden).toEqual(true);
+      expect(isPasswordElementHidden).toEqual(true);
+    });
+
+    it("returns false when the element has a `opacity: 0;` CSS rule applied to it either inline or in a computed style", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username" style="opacity: 0;" />
+        <input type="password" name="password" id="password" />
+        <style>
+          #password {
+            opacity: 0;
+          }
+        </style>
+      `;
+      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
+      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
+
+      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
+      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
+
+      expect(isUsernameElementHidden).toEqual(true);
+      expect(isPasswordElementHidden).toEqual(true);
     });
   });
 });

@@ -54,7 +54,9 @@ import {
   getLabelTop,
   getSelectElementOptions,
   isElementViewable,
-  isElementVisible,
+  /** DEAD CODE - This isn't being used and should be deprecated */
+  // isElementVisible,
+  /** END DEAD CODE **/
   isNewSectionTag,
   queryDocument,
   selectAllFromDoc,
@@ -217,7 +219,9 @@ function collect(document: Document) {
         field.opid = opId;
         field.elementNumber = elIndex;
         addProperty(field, "maxLength", Math.min(elMaxLen, 999), 999);
-        field.visible = isElementVisible(el);
+        /** DEAD CODE - This isn't being used and should be deprecated */
+        // field.visible = isElementVisible(el);
+        /** END DEAD CODE **/
         field.viewable = isElementViewable(el);
         addProperty(field, "htmlID", getPropertyOrAttribute(el, "id"));
         addProperty(field, "htmlName", getPropertyOrAttribute(el, "name"));

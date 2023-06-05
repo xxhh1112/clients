@@ -47,11 +47,11 @@ class AutofillInit implements AutofillInitInterface {
    * @returns {AutofillPageDetails | void}
    * @private
    */
-  private collectPageDetails(
+  private async collectPageDetails(
     message: AutofillExtensionMessage,
     sendDetailsInResponse = false
-  ): AutofillPageDetails | void {
-    const pageDetails: AutofillPageDetails = this.autofillCollect.getPageDetails();
+  ): Promise<AutofillPageDetails | void> {
+    const pageDetails: AutofillPageDetails = await this.autofillCollect.getPageDetails();
     if (sendDetailsInResponse) {
       return pageDetails;
     }

@@ -71,6 +71,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO AutofillCollect.isElementHiddenByCss
   describe("isElementVisible", () => {
     it("should return true when a non-hidden element is passed", () => {
       const testElement = document.querySelector(
