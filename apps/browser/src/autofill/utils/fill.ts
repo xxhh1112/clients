@@ -1,7 +1,10 @@
 import { EVENTS, TYPE_CHECK } from "../constants";
 import { FillableControl } from "../types";
 
-import { getElementByOpId, selectAllFromDoc } from "./collect";
+import {
+  getElementByOpId,
+  // selectAllFromDoc
+} from "./collect";
 
 /**
  * Check if the action to autofill on the given page should be considered "secure"
@@ -94,26 +97,28 @@ export function setValueForElementByEvent(element: FillableControl) {
   }
 }
 
-/**
- * Get all the elements on the DOM that are likely to be a password field
- * @returns {Array} Array of elements
- */
-function getAllPasswordFields() {
-  const passwordPattern = RegExp(
-    "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
-    "i"
-  );
-
-  // @TODO Check password input type as well?
-  const fields = Array.from(selectAllFromDoc("input[type='text']")) as HTMLInputElement[];
-
-  return fields.filter((element) => {
-    const { value } = element;
-
-    // @TODO Check placeholder value? title/label/name/id/etc?
-    return value && passwordPattern.test(value);
-  });
-}
+/** DEAD CODE */
+// /**
+//  * Get all the elements on the DOM that are likely to be a password field
+//  * @returns {Array} Array of elements
+//  */
+// function getAllPasswordFields() {
+//   const passwordPattern = RegExp(
+//     "((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)",
+//     "i"
+//   );
+//
+//   // @TODO Check password input type as well?
+//   const fields = Array.from(selectAllFromDoc("input[type='text']")) as HTMLInputElement[];
+//
+//   return fields.filter((element) => {
+//     const { value } = element;
+//
+//     // @TODO Check placeholder value? title/label/name/id/etc?
+//     return value && passwordPattern.test(value);
+//   });
+// }
+/** END DEAD CODE */
 
 /**
  * Click on an element `element`
@@ -141,40 +146,44 @@ export function doClickByOpId(opId: string) {
   return element ? (clickElement(element) ? [element] : null) : null;
 }
 
-/**
- * Touch all the password fields
- */
-export function touchAllPasswordFields() {
-  getAllPasswordFields().forEach(function (element) {
-    setValueForElement(element);
-    element.click && element.click();
-    setValueForElementByEvent(element);
-  });
-}
+/** DEAD CODE */
+// /**
+//  * Touch all the password fields
+//  */
+// export function touchAllPasswordFields() {
+//   getAllPasswordFields().forEach(function (element) {
+//     setValueForElement(element);
+//     element.click && element.click();
+//     setValueForElementByEvent(element);
+//   });
+// }
+/** END DEAD CODE */
 
-/**
- * Do a `click` and `focus` on all elements that match the query.
- * @param {string} selector
- * @returns
- */
-export function doClickByQuery(selector: string) {
-  const fields = Array.from(selectAllFromDoc(selector)) as HTMLInputElement[];
-
-  return fields.forEach((element) => {
-    clickElement(element);
-
-    if (typeof element.click === TYPE_CHECK.FUNCTION) {
-      element.click();
-    }
-
-    if (typeof element.focus === TYPE_CHECK.FUNCTION) {
-      doFocusElement(element, true);
-    }
-
-    // @TODO Is this meant to return all the affected elements?
-    return [element];
-  });
-}
+/** DEAD CODE */
+// /**
+//  * Do a `click` and `focus` on all elements that match the query.
+//  * @param {string} selector
+//  * @returns
+//  */
+// export function doClickByQuery(selector: string) {
+//   const fields = Array.from(selectAllFromDoc(selector)) as HTMLInputElement[];
+//
+//   return fields.forEach((element) => {
+//     clickElement(element);
+//
+//     if (typeof element.click === TYPE_CHECK.FUNCTION) {
+//       element.click();
+//     }
+//
+//     if (typeof element.focus === TYPE_CHECK.FUNCTION) {
+//       doFocusElement(element, true);
+//     }
+//
+//     // @TODO Is this meant to return all the affected elements?
+//     return [element];
+//   });
+// }
+/** END DEAD CODEW */
 
 /**
  * Focus an element and optionally re-set its value after focusing
@@ -235,30 +244,32 @@ export function setValueForElement(element: FillableControl) {
   }
 }
 
-/**
- * Assign `valueToSet` to all elements in the DOM that match `selector`.
- * @param {string} selector
- * @param {string} valueToSet
- * @returns {Array} Array of elements that were set.
- */
-export function doSimpleSetByQuery(selector: string, valueToSet: string): FillableControl[] {
-  const elements = Array.from(selectAllFromDoc(selector)) as FillableControl[];
-
-  return elements.filter((element) => {
-    if (
-      element.disabled ||
-      (element as any).a ||
-      (element as HTMLInputElement).readOnly ||
-      element.value === undefined
-    ) {
-      return false;
-    }
-
-    element.value = valueToSet;
-
-    return true;
-  });
-}
+/** DEAD CODE */
+// /**
+//  * Assign `valueToSet` to all elements in the DOM that match `selector`.
+//  * @param {string} selector
+//  * @param {string} valueToSet
+//  * @returns {Array} Array of elements that were set.
+//  */
+// export function doSimpleSetByQuery(selector: string, valueToSet: string): FillableControl[] {
+//   const elements = Array.from(selectAllFromDoc(selector)) as FillableControl[];
+//
+//   return elements.filter((element) => {
+//     if (
+//       element.disabled ||
+//       (element as any).a ||
+//       (element as HTMLInputElement).readOnly ||
+//       element.value === undefined
+//     ) {
+//       return false;
+//     }
+//
+//     element.value = valueToSet;
+//
+//     return true;
+//   });
+// }
+/** END DEAD CODE */
 
 /**
  * Add property `propertyKeyName` with `valueToSet` to `fieldRecord`.

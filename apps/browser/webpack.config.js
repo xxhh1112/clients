@@ -304,8 +304,8 @@ if (manifestVersion == 2) {
 
 if (autofillVersion == 2) {
   // Typescript refactors (WIP)
-  mainConfig.entry["content/autofill"] = "./src/autofill/content/autofillv2.ts";
-  // mainConfig.entry["content/autofill"] = "./src/autofill/content/autofill-init.ts";
+  // mainConfig.entry["content/autofill"] = "./src/autofill/content/autofillv2.ts";
+  mainConfig.entry["content/autofill"] = "./src/autofill/content/autofill-init.ts";
 } else {
   // Javascript (used in production)
   mainConfig.entry["content/autofill"] = "./src/autofill/content/autofill.js";

@@ -4,12 +4,12 @@ import { FillableControl, FormElementWithAttribute } from "../types";
 import {
   addProperty,
   doClickByOpId,
-  doClickByQuery,
+  // doClickByQuery,
   doFocusByOpId,
-  doSimpleSetByQuery,
+  // doSimpleSetByQuery,
   setValueForElement,
   setValueForElementByEvent,
-  touchAllPasswordFields,
+  // touchAllPasswordFields,
   urlNotSecure,
 } from "./fill";
 
@@ -250,42 +250,44 @@ describe("fill utils", () => {
     });
   });
 
-  describe("doSimpleSetByQuery", () => {
-    it("should fill (with the passed value) and return all elements targeted by the passed selector", () => {
-      document.body.innerHTML =
-        mockLoginForm + '<input id="input-tag" name="user_id" value="anInitialValue" />';
-
-      const targetInputUserId = document.querySelector('[name="user_id"]') as FillableControl;
-      const targetInputUserName = document.querySelector(
-        'input[type="text"]#username'
-      ) as FillableControl;
-      const passedValue = "jsmith";
-
-      expect(targetInputUserId.value).toEqual("anInitialValue");
-      expect(targetInputUserName.value).toEqual("");
-      expect(
-        doSimpleSetByQuery('input[type="text"]#username, [name="user_id"]', passedValue)
-      ).toHaveLength(2);
-      expect(targetInputUserId.value).toEqual(passedValue);
-      expect(targetInputUserName.value).toEqual(passedValue);
-    });
-
-    it("should not fill or return elements targeted by the passed selector which are anchor tags, disabled, read-only, or cannot have a value set", () => {
-      document.body.innerHTML = `
-        <input id="input-tag-a" type="text" class="user_id" disabled />
-        <input id="input-tag-b" type="text" class="user_id" readonly />
-        <input id="input-tag-c" type="text" class="user_id" />
-        <a id="input-tag-d" class="user_id" href="./"></a>
-        <span id="input-tag-e" class="user_id" value="anInitialValue"></span>
-      `;
-
-      const returnedElements = doSimpleSetByQuery(".user_id", "aUsername");
-
-      expect(returnedElements).toHaveLength(1);
-      expect(returnedElements[0].id).toEqual("input-tag-c");
-      expect(returnedElements[0].value).toEqual("aUsername");
-    });
-  });
+  /** DEAD CODE */
+  // describe("doSimpleSetByQuery", () => {
+  //   it("should fill (with the passed value) and return all elements targeted by the passed selector", () => {
+  //     document.body.innerHTML =
+  //       mockLoginForm + '<input id="input-tag" name="user_id" value="anInitialValue" />';
+  //
+  //     const targetInputUserId = document.querySelector('[name="user_id"]') as FillableControl;
+  //     const targetInputUserName = document.querySelector(
+  //       'input[type="text"]#username'
+  //     ) as FillableControl;
+  //     const passedValue = "jsmith";
+  //
+  //     expect(targetInputUserId.value).toEqual("anInitialValue");
+  //     expect(targetInputUserName.value).toEqual("");
+  //     expect(
+  //       doSimpleSetByQuery('input[type="text"]#username, [name="user_id"]', passedValue)
+  //     ).toHaveLength(2);
+  //     expect(targetInputUserId.value).toEqual(passedValue);
+  //     expect(targetInputUserName.value).toEqual(passedValue);
+  //   });
+  //
+  //   it("should not fill or return elements targeted by the passed selector which are anchor tags, disabled, read-only, or cannot have a value set", () => {
+  //     document.body.innerHTML = `
+  //       <input id="input-tag-a" type="text" class="user_id" disabled />
+  //       <input id="input-tag-b" type="text" class="user_id" readonly />
+  //       <input id="input-tag-c" type="text" class="user_id" />
+  //       <a id="input-tag-d" class="user_id" href="./"></a>
+  //       <span id="input-tag-e" class="user_id" value="anInitialValue"></span>
+  //     `;
+  //
+  //     const returnedElements = doSimpleSetByQuery(".user_id", "aUsername");
+  //
+  //     expect(returnedElements).toHaveLength(1);
+  //     expect(returnedElements[0].id).toEqual("input-tag-c");
+  //     expect(returnedElements[0].value).toEqual("aUsername");
+  //   });
+  // });
+  /** END DEAD CODE */
 
   describe("doClickByOpId", () => {
     it("should click on and return the elements targeted by the passed opid", () => {
@@ -355,84 +357,88 @@ describe("fill utils", () => {
     });
   });
 
-  describe("touchAllPasswordFields", () => {
-    it("should, for each possible password field in the document, set the existing value and click the element if it is clickable", () => {
-      document.body.innerHTML += '<input type="text" name="text_password" value="password" />';
-      const targetInput = document.querySelector(
-        'input[type="text"][name="text_password"]'
-      ) as FormElementWithAttribute;
-      const elementEventCount: { [key: string]: number } = {
-        ...initEventCount,
-      };
+  /** DEAD CODE */
+  // describe("touchAllPasswordFields", () => {
+  //   it("should, for each possible password field in the document, set the existing value and click the element if it is clickable", () => {
+  //     document.body.innerHTML += '<input type="text" name="text_password" value="password" />';
+  //     const targetInput = document.querySelector(
+  //       'input[type="text"][name="text_password"]'
+  //     ) as FormElementWithAttribute;
+  //     const elementEventCount: { [key: string]: number } = {
+  //       ...initEventCount,
+  //     };
+  //
+  //     // Testing all the relevant events to ensure downstream side-effects are firing correctly
+  //     const expectedElementEventCount: { [key: string]: number } = {
+  //       ...initEventCount,
+  //       [EVENTS.CHANGE]: 1,
+  //       [EVENTS.INPUT]: 1,
+  //       [EVENTS.KEYDOWN]: 2,
+  //       [EVENTS.KEYPRESS]: 2,
+  //       [EVENTS.KEYUP]: 2,
+  //       blur: 1,
+  //       click: 2,
+  //       focus: 1,
+  //       focusin: 1,
+  //       focusout: 1,
+  //     };
+  //     const eventHandlers: { [key: string]: EventListener } = {};
+  //
+  //     eventsToTest.forEach((eventType) => {
+  //       eventHandlers[eventType] = (handledEvent) => {
+  //         elementEventCount[handledEvent.type]++;
+  //       };
+  //
+  //       targetInput.addEventListener(eventType, eventHandlers[eventType]);
+  //     });
+  //
+  //     touchAllPasswordFields();
+  //
+  //     expect(elementEventCount).toEqual(expectedElementEventCount);
+  //
+  //     eventsToTest.forEach((eventType) => {
+  //       targetInput.removeEventListener(eventType, eventHandlers[eventType]);
+  //     });
+  //   });
+  // });
+  /** END DEAD CODE */
 
-      // Testing all the relevant events to ensure downstream side-effects are firing correctly
-      const expectedElementEventCount: { [key: string]: number } = {
-        ...initEventCount,
-        [EVENTS.CHANGE]: 1,
-        [EVENTS.INPUT]: 1,
-        [EVENTS.KEYDOWN]: 2,
-        [EVENTS.KEYPRESS]: 2,
-        [EVENTS.KEYUP]: 2,
-        blur: 1,
-        click: 2,
-        focus: 1,
-        focusin: 1,
-        focusout: 1,
-      };
-      const eventHandlers: { [key: string]: EventListener } = {};
-
-      eventsToTest.forEach((eventType) => {
-        eventHandlers[eventType] = (handledEvent) => {
-          elementEventCount[handledEvent.type]++;
-        };
-
-        targetInput.addEventListener(eventType, eventHandlers[eventType]);
-      });
-
-      touchAllPasswordFields();
-
-      expect(elementEventCount).toEqual(expectedElementEventCount);
-
-      eventsToTest.forEach((eventType) => {
-        targetInput.removeEventListener(eventType, eventHandlers[eventType]);
-      });
-    });
-  });
-
-  describe("doClickByQuery", () => {
-    it("should click and focus the elements targeted by the passed selector", () => {
-      const passedSelector = 'input[type="text"]';
-      const targetInput = document.querySelector(passedSelector) as FormElementWithAttribute;
-      const elementEventCount: { [key: string]: number } = {
-        ...initEventCount,
-      };
-
-      // Testing all the relevant events to ensure downstream side-effects are firing correctly
-      const expectedElementEventCount: { [key: string]: number } = {
-        ...initEventCount,
-        click: 2,
-        focus: 1,
-        focusin: 1,
-      };
-      const eventHandlers: { [key: string]: EventListener } = {};
-
-      eventsToTest.forEach((eventType) => {
-        eventHandlers[eventType] = (handledEvent) => {
-          elementEventCount[handledEvent.type]++;
-        };
-
-        targetInput.addEventListener(eventType, eventHandlers[eventType]);
-      });
-
-      expect(doClickByQuery(passedSelector)).toEqual(undefined);
-
-      expect(elementEventCount).toEqual(expectedElementEventCount);
-
-      eventsToTest.forEach((eventType) => {
-        targetInput.removeEventListener(eventType, eventHandlers[eventType]);
-      });
-    });
-  });
+  /** DEAD CODE */
+  // describe("doClickByQuery", () => {
+  //   it("should click and focus the elements targeted by the passed selector", () => {
+  //     const passedSelector = 'input[type="text"]';
+  //     const targetInput = document.querySelector(passedSelector) as FormElementWithAttribute;
+  //     const elementEventCount: { [key: string]: number } = {
+  //       ...initEventCount,
+  //     };
+  //
+  //     // Testing all the relevant events to ensure downstream side-effects are firing correctly
+  //     const expectedElementEventCount: { [key: string]: number } = {
+  //       ...initEventCount,
+  //       click: 2,
+  //       focus: 1,
+  //       focusin: 1,
+  //     };
+  //     const eventHandlers: { [key: string]: EventListener } = {};
+  //
+  //     eventsToTest.forEach((eventType) => {
+  //       eventHandlers[eventType] = (handledEvent) => {
+  //         elementEventCount[handledEvent.type]++;
+  //       };
+  //
+  //       targetInput.addEventListener(eventType, eventHandlers[eventType]);
+  //     });
+  //
+  //     expect(doClickByQuery(passedSelector)).toEqual(undefined);
+  //
+  //     expect(elementEventCount).toEqual(expectedElementEventCount);
+  //
+  //     eventsToTest.forEach((eventType) => {
+  //       targetInput.removeEventListener(eventType, eventHandlers[eventType]);
+  //     });
+  //   });
+  // });
+  /** END DEAD CODE */
 
   describe("doFocusByOpId", () => {
     it("should click and focus the elements targeted by the passed opid", () => {

@@ -31,9 +31,11 @@ import { TYPE_CHECK } from "../constants";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript, {
-  AutofillScriptOptions,
+  /** DEAD CODE */
+  // AutofillScriptOptions,
+  /** END DEAD CODE **/
   FillScript,
-  FillScriptOp,
+  FillScriptActions,
 } from "../models/autofill-script";
 import {
   /** DEAD CODE ?? **/
@@ -54,25 +56,27 @@ import {
   getLabelTop,
   getSelectElementOptions,
   isElementViewable,
-  /** DEAD CODE - This isn't being used and should be deprecated */
-  // isElementVisible,
-  /** END DEAD CODE **/
   isNewSectionTag,
   queryDocument,
-  selectAllFromDoc,
+  /** DEAD CODE - This isn't being used and should be deprecated */
+  // isElementVisible,
+  // selectAllFromDoc,
+  /** END DEAD CODE **/
   getAdjacentElementLabelValues,
   toLowerString,
 
   // fill utils
   addProperty,
   doClickByOpId,
-  doClickByQuery,
   doFocusByOpId,
-  doSimpleSetByQuery,
   setValueForElement,
   setValueForElementByEvent,
-  touchAllPasswordFields,
   urlNotSecure,
+  /** DEAD CODE */
+  // doClickByQuery,
+  // doSimpleSetByQuery,
+  // touchAllPasswordFields,
+  /** END DEAD CODE **/
 } from "../utils";
 
 function collect(document: Document) {
@@ -382,8 +386,10 @@ function collect(document: Document) {
 }
 
 function fill(document: Document, fillScript: AutofillScript) {
-  let markTheFilling = true;
-  let animateTheFilling = true;
+  /** DEAD CODE - markTheFilling means nothing based on how we are currently referencing the variable */
+  // const markTheFilling = true;
+  // const animateTheFilling = true;
+  /** END DEAD CODE */
 
   // Detect if within an iframe, and the iframe is sandboxed
   function isSandboxed() {
@@ -392,11 +398,15 @@ function fill(document: Document, fillScript: AutofillScript) {
   }
 
   function doFill(fillScript: AutofillScript) {
-    let fillScriptOps: AutofillScriptOptions | FillScript[]; // This variable is re-assigned and its type changes
-    let theOpIds: string[] = [];
+    /** DEAD CODE - The fillScriptOptions aren't really being used for anything useful */
+    // let fillScriptOps: AutofillScriptOptions | FillScript[]; // This variable is re-assigned and its type changes
+    // let theOpIds: string[] = [];
+    /** END DEAD CODE */
     const fillScriptProperties = fillScript.properties;
     let operationDelayMs = 1;
-    const operationsToDo: any[] = [];
+    /** DEAD CODE */
+    // const operationsToDo: any[] = [];
+    /** END DEAD CODE */
 
     fillScriptProperties &&
       fillScriptProperties.delay_between_operations &&
@@ -426,51 +436,54 @@ function fill(document: Document, fillScript: AutofillScript) {
      * @argument theOperation A callback to execute after the operations are complete (this appears to be misnamed)
      */
     const doOperation = function (ops: FillScript[], theOperation: () => void): void {
-      let op = ops[0];
+      const op = ops[0];
 
       if (op === void 0) {
         theOperation();
       } else {
+        /** DEAD CODE */
         // should we delay?
-        if ((op as any).operation === "delay" || op[0] === "delay") {
-          operationDelayMs = (op as any).parameters ? (op as any).parameters[0] : op[1];
-        } else {
-          if ((op = normalizeOp(op))) {
-            for (let opIndex = 0; opIndex < op.length; opIndex++) {
-              operationsToDo.indexOf(op[opIndex]) && operationsToDo.push(op[opIndex]) === -1;
-            }
-          }
+        // if ((op as any).operation === "delay" || op[0] === "delay") {
+        //   operationDelayMs = (op as any).parameters ? (op as any).parameters[0] : op[1];
+        // } else {
+        //   if ((op = normalizeOp(op))) {
+        //     for (let opIndex = 0; opIndex < op.length; opIndex++) {
+        //       operationsToDo.indexOf(op[opIndex]) === -1 && operationsToDo.push(op[opIndex]);
+        //     }
+        //   }
+        //
+        //   theOpIds = theOpIds.concat(
+        //     operationsToDo.map(function (operationToDo) {
+        //       // eslint-disable-next-line no-prototype-builtins
+        //       return operationToDo && operationToDo.hasOwnProperty("opid")
+        //         ? operationToDo.opid
+        //         : null;
+        //     })
+        //   );
+        // }
+        /** END DEAD CODE */
 
-          theOpIds = theOpIds.concat(
-            operationsToDo.map(function (operationToDo) {
-              // eslint-disable-next-line no-prototype-builtins
-              return operationToDo && operationToDo.hasOwnProperty("opid")
-                ? operationToDo.opid
-                : null;
-            })
-          );
-        }
-
+        normalizeOp(op);
         setTimeout(function () {
           doOperation(ops.slice(1), theOperation);
         }, operationDelayMs);
       }
     };
 
-    if ((fillScriptOps = fillScript.options)) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (fillScriptOps.hasOwnProperty("animate") && fillScriptOps.animate) {
-        animateTheFilling = fillScriptOps.animate;
-      }
-
-      // eslint-disable-next-line no-prototype-builtins
-      if (fillScriptOps.hasOwnProperty("markFilling") && fillScriptOps.markFilling) {
-        markTheFilling = fillScriptOps.markFilling;
-      }
-    }
-
+    /** DEAD CODE */
+    // if ((fillScriptOps = fillScript.options)) {
+    //   if (fillScriptOps.hasOwnProperty("animate") && fillScriptOps.animate) {
+    //     animateTheFilling = fillScriptOps.animate;
+    //   }
+    //
+    //    if (fillScriptOps.hasOwnProperty("markFilling") && fillScriptOps.markFilling) {
+    //      markTheFilling = fillScriptOps.markFilling;
+    //    }
+    //  }
+    //
     // don't mark a password filling
-    fillScript.itemType && "fillPassword" === fillScript.itemType && (markTheFilling = false);
+    // fillScript.itemType && "fillPassword" === fillScript.itemType && (markTheFilling = false);
+    /** END DEAD CODE */
 
     // eslint-disable-next-line no-prototype-builtins
     if (!fillScript.hasOwnProperty("script")) {
@@ -479,8 +492,10 @@ function fill(document: Document, fillScript: AutofillScript) {
 
     // custom fill script
 
-    fillScriptOps = fillScript.script;
-    doOperation(fillScriptOps, function () {
+    /** DEAD CODE */
+    // fillScriptOps = fillScript.script;
+    /** END DEAD CODE */
+    doOperation(fillScript.script, function () {
       // Done now
       // Removed autosubmit logic because we don't use it and it relied on undeclared variables
       // Removed protectedGlobalPage logic because it relied on undeclared variables
@@ -488,37 +503,51 @@ function fill(document: Document, fillScript: AutofillScript) {
   }
 
   /**
-   * This contains all possible FillScript operations, which matches the FillScriptOp enum. We only use some of them.
-   * This is accessed by indexing on the FillScriptOp, e.g. thisFill[FillScriptOp].
+   * This contains all possible FillScript operations, which matches the FillScriptActions enum. We only use some of them.
+   * This is accessed by indexing on the FillScriptActions, e.g. thisFill[FillScriptActions].
    */
-  const thisFill: Record<FillScriptOp | string, any> = {
+  const thisFill: Record<FillScriptActions | string, any> = {
     fill_by_opid: doFillByOpId,
-    fill_by_query: doFillByQuery,
+    /** DEAD CODE - We never use this */
+    // fill_by_query: doFillByQuery,
+    /** END DEAD CODE */
     click_on_opid: doClickByOpId,
-    click_on_query: doClickByQuery,
-    touch_all_fields: touchAllPasswordFields,
-    simple_set_value_by_query: doSimpleSetByQuery,
+    /** DEAD CODE - We never use these actions */
+    // click_on_query: doClickByQuery,
+    // touch_all_fields: touchAllPasswordFields,
+    // simple_set_value_by_query: doSimpleSetByQuery,
+    /** END DEAD CODE */
     focus_by_opid: doFocusByOpId,
-    delay: null,
+    /** DEAD CODE - We never use this */
+    // delay: null,
+    /** END DEAD CODE */
   };
 
   /**
    * Performs the operation specified by the FillScript
    */
   function normalizeOp(op: FillScript) {
-    let thisOperation: FillScriptOp;
+    let thisOperation: FillScriptActions;
 
+    /** DEAD CODE */
     // If the FillScript is an object - unused
     // eslint-disable-next-line no-prototype-builtins
-    if (op.hasOwnProperty("operation") && op.hasOwnProperty("parameters")) {
-      (thisOperation = (op as any).operation), (op = (op as any).parameters);
+    // if (op.hasOwnProperty("operation") && op.hasOwnProperty("parameters")) {
+    //   (thisOperation = (op as any).operation), (op = (op as any).parameters);
+    // } else {
+    //   // If the FillScript is an array - this is what we use
+    //   if ("[object Array]" === Object.prototype.toString.call(op)) {
+    //     (thisOperation = op[0]), ((op as any) = op.splice(1));
+    //   } else {
+    //     return null;
+    //   }
+    // }
+    /** END DEAD CODE */
+
+    if ("[object Array]" === Object.prototype.toString.call(op)) {
+      (thisOperation = op[0]), ((op as any) = op.splice(1));
     } else {
-      // If the FillScript is an array - this is what we use
-      if ("[object Array]" === Object.prototype.toString.call(op)) {
-        (thisOperation = op[0]), ((op as any) = op.splice(1));
-      } else {
-        return null;
-      }
+      return null;
     }
 
     // eslint-disable-next-line no-prototype-builtins
@@ -532,18 +561,20 @@ function fill(document: Document, fillScript: AutofillScript) {
     return el ? (fillTheElement(el, op), [el]) : null;
   }
 
-  /**
-   * Find all elements matching `query` and fill them using the value `op` from the fill script
-   */
-  function doFillByQuery(query: string, op: string): FillableControl[] {
-    const elements = Array.from(selectAllFromDoc(query)) as HTMLInputElement[];
-
-    return elements.map((el: FillableControl) => {
-      fillTheElement(el, op);
-
-      return el;
-    });
-  }
+  /** DEAD CODE */
+  // /**
+  //  * Find all elements matching `query` and fill them using the value `op` from the fill script
+  //  */
+  // function doFillByQuery(query: string, op: string): FillableControl[] {
+  //   const elements = Array.from(selectAllFromDoc(query)) as HTMLInputElement[];
+  //
+  //   return elements.map((el: FillableControl) => {
+  //     fillTheElement(el, op);
+  //
+  //     return el;
+  //   });
+  // }
+  /** END DEAD CODE */
 
   const checkRadioTrueOps: Record<string, boolean> = {
       true: true,
@@ -569,8 +600,11 @@ function fill(document: Document, fillScript: AutofillScript) {
       !(el.disabled || (el as any).a || (el as HTMLInputElement).readOnly)
     ) {
       switch (
-        (markTheFilling && el.form && !el.form.opfilled && (el.form.opfilled = true),
-        el.type ? el.type.toLowerCase() : null)
+        /** DEAD CODE */
+        // markTheFilling &&
+        // (el.form && !el.form.opfilled && (el.form.opfilled = true),
+        /** END DEAD CODE */
+        el.type ? el.type.toLowerCase() : null
       ) {
         case "checkbox":
           shouldCheck = !!(
@@ -619,7 +653,8 @@ function fill(document: Document, fillScript: AutofillScript) {
     afterValSetFunc(el);
     setValueForElementByEvent(el);
 
-    if (canSeeElementToStyle(el, animateTheFilling)) {
+    // if (canSeeElementToStyle(el, animateTheFilling)) {
+    if (canSeeElementToStyle(el, true)) {
       el.classList.add("com-bitwarden-browser-animated-fill");
 
       setTimeout(function () {

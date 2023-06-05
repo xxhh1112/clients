@@ -4,6 +4,7 @@ import {
   AutofillInit as AutofillInitInterface,
 } from "../models/autofill-init";
 import AutofillPageDetails from "../models/autofill-page-details";
+import AutofillScript from "../models/autofill-script";
 
 import AutofillCollect from "./autofill-collect";
 import AutofillInsert from "./autofill-insert";
@@ -14,7 +15,7 @@ class AutofillInit implements AutofillInitInterface {
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
-    fillForm: ({ message }) => this.autofillInsert.fillForm(message.fillScript),
+    fillForm: ({ message }) => this.fillForm(message.fillScript),
   };
 
   /**
@@ -62,6 +63,10 @@ class AutofillInit implements AutofillInitInterface {
       details: pageDetails,
       sender: message.sender,
     });
+  }
+
+  private fillForm(fillScript: AutofillScript) {
+    this.autofillInsert.fillForm(fillScript);
   }
 
   /**
