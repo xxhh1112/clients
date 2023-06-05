@@ -3765,7 +3765,7 @@
     "message": "您確定要永久刪除此項目嗎？"
   },
   "permanentlyDeletedItem": {
-    "message": "項目已永久刪除"
+    "message": "已永久刪除項目"
   },
   "permanentlyDeletedItems": {
     "message": "已永久刪除項目"
@@ -3798,10 +3798,10 @@
     "message": "還原項目"
   },
   "restoredItem": {
-    "message": "項目已還原"
+    "message": "已還原項目"
   },
   "restoredItems": {
-    "message": "項目已還原"
+    "message": "已還原項目"
   },
   "restoreItemConfirmation": {
     "message": "您確定要還原此項目嗎？"
@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "密碼提示不能與您的密碼相同。"
   },
-  "enrollAccountRecovery": {
-    "message": "Enroll in account recovery"
+  "enrollPasswordReset": {
+    "message": "註冊密碼重設"
   },
-  "enrolledAccountRecovery": {
-    "message": "Enrolled in account recovery"
+  "enrolledPasswordReset": {
+    "message": "已註冊密碼重設"
   },
-  "withdrawAccountRecovery": {
-    "message": "Withdraw from account recovery"
+  "withdrawPasswordReset": {
+    "message": "放棄密碼重設"
   },
   "enrollPasswordResetSuccess": {
     "message": "註冊成功！"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "撤銷成功！"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "User $ID$ enrolled in account recovery.",
+  "eventEnrollPasswordReset": {
+    "message": "使用者 $ID$ 註冊了密碼重設協助。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "User $ID$ withdrew from account recovery.",
+  "eventWithdrawPasswordReset": {
+    "message": "使用者 $ID$ 撤銷了密碼重設協助。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "註冊後將允許組織管理者變更您的主密碼"
   },
-  "accountRecoveryPolicy": {
-    "message": "Account recovery administration"
+  "resetPasswordPolicy": {
+    "message": "主密碼重設"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "resetPasswordPolicyDescription": {
+    "message": "允許管理者重設成員的主密碼。"
   },
   "resetPasswordPolicyWarning": {
     "message": "組織成員需要先自行註冊或被自動註冊後，管理者才能重設他們的主密碼。"
@@ -5854,7 +5854,7 @@
     "description": "A label for a type-to-filter input field to choose projects."
   },
   "searchProjects": {
-    "message": "搜尋專案",
+    "message": "搜尋項目",
     "description": "Label for the search bar used to search projects."
   },
   "project": {
@@ -6295,7 +6295,7 @@
     "message": "New domain"
   },
   "noDomains": {
-    "message": "沒有網域"
+    "message": "No domains"
   },
   "noDomainsSubText": {
     "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
@@ -6679,7 +6679,7 @@
     "message": "Import secrets"
   },
   "getStarted": {
-    "message": "開始使用"
+    "message": "Get started"
   },
   "complete": {
     "message": "$COMPLETED$/$TOTAL$ Complete",
@@ -6695,10 +6695,10 @@
     }
   },
   "restoreSecret": {
-    "message": "還原機密"
+    "message": "Restore secret"
   },
   "restoreSecrets": {
-    "message": "還原機密"
+    "message": "Restore secrets"
   },
   "restoreSecretPrompt": {
     "message": "Are you sure you want to restore this secret?"
@@ -6707,10 +6707,10 @@
     "message": "Are you sure you want to restore these secrets?"
   },
   "secretRestoredSuccessToast": {
-    "message": "機密已還原"
+    "message": "Secret restored"
   },
   "secretsRestoredSuccessToast": {
-    "message": "機密已還原"
+    "message": "Secrets restored"
   },
   "selectionIsRequired": {
     "message": "Selection is required."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6793,14 +6789,14 @@
     "message": "Require existing members to change their passwords"
   },
   "region": {
-    "message": "區域"
+    "message": "Region"
   },
   "eu": {
-    "message": "歐盟",
+    "message": "EU",
     "description": "European Union"
   },
   "us": {
-    "message": "美國",
+    "message": "US",
     "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
@@ -6812,27 +6808,21 @@
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
-    "message": "更新 KDF 設定"
+    "message": "Update KDF settings"
   },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Recover account"
-  },
-  "updatedTempPassword": {
-    "message": "User updated a password issued through account recovery."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

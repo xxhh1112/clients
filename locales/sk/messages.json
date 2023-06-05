@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Nápoveda pre heslo nemôže byť rovnaká ako heslo."
   },
-  "enrollAccountRecovery": {
-    "message": "Zapísať sa na obnovu konta"
+  "enrollPasswordReset": {
+    "message": "Zaregistrovať sa pre obnovu hesla"
   },
-  "enrolledAccountRecovery": {
-    "message": "Zapísaný na obnovu konta"
+  "enrolledPasswordReset": {
+    "message": "Zaregistrovaný pre obnovu hesla"
   },
-  "withdrawAccountRecovery": {
-    "message": "Odhlásiť sa z obnovy konta"
+  "withdrawPasswordReset": {
+    "message": "Odhlásiť sa z obnovy hesla"
   },
   "enrollPasswordResetSuccess": {
     "message": "Registrácia úspešná!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Odhlásenie úspešné!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "Používateľ $ID$ zapísaný na obnovu konta.",
+  "eventEnrollPasswordReset": {
+    "message": "Používateľ $ID$ sa registroval na pomoc s obnovou hesla.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "Používateľ $ID$ sa odhlásil z obnovy konta.",
+  "eventWithdrawPasswordReset": {
+    "message": "Používateľ $ID$ sa odhlásil z pomoci obnovy hesla.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo. Naozaj sa chcete zaregistrovať?"
   },
-  "accountRecoveryPolicy": {
-    "message": "Správa obnovy konta"
+  "resetPasswordPolicy": {
+    "message": "Hlavné heslo obnovené"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Obnovte prístup k členským kontám ktoré stratili hlavné heslo alebo prišli o dôveryhodné zariadenia. Proces obnovy je založený na šifrovacej metóde konta."
+  "resetPasswordPolicyDescription": {
+    "message": "Umožní správcom v organizácii resetovať hlavné heslo používateľov organizácie."
   },
   "resetPasswordPolicyWarning": {
     "message": "Používatelia v organizácii sa budú musieť sami zaregistrovať alebo byť automaticky zaregistrovaní predtým, ako budú môcť správcovia resetovať ich hlavné heslo."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6817,22 +6813,16 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Po autentifikácii, členovia budú dešifrovať dáta v trezore za pomoci kľúča uloženého na ich zariadení.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescStart": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Obnoviť účet"
-  },
-  "updatedTempPassword": {
-    "message": "Použivateľ aktualizoval heslo ktoré bolo vydané pri obnove konta."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

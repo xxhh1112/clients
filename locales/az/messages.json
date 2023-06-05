@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Parol məsləhəti, parolunuzla eyni ola bilməz."
   },
-  "enrollAccountRecovery": {
-    "message": "Hesab bərpasında qeydiyyatdan keçin"
+  "enrollPasswordReset": {
+    "message": "\"Parol sıfırlama\" üzrə qeydiyyat"
   },
-  "enrolledAccountRecovery": {
-    "message": "Hesab bərpasında qeydiyyatdan keçildi"
+  "enrolledPasswordReset": {
+    "message": "\"Parol sıfırlama\" üzrə qeydiyyat tamamlandı"
   },
-  "withdrawAccountRecovery": {
-    "message": "Hesab bərpasından çəkil"
+  "withdrawPasswordReset": {
+    "message": "\"Parol sıfırlama\"dan çıx"
   },
   "enrollPasswordResetSuccess": {
     "message": "Qeydiyyat uğurludur!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Çıxma uğurludur!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "$ID$ istifadəçisi hesab bərpasında qeydiyyatdan keçdi.",
+  "eventEnrollPasswordReset": {
+    "message": "$ID$ istifadəçisi parol sıfırlama dəstəyi üçün qeydiyyatdan keçdi.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "$ID$ istifadəçisi hesab bərpasından çəkildi.",
+  "eventWithdrawPasswordReset": {
+    "message": "$ID$ istifadəçisi parol sıfırlama dəstəyindən çıxdı.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Qeydiyyat, təşkilat administratorlarına ana parolunuzu dəyişdirmə icazəsi verəcək. Qeydiyyatdan keçmək istədiyinizə əminsiniz?"
   },
-  "accountRecoveryPolicy": {
-    "message": "Hesab bərpa idarəsi"
+  "resetPasswordPolicy": {
+    "message": "Ana parol sıfırlama"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Ana parol və ya güvənilən cihazlar unudulanda və ya itəndə üzv hesablarını bərpa edin. Bərpa prosesləri, hesab şifrələmə üsuluna əsaslanır."
+  "resetPasswordPolicyDescription": {
+    "message": "Təşkilatdakı administratorların, təşkilat istifadəçilərinin ana parolu sıfırlamağına icazə verin."
   },
   "resetPasswordPolicyWarning": {
     "message": "Administratorların ana parolları sıfırlaya bilməsi üçün təşkilatdakı istifadəçilər öz-özünə və ya avtomatik olaraq qeydiyyatdan keçməlidir."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Giriş, yalnız boşluq ehtiva etməməlidir.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Rədd et"
   },
@@ -6817,22 +6813,16 @@
   "trustedDeviceEncryption": {
     "message": "Güvənli cihaz şifrələməsi"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescStart": {
     "message": "Kimlik təsdiqləndikdən sonra üzvlər, cihazlarından saxlanılan açarı istifadə edərək anbar verilənlərinin şifrələrini aça biləcək.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Hesab bərpa idarəsi siyasəti",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "ana parol sıfırlama siyasəti",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "Bu seçim istifadə edildikdə avto-qeydiyyat ilə işə salınacaq.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Hesabı bərpa et"
-  },
-  "updatedTempPassword": {
-    "message": "İstifadəçi, hesab bərpası vasitəsilə verilən bir parolu güncəllədi."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

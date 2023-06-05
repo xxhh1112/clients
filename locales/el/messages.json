@@ -986,19 +986,19 @@
     "message": "Αυτή η εξαγωγή αρχείου θα προστατεύεται με κωδικό και θα απαιτείται ο κωδικός του αρχείου για αποκρυπτογράφηση."
   },
   "exportPasswordDescription": {
-    "message": "Αυτός ο κωδικός πρόσβασης θα χρησιμοποιηθεί για την εξαγωγή και εισαγωγή αυτού του αρχείου"
+    "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Επιβεβαίωση κύριου κωδικού πρόσβασης"
+    "message": "Confirm master password"
   },
   "confirmFormat": {
-    "message": "Επιβεβαίωση μορφής"
+    "message": "Confirm format"
   },
   "filePassword": {
-    "message": "Κωδικός πρόσβασης αρχείου"
+    "message": "File password"
   },
   "confirmFilePassword": {
-    "message": "Επιβεβαίωση κωδικού πρόσβασης αρχείου"
+    "message": "Confirm file password"
   },
   "accountRestrictedOptionDescription": {
     "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
@@ -1007,10 +1007,10 @@
     "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "exportTypeHeading": {
-    "message": "Τύπος εξαγωγής"
+    "message": "Export type"
   },
   "accountRestricted": {
-    "message": "Ο λογαριασμός περιορίστηκε"
+    "message": "Account restricted"
   },
   "passwordProtected": {
     "message": "Προστατευμένο με κωδικό"
@@ -1397,7 +1397,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Πολιτική Σύνδεσης Δύο βημάτων"
+    "message": "Two-step Login Policy"
   },
   "twoStepLoginOrganizationDuoDesc": {
     "message": "To enforce Two-step Login through Duo, use the options below."
@@ -1848,7 +1848,7 @@
     "message": "Χρέωση"
   },
   "billingPlanLabel": {
-    "message": "Σχέδιο τιμολόγησης"
+    "message": "Billing plan"
   },
   "paymentType": {
     "message": "Τύπος πληρωμής"
@@ -2406,7 +2406,7 @@
     "message": "Ετησίως"
   },
   "annual": {
-    "message": "Ετήσια"
+    "message": "Annual"
   },
   "basePrice": {
     "message": "Βασική Τιμή"
@@ -2529,7 +2529,7 @@
     "message": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτή τη συλλογή;"
   },
   "editMember": {
-    "message": "Επεξεργασία μέλους"
+    "message": "Edit member"
   },
   "fieldOnTabRequiresAttention": {
     "message": "A field on the '$TAB$' tab requires your attention.",
@@ -2703,7 +2703,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "Δείτε όλες τις επιλογές σύνδεσης"
+    "message": "View all log in options"
   },
   "viewedItemId": {
     "message": "Προβεβλημένο στοιχείο $ID$.",
@@ -3514,7 +3514,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Δημιουργήθηκε",
+    "message": "Created",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3664,7 +3664,7 @@
     "message": "Ορίστε ελάχιστες απαιτήσεις, για ισχύ του κύριου κωδικού."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "Απαίτηση για σύνδεση δύο βημάτων"
+    "message": "Require two-step login"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Να απαιτείτε από τους χρήστες να ορίσουν τη σύνδεση σε δύο βήματα στους προσωπικούς τους λογαριασμούς."
@@ -4003,7 +4003,7 @@
     "message": "Απενεργοποιημένο"
   },
   "revoked": {
-    "message": "Ανακλήθηκαν"
+    "message": "Revoked"
   },
   "sendLink": {
     "message": "Αποστολή Συνδέσμου",
@@ -4307,13 +4307,13 @@
     "message": "Άδειες"
   },
   "permission": {
-    "message": "Δικαιώματα"
+    "message": "Permission"
   },
   "managerPermissions": {
-    "message": "Δικαιώματα Manager"
+    "message": "Manager Permissions"
   },
   "adminPermissions": {
-    "message": "Δικαιώματα Διαχειριστή"
+    "message": "Admin Permissions"
   },
   "accessEventLogs": {
     "message": "Αρχείο Καταγραφής Πρόσβασης"
@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Η υπόδειξη κωδικού πρόσβασης, δεν μπορεί να είναι η ίδια με τον κωδικό πρόσβασης σας."
   },
-  "enrollAccountRecovery": {
-    "message": "Enroll in account recovery"
+  "enrollPasswordReset": {
+    "message": "Επαναφορά κωδικού πρόσβασης"
   },
-  "enrolledAccountRecovery": {
-    "message": "Enrolled in account recovery"
+  "enrolledPasswordReset": {
+    "message": "Εγγεγραμμένος στην επαναφορά κωδικού πρόσβασης"
   },
-  "withdrawAccountRecovery": {
-    "message": "Withdraw from account recovery"
+  "withdrawPasswordReset": {
+    "message": "Επαναφορά κωδικού πρόσβασης"
   },
   "enrollPasswordResetSuccess": {
     "message": "Επιτυχής εγγραφή!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Επιτυχής απόσυρση!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "User $ID$ enrolled in account recovery.",
+  "eventEnrollPasswordReset": {
+    "message": "Ο χρήστης $ID$ έχει εγγραφεί στη βοήθεια επαναφοράς κωδικού πρόσβασης.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "User $ID$ withdrew from account recovery.",
+  "eventWithdrawPasswordReset": {
+    "message": "Ο χρήστης $ID$ αποσύρθηκε από τη βοήθεια επαναφοράς κωδικού πρόσβασης.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Η εγγραφή θα επιτρέψει στους διαχειριστές του οργανισμού να αλλάξουν τον κύριο κωδικό σας. Είστε σίγουροι ότι θέλετε να εγγραφείτε;"
   },
-  "accountRecoveryPolicy": {
-    "message": "Διαχείριση ανάκτησης λογαριασμού"
+  "resetPasswordPolicy": {
+    "message": "Επαναφορά Κύριου Κωδικού Πρόσβασης"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "resetPasswordPolicyDescription": {
+    "message": "Επιτρέψτε στους διαχειριστές του οργανισμού να επαναφέρουν τον κύριο κωδικό πρόσβασης των χρηστών."
   },
   "resetPasswordPolicyWarning": {
     "message": "Οι χρήστες του οργανισμού θα πρέπει να αυτο-εγγραφούν ή να εγγραφούν αυτόματα πριν οι διαχειριστές μπορούν να επαναφέρουν τον κύριο κωδικό πρόσβασής τους."
@@ -4715,7 +4715,7 @@
     "message": "Πελάτες"
   },
   "client": {
-    "message": "Πελάτης",
+    "message": "Client",
     "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
@@ -4915,7 +4915,7 @@
     "message": "Μία ή περισσότερες οργανωτικές πολιτικές σας αποτρέπει από την εξαγωγή του προσωπικού vault."
   },
   "activateAutofill": {
-    "message": "Ενεργοποίηση αυτόματης συμπλήρωσης"
+    "message": "Activate auto-fill"
   },
   "activateAutofillPolicyDesc": {
     "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
@@ -4924,7 +4924,7 @@
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
   },
   "learnMoreAboutAutofill": {
-    "message": "Μάθετε περισσότερα για την αυτόματη συμπλήρωση"
+    "message": "Learn more about auto-fill"
   },
   "selectType": {
     "message": "Επιλογή Τύπου SSO"
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6817,22 +6813,16 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Recover account"
-  },
-  "updatedTempPassword": {
-    "message": "User updated a password issued through account recovery."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

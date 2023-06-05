@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Indiciul dvs. de parolă nu poate fi aceeași cu parola."
   },
-  "enrollAccountRecovery": {
-    "message": "Enroll in account recovery"
+  "enrollPasswordReset": {
+    "message": "Înscrieți-vă în resetarea parolei"
   },
-  "enrolledAccountRecovery": {
-    "message": "Enrolled in account recovery"
+  "enrolledPasswordReset": {
+    "message": "Înscris în resetarea parolei"
   },
-  "withdrawAccountRecovery": {
-    "message": "Withdraw from account recovery"
+  "withdrawPasswordReset": {
+    "message": "Retragere din resetarea parolei"
   },
   "enrollPasswordResetSuccess": {
     "message": "Înregistrare reușită!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Retragere reușită!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "User $ID$ enrolled in account recovery.",
+  "eventEnrollPasswordReset": {
+    "message": "Utilizator $ID$ s-a înscris în asistența de resetare a parolei.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "User $ID$ withdrew from account recovery.",
+  "eventWithdrawPasswordReset": {
+    "message": "Utilizatorul $ID$ s-a retras din asistența pentru resetarea parolei.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Înscrierea va permite administratorilor organizației să vă schimbe parola principală"
   },
-  "accountRecoveryPolicy": {
-    "message": "Account recovery administration"
+  "resetPasswordPolicy": {
+    "message": "Resetarea parolei principale"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "resetPasswordPolicyDescription": {
+    "message": "Permiteți administratorilor să reseteze parolele principale ale membrilor."
   },
   "resetPasswordPolicyWarning": {
     "message": "Utilizatorii din organizație vor trebui să se înregistreze singuri sau, să fie înregistrați automat, înainte ca administratorii să le poată reseta parola principală."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6817,22 +6813,16 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Recover account"
-  },
-  "updatedTempPassword": {
-    "message": "User updated a password issued through account recovery."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

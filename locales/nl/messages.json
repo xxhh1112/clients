@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Je wachtwoordhint moet anders zijn dan je wachtwoord."
   },
-  "enrollAccountRecovery": {
-    "message": "Aanmelden voor accountherstel"
+  "enrollPasswordReset": {
+    "message": "Aanmelden voor wachtwoordherstel"
   },
-  "enrolledAccountRecovery": {
-    "message": "Aangemeld bij accountherstel"
+  "enrolledPasswordReset": {
+    "message": "Aangemeld voor wachtwoordherstel"
   },
-  "withdrawAccountRecovery": {
-    "message": "Afmelden voor accountherstel"
+  "withdrawPasswordReset": {
+    "message": "Teruggetrokken van wachtwoordherstel"
   },
   "enrollPasswordResetSuccess": {
     "message": "Succesvol aangemeld!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Succesvol ingetrokken!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "Gebruiker $ID$ heeft zich aangemeld voor accountherstel.",
+  "eventEnrollPasswordReset": {
+    "message": "Gebruiker $ID$ heeft zich aangemeld voor assistentie bij wachtwoordherstel.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "Gebruiker $ID$ heeft zich afgemeld voor accountherstel.",
+  "eventWithdrawPasswordReset": {
+    "message": "Gebruiker $ID$ heeft zich teruggetrokken van assistentie bij wachtwoordherstel.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen. Weet je zeker dat je wilt inschrijven?"
   },
-  "accountRecoveryPolicy": {
-    "message": "Accountherstel-administratie"
+  "resetPasswordPolicy": {
+    "message": "Hoofdwachtwoord opnieuw instellen"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Herstel accounts van leden in geval van vergeten of verloren hoofdwachtwoord of vertrouwde apparaten. Het herstelproces is gebaseerd op de encryptiemethode van het account."
+  "resetPasswordPolicyDescription": {
+    "message": "Beheerders in de organisatie toestaan het hoofdwachtwoord van gebruikers van de organisatie opnieuw in te stellen."
   },
   "resetPasswordPolicyWarning": {
     "message": "Gebruikers in de organisatie moeten zichzelf inschrijven of automatisch worden ingeschreven voordat beheerders hun hoofdwachtwoord opnieuw kunnen instellen."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Invoer mag niet alleen witruimte bevatten.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Sluiten"
   },
@@ -6817,22 +6813,16 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Eenmaal ingelogd, ontsleutelen leden kluisgegevens met een op hun apparaat opgeslagen sleutel. Schakelt",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescStart": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "accountherstel-administratiebeleid",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "in met automatische inschrijving wanneer deze optie wordt gebruikt.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Account herstellen"
-  },
-  "updatedTempPassword": {
-    "message": "Gebruiker heeft een via accountherstel uitgegeven wachtwoord bijgewerkt."
+  "memberDecryptionTdeDescEnd": {
+    "message": "with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }

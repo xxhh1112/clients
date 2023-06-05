@@ -1141,13 +1141,13 @@
     "message": "Nastavitve kodirnega ključa"
   },
   "kdfAlgorithm": {
-    "message": "Algoritem KDF"
+    "message": "KDF algoritem"
   },
   "kdfIterations": {
-    "message": "Ponovitev KDF"
+    "message": "KDF iteracije"
   },
   "kdfIterationsDesc": {
-    "message": "Višje število ponovitev KDF lahko pomaga pri zaščiti vašega glavnega gesla pred napadi z grobo silo. Priporočamo vsaj $VALUE$ ponovitev.",
+    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker. We recommend a value of $VALUE$ or more.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1156,7 +1156,7 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Če nastavite previsoko število ponovitev KDF, bo Bitwarden morda postal počasen pri prijavi (in odklepanju) na starejših in počasnejših napravah. Priporočamo, da to vrednost povečujete v korakih po $INCREMENT$ in vsakič preskusite vse naprave.",
+    "message": "Setting your KDF iterations too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend that you increase the value in increments of $INCREMENT$ and then test all of your devices.",
     "placeholders": {
       "increment": {
         "content": "$1",
@@ -2089,7 +2089,7 @@
     "message": "Odstrani hrambo"
   },
   "subscriptionStorage": {
-    "message": "Vaša naročnina vam omogoča hrambo $MAX_STORAGE$ GB šifriranih podatkov. Trenutno uporabljate $USED_STORAGE$.",
+    "message": "Your subscription has a total of $MAX_STORAGE$ GB of encrypted file storage. You are currently using $USED_STORAGE$.",
     "placeholders": {
       "max_storage": {
         "content": "$1",
@@ -2152,7 +2152,7 @@
     }
   },
   "gbStorageAdd": {
-    "message": "Povečaj hrambo za toliko GB:"
+    "message": "GB of storage to add"
   },
   "gbStorageRemove": {
     "message": "GB of storage to remove"
@@ -3171,7 +3171,7 @@
     "message": "Two-step login turned off on your account."
   },
   "learnMore": {
-    "message": "Več o tem"
+    "message": "Learn more"
   },
   "deleteRecoverDesc": {
     "message": "Enter your email address below to recover and delete your account."
@@ -3510,11 +3510,11 @@
     "message": "On browser refresh"
   },
   "dateUpdated": {
-    "message": "Spremenjeno",
+    "message": "Updated",
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Ustvarjeno",
+    "message": "Created",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3621,7 +3621,7 @@
     "message": "Your API key has full access to the organization. It should be kept secret."
   },
   "userApiKeyDesc": {
-    "message": "Svoj API-ključ lahko uoprabljate za prijavo pri uporabi ukazne vrstice (CLI)."
+    "message": "Your API key can be used to authenticate in the Bitwarden CLI."
   },
   "userApiKeyWarning": {
     "message": "Your API key is an alternative authentication mechanism. It should be kept secret."
@@ -3655,7 +3655,7 @@
     "message": "Dolžina vsaj"
   },
   "clone": {
-    "message": "Podvoji"
+    "message": "Clone"
   },
   "masterPassPolicyTitle": {
     "message": "Zahteve za glavno geslo"
@@ -3930,10 +3930,10 @@
     "message": "Organization owners and admins are exempt from this policy's enforcement."
   },
   "sendTypeFile": {
-    "message": "Datoteka"
+    "message": "File"
   },
   "sendTypeText": {
-    "message": "Besedilo"
+    "message": "Text"
   },
   "createSend": {
     "message": "Nova pošiljka",
@@ -4070,7 +4070,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "Ni pošiljk.",
+    "message": "There are no Sends to list.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
@@ -4393,10 +4393,10 @@
     "message": "The text you want to Send."
   },
   "sendFileDesc": {
-    "message": "Datoteka, ki jo želite poslati kot pošiljko."
+    "message": "The file you want to Send."
   },
   "copySendLinkOnSave": {
-    "message": "Ko shranim, skopiraj povezavo za deljenje te pošiljke v odložišče."
+    "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendLinkLabel": {
     "message": "Povezava pošiljke",
@@ -4411,14 +4411,14 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendAccessTaglineLearnMore": {
-    "message": "Preberite več o:",
+    "message": "Learn more about",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more about** Bitwarden Send or sign up to try it today.'"
   },
   "sendVaultCardProductDesc": {
     "message": "Share text or files directly with anyone."
   },
   "sendVaultCardLearnMore": {
-    "message": "Več o tem",
+    "message": "Learn more",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more**, see how it works, or try it now. '"
   },
   "sendVaultCardSee": {
@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Your password hint cannot be the same as your password."
   },
-  "enrollAccountRecovery": {
-    "message": "Enroll in account recovery"
+  "enrollPasswordReset": {
+    "message": "Enroll in password reset"
   },
-  "enrolledAccountRecovery": {
-    "message": "Enrolled in account recovery"
+  "enrolledPasswordReset": {
+    "message": "Enrolled in password reset"
   },
-  "withdrawAccountRecovery": {
-    "message": "Withdraw from account recovery"
+  "withdrawPasswordReset": {
+    "message": "Withdraw from password reset"
   },
   "enrollPasswordResetSuccess": {
     "message": "Enrollment success!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Withdrawal success!"
   },
-  "eventEnrollAccountRecovery": {
-    "message": "User $ID$ enrolled in account recovery.",
+  "eventEnrollPasswordReset": {
+    "message": "User $ID$ enrolled in password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawAccountRecovery": {
-    "message": "User $ID$ withdrew from account recovery.",
+  "eventWithdrawPasswordReset": {
+    "message": "User $ID$ withdrew from password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Enrollment will allow organization administrators to change your master password"
   },
-  "accountRecoveryPolicy": {
-    "message": "Account recovery administration"
+  "resetPasswordPolicy": {
+    "message": "Ponastavitev glavnega gesla"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "resetPasswordPolicyDescription": {
+    "message": "Allow admins to reset master passwords for members."
   },
   "resetPasswordPolicyWarning": {
     "message": "Members in the organization will need to self-enroll or be auto-enrolled before administrators can reset their master password."
@@ -4924,7 +4924,7 @@
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
   },
   "learnMoreAboutAutofill": {
-    "message": "Več o samodejnem izpolnjevanju"
+    "message": "Learn more about auto-fill"
   },
   "selectType": {
     "message": "Select SSO type"
@@ -6601,10 +6601,10 @@
     "message": "Group/User"
   },
   "lowKdfIterations": {
-    "message": "Nizko število ponovitev KDF"
+    "message": "Low KDF Iterations"
   },
   "updateLowKdfIterationsDesc": {
-    "message": "Popravite svoje nastavitve šifriranja, da bodo v skladu z novimi priporočili za varnost, in izboljšajte zaščito svojega računa."
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Po tem dejanju boste odjavljeni iz vseh aktivnih sej (na vseh napravah). Prijaviti se boste morali ponovno in zaključiti nastavitev dvostopenjske prijave. Priporočamo vam, da pred tem izvozite svoje podatke, da jih v tem procesu ne bi izgubili."
@@ -6775,10 +6775,6 @@
       }
     }
   },
-  "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
-    "description": "Notification to inform the user that a form's input can't contain only whitespace."
-  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6793,7 +6789,7 @@
     "message": "Require existing members to change their passwords"
   },
   "region": {
-    "message": "Regija"
+    "message": "Region"
   },
   "eu": {
     "message": "EU",
@@ -6812,27 +6808,21 @@
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
-    "message": "Spremeni nastavitve KDF"
+    "message": "Update KDF settings"
   },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescLink": {
+    "message": "master password reset policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
+  "memberDecryptionTdeDescEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "recoverAccount": {
-    "message": "Recover account"
-  },
-  "updatedTempPassword": {
-    "message": "User updated a password issued through account recovery."
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   }
 }
