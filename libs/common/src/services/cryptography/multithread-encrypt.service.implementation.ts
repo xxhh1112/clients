@@ -1,16 +1,17 @@
 import {
   defaultIfEmpty,
-  EmptyError,
   filter,
   firstValueFrom,
   fromEvent,
   map,
   Observable,
-  Subject,
   takeUntil,
 } from "rxjs";
 import { Jsonify } from "type-fest";
 
+import { CryptoFunctionService } from "../../abstractions/cryptoFunction.service";
+import { LogService } from "../../abstractions/log.service";
+import { StateService } from "../../abstractions/state.service";
 import { Decryptable } from "../../interfaces/decryptable.interface";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
 import { Utils } from "../../misc/utils";
@@ -18,10 +19,13 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 
 import { EncryptServiceImplementation } from "./encrypt.service.implementation";
 import { getClassInitializer } from "./get-class-initializer";
-import { StateService } from "../../abstractions/state.service";
-import { LogService } from "../../abstractions/log.service";
-import { CryptoFunctionService } from "../../abstractions/cryptoFunction.service";
 
+/**
+ * A variant of EncryptService which uses multithreading when decrypting multiple items.
+ * This significantly speeds up decryption time and avoids blocking the main thread, which freezes the UI.
+ * Multithreading in browsers is implemented using the Web Workers API. For more information, see:
+ * https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
+ */
 export class MultithreadEncryptServiceImplementation extends EncryptServiceImplementation {
   private worker: Worker;
   private terminateWorker$: Observable<boolean>;
@@ -46,7 +50,6 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
       // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
       this.worker?.terminate();
       this.worker = null;
-      console.log("terminate worker");
     });
   }
 
