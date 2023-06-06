@@ -150,6 +150,7 @@ export class CipherView implements View, InitializerMetadata {
     const attachments = obj.attachments?.map((a: any) => AttachmentView.fromJSON(a));
     const fields = obj.fields?.map((f: any) => FieldView.fromJSON(f));
     const passwordHistory = obj.passwordHistory?.map((ph: any) => PasswordHistoryView.fromJSON(ph));
+    const key = obj.key == null ? null : SymmetricCryptoKey.fromJSON(obj.key);
 
     Object.assign(view, obj, {
       revisionDate: revisionDate,
@@ -157,6 +158,7 @@ export class CipherView implements View, InitializerMetadata {
       attachments: attachments,
       fields: fields,
       passwordHistory: passwordHistory,
+      key: key,
     });
 
     switch (obj.type) {
