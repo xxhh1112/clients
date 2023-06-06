@@ -178,15 +178,27 @@ export class BrowserApi {
     chrome.windows.create({ url, focused, type });
   }
 
+  private static registeredMessageListeners: any[] = [];
+
   static messageListener(
     name: string,
     callback: (message: any, sender: chrome.runtime.MessageSender, response: any) => unknown
   ) {
-    chrome.runtime.onMessage.addListener(
-      (msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) => {
-        return callback(msg, sender, sendResponse) === true;
-      }
-    );
+    chrome.runtime.onMessage.addListener(callback);
+
+    // Keep track of all the events registered in a Safari popup so we can remove
+    // them when the popup gets unloaded, otherwise we cause a memory leak
+    if (BrowserApi.isSafariApi && !BrowserApi.isBackgroundPage(window)) {
+      BrowserApi.registeredMessageListeners.push(callback);
+
+      // The MDN recommend using 'visibilitychange' but that event is fired any time the popup window is obscured as well
+      // 'pagehide' works just like 'unload' but is compatible with the back/forward cache, so we prefer using that one
+      window.onpagehide = () => {
+        for (const callback of BrowserApi.registeredMessageListeners) {
+          chrome.runtime.onMessage.removeListener(callback);
+        }
+      };
+    }
   }
 
   static messageListener$() {
@@ -233,10 +245,12 @@ export class BrowserApi {
     }
   }
 
-  static reloadOpenWindows() {
+  static reloadOpenWindows(exemptCurrentHref = false) {
+    const currentHref = window.location.href;
     const views = chrome.extension.getViews() as Window[];
     views
       .filter((w) => w.location.href != null && !w.location.href.includes("background.html"))
+      .filter((w) => !exemptCurrentHref || w.location.href !== currentHref)
       .forEach((w) => {
         w.location.reload();
       });

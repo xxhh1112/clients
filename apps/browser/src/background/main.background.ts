@@ -515,7 +515,8 @@ export default class MainBackground {
     this.configService = new ConfigService(
       this.stateService,
       this.configApiService,
-      this.authService
+      this.authService,
+      this.environmentService
     );
 
     this.popupUtilsService = new PopupUtilsService(this.isPrivateMode);

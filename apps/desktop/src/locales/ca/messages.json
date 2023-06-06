@@ -2251,5 +2251,19 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Actualització de configuració recomanada"
+  },
+  "region": {
+    "message": "Regió"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EUA",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Autoallotjat"
   }
 }
