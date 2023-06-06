@@ -14,6 +14,12 @@ export abstract class EncryptService {
   abstract decryptToUtf8: (encString: EncString, key: SymmetricCryptoKey) => Promise<string>;
   abstract decryptToBytes: (encThing: IEncrypted, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   abstract resolveLegacyKey: (key: SymmetricCryptoKey, encThing: IEncrypted) => SymmetricCryptoKey;
+
+  /**
+   * Decrypt multiple items at once using the given key. This should be used for all bulk decryption operations because
+   * it may be more performant.
+   * @returns An array of the decrypted items, or `null` if decryption was aborted
+   */
   abstract decryptItems: <T extends InitializerMetadata>(
     items: Decryptable<T>[],
     key: SymmetricCryptoKey

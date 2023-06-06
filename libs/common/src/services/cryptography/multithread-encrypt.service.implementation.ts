@@ -50,13 +50,10 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
       // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
       this.worker?.terminate();
       this.worker = null;
+      this.logService.info("EncryptWorker terminated");
     });
   }
 
-  /**
-   * Sends items to a web worker to decrypt them.
-   * This utilises multithreading to decrypt items faster without interrupting other operations (e.g. updating UI).
-   */
   async decryptItems<T extends InitializerMetadata>(
     items: Decryptable<T>[],
     key: SymmetricCryptoKey
@@ -96,7 +93,6 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
           })
         ),
         takeUntil(this.terminateWorker$),
-        // TODO: signature should return Promise<T[] | null>
         defaultIfEmpty(null)
       )
     );
