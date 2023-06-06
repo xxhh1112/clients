@@ -1,4 +1,4 @@
-import { Injector, LOCALE_ID, NgModule } from "@angular/core";
+import { LOCALE_ID, NgModule } from "@angular/core";
 
 import { AvatarUpdateService as AccountUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/abstractions/anonymousHub.service";
@@ -10,11 +10,12 @@ import { ConfigApiServiceAbstraction } from "@bitwarden/common/abstractions/conf
 import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { DeviceCryptoServiceAbstraction } from "@bitwarden/common/abstractions/device-crypto.service.abstraction";
+import { DevicesApiServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices-api.service.abstraction";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/common/abstractions/environment.service";
 import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
-import { ExportService as ExportServiceAbstraction } from "@bitwarden/common/abstractions/export.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/abstractions/file-upload/file-upload.service";
 import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/abstractions/i18n.service";
@@ -23,8 +24,8 @@ import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/comm
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain-api.service.abstraction";
 import {
-  OrgDomainServiceAbstraction,
   OrgDomainInternalServiceAbstraction,
+  OrgDomainServiceAbstraction,
 } from "@bitwarden/common/abstractions/organization-domain/org-domain.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -91,10 +92,11 @@ import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
+import { DeviceCryptoService } from "@bitwarden/common/services/device-crypto.service.implementation";
+import { DevicesApiServiceImplementation } from "@bitwarden/common/services/devices/devices-api.service.implementation";
 import { EnvironmentService } from "@bitwarden/common/services/environment.service";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
-import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/file-upload/file-upload.service";
 import { FormValidationErrorsService } from "@bitwarden/common/services/formValidationErrors.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
@@ -138,6 +140,10 @@ import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
 import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
 import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
+import {
+  VaultExportService,
+  VaultExportServiceAbstraction,
+} from "@bitwarden/exporter/vault-export";
 
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { LockGuard } from "../auth/guards/lock.guard";
@@ -232,6 +238,9 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         TwoFactorServiceAbstraction,
         I18nServiceAbstraction,
+        EncryptService,
+        PasswordGenerationServiceAbstraction,
+        PolicyServiceAbstraction,
       ],
     },
     {
@@ -251,7 +260,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         settingsService: SettingsServiceAbstraction,
         apiService: ApiServiceAbstraction,
         i18nService: I18nServiceAbstraction,
-        injector: Injector,
+        searchService: SearchServiceAbstraction,
         stateService: StateServiceAbstraction,
         encryptService: EncryptService,
         fileUploadService: CipherFileUploadServiceAbstraction
@@ -261,7 +270,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
           settingsService,
           apiService,
           i18nService,
-          () => injector.get(SearchServiceAbstraction),
+          searchService,
           stateService,
           encryptService,
           fileUploadService
@@ -271,7 +280,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         SettingsServiceAbstraction,
         ApiServiceAbstraction,
         I18nServiceAbstraction,
-        Injector, // TODO: Get rid of this circular dependency!
+        SearchServiceAbstraction,
         StateServiceAbstraction,
         EncryptService,
         CipherFileUploadServiceAbstraction,
@@ -346,6 +355,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         PlatformUtilsServiceAbstraction,
         LogService,
         StateServiceAbstraction,
+        AppIdServiceAbstraction,
+        DevicesApiServiceAbstraction,
       ],
     },
     {
@@ -461,8 +472,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       deps: [AbstractStorageService, SECURE_STORAGE, STATE_FACTORY],
     },
     {
-      provide: ExportServiceAbstraction,
-      useClass: ExportService,
+      provide: VaultExportServiceAbstraction,
+      useClass: VaultExportService,
       deps: [
         FolderServiceAbstraction,
         CipherServiceAbstraction,
@@ -475,7 +486,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: SearchServiceAbstraction,
       useClass: SearchService,
-      deps: [CipherServiceAbstraction, LogService, I18nServiceAbstraction],
+      deps: [LogService, I18nServiceAbstraction],
     },
     {
       provide: NotificationsServiceAbstraction,
@@ -610,7 +621,12 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: ConfigServiceAbstraction,
       useClass: ConfigService,
-      deps: [StateServiceAbstraction, ConfigApiServiceAbstraction],
+      deps: [
+        StateServiceAbstraction,
+        ConfigApiServiceAbstraction,
+        AuthServiceAbstraction,
+        EnvironmentServiceAbstraction,
+      ],
     },
     {
       provide: ConfigApiServiceAbstraction,
@@ -645,6 +661,23 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: OrgDomainApiServiceAbstraction,
       useClass: OrgDomainApiService,
       deps: [OrgDomainServiceAbstraction, ApiServiceAbstraction],
+    },
+    {
+      provide: DevicesApiServiceAbstraction,
+      useClass: DevicesApiServiceImplementation,
+      deps: [ApiServiceAbstraction],
+    },
+    {
+      provide: DeviceCryptoServiceAbstraction,
+      useClass: DeviceCryptoService,
+      deps: [
+        CryptoFunctionServiceAbstraction,
+        CryptoServiceAbstraction,
+        EncryptService,
+        StateServiceAbstraction,
+        AppIdServiceAbstraction,
+        DevicesApiServiceAbstraction,
+      ],
     },
   ],
 })

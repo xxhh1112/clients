@@ -15,6 +15,7 @@ import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { CollectionDetailsResponse } from "../../../admin-console/models/response/collection.response";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
+import { ForceResetPasswordReason } from "../../../auth/models/domain/force-reset-password-reason";
 import { sequentialize } from "../../../misc/sequentialize";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
@@ -311,27 +312,22 @@ export class SyncService implements SyncServiceAbstraction {
     await this.stateService.setEmailVerified(response.emailVerified);
     await this.stateService.setHasPremiumPersonally(response.premiumPersonally);
     await this.stateService.setHasPremiumFromOrganization(response.premiumFromOrganization);
-    await this.stateService.setForcePasswordReset(response.forcePasswordReset);
     await this.keyConnectorService.setUsesKeyConnector(response.usesKeyConnector);
 
-    const organizations: { [id: string]: OrganizationData } = {};
-    response.organizations.forEach((o) => {
-      organizations[o.id] = new OrganizationData(o);
-    });
+    // The `forcePasswordReset` flag indicates an admin has reset the user's password and must be updated
+    if (response.forcePasswordReset) {
+      await this.stateService.setForcePasswordResetReason(
+        ForceResetPasswordReason.AdminForcePasswordReset
+      );
+    }
+
+    await this.syncProfileOrganizations(response);
 
     const providers: { [id: string]: ProviderData } = {};
     response.providers.forEach((p) => {
       providers[p.id] = new ProviderData(p);
     });
 
-    response.providerOrganizations.forEach((o) => {
-      if (organizations[o.id] == null) {
-        organizations[o.id] = new OrganizationData(o);
-        organizations[o.id].isProviderUser = true;
-      }
-    });
-
-    await this.organizationService.replace(organizations);
     await this.providerService.save(providers);
 
     if (await this.keyConnectorService.userNeedsMigration()) {
@@ -340,6 +336,29 @@ export class SyncService implements SyncServiceAbstraction {
     } else {
       this.keyConnectorService.removeConvertAccountRequired();
     }
+  }
+
+  private async syncProfileOrganizations(response: ProfileResponse) {
+    const organizations: { [id: string]: OrganizationData } = {};
+    response.organizations.forEach((o) => {
+      organizations[o.id] = new OrganizationData(o, {
+        isMember: true,
+        isProviderUser: false,
+      });
+    });
+
+    response.providerOrganizations.forEach((o) => {
+      if (organizations[o.id] == null) {
+        organizations[o.id] = new OrganizationData(o, {
+          isMember: false,
+          isProviderUser: true,
+        });
+      } else {
+        organizations[o.id].isProviderUser = true;
+      }
+    });
+
+    await this.organizationService.replace(organizations);
   }
 
   private async syncFolders(response: FolderResponse[]) {

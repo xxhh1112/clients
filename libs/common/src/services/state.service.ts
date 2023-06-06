@@ -1,5 +1,5 @@
 import { BehaviorSubject, concatMap } from "rxjs";
-import { Jsonify } from "type-fest";
+import { Jsonify, JsonValue } from "type-fest";
 
 import { LogService } from "../abstractions/log.service";
 import { StateService as StateServiceAbstraction } from "../abstractions/state.service";
@@ -16,8 +16,11 @@ import { ProviderData } from "../admin-console/models/data/provider.data";
 import { Policy } from "../admin-console/models/domain/policy";
 import { CollectionView } from "../admin-console/models/view/collection.view";
 import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { ForceResetPasswordReason } from "../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../auth/models/domain/kdf-config";
+import { BiometricKey } from "../auth/types/biometric-key";
 import { HtmlStorageLocation, KdfType, StorageLocation, ThemeType, UriMatchType } from "../enums";
+import { VaultTimeoutAction } from "../enums/vault-timeout-action.enum";
 import { StateFactory } from "../factories/stateFactory";
 import { Utils } from "../misc/utils";
 import { EventData } from "../models/data/event.data";
@@ -32,7 +35,7 @@ import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
-import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { DeviceKey, SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 import { WindowState } from "../models/domain/window-state";
 import { GeneratedPasswordHistory } from "../tools/generator/password";
 import { SendData } from "../tools/send/models/data/send.data";
@@ -100,9 +103,8 @@ export class StateService<
           } else if (userId == null) {
             this.activeAccountUnlockedSubject.next(false);
           }
-
           // FIXME: This should be refactored into AuthService or a similar service,
-          //  as checking for the existance of the crypto key is a low level
+          //  as checking for the existence of the crypto key is a low level
           //  implementation detail.
           this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
         })
@@ -127,6 +129,7 @@ export class StateService<
       }
     });
     await this.initAccountState();
+
     this.hasBeenInited = true;
   }
 
@@ -605,7 +608,7 @@ export class StateService<
     );
   }
 
-  async setCryptoMasterKeyBiometric(value: string, options?: StorageOptions): Promise<void> {
+  async setCryptoMasterKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
       await this.defaultSecureStorageOptions()
@@ -1051,6 +1054,32 @@ export class StateService<
       : await this.secureStorageService.save(DDG_SHARED_KEY, value, options);
   }
 
+  async getDeviceKey(options?: StorageOptions): Promise<DeviceKey | null> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.keys?.deviceKey as DeviceKey;
+  }
+
+  async setDeviceKey(value: DeviceKey, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.keys.deviceKey = value;
+
+    await this.saveAccount(account, options);
+  }
+
   async getEmail(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
@@ -1130,24 +1159,6 @@ export class StateService<
     account.settings.enableAutoFillOnPageLoad = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-  }
-
-  async getEnableBiometric(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.enableBiometrics ?? false
-    );
-  }
-
-  async setEnableBiometric(value: boolean, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    globals.enableBiometrics = value;
-    await this.saveGlobals(
-      globals,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
@@ -1570,7 +1581,7 @@ export class StateService<
 
   async setEnvironmentUrls(value: EnvironmentUrls, options?: StorageOptions): Promise<void> {
     // Global values are set on each change and the current global settings are passed to any newly authed accounts.
-    // This is to allow setting environement values before an account is active, while still allowing individual accounts to have their own environments.
+    // This is to allow setting environment values before an account is active, while still allowing individual accounts to have their own environments.
     const globals = await this.getGlobals(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
@@ -1634,21 +1645,27 @@ export class StateService<
     );
   }
 
-  async getForcePasswordReset(options?: StorageOptions): Promise<boolean> {
+  async getForcePasswordResetReason(options?: StorageOptions): Promise<ForceResetPasswordReason> {
     return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.profile?.forcePasswordReset ?? false
+      (
+        await this.getAccount(
+          this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
+        )
+      )?.profile?.forcePasswordResetReason ?? ForceResetPasswordReason.None
     );
   }
 
-  async setForcePasswordReset(value: boolean, options?: StorageOptions): Promise<void> {
+  async setForcePasswordResetReason(
+    value: ForceResetPasswordReason,
+    options?: StorageOptions
+  ): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
-    account.profile.forcePasswordReset = value;
+    account.profile.forcePasswordResetReason = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
     );
   }
 
@@ -1868,24 +1885,6 @@ export class StateService<
     );
   }
 
-  async getNoAutoPromptBiometrics(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.noAutoPromptBiometrics ?? false
-    );
-  }
-
-  async setNoAutoPromptBiometrics(value: boolean, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    globals.noAutoPromptBiometrics = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-  }
-
   async getNoAutoPromptBiometricsText(options?: StorageOptions): Promise<string> {
     return (
       await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -1935,6 +1934,23 @@ export class StateService<
     await this.saveGlobals(
       globals,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
+  async getEmergencyAccessInvitation(options?: StorageOptions): Promise<any> {
+    return (
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.emergencyAccessInvitation;
+  }
+
+  async setEmergencyAccessInvitation(value: any, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    globals.emergencyAccessInvitation = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
 
@@ -2571,7 +2587,10 @@ export class StateService<
       await this.storageService.remove(keys.tempAccountSettings);
     }
     account.settings.environmentUrls = environmentUrls;
-    if (account.settings.vaultTimeoutAction === "logOut" && account.settings.vaultTimeout != null) {
+    if (
+      account.settings.vaultTimeoutAction === VaultTimeoutAction.LogOut &&
+      account.settings.vaultTimeout != null
+    ) {
       account.tokens.accessToken = null;
       account.tokens.refreshToken = null;
       account.profile.apiKeyClientId = null;
@@ -2758,7 +2777,10 @@ export class StateService<
 
   // settings persist even on reset, and are not effected by this method
   protected resetAccount(account: TAccount) {
-    const persistentAccountInformation = { settings: account.settings };
+    const persistentAccountInformation = {
+      settings: account.settings,
+      keys: { deviceKey: account.keys.deviceKey },
+    };
     return Object.assign(this.createAccount(), persistentAccountInformation);
   }
 
@@ -2831,13 +2853,17 @@ export class StateService<
     const timeoutAction = await this.getVaultTimeoutAction({ userId: options?.userId });
     const timeout = await this.getVaultTimeout({ userId: options?.userId });
     const defaultOptions =
-      timeoutAction === "logOut" && timeout != null
+      timeoutAction === VaultTimeoutAction.LogOut && timeout != null
         ? await this.defaultInMemoryOptions()
         : await this.defaultOnDiskOptions();
     return this.reconcileOptions(options, defaultOptions);
   }
 
-  private async saveSecureStorageKey(key: string, value: string, options?: StorageOptions) {
+  protected async saveSecureStorageKey<T extends JsonValue>(
+    key: string,
+    value: T,
+    options?: StorageOptions
+  ) {
     return value == null
       ? await this.secureStorageService.remove(`${options.userId}${key}`, options)
       : await this.secureStorageService.save(`${options.userId}${key}`, value, options);

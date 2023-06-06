@@ -8,6 +8,7 @@ export class GlobalState {
   installedVersion?: string;
   locale?: string;
   organizationInvitation?: any;
+  emergencyAccessInvitation?: any;
   ssoCodeVerifier?: string;
   ssoOrganizationIdentifier?: string;
   ssoState?: string;
@@ -24,7 +25,6 @@ export class GlobalState {
   mainWindowSize?: number;
   enableBiometrics?: boolean;
   biometricText?: string;
-  noAutoPromptBiometrics?: boolean;
   noAutoPromptBiometricsText?: string;
   stateVersion: StateVersion = StateVersion.One;
   environmentUrls: EnvironmentUrls = new EnvironmentUrls();
