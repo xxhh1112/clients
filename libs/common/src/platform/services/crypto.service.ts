@@ -245,28 +245,36 @@ export class CryptoService implements CryptoServiceAbstraction {
   /**
    * Decrypts the user symmetric key with the provided master key
    * @param masterKey The user's master key
+   * @param userSymKey The user's encrypted symmetric key
    * @param userId The desired user
    * @returns The user's symmetric key
    */
-  async decryptUserSymKeyWithMasterKey(masterKey: MasterKey, userId?: string): Promise<UserSymKey> {
+  async decryptUserSymKeyWithMasterKey(
+    masterKey: MasterKey,
+    userSymKey?: EncString,
+    userId?: string
+  ): Promise<UserSymKey> {
     masterKey ||= await this.getMasterKey();
     if (masterKey == null) {
       throw new Error("No Master Key found.");
     }
 
-    // TODO(Jake): Do we need to let this be passed in as well?
-    const userSymKeyMasterKey = await this.stateService.getUserSymKeyMasterKey({ userId: userId });
-    if (userSymKeyMasterKey == null) {
-      throw new Error("No User Key found.");
+    if (!userSymKey) {
+      const userSymKeyMasterKey = await this.stateService.getUserSymKeyMasterKey({
+        userId: userId,
+      });
+      if (userSymKeyMasterKey == null) {
+        throw new Error("No User Key found.");
+      }
+      userSymKey = new EncString(userSymKeyMasterKey);
     }
 
     let decUserKey: ArrayBuffer;
-    const encUserKey = new EncString(userSymKeyMasterKey);
-    if (encUserKey.encryptionType === EncryptionType.AesCbc256_B64) {
-      decUserKey = await this.decryptToBytes(encUserKey, masterKey);
-    } else if (encUserKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
+    if (userSymKey.encryptionType === EncryptionType.AesCbc256_B64) {
+      decUserKey = await this.decryptToBytes(userSymKey, masterKey);
+    } else if (userSymKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
       const newKey = await this.stretchKey(masterKey);
-      decUserKey = await this.decryptToBytes(encUserKey, newKey);
+      decUserKey = await this.decryptToBytes(userSymKey, newKey);
     } else {
       throw new Error("Unsupported encryption type.");
     }
@@ -673,28 +681,19 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param userId The desired user
    */
   async clearPinProtectedKey(userId?: string): Promise<void> {
-    return await this.stateService.setEncryptedPinProtected(null, { userId: userId });
+    await this.stateService.setEncryptedPinProtected(null, { userId: userId });
+    await this.stateService.setEncryptedUserSymKeyPin(null, { userId: userId });
   }
 
-  /**
-   * Decrypts the user's symmetric key with their pin
-   * @param pin The user's PIN
-   * @param salt The user's salt
-   * @param kdf The user's KDF
-   * @param kdfConfig The user's KDF config
-   * @param pinProtectedUserSymKey The user's PIN protected symmetric key, if not provided
-   * it will be retrieved from storage
-   * @returns The decrypted user's symmetric key
-   */
   async decryptUserSymKeyWithPin(
     pin: string,
     salt: string,
     kdf: KdfType,
     kdfConfig: KdfConfig,
-    pinProtectedUserSymKey: EncString = null
+    pinProtectedUserSymKey?: EncString
   ): Promise<UserSymKey> {
-    if (pinProtectedUserSymKey == null) {
-      const pinProtectedUserSymKeyString = await this.stateService.getEncryptedPinProtected();
+    if (!pinProtectedUserSymKey) {
+      const pinProtectedUserSymKeyString = await this.stateService.getEncryptedUserSymKeyPin();
       if (pinProtectedUserSymKeyString == null) {
         throw new Error("No PIN protected key found.");
       }
@@ -703,6 +702,25 @@ export class CryptoService implements CryptoServiceAbstraction {
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
     const userSymKey = await this.decryptToBytes(pinProtectedUserSymKey, pinKey);
     return new SymmetricCryptoKey(userSymKey) as UserSymKey;
+  }
+
+  async decryptMasterKeyWithPin(
+    pin: string,
+    salt: string,
+    kdf: KdfType,
+    kdfConfig: KdfConfig,
+    pinProtectedMasterKey?: EncString
+  ): Promise<MasterKey> {
+    if (!pinProtectedMasterKey) {
+      const pinProtectedMasterKeyString = await this.stateService.getEncryptedPinProtected();
+      if (pinProtectedMasterKeyString == null) {
+        throw new Error("No PIN protected key found.");
+      }
+      pinProtectedMasterKey = new EncString(pinProtectedMasterKeyString);
+    }
+    const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
+    const masterKey = await this.decryptToBytes(pinProtectedMasterKey, pinKey);
+    return new SymmetricCryptoKey(masterKey) as MasterKey;
   }
 
   /**

@@ -619,7 +619,7 @@ export class StateService<
    * so we can unlock with MP offline
    */
   async getUserSymKeyMasterKey(options?: StorageOptions): Promise<string> {
-    // TODO: defaultOnDiskOptions? Other's are saved in secure storage
+    // TODO(Jake): defaultOnDiskOptions? Other's are saved in secure storage
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.keys.userSymKeyMasterKey;
@@ -630,7 +630,7 @@ export class StateService<
    * so we can unlock with MP offline
    */
   async setUserSymKeyMasterKey(value: string, options?: StorageOptions): Promise<void> {
-    // TODO: defaultOnDiskOptions? Other's are saved in secure storage
+    // TODO(Jake): defaultOnDiskOptions? Other's are saved in secure storage
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
@@ -718,6 +718,40 @@ export class StateService<
       return;
     }
     await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
+  }
+
+  async getEncryptedUserSymKeyPin(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.settings?.userSymKeyPin?.encrypted;
+  }
+
+  async setEncryptedUserSymKeyPin(value: string, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.userSymKeyPin.encrypted = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getDecryptedUserSymKeyPin(options?: StorageOptions): Promise<EncString> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+    )?.settings?.userSymKeyPin?.decrypted;
+  }
+
+  async setDecryptedUserSymKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.settings.userSymKeyPin.decrypted = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
   }
 
   /**

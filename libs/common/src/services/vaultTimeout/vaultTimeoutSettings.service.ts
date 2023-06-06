@@ -46,7 +46,9 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   async isPinLockSet(): Promise<[boolean, boolean]> {
     const protectedPin = await this.stateService.getProtectedPin();
-    const pinProtectedKey = await this.stateService.getEncryptedPinProtected();
+    let pinProtectedKey = await this.stateService.getEncryptedUserSymKeyPin();
+    pinProtectedKey ||= await this.stateService.getEncryptedPinProtected();
+
     return [protectedPin != null, pinProtectedKey != null];
   }
 
@@ -105,6 +107,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   async clear(userId?: string): Promise<void> {
     await this.stateService.setEverBeenUnlocked(false, { userId: userId });
     await this.stateService.setDecryptedPinProtected(null, { userId: userId });
+    await this.stateService.setDecryptedUserSymKeyPin(null, { userId: userId });
     await this.stateService.setProtectedPin(null, { userId: userId });
   }
 }

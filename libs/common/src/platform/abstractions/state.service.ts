@@ -76,8 +76,6 @@ export abstract class StateService<T extends Account = Account> {
   setCollapsedGroupings: (value: string[], options?: StorageOptions) => Promise<void>;
   getConvertAccountToKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
-
-  // new keys
   getUserSymKey: (options?: StorageOptions) => Promise<UserSymKey>;
   setUserSymKey: (value: UserSymKey, options?: StorageOptions) => Promise<void>;
   getMasterKey: (options?: StorageOptions) => Promise<MasterKey>;
@@ -89,10 +87,35 @@ export abstract class StateService<T extends Account = Account> {
   getUserSymKeyBiometric: (options?: StorageOptions) => Promise<string>;
   hasUserSymKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   setUserSymKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
-  // end new keys
+  /**
+   * Gets the encrypted version of the user's symmetric key encrypted by the Pin key.
+   * Used when Master Password on Reset is disabled
+   */
+  getEncryptedUserSymKeyPin: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Sets the encrypted version of the user's symmetric key encrypted by the Pin key.
+   * Used when Master Password on Reset is disabled
+   */
+  setEncryptedUserSymKeyPin: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the decrypted version of the user's symmetric key encrypted by the Pin key.
+   * Used when Master Password on Reset is enabled
+   */
+  getDecryptedUserSymKeyPin: (options?: StorageOptions) => Promise<EncString>;
+  /**
+   * Sets the decrypted version of the user's symmetric key encrypted by the Pin key.
+   * Used when Master Password on Reset is enabled
+   */
+  setDecryptedUserSymKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
 
   // deprecated keys
+  /**
+   * @deprecated For migration purposes only, use getUserSymKeyMasterKey instead
+   */
   getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
+  /**
+   * @deprecated For migration purposes only, use setUserSymKeyMasterKey instead
+   */
   setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDecryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
   setDecryptedCryptoSymmetricKey: (
@@ -128,7 +151,13 @@ export abstract class StateService<T extends Account = Account> {
     value: GeneratedPasswordHistory[],
     options?: StorageOptions
   ) => Promise<void>;
+  /**
+   * @deprecated For migration purposes only, use getDecryptedUserSymKeyPin instead
+   */
   getDecryptedPinProtected: (options?: StorageOptions) => Promise<EncString>;
+  /**
+   * @deprecated For migration purposes only, use setDecryptedUserSymKeyPin instead
+   */
   setDecryptedPinProtected: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this, use PolicyService
@@ -255,7 +284,13 @@ export abstract class StateService<T extends Account = Account> {
     value: GeneratedPasswordHistory[],
     options?: StorageOptions
   ) => Promise<void>;
+  /**
+   * @deprecated For migration purposes only, use getEncryptedUserSymKeyPin instead
+   */
   getEncryptedPinProtected: (options?: StorageOptions) => Promise<string>;
+  /**
+   * @deprecated For migration purposes only, use setEncryptedUserSymKeyPin instead
+   */
   setEncryptedPinProtected: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this directly, use PolicyService

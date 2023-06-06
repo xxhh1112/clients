@@ -22,7 +22,7 @@ export abstract class CryptoService {
   hasUserKey: () => Promise<boolean>;
   hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
   hasUserKeyStored: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<boolean>;
-  makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[SymmetricCryptoKey, EncString]>;
+  makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[UserSymKey, EncString]>;
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   clearUserKeyFromStorage: (keySuffix: KeySuffixOptions) => Promise<void>;
   setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;
@@ -39,7 +39,11 @@ export abstract class CryptoService {
     masterKey: MasterKey,
     userSymKey?: UserSymKey
   ) => Promise<[UserSymKey, EncString]>;
-  decryptUserSymKeyWithMasterKey: (masterKey: MasterKey, userId?: string) => Promise<UserSymKey>;
+  decryptUserSymKeyWithMasterKey: (
+    masterKey: MasterKey,
+    userSymKey?: EncString,
+    userId?: string
+  ) => Promise<UserSymKey>;
   hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
   setKeyHash: (keyHash: string) => Promise<void>;
   getKeyHash: () => Promise<string>;
@@ -65,6 +69,16 @@ export abstract class CryptoService {
   clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<void[]>;
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
   clearPinProtectedKey: () => Promise<void>;
+  /**
+   * Decrypts the user's symmetric key with their pin
+   * @param pin The user's PIN
+   * @param salt The user's salt
+   * @param kdf The user's KDF
+   * @param kdfConfig The user's KDF config
+   * @param pinProtectedUserSymKey The user's PIN protected symmetric key, if not provided
+   * it will be retrieved from storage
+   * @returns The decrypted user's symmetric key
+   */
   decryptUserSymKeyWithPin: (
     pin: string,
     salt: string,
@@ -72,6 +86,16 @@ export abstract class CryptoService {
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
   ) => Promise<UserSymKey>;
+  /**
+   * @deprecated Left for migration purposes. Use decryptUserSymKeyWithPin instead.
+   */
+  decryptMasterKeyWithPin: (
+    pin: string,
+    salt: string,
+    kdf: KdfType,
+    kdfConfig: KdfConfig,
+    protectedKeyCs?: EncString
+  ) => Promise<MasterKey>;
   makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
   clearKeys: (userId?: string) => Promise<any>;
   rsaEncrypt: (data: ArrayBuffer, publicKey?: ArrayBuffer) => Promise<EncString>;
