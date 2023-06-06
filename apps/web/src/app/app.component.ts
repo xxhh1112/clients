@@ -28,7 +28,6 @@ import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { EncryptService } from '@bitwarden/common/abstractions/encrypt.service';
 
 import {
   DisableSendPolicy,
@@ -249,7 +248,6 @@ export class AppComponent implements OnDestroy, OnInit {
       this.keyConnectorService.clear(),
     ]);
 
-    this.encryptService.clear();
     this.searchService.clearIndex();
     this.authService.logOut(async () => {
       if (expired) {

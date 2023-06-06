@@ -449,7 +449,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         AuthServiceAbstraction,
         VaultTimeoutSettingsServiceAbstraction,
-        EncryptService,
         LOCKED_CALLBACK,
         LOGOUT_CALLBACK,
       ],
@@ -512,7 +511,12 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: EncryptService,
       useFactory: encryptServiceFactory,
-      deps: [CryptoFunctionServiceAbstraction, LogService, LOG_MAC_FAILURES],
+      deps: [
+        CryptoFunctionServiceAbstraction,
+        LogService,
+        StateServiceAbstraction,
+        LOG_MAC_FAILURES,
+      ],
     },
     {
       provide: EventUploadServiceAbstraction,
@@ -687,9 +691,15 @@ export class JslibServicesModule {}
 function encryptServiceFactory(
   cryptoFunctionservice: CryptoFunctionServiceAbstraction,
   logService: LogService,
+  stateService: StateServiceAbstraction,
   logMacFailures: boolean
 ): EncryptService {
   return flagEnabled("multithreadDecryption")
-    ? new MultithreadEncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures)
+    ? new MultithreadEncryptServiceImplementation(
+        cryptoFunctionservice,
+        logService,
+        stateService,
+        logMacFailures
+      )
     : new EncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures);
 }

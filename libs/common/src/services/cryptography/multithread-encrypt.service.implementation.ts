@@ -1,4 +1,14 @@
-import { EmptyError, filter, firstValueFrom, fromEvent, map, Subject, takeUntil } from "rxjs";
+import {
+  defaultIfEmpty,
+  EmptyError,
+  filter,
+  firstValueFrom,
+  fromEvent,
+  map,
+  Observable,
+  Subject,
+  takeUntil,
+} from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { Decryptable } from "../../interfaces/decryptable.interface";
@@ -8,10 +18,37 @@ import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 
 import { EncryptServiceImplementation } from "./encrypt.service.implementation";
 import { getClassInitializer } from "./get-class-initializer";
+import { StateService } from "../../abstractions/state.service";
+import { LogService } from "../../abstractions/log.service";
+import { CryptoFunctionService } from "../../abstractions/cryptoFunction.service";
 
 export class MultithreadEncryptServiceImplementation extends EncryptServiceImplementation {
   private worker: Worker;
-  private clear$ = new Subject<void>();
+  private terminateWorker$: Observable<boolean>;
+
+  constructor(
+    cryptoFunctionService: CryptoFunctionService,
+    logService: LogService,
+    stateService: StateService,
+    logMacFailures: boolean
+  ) {
+    super(cryptoFunctionService, logService, logMacFailures);
+
+    // Terminate the worker if the active account is locked or logged out
+    // The intention here is to err on the safe side of cleaning up memory given that decryption operations
+    // may be running when this occurs
+    this.terminateWorker$ = stateService.activeAccountUnlocked$.pipe(
+      filter((unlocked) => !unlocked)
+    );
+
+    this.terminateWorker$.subscribe(() => {
+      // This aborts the current script and any queued tasks in the worker:
+      // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
+      this.worker?.terminate();
+      this.worker = null;
+      console.log("terminate worker");
+    });
+  }
 
   /**
    * Sends items to a web worker to decrypt them.
@@ -55,28 +92,10 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
             return initializer(jsonItem);
           })
         ),
-        takeUntil(this.clear$)
+        takeUntil(this.terminateWorker$),
+        // TODO: signature should return Promise<T[] | null>
+        defaultIfEmpty(null)
       )
-    ).catch((error: Error) => {
-      // If the observable completes early due to takeUntil, it will reject with an EmptyError. This is desirable
-      // because any default value may be mistaken for an empty vault by a caller, which could
-      // cause data loss for sensitive operations like key rotation.
-      if (error instanceof EmptyError) {
-        this.logService.info("Decryption has been aborted due to lock or logout.");
-        return;
-      }
-
-      throw error;
-    });
-  }
-
-  override clear() {
-    // Fulfill the decryptItems promise so that it's not left hanging for a response from the terminated worker
-    this.clear$.next();
-
-    // Terminate the worker. This aborts the current script and any queued tasks in the worker:
-    // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
-    this.worker?.terminate();
-    this.worker = null;
+    );
   }
 }

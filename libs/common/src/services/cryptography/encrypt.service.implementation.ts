@@ -197,8 +197,4 @@ export class EncryptServiceImplementation implements EncryptService {
 
     return key;
   }
-
-  clear() {
-    // Only used by multithreadEncryptService
-  }
 }

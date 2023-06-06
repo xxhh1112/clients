@@ -1,7 +1,6 @@
 import { firstValueFrom } from "rxjs";
 
 import { CryptoService } from "../../abstractions/crypto.service";
-import { EncryptService } from "../../abstractions/encrypt.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { SearchService } from "../../abstractions/search.service";
@@ -31,7 +30,6 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private stateService: StateService,
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
-    private encryptService: EncryptService,
     private lockedCallback: (userId?: string) => Promise<void> = null,
     private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null
   ) {}
@@ -96,7 +94,6 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
     await this.cipherService.clearCache(userId);
     await this.collectionService.clearCache(userId);
-    this.encryptService.clear();
 
     this.messagingService.send("locked", { userId: userId });
 

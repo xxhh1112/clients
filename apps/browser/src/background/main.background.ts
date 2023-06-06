@@ -284,6 +284,7 @@ export default class MainBackground {
       ? new MultithreadEncryptServiceImplementation(
           this.cryptoFunctionService,
           this.logService,
+          this.stateService,
           true
         )
       : new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, true);
@@ -414,7 +415,6 @@ export default class MainBackground {
       this.stateService,
       this.authService,
       this.vaultTimeoutSettingsService,
-      this.encryptService,
       lockedCallback,
       logoutCallback
     );
