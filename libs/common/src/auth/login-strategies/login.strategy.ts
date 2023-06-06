@@ -5,7 +5,12 @@ import { LogService } from "../../abstractions/log.service";
 import { MessagingService } from "../../abstractions/messaging.service";
 import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
 import { StateService } from "../../abstractions/state.service";
-import { Account, AccountProfile, AccountTokens } from "../../models/domain/account";
+import {
+  Account,
+  AccountDecryptionOptions,
+  AccountProfile,
+  AccountTokens,
+} from "../../models/domain/account";
 import { KeysRequest } from "../../models/request/keys.request";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -102,8 +107,6 @@ export abstract class LogInStrategy {
   protected async saveAccountInformation(tokenResponse: IdentityTokenResponse) {
     const accountInformation = await this.tokenService.decodeToken(tokenResponse.accessToken);
 
-    // TODO: add AccountDecryptionOptions to the account
-
     await this.stateService.addAccount(
       new Account({
         profile: {
@@ -126,6 +129,9 @@ export abstract class LogInStrategy {
             refreshToken: tokenResponse.refreshToken,
           },
         },
+        decryptionOptions: AccountDecryptionOptions.fromResponse(
+          tokenResponse.userDecryptionOptions
+        ),
       })
     );
   }
