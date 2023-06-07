@@ -1,9 +1,9 @@
 import { parse } from "tldts";
 
-import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
-import { LogService } from "../../abstractions/log.service";
-import { FeatureFlag } from "../../enums/feature-flag.enum";
-import { Utils } from "../../misc/utils";
+import { ConfigServiceAbstraction } from "../../../abstractions/config/config.service.abstraction";
+import { LogService } from "../../../abstractions/log.service";
+import { FeatureFlag } from "../../../enums/feature-flag.enum";
+import { Utils } from "../../../misc/utils";
 import {
   Fido2AutenticatorError,
   Fido2AutenticatorErrorCode,
@@ -11,7 +11,7 @@ import {
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService,
   PublicKeyCredentialDescriptor,
-} from "../abstractions/fido2-authenticator.service.abstraction";
+} from "../../abstractions/fido2/fido2-authenticator.service.abstraction";
 import {
   AssertCredentialParams,
   AssertCredentialResult,
@@ -22,10 +22,10 @@ import {
   PublicKeyCredentialParam,
   UserRequestedFallbackAbortReason,
   UserVerification,
-} from "../abstractions/fido2-client.service.abstraction";
-import { Fido2Utils } from "../abstractions/fido2-utils";
+} from "../../abstractions/fido2/fido2-client.service.abstraction";
 
 import { isValidRpId } from "./domain-utils";
+import { Fido2Utils } from "./fido2-utils";
 
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   constructor(

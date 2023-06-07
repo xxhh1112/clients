@@ -1,4 +1,4 @@
-import { Fido2KeyApi } from "../api/fido2-key.api";
+import { Fido2KeyApi } from "../../api/fido2-key.api";
 
 export class Fido2KeyData {
   nonDiscoverableId: string;

@@ -1,6 +1,5 @@
 import { Jsonify } from "type-fest";
 
-import { Fido2Key } from "../../../fido2/models/domain/fido2-key";
 import { Decryptable } from "../../../interfaces/decryptable.interface";
 import Domain from "../../../models/domain/domain-base";
 import { EncString } from "../../../models/domain/enc-string";
@@ -14,6 +13,7 @@ import { CipherView } from "../view/cipher.view";
 
 import { Attachment } from "./attachment";
 import { Card } from "./card";
+import { Fido2Key } from "./fido2-key";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";

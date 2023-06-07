@@ -3,26 +3,26 @@ import { TextEncoder } from "util";
 import { CBOR } from "cbor-redux";
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { Utils } from "../../misc/utils";
-import { CipherService } from "../../vault/abstractions/cipher.service";
-import { CipherType } from "../../vault/enums/cipher-type";
-import { Cipher } from "../../vault/models/domain/cipher";
-import { CipherView } from "../../vault/models/view/cipher.view";
-import { LoginView } from "../../vault/models/view/login.view";
+import { Utils } from "../../../misc/utils";
+import { CipherService } from "../../abstractions/cipher.service";
 import {
   Fido2AutenticatorErrorCode,
   Fido2AuthenticatorGetAssertionParams,
   Fido2AuthenticatorMakeCredentialsParams,
-} from "../abstractions/fido2-authenticator.service.abstraction";
+} from "../../abstractions/fido2/fido2-authenticator.service.abstraction";
 import {
   Fido2UserInterfaceService,
   Fido2UserInterfaceSession,
   NewCredentialParams,
-} from "../abstractions/fido2-user-interface.service.abstraction";
-import { Fido2Utils } from "../abstractions/fido2-utils";
-import { Fido2KeyView } from "../models/view/fido2-key.view";
+} from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
+import { CipherType } from "../../enums/cipher-type";
+import { Cipher } from "../../models/domain/cipher";
+import { CipherView } from "../../models/view/cipher.view";
+import { Fido2KeyView } from "../../models/view/fido2-key.view";
+import { LoginView } from "../../models/view/login.view";
 
 import { AAGUID, Fido2AuthenticatorService } from "./fido2-authenticator.service";
+import { Fido2Utils } from "./fido2-utils";
 
 const RpId = "bitwarden.com";
 
@@ -573,6 +573,7 @@ describe("FidoAuthenticatorService", () => {
         ],
         requireResidentKey: params.requireResidentKey ?? false,
         requireUserVerification: params.requireUserVerification ?? false,
+        fallbackSupported: params.fallbackSupported ?? false,
         extensions: params.extensions ?? {
           appid: undefined,
           appidExclude: undefined,
@@ -908,6 +909,7 @@ describe("FidoAuthenticatorService", () => {
         allowCredentialDescriptorList: params.allowCredentialDescriptorList ?? [],
         requireUserVerification: params.requireUserVerification ?? false,
         extensions: params.extensions ?? {},
+        fallbackSupported: params.fallbackSupported ?? false,
       };
     }
 

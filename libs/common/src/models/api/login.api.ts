@@ -1,4 +1,4 @@
-import { Fido2KeyApi } from "../../fido2/models/api/fido2-key.api";
+import { Fido2KeyApi } from "../../vault/api/fido2-key.api";
 import { BaseResponse } from "../response/base.response";
 
 import { LoginUriApi } from "./login-uri.api";

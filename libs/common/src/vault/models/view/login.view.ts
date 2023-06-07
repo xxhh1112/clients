@@ -1,11 +1,11 @@
 import { Jsonify } from "type-fest";
 
 import { LoginLinkedId as LinkedId, UriMatchType } from "../../../enums";
-import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { linkedFieldOption } from "../../../misc/linkedFieldOption.decorator";
 import { Utils } from "../../../misc/utils";
 import { Login } from "../domain/login";
 
+import { Fido2KeyView } from "./fido2-key.view";
 import { ItemView } from "./item.view";
 import { LoginUriView } from "./login-uri.view";
 

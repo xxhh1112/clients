@@ -3,8 +3,8 @@ import {
   CreateCredentialResult,
   AssertCredentialParams,
   AssertCredentialResult,
-} from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
-import { Fido2Utils } from "@bitwarden/common/fido2/abstractions/fido2-utils";
+} from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
+import { Fido2Utils } from "@bitwarden/common/vault/services/fido2/fido2-utils";
 
 export class WebauthnUtils {
   static mapCredentialCreationOptions(

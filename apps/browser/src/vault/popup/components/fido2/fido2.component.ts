@@ -12,17 +12,17 @@ import {
   takeUntil,
 } from "rxjs";
 
-import { Fido2KeyView } from "@bitwarden/common/fido2/models/view/fido2-key.view";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { Fido2KeyView } from "@bitwarden/common/vault/models/view/fido2-key.view";
 
-import { BrowserApi } from "../../../browser/browserApi";
+import { BrowserApi } from "../../../../browser/browserApi";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
-} from "../../../services/fido2/browser-fido2-user-interface.service";
+} from "../../../../services/fido2/browser-fido2-user-interface.service";
 
 interface ViewData {
   message: BrowserFido2Message;

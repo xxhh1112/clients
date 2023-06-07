@@ -1,22 +1,22 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { ConfigServiceAbstraction } from "../../abstractions/config/config.service.abstraction";
-import { Utils } from "../../misc/utils";
+import { ConfigServiceAbstraction } from "../../../abstractions/config/config.service.abstraction";
+import { Utils } from "../../../misc/utils";
 import {
   Fido2AutenticatorError,
   Fido2AutenticatorErrorCode,
   Fido2AuthenticatorGetAssertionResult,
   Fido2AuthenticatorMakeCredentialResult,
-} from "../abstractions/fido2-authenticator.service.abstraction";
+} from "../../abstractions/fido2/fido2-authenticator.service.abstraction";
 import {
   AssertCredentialParams,
   CreateCredentialParams,
   FallbackRequestedError,
-} from "../abstractions/fido2-client.service.abstraction";
-import { Fido2Utils } from "../abstractions/fido2-utils";
+} from "../../abstractions/fido2/fido2-client.service.abstraction";
 
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
 import { Fido2ClientService } from "./fido2-client.service";
+import { Fido2Utils } from "./fido2-utils";
 
 const RpId = "bitwarden.com";
 
@@ -228,6 +228,7 @@ describe("FidoAuthenticatorService", () => {
           id: "YmFzZTY0LWVuY29kZWQtdXNlci1pZA",
           displayName: "User Name",
         },
+        fallbackSupported: params.fallbackSupported ?? false,
         timeout: params.timeout,
       };
     }
@@ -408,13 +409,14 @@ describe("FidoAuthenticatorService", () => {
         timeout: params.timeout,
         userVerification: params.userVerification,
         sameOriginWithAncestors: true,
+        fallbackSupported: params.fallbackSupported ?? false,
       };
     }
 
     function createAuthenticatorAssertResult(): Fido2AuthenticatorGetAssertionResult {
       return {
         selectedCredential: {
-          id: Utils.newGuid(),
+          id: randomBytes(32),
           userHandle: randomBytes(32),
         },
         authenticatorData: randomBytes(64),

@@ -1,10 +1,10 @@
-import { Fido2KeyData } from "../../../fido2/models/data/fido2-key.data";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { CipherResponse } from "../response/cipher.response";
 
 import { AttachmentData } from "./attachment.data";
 import { CardData } from "./card.data";
+import { Fido2KeyData } from "./fido2-key.data";
 import { FieldData } from "./field.data";
 import { IdentityData } from "./identity.data";
 import { LoginData } from "./login.data";

@@ -1,4 +1,4 @@
-import { WebauthnUtils } from "../../browser/webauthn-utils";
+import { WebauthnUtils } from "../../../browser/webauthn-utils";
 
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";

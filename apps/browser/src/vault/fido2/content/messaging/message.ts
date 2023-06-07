@@ -3,7 +3,7 @@ import {
   CreateCredentialResult,
   AssertCredentialParams,
   AssertCredentialResult,
-} from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
+} from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
 
 export enum MessageType {
   CredentialCreationRequest,

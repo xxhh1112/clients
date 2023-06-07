@@ -1,7 +1,6 @@
 import { Jsonify } from "type-fest";
 
 import { LinkedIdType } from "../../../enums";
-import { Fido2KeyView } from "../../../fido2/models/view/fido2-key.view";
 import { InitializerMetadata } from "../../../interfaces/initializer-metadata.interface";
 import { View } from "../../../models/view/view";
 import { InitializerKey } from "../../../services/cryptography/initializer-key";
@@ -12,6 +11,7 @@ import { Cipher } from "../domain/cipher";
 
 import { AttachmentView } from "./attachment.view";
 import { CardView } from "./card.view";
+import { Fido2KeyView } from "./fido2-key.view";
 import { FieldView } from "./field.view";
 import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
