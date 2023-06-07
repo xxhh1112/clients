@@ -5,7 +5,7 @@ import AutofillFieldVisibilityService from "../services/autofill-field-visibilit
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
 class AutofillCollect {
-  private autofillFieldVisibility: AutofillFieldVisibilityService;
+  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
 
   constructor(autofillFieldVisibility: AutofillFieldVisibilityService) {
     this.autofillFieldVisibility = autofillFieldVisibility;
@@ -29,6 +29,32 @@ class AutofillCollect {
       fields: autofillFieldsData,
       collectedTimestamp: Date.now(),
     };
+  }
+
+  /**
+   * Find an AutofillField element by its opid, will only return the first
+   * element if there are multiple elements with the same opid. If no
+   * element is found, null will be returned.
+   * @param {string} opid
+   * @returns {FormElement | null}
+   */
+  getAutofillFieldElementByOpid(opid: string): FormElement | null {
+    const fieldElements = this.getAutofillFieldElements();
+    const fieldElementsWithOpid = fieldElements.filter(
+      (fieldElement) => (fieldElement as ElementWithOpId<FormElement>).opid === opid
+    ) as ElementWithOpId<FormElement>[];
+
+    if (!fieldElementsWithOpid.length) {
+      const elementIndex = parseInt(opid.split("__")[1], 10);
+
+      return fieldElements[elementIndex] || null;
+    }
+
+    if (fieldElementsWithOpid.length > 1) {
+      console.warn(`More than one element found with opid ${opid}`);
+    }
+
+    return fieldElementsWithOpid[0];
   }
 
   /**

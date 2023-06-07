@@ -1,21 +1,27 @@
+import { TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
-import { FillableControl } from "../types";
-import {
-  canSeeElementToStyle,
-  doClickByOpId,
-  doFocusByOpId,
-  getElementByOpId,
-  setValueForElement,
-  setValueForElementByEvent,
-} from "../utils";
+import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
+import { FillableControl, FormElement } from "../types";
+import { canSeeElementToStyle, setValueForElement, setValueForElementByEvent } from "../utils";
+
+import AutofillCollect from "./autofill-collect";
 
 class AutofillInsert {
-  private delayActionsInMilliseconds = 20;
+  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
+  private readonly autofillCollect: AutofillCollect;
   private readonly autofillInsertActions: AutofillInsertActions = {
     fill_by_opid: ({ opid, value }) => this.fillFieldByOpid(opid, value),
     click_on_opid: ({ opid }) => this.clickOnFieldByOpid(opid),
     focus_by_opid: ({ opid }) => this.focusOnFieldByOpid(opid),
   };
+
+  constructor(
+    autofillFieldVisibility: AutofillFieldVisibilityService,
+    autofillCollect: AutofillCollect
+  ) {
+    this.autofillFieldVisibility = autofillFieldVisibility;
+    this.autofillCollect = autofillCollect;
+  }
 
   fillForm(fillScript: AutofillScript) {
     if (
@@ -35,66 +41,59 @@ class AutofillInsert {
       return;
     }
 
+    const delayActionsInMilliseconds = 20;
     setTimeout(
       () => this.autofillInsertActions[action]({ opid, value }),
-      this.delayActionsInMilliseconds * actionIndex
+      delayActionsInMilliseconds * actionIndex
     );
   };
 
-  private fillFieldByOpid(opid: string, value: string) {
-    const element = getElementByOpId(opid);
+  private fillFieldByOpid(opid: string | undefined, value: string) {
+    if (!opid) {
+      return;
+    }
+
+    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
     this.insertValueIntoField(element, value);
   }
 
   private clickOnFieldByOpid(opid: string) {
-    doClickByOpId(opid);
+    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
+    this.triggerClickOnElement(element);
   }
 
   private focusOnFieldByOpid(opid: string) {
-    doFocusByOpId(opid);
+    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
+    this.triggerFocusOnElement(element);
   }
 
-  private insertValueIntoField(element: HTMLElement, value: string) {
-    const unknownElementType = element as any;
+  private insertValueIntoField(element: FormElement, value: string) {
+    const elementCanBeReadonly =
+      element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+    const elementCanBeFilled = elementCanBeReadonly || element instanceof HTMLSelectElement;
+
     if (
       !element ||
       !value ||
-      // TODO - Need these elements to be typed more specifically
-      unknownElementType.disabled ||
-      unknownElementType.a || // Ok seriously, what is this? Why is this here?
-      unknownElementType.readOnly
+      (elementCanBeFilled && element.disabled) ||
+      (elementCanBeReadonly && element.readOnly)
     ) {
       return;
     }
 
-    const elementType = unknownElementType.type;
-
-    const shouldFillCheckboxAndRadioElements = new Set(["true", "y", "1", "yes", "✓"]).has(
-      String(value).toLowerCase()
-    );
-    if (elementType === "checkbox") {
-      if ((unknownElementType as HTMLInputElement).checked === shouldFillCheckboxAndRadioElements) {
-        return;
-      }
-
-      this.doAllFillOperations(unknownElementType, function (theElement: any) {
+    const elementType = elementCanBeFilled ? element.type : "";
+    const isFillableCheckboxOrRadioElement =
+      new Set(["checkbox", "radio"]).has(elementType) &&
+      new Set(["true", "y", "1", "yes", "✓"]).has(String(value).toLowerCase());
+    if (isFillableCheckboxOrRadioElement) {
+      this.doAllFillOperations(element, function (theElement: any) {
         theElement.checked = true;
       });
 
       return;
     }
 
-    if (elementType === "radio" && shouldFillCheckboxAndRadioElements) {
-      unknownElementType.click();
-
-      return;
-    }
-
-    if (unknownElementType.value == value) {
-      return;
-    }
-
-    this.doAllFillOperations(unknownElementType, function (theElement: any) {
+    this.doAllFillOperations(element, function (theElement: any) {
       if (!theElement.type && theElement.tagName.toLowerCase() === "span") {
         theElement.innerText = value;
 
@@ -143,11 +142,11 @@ class AutofillInsert {
     return confirm(confirmationWarning);
   }
 
-  private doAllFillOperations(element: FillableControl, callback: CallableFunction): void {
+  private doAllFillOperations(element: FormElement, callback: CallableFunction): void {
     const styleTimeout = 200;
-    setValueForElement(element);
+    setValueForElement(element as FillableControl);
     callback(element);
-    setValueForElementByEvent(element);
+    setValueForElementByEvent(element as FillableControl);
 
     if (canSeeElementToStyle(element, true)) {
       element.classList.add("com-bitwarden-browser-animated-fill");
@@ -158,6 +157,22 @@ class AutofillInsert {
         }
       }, styleTimeout);
     }
+  }
+
+  private triggerClickOnElement(element?: HTMLElement): void {
+    if (!element || typeof element.click !== TYPE_CHECK.FUNCTION) {
+      return;
+    }
+
+    element.click();
+  }
+
+  private triggerFocusOnElement(element?: HTMLElement): void {
+    if (!element || typeof element.focus !== TYPE_CHECK.FUNCTION) {
+      return;
+    }
+
+    element.focus();
   }
 }
 

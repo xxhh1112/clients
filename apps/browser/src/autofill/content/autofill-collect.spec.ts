@@ -138,6 +138,68 @@ describe("AutofillCollect", function () {
     });
   });
 
+  describe("getAutofillFieldElementByOpid", function () {
+    it("returns the element with the opid property value matching the passed value", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      const passwordInput = document.querySelector(
+        'input[type="password"]'
+      ) as FormElementWithAttribute;
+      textInput.opid = "__0";
+      passwordInput.opid = "__1";
+
+      const textInputWithOpid = autofillCollect.getAutofillFieldElementByOpid("__0");
+      const passwordInputWithOpid = autofillCollect.getAutofillFieldElementByOpid("__1");
+
+      expect(textInputWithOpid).toEqual(textInput);
+      expect(textInputWithOpid).not.toEqual(passwordInput);
+      expect(passwordInputWithOpid).toEqual(passwordInput);
+    });
+
+    it("returns the first of the element with an `opid` value matching the passed value and emits a console warning if multiple fields contain the same `opid`", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      const passwordInput = document.querySelector(
+        'input[type="password"]'
+      ) as FormElementWithAttribute;
+      jest.spyOn(console, "warn").mockImplementationOnce(jest.fn());
+      textInput.opid = "__1";
+      passwordInput.opid = "__1";
+
+      const elementWithOpid0 = autofillCollect.getAutofillFieldElementByOpid("__0");
+      const elementWithOpid1 = autofillCollect.getAutofillFieldElementByOpid("__1");
+
+      expect(elementWithOpid0).toEqual(textInput);
+      expect(elementWithOpid1).toEqual(textInput);
+      expect(elementWithOpid1).not.toEqual(passwordInput);
+      expect(console.warn).toHaveBeenCalledWith("More than one element found with opid __1");
+    });
+
+    it("returns the element at the index position (parsed from passed opid) of all AutofillField elements when the passed opid value cannot be found", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      const passwordInput = document.querySelector(
+        'input[type="password"]'
+      ) as FormElementWithAttribute;
+      textInput.opid = undefined;
+      passwordInput.opid = "__1";
+
+      const elementWithOpid0 = autofillCollect.getAutofillFieldElementByOpid("__0");
+      const elementWithOpid2 = autofillCollect.getAutofillFieldElementByOpid("__2");
+
+      expect(textInput.opid).toBeUndefined();
+      expect(elementWithOpid0).toEqual(textInput);
+      expect(elementWithOpid0).not.toEqual(passwordInput);
+      expect(elementWithOpid2).toBeNull();
+    });
+
+    it("returns null if no element can be found", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      textInput.opid = "__0";
+
+      const foundElementWithOpid = autofillCollect.getAutofillFieldElementByOpid("__999");
+
+      expect(foundElementWithOpid).toBeNull();
+    });
+  });
+
   describe("buildAutofillFormsData", function () {
     it("returns an object of AutofillForm objects with the form id as a key", function () {
       const documentTitle = "Test Page";

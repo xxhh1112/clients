@@ -27,7 +27,7 @@ class AutofillInit implements AutofillInitInterface {
   constructor() {
     this.autofillFieldVisibility = new AutofillFieldVisibilityService();
     this.autofillCollect = new AutofillCollect(this.autofillFieldVisibility);
-    this.autofillInsert = new AutofillInsert();
+    this.autofillInsert = new AutofillInsert(this.autofillFieldVisibility, this.autofillCollect);
   }
 
   /**

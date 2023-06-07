@@ -1,6 +1,6 @@
-import { AutofillFieldVisibilityService as AutofillFieldVisibilityServiceAbstraction } from "./abstractions/autofill-field-visibility.service";
+import { AutofillFieldVisibilityService as AutofillFieldVisibilityServiceInterface } from "./abstractions/autofill-field-visibility.service";
 
-class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceAbstraction {
+class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceInterface {
   private cachedComputedStyle: CSSStyleDeclaration | null = null;
 
   async isFieldViewable(element: HTMLElement): Promise<boolean> {
@@ -16,6 +16,39 @@ class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceAb
     }
 
     return this.fieldIsNotHiddenBehindAnotherElement(element, elementBoundingClientRect);
+  }
+
+  /**
+   * Check if the target element is hidden using CSS. This is done by checking the opacity, display,
+   * visibility, and clip-path CSS properties of the element. We also check the opacity of all
+   * parent elements to ensure that the target element is not hidden by a parent element.
+   * @param {HTMLElement} element
+   * @returns {boolean}
+   */
+  isFieldHiddenByCss(element: HTMLElement): boolean {
+    this.cachedComputedStyle = null;
+
+    if (
+      this.isElementInvisible(element) ||
+      this.isElementNotDisplayed(element) ||
+      this.isElementNotVisible(element) ||
+      this.isElementClipped(element)
+    ) {
+      return true;
+    }
+
+    // Check parent elements to identify if the element is invisible through a zero opacity.
+    let parentElement = element.parentElement;
+    while (parentElement && parentElement !== element.ownerDocument.documentElement) {
+      this.cachedComputedStyle = null;
+      if (this.isElementInvisible(parentElement)) {
+        return true;
+      }
+
+      parentElement = parentElement.parentElement;
+    }
+
+    return false;
   }
 
   private isFieldOutsideViewportBounds(
@@ -43,40 +76,6 @@ class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceAb
       isElementOverflowingTopViewport ||
       isElementOverflowingBottomViewport
     );
-  }
-
-  /**
-   * Check if the target element is hidden using CSS. This is done by checking the opacity, display,
-   * visibility, and clip-path CSS properties of the element. We also check the opacity of all
-   * parent elements to ensure that the target element is not hidden by a parent element.
-   * @param {HTMLElement} element
-   * @returns {boolean}
-   * @private
-   */
-  private isFieldHiddenByCss(element: HTMLElement): boolean {
-    this.cachedComputedStyle = null;
-
-    if (
-      this.isElementInvisible(element) ||
-      this.isElementNotDisplayed(element) ||
-      this.isElementNotVisible(element) ||
-      this.isElementClipped(element)
-    ) {
-      return true;
-    }
-
-    // Check parent elements to identify if the element is invisible through a zero opacity.
-    let parentElement = element.parentElement;
-    while (parentElement && parentElement !== element.ownerDocument.documentElement) {
-      this.cachedComputedStyle = null;
-      if (this.isElementInvisible(parentElement)) {
-        return true;
-      }
-
-      parentElement = parentElement.parentElement;
-    }
-
-    return false;
   }
 
   private getElementStyle(element: HTMLElement, styleProperty: string): string {
