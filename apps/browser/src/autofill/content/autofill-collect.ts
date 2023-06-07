@@ -7,8 +7,8 @@ import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute
 class AutofillCollect {
   private autofillFieldVisibility: AutofillFieldVisibilityService;
 
-  constructor() {
-    this.autofillFieldVisibility = new AutofillFieldVisibilityService();
+  constructor(autofillFieldVisibility: AutofillFieldVisibilityService) {
+    this.autofillFieldVisibility = autofillFieldVisibility;
   }
 
   /**

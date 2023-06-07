@@ -1,3 +1,4 @@
+import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
 import AutofillCollect from "./autofill-collect";
@@ -12,12 +13,13 @@ const mockLoginForm = `
 `;
 
 describe("AutofillCollect", function () {
+  const autofillFieldVisibility = new AutofillFieldVisibilityService();
   let autofillCollect: AutofillCollect;
 
   beforeEach(function () {
     jest.clearAllMocks();
     document.body.innerHTML = mockLoginForm;
-    autofillCollect = new AutofillCollect();
+    autofillCollect = new AutofillCollect(autofillFieldVisibility);
   });
 
   describe("getPageDetails", function () {

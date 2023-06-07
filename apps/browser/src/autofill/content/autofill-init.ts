@@ -5,13 +5,15 @@ import {
 } from "../models/autofill-init";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 
 import AutofillCollect from "./autofill-collect";
 import AutofillInsert from "./autofill-insert";
 
 class AutofillInit implements AutofillInitInterface {
-  private autofillCollect: AutofillCollect;
-  private autofillInsert: AutofillInsert;
+  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
+  private readonly autofillCollect: AutofillCollect;
+  private readonly autofillInsert: AutofillInsert;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
@@ -19,11 +21,12 @@ class AutofillInit implements AutofillInitInterface {
   };
 
   /**
-   * AutofillInit constructor. Initializes the
+   * AutofillInit constructor. Initializes the AutofillFieldVisibilityService,
    * AutofillCollect and AutofillInsert classes.
    */
   constructor() {
-    this.autofillCollect = new AutofillCollect();
+    this.autofillFieldVisibility = new AutofillFieldVisibilityService();
+    this.autofillCollect = new AutofillCollect(this.autofillFieldVisibility);
     this.autofillInsert = new AutofillInsert();
   }
 
