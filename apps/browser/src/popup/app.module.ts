@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
+import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
 import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.component";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
@@ -28,7 +29,6 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
-import { Fido2Component } from "../fido2/popup/fido2/fido2.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendListComponent } from "../tools/popup/send/components/send-list.component";
@@ -39,6 +39,7 @@ import { SendTypeComponent } from "../tools/popup/send/send-type.component";
 import { ExportComponent } from "../tools/popup/settings/export.component";
 import { ActionButtonsComponent } from "../vault/popup/components/action-buttons.component";
 import { CipherRowComponent } from "../vault/popup/components/cipher-row.component";
+import { Fido2Component } from "../vault/popup/components/fido2/fido2.component";
 import { PasswordRepromptComponent } from "../vault/popup/components/password-reprompt.component";
 import { AddEditCustomFieldsComponent } from "../vault/popup/components/vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
@@ -155,6 +156,7 @@ import "./locales";
     Fido2Component,
     HelpAndFeedbackComponent,
     AutofillComponent,
+    EnvironmentSelectorComponent,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],

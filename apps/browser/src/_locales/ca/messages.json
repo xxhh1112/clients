@@ -2221,7 +2221,18 @@
       }
     }
   },
+  "region": {
+    "message": "Regió"
+  },
   "opensInANewWindow": {
     "message": "S'obri en una finestra nova"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EUA",
+    "description": "United States"
   }
 }

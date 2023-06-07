@@ -10,14 +10,14 @@ import {
   takeUntil,
 } from "rxjs";
 
-import { UserRequestedFallbackAbortReason } from "@bitwarden/common/fido2/abstractions/fido2-client.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { UserRequestedFallbackAbortReason } from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
 import {
   Fido2UserInterfaceService as Fido2UserInterfaceServiceAbstraction,
   Fido2UserInterfaceSession,
   NewCredentialParams,
   PickCredentialParams,
-} from "@bitwarden/common/fido2/abstractions/fido2-user-interface.service.abstraction";
-import { Utils } from "@bitwarden/common/misc/utils";
+} from "@bitwarden/common/vault/abstractions/fido2/fido2-user-interface.service.abstraction";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { Popout, PopupUtilsService } from "../../popup/services/popup-utils.service";

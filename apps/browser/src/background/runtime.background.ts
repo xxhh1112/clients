@@ -239,7 +239,6 @@ export default class RuntimeBackground {
           .assertCredential(msg.data, this.createAbortController(msg.requestId))
           .finally(() => this.abortControllers.delete(msg.requestId));
     }
-    return undefined;
   }
 
   private async autofillPage(tabToAutoFill: chrome.tabs.Tab) {

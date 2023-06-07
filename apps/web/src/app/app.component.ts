@@ -28,6 +28,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
+import { PolicyListService } from "./admin-console/core/policy-list.service";
 import {
   DisableSendPolicy,
   MasterPasswordPolicy,
@@ -39,7 +40,7 @@ import {
   SingleOrgPolicy,
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
-import { PolicyListService, RouterService } from "./core";
+import { RouterService } from "./core";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -98,6 +99,12 @@ export class AppComponent implements OnDestroy, OnInit {
       window.onkeypress = () => this.recordActivity();
     });
 
+    /// ############ DEPRECATED ############
+    /// Please do not use the AppComponent to send events between services.
+    ///
+    /// Services that depends on other services, should do so through Dependency Injection
+    /// and subscribe to events through that service observable.
+    ///
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(async () => {
         switch (message.command) {

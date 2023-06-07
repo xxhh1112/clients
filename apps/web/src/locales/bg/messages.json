@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Подсказването за паролата не може да съвпада с нея."
   },
-  "enrollPasswordReset": {
-    "message": "Включване на помощта при смяната на паролата"
+  "enrollAccountRecovery": {
+    "message": "Включване във възстановяването на профили"
   },
-  "enrolledPasswordReset": {
-    "message": "Помощта при смяната на паролата е включена"
+  "enrolledAccountRecovery": {
+    "message": "Включен във възстановяването на профили"
   },
-  "withdrawPasswordReset": {
-    "message": "Изключване на помощта при смяната на паролата"
+  "withdrawAccountRecovery": {
+    "message": "Оттегляне от възстановяването на профили"
   },
   "enrollPasswordResetSuccess": {
     "message": "Успешно включване!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Успешно изключване!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Потребителят $ID$ включи помощта при смяна на паролата.",
+  "eventEnrollAccountRecovery": {
+    "message": "Потребителят $ID$ се включи във възстановяването на профили.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Потребителят $ID$ изключи помощта при смяна на паролата.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Потребителят $ID$ се оттегли от възстановяването на профили.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Включването ще позволи на администраторите на организацията да променят главната Ви парола. Наистина ли искате да се включите?"
   },
-  "resetPasswordPolicy": {
-    "message": "Смяна на главната парола"
+  "accountRecoveryPolicy": {
+    "message": "Управление на възстановяването на профили"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Позволяване на администраторите на организацията да сменят главните пароли на участващите потребители."
+  "accountRecoveryPolicyDescription": {
+    "message": "Можете да възстановявате профилите на потребителите, когато загубят или забравят своята главна парола или доверено устройство. Процесът по възстановяване се основава на метод на шифроване на профила."
   },
   "resetPasswordPolicyWarning": {
     "message": "Потребителите в организацията ще трябва да се включат сами или да бъдат включени автоматично, преди администраторите да могат да сменят главните им пароли."
@@ -5227,15 +5227,15 @@
     "message": "Конектор за ключове"
   },
   "memberDecryptionKeyConnectorDescStart": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "message": "Свържете вписването чрез еднократно удостоверяване със своя собствен сървър за ключове за дешифриране. Така няма да има нужда членовете да използват главната си парола, за да дешифрират данните от трезора си.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescLink": {
-    "message": "require SSO authentication and single organization policies",
+    "message": "Политиките за еднократно удостоверяване и една организация",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescEnd": {
-    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "message": "са необходими, за да бъде настроено шифроването чрез конектор за ключове. Свържете се с поддръжката на Битуорден, ако имате нужда от помощ с настройката.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
@@ -6552,6 +6552,18 @@
   "billingSyncHelp": {
     "message": "Помощ относно синхронизирането на лицензи"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Помощ относно платените функционалности в лиценза"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "След като изтече абонаментът Ви, имате 60 дни да приложите актуализиран лицензионен файл към организацията си. Този период приключва на $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Качване на лиценз"
   },
@@ -6763,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Въведеното не може да съдържа само интервали.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6776,6 +6792,17 @@
   "enforceOnLoginDesc": {
     "message": "Задължаване на текущите членове да сменят паролите си"
   },
+  "region": {
+    "message": "Регион"
+  },
+  "eu": {
+    "message": "ЕС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "САЩ",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "Нямате право за изтриване на този проект",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6788,18 +6815,24 @@
     "message": "Промяна на настройките за KDF"
   },
   "trustedDeviceEncryption": {
-    "message": "Trusted device encryption"
+    "message": "Шифроване чрез доверено устройство"
   },
-  "memberDecryptionTdeDescStart": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "След вписване, членовете ще дешифрират данните от трезорите си чрез ключ, който се съхранява на устройство.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "master password reset policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Политиката за управление на възстановяването на профили",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "с автоматично включване ще бъде активирана при използването на тази настройка.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "recoverAccount": {
+    "message": "Възстановяване на профила"
+  },
+  "updatedTempPassword": {
+    "message": "Потребителят промени парола издадена чрез възстановяването на профили."
   }
 }
