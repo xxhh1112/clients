@@ -2,7 +2,7 @@ import { TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import { FillableControl, FormElement } from "../types";
-import { canSeeElementToStyle, setValueForElement, setValueForElementByEvent } from "../utils";
+import { setValueForElement, setValueForElementByEvent } from "../utils";
 
 import AutofillCollect from "./autofill-collect";
 
@@ -143,20 +143,19 @@ class AutofillInsert {
   }
 
   private doAllFillOperations(element: FormElement, callback: CallableFunction): void {
-    const styleTimeout = 200;
+    if (!element) {
+      return;
+    }
+
     setValueForElement(element as FillableControl);
     callback(element);
     setValueForElementByEvent(element as FillableControl);
-
-    if (canSeeElementToStyle(element, true)) {
-      element.classList.add("com-bitwarden-browser-animated-fill");
-
-      setTimeout(function () {
-        if (element) {
-          element.classList.remove("com-bitwarden-browser-animated-fill");
-        }
-      }, styleTimeout);
+    if (!this.canAnimateElement(element)) {
+      return;
     }
+
+    element.classList.add("com-bitwarden-browser-animated-fill");
+    setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
   }
 
   private triggerClickOnElement(element?: HTMLElement): void {
@@ -173,6 +172,17 @@ class AutofillInsert {
     }
 
     element.focus();
+  }
+
+  private canAnimateElement(element: FormElement): boolean {
+    if (this.autofillFieldVisibility.isFieldHiddenByCss(element)) {
+      return false;
+    }
+
+    return (
+      element instanceof HTMLSpanElement ||
+      new Set(["email", "text", "password", "number", "tel", "url"]).has(element.type)
+    );
   }
 }
 
