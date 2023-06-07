@@ -133,7 +133,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<boolean> {
     switch (keySuffix) {
       case KeySuffixOptions.Auto:
-        return (await this.stateService.getUserSymKeyAuto({ userId: userId })) != null;
+        return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
       case KeySuffixOptions.Biometric:
         return (await this.stateService.hasUserSymKeyBiometric({ userId: userId })) === true;
       default:
@@ -889,6 +889,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       await this.stateService.setUserSymKeyAuto(key.keyB64, { userId: userId });
     } else {
       await this.stateService.setUserSymKeyAuto(null, { userId: userId });
+      await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
     }
 
     const storePin = await this.shouldStoreKey(KeySuffixOptions.Pin, userId);
@@ -896,6 +897,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       await this.storePinKey(key);
     } else {
       await this.stateService.setUserSymKeyPin(null, { userId: userId });
+      await this.stateService.setEncryptedPinProtected(null, { userId: userId });
     }
   }
 
@@ -941,10 +943,23 @@ export class CryptoService implements CryptoServiceAbstraction {
     userId?: string
   ): Promise<UserSymKey> {
     let userKey: string;
-    if (keySuffix === KeySuffixOptions.Auto) {
-      userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
-    } else if (keySuffix === KeySuffixOptions.Biometric) {
-      userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
+    switch (keySuffix) {
+      case KeySuffixOptions.Auto: {
+        // migrate if needed
+        const oldAutoKey = await this.stateService.getCryptoMasterKeyAuto({ userId: userId });
+        if (oldAutoKey) {
+          await this.stateService.setUserSymKeyAuto(oldAutoKey, { userId: userId });
+          await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
+          userKey = oldAutoKey;
+        } else {
+          userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
+        }
+        break;
+      }
+      case KeySuffixOptions.Biometric: {
+        userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
+        break;
+      }
     }
     return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
   }
