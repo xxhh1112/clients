@@ -46,6 +46,10 @@ export class MultithreadEncryptServiceImplementation extends EncryptServiceImple
     );
 
     this.terminateWorker$.subscribe(() => {
+      if (this.worker == null) {
+        return;
+      }
+
       // This aborts the current script and any queued tasks in the worker:
       // https://html.spec.whatwg.org/multipage/workers.html#terminate-a-worker
       this.worker?.terminate();
