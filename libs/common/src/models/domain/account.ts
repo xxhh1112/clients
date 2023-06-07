@@ -10,8 +10,8 @@ import { CollectionView } from "../../admin-console/models/view/collection.view"
 import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
-import { KeyConnectorUserDecryptionOptionResponse } from "../../auth/models/response/user-decryption-options/key-connector-user-decryption-option.response";
-import { TrustedDeviceUserDecryptionOptionResponse } from "../../auth/models/response/user-decryption-options/trusted-device-user-decryption-option.response";
+import { KeyConnectorUserDecryptionOption } from "../../auth/models/domain/user-decryption-options/key-connector-user-decryption-option";
+import { TrustedDeviceUserDecryptionOption } from "../../auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { UserDecryptionOptionsResponse } from "../../auth/models/response/user-decryption-options/user-decryption-options.response";
 import { KdfType, UriMatchType } from "../../enums";
 import { Utils } from "../../misc/utils";
@@ -274,8 +274,8 @@ export class AccountTokens {
 
 export class AccountDecryptionOptions {
   hasMasterPassword: boolean;
-  trustedDeviceOption?: TrustedDeviceUserDecryptionOptionResponse;
-  keyConnectorOption?: KeyConnectorUserDecryptionOptionResponse;
+  trustedDeviceOption?: TrustedDeviceUserDecryptionOption;
+  keyConnectorOption?: KeyConnectorUserDecryptionOption;
 
   constructor(init?: Partial<AccountDecryptionOptions>) {
     if (init) {
@@ -292,12 +292,18 @@ export class AccountDecryptionOptions {
     accountDecryptionOptions.hasMasterPassword = response.hasMasterPassword;
 
     if (response.trustedDeviceOption) {
-      accountDecryptionOptions.trustedDeviceOption = response.trustedDeviceOption;
+      accountDecryptionOptions.trustedDeviceOption = new TrustedDeviceUserDecryptionOption(
+        response.trustedDeviceOption.hasAdminApproval
+      );
     }
 
     if (response.keyConnectorOption) {
-      accountDecryptionOptions.keyConnectorOption = response.keyConnectorOption;
+      accountDecryptionOptions.keyConnectorOption = new KeyConnectorUserDecryptionOption(
+        response.keyConnectorOption.keyConnectorUrl
+      );
     }
+
+    return accountDecryptionOptions;
   }
 
   static fromJSON(obj: Jsonify<AccountDecryptionOptions>): AccountDecryptionOptions {
