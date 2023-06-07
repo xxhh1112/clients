@@ -88,25 +88,25 @@ export abstract class StateService<T extends Account = Account> {
   hasUserSymKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   setUserSymKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the encrypted version of the user's symmetric key encrypted by the Pin key.
+   * Gets the user's symmetric key encrypted by the Pin key.
    * Used when Master Password on Reset is disabled
    */
-  getEncryptedUserSymKeyPin: (options?: StorageOptions) => Promise<string>;
+  getUserSymKeyPin: (options?: StorageOptions) => Promise<EncString>;
   /**
-   * Sets the encrypted version of the user's symmetric key encrypted by the Pin key.
+   * Sets the user's symmetric key encrypted by the Pin key.
    * Used when Master Password on Reset is disabled
    */
-  setEncryptedUserSymKeyPin: (value: string, options?: StorageOptions) => Promise<void>;
+  setUserSymKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the decrypted version of the user's symmetric key encrypted by the Pin key.
+   * Gets the ephemeral version of the user's symmetric key encrypted by the Pin key.
    * Used when Master Password on Reset is enabled
    */
-  getDecryptedUserSymKeyPin: (options?: StorageOptions) => Promise<EncString>;
+  getUserSymKeyPinEphemeral: (options?: StorageOptions) => Promise<EncString>;
   /**
-   * Sets the decrypted version of the user's symmetric key encrypted by the Pin key.
+   * Sets the ephemeral version of the user's symmetric key encrypted by the Pin key.
    * Used when Master Password on Reset is enabled
    */
-  setDecryptedUserSymKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
+  setUserSymKeyPinEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
 
   // deprecated keys
   /**

@@ -235,9 +235,10 @@ export class AccountSettings {
   passwordGenerationOptions?: any;
   usernameGenerationOptions?: any;
   generatorOptions?: any;
-  userSymKeyPin?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>();
-  pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>(); // Deprecated
+  userSymKeyPin?: EncString;
+  userSymKeyPinEphemeral?: EncString;
   protectedPin?: string;
+  pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>(); // Deprecated
   settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
@@ -255,10 +256,7 @@ export class AccountSettings {
 
     return Object.assign(new AccountSettings(), obj, {
       environmentUrls: EnvironmentUrls.fromJSON(obj?.environmentUrls),
-      userSymKeyPin: EncryptionPair.fromJSON<string, EncString>(
-        obj?.userSymKeyPin,
-        EncString.fromJSON
-      ),
+      userSymKeyPin: EncString.fromJSON(obj.userSymKeyPin),
       pinProtected: EncryptionPair.fromJSON<string, EncString>(
         obj?.pinProtected,
         EncString.fromJSON

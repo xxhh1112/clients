@@ -153,15 +153,15 @@ export class LockComponent implements OnInit, OnDestroy {
     try {
       const kdf = await this.stateService.getKdfType();
       const kdfConfig = await this.stateService.getKdfConfig();
-      let oldPinProtected: EncString;
       let userSymKeyPin: EncString;
+      let oldPinProtected: EncString;
       if (this.pinSet[0]) {
         // MP on restart enabled
-        userSymKeyPin = await this.stateService.getDecryptedUserSymKeyPin();
+        userSymKeyPin = await this.stateService.getUserSymKeyPinEphemeral();
         oldPinProtected = await this.stateService.getDecryptedPinProtected();
       } else {
         // MP on restart disabled
-        userSymKeyPin = new EncString(await this.stateService.getEncryptedUserSymKeyPin());
+        userSymKeyPin = await this.stateService.getUserSymKeyPin();
         oldPinProtected = new EncString(await this.stateService.getEncryptedPinProtected());
       }
 
@@ -178,14 +178,12 @@ export class LockComponent implements OnInit, OnDestroy {
         );
       }
 
-      if (this.pinSet[0]) {
-        const protectedPin = await this.stateService.getProtectedPin();
-        const decryptedPin = await this.cryptoService.decryptToUtf8(
-          new EncString(protectedPin),
-          userSymKey
-        );
-        failed = decryptedPin !== this.pin;
-      }
+      const protectedPin = await this.stateService.getProtectedPin();
+      const decryptedPin = await this.cryptoService.decryptToUtf8(
+        new EncString(protectedPin),
+        userSymKey
+      );
+      failed = decryptedPin !== this.pin;
 
       if (!failed) {
         await this.setKeyAndContinue(userSymKey);
@@ -317,10 +315,9 @@ export class LockComponent implements OnInit, OnDestroy {
   private async load() {
     this.pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
 
-    let decryptedPinSet = await this.stateService.getDecryptedUserSymKeyPin();
-    decryptedPinSet ||= await this.stateService.getDecryptedPinProtected();
-    // (is MP on Restart enabled && MP already entered) || (Pin is set and MP on Restart disabled)
-    this.pinLock = (this.pinSet[0] && decryptedPinSet != null) || this.pinSet[1];
+    let ephemeralPinSet = await this.stateService.getUserSymKeyPinEphemeral();
+    ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
+    this.pinLock = (this.pinSet[0] && !!ephemeralPinSet) || this.pinSet[1];
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
@@ -401,10 +398,13 @@ export class LockComponent implements OnInit, OnDestroy {
     const pinProtectedKey = await this.cryptoService.encrypt(userSymKey.key, pinKey);
     if (masterPasswordOnRestart) {
       await this.stateService.setDecryptedPinProtected(null);
-      await this.stateService.setDecryptedUserSymKeyPin(pinProtectedKey);
+      await this.stateService.setUserSymKeyPinEphemeral(pinProtectedKey);
     } else {
       await this.stateService.setEncryptedPinProtected(null);
-      await this.stateService.setEncryptedUserSymKeyPin(pinProtectedKey.encryptedString);
+      await this.stateService.setUserSymKeyPin(pinProtectedKey);
+      // always set the protected pin, even if MP on Restart is disabled
+      const encPin = await this.cryptoService.encrypt(this.pin, userSymKey);
+      await this.stateService.setProtectedPin(encPin.encryptedString);
     }
     return userSymKey;
   }

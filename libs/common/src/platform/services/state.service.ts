@@ -720,34 +720,34 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
   }
 
-  async getEncryptedUserSymKeyPin(options?: StorageOptions): Promise<string> {
+  async getUserSymKeyPin(options?: StorageOptions): Promise<EncString> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.settings?.userSymKeyPin?.encrypted;
+    )?.settings?.userSymKeyPin;
   }
 
-  async setEncryptedUserSymKeyPin(value: string, options?: StorageOptions): Promise<void> {
+  async setUserSymKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.settings.userSymKeyPin.encrypted = value;
+    account.settings.userSymKeyPin = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
 
-  async getDecryptedUserSymKeyPin(options?: StorageOptions): Promise<EncString> {
+  async getUserSymKeyPinEphemeral(options?: StorageOptions): Promise<EncString> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.settings?.userSymKeyPin?.decrypted;
+    )?.settings?.userSymKeyPinEphemeral;
   }
 
-  async setDecryptedUserSymKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
+  async setUserSymKeyPinEphemeral(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.settings.userSymKeyPin.decrypted = value;
+    account.settings.userSymKeyPinEphemeral = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())

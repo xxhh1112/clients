@@ -35,18 +35,20 @@ export class SetPinComponent implements OnInit {
       this.modalRef.close(false);
     }
 
-    const kdf = await this.stateService.getKdfType();
-    const kdfConfig = await this.stateService.getKdfConfig();
-    const email = await this.stateService.getEmail();
-    const pinKey = await this.cryptoService.makePinKey(this.pin, email, kdf, kdfConfig);
+    const pinKey = await this.cryptoService.makePinKey(
+      this.pin,
+      await this.stateService.getEmail(),
+      await this.stateService.getKdfType(),
+      await this.stateService.getKdfConfig()
+    );
     const userKey = await this.cryptoService.getUserKeyFromMemory();
     const pinProtectedKey = await this.cryptoService.encrypt(userKey.key, pinKey);
+    const encPin = await this.cryptoService.encrypt(this.pin, userKey);
+    await this.stateService.setProtectedPin(encPin.encryptedString);
     if (this.masterPassOnRestart) {
-      const encPin = await this.cryptoService.encrypt(this.pin, userKey);
-      await this.stateService.setProtectedPin(encPin.encryptedString);
-      await this.stateService.setDecryptedUserSymKeyPin(pinProtectedKey);
+      await this.stateService.setUserSymKeyPinEphemeral(pinProtectedKey);
     } else {
-      await this.stateService.setEncryptedUserSymKeyPin(pinProtectedKey.encryptedString);
+      await this.stateService.setUserSymKeyPin(pinProtectedKey);
     }
 
     this.modalRef.close(true);

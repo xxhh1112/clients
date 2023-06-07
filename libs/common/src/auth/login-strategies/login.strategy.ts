@@ -132,6 +132,7 @@ export abstract class LogInStrategy {
       result.forcePasswordReset = ForceResetPasswordReason.AdminForcePasswordReset;
     }
 
+    // Must come before setting keys, user key needs email to update additional keys
     await this.saveAccountInformation(response);
 
     if (response.twoFactorToken != null) {

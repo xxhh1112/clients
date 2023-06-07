@@ -9,16 +9,12 @@ describe("AccountSettings", () => {
 
     it("should deserialize userSymKeyPin", () => {
       const accountSettings = new AccountSettings();
-      accountSettings.userSymKeyPin = EncryptionPair.fromJSON<string, EncString>({
-        encrypted: "encrypted",
-        decrypted: "3.data",
-      });
+      accountSettings.userSymKeyPin = EncString.fromJSON("encrypted");
       const jsonObj = JSON.parse(JSON.stringify(accountSettings));
       const actual = AccountSettings.fromJSON(jsonObj);
 
-      expect(actual.userSymKeyPin).toBeInstanceOf(EncryptionPair);
-      expect(actual.userSymKeyPin.encrypted).toEqual("encrypted");
-      expect(actual.userSymKeyPin.decrypted.encryptedString).toEqual("3.data");
+      expect(actual.userSymKeyPin).toBeInstanceOf(EncString);
+      expect(actual.userSymKeyPin.encryptedString).toEqual("encrypted");
     });
 
     it("should deserialize pinProtected", () => {

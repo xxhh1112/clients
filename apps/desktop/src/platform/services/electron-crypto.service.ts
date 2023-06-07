@@ -4,7 +4,10 @@ import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
 import { CsprngString } from "@bitwarden/common/types/csprng";
 
@@ -21,7 +24,7 @@ export class ElectronCryptoService extends CryptoService {
     super(cryptoFunctionService, encryptService, platformUtilsService, logService, stateService);
   }
 
-  protected override async storeAdditionalKeys(key: SymmetricCryptoKey, userId?: string) {
+  protected override async storeAdditionalKeys(key: UserSymKey, userId?: string) {
     await super.storeAdditionalKeys(key, userId);
 
     const storeBiometricKey = await this.shouldStoreKey(KeySuffixOptions.Biometric, userId);
