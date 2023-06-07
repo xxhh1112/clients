@@ -46,17 +46,17 @@ describe("AutofillInit", function () {
         .mockReturnValue(pageDetails);
     });
 
-    it("returns collected page details for autofill if set to send the details in the response", function () {
-      const response = bitwardenAutofillInit["collectPageDetails"](extensionMessage, true);
+    it("returns collected page details for autofill if set to send the details in the response", async function () {
+      const response = await bitwardenAutofillInit["collectPageDetails"](extensionMessage, true);
 
       expect(bitwardenAutofillInit.autofillCollect.getPageDetails).toHaveBeenCalled();
       expect(response).toEqual(pageDetails);
     });
 
-    it("sends the collected page details for autofill using a background script message", function () {
+    it("sends the collected page details for autofill using a background script message", async function () {
       jest.spyOn(chrome.runtime, "sendMessage");
 
-      bitwardenAutofillInit["collectPageDetails"](extensionMessage);
+      await bitwardenAutofillInit["collectPageDetails"](extensionMessage);
 
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
         command: "collectPageDetailsResponse",
@@ -105,8 +105,10 @@ describe("AutofillInit", function () {
       expect(response).toBe(false);
     });
 
-    it("returns a false value if the message handler does not return a response", function () {
-      const response = bitwardenAutofillInit["handleExtensionMessage"](
+    it("returns a false value if the message handler does not return a response", async function () {
+      message.command = "fillForm";
+
+      const response = await bitwardenAutofillInit["handleExtensionMessage"](
         message,
         sender,
         sendResponse
@@ -134,6 +136,7 @@ describe("AutofillInit", function () {
         sender,
         sendResponse
       );
+      await Promise.resolve(response);
 
       expect(response).toBe(true);
       expect(sendResponse).toHaveBeenCalledWith(pageDetails);
