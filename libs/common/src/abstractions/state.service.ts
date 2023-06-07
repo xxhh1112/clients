@@ -14,7 +14,11 @@ import { BiometricKey } from "../auth/types/biometric-key";
 import { KdfType, ThemeType, UriMatchType } from "../enums";
 import { EventData } from "../models/data/event.data";
 import { ServerConfigData } from "../models/data/server-config.data";
-import { Account, AccountSettingsSettings } from "../models/domain/account";
+import {
+  Account,
+  AccountDecryptionOptions,
+  AccountSettingsSettings,
+} from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
 import { StorageOptions } from "../models/domain/storage-options";
 import { DeviceKey, SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
@@ -165,6 +169,11 @@ export abstract class StateService<T extends Account = Account> {
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
   setDeviceKey: (value: DeviceKey, options?: StorageOptions) => Promise<void>;
+  getUserDecryptionOptions: (options?: StorageOptions) => Promise<AccountDecryptionOptions | null>;
+  setUserDecryptionOptions: (
+    value: AccountDecryptionOptions,
+    options?: StorageOptions
+  ) => Promise<void>;
   getEmail: (options?: StorageOptions) => Promise<string>;
   setEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getEmailVerified: (options?: StorageOptions) => Promise<boolean>;
