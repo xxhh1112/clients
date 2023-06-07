@@ -3023,6 +3023,8 @@ export class StateService<
 
   protected async removeAccountFromSecureStorage(userId: string = null): Promise<void> {
     userId = userId ?? (await this.state())?.activeUserId;
+    await this.setUserSymKeyAuto(null, { userId: userId });
+    await this.setUserSymKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyAuto(null, { userId: userId });
     await this.setCryptoMasterKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyB64(null, { userId: userId });
