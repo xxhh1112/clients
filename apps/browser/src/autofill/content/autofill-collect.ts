@@ -1,12 +1,15 @@
 import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
+import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
 class AutofillCollect {
-  private autofillFormsData: Record<string, AutofillForm> = {};
-  private autofillFieldsData: AutofillField[] = [];
-  private readonly queriedFieldsLimit = 50;
+  private autofillFieldVisibility: AutofillFieldVisibilityService;
+
+  constructor() {
+    this.autofillFieldVisibility = new AutofillFieldVisibilityService();
+  }
 
   /**
    * Builds the data for all the forms and fields
@@ -15,15 +18,15 @@ class AutofillCollect {
    * @public
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
-    this.autofillFormsData = this.buildAutofillFormsData();
-    this.autofillFieldsData = await this.buildAutofillFieldsData();
+    const autofillFormsData: Record<string, AutofillForm> = this.buildAutofillFormsData();
+    const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData();
 
     return {
       title: document.title,
       url: (document.defaultView || window).location.href,
       documentUrl: document.location.href,
-      forms: this.autofillFormsData,
-      fields: this.autofillFieldsData,
+      forms: autofillFormsData,
+      fields: autofillFieldsData,
       collectedTimestamp: Date.now(),
     };
   }
@@ -39,11 +42,10 @@ class AutofillCollect {
     const documentFormElements = document.querySelectorAll("form");
 
     documentFormElements.forEach((formElement: HTMLFormElement, index: number) => {
-      const formOpid = `__form__${index}`;
-      formElement.opid = formOpid;
+      formElement.opid = `__form__${index}`;
 
-      autofillForms[formOpid] = {
-        opid: formOpid,
+      autofillForms[formElement.opid] = {
+        opid: formElement.opid,
         htmlAction: new URL(
           this.getPropertyOrAttribute(formElement, "action"),
           window.location.href
@@ -64,8 +66,8 @@ class AutofillCollect {
    * @private
    */
   private async buildAutofillFieldsData(): Promise<AutofillField[]> {
-    const autofillFieldElements = this.getAutofillFieldElements(this.queriedFieldsLimit);
-    const autofillFieldDataPromises = autofillFieldElements.map(this.buildAutofillFieldDataItem);
+    const autofillFieldElements = this.getAutofillFieldElements(50);
+    const autofillFieldDataPromises = autofillFieldElements.map(this.buildAutofillFieldItem);
 
     return Promise.all(autofillFieldDataPromises);
   }
@@ -97,7 +99,7 @@ class AutofillCollect {
     const unimportantFieldTypesSet = new Set(["checkbox", "radio"]);
     for (const element of formFieldElements) {
       if (priorityFormFields.length >= fieldsLimit) {
-        break;
+        return priorityFormFields;
       }
 
       const fieldType = this.getPropertyOrAttribute(element, "type")?.toLowerCase();
@@ -109,21 +111,34 @@ class AutofillCollect {
       priorityFormFields.push(element);
     }
 
-    return [...priorityFormFields, ...unimportantFormFields].slice(0, fieldsLimit);
+    const numberUnimportantFieldsToInclude = fieldsLimit - priorityFormFields.length;
+    for (let index = 0; index < numberUnimportantFieldsToInclude; index++) {
+      priorityFormFields.push(unimportantFormFields[index]);
+    }
+
+    return priorityFormFields;
   }
 
-  private buildAutofillFieldDataItem = async (
+  /**
+   * Builds an AutofillField object from the given form element. Will only return
+   * shared field values if the element is a span element. Will not return any label
+   * values if the element is a hidden input element.
+   * @param {ElementWithOpId<FormElement>} element
+   * @param {number} index
+   * @returns {Promise<AutofillField>}
+   * @private
+   */
+  private buildAutofillFieldItem = async (
     element: ElementWithOpId<FormElement>,
     index: number
   ): Promise<AutofillField> => {
-    const fieldOpid = `__${index}`;
-    element.opid = fieldOpid;
+    element.opid = `__${index}`;
 
     const autofillFieldBase = {
-      opid: fieldOpid,
+      opid: element.opid,
       elementNumber: index,
       maxLength: this.getAutofillFieldMaxLength(element),
-      viewable: await this.isElementCurrentlyViewable(element),
+      viewable: await this.autofillFieldVisibility.isFieldViewable(element),
       htmlID: this.getPropertyOrAttribute(element, "id"),
       htmlName: this.getPropertyOrAttribute(element, "name"),
       htmlClass: this.getPropertyOrAttribute(element, "class"),
@@ -136,15 +151,15 @@ class AutofillCollect {
       return autofillFieldBase;
     }
 
+    let autofillFieldLabels = {};
     const autoCompleteType =
       this.getPropertyOrAttribute(element, "x-autocompletetype") ||
       this.getPropertyOrAttribute(element, "autocompletetype") ||
       this.getPropertyOrAttribute(element, "autocomplete");
-    let autofillFieldLabels = {};
     const elementType = this.getPropertyOrAttribute(element, "type")?.toLowerCase();
     if (elementType !== "hidden") {
       autofillFieldLabels = {
-        "label-tag": this.getAutofillFieldLabelTag(element),
+        "label-tag": this.createAutofillFieldLabelTag(element),
         "label-data": this.getPropertyOrAttribute(element, "data-label"),
         "label-aria": this.getPropertyOrAttribute(element, "aria-label"),
         "label-top": this.createAutofillFieldTopLabel(element),
@@ -184,7 +199,7 @@ class AutofillCollect {
    * @returns {string}
    * @private
    */
-  private getAutofillFieldLabelTag(element: ElementWithOpId<FillableControl>): string {
+  private createAutofillFieldLabelTag(element: FillableControl): string {
     const labelElementsSet: Set<HTMLElement> = new Set(element.labels);
 
     if (labelElementsSet.size) {
@@ -214,6 +229,14 @@ class AutofillCollect {
     return this.createLabelElementsTag(labelElementsSet);
   }
 
+  /**
+   * Queries the DOM for label elements associated with the given element
+   * by id or name. Returns a NodeList of label elements or null if none
+   * are found.
+   * @param {FillableControl} element
+   * @returns {NodeListOf<HTMLLabelElement> | null}
+   * @private
+   */
   private queryElementLabels(element: FillableControl): NodeListOf<HTMLLabelElement> | null {
     let labelQuerySelectors = element.id ? `label[for="${element.id}"]` : "";
     if (element.name) {
@@ -249,24 +272,38 @@ class AutofillCollect {
       .join("");
   };
 
-  private getAutofillFieldMaxLength(element: ElementWithOpId<FormElement>): number | null {
+  /**
+   * Gets the maxLength property of the passed FormElement and
+   * returns the value or null if the element does not have a
+   * maxLength property. If the element has a maxLength property
+   * greater than 999, it will return 999.
+   * @param {FormElement} element
+   * @returns {number | null}
+   * @private
+   */
+  private getAutofillFieldMaxLength(element: FormElement): number | null {
     const elementHasMaxLengthProperty =
       element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
-    let elementMaxLength =
-      elementHasMaxLengthProperty && Number(element.maxLength) > -1
-        ? Number(element.maxLength)
-        : 999;
-    elementMaxLength = Math.min(elementMaxLength, 999);
+    const elementMaxLength =
+      elementHasMaxLengthProperty && element.maxLength > -1 ? element.maxLength : 999;
 
-    return elementMaxLength !== 999 ? elementMaxLength : null;
+    return elementHasMaxLengthProperty ? Math.min(elementMaxLength, 999) : null;
   }
 
-  private createAutofillFieldRightLabel(element: ElementWithOpId<FormElement>): string {
+  /**
+   * Iterates over the next siblings of the passed element and
+   * returns a string of the text content of each element. Will
+   * stop iterating if it encounters a new section element.
+   * @param {FormElement} element
+   * @returns {string}
+   * @private
+   */
+  private createAutofillFieldRightLabel(element: FormElement): string {
     const labelTextContent: string[] = [];
-    let currentElement = element;
+    let currentElement: ChildNode = element;
 
-    while (currentElement && currentElement.nextElementSibling) {
-      currentElement = currentElement.nextElementSibling as ElementWithOpId<HTMLElement>;
+    while (currentElement && currentElement.nextSibling) {
+      currentElement = currentElement.nextSibling;
       if (this.isNewSectionElement(currentElement)) {
         break;
       }
@@ -280,7 +317,14 @@ class AutofillCollect {
     return labelTextContent.join("");
   }
 
-  private createAutofillFieldLeftLabel(element: ElementWithOpId<FormElement>): string {
+  /**
+   * Recursively gets the text content from an element's previous siblings
+   * and returns a string of the text content of each element.
+   * @param {FormElement} element
+   * @returns {string}
+   * @private
+   */
+  private createAutofillFieldLeftLabel(element: FormElement): string {
     const labelTextContent: string[] = this.recursivelyGetTextFromPreviousSiblings(element);
 
     return labelTextContent.reverse().join("");
@@ -291,11 +335,11 @@ class AutofillCollect {
    * table structure. Queries the previous sibling of the parent row that
    * the input element is in and returns the text content of the cell that
    * is in the same column as the input element.
-   * @param {ElementWithOpId<FormElement>} element
+   * @param {FormElement} element
    * @returns {string | null}
    * @private
    */
-  private createAutofillFieldTopLabel(element: ElementWithOpId<FormElement>): string | null {
+  private createAutofillFieldTopLabel(element: FormElement): string | null {
     const tableDataElement = element.closest("td");
     if (!tableDataElement) {
       return null;
@@ -463,8 +507,10 @@ class AutofillCollect {
     }
 
     if (elementType === "hidden") {
-      return elementValue.length > 254
-        ? `${elementValue.substring(0, 254)}...SNIPPED`
+      const inputValueMaxLength = 254;
+
+      return elementValue.length > inputValueMaxLength
+        ? `${elementValue.substring(0, inputValueMaxLength)}...SNIPPED`
         : elementValue;
     }
 
@@ -490,168 +536,6 @@ class AutofillCollect {
     });
 
     return { options };
-  }
-
-  private async isElementCurrentlyViewable(element: FormElement): Promise<boolean> {
-    // If the element is not intersecting, it is not viewable.
-    const elementObserverEntry = await this.getElementIntersectionObserverEntry(element);
-    if (!elementObserverEntry.isIntersecting) {
-      return false;
-    }
-
-    const targetElement = elementObserverEntry.target as FormElement;
-    const targetElementDocument = targetElement.ownerDocument;
-    const elementBoundingClientRect = elementObserverEntry.boundingClientRect;
-    if (this.isElementAbsentFromViewport(targetElementDocument, elementBoundingClientRect)) {
-      return false;
-    }
-
-    if (this.isElementHiddenByCss(targetElement)) {
-      return false;
-    }
-
-    return this.targetElementIsNotHiddenBehindAnotherElement(
-      targetElement,
-      targetElementDocument,
-      elementBoundingClientRect
-    );
-  }
-
-  // Check the bounds of the element against the element's owner document's viewport. If the
-  // element size is too small or the element is overflowing the viewport, it is not viewable.
-  private isElementAbsentFromViewport(
-    targetElementDocument: Document,
-    elementBoundingClientRect: DOMRectReadOnly
-  ): boolean {
-    const documentElement = targetElementDocument.documentElement;
-    const documentElementHeight = documentElement.scrollHeight;
-    const documentElementWidth = documentElement.scrollWidth;
-    const elementTopOffset = elementBoundingClientRect.top - documentElement.clientTop;
-    const elementLeftOffset = elementBoundingClientRect.left - documentElement.clientLeft;
-    const isElementSizeInsufficient =
-      elementBoundingClientRect.width < 10 || elementBoundingClientRect.height < 10;
-    const isElementOverflowingLeftViewport = elementLeftOffset < 0;
-    const isElementOverflowingRightViewport =
-      elementLeftOffset + elementBoundingClientRect.width > documentElementWidth;
-    const isElementOverflowingTopViewport = elementTopOffset < 0;
-    const isElementOverflowingBottomViewport =
-      elementTopOffset + elementBoundingClientRect.height > documentElementHeight;
-
-    return (
-      isElementSizeInsufficient ||
-      isElementOverflowingLeftViewport ||
-      isElementOverflowingRightViewport ||
-      isElementOverflowingTopViewport ||
-      isElementOverflowingBottomViewport
-    );
-  }
-
-  /**
-   * Check if the target element is hidden using CSS. This is done by checking the opacity, display,
-   * visibility, and clip-path CSS properties of the element. We also check the opacity of all
-   * parent elements to ensure that the target element is not hidden by a parent element.
-   * @param {FormElement} targetElement
-   * @returns {boolean}
-   * @private
-   */
-  private isElementHiddenByCss(targetElement: FormElement): boolean {
-    const targetElementDocument = targetElement.ownerDocument;
-    const targetElementWindow = targetElementDocument.defaultView || window;
-    const documentElement = targetElementDocument.documentElement;
-    let cachedComputedStyle: CSSStyleDeclaration | null = null;
-    const getElementStyle = (element: FormElement, styleProperty: string): string =>
-      element.style.getPropertyValue(styleProperty) ||
-      getCachedComputedStyle(element).getPropertyValue(styleProperty);
-    const getCachedComputedStyle = (element: FormElement): CSSStyleDeclaration => {
-      if (!cachedComputedStyle) {
-        cachedComputedStyle = targetElementWindow.getComputedStyle(element);
-      }
-
-      return cachedComputedStyle;
-    };
-    const isElementInvisible = () => getElementStyle(targetElement, "opacity") === "0";
-    const isElementNotDisplayed = () => getElementStyle(targetElement, "display") === "none";
-    const isElementNotVisible = () =>
-      new Set(["hidden", "collapse"]).has(getElementStyle(targetElement, "visibility"));
-    const isElementClippedByPath = () =>
-      new Set([
-        "circle(0)",
-        "circle(0px)",
-        "circle(0px at 50% 50%)",
-        "polygon(0 0, 0 0, 0 0, 0 0)",
-        "polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px)",
-      ]).has(getElementStyle(targetElement, "clipPath"));
-    if (
-      isElementInvisible() ||
-      isElementNotDisplayed() ||
-      isElementNotVisible() ||
-      isElementClippedByPath()
-    ) {
-      return true;
-    }
-
-    // Check parent elements to identify if the element is invisible through a zero opacity.
-    let parentElement = targetElement.parentElement;
-    while (parentElement && parentElement !== documentElement) {
-      cachedComputedStyle = null;
-      const isParentElementInvisible = getElementStyle(targetElement, "opacity") === "0";
-      if (isParentElementInvisible) {
-        return true;
-      }
-
-      parentElement = parentElement.parentElement;
-    }
-
-    return false;
-  }
-
-  private targetElementIsNotHiddenBehindAnotherElement(
-    targetElement: FormElement,
-    targetElementDocument: Document,
-    elementBoundingClientRect: DOMRectReadOnly
-  ): boolean {
-    // If the element is intersecting, we need to check if it is actually visible on the page. Check the center
-    // point of the element and use elementFromPoint to see if the element is actually returned as the
-    // element at that point. If it is not, the element is not viewable.
-    let elementAtCenterPoint = targetElementDocument.elementFromPoint(
-      elementBoundingClientRect.left + elementBoundingClientRect.width / 2,
-      elementBoundingClientRect.top + elementBoundingClientRect.height / 2
-    );
-
-    //  If the element at the center point is a label, check if the label is for the element.
-    //  If it is, the element is viewable. If it is not, the element is not viewable.
-    while (
-      elementAtCenterPoint &&
-      elementAtCenterPoint !== targetElement &&
-      elementAtCenterPoint instanceof HTMLLabelElement
-    ) {
-      const labelForAttribute = elementAtCenterPoint.getAttribute("for");
-      const elementAssignedToLabel = targetElementDocument.getElementById(labelForAttribute);
-
-      // TODO - Think through cases where a label is a parent of an element and it is implicitly assigned to the label.
-      if (elementAssignedToLabel === targetElement) {
-        return true;
-      }
-
-      elementAtCenterPoint = elementAtCenterPoint.closest("label");
-    }
-
-    return elementAtCenterPoint === targetElement;
-  }
-
-  private async getElementIntersectionObserverEntry(
-    element: FormElement
-  ): Promise<IntersectionObserverEntry> {
-    return new Promise((resolve) => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          resolve(entries[0]);
-          observer.disconnect();
-        },
-        { root: element.ownerDocument }
-      );
-      observer.observe(element);
-    });
   }
 }
 

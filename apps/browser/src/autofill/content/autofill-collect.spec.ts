@@ -44,7 +44,7 @@ describe("AutofillCollect", function () {
       `;
       jest.spyOn(autofillCollect, "buildAutofillFormsData");
       jest.spyOn(autofillCollect, "buildAutofillFieldsData");
-      jest.spyOn(autofillCollect, "isElementCurrentlyViewable").mockResolvedValue(true);
+      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
 
       const pageDetails = await autofillCollect.getPageDetails();
 
@@ -67,7 +67,7 @@ describe("AutofillCollect", function () {
           {
             opid: "__0",
             elementNumber: 0,
-            maxLength: null,
+            maxLength: 999,
             viewable: true,
             htmlID: usernameFieldId,
             htmlName: usernameFieldName,
@@ -99,7 +99,7 @@ describe("AutofillCollect", function () {
           {
             opid: "__1",
             elementNumber: 1,
-            maxLength: null,
+            maxLength: 999,
             viewable: true,
             htmlID: passwordFieldId,
             htmlName: passwordFieldName,
@@ -180,16 +180,127 @@ describe("AutofillCollect", function () {
     });
   });
 
+  describe("buildAutofillFieldsData", function () {
+    it("returns a promise containing an array of AutofillField objects", async function () {
+      jest.spyOn(autofillCollect, "getAutofillFieldElements");
+      jest.spyOn(autofillCollect, "buildAutofillFieldItem");
+      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+
+      const autofillFieldsPromise = autofillCollect["buildAutofillFieldsData"]();
+      const autofillFieldsData = await Promise.resolve(autofillFieldsPromise);
+
+      expect(autofillCollect["getAutofillFieldElements"]).toHaveBeenCalledWith(50);
+      expect(autofillCollect["buildAutofillFieldItem"]).toHaveBeenCalledTimes(2);
+      expect(autofillFieldsPromise).toBeInstanceOf(Promise);
+      expect(autofillFieldsData).toStrictEqual([
+        {
+          "aria-disabled": false,
+          "aria-haspopup": false,
+          "aria-hidden": false,
+          autoCompleteType: "",
+          checked: false,
+          "data-stripe": null,
+          disabled: false,
+          elementNumber: 0,
+          form: null,
+          htmlClass: null,
+          htmlID: "username",
+          htmlName: "",
+          "label-aria": null,
+          "label-data": null,
+          "label-left": "",
+          "label-right": "",
+          "label-tag": "",
+          "label-top": null,
+          maxLength: 999,
+          opid: "__0",
+          placeholder: "",
+          readonly: false,
+          rel: null,
+          selectInfo: null,
+          tabindex: null,
+          tagName: "input",
+          title: "",
+          type: "text",
+          value: "",
+          viewable: true,
+        },
+        {
+          "aria-disabled": false,
+          "aria-haspopup": false,
+          "aria-hidden": false,
+          autoCompleteType: "",
+          checked: false,
+          "data-stripe": null,
+          disabled: false,
+          elementNumber: 1,
+          form: null,
+          htmlClass: null,
+          htmlID: "",
+          htmlName: "",
+          "label-aria": null,
+          "label-data": null,
+          "label-left": "",
+          "label-right": "",
+          "label-tag": "",
+          "label-top": null,
+          maxLength: 999,
+          opid: "__1",
+          placeholder: "",
+          readonly: false,
+          rel: null,
+          selectInfo: null,
+          tabindex: null,
+          tagName: "input",
+          title: "",
+          type: "password",
+          value: "",
+          viewable: true,
+        },
+      ]);
+    });
+  });
+
   describe("getAutofillFieldElements", function () {
     it("returns all form elements from the targeted document if no limit is set", function () {
-      document.body.innerHTML = mockLoginForm;
+      document.body.innerHTML = `
+      <div id="root">
+        <form>
+          <label for="username">Username</label>
+          <input type="text" id="username" />
+          <label for="password">Password</label>
+          <input type="password" />
+          <label for="comments">Comments</label>
+          <textarea id="comments"></textarea>
+          <label for="select">Select</label>
+          <select id="select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+          <span data-bwautofill="true">Span Element</span>
+        </form>
+      </div>
+      `;
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.querySelector('input[type="password"]');
+      const commentsTextarea = document.getElementById("comments");
+      const selectElement = document.getElementById("select");
+      const spanElement = document.querySelector('span[data-bwautofill="true"]');
+      jest.spyOn(document, "querySelectorAll");
+      jest.spyOn(autofillCollect, "getPropertyOrAttribute");
 
       const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
-      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
 
-      expect(elementStringsToCheck).toEqual([
-        '<input type="text" id="username">',
-        '<input type="password">',
+      expect(document.querySelectorAll).toHaveBeenCalledWith(
+        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), textarea:not([data-bwignore]), select:not([data-bwignore]), span[data-bwautofill]'
+      );
+      expect(autofillCollect["getPropertyOrAttribute"]).not.toHaveBeenCalled();
+      expect(formElements).toEqual([
+        usernameInput,
+        passwordInput,
+        commentsTextarea,
+        selectElement,
+        spanElement,
       ]);
     });
 
@@ -206,14 +317,23 @@ describe("AutofillCollect", function () {
           <span data-bwautofill="true">another included span</span>
         </div>
       `;
+      const spanElement = document.querySelector("span[data-bwautofill='true']");
+      const textAreaInput = document.querySelector("textarea");
+      jest.spyOn(autofillCollect, "getPropertyOrAttribute");
 
       const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"](2);
-      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
 
-      expect(elementStringsToCheck).toEqual([
-        '<span data-bwautofill="true">included span</span>',
-        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
-      ]);
+      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+        1,
+        spanElement,
+        "type"
+      );
+      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+        2,
+        textAreaInput,
+        "type"
+      );
+      expect(formElements).toEqual([spanElement, textAreaInput]);
     });
 
     it("returns form elements from the targeted document, ignoring input types `hidden`, `submit`, `reset`, `button`, `image`, `file`, and inputs tagged with `data-bwignore`, while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit", function () {
@@ -234,7 +354,7 @@ describe("AutofillCollect", function () {
               <label for="option-c">Option C: Options A & B</label>
             </div>
           </fieldset>
-          <span data-bwautofill="true">included span</span>
+          <span data-bwautofill="true" id="first-span">included span</span>
           <textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>
           <span>ignored span</span>
           <input type="checkbox" name="doYouWantToCheck" />
@@ -250,24 +370,33 @@ describe("AutofillCollect", function () {
           <input type="file" multiple id="returned" />
           <input type="text" id="username" />
           <input type="password" />
-          <span data-bwautofill="true">another included span</span>
+          <span data-bwautofill="true" id="second-span">another included span</span>
         </div>
       `;
+      const inputRadioA = document.querySelector('input[type="radio"][value="option-a"]');
+      const inputRadioB = document.querySelector('input[type="radio"][value="option-b"]');
+      const inputRadioC = document.querySelector('input[type="radio"][value="option-c"]');
+      const firstSpan = document.getElementById("first-span");
+      const textAreaInput = document.querySelector("textarea");
+      const checkboxInput = document.querySelector('input[type="checkbox"]');
+      const selectElement = document.querySelector("select");
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.querySelector('input[type="password"]');
+      const secondSpan = document.getElementById("second-span");
 
       const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
-      const elementStringsToCheck = formElements.map(({ outerHTML }) => outerHTML);
 
-      expect(elementStringsToCheck).toEqual([
-        '<input type="radio" value="option-a">',
-        '<input type="radio" value="option-b">',
-        '<input type="radio" value="option-c">',
-        '<span data-bwautofill="true">included span</span>',
-        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
-        '<input type="checkbox" name="doYouWantToCheck">',
-        '<select><option value="1">Option 1</option></select>',
-        '<input type="text" id="username">',
-        '<input type="password">',
-        '<span data-bwautofill="true">another included span</span>',
+      expect(formElements).toEqual([
+        inputRadioA,
+        inputRadioB,
+        inputRadioC,
+        firstSpan,
+        textAreaInput,
+        checkboxInput,
+        selectElement,
+        usernameInput,
+        passwordInput,
+        secondSpan,
       ]);
     });
 
@@ -300,26 +429,251 @@ describe("AutofillCollect", function () {
           <span data-bwautofill="true">another included span</span>
         </div>
       `;
+      const textAreaInput = document.querySelector("textarea");
+      const selectElement = document.querySelector("select");
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.querySelector('input[type="password"]');
+      const includedSpan = document.querySelector('span[data-bwautofill="true"]');
+      const checkboxInput = document.querySelector('input[type="checkbox"]');
+      const inputRadioA = document.querySelector('input[type="radio"][value="option-a"]');
+      const inputRadioB = document.querySelector('input[type="radio"][value="option-b"]');
 
       const truncatedFormElements: FormElement[] = autofillCollect["getAutofillFieldElements"](8);
-      const truncatedElementStringsToCheck = truncatedFormElements.map(
-        ({ outerHTML }) => outerHTML
-      );
 
-      expect(truncatedElementStringsToCheck).toEqual([
-        '<textarea name="user-bio" rows="10" cols="42">Tell us about yourself...</textarea>',
-        '<select><option value="1">Option 1</option></select>',
-        '<input type="text" id="username">',
-        '<input type="password">',
-        '<span data-bwautofill="true">another included span</span>',
-        '<input type="checkbox" name="doYouWantToCheck">',
-        '<input type="radio" value="option-a">',
-        '<input type="radio" value="option-b">',
+      expect(truncatedFormElements).toEqual([
+        textAreaInput,
+        selectElement,
+        usernameInput,
+        passwordInput,
+        includedSpan,
+        checkboxInput,
+        inputRadioA,
+        inputRadioB,
       ]);
     });
   });
 
-  describe("getAutofillFieldLabelTag", function () {
+  describe("buildAutofillFieldItem", function () {
+    it("returns the AutofillField base data values without the field labels or input values if the passed element is a span element", async function () {
+      const index = 0;
+      const spanElementId = "span-element";
+      const spanElementClasses = "span element classes";
+      const spanElementTabIndex = 0;
+      const spanElementTitle = "Span Element Title";
+      document.body.innerHTML = `
+        <span id="${spanElementId}" class="${spanElementClasses}" tabindex="${spanElementTabIndex}" title="${spanElementTitle}">Span Element</span>
+      `;
+      const spanElement = document.getElementById(spanElementId) as FormElement;
+      jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
+      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest.spyOn(autofillCollect, "getPropertyOrAttribute");
+      jest.spyOn(autofillCollect, "getElementValue");
+
+      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](spanElement, index);
+
+      expect(autofillCollect.getAutofillFieldMaxLength).toHaveBeenCalledWith(spanElement);
+      expect(autofillCollect.domVisibility.isElementViewable).toHaveBeenCalledWith(spanElement);
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(1, spanElement, "id");
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
+        2,
+        spanElement,
+        "name"
+      );
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
+        3,
+        spanElement,
+        "class"
+      );
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
+        4,
+        spanElement,
+        "tabindex"
+      );
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
+        5,
+        spanElement,
+        "title"
+      );
+      expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
+        6,
+        spanElement,
+        "tagName"
+      );
+      expect(autofillCollect.getElementValue).not.toHaveBeenCalled();
+      expect(autofillFieldItem).toEqual({
+        elementNumber: index,
+        htmlClass: spanElementClasses,
+        htmlID: spanElementId,
+        htmlName: null,
+        maxLength: null,
+        opid: `__${index}`,
+        tabindex: String(spanElementTabIndex),
+        tagName: spanElement.tagName.toLowerCase(),
+        title: spanElementTitle,
+        viewable: true,
+      });
+    });
+
+    it("returns the AutofillField base data, label data, and input element data", async function () {
+      const index = 0;
+      const usernameField = {
+        labelText: "Username",
+        id: "username-id",
+        classes: "username input classes",
+        name: "username",
+        type: "text",
+        maxLength: 42,
+        tabIndex: 0,
+        title: "Username Input Title",
+        autocomplete: "username-autocomplete",
+        dataLabel: "username-data-label",
+        ariaLabel: "username-aria-label",
+        placeholder: "username-placeholder",
+        rel: "username-rel",
+        value: "username-value",
+        dataStripe: "data-stripe",
+      };
+      document.body.innerHTML = `
+        <form>
+          <label for="${usernameField.id}">${usernameField.labelText}</label>
+          <input
+            id="${usernameField.id}"
+            class="${usernameField.classes}"
+            name="${usernameField.name}"
+            type="${usernameField.type}"
+            maxlength="${usernameField.maxLength}"
+            tabindex="${usernameField.tabIndex}"
+            title="${usernameField.title}"
+            autocomplete="${usernameField.autocomplete}"
+            data-label="${usernameField.dataLabel}"
+            aria-label="${usernameField.ariaLabel}"
+            placeholder="${usernameField.placeholder}"
+            rel="${usernameField.rel}"
+            value="${usernameField.value}"
+            data-stripe="${usernameField.dataStripe}"
+          />
+        </form>
+      `;
+      const formElement = document.querySelector("form");
+      formElement.opid = "form-opid";
+      const usernameInput = document.getElementById(usernameField.id) as FillableControl;
+      jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
+      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest.spyOn(autofillCollect, "getPropertyOrAttribute");
+      jest.spyOn(autofillCollect, "getElementValue");
+
+      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](
+        usernameInput,
+        index
+      );
+
+      expect(autofillFieldItem).toEqual({
+        "aria-disabled": false,
+        "aria-haspopup": false,
+        "aria-hidden": false,
+        autoCompleteType: usernameField.autocomplete,
+        checked: false,
+        "data-stripe": usernameField.dataStripe,
+        disabled: false,
+        elementNumber: index,
+        form: formElement.opid,
+        htmlClass: usernameField.classes,
+        htmlID: usernameField.id,
+        htmlName: usernameField.name,
+        "label-aria": usernameField.ariaLabel,
+        "label-data": usernameField.dataLabel,
+        "label-left": usernameField.labelText,
+        "label-right": "",
+        "label-tag": usernameField.labelText,
+        "label-top": null,
+        maxLength: usernameField.maxLength,
+        opid: `__${index}`,
+        placeholder: usernameField.placeholder,
+        readonly: false,
+        rel: usernameField.rel,
+        selectInfo: null,
+        tabindex: String(usernameField.tabIndex),
+        tagName: usernameInput.tagName.toLowerCase(),
+        title: usernameField.title,
+        type: usernameField.type,
+        value: usernameField.value,
+        viewable: true,
+      });
+    });
+
+    it("returns the AutofillField base data and input element data, but not the label data if the input element is of type `hidden`", async function () {
+      const index = 0;
+      const hiddenField = {
+        labelText: "Hidden Field",
+        id: "hidden-id",
+        classes: "hidden input classes",
+        name: "hidden",
+        type: "hidden",
+        maxLength: 42,
+        tabIndex: 0,
+        title: "Hidden Input Title",
+        autocomplete: "off",
+        rel: "hidden-rel",
+        value: "hidden-value",
+        dataStripe: "data-stripe",
+      };
+      document.body.innerHTML = `
+        <form>
+          <label for="${hiddenField.id}">${hiddenField.labelText}</label>
+          <input
+            id="${hiddenField.id}"
+            class="${hiddenField.classes}"
+            name="${hiddenField.name}"
+            type="${hiddenField.type}"
+            maxlength="${hiddenField.maxLength}"
+            tabindex="${hiddenField.tabIndex}"
+            title="${hiddenField.title}"
+            autocomplete="${hiddenField.autocomplete}"
+            rel="${hiddenField.rel}"
+            value="${hiddenField.value}"
+            data-stripe="${hiddenField.dataStripe}"
+          />
+        </form>
+      `;
+      const formElement = document.querySelector("form");
+      formElement.opid = "form-opid";
+      const hiddenInput = document.getElementById(hiddenField.id) as FillableControl;
+      jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
+      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest.spyOn(autofillCollect, "getPropertyOrAttribute");
+      jest.spyOn(autofillCollect, "getElementValue");
+
+      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](hiddenInput, index);
+
+      expect(autofillFieldItem).toEqual({
+        "aria-disabled": false,
+        "aria-haspopup": false,
+        "aria-hidden": false,
+        autoCompleteType: null,
+        checked: false,
+        "data-stripe": hiddenField.dataStripe,
+        disabled: false,
+        elementNumber: index,
+        form: formElement.opid,
+        htmlClass: hiddenField.classes,
+        htmlID: hiddenField.id,
+        htmlName: hiddenField.name,
+        maxLength: hiddenField.maxLength,
+        opid: `__${index}`,
+        readonly: false,
+        rel: hiddenField.rel,
+        selectInfo: null,
+        tabindex: String(hiddenField.tabIndex),
+        tagName: hiddenInput.tagName.toLowerCase(),
+        title: hiddenField.title,
+        type: hiddenField.type,
+        value: hiddenField.value,
+        viewable: true,
+      });
+    });
+  });
+
+  describe("createAutofillFieldLabelTag", function () {
     beforeEach(function () {
       jest.spyOn(autofillCollect, "createLabelElementsTag");
       jest.spyOn(document, "querySelectorAll");
@@ -333,7 +687,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set(element.labels));
       expect(document.querySelectorAll).not.toHaveBeenCalled();
@@ -348,7 +702,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#country-id") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-id']");
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
@@ -363,7 +717,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("select") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).not.toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.name}"]`);
@@ -380,7 +734,7 @@ describe("AutofillCollect", function () {
       element.name = "country-name";
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(
         `label[for="${element.id}"], label[for="${element.name}"]`
@@ -397,7 +751,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = element.parentElement;
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
@@ -415,7 +769,7 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = document.querySelector("#label-element");
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(autofillCollect.createLabelElementsTag).toHaveBeenCalledWith(new Set([elementLabel]));
       expect(labelTag).toEqual("Username");
@@ -427,9 +781,320 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["getAutofillFieldLabelTag"](element);
+      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
 
       expect(labelTag).toEqual("");
+    });
+  });
+
+  describe("queryElementLabels", function () {
+    it("returns null if the passed element has no id or name", function () {
+      document.body.innerHTML = `
+        <label for="username-id">
+          Username
+          <input type="text">
+        </label>
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labels = autofillCollect["queryElementLabels"](element);
+
+      expect(labels).toBeNull();
+    });
+
+    it("returns an empty NodeList if the passed element has no label", function () {
+      document.body.innerHTML = `
+        <input type="text" id="username-id">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labels = autofillCollect["queryElementLabels"](element);
+
+      expect(labels).toEqual(document.querySelectorAll("label"));
+    });
+
+    it("returns the label of an element associated with its ID value", function () {
+      document.body.innerHTML = `
+        <label for="username-id">Username</label>
+        <input type="text" id="username-id">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labels = autofillCollect["queryElementLabels"](element);
+
+      expect(labels).toEqual(document.querySelectorAll("label[for='username-id']"));
+    });
+
+    it("returns the label of an element associated with its name value", function () {
+      document.body.innerHTML = `
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username-id">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labels = autofillCollect["queryElementLabels"](element);
+
+      expect(labels).toEqual(document.querySelectorAll("label[for='username']"));
+    });
+  });
+
+  describe("createLabelElementsTag", function () {
+    it("returns a string containing all the labels associated with a given input element", function () {
+      const firstLabelText = "Username by name";
+      const secondLabelText = "Username by ID";
+      document.body.innerHTML = `
+        <label for="username">${firstLabelText}</label>
+        <label for="username-id">${secondLabelText}</label>
+        <input type="text" name="username" id="username-id">
+      `;
+      const labels = document.querySelectorAll("label");
+      jest.spyOn(autofillCollect, "trimAndRemoveNonPrintableText");
+
+      const labelTag = autofillCollect["createLabelElementsTag"](new Set(labels));
+
+      expect(autofillCollect.trimAndRemoveNonPrintableText).toHaveBeenNthCalledWith(
+        1,
+        firstLabelText
+      );
+      expect(autofillCollect.trimAndRemoveNonPrintableText).toHaveBeenNthCalledWith(
+        2,
+        secondLabelText
+      );
+      expect(labelTag).toEqual(`${firstLabelText}${secondLabelText}`);
+    });
+  });
+
+  describe("getAutofillFieldMaxLength", function () {
+    it("returns null if the passed FormElement is not an element type that has a max length property", function () {
+      document.body.innerHTML = `
+        <select name="country">
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+        </select>
+      `;
+      const element = document.querySelector("select") as FillableControl;
+
+      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+
+      expect(maxLength).toBeNull();
+    });
+
+    it("returns a value of 999 if the passed FormElement has no set maxLength value", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+
+      expect(maxLength).toEqual(999);
+    });
+
+    it("returns a value of 999 if the passed FormElement has a maxLength value higher than 999", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" maxlength="1000">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+
+      expect(maxLength).toEqual(999);
+    });
+
+    it("returns the maxLength property of a passed FormElement", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" maxlength="10">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+
+      expect(maxLength).toEqual(10);
+    });
+  });
+
+  describe("createAutofillFieldRightLabel", function () {
+    it("returns an empty string if no siblings are found", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username">
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+
+      expect(labelTag).toEqual("");
+    });
+
+    it("returns the text content of the element's next sibling element", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username-id">
+        <label for="username-id">Username</label>
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+
+      expect(labelTag).toEqual("Username");
+    });
+
+    it("returns the text content of the element's next sibling textNode", function () {
+      document.body.innerHTML = `
+        <input type="text" name="username" id="username-id">
+        Username
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+
+      expect(labelTag).toEqual("Username");
+    });
+  });
+
+  describe("createAutofillFieldLeftLabel", function () {
+    it("returns a string value of the text content associated with the previous siblings of the passed element", function () {
+      document.body.innerHTML = `
+        <div>
+          <span>Text Content</span>
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username-id">
+        </div>
+      `;
+      const element = document.querySelector("input") as FillableControl;
+
+      const labelTag = autofillCollect["createAutofillFieldLeftLabel"](element);
+
+      expect(labelTag).toEqual("Text ContentUsername");
+    });
+  });
+
+  describe("createAutofillFieldTopLabel", function () {
+    it("returns the table column header value for the passed table element", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Login code</th>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual("Password");
+    });
+
+    it("will attempt to return the value for the previous sibling row as the label if a `th` cell is not found", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+              <td>Login code</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="auth-code"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual("Login code");
+    });
+
+    it("returns null for the passed table element it's parent row has no previous sibling row", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
+    });
+
+    it("returns null if the input element is not structured within a `td` element", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+              <td>Login code</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <div><input type="password" name="password" /></div>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="password"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
+    });
+
+    it("returns null if the index of the `td` element is larger than the length of cells in the sibling row", function () {
+      document.body.innerHTML = `
+        <table>
+          <tbody>
+            <tr>
+              <td>Username</td>
+              <td>Password</td>
+            </tr>
+            <tr>
+              <td><input type="text" name="username" /></td>
+              <td><input type="password" name="password" /></td>
+              <td><input type="text" name="auth-code" /></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+      const targetTableCellInput = document.querySelector(
+        'input[name="auth-code"]'
+      ) as HTMLInputElement;
+
+      const targetTableCellLabel =
+        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+
+      expect(targetTableCellLabel).toEqual(null);
     });
   });
 
@@ -787,222 +1452,6 @@ describe("AutofillCollect", function () {
         ],
       });
       expect(selectWithoutOptionsOptions).toEqual({ options: [] });
-    });
-  });
-
-  describe("createAutofillFieldTopLabel", function () {
-    it("returns the table column header value for the passed table element", function () {
-      document.body.innerHTML = `
-        <table>
-          <tbody>
-            <tr>
-              <th>Username</th>
-              <th>Password</th>
-              <th>Login code</th>
-            </tr>
-            <tr>
-              <td><input type="text" name="username" /></td>
-              <td><input type="password" name="password" /></td>
-              <td><input type="text" name="auth-code" /></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-      const targetTableCellInput = document.querySelector(
-        'input[name="password"]'
-      ) as HTMLInputElement;
-
-      const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
-
-      expect(targetTableCellLabel).toEqual("Password");
-    });
-
-    it("will attempt to return the value for the previous sibling row as the label if a `th` cell is not found", function () {
-      document.body.innerHTML = `
-        <table>
-          <tbody>
-            <tr>
-              <td>Username</td>
-              <td>Password</td>
-              <td>Login code</td>
-            </tr>
-            <tr>
-              <td><input type="text" name="username" /></td>
-              <td><input type="password" name="password" /></td>
-              <td><input type="text" name="auth-code" /></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-      const targetTableCellInput = document.querySelector(
-        'input[name="auth-code"]'
-      ) as HTMLInputElement;
-
-      const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
-
-      expect(targetTableCellLabel).toEqual("Login code");
-    });
-
-    it("returns null for the passed table element it's parent row has no previous sibling row", function () {
-      document.body.innerHTML = `
-        <table>
-          <tbody>
-            <tr>
-              <td><input type="text" name="username" /></td>
-              <td><input type="password" name="password" /></td>
-              <td><input type="text" name="auth-code" /></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-      const targetTableCellInput = document.querySelector(
-        'input[name="password"]'
-      ) as HTMLInputElement;
-
-      const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
-
-      expect(targetTableCellLabel).toEqual(null);
-    });
-
-    it("returns null if the input element is not structured within a `td` element", function () {
-      document.body.innerHTML = `
-        <table>
-          <tbody>
-            <tr>
-              <td>Username</td>
-              <td>Password</td>
-              <td>Login code</td>
-            </tr>
-            <tr>
-              <td><input type="text" name="username" /></td>
-              <div><input type="password" name="password" /></div>
-              <td><input type="text" name="auth-code" /></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-      const targetTableCellInput = document.querySelector(
-        'input[name="password"]'
-      ) as HTMLInputElement;
-
-      const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
-
-      expect(targetTableCellLabel).toEqual(null);
-    });
-
-    it("returns null if the index of the `td` element is larger than the length of cells in the sibling row", function () {
-      document.body.innerHTML = `
-        <table>
-          <tbody>
-            <tr>
-              <td>Username</td>
-              <td>Password</td>
-            </tr>
-            <tr>
-              <td><input type="text" name="username" /></td>
-              <td><input type="password" name="password" /></td>
-              <td><input type="text" name="auth-code" /></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-      const targetTableCellInput = document.querySelector(
-        'input[name="auth-code"]'
-      ) as HTMLInputElement;
-
-      const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
-
-      expect(targetTableCellLabel).toEqual(null);
-    });
-  });
-
-  describe("isElementHiddenByCss", function () {
-    it("returns true when a non-hidden element is passed", function () {
-      document.body.innerHTML = `
-        <input type="text" name="username" id="username" />
-      `;
-      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
-
-      const isElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
-
-      expect(isElementHidden).toEqual(false);
-    });
-
-    it("returns true when the element has a `visibility: hidden;` CSS rule applied to it either inline or in a computed style", function () {
-      document.body.innerHTML = `
-        <input type="text" name="username" id="username" style="visibility: hidden;" />
-        <input type="password" name="password" id="password" />
-        <style>
-          #password {
-            visibility: hidden;
-          }
-        </style>
-      `;
-      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
-      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
-      jest.spyOn(usernameElement.style, "getPropertyValue");
-      jest.spyOn(usernameElement.ownerDocument.defaultView, "getComputedStyle");
-      jest.spyOn(passwordElement.style, "getPropertyValue");
-      jest.spyOn(passwordElement.ownerDocument.defaultView, "getComputedStyle");
-
-      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
-      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
-
-      expect(isUsernameElementHidden).toEqual(true);
-      expect(usernameElement.style.getPropertyValue).toHaveBeenCalled();
-      expect(usernameElement.ownerDocument.defaultView.getComputedStyle).toHaveBeenCalledWith(
-        usernameElement
-      );
-      expect(isPasswordElementHidden).toEqual(true);
-      expect(passwordElement.style.getPropertyValue).toHaveBeenCalled();
-      expect(passwordElement.ownerDocument.defaultView.getComputedStyle).toHaveBeenCalledWith(
-        passwordElement
-      );
-    });
-
-    it("returns false when the element has a `display: none;` CSS rule applied to it either inline or in a computed style", function () {
-      document.body.innerHTML = `
-        <input type="text" name="username" id="username" style="display: none;" />
-        <input type="password" name="password" id="password" />
-        <style>
-          #password {
-            display: none;
-          }
-        </style>
-      `;
-      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
-      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
-
-      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
-      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
-
-      expect(isUsernameElementHidden).toEqual(true);
-      expect(isPasswordElementHidden).toEqual(true);
-    });
-
-    it("returns false when the element has a `opacity: 0;` CSS rule applied to it either inline or in a computed style", function () {
-      document.body.innerHTML = `
-        <input type="text" name="username" id="username" style="opacity: 0;" />
-        <input type="password" name="password" id="password" />
-        <style>
-          #password {
-            opacity: 0;
-          }
-        </style>
-      `;
-      const usernameElement = document.getElementById("username") as FormElementWithAttribute;
-      const passwordElement = document.getElementById("password") as FormElementWithAttribute;
-
-      const isUsernameElementHidden = autofillCollect["isElementHiddenByCss"](usernameElement);
-      const isPasswordElementHidden = autofillCollect["isElementHiddenByCss"](passwordElement);
-
-      expect(isUsernameElementHidden).toEqual(true);
-      expect(isPasswordElementHidden).toEqual(true);
     });
   });
 });

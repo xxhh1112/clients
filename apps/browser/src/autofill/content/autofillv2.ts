@@ -403,7 +403,7 @@ function fill(document: Document, fillScript: AutofillScript) {
     // let theOpIds: string[] = [];
     /** END DEAD CODE */
     const fillScriptProperties = fillScript.properties;
-    let operationDelayMs = 1;
+    let operationDelayMs = fillScript?.properties?.delay_between_operations || 1;
     /** DEAD CODE */
     // const operationsToDo: any[] = [];
     /** END DEAD CODE */

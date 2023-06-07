@@ -159,6 +159,7 @@ export function isElementVisible(element: any) {
   return theEl === document;
 }
 
+// CG - METHOD MIGRATED TO AutofillCollect.isElementCurrentlyViewable
 /**
  * Determine if the element is "viewable" on the screen.
  * "Viewable" is defined as being visible in the DOM and being within the confines of the viewport.
