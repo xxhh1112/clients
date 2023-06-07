@@ -18,10 +18,16 @@ export abstract class CryptoService {
 
   setUserKey: (key: UserSymKey) => Promise<void>;
   getUserKeyFromMemory: (userId?: string) => Promise<UserSymKey>;
-  getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserSymKey>;
+  getUserKeyFromStorage: (
+    keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
+    userId?: string
+  ) => Promise<UserSymKey>;
   hasUserKey: () => Promise<boolean>;
   hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
-  hasUserKeyStored: (keySuffix?: KeySuffixOptions, userId?: string) => Promise<boolean>;
+  hasUserKeyStored: (
+    keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
+    userId?: string
+  ) => Promise<boolean>;
   makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[UserSymKey, EncString]>;
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;

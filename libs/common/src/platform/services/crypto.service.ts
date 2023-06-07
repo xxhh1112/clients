@@ -127,7 +127,10 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param userId The desired user
    * @returns True if the provided version of the user symmetric key is stored
    */
-  async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
+  async hasUserKeyStored(
+    keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
+    userId?: string
+  ): Promise<boolean> {
     switch (keySuffix) {
       case KeySuffixOptions.Auto:
         return (await this.stateService.getUserSymKeyAuto({ userId: userId })) != null;
