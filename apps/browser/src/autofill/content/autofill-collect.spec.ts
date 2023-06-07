@@ -44,7 +44,9 @@ describe("AutofillCollect", function () {
       `;
       jest.spyOn(autofillCollect, "buildAutofillFormsData");
       jest.spyOn(autofillCollect, "buildAutofillFieldsData");
-      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest
+        .spyOn(autofillCollect.autofillFieldVisibility, "isFieldViewable")
+        .mockResolvedValue(true);
 
       const pageDetails = await autofillCollect.getPageDetails();
 
@@ -184,7 +186,9 @@ describe("AutofillCollect", function () {
     it("returns a promise containing an array of AutofillField objects", async function () {
       jest.spyOn(autofillCollect, "getAutofillFieldElements");
       jest.spyOn(autofillCollect, "buildAutofillFieldItem");
-      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest
+        .spyOn(autofillCollect.autofillFieldVisibility, "isFieldViewable")
+        .mockResolvedValue(true);
 
       const autofillFieldsPromise = autofillCollect["buildAutofillFieldsData"]();
       const autofillFieldsData = await Promise.resolve(autofillFieldsPromise);
@@ -465,14 +469,18 @@ describe("AutofillCollect", function () {
       `;
       const spanElement = document.getElementById(spanElementId) as FormElement;
       jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
-      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest
+        .spyOn(autofillCollect.autofillFieldVisibility, "isFieldViewable")
+        .mockResolvedValue(true);
       jest.spyOn(autofillCollect, "getPropertyOrAttribute");
       jest.spyOn(autofillCollect, "getElementValue");
 
       const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](spanElement, index);
 
       expect(autofillCollect.getAutofillFieldMaxLength).toHaveBeenCalledWith(spanElement);
-      expect(autofillCollect.domVisibility.isElementViewable).toHaveBeenCalledWith(spanElement);
+      expect(autofillCollect.autofillFieldVisibility.isFieldViewable).toHaveBeenCalledWith(
+        spanElement
+      );
       expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(1, spanElement, "id");
       expect(autofillCollect.getPropertyOrAttribute).toHaveBeenNthCalledWith(
         2,
@@ -558,7 +566,9 @@ describe("AutofillCollect", function () {
       formElement.opid = "form-opid";
       const usernameInput = document.getElementById(usernameField.id) as FillableControl;
       jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
-      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest
+        .spyOn(autofillCollect.autofillFieldVisibility, "isFieldViewable")
+        .mockResolvedValue(true);
       jest.spyOn(autofillCollect, "getPropertyOrAttribute");
       jest.spyOn(autofillCollect, "getElementValue");
 
@@ -639,7 +649,9 @@ describe("AutofillCollect", function () {
       formElement.opid = "form-opid";
       const hiddenInput = document.getElementById(hiddenField.id) as FillableControl;
       jest.spyOn(autofillCollect, "getAutofillFieldMaxLength");
-      jest.spyOn(autofillCollect.domVisibility, "isElementViewable").mockResolvedValue(true);
+      jest
+        .spyOn(autofillCollect.autofillFieldVisibility, "isFieldViewable")
+        .mockResolvedValue(true);
       jest.spyOn(autofillCollect, "getPropertyOrAttribute");
       jest.spyOn(autofillCollect, "getElementValue");
 
