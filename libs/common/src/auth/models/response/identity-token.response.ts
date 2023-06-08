@@ -47,8 +47,10 @@ export class IdentityTokenResponse extends BaseResponse {
       this.getResponseProperty("MasterPasswordPolicy")
     );
 
-    this.userDecryptionOptions = new UserDecryptionOptionsResponse(
-      this.getResponseProperty("UserDecryptionOptions")
-    );
+    if (response.UserDecryptionOptions) {
+      this.userDecryptionOptions = new UserDecryptionOptionsResponse(
+        this.getResponseProperty("UserDecryptionOptions")
+      );
+    }
   }
 }
