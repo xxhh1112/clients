@@ -1,8 +1,7 @@
-import { TYPE_CHECK } from "../constants";
+import { EVENTS, TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
-import { FillableControl, FormElement } from "../types";
-import { setValueForElement, setValueForElementByEvent } from "../utils";
+import { FormElement } from "../types";
 
 import AutofillCollect from "./autofill-collect";
 
@@ -147,15 +146,60 @@ class AutofillInsert {
       return;
     }
 
-    setValueForElement(element as FillableControl);
+    this.simulateClickAndKeyboardEventsOnElement(element);
     callback(element);
-    setValueForElementByEvent(element as FillableControl);
+    this.simulateInputChangeEventOnElement(element);
+
     if (!this.canAnimateElement(element)) {
       return;
     }
 
     element.classList.add("com-bitwarden-browser-animated-fill");
     setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
+  }
+
+  // TODO - Think through whether this is a good idea or not... why are we simulating events? What purpose does it serve?
+  private simulateClickAndKeyboardEventsOnElement(element: FormElement): void {
+    const initialElementValue = "value" in element ? element.value : "";
+
+    this.triggerClickOnElement(element);
+    this.triggerFocusOnElement(element);
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYDOWN);
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYPRESS);
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYUP);
+
+    if ("value" in element && initialElementValue !== element.value) {
+      element.value = initialElementValue;
+    }
+  }
+
+  // TODO - Again, why are we simulating events? What purpose does it serve? Are we doing this in the correct order?
+  private simulateInputChangeEventOnElement(element: FormElement): void {
+    const autofilledValue = "value" in element ? element.value : "";
+
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYDOWN);
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYPRESS);
+    this.triggerKeyboardEventOnElement(element, EVENTS.KEYUP);
+    this.triggerEventOnElement(element, EVENTS.INPUT);
+    this.triggerEventOnElement(element, EVENTS.CHANGE);
+    element.blur();
+
+    if ("value" in element && autofilledValue !== element.value) {
+      element.value = autofilledValue;
+    }
+
+    // TODO - For instance, if we are inserting a value, an SPA is expecting an input event to be fired, but we are not firing it.
+    // This causes issues where the site attempts to do validation on the input, but the validation erases the value we just inserted.
+    this.triggerEventOnElement(element, EVENTS.INPUT);
+    this.triggerEventOnElement(element, EVENTS.CHANGE);
+  }
+
+  private triggerEventOnElement(element: FormElement, eventType: string): void {
+    element.dispatchEvent(new Event(eventType, { bubbles: true }));
+  }
+
+  private triggerKeyboardEventOnElement(element: HTMLElement, eventType: string): void {
+    element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }));
   }
 
   private triggerClickOnElement(element?: HTMLElement): void {

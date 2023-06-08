@@ -6,6 +6,7 @@ import {
   // selectAllFromDoc
 } from "./collect";
 
+// CG - METHOD MIGRATED TO AutofillInsert.urlNotSecure
 /**
  * Check if the action to autofill on the given page should be considered "secure"
  * @param {string[]} savedURLs
@@ -38,6 +39,7 @@ export function urlNotSecure(savedURLs?: string[] | null): boolean {
   return false;
 }
 
+// CG - DEPRECATE/REMOVE THIS METHOD
 /**
  * Normalize the event based on API support
  * @param {HTMLElement} element
@@ -69,6 +71,7 @@ function normalizeEvent(element: FillableControl, eventName: string) {
   return event;
 }
 
+// CG - MIGRATED TO AutofillInsert.simulateInputChangeEventOnElement
 /**
  * Simulate the entry of a value into an element by using events.
  * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
@@ -120,6 +123,7 @@ export function setValueForElementByEvent(element: FillableControl) {
 // }
 /** END DEAD CODE */
 
+// CG - MIGRATED TO AutofillInsert.triggerClickOnElement
 /**
  * Click on an element `element`
  * @param {HTMLElement} element
@@ -135,6 +139,7 @@ function clickElement(element: HTMLElement) {
   return true;
 }
 
+// CG - MIGRATED TO AutofillInsert.clickOnFieldByOpid
 /**
  * Do a click on the element with the given `opId`.
  * @param {string} opId
@@ -185,6 +190,7 @@ export function doClickByOpId(opId: string) {
 // }
 /** END DEAD CODEW */
 
+// CG - MIGRATED TO AutofillInsert.triggerFocusOnElement
 /**
  * Focus an element and optionally re-set its value after focusing
  * @param {HTMLElement} element
@@ -204,6 +210,7 @@ export function doFocusElement(element: FillableControl, shouldResetValue: boole
   }
 }
 
+// CG - MIGRATED TO AutofillInsert.focusOnFieldByOpid
 /**
  * Do a click and focus on the element with the given `opId`.
  * @param {string} opId
@@ -225,6 +232,7 @@ export function doFocusByOpId(opId: string): null {
   return null;
 }
 
+// CG - MIGRATED TO AutofillInsert.simulateClickAndKeyboardEventsOnElement
 /**
  * Simulate the entry of a value into an element.
  * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.
@@ -271,6 +279,7 @@ export function setValueForElement(element: FillableControl) {
 // }
 /** END DEAD CODE */
 
+// CG - DEPRECATE/REMOVE THIS METHOD
 /**
  * Add property `propertyKeyName` with `valueToSet` to `fieldRecord`.
  * @param {Record<string, any>} fieldRecord
