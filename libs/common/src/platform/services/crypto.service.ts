@@ -69,6 +69,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.storeAdditionalKeys(key, userId);
   }
 
+  async toggleKey(): Promise<void> {
+    const key = await this.getUserKeyFromMemory();
+    await this.setUserKey(key);
+  }
+
   /**
    * Retrieves the user's symmetric key
    * @param keySuffix The desired version of the user's key to retrieve
@@ -948,15 +953,8 @@ export class CryptoService implements CryptoServiceAbstraction {
     let userKey: string;
     switch (keySuffix) {
       case KeySuffixOptions.Auto: {
-        // migrate if needed
-        const oldAutoKey = await this.stateService.getCryptoMasterKeyAuto({ userId: userId });
-        if (oldAutoKey) {
-          await this.stateService.setUserSymKeyAuto(oldAutoKey, { userId: userId });
-          await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
-          userKey = oldAutoKey;
-        } else {
-          userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
-        }
+        await this.migrateAutoKeyIfNeeded(userId);
+        userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
         break;
       }
       case KeySuffixOptions.Biometric: {
@@ -965,6 +963,23 @@ export class CryptoService implements CryptoServiceAbstraction {
       }
     }
     return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+  }
+
+  private async migrateAutoKeyIfNeeded(userId?: string) {
+    const oldAutoKey = await this.stateService.getCryptoMasterKeyAuto({ userId: userId });
+    if (oldAutoKey) {
+      // decrypt
+      const masterKey = new SymmetricCryptoKey(
+        Utils.fromB64ToArray(oldAutoKey).buffer
+      ) as MasterKey;
+      const userSymKey = await this.decryptUserSymKeyWithMasterKey(
+        masterKey,
+        new EncString(await this.stateService.getEncryptedCryptoSymmetricKey())
+      );
+      // migrate
+      await this.stateService.setUserSymKeyAuto(userSymKey.keyB64, { userId: userId });
+      await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
+    }
   }
 
   private async stretchKey(key: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
@@ -1191,13 +1206,5 @@ export class CryptoService implements CryptoServiceAbstraction {
     if (!memoryOnly) {
       await this.stateService.setEncryptedCryptoSymmetricKey(null, { userId: userId });
     }
-  }
-
-  /**
-   * @deprecated we wouldn't be saving encrypted/decrypted versions of the user symmetric key
-   */
-  async toggleKey(): Promise<any> {
-    // const key = await this.getKey();
-    // await this.setKey(key);
   }
 }

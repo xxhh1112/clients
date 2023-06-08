@@ -17,6 +17,11 @@ export abstract class CryptoService {
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
   setUserKey: (key: UserSymKey) => Promise<void>;
+  /**
+   * Gets the user key from memory and sets it again,
+   * kicking off a refresh of any additional keys that are needed.
+   */
+  toggleKey: () => Promise<void>;
   getUserKeyFromMemory: (userId?: string) => Promise<UserSymKey>;
   getUserKeyFromStorage: (
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
@@ -117,5 +122,4 @@ export abstract class CryptoService {
   setEncKey: (encKey: string) => Promise<void>;
   hasEncKey: () => Promise<boolean>;
   clearEncKey: (memoryOnly?: boolean, userId?: string) => Promise<any>;
-  toggleKey: () => Promise<any>;
 }
