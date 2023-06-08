@@ -73,7 +73,8 @@ export abstract class CryptoService {
   makeKeyPair: (key?: SymmetricCryptoKey) => Promise<[string, EncString]>;
   clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<void[]>;
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
-  clearPinProtectedKey: () => Promise<void>;
+  clearPinProtectedKey: (userId?: string) => Promise<void>;
+  clearOldPinKeys: (userId?: string) => Promise<void>;
   /**
    * Decrypts the user's symmetric key with their pin
    * @param pin The user's PIN

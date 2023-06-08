@@ -50,6 +50,7 @@ export class SetPinComponent implements OnInit {
     } else {
       await this.stateService.setUserSymKeyPin(pinProtectedKey);
     }
+    await this.cryptoService.clearOldPinKeys();
 
     this.modalRef.close(true);
   }

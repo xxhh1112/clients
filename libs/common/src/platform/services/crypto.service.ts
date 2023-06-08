@@ -676,7 +676,12 @@ export class CryptoService implements CryptoServiceAbstraction {
    */
   async clearPinProtectedKey(userId?: string): Promise<void> {
     await this.stateService.setUserSymKeyPin(null, { userId: userId });
+    await this.clearOldPinKeys(userId);
+  }
+
+  async clearOldPinKeys(userId?: string): Promise<void> {
     await this.stateService.setEncryptedPinProtected(null, { userId: userId });
+    await this.stateService.setDecryptedPinProtected(null, { userId: userId });
   }
 
   async decryptUserSymKeyWithPin(
@@ -889,7 +894,6 @@ export class CryptoService implements CryptoServiceAbstraction {
       await this.stateService.setUserSymKeyAuto(key.keyB64, { userId: userId });
     } else {
       await this.stateService.setUserSymKeyAuto(null, { userId: userId });
-      await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
     }
 
     const storePin = await this.shouldStoreKey(KeySuffixOptions.Pin, userId);
@@ -897,7 +901,6 @@ export class CryptoService implements CryptoServiceAbstraction {
       await this.storePinKey(key);
     } else {
       await this.stateService.setUserSymKeyPin(null, { userId: userId });
-      await this.stateService.setEncryptedPinProtected(null, { userId: userId });
     }
   }
 
