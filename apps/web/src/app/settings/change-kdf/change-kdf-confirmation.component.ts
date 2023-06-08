@@ -77,15 +77,18 @@ export class ChangeKdfConfirmationComponent {
     request.kdfParallelism = this.kdfConfig.parallelism;
     request.masterPasswordHash = await this.cryptoService.hashPassword(masterPassword, null);
     const email = await this.stateService.getEmail();
-    const newKey = await this.cryptoService.makeKey(
+    const newMasterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
       email,
       this.kdf,
       this.kdfConfig
     );
-    request.newMasterPasswordHash = await this.cryptoService.hashPassword(masterPassword, newKey);
-    const newEncKey = await this.cryptoService.remakeEncKey(newKey);
-    request.key = newEncKey[1].encryptedString;
+    request.newMasterPasswordHash = await this.cryptoService.hashPassword(
+      masterPassword,
+      newMasterKey
+    );
+    const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(newMasterKey);
+    request.key = newUserSymKey[1].encryptedString;
 
     await this.apiService.postAccountKdf(request);
   }
