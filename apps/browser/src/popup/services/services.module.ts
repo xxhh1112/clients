@@ -58,6 +58,7 @@ import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
 import { StateFactory } from "@bitwarden/common/factories/stateFactory";
 import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
 import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
@@ -490,6 +491,11 @@ function getBgService<T>(service: keyof MainBackground) {
       provide: ConfigServiceAbstraction,
       useClass: BrowserConfigService,
       deps: [StateServiceAbstraction, ConfigApiServiceAbstraction],
+    },
+    {
+      provide: ConfigApiServiceAbstraction,
+      useClass: ConfigApiService,
+      deps: [ApiService],
     },
     {
       provide: DialogServiceAbstraction,
