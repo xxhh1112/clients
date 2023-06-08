@@ -23,7 +23,11 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+  UserSymKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SendWithIdRequest } from "@bitwarden/common/tools/send/models/request/send-with-id.request";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
@@ -137,8 +141,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   async submit() {
-    const hasEncKey = await this.cryptoService.hasEncKey();
-    if (!hasEncKey) {
+    const hasUserKey = await this.cryptoService.hasUserKey();
+    if (!hasUserKey) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("updateKey"));
       return;
     }
@@ -179,8 +183,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
 
   async performSubmitActions(
     newMasterPasswordHash: string,
-    newKey: SymmetricCryptoKey,
-    newEncKey: [SymmetricCryptoKey, EncString]
+    newMasterKey: MasterKey,
+    newUserKey: [UserSymKey, EncString]
   ) {
     const request = new PasswordRequest();
     request.masterPasswordHash = await this.cryptoService.hashPassword(
@@ -189,12 +193,12 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     );
     request.masterPasswordHint = this.masterPasswordHint;
     request.newMasterPasswordHash = newMasterPasswordHash;
-    request.key = newEncKey[1].encryptedString;
+    request.key = newUserKey[1].encryptedString;
 
     try {
       if (this.rotateEncKey) {
         this.formPromise = this.apiService.postPassword(request).then(() => {
-          return this.updateKey(newKey, request.newMasterPasswordHash);
+          return this.updateKey(newMasterKey, request.newMasterPasswordHash);
         });
       } else {
         this.formPromise = this.apiService.postPassword(request);
@@ -213,16 +217,16 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     }
   }
 
-  private async updateKey(key: SymmetricCryptoKey, masterPasswordHash: string) {
-    const encKey = await this.cryptoService.makeEncKey(key);
+  private async updateKey(masterKey: MasterKey, masterPasswordHash: string) {
+    const userSymKey = await this.cryptoService.makeUserSymKey(masterKey);
     const privateKey = await this.cryptoService.getPrivateKey();
     let encPrivateKey: EncString = null;
     if (privateKey != null) {
-      encPrivateKey = await this.cryptoService.encrypt(privateKey, encKey[0]);
+      encPrivateKey = await this.cryptoService.encrypt(privateKey, userSymKey[0]);
     }
     const request = new UpdateKeyRequest();
     request.privateKey = encPrivateKey != null ? encPrivateKey.encryptedString : null;
-    request.key = encKey[1].encryptedString;
+    request.key = userSymKey[1].encryptedString;
     request.masterPasswordHash = masterPasswordHash;
 
     const folders = await firstValueFrom(this.folderService.folderViews$);
@@ -230,7 +234,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       if (folders[i].id == null) {
         continue;
       }
-      const folder = await this.folderService.encrypt(folders[i], encKey[0]);
+      const folder = await this.folderService.encrypt(folders[i], userSymKey[0]);
       request.folders.push(new FolderWithIdRequest(folder));
     }
 
@@ -240,24 +244,24 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
         continue;
       }
 
-      const cipher = await this.cipherService.encrypt(ciphers[i], encKey[0]);
+      const cipher = await this.cipherService.encrypt(ciphers[i], userSymKey[0]);
       request.ciphers.push(new CipherWithIdRequest(cipher));
     }
 
     const sends = await firstValueFrom(this.sendService.sends$);
     await Promise.all(
       sends.map(async (send) => {
-        const cryptoKey = await this.cryptoService.decryptToBytes(send.key, null);
-        send.key = (await this.cryptoService.encrypt(cryptoKey, encKey[0])) ?? send.key;
+        const sendKey = await this.cryptoService.decryptToBytes(send.key, null);
+        send.key = (await this.cryptoService.encrypt(sendKey, userSymKey[0])) ?? send.key;
         request.sends.push(new SendWithIdRequest(send));
       })
     );
 
     await this.apiService.postAccountKey(request);
 
-    await this.updateEmergencyAccesses(encKey[0]);
+    await this.updateEmergencyAccesses(userSymKey[0]);
 
-    await this.updateAllResetPasswordKeys(encKey[0], masterPasswordHash);
+    await this.updateAllResetPasswordKeys(userSymKey[0], masterPasswordHash);
   }
 
   private async updateEmergencyAccesses(encKey: SymmetricCryptoKey) {
@@ -285,7 +289,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     }
   }
 
-  private async updateAllResetPasswordKeys(encKey: SymmetricCryptoKey, masterPasswordHash: string) {
+  private async updateAllResetPasswordKeys(userSymKey: UserSymKey, masterPasswordHash: string) {
     const orgs = await this.organizationService.getAll();
 
     for (const org of orgs) {
@@ -299,7 +303,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       const publicKey = Utils.fromB64ToArray(response?.publicKey);
 
       // Re-enroll - encrypt user's encKey.key with organization public key
-      const encryptedKey = await this.cryptoService.rsaEncrypt(encKey.key, publicKey.buffer);
+      const encryptedKey = await this.cryptoService.rsaEncrypt(userSymKey.key, publicKey.buffer);
 
       // Create/Execute request
       const request = new OrganizationUserResetPasswordEnrollmentRequest();

@@ -16,7 +16,10 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  UserSymKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { Verification } from "@bitwarden/common/types/verification";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -114,21 +117,27 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
 
     try {
       // Create new key and hash new password
-      const newKey = await this.cryptoService.makeKey(
+      const newMasterKey = await this.cryptoService.makeMasterKey(
         this.masterPassword,
         this.email.trim().toLowerCase(),
         this.kdf,
         this.kdfConfig
       );
-      const newPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, newKey);
+      const newPasswordHash = await this.cryptoService.hashPassword(
+        this.masterPassword,
+        newMasterKey
+      );
 
-      // Grab user's current enc key
-      const userEncKey = await this.cryptoService.getEncKey();
+      // Grab user's symmetric key
+      const userKey = await this.cryptoService.getUserKeyFromMemory();
 
-      // Create new encKey for the User
-      const newEncKey = await this.cryptoService.remakeEncKey(newKey, userEncKey);
+      // Encrypt user's symmetric key with new master key
+      const newProtectedUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
+        newMasterKey,
+        userKey
+      );
 
-      await this.performSubmitActions(newPasswordHash, newKey, newEncKey);
+      await this.performSubmitActions(newPasswordHash, newMasterKey, newProtectedUserSymKey);
     } catch (e) {
       this.logService.error(e);
     }
@@ -136,16 +145,16 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
 
   async performSubmitActions(
     masterPasswordHash: string,
-    key: SymmetricCryptoKey,
-    encKey: [SymmetricCryptoKey, EncString]
+    masterKey: MasterKey,
+    userSymKey: [UserSymKey, EncString]
   ) {
     try {
       switch (this.reason) {
         case ForceResetPasswordReason.AdminForcePasswordReset:
-          this.formPromise = this.updateTempPassword(masterPasswordHash, encKey);
+          this.formPromise = this.updateTempPassword(masterPasswordHash, userSymKey);
           break;
         case ForceResetPasswordReason.WeakMasterPassword:
-          this.formPromise = this.updatePassword(masterPasswordHash, encKey);
+          this.formPromise = this.updatePassword(masterPasswordHash, userSymKey);
           break;
       }
 
@@ -169,27 +178,24 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
   private async updateTempPassword(
     masterPasswordHash: string,
-    encKey: [SymmetricCryptoKey, EncString]
+    userSymKey: [UserSymKey, EncString]
   ) {
     const request = new UpdateTempPasswordRequest();
-    request.key = encKey[1].encryptedString;
+    request.key = userSymKey[1].encryptedString;
     request.newMasterPasswordHash = masterPasswordHash;
     request.masterPasswordHint = this.hint;
 
     return this.apiService.putUpdateTempPassword(request);
   }
 
-  private async updatePassword(
-    newMasterPasswordHash: string,
-    encKey: [SymmetricCryptoKey, EncString]
-  ) {
+  private async updatePassword(newMasterPasswordHash: string, userSymKey: [UserSymKey, EncString]) {
     const request = await this.userVerificationService.buildRequest(
       this.verification,
       PasswordRequest
     );
     request.masterPasswordHint = this.hint;
     request.newMasterPasswordHash = newMasterPasswordHash;
-    request.key = encKey[1].encryptedString;
+    request.key = userSymKey[1].encryptedString;
 
     return this.apiService.postPassword(request);
   }

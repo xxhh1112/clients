@@ -12,7 +12,10 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  UserSymKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
@@ -79,23 +82,30 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     if (this.kdfConfig == null) {
       this.kdfConfig = await this.stateService.getKdfConfig();
     }
-    const key = await this.cryptoService.makeKey(
+
+    // Create new master key
+    const newMasterKey = await this.cryptoService.makeMasterKey(
       this.masterPassword,
       email.trim().toLowerCase(),
       this.kdf,
       this.kdfConfig
     );
-    const masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, key);
+    const newMasterPasswordHash = await this.cryptoService.hashPassword(
+      this.masterPassword,
+      newMasterKey
+    );
 
-    let encKey: [SymmetricCryptoKey, EncString] = null;
-    const existingEncKey = await this.cryptoService.getEncKey();
-    if (existingEncKey == null) {
-      encKey = await this.cryptoService.makeEncKey(key);
+    let newProtectedUserSymKey: [UserSymKey, EncString] = null;
+    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
+    if (userSymKey == null) {
+      newProtectedUserSymKey = await this.cryptoService.makeUserSymKey(newMasterKey);
     } else {
-      encKey = await this.cryptoService.remakeEncKey(key);
+      newProtectedUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
+        newMasterKey
+      );
     }
 
-    await this.performSubmitActions(masterPasswordHash, key, encKey);
+    await this.performSubmitActions(newMasterPasswordHash, newMasterKey, newProtectedUserSymKey);
   }
 
   async setupSubmitActions(): Promise<boolean> {
@@ -106,8 +116,8 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   async performSubmitActions(
     masterPasswordHash: string,
-    key: SymmetricCryptoKey,
-    encKey: [SymmetricCryptoKey, EncString]
+    masterKey: MasterKey,
+    userSymKey: [UserSymKey, EncString]
   ) {
     // Override in sub-class
   }

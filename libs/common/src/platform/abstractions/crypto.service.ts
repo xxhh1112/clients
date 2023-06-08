@@ -33,7 +33,7 @@ export abstract class CryptoService {
     keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ) => Promise<boolean>;
-  makeUserSymKey: (key: SymmetricCryptoKey) => Promise<[UserSymKey, EncString]>;
+  makeUserSymKey: (key: MasterKey) => Promise<[UserSymKey, EncString]>;
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;
   setMasterKey: (key: MasterKey, userId?: string) => Promise<void>;
