@@ -1090,7 +1090,7 @@ export class StateService<
   async getAcctDecryptionOptions(
     options?: StorageOptions
   ): Promise<AccountDecryptionOptions | null> {
-    options = this.reconcileOptions(options, await this.defaultInMemoryOptions());
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
       return null;
@@ -1105,7 +1105,7 @@ export class StateService<
     value: AccountDecryptionOptions,
     options?: StorageOptions
   ): Promise<void> {
-    options = this.reconcileOptions(options, await this.defaultInMemoryOptions());
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
       return;
