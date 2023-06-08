@@ -8,7 +8,11 @@ import { CryptoFunctionService } from "../platform/abstractions/crypto-function.
 import { EncryptService } from "../platform/abstractions/encrypt.service";
 import { StateService } from "../platform/abstractions/state.service";
 import { EncString } from "../platform/models/domain/enc-string";
-import { SymmetricCryptoKey, DeviceKey } from "../platform/models/domain/symmetric-crypto-key";
+import {
+  SymmetricCryptoKey,
+  DeviceKey,
+  UserSymKey,
+} from "../platform/models/domain/symmetric-crypto-key";
 import { CryptoService } from "../platform/services/crypto.service";
 import { CsprngArray } from "../types/csprng";
 
@@ -125,7 +129,7 @@ describe("deviceCryptoService", () => {
       let mockDeviceKey: DeviceKey;
 
       let mockUserSymKeyRandomBytes: CsprngArray;
-      let mockUserSymKey: SymmetricCryptoKey;
+      let mockUserSymKey: UserSymKey;
 
       const deviceRsaKeyLength = 2048;
       let mockDeviceRsaKeyPair: [ArrayBuffer, ArrayBuffer];
@@ -147,7 +151,7 @@ describe("deviceCryptoService", () => {
 
       let makeDeviceKeySpy: jest.SpyInstance;
       let rsaGenerateKeyPairSpy: jest.SpyInstance;
-      let cryptoSvcGetEncKeySpy: jest.SpyInstance;
+      let cryptoSvcGetUserKeyFromMemorySpy: jest.SpyInstance;
       let cryptoSvcRsaEncryptSpy: jest.SpyInstance;
       let encryptServiceEncryptSpy: jest.SpyInstance;
       let appIdServiceGetAppIdSpy: jest.SpyInstance;
@@ -160,7 +164,7 @@ describe("deviceCryptoService", () => {
         mockDeviceKey = new SymmetricCryptoKey(mockDeviceKeyRandomBytes) as DeviceKey;
 
         mockUserSymKeyRandomBytes = new Uint8Array(userSymKeyBytesLength).buffer as CsprngArray;
-        mockUserSymKey = new SymmetricCryptoKey(mockUserSymKeyRandomBytes);
+        mockUserSymKey = new SymmetricCryptoKey(mockUserSymKeyRandomBytes) as UserSymKey;
 
         mockDeviceRsaKeyPair = [
           new ArrayBuffer(deviceRsaKeyLength),
@@ -194,8 +198,8 @@ describe("deviceCryptoService", () => {
           .spyOn(cryptoFunctionService, "rsaGenerateKeyPair")
           .mockResolvedValue(mockDeviceRsaKeyPair);
 
-        cryptoSvcGetEncKeySpy = jest
-          .spyOn(cryptoService, "getEncKey")
+        cryptoSvcGetUserKeyFromMemorySpy = jest
+          .spyOn(cryptoService, "getUserKeyFromMemory")
           .mockResolvedValue(mockUserSymKey);
 
         cryptoSvcRsaEncryptSpy = jest
@@ -227,7 +231,7 @@ describe("deviceCryptoService", () => {
 
         expect(makeDeviceKeySpy).toHaveBeenCalledTimes(1);
         expect(rsaGenerateKeyPairSpy).toHaveBeenCalledTimes(1);
-        expect(cryptoSvcGetEncKeySpy).toHaveBeenCalledTimes(1);
+        expect(cryptoSvcGetUserKeyFromMemorySpy).toHaveBeenCalledTimes(1);
 
         expect(cryptoSvcRsaEncryptSpy).toHaveBeenCalledTimes(1);
         expect(encryptServiceEncryptSpy).toHaveBeenCalledTimes(2);
@@ -247,17 +251,17 @@ describe("deviceCryptoService", () => {
 
       it("throws specific error if user symmetric key is not found", async () => {
         // setup the spy to return null
-        cryptoSvcGetEncKeySpy.mockResolvedValue(null);
+        cryptoSvcGetUserKeyFromMemorySpy.mockResolvedValue(null);
         // check if the expected error is thrown
         await expect(deviceCryptoService.trustDevice()).rejects.toThrow(
           "User symmetric key not found"
         );
 
         // reset the spy
-        cryptoSvcGetEncKeySpy.mockReset();
+        cryptoSvcGetUserKeyFromMemorySpy.mockReset();
 
         // setup the spy to return undefined
-        cryptoSvcGetEncKeySpy.mockResolvedValue(undefined);
+        cryptoSvcGetUserKeyFromMemorySpy.mockResolvedValue(undefined);
         // check if the expected error is thrown
         await expect(deviceCryptoService.trustDevice()).rejects.toThrow(
           "User symmetric key not found"
@@ -276,9 +280,9 @@ describe("deviceCryptoService", () => {
           errorText: "rsaGenerateKeyPair error",
         },
         {
-          method: "getEncKey",
-          spy: () => cryptoSvcGetEncKeySpy,
-          errorText: "getEncKey error",
+          method: "getUserKeyFromMemory",
+          spy: () => cryptoSvcGetUserKeyFromMemorySpy,
+          errorText: "getUserKeyFromMemory error",
         },
         {
           method: "rsaEncrypt",

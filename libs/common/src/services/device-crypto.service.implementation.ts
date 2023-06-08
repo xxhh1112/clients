@@ -6,7 +6,11 @@ import { CryptoFunctionService } from "../platform/abstractions/crypto-function.
 import { CryptoService } from "../platform/abstractions/crypto.service";
 import { EncryptService } from "../platform/abstractions/encrypt.service";
 import { StateService } from "../platform/abstractions/state.service";
-import { SymmetricCryptoKey, DeviceKey } from "../platform/models/domain/symmetric-crypto-key";
+import {
+  SymmetricCryptoKey,
+  DeviceKey,
+  UserSymKey,
+} from "../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../types/csprng";
 
 export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
@@ -21,7 +25,7 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
 
   async trustDevice(): Promise<DeviceResponse> {
     // Attempt to get user symmetric key
-    const userSymKey: SymmetricCryptoKey = await this.cryptoService.getEncKey();
+    const userSymKey: UserSymKey = await this.cryptoService.getUserKeyFromMemory();
 
     // If user symmetric key is not found, throw error
     if (!userSymKey) {
