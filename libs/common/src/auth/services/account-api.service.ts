@@ -1,5 +1,5 @@
 import { ApiService } from "../../abstractions/api.service";
-import { LogService } from "../../abstractions/log.service";
+import { LogService } from "../../platform/abstractions/log.service";
 import { Verification } from "../../types/verification";
 import { AccountApiService } from "../abstractions/account-api.service";
 import { InternalAccountService } from "../abstractions/account.service";
