@@ -45,8 +45,8 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
 
   async migrateUser() {
     const organization = await this.getManagingOrganization();
-    const key = await this.cryptoService.getKey();
-    const keyConnectorRequest = new KeyConnectorUserKeyRequest(key.encKeyB64);
+    const masterKey = await this.cryptoService.getMasterKey();
+    const keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.encKeyB64);
 
     try {
       await this.apiService.postUserKeyToKeyConnector(
@@ -88,17 +88,18 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     const password = await this.cryptoFunctionService.randomBytes(64);
     const kdfConfig = new KdfConfig(kdfIterations, kdfMemory, kdfParallelism);
 
-    const k = await this.cryptoService.makeKey(
+    const masterKey = await this.cryptoService.makeMasterKey(
       Utils.fromBufferToB64(password),
       await this.tokenService.getEmail(),
       kdf,
       kdfConfig
     );
-    const keyConnectorRequest = new KeyConnectorUserKeyRequest(k.encKeyB64);
-    await this.cryptoService.setKey(k);
+    const keyConnectorRequest = new KeyConnectorUserKeyRequest(masterKey.encKeyB64);
+    await this.cryptoService.setMasterKey(masterKey);
 
-    const encKey = await this.cryptoService.makeEncKey(k);
-    await this.cryptoService.setEncKey(encKey[1].encryptedString);
+    const userKey = await this.cryptoService.makeUserSymKey(masterKey);
+    await this.cryptoService.setUserKey(userKey[0]);
+    await this.cryptoService.setUserSymKeyMasterKey(userKey[1].encryptedString);
 
     const [pubKey, privKey] = await this.cryptoService.makeKeyPair();
 
@@ -110,7 +111,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
 
     const keys = new KeysRequest(pubKey, privKey.encryptedString);
     const setPasswordRequest = new SetKeyConnectorKeyRequest(
-      encKey[1].encryptedString,
+      userKey[1].encryptedString,
       kdf,
       kdfConfig,
       orgId,
