@@ -404,7 +404,7 @@ export class SettingsComponent implements OnInit {
     await this.cryptoService.toggleKey();
 
     // Validate the key is stored in case biometrics fail.
-    const biometricSet = await this.cryptoService.hasKeyStored(KeySuffixOptions.Biometric);
+    const biometricSet = await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric);
     this.form.controls.biometric.setValue(biometricSet);
     if (!biometricSet) {
       await this.stateService.setBiometricUnlock(null);

@@ -124,12 +124,27 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getCryptoMasterKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
   setCryptoMasterKey: (value: SymmetricCryptoKey, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated For migration purposes only, use getUserSymKeyAuto instead
+   */
   getCryptoMasterKeyAuto: (options?: StorageOptions) => Promise<string>;
+  /**
+   * @deprecated For migration purposes only, use setUserSymKeyAuto instead
+   */
   setCryptoMasterKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
   getCryptoMasterKeyB64: (options?: StorageOptions) => Promise<string>;
   setCryptoMasterKeyB64: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated For migration purposes only, use getUserSymKeyBiometric instead
+   */
   getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
+  /**
+   * @deprecated For migration purposes only, use hasUserSymKeyBiometric instead
+   */
   hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
+  /**
+   * @deprecated For migration purposes only, use setUserSymKeyBiometric instead
+   */
   setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   // end deprecated keys
 

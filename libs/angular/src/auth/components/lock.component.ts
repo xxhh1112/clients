@@ -116,13 +116,13 @@ export class LockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const success = (await this.cryptoService.getKey(KeySuffixOptions.Biometric)) != null;
+    const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Biometric);
 
-    if (success) {
-      await this.doContinue(false);
+    if (userKey) {
+      await this.setKeyAndContinue(userKey, false);
     }
 
-    return success;
+    return !!userKey;
   }
 
   togglePassword() {
@@ -337,7 +337,7 @@ export class LockComponent implements OnInit, OnDestroy {
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
-      ((await this.cryptoService.hasKeyStored(KeySuffixOptions.Biometric)) ||
+      ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();

@@ -136,7 +136,7 @@ export class NativeMessagingService {
           });
         }
 
-        const key = await this.cryptoService.getKeyFromStorage(
+        const key = await this.cryptoService.getUserKeyFromStorage(
           KeySuffixOptions.Biometric,
           message.userId
         );

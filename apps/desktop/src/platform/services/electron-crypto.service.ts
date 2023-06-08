@@ -4,7 +4,9 @@ import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import {
+  MasterKey,
   SymmetricCryptoKey,
   UserSymKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
@@ -32,16 +34,32 @@ export class ElectronCryptoService extends CryptoService {
     if (storeBiometricKey) {
       await this.storeBiometricKey(key, userId);
     } else {
-      await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
+      await this.stateService.setUserSymKeyBiometric(null, { userId: userId });
     }
   }
 
-  protected async storeBiometricKey(key: SymmetricCryptoKey, userId?: string): Promise<void> {
+  protected override async retrieveUserKeyFromStorage(
+    keySuffix: KeySuffixOptions,
+    userId?: string
+  ): Promise<UserSymKey> {
+    const userKey = super.retrieveUserKeyFromStorage(keySuffix, userId);
+    if (userKey) {
+      return userKey;
+    }
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      await this.migrateBiometricKeyIfNeeded(userId);
+      const userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
+      return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+    }
+    return null;
+  }
+
+  protected async storeBiometricKey(key: UserSymKey, userId?: string): Promise<void> {
     let clientEncKeyHalf: CsprngString = null;
     if (await this.stateService.getBiometricRequirePasswordOnStart({ userId })) {
       clientEncKeyHalf = await this.getBiometricEncryptionClientKeyHalf(userId);
     }
-    await this.stateService.setCryptoMasterKeyBiometric(
+    await this.stateService.setUserSymKeyBiometric(
       { key: key.keyB64, clientEncKeyHalf },
       { userId: userId }
     );
@@ -64,6 +82,23 @@ export class ElectronCryptoService extends CryptoService {
       return biometricKey;
     } catch {
       return null;
+    }
+  }
+
+  private async migrateBiometricKeyIfNeeded(userId?: string) {
+    const oldBiometricKey = await this.stateService.getCryptoMasterKeyBiometric({ userId });
+    if (oldBiometricKey) {
+      // decrypt
+      const masterKey = new SymmetricCryptoKey(
+        Utils.fromB64ToArray(oldBiometricKey).buffer
+      ) as MasterKey;
+      const userSymKey = await this.decryptUserSymKeyWithMasterKey(
+        masterKey,
+        new EncString(await this.stateService.getEncryptedCryptoSymmetricKey())
+      );
+      // migrate
+      await this.storeBiometricKey(userSymKey, userId);
+      await this.stateService.setCryptoMasterKeyBiometric(null, { userId });
     }
   }
 }

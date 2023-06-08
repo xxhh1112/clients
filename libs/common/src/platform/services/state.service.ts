@@ -689,9 +689,6 @@ export class StateService<
     );
   }
 
-  /**
-   * User's encrypted symmetric key when using biometrics
-   */
   async hasUserSymKeyBiometric(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -706,9 +703,6 @@ export class StateService<
     );
   }
 
-  /**
-   * User's encrypted symmetric key when using biometrics
-   */
   async setUserSymKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),

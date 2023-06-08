@@ -136,14 +136,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ): Promise<boolean> {
-    switch (keySuffix) {
-      case KeySuffixOptions.Auto:
-        return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
-      case KeySuffixOptions.Biometric:
-        return (await this.stateService.hasUserSymKeyBiometric({ userId: userId })) === true;
-      default:
-        return false;
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      const oldKey = await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId });
+      return oldKey || (await this.stateService.hasUserSymKeyBiometric({ userId: userId }));
     }
+    return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
   }
 
   /**
@@ -947,22 +944,15 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   protected async retrieveUserKeyFromStorage(
-    keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
+    keySuffix: KeySuffixOptions,
     userId?: string
   ): Promise<UserSymKey> {
-    let userKey: string;
-    switch (keySuffix) {
-      case KeySuffixOptions.Auto: {
-        await this.migrateAutoKeyIfNeeded(userId);
-        userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
-        break;
-      }
-      case KeySuffixOptions.Biometric: {
-        userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
-        break;
-      }
+    if (keySuffix === KeySuffixOptions.Pin) {
+      await this.migrateAutoKeyIfNeeded(userId);
+      const userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
+      return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
     }
-    return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+    return null;
   }
 
   private async migrateAutoKeyIfNeeded(userId?: string) {
