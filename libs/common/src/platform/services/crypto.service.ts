@@ -28,6 +28,7 @@ import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
 import {
   MasterKey,
+  OrgKey,
   PinKey,
   SymmetricCryptoKey,
   UserSymKey,
@@ -114,7 +115,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     const newUserSymKey = await this.cryptoFunctionService.randomBytes(64);
-    return this.buildProtectedUserSymKey(masterKey, newUserSymKey);
+    return this.buildProtectedSymmetricKey(masterKey, newUserSymKey);
   }
 
   async clearUserKey(clearStoredKeys = true, userId?: string): Promise<void> {
@@ -155,7 +156,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     userSymKey?: UserSymKey
   ): Promise<[UserSymKey, EncString]> {
     userSymKey ||= await this.getUserKeyFromMemory();
-    return this.buildProtectedUserSymKey(masterKey, userSymKey.key);
+    return this.buildProtectedSymmetricKey(masterKey, userSymKey.key);
   }
 
   async decryptUserSymKeyWithMasterKey(
@@ -271,7 +272,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.stateService.setEncryptedOrganizationKeys(encOrgKeyData);
   }
 
-  async getOrgKey(orgId: string): Promise<SymmetricCryptoKey> {
+  async getOrgKey(orgId: string): Promise<OrgKey> {
     if (orgId == null) {
       return null;
     }
@@ -285,11 +286,11 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   @sequentialize(() => "getOrgKeys")
-  async getOrgKeys(): Promise<Map<string, SymmetricCryptoKey>> {
-    const result: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
+  async getOrgKeys(): Promise<Map<string, OrgKey>> {
+    const result: Map<string, OrgKey> = new Map<string, OrgKey>();
     const decryptedOrganizationKeys = await this.stateService.getDecryptedOrganizationKeys();
     if (decryptedOrganizationKeys != null && decryptedOrganizationKeys.size > 0) {
-      return decryptedOrganizationKeys;
+      return decryptedOrganizationKeys as Map<string, OrgKey>;
     }
 
     const encOrgKeyData = await this.stateService.getEncryptedOrganizationKeys();
@@ -305,7 +306,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       }
 
       const encOrgKey = BaseEncryptedOrganizationKey.fromData(encOrgKeyData[orgId]);
-      const decOrgKey = await encOrgKey.decrypt(this);
+      const decOrgKey = (await encOrgKey.decrypt(this)) as OrgKey;
       result.set(orgId, decOrgKey);
 
       setKey = true;
@@ -316,6 +317,15 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     return result;
+  }
+
+  async makeOrgDataEncKey(orgKey: OrgKey): Promise<[SymmetricCryptoKey, EncString]> {
+    if (orgKey == null) {
+      throw new Error("No Org Key provided");
+    }
+
+    const newSymKey = await this.cryptoFunctionService.randomBytes(64);
+    return this.buildProtectedSymmetricKey(orgKey, newSymKey);
   }
 
   async clearOrgKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
@@ -783,20 +793,20 @@ export class CryptoService implements CryptoServiceAbstraction {
     return phrase;
   }
 
-  private async buildProtectedUserSymKey(
-    masterKey: MasterKey,
-    newUserSymKey: ArrayBuffer
-  ): Promise<[UserSymKey, EncString]> {
-    let protectedUserSymKey: EncString = null;
-    if (masterKey.key.byteLength === 32) {
-      const stretchedMasterKey = await this.stretchKey(masterKey);
-      protectedUserSymKey = await this.encrypt(newUserSymKey, stretchedMasterKey);
-    } else if (masterKey.key.byteLength === 64) {
-      protectedUserSymKey = await this.encrypt(newUserSymKey, masterKey);
+  private async buildProtectedSymmetricKey<T extends SymmetricCryptoKey>(
+    encryptionKey: SymmetricCryptoKey,
+    newSymKey: ArrayBuffer
+  ): Promise<[T, EncString]> {
+    let protectedSymKey: EncString = null;
+    if (encryptionKey.key.byteLength === 32) {
+      const stretchedEncryptionKey = await this.stretchKey(encryptionKey);
+      protectedSymKey = await this.encrypt(newSymKey, stretchedEncryptionKey);
+    } else if (encryptionKey.key.byteLength === 64) {
+      protectedSymKey = await this.encrypt(newSymKey, encryptionKey);
     } else {
       throw new Error("Invalid key size.");
     }
-    return [new SymmetricCryptoKey(newUserSymKey) as UserSymKey, protectedUserSymKey];
+    return [new SymmetricCryptoKey(newSymKey) as T, protectedSymKey];
   }
 
   private async clearStoredUserKeys(userId?: string): Promise<void> {

@@ -7,6 +7,7 @@ import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
 import {
   MasterKey,
+  OrgKey,
   PinKey,
   SymmetricCryptoKey,
   UserSymKey,
@@ -188,11 +189,16 @@ export abstract class CryptoService {
    * @param orgId The desired organization
    * @returns The organization's symmetric key
    */
-  getOrgKey: (orgId: string) => Promise<SymmetricCryptoKey>;
+  getOrgKey: (orgId: string) => Promise<OrgKey>;
   /**
    * @returns A map of the organization Ids to their symmetric keys
    */
   getOrgKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  /**
+   * Uses the org key to derive a new symmetric key for encrypting data
+   * @param orgKey The organization's symmetric key
+   */
+  makeOrgDataEncKey: (orgKey: OrgKey) => Promise<[SymmetricCryptoKey, EncString]>;
   /**
    * Clears the user's stored organization keys
    * @param memoryOnly Clear only the in-memory keys
