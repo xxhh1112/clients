@@ -6,7 +6,7 @@ import {
   // selectAllFromDoc
 } from "./collect";
 
-// CG - METHOD MIGRATED TO AutofillInsert.urlNotSecure
+// CG - METHOD MIGRATED TO InsertAutofillContentService.urlNotSecure
 /**
  * Check if the action to autofill on the given page should be considered "secure"
  * @param {string[]} savedURLs
@@ -71,7 +71,7 @@ function normalizeEvent(element: FillableControl, eventName: string) {
   return event;
 }
 
-// CG - MIGRATED TO AutofillInsert.simulateInputChangeEventOnElement
+// CG - MIGRATED TO InsertAutofillContentService.simulateInputChangeEventOnElement
 /**
  * Simulate the entry of a value into an element by using events.
  * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
@@ -123,7 +123,7 @@ export function setValueForElementByEvent(element: FillableControl) {
 // }
 /** END DEAD CODE */
 
-// CG - MIGRATED TO AutofillInsert.triggerClickOnElement
+// CG - MIGRATED TO InsertAutofillContentService.triggerClickOnElement
 /**
  * Click on an element `element`
  * @param {HTMLElement} element
@@ -139,7 +139,7 @@ function clickElement(element: HTMLElement) {
   return true;
 }
 
-// CG - MIGRATED TO AutofillInsert.clickOnFieldByOpid
+// CG - MIGRATED TO InsertAutofillContentService.clickOnFieldByOpid
 /**
  * Do a click on the element with the given `opId`.
  * @param {string} opId
@@ -190,7 +190,7 @@ export function doClickByOpId(opId: string) {
 // }
 /** END DEAD CODEW */
 
-// CG - MIGRATED TO AutofillInsert.triggerFocusOnElement
+// CG - MIGRATED TO InsertAutofillContentService.triggerFocusOnElement
 /**
  * Focus an element and optionally re-set its value after focusing
  * @param {HTMLElement} element
@@ -210,7 +210,7 @@ export function doFocusElement(element: FillableControl, shouldResetValue: boole
   }
 }
 
-// CG - MIGRATED TO AutofillInsert.focusOnFieldByOpid
+// CG - MIGRATED TO InsertAutofillContentService.focusOnFieldByOpid
 /**
  * Do a click and focus on the element with the given `opId`.
  * @param {string} opId
@@ -232,7 +232,7 @@ export function doFocusByOpId(opId: string): null {
   return null;
 }
 
-// CG - MIGRATED TO AutofillInsert.simulateClickAndKeyboardEventsOnElement
+// CG - MIGRATED TO InsertAutofillContentService.simulateClickAndKeyboardEventsOnElement
 /**
  * Simulate the entry of a value into an element.
  * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.

@@ -1,17 +1,16 @@
-import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
-import CollectAutofillContentService from "../services/collect-autofill-content.service";
+import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import CollectAutofillContentService from "./collect-autofill-content.service";
+import InsertAutofillContentService from "./insert-autofill-content.service";
 
-import AutofillInsert from "./autofill-insert";
-
-describe("AutofillInsert", function () {
+describe("InsertAutofillContentService", function () {
   const autofillFieldVisibilityService = new AutofillFieldVisibilityService();
   const collectAutofillContentService = new CollectAutofillContentService(
     autofillFieldVisibilityService
   );
-  let autofillInsert: AutofillInsert;
+  let autofillInsert: InsertAutofillContentService;
 
   beforeEach(() => {
-    autofillInsert = new AutofillInsert(
+    autofillInsert = new InsertAutofillContentService(
       autofillFieldVisibilityService,
       collectAutofillContentService
     );

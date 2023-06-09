@@ -7,13 +7,12 @@ import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import CollectAutofillContentService from "../services/collect-autofill-content.service";
-
-import AutofillInsert from "./autofill-insert";
+import InsertAutofillContentService from "../services/insert-autofill-content.service";
 
 class AutofillInit implements AutofillInitInterface {
   private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
-  private readonly autofillInsert: AutofillInsert;
+  private readonly insertAutofillContentService: InsertAutofillContentService;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
@@ -22,14 +21,14 @@ class AutofillInit implements AutofillInitInterface {
 
   /**
    * AutofillInit constructor. Initializes the AutofillFieldVisibilityService,
-   * CollectAutofillContentService and AutofillInsert classes.
+   * CollectAutofillContentService and InsertAutofillContentService classes.
    */
   constructor() {
     this.autofillFieldVisibilityService = new AutofillFieldVisibilityService();
     this.collectAutofillContentService = new CollectAutofillContentService(
       this.autofillFieldVisibilityService
     );
-    this.autofillInsert = new AutofillInsert(
+    this.insertAutofillContentService = new InsertAutofillContentService(
       this.autofillFieldVisibilityService,
       this.collectAutofillContentService
     );
@@ -75,7 +74,7 @@ class AutofillInit implements AutofillInitInterface {
   }
 
   private fillForm(fillScript: AutofillScript) {
-    this.autofillInsert.fillForm(fillScript);
+    this.insertAutofillContentService.fillForm(fillScript);
   }
 
   /**

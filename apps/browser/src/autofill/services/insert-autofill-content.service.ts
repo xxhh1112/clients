@@ -1,12 +1,13 @@
 import { EVENTS, TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
-import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
-import CollectAutofillContentService from "../services/collect-autofill-content.service";
 import { FormElement } from "../types";
 
-class AutofillInsert {
-  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
-  private readonly autofillCollect: CollectAutofillContentService;
+import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import CollectAutofillContentService from "./collect-autofill-content.service";
+
+class InsertAutofillContentService {
+  private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
+  private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly autofillInsertActions: AutofillInsertActions = {
     fill_by_opid: ({ opid, value }) => this.fillFieldByOpid(opid, value),
     click_on_opid: ({ opid }) => this.clickOnFieldByOpid(opid),
@@ -14,11 +15,11 @@ class AutofillInsert {
   };
 
   constructor(
-    autofillFieldVisibility: AutofillFieldVisibilityService,
-    autofillCollect: CollectAutofillContentService
+    autofillFieldVisibilityService: AutofillFieldVisibilityService,
+    collectAutofillContentService: CollectAutofillContentService
   ) {
-    this.autofillFieldVisibility = autofillFieldVisibility;
-    this.autofillCollect = autofillCollect;
+    this.autofillFieldVisibilityService = autofillFieldVisibilityService;
+    this.collectAutofillContentService = collectAutofillContentService;
   }
 
   fillForm(fillScript: AutofillScript) {
@@ -51,17 +52,17 @@ class AutofillInsert {
       return;
     }
 
-    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.insertValueIntoField(element, value);
   }
 
   private clickOnFieldByOpid(opid: string) {
-    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.triggerClickOnElement(element);
   }
 
   private focusOnFieldByOpid(opid: string) {
-    const element = this.autofillCollect.getAutofillFieldElementByOpid(opid);
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.triggerFocusOnElement(element);
   }
 
@@ -212,7 +213,7 @@ class AutofillInsert {
   }
 
   private canAnimateElement(element: FormElement): boolean {
-    if (this.autofillFieldVisibility.isFieldHiddenByCss(element)) {
+    if (this.autofillFieldVisibilityService.isFieldHiddenByCss(element)) {
       return false;
     }
 
@@ -223,4 +224,4 @@ class AutofillInsert {
   }
 }
 
-export default AutofillInsert;
+export default InsertAutofillContentService;
