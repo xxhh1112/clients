@@ -1,3 +1,12 @@
+<ng-container *ngIf="loading">
+  <i
+    class="bwi bwi-spinner bwi-spin text-muted"
+    title="{{ 'loading' | i18n }}"
+    aria-hidden="true"
+  ></i>
+  <span class="sr-only">{{ "loading" | i18n }}</span>
+</ng-container>
+
 <div class="tw-container tw-mx-auto">
   <div
     class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
@@ -23,6 +32,7 @@
 
       <div class="tw-flex tw-flex-col">
         <button
+          *ngIf="showApproveFromOtherDeviceBtn"
           bitButton
           type="button"
           buttonType="primary"
@@ -34,6 +44,7 @@
         </button>
 
         <button
+          *ngIf="showReqAdminApprovalBtn"
           bitButton
           type="button"
           buttonType="secondary"
@@ -44,6 +55,8 @@
         </button>
 
         <button
+          *ngIf="showApproveWithMasterPasswordBtn"
+          (click)="approveWithMasterPassword()"
           bitButton
           type="button"
           buttonType="secondary"
