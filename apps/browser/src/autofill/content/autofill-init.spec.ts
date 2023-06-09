@@ -1,7 +1,8 @@
 import { mock } from "jest-mock-extended";
 
-import { AutofillExtensionMessage } from "../models/autofill-init";
 import AutofillPageDetails from "../models/autofill-page-details";
+
+import { AutofillExtensionMessage } from "./abstractions/autofill-init";
 
 describe("AutofillInit", function () {
   let bitwardenAutofillInit: any;

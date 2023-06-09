@@ -1,13 +1,14 @@
-import {
-  AutofillExtensionMessage,
-  AutofillExtensionMessageHandlers,
-  AutofillInit as AutofillInitInterface,
-} from "../models/autofill-init";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import CollectAutofillContentService from "../services/collect-autofill-content.service";
 import InsertAutofillContentService from "../services/insert-autofill-content.service";
+
+import {
+  AutofillExtensionMessage,
+  AutofillExtensionMessageHandlers,
+  AutofillInit as AutofillInitInterface,
+} from "./abstractions/autofill-init";
 
 class AutofillInit implements AutofillInitInterface {
   private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
