@@ -120,6 +120,7 @@ describe("collect utils", () => {
     });
   });
 
+  // CG - TESTS MIGRATED TO InsertAutofillContent.canElementBeAnimated
   describe("canSeeElementToStyle", () => {
     it("should return true when the element is a non-hidden password field", () => {
       const testElement = document.querySelector(
@@ -248,7 +249,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - CONSIDERING MOVING THIS METHOD TO SHARED AutofillInit CLASS
+  // CG - TESTS MIGRATED TO InsertAutofillContent.getAutofillFieldElementByOpid
   describe("getElementByOpId", () => {
     it("should return the element with the opid property value matching the passed value", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;

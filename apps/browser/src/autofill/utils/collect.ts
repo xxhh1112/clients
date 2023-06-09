@@ -1,5 +1,5 @@
 import { TYPE_CHECK } from "../constants";
-import { FillableControl, ElementWithOpId, FormElement } from "../types";
+import { FillableControl, ElementWithOpId, FormFieldElement } from "../types";
 
 // CG - METHOD MIGRATED TO CollectAutofillContentService.trimAndRemoveNonPrintableText
 /**
@@ -166,7 +166,7 @@ export function isElementVisible(element: any) {
  * @param {HTMLElement} element
  * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
  */
-export function isElementViewable(element: FormElement) {
+export function isElementViewable(element: FormFieldElement) {
   const theDoc = element.ownerDocument.documentElement;
   const rect = element.getBoundingClientRect(); // getBoundingClientRect is relative to the viewport
   const docScrollWidth = theDoc.scrollWidth; // scrollWidth is the width of the document including any overflow
@@ -379,9 +379,9 @@ export function getElementByOpId(
  * ranked for importance by `limit`.
  * @param {Document} targetDocument The Document to query
  * @param {number} limit The maximum number of elements to return
- * @returns {FormElement[]}
+ * @returns {FormFieldElement[]}
  */
-export function getFormElements(targetDocument: Document, limit?: number): FormElement[] {
+export function getFormElements(targetDocument: Document, limit?: number): FormFieldElement[] {
   let elementList: HTMLInputElement[] = [];
 
   try {
@@ -402,8 +402,8 @@ export function getFormElements(targetDocument: Document, limit?: number): FormE
     return elementList;
   }
 
-  const returnElements: FormElement[] = [];
-  const unimportantElements: FormElement[] = [];
+  const returnElements: FormFieldElement[] = [];
+  const unimportantElements: FormFieldElement[] = [];
 
   elementList.every((element: HTMLInputElement) => {
     if (returnElements.length >= limit) {

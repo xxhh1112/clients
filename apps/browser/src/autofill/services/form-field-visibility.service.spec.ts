@@ -1,10 +1,10 @@
-import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import FormFieldVisibilityService from "./form-field-visibility.service";
 
-describe("AutofillFieldVisibilityService", function () {
-  let autofillFieldVisibilityService: AutofillFieldVisibilityService;
+describe("FormFieldVisibilityService", function () {
+  let formFieldVisibilityService: FormFieldVisibilityService;
 
   beforeEach(function () {
-    autofillFieldVisibilityService = new AutofillFieldVisibilityService();
+    formFieldVisibilityService = new FormFieldVisibilityService();
   });
 
   describe("isFieldHiddenByCss", function () {
@@ -14,7 +14,7 @@ describe("AutofillFieldVisibilityService", function () {
       `;
       const usernameElement = document.getElementById("username");
 
-      const isElementHidden = autofillFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+      const isElementHidden = formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
 
       expect(isElementHidden).toEqual(false);
     });
@@ -37,9 +37,9 @@ describe("AutofillFieldVisibilityService", function () {
       jest.spyOn(passwordElement.ownerDocument.defaultView, "getComputedStyle");
 
       const isUsernameElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(usernameElement.style.getPropertyValue).toHaveBeenCalled();
@@ -67,9 +67,9 @@ describe("AutofillFieldVisibilityService", function () {
       const passwordElement = document.getElementById("password");
 
       const isUsernameElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(isPasswordElementHidden).toEqual(true);
@@ -89,9 +89,9 @@ describe("AutofillFieldVisibilityService", function () {
       const passwordElement = document.getElementById("password");
 
       const isUsernameElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        autofillFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(isPasswordElementHidden).toEqual(true);

@@ -1,15 +1,21 @@
 import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
-import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
+import {
+  ElementWithOpId,
+  FillableControl,
+  FormFieldElement,
+  FormElementWithAttribute,
+} from "../types";
 
-import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import { CollectAutofillContentService as CollectAutofillContentServiceInterface } from "./abstractions/collect-autofill-content.service";
+import FormFieldVisibilityService from "./form-field-visibility.service";
 
-class CollectAutofillContentService {
-  private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
+class CollectAutofillContentService implements CollectAutofillContentServiceInterface {
+  private readonly formFieldVisibilityService: FormFieldVisibilityService;
 
-  constructor(autofillFieldVisibilityService: AutofillFieldVisibilityService) {
-    this.autofillFieldVisibilityService = autofillFieldVisibilityService;
+  constructor(formFieldVisibilityService: FormFieldVisibilityService) {
+    this.formFieldVisibilityService = formFieldVisibilityService;
   }
 
   /**
@@ -37,13 +43,13 @@ class CollectAutofillContentService {
    * element if there are multiple elements with the same opid. If no
    * element is found, null will be returned.
    * @param {string} opid
-   * @returns {FormElement | null}
+   * @returns {FormFieldElement | null}
    */
-  getAutofillFieldElementByOpid(opid: string): FormElement | null {
+  getAutofillFieldElementByOpid(opid: string): FormFieldElement | null {
     const fieldElements = this.getAutofillFieldElements();
     const fieldElementsWithOpid = fieldElements.filter(
-      (fieldElement) => (fieldElement as ElementWithOpId<FormElement>).opid === opid
-    ) as ElementWithOpId<FormElement>[];
+      (fieldElement) => (fieldElement as ElementWithOpId<FormFieldElement>).opid === opid
+    ) as ElementWithOpId<FormFieldElement>[];
 
     if (!fieldElementsWithOpid.length) {
       const elementIndex = parseInt(opid.split("__")[1], 10);
@@ -104,25 +110,25 @@ class CollectAutofillContentService {
    * and returns a list limited to the given `fieldsLimit` number that
    * is ordered by priority.
    * @param {number} fieldsLimit - The maximum number of fields to return
-   * @returns {FormElement[]}
+   * @returns {FormFieldElement[]}
    * @private
    */
-  private getAutofillFieldElements(fieldsLimit?: number): FormElement[] {
-    const formFieldElements: FormElement[] = [
+  private getAutofillFieldElements(fieldsLimit?: number): FormFieldElement[] {
+    const formFieldElements: FormFieldElement[] = [
       ...(document.querySelectorAll(
         'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
           "textarea:not([data-bwignore]), " +
           "select:not([data-bwignore]), " +
           "span[data-bwautofill]"
-      ) as NodeListOf<FormElement>),
+      ) as NodeListOf<FormFieldElement>),
     ];
 
     if (!fieldsLimit || formFieldElements.length <= fieldsLimit) {
       return formFieldElements;
     }
 
-    const priorityFormFields: FormElement[] = [];
-    const unimportantFormFields: FormElement[] = [];
+    const priorityFormFields: FormFieldElement[] = [];
+    const unimportantFormFields: FormFieldElement[] = [];
     const unimportantFieldTypesSet = new Set(["checkbox", "radio"]);
     for (const element of formFieldElements) {
       if (priorityFormFields.length >= fieldsLimit) {
@@ -150,13 +156,13 @@ class CollectAutofillContentService {
    * Builds an AutofillField object from the given form element. Will only return
    * shared field values if the element is a span element. Will not return any label
    * values if the element is a hidden input element.
-   * @param {ElementWithOpId<FormElement>} element
+   * @param {ElementWithOpId<FormFieldElement>} element
    * @param {number} index
    * @returns {Promise<AutofillField>}
    * @private
    */
   private buildAutofillFieldItem = async (
-    element: ElementWithOpId<FormElement>,
+    element: ElementWithOpId<FormFieldElement>,
     index: number
   ): Promise<AutofillField> => {
     element.opid = `__${index}`;
@@ -165,7 +171,7 @@ class CollectAutofillContentService {
       opid: element.opid,
       elementNumber: index,
       maxLength: this.getAutofillFieldMaxLength(element),
-      viewable: await this.autofillFieldVisibilityService.isFieldViewable(element),
+      viewable: await this.formFieldVisibilityService.isFieldViewable(element),
       htmlID: this.getPropertyOrAttribute(element, "id"),
       htmlName: this.getPropertyOrAttribute(element, "name"),
       htmlClass: this.getPropertyOrAttribute(element, "class"),
@@ -300,15 +306,15 @@ class CollectAutofillContentService {
   };
 
   /**
-   * Gets the maxLength property of the passed FormElement and
+   * Gets the maxLength property of the passed FormFieldElement and
    * returns the value or null if the element does not have a
    * maxLength property. If the element has a maxLength property
    * greater than 999, it will return 999.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {number | null}
    * @private
    */
-  private getAutofillFieldMaxLength(element: FormElement): number | null {
+  private getAutofillFieldMaxLength(element: FormFieldElement): number | null {
     const elementHasMaxLengthProperty =
       element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
     const elementMaxLength =
@@ -321,11 +327,11 @@ class CollectAutofillContentService {
    * Iterates over the next siblings of the passed element and
    * returns a string of the text content of each element. Will
    * stop iterating if it encounters a new section element.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {string}
    * @private
    */
-  private createAutofillFieldRightLabel(element: FormElement): string {
+  private createAutofillFieldRightLabel(element: FormFieldElement): string {
     const labelTextContent: string[] = [];
     let currentElement: ChildNode = element;
 
@@ -347,11 +353,11 @@ class CollectAutofillContentService {
   /**
    * Recursively gets the text content from an element's previous siblings
    * and returns a string of the text content of each element.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {string}
    * @private
    */
-  private createAutofillFieldLeftLabel(element: FormElement): string {
+  private createAutofillFieldLeftLabel(element: FormFieldElement): string {
     const labelTextContent: string[] = this.recursivelyGetTextFromPreviousSiblings(element);
 
     return labelTextContent.reverse().join("");
@@ -362,11 +368,11 @@ class CollectAutofillContentService {
    * table structure. Queries the previous sibling of the parent row that
    * the input element is in and returns the text content of the cell that
    * is in the same column as the input element.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {string | null}
    * @private
    */
-  private createAutofillFieldTopLabel(element: FormElement): string | null {
+  private createAutofillFieldTopLabel(element: FormFieldElement): string | null {
     const tableDataElement = element.closest("td");
     if (!tableDataElement) {
       return null;
@@ -448,7 +454,7 @@ class CollectAutofillContentService {
    * Get the text content from the previous siblings of the element. If
    * no text content is found, recursively get the text content from the
    * previous siblings of the parent element.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {string[]}
    * @private
    */
@@ -498,7 +504,7 @@ class CollectAutofillContentService {
   }
 
   /**
-   * Get the value of a property or attribute from a FormElement.
+   * Get the value of a property or attribute from a FormFieldElement.
    * @param {HTMLElement} element
    * @param {string} attributeName
    * @returns {string | null}
@@ -517,11 +523,11 @@ class CollectAutofillContentService {
    * checkbox is checked, or an empty string if it is not checked. If the element is a hidden
    * input, returns the value of the input if it is less than 254 characters, or a truncated
    * value if it is longer than 254 characters.
-   * @param {FormElement} element
+   * @param {FormFieldElement} element
    * @returns {string}
    * @private
    */
-  private getElementValue(element: FormElement): string {
+  private getElementValue(element: FormFieldElement): string {
     if (element instanceof HTMLSpanElement) {
       const spanTextContent = element.textContent || element.innerText;
       return spanTextContent || "";

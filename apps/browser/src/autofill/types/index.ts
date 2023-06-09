@@ -24,10 +24,6 @@ export type FillableControl = HTMLInputElement | HTMLSelectElement | HTMLTextAre
  * This script's definition of a Form Element (only a subset of HTML form elements)
  * This is defined by getFormElements
  */
+export type FormFieldElement = FillableControl | HTMLSpanElement;
 
-export type FormElement = FillableControl | HTMLSpanElement;
-
-export type FormElementWithAttribute = FormElement & Record<string, string | null | undefined>;
-
-// @TODO deprecate in favor of FormElementWithAttribute?
-// export type FormElementExtended = FormElement & { opid?: string };
+export type FormElementWithAttribute = FormFieldElement & Record<string, string | null | undefined>;

@@ -1,6 +1,6 @@
-import { AutofillFieldVisibilityService as AutofillFieldVisibilityServiceInterface } from "./abstractions/autofill-field-visibility.service";
+import { FormFieldVisibilityService as FormFieldVisibilityServiceInterface } from "./abstractions/form-field-visibility.service";
 
-class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceInterface {
+class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface {
   private cachedComputedStyle: CSSStyleDeclaration | null = null;
 
   async isFieldViewable(element: HTMLElement): Promise<boolean> {
@@ -174,4 +174,4 @@ class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceIn
   }
 }
 
-export default AutofillFieldVisibilityService;
+export default FormFieldVisibilityService;

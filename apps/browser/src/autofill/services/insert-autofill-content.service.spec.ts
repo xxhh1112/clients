@@ -1,7 +1,7 @@
 import { FormElementWithAttribute } from "../types";
 
-import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
+import FormFieldVisibilityService from "./form-field-visibility.service";
 import InsertAutofillContentService from "./insert-autofill-content.service";
 
 const mockLoginForm = `
@@ -14,16 +14,16 @@ const mockLoginForm = `
 `;
 
 describe("InsertAutofillContentService", function () {
-  const autofillFieldVisibilityService = new AutofillFieldVisibilityService();
+  const formFieldVisibilityService = new FormFieldVisibilityService();
   const collectAutofillContentService = new CollectAutofillContentService(
-    autofillFieldVisibilityService
+    formFieldVisibilityService
   );
   let autofillInsert: InsertAutofillContentService;
 
   beforeEach(() => {
     document.body.innerHTML = mockLoginForm;
     autofillInsert = new InsertAutofillContentService(
-      autofillFieldVisibilityService,
+      formFieldVisibilityService,
       collectAutofillContentService
     );
   });

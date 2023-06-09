@@ -1,7 +1,12 @@
-import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
+import {
+  ElementWithOpId,
+  FillableControl,
+  FormFieldElement,
+  FormElementWithAttribute,
+} from "../types";
 
-import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
+import FormFieldVisibilityService from "./form-field-visibility.service";
 
 const mockLoginForm = `
   <div id="root">
@@ -13,15 +18,13 @@ const mockLoginForm = `
 `;
 
 describe("CollectAutofillContentService", function () {
-  const autofillFieldVisibilityService = new AutofillFieldVisibilityService();
+  const formFieldVisibilityService = new FormFieldVisibilityService();
   let collectAutofillContentService: CollectAutofillContentService;
 
   beforeEach(function () {
     jest.clearAllMocks();
     document.body.innerHTML = mockLoginForm;
-    collectAutofillContentService = new CollectAutofillContentService(
-      autofillFieldVisibilityService
-    );
+    collectAutofillContentService = new CollectAutofillContentService(formFieldVisibilityService);
   });
 
   describe("getPageDetails", function () {
@@ -49,7 +52,7 @@ describe("CollectAutofillContentService", function () {
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
       jest
-        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
 
       const pageDetails = await collectAutofillContentService.getPageDetails();
@@ -255,7 +258,7 @@ describe("CollectAutofillContentService", function () {
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldElements");
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldItem");
       jest
-        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
 
       const autofillFieldsPromise = collectAutofillContentService["buildAutofillFieldsData"]();
@@ -361,7 +364,7 @@ describe("CollectAutofillContentService", function () {
       jest.spyOn(document, "querySelectorAll");
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
 
-      const formElements: FormElement[] =
+      const formElements: FormFieldElement[] =
         collectAutofillContentService["getAutofillFieldElements"]();
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(
@@ -394,7 +397,7 @@ describe("CollectAutofillContentService", function () {
       const textAreaInput = document.querySelector("textarea");
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
 
-      const formElements: FormElement[] =
+      const formElements: FormFieldElement[] =
         collectAutofillContentService["getAutofillFieldElements"](2);
 
       expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
@@ -458,7 +461,7 @@ describe("CollectAutofillContentService", function () {
       const passwordInput = document.querySelector('input[type="password"]');
       const secondSpan = document.getElementById("second-span");
 
-      const formElements: FormElement[] =
+      const formElements: FormFieldElement[] =
         collectAutofillContentService["getAutofillFieldElements"]();
 
       expect(formElements).toEqual([
@@ -513,7 +516,7 @@ describe("CollectAutofillContentService", function () {
       const inputRadioA = document.querySelector('input[type="radio"][value="option-a"]');
       const inputRadioB = document.querySelector('input[type="radio"][value="option-b"]');
 
-      const truncatedFormElements: FormElement[] =
+      const truncatedFormElements: FormFieldElement[] =
         collectAutofillContentService["getAutofillFieldElements"](8);
 
       expect(truncatedFormElements).toEqual([
@@ -539,10 +542,12 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <span id="${spanElementId}" class="${spanElementClasses}" tabindex="${spanElementTabIndex}" title="${spanElementTitle}">Span Element</span>
       `;
-      const spanElement = document.getElementById(spanElementId) as ElementWithOpId<FormElement>;
+      const spanElement = document.getElementById(
+        spanElementId
+      ) as ElementWithOpId<FormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");
@@ -556,7 +561,7 @@ describe("CollectAutofillContentService", function () {
         spanElement
       );
       expect(
-        collectAutofillContentService["autofillFieldVisibilityService"].isFieldViewable
+        collectAutofillContentService["formFieldVisibilityService"].isFieldViewable
       ).toHaveBeenCalledWith(spanElement);
       expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         1,
@@ -650,7 +655,7 @@ describe("CollectAutofillContentService", function () {
       ) as ElementWithOpId<FillableControl>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");
@@ -735,7 +740,7 @@ describe("CollectAutofillContentService", function () {
       ) as ElementWithOpId<FillableControl>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");
@@ -975,7 +980,7 @@ describe("CollectAutofillContentService", function () {
   });
 
   describe("getAutofillFieldMaxLength", function () {
-    it("returns null if the passed FormElement is not an element type that has a max length property", function () {
+    it("returns null if the passed FormFieldElement is not an element type that has a max length property", function () {
       document.body.innerHTML = `
         <select name="country">
           <option value="US">United States</option>
@@ -989,7 +994,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toBeNull();
     });
 
-    it("returns a value of 999 if the passed FormElement has no set maxLength value", function () {
+    it("returns a value of 999 if the passed FormFieldElement has no set maxLength value", function () {
       document.body.innerHTML = `
         <input type="text" name="username">
       `;
@@ -1000,7 +1005,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toEqual(999);
     });
 
-    it("returns a value of 999 if the passed FormElement has a maxLength value higher than 999", function () {
+    it("returns a value of 999 if the passed FormFieldElement has a maxLength value higher than 999", function () {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="1000">
       `;
@@ -1011,7 +1016,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toEqual(999);
     });
 
-    it("returns the maxLength property of a passed FormElement", function () {
+    it("returns the maxLength property of a passed FormFieldElement", function () {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="10">
       `;

@@ -43,7 +43,7 @@ import {
   /** END DEAD CODE **/
   ElementWithOpId,
   FillableControl,
-  FormElement,
+  FormFieldElement,
 } from "../types";
 import {
   // collect utils
@@ -206,7 +206,7 @@ function collect(document: Document) {
     // get all the form fields
     const theFields = Array.prototype.slice
       .call(getFormElements(theDoc, 50))
-      .map(function (el: FormElement, elIndex: number) {
+      .map(function (el: FormFieldElement, elIndex: number) {
         const field: Record<string, any> = {};
         const opId = "__" + elIndex;
         let elMaxLen =
@@ -219,7 +219,7 @@ function collect(document: Document) {
         /** DEAD CODE */
         // (theDoc as AutofillDocument).elementsByOPID[opId] = el;
         /* END DEAD CODE **/
-        (el as ElementWithOpId<FormElement>).opid = opId;
+        (el as ElementWithOpId<FormFieldElement>).opid = opId;
         field.opid = opId;
         field.elementNumber = elIndex;
         addProperty(field, "maxLength", Math.min(elMaxLen, 999), 999);

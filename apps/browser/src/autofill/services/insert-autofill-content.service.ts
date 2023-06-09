@@ -1,12 +1,13 @@
 import { EVENTS, TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
-import { FormElement } from "../types";
+import { FormFieldElement } from "../types";
 
-import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import { InsertAutofillContentService as InsertAutofillContentServiceInterface } from "./abstractions/insert-autofill-content.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
+import FormFieldVisibilityService from "./form-field-visibility.service";
 
-class InsertAutofillContentService {
-  private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
+class InsertAutofillContentService implements InsertAutofillContentServiceInterface {
+  private readonly formFieldVisibilityService: FormFieldVisibilityService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly autofillInsertActions: AutofillInsertActions = {
     fill_by_opid: ({ opid, value }) => this.fillFieldByOpid(opid, value),
@@ -15,10 +16,10 @@ class InsertAutofillContentService {
   };
 
   constructor(
-    autofillFieldVisibilityService: AutofillFieldVisibilityService,
+    formFieldVisibilityService: FormFieldVisibilityService,
     collectAutofillContentService: CollectAutofillContentService
   ) {
-    this.autofillFieldVisibilityService = autofillFieldVisibilityService;
+    this.formFieldVisibilityService = formFieldVisibilityService;
     this.collectAutofillContentService = collectAutofillContentService;
   }
 
@@ -66,7 +67,7 @@ class InsertAutofillContentService {
     this.triggerFocusOnElement(element);
   }
 
-  private insertValueIntoField(element: FormElement, value: string) {
+  private insertValueIntoField(element: FormFieldElement, value: string) {
     const elementCanBeReadonly =
       element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
     const elementCanBeFilled = elementCanBeReadonly || element instanceof HTMLSelectElement;
@@ -141,7 +142,7 @@ class InsertAutofillContentService {
     return confirm(confirmationWarning);
   }
 
-  private doAllFillOperations(element: FormElement, callback: CallableFunction): void {
+  private doAllFillOperations(element: FormFieldElement, callback: CallableFunction): void {
     if (!element) {
       return;
     }
@@ -158,7 +159,7 @@ class InsertAutofillContentService {
     setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
   }
 
-  private simulateClickAndKeyboardEventsOnElement(element: FormElement): void {
+  private simulateClickAndKeyboardEventsOnElement(element: FormFieldElement): void {
     const initialElementValue = "value" in element ? element.value : "";
 
     this.triggerClickOnElement(element);
@@ -172,7 +173,7 @@ class InsertAutofillContentService {
     }
   }
 
-  private simulateInputChangeEventOnElement(element: FormElement): void {
+  private simulateInputChangeEventOnElement(element: FormFieldElement): void {
     const autofilledValue = "value" in element ? element.value : "";
 
     this.triggerKeyboardEventOnElement(element, EVENTS.KEYDOWN);
@@ -188,7 +189,7 @@ class InsertAutofillContentService {
     element.blur();
   }
 
-  private triggerEventOnElement(element: FormElement, eventType: string): void {
+  private triggerEventOnElement(element: FormFieldElement, eventType: string): void {
     element.dispatchEvent(new Event(eventType, { bubbles: true }));
   }
 
@@ -212,8 +213,8 @@ class InsertAutofillContentService {
     element.focus();
   }
 
-  private canElementBeAnimated(element: FormElement): boolean {
-    if (this.autofillFieldVisibilityService.isFieldHiddenByCss(element)) {
+  private canElementBeAnimated(element: FormFieldElement): boolean {
+    if (this.formFieldVisibilityService.isFieldHiddenByCss(element)) {
       return false;
     }
 
