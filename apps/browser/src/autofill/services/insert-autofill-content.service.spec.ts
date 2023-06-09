@@ -13,19 +13,116 @@ const mockLoginForm = `
   </div>
 `;
 
+let confirmSpy: jest.SpyInstance<boolean, [message?: string]>;
+let windowSpy: jest.SpyInstance<any>;
+let savedURLs: string[] | null = ["https://bitwarden.com"];
+function setMockWindowLocationProtocol(protocol: "http:" | "https:") {
+  windowSpy.mockImplementation(() => ({
+    location: {
+      protocol,
+    },
+  }));
+}
+
 describe("InsertAutofillContentService", function () {
   const formFieldVisibilityService = new FormFieldVisibilityService();
   const collectAutofillContentService = new CollectAutofillContentService(
     formFieldVisibilityService
   );
-  let autofillInsert: InsertAutofillContentService;
+  let insertAutofillContentService: InsertAutofillContentService;
 
   beforeEach(() => {
     document.body.innerHTML = mockLoginForm;
-    autofillInsert = new InsertAutofillContentService(
+    insertAutofillContentService = new InsertAutofillContentService(
       formFieldVisibilityService,
       collectAutofillContentService
     );
+  });
+
+  afterEach(() => {
+    windowSpy.mockRestore();
+    confirmSpy.mockRestore();
+  });
+
+  describe("userCancelledInsecureUrlAutofill", function () {
+    beforeEach(() => {
+      savedURLs = ["https://bitwarden.com"];
+      confirmSpy = jest.spyOn(window, "confirm");
+      windowSpy = jest.spyOn(window, "window", "get");
+    });
+
+    it("returns false if on page with no password field", function () {
+      setMockWindowLocationProtocol("https:");
+
+      document.body.innerHTML = `
+        <div id="root">
+          <form>
+            <input type="text" id="username" />
+          </form>
+        </div>
+      `;
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
+    });
+
+    it("returns false if Autofill occurring on https page with saved https URL", function () {
+      setMockWindowLocationProtocol("https:");
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
+    });
+
+    it("returns false if Autofill occurring on http page with saved https URL and user approval", function () {
+      setMockWindowLocationProtocol("http:");
+      confirmSpy.mockImplementation(jest.fn(() => true));
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
+    });
+
+    it("returns false if Autofill occurring on http page with saved http URL", function () {
+      savedURLs = ["http://bitwarden.com"];
+      setMockWindowLocationProtocol("http:");
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
+    });
+
+    it("returns false if Autofill occurring when there are no saved URLs", function () {
+      savedURLs = [];
+      setMockWindowLocationProtocol("http:");
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
+
+      savedURLs = null;
+
+      const userCancelledInsecureUrlAutofill2 =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill2).toBe(false);
+    });
+
+    it("returns true if Autofill occurring on http page with saved https URL and user disapproval", function () {
+      setMockWindowLocationProtocol("http:");
+      confirmSpy.mockImplementation(jest.fn(() => false));
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(userCancelledInsecureUrlAutofill).toBe(true);
+    });
   });
 
   describe("canElementBeAnimated", function () {
@@ -34,7 +131,8 @@ describe("InsertAutofillContentService", function () {
         'input[type="password"]'
       ) as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -43,7 +141,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<input type="email" />';
       const testElement = document.querySelector('input[type="email"]') as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -52,7 +151,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<input type="text" />';
       const testElement = document.querySelector('input[type="text"]') as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -63,7 +163,8 @@ describe("InsertAutofillContentService", function () {
         'input[type="number"]'
       ) as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -72,7 +173,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<input type="tel" />';
       const testElement = document.querySelector('input[type="tel"]') as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -81,7 +183,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<input type="url" />';
       const testElement = document.querySelector('input[type="url"]') as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -90,7 +193,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<span id="input-tag"></span>';
       const testElement = document.querySelector("#input-tag") as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(true);
     });
@@ -101,7 +205,8 @@ describe("InsertAutofillContentService", function () {
         'input[type="hidden"]'
       ) as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });
@@ -110,7 +215,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + "<textarea></textarea>";
       const testElement = document.querySelector("textarea") as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });
@@ -119,7 +225,8 @@ describe("InsertAutofillContentService", function () {
       document.body.innerHTML = mockLoginForm + '<div id="input-tag"></div>';
       const testElement = document.querySelector("#input-tag") as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });
@@ -130,7 +237,8 @@ describe("InsertAutofillContentService", function () {
       ) as FormElementWithAttribute;
       testElement.style.visibility = "hidden";
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });
@@ -141,7 +249,8 @@ describe("InsertAutofillContentService", function () {
       ) as FormElementWithAttribute;
       testElement.style.display = "none";
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });
@@ -151,7 +260,8 @@ describe("InsertAutofillContentService", function () {
         mockLoginForm + '<div style="opacity: 0;"><input type="email" /></div>';
       const testElement = document.querySelector('input[type="email"]') as FormElementWithAttribute;
 
-      const canElementBeAnimated = autofillInsert["canElementBeAnimated"](testElement);
+      const canElementBeAnimated =
+        insertAutofillContentService["canElementBeAnimated"](testElement);
 
       expect(canElementBeAnimated).toBe(false);
     });

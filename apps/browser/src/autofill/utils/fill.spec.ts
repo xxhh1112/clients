@@ -69,6 +69,7 @@ describe("fill utils", () => {
     document.body.innerHTML = mockLoginForm;
   });
 
+  /** CG - TESTS MIGRATED TO InsertAutofillContentService.userCancelledInsecureUrlAutofill */
   describe("urlNotSecure", () => {
     beforeEach(() => {
       confirmSpy = jest.spyOn(window, "confirm");

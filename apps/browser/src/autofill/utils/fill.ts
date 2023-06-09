@@ -6,7 +6,7 @@ import {
   // selectAllFromDoc
 } from "./collect";
 
-// CG - METHOD MIGRATED TO InsertAutofillContentService.urlNotSecure
+// CG - METHOD MIGRATED TO InsertAutofillContentService.userCancelledInsecureUrlAutofill
 /**
  * Check if the action to autofill on the given page should be considered "secure"
  * @param {string[]} savedURLs

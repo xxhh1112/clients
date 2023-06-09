@@ -27,8 +27,8 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     if (
       !fillScript?.script ||
       this.fillingWithinSandBoxedIframe() ||
-      this.urlNotSecure(fillScript.savedUrls) ||
-      !this.userWillAllowUntrustedIframeAutofill(fillScript)
+      this.userCancelledInsecureUrlAutofill(fillScript.savedUrls) ||
+      this.userCancelledUntrustedIframeAutofill(fillScript)
     ) {
       return;
     }
@@ -108,10 +108,9 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return String(self.origin).toLowerCase() === "null";
   }
 
-  private urlNotSecure(savedUrls?: string[] | null): boolean {
+  private userCancelledInsecureUrlAutofill(savedUrls?: string[] | null): boolean {
     if (
-      !savedUrls?.length ||
-      !savedUrls.some((url) => url.startsWith("https://")) ||
+      !savedUrls?.some((url) => url.startsWith("https://")) ||
       window.location.protocol !== "http:" ||
       !document.querySelectorAll("input[type=password]")?.length
     ) {
@@ -126,9 +125,9 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return !confirm(confirmationWarning);
   }
 
-  private userWillAllowUntrustedIframeAutofill(fillScript: AutofillScript): boolean {
+  private userCancelledUntrustedIframeAutofill(fillScript: AutofillScript): boolean {
     if (!fillScript.untrustedIframe) {
-      return true;
+      return false;
     }
 
     // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
@@ -139,7 +138,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
       chrome.i18n.getMessage("autofillIframeWarningTip", [window.location.hostname]),
     ].join("\n\n");
 
-    return confirm(confirmationWarning);
+    return !confirm(confirmationWarning);
   }
 
   private doAllFillOperations(element: FormFieldElement, callback: CallableFunction): void {
