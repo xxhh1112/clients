@@ -1073,45 +1073,6 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
-   * @deprecated the UserSymKey is always stored decrypted
-   */
-  private async getEncKeyHelper(key: SymmetricCryptoKey = null): Promise<SymmetricCryptoKey> {
-    const inMemoryKey = await this.stateService.getDecryptedCryptoSymmetricKey();
-    if (inMemoryKey != null) {
-      return inMemoryKey;
-    }
-
-    const encKey = await this.stateService.getEncryptedCryptoSymmetricKey();
-    if (encKey == null) {
-      return null;
-    }
-
-    if (key == null) {
-      key = await this.getUserKey();
-    }
-    if (key == null) {
-      return null;
-    }
-
-    let decEncKey: ArrayBuffer;
-    const encKeyCipher = new EncString(encKey);
-    if (encKeyCipher.encryptionType === EncryptionType.AesCbc256_B64) {
-      decEncKey = await this.decryptToBytes(encKeyCipher, key);
-    } else if (encKeyCipher.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
-      const newKey = await this.stretchKey(key);
-      decEncKey = await this.decryptToBytes(encKeyCipher, newKey);
-    } else {
-      throw new Error("Unsupported encKey type.");
-    }
-    if (decEncKey == null) {
-      return null;
-    }
-    const symmetricCryptoKey = new SymmetricCryptoKey(decEncKey);
-    await this.stateService.setDecryptedCryptoSymmetricKey(symmetricCryptoKey);
-    return symmetricCryptoKey;
-  }
-
-  /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.encrypt
    */
@@ -1159,15 +1120,5 @@ export class CryptoService implements CryptoServiceAbstraction {
     key ||= await this.getKeyForUserEncryption();
 
     return this.encryptService.decryptToBytes(encBuffer, key);
-  }
-
-  /**
-   * @deprecated use clearKey instead
-   */
-  async clearEncKey(memoryOnly?: boolean, userId?: string): Promise<void> {
-    await this.stateService.setDecryptedCryptoSymmetricKey(null, { userId: userId });
-    if (!memoryOnly) {
-      await this.stateService.setEncryptedCryptoSymmetricKey(null, { userId: userId });
-    }
   }
 }
