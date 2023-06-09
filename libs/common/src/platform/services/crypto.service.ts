@@ -42,11 +42,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     protected stateService: StateService
   ) {}
 
-  /**
-   * Use for encryption/decryption of data in order to support legacy
-   * encryption models. It will return the user symmetric key if available,
-   * if not it will return the master key.
-   */
   async getKeyForUserEncryption(): Promise<SymmetricCryptoKey> {
     const userKey = await this.getUserKeyFromMemory();
     if (userKey != null) {
@@ -58,12 +53,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.stateService.getCryptoMasterKey();
   }
 
-  /**
-   * Sets the provided user symmetric key and stores
-   * any other necessary versions, such as biometrics
-   * @param key The user symmetric key to set
-   * @param userId The desired user
-   */
   async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
     await this.stateService.setUserSymKey(key, { userId: userId });
     await this.storeAdditionalKeys(key, userId);
@@ -74,23 +63,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.setUserKey(key);
   }
 
-  /**
-   * Retrieves the user's symmetric key
-   * @param keySuffix The desired version of the user's key to retrieve
-   * from storage if it is not available in memory
-   * @param userId The desired user
-   * @returns The user's symmetric key
-   */
   async getUserKeyFromMemory(userId?: string): Promise<UserSymKey> {
     return await this.stateService.getUserSymKey({ userId: userId });
   }
 
-  /**
-   * Retrieves the user's symmetric key from storage
-   * @param keySuffix The desired version of the user's key to retrieve
-   * @param userId The desired user
-   * @returns The user's symmetric key
-   */
   async getUserKeyFromStorage(
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
@@ -108,9 +84,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return null;
   }
 
-  /**
-   * @returns True if any version of the user symmetric key is available
-   */
   async hasUserKey(): Promise<boolean> {
     return (
       (await this.hasUserKeyInMemory()) ||
@@ -119,19 +92,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     );
   }
 
-  /**
-   * @param userId The desired user
-   * @returns True if the user symmetric key is set in memory
-   */
   async hasUserKeyInMemory(userId?: string): Promise<boolean> {
     return (await this.stateService.getUserSymKey({ userId: userId })) != null;
   }
 
-  /**
-   * @param keySuffix The desired version of the user's key to check
-   * @param userId The desired user
-   * @returns True if the provided version of the user symmetric key is stored
-   */
   async hasUserKeyStored(
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
@@ -143,11 +107,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
   }
 
-  /**
-   * Generates a new user symmetric key
-   * @param masterKey The user's master key
-   * @returns A new user symmetric key and the master key protected version of it
-   */
   async makeUserSymKey(masterKey: MasterKey): Promise<[UserSymKey, EncString]> {
     masterKey ||= await this.getMasterKey();
     if (masterKey == null) {
@@ -158,12 +117,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.buildProtectedUserSymKey(masterKey, newUserSymKey);
   }
 
-  /**
-   * Clears the user's symmetric key
-   * @param clearStoredKeys Clears all stored versions of the user keys as well,
-   * such as the biometrics key
-   * @param userId The desired user
-   */
   async clearUserKey(clearStoredKeys = true, userId?: string): Promise<void> {
     await this.stateService.setUserSymKey(null, { userId: userId });
     if (clearStoredKeys) {
@@ -171,41 +124,19 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
   }
 
-  /**
-   * Stores the master key encrypted user symmetric key
-   * @param userSymKeyMasterKey The master key encrypted user symmetric key to set
-   * @param userId The desired user
-   */
   async setUserSymKeyMasterKey(userSymKeyMasterKey: string, userId?: string): Promise<void> {
     // TODO(Jake): is this the best way to handle this from the identity token?
     await this.stateService.setUserSymKeyMasterKey(userSymKeyMasterKey, { userId: userId });
   }
 
-  /**
-   * Sets the user's master key
-   * @param key The user's master key to set
-   * @param userId The desired user
-   */
   async setMasterKey(key: MasterKey, userId?: string): Promise<void> {
     await this.stateService.setMasterKey(key, { userId: userId });
   }
 
-  /**
-   * @param userId The desired user
-   * @returns The user's master key
-   */
   async getMasterKey(userId?: string): Promise<MasterKey> {
     return await this.stateService.getMasterKey({ userId: userId });
   }
 
-  /**
-   * Generates a master key from the provided password
-   * @param password The user's master password
-   * @param email The user's email
-   * @param kdf The user's selected key derivation function to use
-   * @param KdfConfig The user's key derivation function configuration
-   * @returns A master key derived from the provided password
-   */
   async makeMasterKey(
     password: string,
     email: string,
@@ -215,21 +146,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     return (await this.makeKey(password, email, kdf, KdfConfig)) as MasterKey;
   }
 
-  /**
-   * Clears the user's master key
-   * @param userId The desired user
-   */
   async clearMasterKey(userId?: string): Promise<void> {
     await this.stateService.setMasterKey(null, { userId: userId });
   }
 
-  /**
-   * Encrypts the existing (or provided) user symmetric key with the
-   * provided master key
-   * @param masterKey The user's master key
-   * @param userSymKey The user's symmetric key
-   * @returns The user's symmetric key and the master key protected version of it
-   */
   async encryptUserSymKeyWithMasterKey(
     masterKey: MasterKey,
     userSymKey?: UserSymKey
@@ -238,13 +158,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.buildProtectedUserSymKey(masterKey, userSymKey.key);
   }
 
-  /**
-   * Decrypts the user symmetric key with the provided master key
-   * @param masterKey The user's master key
-   * @param userSymKey The user's encrypted symmetric key
-   * @param userId The desired user
-   * @returns The user's symmetric key
-   */
   async decryptUserSymKeyWithMasterKey(
     masterKey: MasterKey,
     userSymKey?: EncString,
@@ -282,15 +195,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(decUserKey) as UserSymKey;
   }
 
-  /**
-   * Creates a master password hash from the user's master password. Can
-   * be used for local authentication or for server authentication depending
-   * on the hashPurpose provided.
-   * @param password The user's master password
-   * @param key The user's master key
-   * @param hashPurpose The iterations to use for the hash
-   * @returns The user's master password hash
-   */
   async hashPassword(password: string, key: MasterKey, hashPurpose?: HashPurpose): Promise<string> {
     key ||= await this.getMasterKey();
 
@@ -303,37 +207,18 @@ export class CryptoService implements CryptoServiceAbstraction {
     return Utils.fromBufferToB64(hash);
   }
 
-  /**
-   * Sets the user's key hash
-   * @param keyHash The user's key hash to set
-   */
   async setKeyHash(keyHash: string): Promise<void> {
     await this.stateService.setKeyHash(keyHash);
   }
 
-  /**
-   * @returns The user's key hash
-   */
   async getKeyHash(): Promise<string> {
     return await this.stateService.getKeyHash();
   }
 
-  /**
-   * Clears the user's stored key hash
-   * @param userId The desired user
-   */
   async clearKeyHash(userId?: string): Promise<void> {
     return await this.stateService.setKeyHash(null, { userId: userId });
   }
 
-  /**
-   * Compares the provided master password to the stored key hash and updates
-   * if the stored hash is outdated
-   * @param masterPassword The user's master password
-   * @param key The user's master key
-   * @returns True if the provided master password matches either the stored
-   * key hash
-   */
   async compareAndUpdateKeyHash(masterPassword: string, key: MasterKey): Promise<boolean> {
     const storedKeyHash = await this.getKeyHash();
     if (masterPassword != null && storedKeyHash != null) {
@@ -361,12 +246,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return false;
   }
 
-  /**
-   * Stores the encrypted organization keys and clears any decrypted
-   * organization keys currently in memory
-   * @param orgs The organizations to set keys for
-   * @param providerOrgs The provider organizations to set keys for
-   */
   async setOrgKeys(
     orgs: ProfileOrganizationResponse[] = [],
     providerOrgs: ProfileProviderOrganizationResponse[] = []
@@ -392,11 +271,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.stateService.setEncryptedOrganizationKeys(encOrgKeyData);
   }
 
-  /**
-   * Returns the organization's symmetric key
-   * @param orgId The desired organization
-   * @returns The organization's symmetric key
-   */
   async getOrgKey(orgId: string): Promise<SymmetricCryptoKey> {
     if (orgId == null) {
       return null;
@@ -410,9 +284,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return orgKeys.get(orgId);
   }
 
-  /**
-   * @returns A map of the organization Ids to their symmetric keys
-   */
   @sequentialize(() => "getOrgKeys")
   async getOrgKeys(): Promise<Map<string, SymmetricCryptoKey>> {
     const result: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
@@ -447,11 +318,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return result;
   }
 
-  /**
-   * Clears the user's stored organization keys
-   * @param memoryOnly Clear only the in-memory keys
-   * @param userId The desired user
-   */
   async clearOrgKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
     await this.stateService.setDecryptedOrganizationKeys(null, { userId: userId });
     if (!memoryOnly) {
@@ -459,11 +325,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
   }
 
-  /**
-   * Stores the encrypted provider keys and clears any decrypted
-   * provider keys currently in memory
-   * @param providers The providers to set keys for
-   */
   async setProviderKeys(providers: ProfileProviderResponse[]): Promise<void> {
     const providerKeys: any = {};
     providers.forEach((provider) => {
@@ -474,10 +335,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.stateService.setEncryptedProviderKeys(providerKeys);
   }
 
-  /**
-   * @param providerId The desired provider
-   * @returns The provider's symmetric key
-   */
   async getProviderKey(providerId: string): Promise<SymmetricCryptoKey> {
     if (providerId == null) {
       return null;
@@ -491,9 +348,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return providerKeys.get(providerId);
   }
 
-  /**
-   * @returns A map of the provider Ids to their symmetric keys
-   */
   @sequentialize(() => "getProviderKeys")
   async getProviderKeys(): Promise<Map<string, SymmetricCryptoKey>> {
     const providerKeys: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
@@ -527,10 +381,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return providerKeys;
   }
 
-  /**
-   * @param memoryOnly Clear only the in-memory keys
-   * @param userId The desired user
-   */
   async clearProviderKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
     await this.stateService.setDecryptedProviderKeys(null, { userId: userId });
     if (!memoryOnly) {
@@ -538,11 +388,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
   }
 
-  /**
-   * Returns the public key from memory. If not available, extracts it
-   * from the private key and stores it in memory
-   * @returns The user's public key
-   */
   async getPublicKey(): Promise<ArrayBuffer> {
     const inMemoryPublicKey = await this.stateService.getPublicKey();
     if (inMemoryPublicKey != null) {
@@ -559,10 +404,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return publicKey;
   }
 
-  /**
-   * Create's a new 64 byte key and encrypts it with the user's public key
-   * @returns The new encrypted share key and the decrypted key itself
-   */
   async makeShareKey(): Promise<[EncString, SymmetricCryptoKey]> {
     const shareKey = await this.cryptoFunctionService.randomBytes(64);
     const publicKey = await this.getPublicKey();
@@ -570,12 +411,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return [encShareKey, new SymmetricCryptoKey(shareKey)];
   }
 
-  /**
-   * Sets the the user's encrypted private key in storage and
-   * clears the decrypted private key from memory
-   * Note: does not clear the private key if null is provided
-   * @param encPrivateKey An encrypted private key
-   */
   async setPrivateKey(encPrivateKey: string): Promise<void> {
     if (encPrivateKey == null) {
       return;
@@ -585,11 +420,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.stateService.setEncryptedPrivateKey(encPrivateKey);
   }
 
-  /**
-   * Returns the private key from memory. If not available, decrypts it
-   * from storage and stores it in memory
-   * @returns The user's private key
-   */
   async getPrivateKey(): Promise<ArrayBuffer> {
     const decryptedPrivateKey = await this.stateService.getDecryptedPrivateKey();
     if (decryptedPrivateKey != null) {
@@ -606,12 +436,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return privateKey;
   }
 
-  /**
-   * Generates a fingerprint phrase for the user based on their public key
-   * @param userId The user's Id
-   * @param publicKey The user's public key
-   * @returns The user's fingerprint phrase
-   */
   async getFingerprint(fingerprintMaterial: string, publicKey?: ArrayBuffer): Promise<string[]> {
     if (publicKey == null) {
       publicKey = await this.getPublicKey();
@@ -629,12 +453,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.hashPhrase(userFingerprint);
   }
 
-  /**
-   * Generates a new keypair
-   * @param key A key to encrypt the private key with. If not provided,
-   * defaults to the user's symmetric key
-   * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
-   */
   async makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]> {
     key ||= await this.getUserKeyFromMemory();
 
@@ -644,11 +462,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return [publicB64, privateEnc];
   }
 
-  /**
-   * Clears the user's key pair
-   * @param memoryOnly Clear only the in-memory keys
-   * @param userId The desired user
-   */
   async clearKeyPair(memoryOnly?: boolean, userId?: string): Promise<void[]> {
     const keysToClear: Promise<void>[] = [
       this.stateService.setDecryptedPrivateKey(null, { userId: userId }),
@@ -660,22 +473,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     return Promise.all(keysToClear);
   }
 
-  /**
-   * @param pin The user's pin
-   * @param salt The user's salt
-   * @param kdf The user's kdf
-   * @param kdfConfig The user's kdf config
-   * @returns A key derived from the user's pin
-   */
   async makePinKey(pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig): Promise<PinKey> {
     const pinKey = await this.makeKey(pin, salt, kdf, kdfConfig);
     return (await this.stretchKey(pinKey)) as PinKey;
   }
 
-  /**
-   * Clears the user's pin protected user symmetric key
-   * @param userId The desired user
-   */
   async clearPinProtectedKey(userId?: string): Promise<void> {
     await this.stateService.setUserSymKeyPin(null, { userId: userId });
     await this.clearOldPinKeys(userId);
@@ -721,10 +523,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(masterKey) as MasterKey;
   }
 
-  /**
-   * @param keyMaterial The key material to derive the send key from
-   * @returns A new send key
-   */
   async makeSendKey(keyMaterial: ArrayBuffer): Promise<SymmetricCryptoKey> {
     const sendKey = await this.cryptoFunctionService.hkdf(
       keyMaterial,
@@ -736,10 +534,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(sendKey);
   }
 
-  /**
-   * Clears all of the user's keys from storage
-   * @param userId The user's Id
-   */
   async clearKeys(userId?: string): Promise<any> {
     await this.clearUserKey(true, userId);
     await this.clearKeyHash(userId);
@@ -749,12 +543,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.clearPinProtectedKey(userId);
   }
 
-  /**
-   * RSA encrypts a value.
-   * @param data The data to encrypt
-   * @param publicKey The public key to use for encryption, if not provided, the user's public key will be used
-   * @returns The encrypted data
-   */
   async rsaEncrypt(data: ArrayBuffer, publicKey?: ArrayBuffer): Promise<EncString> {
     if (publicKey == null) {
       publicKey = await this.getPublicKey();
@@ -767,12 +555,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Utils.fromBufferToB64(encBytes));
   }
 
-  /**
-   * Decrypts a value using RSA.
-   * @param encValue The encrypted value to decrypt
-   * @param privateKeyValue The private key to use for decryption
-   * @returns The decrypted value
-   */
   async rsaDecrypt(encValue: string, privateKeyValue?: ArrayBuffer): Promise<ArrayBuffer> {
     const headerPieces = encValue.split(".");
     let encType: EncryptionType = null;

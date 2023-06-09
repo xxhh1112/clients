@@ -13,72 +13,273 @@ import {
 } from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
-  // TODO: This works right?
+  /**
+   * Use for encryption/decryption of data in order to support legacy
+   * encryption models. It will return the user symmetric key if available,
+   * if not it will return the master key.
+   */
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
+  /**
+   * Sets the provided user symmetric key and stores
+   * any other necessary versions, such as biometrics
+   * @param key The user symmetric key to set
+   * @param userId The desired user
+   */
   setUserKey: (key: UserSymKey) => Promise<void>;
   /**
    * Gets the user key from memory and sets it again,
    * kicking off a refresh of any additional keys that are needed.
    */
   toggleKey: () => Promise<void>;
+  /**
+   * Retrieves the user's symmetric key
+   * @param keySuffix The desired version of the user's key to retrieve
+   * from storage if it is not available in memory
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
   getUserKeyFromMemory: (userId?: string) => Promise<UserSymKey>;
+  /**
+   * Retrieves the user's symmetric key from storage
+   * @param keySuffix The desired version of the user's key to retrieve
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
   getUserKeyFromStorage: (
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ) => Promise<UserSymKey>;
+  /**
+   * @returns True if any version of the user symmetric key is available
+   */
   hasUserKey: () => Promise<boolean>;
+  /**
+   * @param userId The desired user
+   * @returns True if the user symmetric key is set in memory
+   */
   hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
+  /**
+   * @param keySuffix The desired version of the user's key to check
+   * @param userId The desired user
+   * @returns True if the provided version of the user symmetric key is stored
+   */
   hasUserKeyStored: (
     keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ) => Promise<boolean>;
+  /**
+   * Generates a new user symmetric key
+   * @param masterKey The user's master key
+   * @returns A new user symmetric key and the master key protected version of it
+   */
   makeUserSymKey: (key: MasterKey) => Promise<[UserSymKey, EncString]>;
+  /**
+   * Clears the user's symmetric key
+   * @param clearStoredKeys Clears all stored versions of the user keys as well,
+   * such as the biometrics key
+   * @param userId The desired user
+   */
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
+  /**
+   * Stores the master key encrypted user symmetric key
+   * @param userSymKeyMasterKey The master key encrypted user symmetric key to set
+   * @param userId The desired user
+   */
   setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;
+  /**
+   * Sets the user's master key
+   * @param key The user's master key to set
+   * @param userId The desired user
+   */
   setMasterKey: (key: MasterKey, userId?: string) => Promise<void>;
+  /**
+   * @param userId The desired user
+   * @returns The user's master key
+   */
   getMasterKey: (userId?: string) => Promise<MasterKey>;
+  /**
+   * Generates a master key from the provided password
+   * @param password The user's master password
+   * @param email The user's email
+   * @param kdf The user's selected key derivation function to use
+   * @param KdfConfig The user's key derivation function configuration
+   * @returns A master key derived from the provided password
+   */
   makeMasterKey: (
     password: string,
     email: string,
     kdf: KdfType,
     KdfConfig: KdfConfig
   ) => Promise<MasterKey>;
+  /**
+   * Clears the user's master key
+   * @param userId The desired user
+   */
   clearMasterKey: (userId?: string) => Promise<void>;
+  /**
+   * Encrypts the existing (or provided) user symmetric key with the
+   * provided master key
+   * @param masterKey The user's master key
+   * @param userSymKey The user's symmetric key
+   * @returns The user's symmetric key and the master key protected version of it
+   */
   encryptUserSymKeyWithMasterKey: (
     masterKey: MasterKey,
     userSymKey?: UserSymKey
   ) => Promise<[UserSymKey, EncString]>;
+  /**
+   * Decrypts the user symmetric key with the provided master key
+   * @param masterKey The user's master key
+   * @param userSymKey The user's encrypted symmetric key
+   * @param userId The desired user
+   * @returns The user's symmetric key
+   */
   decryptUserSymKeyWithMasterKey: (
     masterKey: MasterKey,
     userSymKey?: EncString,
     userId?: string
   ) => Promise<UserSymKey>;
+  /**
+   * Creates a master password hash from the user's master password. Can
+   * be used for local authentication or for server authentication depending
+   * on the hashPurpose provided.
+   * @param password The user's master password
+   * @param key The user's master key
+   * @param hashPurpose The iterations to use for the hash
+   * @returns The user's master password hash
+   */
   hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
+  /**
+   * Sets the user's key hash
+   * @param keyHash The user's key hash to set
+   */
   setKeyHash: (keyHash: string) => Promise<void>;
+  /**
+   * @returns The user's key hash
+   */
   getKeyHash: () => Promise<string>;
+  /**
+   * Clears the user's stored key hash
+   * @param userId The desired user
+   */
   clearKeyHash: () => Promise<void>;
+  /**
+   * Compares the provided master password to the stored key hash and updates
+   * if the stored hash is outdated
+   * @param masterPassword The user's master password
+   * @param key The user's master key
+   * @returns True if the provided master password matches either the stored
+   * key hash
+   */
   compareAndUpdateKeyHash: (masterPassword: string, key: MasterKey) => Promise<boolean>;
+  /**
+   * Stores the encrypted organization keys and clears any decrypted
+   * organization keys currently in memory
+   * @param orgs The organizations to set keys for
+   * @param providerOrgs The provider organizations to set keys for
+   */
   setOrgKeys: (
     orgs: ProfileOrganizationResponse[],
     providerOrgs: ProfileProviderOrganizationResponse[]
   ) => Promise<void>;
+  /**
+   * Returns the organization's symmetric key
+   * @param orgId The desired organization
+   * @returns The organization's symmetric key
+   */
   getOrgKey: (orgId: string) => Promise<SymmetricCryptoKey>;
+  /**
+   * @returns A map of the organization Ids to their symmetric keys
+   */
   getOrgKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  /**
+   * Clears the user's stored organization keys
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
   clearOrgKeys: (memoryOnly?: boolean, userId?: string) => Promise<void>;
+  /**
+   * Stores the encrypted provider keys and clears any decrypted
+   * provider keys currently in memory
+   * @param providers The providers to set keys for
+   */
   setProviderKeys: (orgs: ProfileProviderResponse[]) => Promise<void>;
+  /**
+   * @param providerId The desired provider
+   * @returns The provider's symmetric key
+   */
   getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
+  /**
+   * @returns A map of the provider Ids to their symmetric keys
+   */
   getProviderKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  /**
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
   clearProviderKeys: (memoryOnly?: boolean) => Promise<void>;
+  /**
+   * Returns the public key from memory. If not available, extracts it
+   * from the private key and stores it in memory
+   * @returns The user's public key
+   */
   getPublicKey: () => Promise<ArrayBuffer>;
+  /**
+   * Create's a new 64 byte key and encrypts it with the user's public key
+   * @returns The new encrypted share key and the decrypted key itself
+   */
   makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
+  /**
+   * Sets the the user's encrypted private key in storage and
+   * clears the decrypted private key from memory
+   * Note: does not clear the private key if null is provided
+   * @param encPrivateKey An encrypted private key
+   */
   setPrivateKey: (encPrivateKey: string) => Promise<void>;
+  /**
+   * Returns the private key from memory. If not available, decrypts it
+   * from storage and stores it in memory
+   * @returns The user's private key
+   */
   getPrivateKey: () => Promise<ArrayBuffer>;
+  /**
+   * Generates a fingerprint phrase for the user based on their public key
+   * @param fingerprintMaterial Fingerprint material
+   * @param publicKey The user's public key
+   * @returns The user's fingerprint phrase
+   */
   getFingerprint: (fingerprintMaterial: string, publicKey?: ArrayBuffer) => Promise<string[]>;
+  /**
+   * Generates a new keypair
+   * @param key A key to encrypt the private key with. If not provided,
+   * defaults to the user's symmetric key
+   * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
+   */
   makeKeyPair: (key?: SymmetricCryptoKey) => Promise<[string, EncString]>;
+  /**
+   * Clears the user's key pair
+   * @param memoryOnly Clear only the in-memory keys
+   * @param userId The desired user
+   */
   clearKeyPair: (memoryOnly?: boolean, userId?: string) => Promise<void[]>;
+  /**
+   * @param pin The user's pin
+   * @param salt The user's salt
+   * @param kdf The user's kdf
+   * @param kdfConfig The user's kdf config
+   * @returns A key derived from the user's pin
+   */
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
+  /**
+   * Clears the user's pin protected user symmetric key
+   * @param userId The desired user
+   */
   clearPinProtectedKey: (userId?: string) => Promise<void>;
+  /**
+   * Clears the user's old pin keys from storage
+   * @param userId The desired user
+   */
   clearOldPinKeys: (userId?: string) => Promise<void>;
   /**
    * Decrypts the user's symmetric key with their pin
@@ -98,6 +299,32 @@ export abstract class CryptoService {
     protectedKeyCs?: EncString
   ) => Promise<UserSymKey>;
   /**
+   * @param keyMaterial The key material to derive the send key from
+   * @returns A new send key
+   */
+  makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
+  /**
+   * Clears all of the user's keys from storage
+   * @param userId The user's Id
+   */
+  clearKeys: (userId?: string) => Promise<any>;
+  /**
+   * RSA encrypts a value.
+   * @param data The data to encrypt
+   * @param publicKey The public key to use for encryption, if not provided, the user's public key will be used
+   * @returns The encrypted data
+   */
+  rsaEncrypt: (data: ArrayBuffer, publicKey?: ArrayBuffer) => Promise<EncString>;
+  /**
+   * Decrypts a value using RSA.
+   * @param encValue The encrypted value to decrypt
+   * @param privateKeyValue The private key to use for decryption
+   * @returns The decrypted value
+   */
+  rsaDecrypt: (encValue: string, privateKeyValue?: ArrayBuffer) => Promise<ArrayBuffer>;
+  randomNumber: (min: number, max: number) => Promise<number>;
+
+  /**
    * @deprecated Left for migration purposes. Use decryptUserSymKeyWithPin instead.
    */
   decryptMasterKeyWithPin: (
@@ -107,16 +334,29 @@ export abstract class CryptoService {
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
   ) => Promise<MasterKey>;
-  makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
-  clearKeys: (userId?: string) => Promise<any>;
-  rsaEncrypt: (data: ArrayBuffer, publicKey?: ArrayBuffer) => Promise<EncString>;
-  rsaDecrypt: (encValue: string, privateKeyValue?: ArrayBuffer) => Promise<ArrayBuffer>;
-  randomNumber: (min: number, max: number) => Promise<number>;
-
-  // deprecate
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.encrypt
+   */
   encrypt: (plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncString>;
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.encryptToBytes
+   */
   encryptToBytes: (plainValue: ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncArrayBuffer>;
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToBytes
+   */
   decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<ArrayBuffer>;
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToUtf8
+   */
   decryptToUtf8: (encString: EncString, key?: SymmetricCryptoKey) => Promise<string>;
+  /**
+   * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
+   * and then call encryptService.decryptToBytes
+   */
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
 }
