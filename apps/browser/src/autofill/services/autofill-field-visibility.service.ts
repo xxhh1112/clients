@@ -167,7 +167,7 @@ class AutofillFieldVisibilityService implements AutofillFieldVisibilityServiceIn
           resolve(entries[0]);
           observer.disconnect();
         },
-        { root: element.ownerDocument }
+        { root: element.ownerDocument.body, threshold: 0.999 }
       );
       observer.observe(element);
     });
