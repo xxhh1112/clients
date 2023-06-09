@@ -119,7 +119,5 @@ export abstract class CryptoService {
   decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<ArrayBuffer>;
   decryptToUtf8: (encString: EncString, key?: SymmetricCryptoKey) => Promise<string>;
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
-  setEncKey: (encKey: string) => Promise<void>;
-  hasEncKey: () => Promise<boolean>;
   clearEncKey: (memoryOnly?: boolean, userId?: string) => Promise<any>;
 }

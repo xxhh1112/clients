@@ -42,8 +42,8 @@ export class ChangeEmailComponent implements OnInit {
   }
 
   async submit() {
-    const hasEncKey = await this.cryptoService.hasEncKey();
-    if (!hasEncKey) {
+    const hasUserKey = await this.cryptoService.hasUserKey();
+    if (!hasUserKey) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("updateKey"));
       return;
     }

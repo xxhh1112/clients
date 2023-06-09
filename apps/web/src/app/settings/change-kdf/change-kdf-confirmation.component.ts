@@ -46,8 +46,8 @@ export class ChangeKdfConfirmationComponent {
 
   async submit() {
     this.loading = true;
-    const hasEncKey = await this.cryptoService.hasEncKey();
-    if (!hasEncKey) {
+    const hasUserKey = await this.cryptoService.hasUserKey();
+    if (!hasUserKey) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("updateKey"));
       return;
     }

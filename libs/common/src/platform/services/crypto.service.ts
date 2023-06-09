@@ -1162,33 +1162,6 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
-   * @deprecated use SetUserKey instead
-   */
-  async setEncKey(encKey: string): Promise<void> {
-    if (encKey == null) {
-      return;
-    }
-
-    await this.stateService.setDecryptedCryptoSymmetricKey(null);
-    await this.stateService.setEncryptedCryptoSymmetricKey(encKey);
-  }
-
-  /**
-   * @deprecated use getUserKey instead
-   */
-  @sequentialize(() => "getEncKey")
-  getEncKey(key: SymmetricCryptoKey = null): Promise<SymmetricCryptoKey> {
-    return this.getEncKeyHelper(key);
-  }
-
-  /**
-   * @deprecated use hasUserKey instead
-   */
-  async hasEncKey(): Promise<boolean> {
-    return (await this.stateService.getEncryptedCryptoSymmetricKey()) != null;
-  }
-
-  /**
    * @deprecated use clearKey instead
    */
   async clearEncKey(memoryOnly?: boolean, userId?: string): Promise<void> {
