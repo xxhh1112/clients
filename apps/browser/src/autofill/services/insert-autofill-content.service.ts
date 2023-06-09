@@ -150,7 +150,7 @@ class InsertAutofillContentService {
     callback(element);
     this.simulateInputChangeEventOnElement(element);
 
-    if (!this.canAnimateElement(element)) {
+    if (!this.canElementBeAnimated(element)) {
       return;
     }
 
@@ -212,7 +212,7 @@ class InsertAutofillContentService {
     element.focus();
   }
 
-  private canAnimateElement(element: FormElement): boolean {
+  private canElementBeAnimated(element: FormElement): boolean {
     if (this.autofillFieldVisibilityService.isFieldHiddenByCss(element)) {
       return false;
     }
