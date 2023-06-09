@@ -27,6 +27,7 @@ import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/services/appId.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { BroadcasterService } from "@bitwarden/common/services/broadcaster.service";
+import { ConfigApiService } from "@bitwarden/common/services/config/config-api.service";
 import { ContainerService } from "@bitwarden/common/services/container.service";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptography/encrypt.service.implementation";
@@ -248,6 +249,8 @@ export class Main {
     );
 
     this.searchService = new SearchService(this.logService, this.i18nService);
+
+    this.configApiService = new ConfigApiService(this.apiService);
 
     this.cipherService = new CipherService(
       this.cryptoService,
