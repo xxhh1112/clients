@@ -1,6 +1,7 @@
 import { mock } from "jest-mock-extended";
 
 import AutofillPageDetails from "../models/autofill-page-details";
+import AutofillScript from "../models/autofill-script";
 
 import { AutofillExtensionMessage } from "./abstractions/autofill-init";
 
@@ -65,6 +66,21 @@ describe("AutofillInit", function () {
         details: pageDetails,
         sender: extensionMessage.sender,
       });
+    });
+  });
+
+  describe("fillForm", function () {
+    it("will call the InsertAutofillContentService to fill the form", function () {
+      const fillScript = mock<AutofillScript>();
+      jest
+        .spyOn(bitwardenAutofillInit.insertAutofillContentService, "fillForm")
+        .mockImplementation();
+
+      bitwardenAutofillInit.fillForm(fillScript);
+
+      expect(bitwardenAutofillInit.insertAutofillContentService.fillForm).toHaveBeenCalledWith(
+        fillScript
+      );
     });
   });
 

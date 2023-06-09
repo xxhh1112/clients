@@ -74,6 +74,11 @@ class AutofillInit implements AutofillInitInterface {
     });
   }
 
+  /**
+   * Fills the form with the given fill script.
+   * @param {AutofillScript} fillScript
+   * @private
+   */
   private fillForm(fillScript: AutofillScript) {
     this.insertAutofillContentService.fillForm(fillScript);
   }
