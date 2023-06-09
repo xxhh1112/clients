@@ -42,14 +42,14 @@ describe("AutofillInit", function () {
         collectedTimestamp: 0,
       };
       jest
-        .spyOn(bitwardenAutofillInit.autofillCollect, "getPageDetails")
+        .spyOn(bitwardenAutofillInit.collectAutofillContentService, "getPageDetails")
         .mockReturnValue(pageDetails);
     });
 
     it("returns collected page details for autofill if set to send the details in the response", async function () {
       const response = await bitwardenAutofillInit["collectPageDetails"](extensionMessage, true);
 
-      expect(bitwardenAutofillInit.autofillCollect.getPageDetails).toHaveBeenCalled();
+      expect(bitwardenAutofillInit.collectAutofillContentService.getPageDetails).toHaveBeenCalled();
       expect(response).toEqual(pageDetails);
     });
 
@@ -128,7 +128,7 @@ describe("AutofillInit", function () {
         collectedTimestamp: 0,
       };
       jest
-        .spyOn(bitwardenAutofillInit.autofillCollect, "getPageDetails")
+        .spyOn(bitwardenAutofillInit.collectAutofillContentService, "getPageDetails")
         .mockReturnValue(pageDetails);
 
       const response = await bitwardenAutofillInit["handleExtensionMessage"](

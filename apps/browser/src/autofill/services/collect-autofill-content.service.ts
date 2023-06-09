@@ -1,14 +1,15 @@
 import AutofillField from "../models/autofill-field";
 import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
-import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
-class AutofillCollect {
-  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
+import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
 
-  constructor(autofillFieldVisibility: AutofillFieldVisibilityService) {
-    this.autofillFieldVisibility = autofillFieldVisibility;
+class CollectAutofillContentService {
+  private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
+
+  constructor(autofillFieldVisibilityService: AutofillFieldVisibilityService) {
+    this.autofillFieldVisibilityService = autofillFieldVisibilityService;
   }
 
   /**
@@ -164,7 +165,7 @@ class AutofillCollect {
       opid: element.opid,
       elementNumber: index,
       maxLength: this.getAutofillFieldMaxLength(element),
-      viewable: await this.autofillFieldVisibility.isFieldViewable(element),
+      viewable: await this.autofillFieldVisibilityService.isFieldViewable(element),
       htmlID: this.getPropertyOrAttribute(element, "id"),
       htmlName: this.getPropertyOrAttribute(element, "name"),
       htmlClass: this.getPropertyOrAttribute(element, "class"),
@@ -565,4 +566,4 @@ class AutofillCollect {
   }
 }
 
-export default AutofillCollect;
+export default CollectAutofillContentService;

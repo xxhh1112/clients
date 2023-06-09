@@ -1,7 +1,7 @@
 import { TYPE_CHECK } from "../constants";
 import { FillableControl, ElementWithOpId, FormElement } from "../types";
 
-// CG - METHOD MIGRATED TO AutofillCollect.trimAndRemoveNonPrintableText
+// CG - METHOD MIGRATED TO CollectAutofillContentService.trimAndRemoveNonPrintableText
 /**
  * Clean up the string `unformattedString` to remove non-printable characters and whitespace.
  * @param {string} unformattedString
@@ -17,7 +17,7 @@ function cleanText(unformattedString: string | null): string | null {
   return newString.length ? newString : null;
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.getTextContentFromElement
+// CG - METHOD MIGRATED TO CollectAutofillContentService.getTextContentFromElement
 /**
  * If `element` is a text node, add the node's text to `siblingTexts`.
  * If `element` is an element node, add the element's `textContent or `innerText` to `siblingTexts`.
@@ -40,7 +40,7 @@ export function getInnerText(siblingTexts: string[], element: Node) {
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.isNewSectionElement
+// CG - METHOD MIGRATED TO CollectAutofillContentService.isNewSectionElement
 /**
  * Check if `element` is a type that indicates the transition to a new section of the page.
  * If so, this indicates that we should not use `element` or its children for getting autofill context for the previous element.
@@ -72,7 +72,7 @@ export function isNewSectionTag(element: any) {
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.recursivelyGetTextFromPreviousSiblings
+// CG - METHOD MIGRATED TO CollectAutofillContentService.recursivelyGetTextFromPreviousSiblings
 /**
  * Recursively gather all of the text values from the elements preceding `element` in the DOM
  * @param {HTMLElement} element
@@ -123,7 +123,7 @@ export function getAdjacentElementLabelValues(element: any, siblingTexts: string
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.isElementHiddenByCss
+// CG - METHOD MIGRATED TO CollectAutofillContentService.isElementHiddenByCss
 /**
  * Determine if the element is visible.
  * Visible is defined as not having `display: none;` or `visibility: hidden;`.
@@ -159,7 +159,7 @@ export function isElementVisible(element: any) {
   return theEl === document;
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.isElementCurrentlyViewable
+// CG - METHOD MIGRATED TO CollectAutofillContentService.isElementCurrentlyViewable
 /**
  * Determine if the element is "viewable" on the screen.
  * "Viewable" is defined as being visible in the DOM and being within the confines of the viewport.
@@ -373,7 +373,7 @@ export function getElementByOpId(
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.getAutofillFieldElements
+// CG - METHOD MIGRATED TO CollectAutofillContentService.getAutofillFieldElements
 /**
  * Query `targetDocument` for form elements that we can use for autofill, limited and
  * ranked for importance by `limit`.
@@ -424,7 +424,7 @@ export function getFormElements(targetDocument: Document, limit?: number): FormE
   return [...returnElements, ...unimportantElements].slice(0, limit);
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.getPropertyOrAttribute
+// CG - METHOD MIGRATED TO CollectAutofillContentService.getPropertyOrAttribute
 /**
  * For a given element `element`, returns the value of the attribute `attributeName`.
  * @param {HTMLElement} element
@@ -443,7 +443,7 @@ export function getPropertyOrAttribute(element: any, attributeName: string) {
   return typeof targetValue == TYPE_CHECK.STRING ? targetValue : null;
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.getElementValue
+// CG - METHOD MIGRATED TO CollectAutofillContentService.getElementValue
 /**
  * Returns the value of the given element.
  * @param {HTMLElement} element
@@ -479,7 +479,7 @@ export function getElementValue(element: any) {
   }
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.getSelectElementOptions
+// CG - METHOD MIGRATED TO CollectAutofillContentService.getSelectElementOptions
 /**
  * If `element` is a `<select>` element, return an array of all of the options' `text` properties.
  * @param {HTMLSelectElement} element
@@ -501,7 +501,7 @@ export function getSelectElementOptions(element: HTMLSelectElement): {
   return { options };
 }
 
-// CG - METHOD MIGRATED TO AutofillCollect.createAutofillFieldTopLabel
+// CG - METHOD MIGRATED TO CollectAutofillContentService.createAutofillFieldTopLabel
 /**
  * If `element` is in a data table, get the label in the row directly above it
  * @param {HTMLElement} element

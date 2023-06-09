@@ -6,13 +6,13 @@ import {
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
+import CollectAutofillContentService from "../services/collect-autofill-content.service";
 
-import AutofillCollect from "./autofill-collect";
 import AutofillInsert from "./autofill-insert";
 
 class AutofillInit implements AutofillInitInterface {
-  private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
-  private readonly autofillCollect: AutofillCollect;
+  private readonly autofillFieldVisibilityService: AutofillFieldVisibilityService;
+  private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly autofillInsert: AutofillInsert;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
@@ -22,12 +22,17 @@ class AutofillInit implements AutofillInitInterface {
 
   /**
    * AutofillInit constructor. Initializes the AutofillFieldVisibilityService,
-   * AutofillCollect and AutofillInsert classes.
+   * CollectAutofillContentService and AutofillInsert classes.
    */
   constructor() {
-    this.autofillFieldVisibility = new AutofillFieldVisibilityService();
-    this.autofillCollect = new AutofillCollect(this.autofillFieldVisibility);
-    this.autofillInsert = new AutofillInsert(this.autofillFieldVisibility, this.autofillCollect);
+    this.autofillFieldVisibilityService = new AutofillFieldVisibilityService();
+    this.collectAutofillContentService = new CollectAutofillContentService(
+      this.autofillFieldVisibilityService
+    );
+    this.autofillInsert = new AutofillInsert(
+      this.autofillFieldVisibilityService,
+      this.collectAutofillContentService
+    );
   }
 
   /**
@@ -55,7 +60,8 @@ class AutofillInit implements AutofillInitInterface {
     message: AutofillExtensionMessage,
     sendDetailsInResponse = false
   ): Promise<AutofillPageDetails | void> {
-    const pageDetails: AutofillPageDetails = await this.autofillCollect.getPageDetails();
+    const pageDetails: AutofillPageDetails =
+      await this.collectAutofillContentService.getPageDetails();
     if (sendDetailsInResponse) {
       return pageDetails;
     }

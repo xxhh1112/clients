@@ -32,7 +32,7 @@ describe("collect utils", () => {
     document.body.innerHTML = mockLoginForm;
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.isNewSectionElement
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.isNewSectionElement
   describe("isNewSectionTag", () => {
     const validTags = [
       "body",
@@ -71,7 +71,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.isElementHiddenByCss
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.isElementHiddenByCss
   describe("isElementVisible", () => {
     it("should return true when a non-hidden element is passed", () => {
       const testElement = document.querySelector(
@@ -318,7 +318,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.recursivelyGetTextFromPreviousSiblings
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.recursivelyGetTextFromPreviousSiblings
   describe("getAdjacentElementLabelValues", () => {
     it("should find text adjacent to the target element likely to be a label", () => {
       document.body.innerHTML = `
@@ -416,7 +416,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.getAutofillFieldElements
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.getAutofillFieldElements
   describe("getFormElements", () => {
     it("should return all form elements from the targeted document", () => {
       const formElements = getFormElements(document);
@@ -554,7 +554,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.getPropertyOrAttribute
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.getPropertyOrAttribute
   describe("getPropertyOrAttribute", () => {
     it("should get the value of the named property or attribute of the target element, if the value is a string", () => {
       document.body.innerHTML += '<input type="checkbox" value="userWouldLikeToCheck" checked />';
@@ -572,7 +572,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.getElementValue
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.getElementValue
   describe("getElementValue", () => {
     it("should return the value of the passed input element", () => {
       // @TODO cannot test `span` `innerText` case, as jsdom has no layout engine
@@ -614,7 +614,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.getSelectElementOptions
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.getSelectElementOptions
   describe("getSelectElementOptions", () => {
     it("should return the inner text and values of each `option` within the passed `select`", () => {
       document.body.innerHTML = `
@@ -646,7 +646,7 @@ describe("collect utils", () => {
     });
   });
 
-  // CG - TESTS MIGRATED TO AutofillCollect.createAutofillFieldTopLabel
+  // CG - TESTS MIGRATED TO CollectAutofillContentService.createAutofillFieldTopLabel
   describe("getLabelTop", () => {
     it("should return the table column header value for the passed table element", () => {
       document.body.innerHTML = `

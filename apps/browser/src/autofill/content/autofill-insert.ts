@@ -1,13 +1,12 @@
 import { EVENTS, TYPE_CHECK } from "../constants";
 import AutofillScript, { AutofillInsertActions, FillScript } from "../models/autofill-script";
 import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
+import CollectAutofillContentService from "../services/collect-autofill-content.service";
 import { FormElement } from "../types";
-
-import AutofillCollect from "./autofill-collect";
 
 class AutofillInsert {
   private readonly autofillFieldVisibility: AutofillFieldVisibilityService;
-  private readonly autofillCollect: AutofillCollect;
+  private readonly autofillCollect: CollectAutofillContentService;
   private readonly autofillInsertActions: AutofillInsertActions = {
     fill_by_opid: ({ opid, value }) => this.fillFieldByOpid(opid, value),
     click_on_opid: ({ opid }) => this.clickOnFieldByOpid(opid),
@@ -16,7 +15,7 @@ class AutofillInsert {
 
   constructor(
     autofillFieldVisibility: AutofillFieldVisibilityService,
-    autofillCollect: AutofillCollect
+    autofillCollect: CollectAutofillContentService
   ) {
     this.autofillFieldVisibility = autofillFieldVisibility;
     this.autofillCollect = autofillCollect;

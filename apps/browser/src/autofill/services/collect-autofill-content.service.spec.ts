@@ -1,7 +1,7 @@
-import AutofillFieldVisibilityService from "../services/autofill-field-visibility.service";
 import { ElementWithOpId, FillableControl, FormElement, FormElementWithAttribute } from "../types";
 
-import AutofillCollect from "./autofill-collect";
+import AutofillFieldVisibilityService from "./autofill-field-visibility.service";
+import CollectAutofillContentService from "./collect-autofill-content.service";
 
 const mockLoginForm = `
   <div id="root">
@@ -12,14 +12,16 @@ const mockLoginForm = `
   </div>
 `;
 
-describe("AutofillCollect", function () {
-  const autofillFieldVisibility = new AutofillFieldVisibilityService();
-  let autofillCollect: AutofillCollect;
+describe("CollectAutofillContentService", function () {
+  const autofillFieldVisibilityService = new AutofillFieldVisibilityService();
+  let collectAutofillContentService: CollectAutofillContentService;
 
   beforeEach(function () {
     jest.clearAllMocks();
     document.body.innerHTML = mockLoginForm;
-    autofillCollect = new AutofillCollect(autofillFieldVisibility);
+    collectAutofillContentService = new CollectAutofillContentService(
+      autofillFieldVisibilityService
+    );
   });
 
   describe("getPageDetails", function () {
@@ -44,16 +46,16 @@ describe("AutofillCollect", function () {
             <input type="password" id="${passwordFieldId}" name="${passwordFieldName}" />
         </form>
       `;
-      jest.spyOn(autofillCollect as any, "buildAutofillFormsData");
-      jest.spyOn(autofillCollect as any, "buildAutofillFieldsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
       jest
-        .spyOn(autofillCollect["autofillFieldVisibility"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
 
-      const pageDetails = await autofillCollect.getPageDetails();
+      const pageDetails = await collectAutofillContentService.getPageDetails();
 
-      expect(autofillCollect["buildAutofillFormsData"]).toHaveBeenCalled();
-      expect(autofillCollect["buildAutofillFieldsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFormsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).toHaveBeenCalled();
       expect(pageDetails).toStrictEqual({
         title: documentTitle,
         url: window.location.href,
@@ -147,8 +149,9 @@ describe("AutofillCollect", function () {
       textInput.opid = "__0";
       passwordInput.opid = "__1";
 
-      const textInputWithOpid = autofillCollect.getAutofillFieldElementByOpid("__0");
-      const passwordInputWithOpid = autofillCollect.getAutofillFieldElementByOpid("__1");
+      const textInputWithOpid = collectAutofillContentService.getAutofillFieldElementByOpid("__0");
+      const passwordInputWithOpid =
+        collectAutofillContentService.getAutofillFieldElementByOpid("__1");
 
       expect(textInputWithOpid).toEqual(textInput);
       expect(textInputWithOpid).not.toEqual(passwordInput);
@@ -164,8 +167,8 @@ describe("AutofillCollect", function () {
       textInput.opid = "__1";
       passwordInput.opid = "__1";
 
-      const elementWithOpid0 = autofillCollect.getAutofillFieldElementByOpid("__0");
-      const elementWithOpid1 = autofillCollect.getAutofillFieldElementByOpid("__1");
+      const elementWithOpid0 = collectAutofillContentService.getAutofillFieldElementByOpid("__0");
+      const elementWithOpid1 = collectAutofillContentService.getAutofillFieldElementByOpid("__1");
 
       expect(elementWithOpid0).toEqual(textInput);
       expect(elementWithOpid1).toEqual(textInput);
@@ -181,8 +184,8 @@ describe("AutofillCollect", function () {
       textInput.opid = undefined;
       passwordInput.opid = "__1";
 
-      const elementWithOpid0 = autofillCollect.getAutofillFieldElementByOpid("__0");
-      const elementWithOpid2 = autofillCollect.getAutofillFieldElementByOpid("__2");
+      const elementWithOpid0 = collectAutofillContentService.getAutofillFieldElementByOpid("__0");
+      const elementWithOpid2 = collectAutofillContentService.getAutofillFieldElementByOpid("__2");
 
       expect(textInput.opid).toBeUndefined();
       expect(elementWithOpid0).toEqual(textInput);
@@ -194,7 +197,8 @@ describe("AutofillCollect", function () {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       textInput.opid = "__0";
 
-      const foundElementWithOpid = autofillCollect.getAutofillFieldElementByOpid("__999");
+      const foundElementWithOpid =
+        collectAutofillContentService.getAutofillFieldElementByOpid("__999");
 
       expect(foundElementWithOpid).toBeNull();
     });
@@ -225,7 +229,7 @@ describe("AutofillCollect", function () {
         </form>
       `;
 
-      const autofillFormsData = autofillCollect["buildAutofillFormsData"]();
+      const autofillFormsData = collectAutofillContentService["buildAutofillFormsData"]();
 
       expect(autofillFormsData).toStrictEqual({
         __form__0: {
@@ -248,17 +252,17 @@ describe("AutofillCollect", function () {
 
   describe("buildAutofillFieldsData", function () {
     it("returns a promise containing an array of AutofillField objects", async function () {
-      jest.spyOn(autofillCollect as any, "getAutofillFieldElements");
-      jest.spyOn(autofillCollect as any, "buildAutofillFieldItem");
+      jest.spyOn(collectAutofillContentService as any, "getAutofillFieldElements");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldItem");
       jest
-        .spyOn(autofillCollect["autofillFieldVisibility"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
 
-      const autofillFieldsPromise = autofillCollect["buildAutofillFieldsData"]();
+      const autofillFieldsPromise = collectAutofillContentService["buildAutofillFieldsData"]();
       const autofillFieldsData = await Promise.resolve(autofillFieldsPromise);
 
-      expect(autofillCollect["getAutofillFieldElements"]).toHaveBeenCalledWith(50);
-      expect(autofillCollect["buildAutofillFieldItem"]).toHaveBeenCalledTimes(2);
+      expect(collectAutofillContentService["getAutofillFieldElements"]).toHaveBeenCalledWith(50);
+      expect(collectAutofillContentService["buildAutofillFieldItem"]).toHaveBeenCalledTimes(2);
       expect(autofillFieldsPromise).toBeInstanceOf(Promise);
       expect(autofillFieldsData).toStrictEqual([
         {
@@ -355,14 +359,15 @@ describe("AutofillCollect", function () {
       const selectElement = document.getElementById("select");
       const spanElement = document.querySelector('span[data-bwautofill="true"]');
       jest.spyOn(document, "querySelectorAll");
-      jest.spyOn(autofillCollect as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
 
-      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
+      const formElements: FormElement[] =
+        collectAutofillContentService["getAutofillFieldElements"]();
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(
         'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), textarea:not([data-bwignore]), select:not([data-bwignore]), span[data-bwautofill]'
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).not.toHaveBeenCalled();
       expect(formElements).toEqual([
         usernameInput,
         passwordInput,
@@ -387,16 +392,17 @@ describe("AutofillCollect", function () {
       `;
       const spanElement = document.querySelector("span[data-bwautofill='true']");
       const textAreaInput = document.querySelector("textarea");
-      jest.spyOn(autofillCollect as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
 
-      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"](2);
+      const formElements: FormElement[] =
+        collectAutofillContentService["getAutofillFieldElements"](2);
 
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         1,
         spanElement,
         "type"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         2,
         textAreaInput,
         "type"
@@ -452,7 +458,8 @@ describe("AutofillCollect", function () {
       const passwordInput = document.querySelector('input[type="password"]');
       const secondSpan = document.getElementById("second-span");
 
-      const formElements: FormElement[] = autofillCollect["getAutofillFieldElements"]();
+      const formElements: FormElement[] =
+        collectAutofillContentService["getAutofillFieldElements"]();
 
       expect(formElements).toEqual([
         inputRadioA,
@@ -506,7 +513,8 @@ describe("AutofillCollect", function () {
       const inputRadioA = document.querySelector('input[type="radio"][value="option-a"]');
       const inputRadioB = document.querySelector('input[type="radio"][value="option-b"]');
 
-      const truncatedFormElements: FormElement[] = autofillCollect["getAutofillFieldElements"](8);
+      const truncatedFormElements: FormElement[] =
+        collectAutofillContentService["getAutofillFieldElements"](8);
 
       expect(truncatedFormElements).toEqual([
         textAreaInput,
@@ -532,50 +540,55 @@ describe("AutofillCollect", function () {
         <span id="${spanElementId}" class="${spanElementClasses}" tabindex="${spanElementTabIndex}" title="${spanElementTitle}">Span Element</span>
       `;
       const spanElement = document.getElementById(spanElementId) as ElementWithOpId<FormElement>;
-      jest.spyOn(autofillCollect as any, "getAutofillFieldMaxLength");
+      jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(autofillCollect["autofillFieldVisibility"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
-      jest.spyOn(autofillCollect as any, "getPropertyOrAttribute");
-      jest.spyOn(autofillCollect as any, "getElementValue");
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getElementValue");
 
-      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](spanElement, index);
+      const autofillFieldItem = await collectAutofillContentService["buildAutofillFieldItem"](
+        spanElement,
+        index
+      );
 
-      expect(autofillCollect["getAutofillFieldMaxLength"]).toHaveBeenCalledWith(spanElement);
-      expect(autofillCollect["autofillFieldVisibility"].isFieldViewable).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["getAutofillFieldMaxLength"]).toHaveBeenCalledWith(
         spanElement
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(
+        collectAutofillContentService["autofillFieldVisibilityService"].isFieldViewable
+      ).toHaveBeenCalledWith(spanElement);
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         1,
         spanElement,
         "id"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         2,
         spanElement,
         "name"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         3,
         spanElement,
         "class"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         4,
         spanElement,
         "tabindex"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         5,
         spanElement,
         "title"
       );
-      expect(autofillCollect["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         6,
         spanElement,
         "tagName"
       );
-      expect(autofillCollect["getElementValue"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["getElementValue"]).not.toHaveBeenCalled();
       expect(autofillFieldItem).toEqual({
         elementNumber: index,
         htmlClass: spanElementClasses,
@@ -635,14 +648,14 @@ describe("AutofillCollect", function () {
       const usernameInput = document.getElementById(
         usernameField.id
       ) as ElementWithOpId<FillableControl>;
-      jest.spyOn(autofillCollect as any, "getAutofillFieldMaxLength");
+      jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(autofillCollect["autofillFieldVisibility"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
-      jest.spyOn(autofillCollect as any, "getPropertyOrAttribute");
-      jest.spyOn(autofillCollect as any, "getElementValue");
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getElementValue");
 
-      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](
+      const autofillFieldItem = await collectAutofillContentService["buildAutofillFieldItem"](
         usernameInput,
         index
       );
@@ -720,14 +733,17 @@ describe("AutofillCollect", function () {
       const hiddenInput = document.getElementById(
         hiddenField.id
       ) as ElementWithOpId<FillableControl>;
-      jest.spyOn(autofillCollect as any, "getAutofillFieldMaxLength");
+      jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(autofillCollect["autofillFieldVisibility"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["autofillFieldVisibilityService"], "isFieldViewable")
         .mockResolvedValue(true);
-      jest.spyOn(autofillCollect as any, "getPropertyOrAttribute");
-      jest.spyOn(autofillCollect as any, "getElementValue");
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getElementValue");
 
-      const autofillFieldItem = await autofillCollect["buildAutofillFieldItem"](hiddenInput, index);
+      const autofillFieldItem = await collectAutofillContentService["buildAutofillFieldItem"](
+        hiddenInput,
+        index
+      );
 
       expect(autofillFieldItem).toEqual({
         "aria-disabled": false,
@@ -759,7 +775,7 @@ describe("AutofillCollect", function () {
 
   describe("createAutofillFieldLabelTag", function () {
     beforeEach(function () {
-      jest.spyOn(autofillCollect as any, "createLabelElementsTag");
+      jest.spyOn(collectAutofillContentService as any, "createLabelElementsTag");
       jest.spyOn(document, "querySelectorAll");
     });
 
@@ -771,9 +787,9 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set(element.labels)
       );
       expect(document.querySelectorAll).not.toHaveBeenCalled();
@@ -788,10 +804,10 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#country-id") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-id']");
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.id}"]`);
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set([elementLabel])
       );
       expect(labelTag).toEqual("Country");
@@ -805,11 +821,11 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("select") as FillableControl;
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).not.toHaveBeenCalledWith(`label[for="${element.id}"]`);
       expect(document.querySelectorAll).toHaveBeenCalledWith(`label[for="${element.name}"]`);
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set([elementLabel])
       );
       expect(labelTag).toEqual("Country");
@@ -824,12 +840,12 @@ describe("AutofillCollect", function () {
       element.name = "country-name";
       const elementLabel = document.querySelector("label[for='country-name']");
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
       expect(document.querySelectorAll).toHaveBeenCalledWith(
         `label[for="${element.id}"], label[for="${element.name}"]`
       );
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set([elementLabel])
       );
       expect(labelTag).toEqual("Country");
@@ -843,9 +859,9 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = element.parentElement;
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set([elementLabel])
       );
       expect(labelTag).toEqual("Username");
@@ -863,9 +879,9 @@ describe("AutofillCollect", function () {
       const element = document.querySelector("#username-id") as FillableControl;
       const elementLabel = document.querySelector("#label-element");
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
-      expect(autofillCollect["createLabelElementsTag"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["createLabelElementsTag"]).toHaveBeenCalledWith(
         new Set([elementLabel])
       );
       expect(labelTag).toEqual("Username");
@@ -877,7 +893,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldLabelTag"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
       expect(labelTag).toEqual("");
     });
@@ -893,7 +909,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labels = autofillCollect["queryElementLabels"](element);
+      const labels = collectAutofillContentService["queryElementLabels"](element);
 
       expect(labels).toBeNull();
     });
@@ -904,7 +920,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labels = autofillCollect["queryElementLabels"](element);
+      const labels = collectAutofillContentService["queryElementLabels"](element);
 
       expect(labels).toEqual(document.querySelectorAll("label"));
     });
@@ -916,7 +932,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labels = autofillCollect["queryElementLabels"](element);
+      const labels = collectAutofillContentService["queryElementLabels"](element);
 
       expect(labels).toEqual(document.querySelectorAll("label[for='username-id']"));
     });
@@ -928,7 +944,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labels = autofillCollect["queryElementLabels"](element);
+      const labels = collectAutofillContentService["queryElementLabels"](element);
 
       expect(labels).toEqual(document.querySelectorAll("label[for='username']"));
     });
@@ -944,18 +960,16 @@ describe("AutofillCollect", function () {
         <input type="text" name="username" id="username-id">
       `;
       const labels = document.querySelectorAll("label");
-      jest.spyOn(autofillCollect as any, "trimAndRemoveNonPrintableText");
+      jest.spyOn(collectAutofillContentService as any, "trimAndRemoveNonPrintableText");
 
-      const labelTag = autofillCollect["createLabelElementsTag"](new Set(labels));
+      const labelTag = collectAutofillContentService["createLabelElementsTag"](new Set(labels));
 
-      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenNthCalledWith(
-        1,
-        firstLabelText
-      );
-      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenNthCalledWith(
-        2,
-        secondLabelText
-      );
+      expect(
+        collectAutofillContentService["trimAndRemoveNonPrintableText"]
+      ).toHaveBeenNthCalledWith(1, firstLabelText);
+      expect(
+        collectAutofillContentService["trimAndRemoveNonPrintableText"]
+      ).toHaveBeenNthCalledWith(2, secondLabelText);
       expect(labelTag).toEqual(`${firstLabelText}${secondLabelText}`);
     });
   });
@@ -970,7 +984,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("select") as FillableControl;
 
-      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+      const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
       expect(maxLength).toBeNull();
     });
@@ -981,7 +995,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+      const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
       expect(maxLength).toEqual(999);
     });
@@ -992,7 +1006,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+      const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
       expect(maxLength).toEqual(999);
     });
@@ -1003,7 +1017,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const maxLength = autofillCollect["getAutofillFieldMaxLength"](element);
+      const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
       expect(maxLength).toEqual(10);
     });
@@ -1016,7 +1030,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
       expect(labelTag).toEqual("");
     });
@@ -1028,7 +1042,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
       expect(labelTag).toEqual("Username");
     });
@@ -1040,7 +1054,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldRightLabel"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
       expect(labelTag).toEqual("Username");
     });
@@ -1057,7 +1071,7 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("input") as FillableControl;
 
-      const labelTag = autofillCollect["createAutofillFieldLeftLabel"](element);
+      const labelTag = collectAutofillContentService["createAutofillFieldLeftLabel"](element);
 
       expect(labelTag).toEqual("Text ContentUsername");
     });
@@ -1086,7 +1100,7 @@ describe("AutofillCollect", function () {
       ) as HTMLInputElement;
 
       const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+        collectAutofillContentService["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual("Password");
     });
@@ -1113,7 +1127,7 @@ describe("AutofillCollect", function () {
       ) as HTMLInputElement;
 
       const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+        collectAutofillContentService["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual("Login code");
     });
@@ -1135,7 +1149,7 @@ describe("AutofillCollect", function () {
       ) as HTMLInputElement;
 
       const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+        collectAutofillContentService["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual(null);
     });
@@ -1162,7 +1176,7 @@ describe("AutofillCollect", function () {
       ) as HTMLInputElement;
 
       const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+        collectAutofillContentService["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual(null);
     });
@@ -1188,7 +1202,7 @@ describe("AutofillCollect", function () {
       ) as HTMLInputElement;
 
       const targetTableCellLabel =
-        autofillCollect["createAutofillFieldTopLabel"](targetTableCellInput);
+        collectAutofillContentService["createAutofillFieldTopLabel"](targetTableCellInput);
 
       expect(targetTableCellLabel).toEqual(null);
     });
@@ -1216,7 +1230,7 @@ describe("AutofillCollect", function () {
         const element = document.createElement(tag);
 
         it(`returns true if the element tag is a ${tag}`, function () {
-          expect(autofillCollect["isNewSectionElement"](element)).toEqual(true);
+          expect(collectAutofillContentService["isNewSectionElement"](element)).toEqual(true);
         });
       });
     });
@@ -1226,13 +1240,13 @@ describe("AutofillCollect", function () {
         const element = document.createElement(tag);
 
         it(`returns false if the element tag is a ${tag}`, function () {
-          expect(autofillCollect["isNewSectionElement"](element)).toEqual(false);
+          expect(collectAutofillContentService["isNewSectionElement"](element)).toEqual(false);
         });
       });
     });
 
     it(`returns true if the provided element is falsy`, function () {
-      expect(autofillCollect["isNewSectionElement"](undefined)).toEqual(true);
+      expect(collectAutofillContentService["isNewSectionElement"](undefined)).toEqual(true);
     });
   });
 
@@ -1248,15 +1262,15 @@ describe("AutofillCollect", function () {
       `;
       const element = document.querySelector("#username-id");
       const textNode = element.previousSibling;
-      const parsedTextContent = autofillCollect["trimAndRemoveNonPrintableText"](
+      const parsedTextContent = collectAutofillContentService["trimAndRemoveNonPrintableText"](
         textNode.nodeValue
       );
-      jest.spyOn(autofillCollect as any, "trimAndRemoveNonPrintableText");
+      jest.spyOn(collectAutofillContentService as any, "trimAndRemoveNonPrintableText");
 
-      const textContent = autofillCollect["getTextContentFromElement"](textNode);
+      const textContent = collectAutofillContentService["getTextContentFromElement"](textNode);
 
       expect(textNode.nodeType).toEqual(Node.TEXT_NODE);
-      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
         textNode.nodeValue
       );
       expect(textContent).toEqual(parsedTextContent);
@@ -1270,12 +1284,12 @@ describe("AutofillCollect", function () {
         </div>
       `;
       const element = document.querySelector('label[for="username-id"]');
-      jest.spyOn(autofillCollect as any, "trimAndRemoveNonPrintableText");
+      jest.spyOn(collectAutofillContentService as any, "trimAndRemoveNonPrintableText");
 
-      const textContent = autofillCollect["getTextContentFromElement"](element);
+      const textContent = collectAutofillContentService["getTextContentFromElement"](element);
 
       expect(element.nodeType).toEqual(Node.ELEMENT_NODE);
-      expect(autofillCollect["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
+      expect(collectAutofillContentService["trimAndRemoveNonPrintableText"]).toHaveBeenCalledWith(
         element.textContent
       );
       expect(textContent).toEqual(element.textContent);
@@ -1284,7 +1298,7 @@ describe("AutofillCollect", function () {
 
   describe("trimAndRemoveNonPrintableText", function () {
     it("returns an empty string if no text content is passed", function () {
-      const textContent = autofillCollect["trimAndRemoveNonPrintableText"](undefined);
+      const textContent = collectAutofillContentService["trimAndRemoveNonPrintableText"](undefined);
 
       expect(textContent).toEqual("");
     });
@@ -1293,7 +1307,8 @@ describe("AutofillCollect", function () {
       const nonParsedText = `Hello!\nThis is a \t
       test   string.\x0B\x08`;
 
-      const parsedText = autofillCollect["trimAndRemoveNonPrintableText"](nonParsedText);
+      const parsedText =
+        collectAutofillContentService["trimAndRemoveNonPrintableText"](nonParsedText);
 
       expect(parsedText).toEqual("Hello! This is a test string.");
     });
@@ -1317,7 +1332,7 @@ describe("AutofillCollect", function () {
       const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
 
       const elementList: string[] =
-        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+        collectAutofillContentService["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual([
         "something else",
@@ -1345,7 +1360,7 @@ describe("AutofillCollect", function () {
 
       const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
       const elementList: string[] =
-        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+        collectAutofillContentService["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual(["something else"]);
     });
@@ -1364,7 +1379,7 @@ describe("AutofillCollect", function () {
 
       const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
       const elementList: string[] =
-        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+        collectAutofillContentService["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual(["some things"]);
     });
@@ -1384,7 +1399,7 @@ describe("AutofillCollect", function () {
 
       const textInput = document.querySelector("#input-tag") as FormElementWithAttribute;
       const elementList: string[] =
-        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+        collectAutofillContentService["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual(["some nested things"]);
     });
@@ -1393,7 +1408,7 @@ describe("AutofillCollect", function () {
       const textInput = document.querySelector("html") as HTMLHtmlElement;
 
       const elementList: string[] =
-        autofillCollect["recursivelyGetTextFromPreviousSiblings"](textInput);
+        collectAutofillContentService["recursivelyGetTextFromPreviousSiblings"](textInput);
 
       expect(elementList).toEqual([]);
     });
@@ -1408,11 +1423,20 @@ describe("AutofillCollect", function () {
       jest.spyOn(textInput, "getAttribute");
       jest.spyOn(checkboxInput, "getAttribute");
 
-      const textInputValue = autofillCollect["getPropertyOrAttribute"](textInput, "value");
-      const textInputId = autofillCollect["getPropertyOrAttribute"](textInput, "id");
-      const textInputBaseURI = autofillCollect["getPropertyOrAttribute"](textInput, "baseURI");
-      const textInputAutofocus = autofillCollect["getPropertyOrAttribute"](textInput, "autofocus");
-      const checkboxInputChecked = autofillCollect["getPropertyOrAttribute"](
+      const textInputValue = collectAutofillContentService["getPropertyOrAttribute"](
+        textInput,
+        "value"
+      );
+      const textInputId = collectAutofillContentService["getPropertyOrAttribute"](textInput, "id");
+      const textInputBaseURI = collectAutofillContentService["getPropertyOrAttribute"](
+        textInput,
+        "baseURI"
+      );
+      const textInputAutofocus = collectAutofillContentService["getPropertyOrAttribute"](
+        textInput,
+        "autofocus"
+      );
+      const checkboxInputChecked = collectAutofillContentService["getPropertyOrAttribute"](
         checkboxInput,
         "checked"
       );
@@ -1431,7 +1455,7 @@ describe("AutofillCollect", function () {
       textInput.setAttribute("data-unique-attribute", "unique-value");
       jest.spyOn(textInput, "getAttribute");
 
-      const textInputUniqueAttribute = autofillCollect["getPropertyOrAttribute"](
+      const textInputUniqueAttribute = collectAutofillContentService["getPropertyOrAttribute"](
         textInput,
         "data-unique-attribute"
       );
@@ -1444,7 +1468,7 @@ describe("AutofillCollect", function () {
       const textInput = document.querySelector("#username") as HTMLInputElement;
       jest.spyOn(textInput, "getAttribute");
 
-      const textInputNonExistentAttribute = autofillCollect["getPropertyOrAttribute"](
+      const textInputNonExistentAttribute = collectAutofillContentService["getPropertyOrAttribute"](
         textInput,
         "non-existent-attribute"
       );
@@ -1466,10 +1490,10 @@ describe("AutofillCollect", function () {
       const hiddenInput = document.querySelector("#hidden-input") as HTMLInputElement;
       const spanInput = document.querySelector("#span-input") as HTMLInputElement;
 
-      const textInputValue = autofillCollect["getElementValue"](textInput);
-      const checkboxInputValue = autofillCollect["getElementValue"](checkboxInput);
-      const hiddenInputValue = autofillCollect["getElementValue"](hiddenInput);
-      const spanInputValue = autofillCollect["getElementValue"](spanInput);
+      const textInputValue = collectAutofillContentService["getElementValue"](textInput);
+      const checkboxInputValue = collectAutofillContentService["getElementValue"](checkboxInput);
+      const hiddenInputValue = collectAutofillContentService["getElementValue"](hiddenInput);
+      const spanInputValue = collectAutofillContentService["getElementValue"](spanInput);
 
       expect(textInputValue).toEqual("");
       expect(checkboxInputValue).toEqual("");
@@ -1491,10 +1515,10 @@ describe("AutofillCollect", function () {
       hiddenInput.value = "aHiddenInputValue";
       const spanInput = document.querySelector("#span-input") as HTMLInputElement;
 
-      const textInputValue = autofillCollect["getElementValue"](textInput);
-      const checkboxInputValue = autofillCollect["getElementValue"](checkboxInput);
-      const hiddenInputValue = autofillCollect["getElementValue"](hiddenInput);
-      const spanInputValue = autofillCollect["getElementValue"](spanInput);
+      const textInputValue = collectAutofillContentService["getElementValue"](textInput);
+      const checkboxInputValue = collectAutofillContentService["getElementValue"](checkboxInput);
+      const hiddenInputValue = collectAutofillContentService["getElementValue"](hiddenInput);
+      const spanInputValue = collectAutofillContentService["getElementValue"](spanInput);
 
       expect(textInputValue).toEqual("jsmith");
       expect(checkboxInputValue).toEqual("✓");
@@ -1510,7 +1534,8 @@ describe("AutofillCollect", function () {
         "#long-value-hidden-input"
       ) as HTMLInputElement;
 
-      const longHiddenValue = autofillCollect["getElementValue"](longValueHiddenInput);
+      const longHiddenValue =
+        collectAutofillContentService["getElementValue"](longValueHiddenInput);
 
       expect(longHiddenValue).toEqual(
         "’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe. | “Beware the Jabberwock, my son! | The jaws that bite, the claws that catch! | Beware the Jubjub bird, and shun | The f...SNIPPED"
@@ -1535,9 +1560,9 @@ describe("AutofillCollect", function () {
       ) as HTMLSelectElement;
 
       const selectWithOptionsOptions =
-        autofillCollect["getSelectElementOptions"](selectWithOptions);
+        collectAutofillContentService["getSelectElementOptions"](selectWithOptions);
       const selectWithoutOptionsOptions =
-        autofillCollect["getSelectElementOptions"](selectWithoutOptions);
+        collectAutofillContentService["getSelectElementOptions"](selectWithoutOptions);
 
       expect(selectWithOptionsOptions).toEqual({
         options: [
