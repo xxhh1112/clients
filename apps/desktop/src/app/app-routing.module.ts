@@ -3,6 +3,8 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
 import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.component";
 import { LoginGuard } from "../auth/guards/login.guard";
@@ -41,7 +43,7 @@ const routes: Routes = [
   {
     path: "login-initiated",
     component: LoginDecryptionOptionsComponent,
-    canActivate: [], // TODO: do I need an unauth guard like web?
+    canActivate: [LockGuard, canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
   },
   { path: "register", component: RegisterComponent },
   {

@@ -4,6 +4,8 @@ import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
 import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
+import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
@@ -97,7 +99,7 @@ const routes: Routes = [
   {
     path: "login-initiated",
     component: LoginDecryptionOptionsComponent,
-    canActivate: [], // TODO: put UnauthGuard back
+    canActivate: [LockGuard, canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
   },
   {
     path: "sso",
