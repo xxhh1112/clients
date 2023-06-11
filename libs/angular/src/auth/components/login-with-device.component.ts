@@ -117,6 +117,13 @@ export class LoginWithDeviceComponent
 
   private async confirmResponse(requestId: string) {
     try {
+      // TODO for TDE: We are going to have to make changes here to support the new unlock flow as the user is already AuthN via SSO
+      // The existing flow currently works for unauthN users and authenticates them AND unlocks their vault.
+      // We only need the unlock portion of the logic to run.
+
+      // We need to make the approving device treats the MP hash as optional
+      // and make sure the server can handle that.
+
       const response = await this.apiService.getAuthResponse(
         requestId,
         this.passwordlessRequest.accessCode
@@ -125,6 +132,13 @@ export class LoginWithDeviceComponent
       if (!response.requestApproved) {
         return;
       }
+
+      // TODO for TDE:
+      // Add a check here to see if the user is already AuthN via SSO, then we
+      // have to figure out how to handle the unlock portion of the logic.
+      // Taken from PasswordlessLogInStrategy:
+      // await this.cryptoService.setKey(this.passwordlessCredentials.decKey);
+      // navigate to vault
 
       const credentials = await this.buildLoginCredentials(requestId, response);
       const loginResponse = await this.authService.logIn(credentials);

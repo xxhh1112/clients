@@ -310,6 +310,9 @@ export class LockComponent implements OnInit, OnDestroy {
     const usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
     this.hideInput = usesKeyConnector && !this.pinLock;
 
+    // TODO: might have to duplicate/extend this check a bit - should it use new AcctDecryptionOptions?
+    // if the user has no MP hash via TDE and they get here without biometric / pin as well, they should logout as well.
+
     // Users with key connector and without biometric or pin has no MP to unlock using
     if (usesKeyConnector && !(this.biometricLock || this.pinLock)) {
       await this.vaultTimeoutService.logOut();
