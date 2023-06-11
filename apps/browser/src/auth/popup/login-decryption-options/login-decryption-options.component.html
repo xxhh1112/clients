@@ -6,40 +6,72 @@
   </header>
 
   <div class="content login-page">
-    <div class="standard-x-margin">
-      <p class="lead">{{ "logInInitiated" | i18n }}</p>
-      <h6 class="standard-bottom-margin">{{ "deviceApprovalRequired" | i18n }}</h6>
+    <div class="full-loading-spinner" *ngIf="loading">
+      <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
     </div>
 
-    <form
-      id="rememberDeviceForm"
-      class="standard-bottom-margin standard-x-margin"
-      [formGroup]="rememberDeviceForm"
-    >
-      <div class="">
-        <input
-          type="checkbox"
-          id="rememberDevice"
-          name="rememberDevice"
-          formControlName="rememberDevice"
-        />
-        <label for="rememberDevice">
-          {{ "rememberThisDevice" | i18n }}
-        </label>
-        <p id="rememberThisDeviceHintText">{{ "uncheckIfPublicDevice" | i18n }}</p>
+    <ng-container *ngIf="!loading">
+      <div class="standard-x-margin">
+        <p class="lead">{{ "logInInitiated" | i18n }}</p>
+        <h6 class="mb-20px">{{ "deviceApprovalRequired" | i18n }}</h6>
       </div>
-    </form>
 
-    <div class="box">
-      <button type="button" class="btn primary block btn-bottom-margin">
-        <b>{{ "approveFromYourOtherDevice" | i18n }}</b>
-      </button>
-      <button type="button" class="btn block btn-bottom-margin">
-        {{ "requestAdminApproval" | i18n }}
-      </button>
-      <button type="button" class="btn block">
-        {{ "approveWithMasterPassword" | i18n }}
-      </button>
-    </div>
+      <form
+        id="rememberDeviceForm"
+        class="mb-20px standard-x-margin"
+        [formGroup]="rememberDeviceForm"
+      >
+        <div class="">
+          <input
+            type="checkbox"
+            id="rememberDevice"
+            name="rememberDevice"
+            formControlName="rememberDevice"
+          />
+          <label for="rememberDevice">
+            {{ "rememberThisDevice" | i18n }}
+          </label>
+          <p id="rememberThisDeviceHintText">{{ "uncheckIfPublicDevice" | i18n }}</p>
+        </div>
+      </form>
+
+      <div class="box mb-20px">
+        <button
+          *ngIf="showApproveFromOtherDeviceBtn"
+          (click)="approveFromOtherDevice()"
+          type="button"
+          class="btn primary block"
+          [ngClass]="{
+            'btn-bottom-margin': showReqAdminApprovalBtn || showApproveWithMasterPasswordBtn
+          }"
+        >
+          <b>{{ "approveFromYourOtherDevice" | i18n }}</b>
+        </button>
+        <button
+          *ngIf="showReqAdminApprovalBtn"
+          (click)="requestAdminApproval()"
+          type="button"
+          class="btn block"
+          [ngClass]="{ 'btn-bottom-margin': showApproveWithMasterPasswordBtn }"
+        >
+          {{ "requestAdminApproval" | i18n }}
+        </button>
+        <button
+          type="button"
+          class="btn block"
+          *ngIf="showApproveWithMasterPasswordBtn"
+          (click)="approveWithMasterPassword()"
+        >
+          {{ "approveWithMasterPassword" | i18n }}
+        </button>
+      </div>
+
+      <hr class="muted-hr mx-5px mb-20px" />
+
+      <div class="small mx-5px">
+        <p class="no-margin">{{ "loggingInAs" | i18n }} {{ userEmail }}</p>
+        <a [routerLink]="[]" (click)="logOut()">{{ "notYou" | i18n }}</a>
+      </div>
+    </ng-container>
   </div>
 </div>

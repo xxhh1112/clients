@@ -7,7 +7,7 @@
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
 
-<div class="tw-container tw-mx-auto">
+<div class="tw-container tw-mx-auto" *ngIf="!loading">
   <div
     class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
   >
@@ -30,14 +30,15 @@
         </bit-form-control>
       </form>
 
-      <div class="tw-flex tw-flex-col">
+      <div class="tw-mb-6 tw-flex tw-flex-col">
         <button
           *ngIf="showApproveFromOtherDeviceBtn"
+          (click)="approveFromOtherDevice()"
           bitButton
           type="button"
           buttonType="primary"
           [block]="true"
-          class="tw-mb-3"
+          [ngClass]="{ 'tw-mb-3': showReqAdminApprovalBtn || showApproveWithMasterPasswordBtn }"
           [appA11yTitle]="'approveFromYourOtherDevice' | i18n"
         >
           {{ "approveFromYourOtherDevice" | i18n }}
@@ -45,10 +46,11 @@
 
         <button
           *ngIf="showReqAdminApprovalBtn"
+          (click)="requestAdminApproval()"
           bitButton
           type="button"
           buttonType="secondary"
-          class="tw-mb-3"
+          [ngClass]="{ 'tw-mb-3': showApproveWithMasterPasswordBtn }"
           [appA11yTitle]="'requestAdminApproval' | i18n"
         >
           {{ "requestAdminApproval" | i18n }}
@@ -64,6 +66,13 @@
         >
           {{ "approveWithMasterPassword" | i18n }}
         </button>
+      </div>
+
+      <hr class="tw-mb-6 tw-mt-0" />
+
+      <div class="tw-m-0 tw-text-sm">
+        <p class="tw-mb-1">{{ "loggingInAs" | i18n }} {{ userEmail }}</p>
+        <a [routerLink]="[]" (click)="logOut()">{{ "notYou" | i18n }}</a>
       </div>
     </div>
   </div>
