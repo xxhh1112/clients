@@ -12,6 +12,6 @@
   "flags": {
     "secretsManager": true,
     "showPasswordless": true,
-    "enableCipherKeyEncryption": true
+    "enableCipherKeyEncryption": false
   }
 }
