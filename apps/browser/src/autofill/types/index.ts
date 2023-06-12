@@ -1,12 +1,14 @@
+/** DEAD CODE */
 /**
  * The Document with additional custom properties added by this script
  */
-export type AutofillDocument = Document & {
-  elementsByOPID: Record<string, Element>;
-  elementForOPID: (
-    targetOpId?: string | null | undefined
-  ) => FillableControl | HTMLButtonElement | null | undefined;
-};
+// export type AutofillDocument = Document & {
+//   elementsByOPID: Record<string, Element>;
+//   elementForOPID: (
+//     targetOpId?: string | null | undefined
+//   ) => FillableControl | HTMLButtonElement | null | undefined;
+// };
+/** END DEAD CODE */
 
 /**
  * A HTMLElement (usually a form element) with additional custom properties added by this script

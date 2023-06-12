@@ -47,12 +47,7 @@
             "allowedNames": ["self"]
           }
         ],
-        "no-console": [
-          "error",
-          {
-            "allow": ["warn", "error"]
-          }
-        ],
+        "no-console": "error",
         "import/no-unresolved": "off", // TODO: Look into turning off once each package is an actual package.
         "import/order": [
           "error",

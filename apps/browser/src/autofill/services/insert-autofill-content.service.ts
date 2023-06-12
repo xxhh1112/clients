@@ -46,74 +46,6 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     fillScript.script.forEach(this.runFillScriptAction);
   }
 
-  private runFillScriptAction = ([action, opid, value]: FillScript, actionIndex: number): void => {
-    if (!this.autofillInsertActions[action]) {
-      return;
-    }
-
-    const delayActionsInMilliseconds = 20;
-    setTimeout(
-      () => this.autofillInsertActions[action]({ opid, value }),
-      delayActionsInMilliseconds * actionIndex
-    );
-  };
-
-  private fillFieldByOpid(opid: string | undefined, value: string) {
-    if (!opid) {
-      return;
-    }
-
-    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-    this.insertValueIntoField(element, value);
-  }
-
-  private clickOnFieldByOpid(opid: string) {
-    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-    this.triggerClickOnElement(element);
-  }
-
-  private focusOnFieldByOpid(opid: string) {
-    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-    this.triggerFocusOnElement(element);
-  }
-
-  private insertValueIntoField(element: FormFieldElement, value: string) {
-    const elementCanBeReadonly =
-      element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
-    const elementCanBeFilled = elementCanBeReadonly || element instanceof HTMLSelectElement;
-
-    if (
-      !element ||
-      !value ||
-      (elementCanBeFilled && element.disabled) ||
-      (elementCanBeReadonly && element.readOnly)
-    ) {
-      return;
-    }
-
-    const elementType = elementCanBeFilled ? element.type : "";
-    const isFillableCheckboxOrRadioElement =
-      new Set(["checkbox", "radio"]).has(elementType) &&
-      new Set(["true", "y", "1", "yes", "✓"]).has(String(value).toLowerCase());
-    if (isFillableCheckboxOrRadioElement) {
-      this.doAllFillOperations(element, function (theElement: any) {
-        theElement.checked = true;
-      });
-
-      return;
-    }
-
-    this.doAllFillOperations(element, function (theElement: any) {
-      if (!theElement.type && theElement.tagName.toLowerCase() === "span") {
-        theElement.innerText = value;
-
-        return;
-      }
-
-      theElement.value = value;
-    });
-  }
-
   private fillingWithinSandBoxedIframe() {
     return String(self.origin).toLowerCase() === "null";
   }
@@ -151,63 +83,119 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return !confirm(confirmationWarning);
   }
 
-  private doAllFillOperations(element: FormFieldElement, callback: CallableFunction): void {
-    if (!element) {
+  private runFillScriptAction = ([action, opid, value]: FillScript, actionIndex: number): void => {
+    if (!this.autofillInsertActions[action] || !opid) {
       return;
     }
 
-    this.simulateClickAndKeyboardEventsOnElement(element);
-    callback(element);
-    this.simulateInputChangeEventOnElement(element);
+    const delayActionsInMilliseconds = 20;
+    setTimeout(
+      () => this.autofillInsertActions[action]({ opid, value }),
+      delayActionsInMilliseconds * actionIndex
+    );
+  };
 
-    if (!this.canElementBeAnimated(element)) {
-      return;
-    }
-
-    element.classList.add("com-bitwarden-browser-animated-fill");
-    setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
+  private fillFieldByOpid(opid: string, value: string) {
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
+    this.insertValueIntoField(element, value);
   }
 
-  private simulateClickAndKeyboardEventsOnElement(element: FormFieldElement): void {
-    const initialElementValue = "value" in element ? element.value : "";
-
+  private clickOnFieldByOpid(opid: string) {
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.triggerClickOnElement(element);
-    this.triggerFocusOnElement(element);
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYDOWN);
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYPRESS);
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYUP);
+  }
 
+  private focusOnFieldByOpid(opid: string) {
+    const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
+    this.triggerFocusOnElement(element);
+  }
+
+  private insertValueIntoField(element: FormFieldElement, value: string) {
+    const elementCanBeReadonly =
+      element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+    const elementCanBeFilled = elementCanBeReadonly || element instanceof HTMLSelectElement;
+
+    if (
+      !element ||
+      !value ||
+      (elementCanBeReadonly && element.readOnly) ||
+      (elementCanBeFilled && element.disabled)
+    ) {
+      return;
+    }
+
+    if (element instanceof HTMLSpanElement) {
+      this.handleInsertValueAndTriggerSimulatedEvents(element, () => (element.innerText = value));
+      return;
+    }
+
+    const isFillableCheckboxOrRadioElement =
+      element instanceof HTMLInputElement &&
+      new Set(["checkbox", "radio"]).has(element.type) &&
+      new Set(["true", "y", "1", "yes", "✓"]).has(String(value).toLowerCase());
+    if (isFillableCheckboxOrRadioElement) {
+      this.handleInsertValueAndTriggerSimulatedEvents(element, () => (element.checked = true));
+      return;
+    }
+
+    this.handleInsertValueAndTriggerSimulatedEvents(element, () => (element.value = value));
+  }
+
+  private handleInsertValueAndTriggerSimulatedEvents(
+    element: FormFieldElement,
+    valueChangeCallback: CallableFunction
+  ): void {
+    this.triggerPreInsertEventsOnElement(element);
+    valueChangeCallback();
+    this.triggerPostInsertEventsOnElement(element);
+    this.triggerFillAnimationOnElement(element);
+  }
+
+  private triggerPreInsertEventsOnElement(element: FormFieldElement): void {
+    const initialElementValue = "value" in element ? element.value : "";
+    this.simulateUserMouseClickEventInteractions(element);
+    this.simulateUserKeyboardEventInteractions(element);
     if ("value" in element && initialElementValue !== element.value) {
       element.value = initialElementValue;
     }
   }
 
-  private simulateInputChangeEventOnElement(element: FormFieldElement): void {
+  /**
+   *
+   * @param {FormFieldElement} element
+   * @private
+   */
+  private triggerPostInsertEventsOnElement(element: FormFieldElement): void {
     const autofilledValue = "value" in element ? element.value : "";
-
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYDOWN);
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYPRESS);
-    this.triggerKeyboardEventOnElement(element, EVENTS.KEYUP);
+    this.simulateUserKeyboardEventInteractions(element);
 
     if ("value" in element && autofilledValue !== element.value) {
       element.value = autofilledValue;
     }
 
-    this.triggerEventOnElement(element, EVENTS.INPUT);
-    this.triggerEventOnElement(element, EVENTS.CHANGE);
+    this.simulateInputElementChangedEvent(element);
     element.blur();
   }
 
-  private triggerEventOnElement(element: FormFieldElement, eventType: string): void {
-    element.dispatchEvent(new Event(eventType, { bubbles: true }));
+  private simulateUserMouseClickEventInteractions(element: FormFieldElement): void {
+    this.triggerClickOnElement(element);
+    this.triggerFocusOnElement(element);
   }
 
-  private triggerKeyboardEventOnElement(element: HTMLElement, eventType: string): void {
-    element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }));
+  private simulateUserKeyboardEventInteractions(element: FormFieldElement): void {
+    [EVENTS.KEYDOWN, EVENTS.KEYPRESS, EVENTS.KEYUP].forEach((eventType) =>
+      element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }))
+    );
+  }
+
+  private simulateInputElementChangedEvent(element: FormFieldElement): void {
+    [EVENTS.INPUT, EVENTS.CHANGE].forEach((eventType) =>
+      element.dispatchEvent(new Event(eventType, { bubbles: true }))
+    );
   }
 
   private triggerClickOnElement(element?: HTMLElement): void {
-    if (!element || typeof element.click !== TYPE_CHECK.FUNCTION) {
+    if (typeof element?.click !== TYPE_CHECK.FUNCTION) {
       return;
     }
 
@@ -215,22 +203,24 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   }
 
   private triggerFocusOnElement(element?: HTMLElement): void {
-    if (!element || typeof element.focus !== TYPE_CHECK.FUNCTION) {
+    if (typeof element?.focus !== TYPE_CHECK.FUNCTION) {
       return;
     }
 
     element.focus();
   }
 
-  private canElementBeAnimated(element: FormFieldElement): boolean {
-    if (this.formFieldVisibilityService.isFieldHiddenByCss(element)) {
-      return false;
+  private triggerFillAnimationOnElement(element: FormFieldElement): void {
+    const skipAnimatingElement =
+      !(element instanceof HTMLSpanElement) &&
+      !new Set(["email", "text", "password", "number", "tel", "url"]).has(element?.type);
+
+    if (this.formFieldVisibilityService.isFieldHiddenByCss(element) || skipAnimatingElement) {
+      return;
     }
 
-    return (
-      element instanceof HTMLSpanElement ||
-      new Set(["email", "text", "password", "number", "tel", "url"]).has(element.type)
-    );
+    element.classList.add("com-bitwarden-browser-animated-fill");
+    setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
   }
 }
 

@@ -71,7 +71,7 @@ function normalizeEvent(element: FillableControl, eventName: string) {
   return event;
 }
 
-// CG - MIGRATED TO InsertAutofillContentService.simulateInputChangeEventOnElement
+// CG - MIGRATED TO InsertAutofillContentService.triggerPostInsertEventsOnElement
 /**
  * Simulate the entry of a value into an element by using events.
  * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
@@ -232,7 +232,7 @@ export function doFocusByOpId(opId: string): null {
   return null;
 }
 
-// CG - MIGRATED TO InsertAutofillContentService.simulateClickAndKeyboardEventsOnElement
+// CG - MIGRATED TO InsertAutofillContentService.triggerPreInsertEventsOnElement
 /**
  * Simulate the entry of a value into an element.
  * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.

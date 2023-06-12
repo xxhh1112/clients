@@ -1,5 +1,5 @@
 import AutofillScript from "../models/autofill-script";
-import { FormElementWithAttribute } from "../types";
+import { FillableControl } from "../types";
 
 import CollectAutofillContentService from "./collect-autofill-content.service";
 import FormFieldVisibilityService from "./form-field-visibility.service";
@@ -269,145 +269,197 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("canElementBeAnimated", function () {
-    it("returns true when the element is a non-hidden password field", function () {
-      const testElement = document.querySelector(
-        'input[type="password"]'
-      ) as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
+  describe("triggerFillAnimationOnElement", function () {
+    beforeEach(function () {
+      jest.useFakeTimers();
+      jest.clearAllTimers();
     });
 
-    it("returns true when the element is a non-hidden email input", function () {
-      document.body.innerHTML = mockLoginForm + '<input type="email" />';
-      const testElement = document.querySelector('input[type="email"]') as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns true when the element is a non-hidden text input", function () {
-      document.body.innerHTML = mockLoginForm + '<input type="text" />';
-      const testElement = document.querySelector('input[type="text"]') as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns true when the element is a non-hidden number input", function () {
-      document.body.innerHTML = mockLoginForm + '<input type="number" />';
-      const testElement = document.querySelector(
-        'input[type="number"]'
-      ) as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns true when the element is a non-hidden tel input", function () {
-      document.body.innerHTML = mockLoginForm + '<input type="tel" />';
-      const testElement = document.querySelector('input[type="tel"]') as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns true when the element is a non-hidden url input", function () {
-      document.body.innerHTML = mockLoginForm + '<input type="url" />';
-      const testElement = document.querySelector('input[type="url"]') as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns true when the element is a non-hidden span", function () {
-      document.body.innerHTML = mockLoginForm + '<span id="input-tag"></span>';
-      const testElement = document.querySelector("#input-tag") as FormElementWithAttribute;
-
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
-
-      expect(canElementBeAnimated).toBe(true);
-    });
-
-    it("returns false when the element is a non-hidden hidden input type", function () {
+    it("will not trigger the animation when the element is a non-hidden hidden input type", async function () {
       document.body.innerHTML = mockLoginForm + '<input type="hidden" />';
-      const testElement = document.querySelector(
-        'input[type="hidden"]'
-      ) as FormElementWithAttribute;
+      const testElement = document.querySelector('input[type="hidden"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      await jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
     });
 
-    it("returns false when the element is a non-hidden textarea", function () {
+    it("will not trigger the animation when the element is a non-hidden textarea", function () {
       document.body.innerHTML = mockLoginForm + "<textarea></textarea>";
-      const testElement = document.querySelector("textarea") as FormElementWithAttribute;
+      const testElement = document.querySelector("textarea") as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
     });
 
-    it("return false when the element is a unsupported tag", function () {
+    it("will not trigger the animation when the element is a unsupported tag", function () {
       document.body.innerHTML = mockLoginForm + '<div id="input-tag"></div>';
-      const testElement = document.querySelector("#input-tag") as FormElementWithAttribute;
+      const testElement = document.querySelector("#input-tag") as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
     });
 
-    it("returns false when the element has a `visibility: hidden;` CSS rule applied to it", function () {
-      const testElement = document.querySelector(
-        'input[type="password"]'
-      ) as FormElementWithAttribute;
+    it("will not trigger the animation when the element has a `visibility: hidden;` CSS rule applied to it", function () {
+      const testElement = document.querySelector('input[type="password"]') as FillableControl;
       testElement.style.visibility = "hidden";
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
     });
 
-    it("returns false when the element has a `display: none;` CSS rule applied to it", function () {
-      const testElement = document.querySelector(
-        'input[type="password"]'
-      ) as FormElementWithAttribute;
+    it("will not trigger the animation when the element has a `display: none;` CSS rule applied to it", function () {
+      const testElement = document.querySelector('input[type="password"]') as FillableControl;
       testElement.style.display = "none";
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
     });
 
-    it("returns false when a parent of the element has an `opacity: 0;` CSS rule applied to it", function () {
+    it("will not trigger the animation when a parent of the element has an `opacity: 0;` CSS rule applied to it", function () {
       document.body.innerHTML =
         mockLoginForm + '<div style="opacity: 0;"><input type="email" /></div>';
-      const testElement = document.querySelector('input[type="email"]') as FormElementWithAttribute;
+      const testElement = document.querySelector('input[type="email"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
 
-      const canElementBeAnimated =
-        insertAutofillContentService["canElementBeAnimated"](testElement);
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
 
-      expect(canElementBeAnimated).toBe(false);
+      expect(testElement.classList.add).not.toHaveBeenCalled();
+      expect(testElement.classList.remove).not.toHaveBeenCalled();
+    });
+
+    it("will trigger the animation when the element is a non-hidden password field", function () {
+      const testElement = document.querySelector('input[type="password"]') as FillableControl;
+      jest.spyOn(insertAutofillContentService["formFieldVisibilityService"], "isFieldHiddenByCss");
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(
+        insertAutofillContentService["formFieldVisibilityService"].isFieldHiddenByCss
+      ).toHaveBeenCalledWith(testElement);
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden email input", function () {
+      document.body.innerHTML = mockLoginForm + '<input type="email" />';
+      const testElement = document.querySelector('input[type="email"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden text input", function () {
+      document.body.innerHTML = mockLoginForm + '<input type="text" />';
+      const testElement = document.querySelector('input[type="text"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden number input", function () {
+      document.body.innerHTML = mockLoginForm + '<input type="number" />';
+      const testElement = document.querySelector('input[type="number"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden tel input", function () {
+      document.body.innerHTML = mockLoginForm + '<input type="tel" />';
+      const testElement = document.querySelector('input[type="tel"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden url input", function () {
+      document.body.innerHTML = mockLoginForm + '<input type="url" />';
+      const testElement = document.querySelector('input[type="url"]') as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
+    });
+
+    it("will trigger the animation when the element is a non-hidden span", function () {
+      document.body.innerHTML = mockLoginForm + '<span id="input-tag"></span>';
+      const testElement = document.querySelector("#input-tag") as FillableControl;
+      jest.spyOn(testElement.classList, "add");
+      jest.spyOn(testElement.classList, "remove");
+
+      insertAutofillContentService["triggerFillAnimationOnElement"](testElement);
+      jest.advanceTimersByTime(200);
+
+      expect(testElement.classList.add).toHaveBeenCalledWith("com-bitwarden-browser-animated-fill");
+      expect(testElement.classList.remove).toHaveBeenCalledWith(
+        "com-bitwarden-browser-animated-fill"
+      );
     });
   });
 });
