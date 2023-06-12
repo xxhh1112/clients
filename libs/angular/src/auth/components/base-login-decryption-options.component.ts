@@ -11,6 +11,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 
+// TODO: replace this base component with a service per latest ADR
 @Directive()
 export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   private componentDestroyed$: Subject<void> = new Subject();
