@@ -15,6 +15,10 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     focus_by_opid: ({ opid }) => this.focusOnFieldByOpid(opid),
   };
 
+  /**
+   * InsertAutofillContentService constructor. Instantiates the
+   * FormFieldVisibilityService and CollectAutofillContentService classes.
+   */
   constructor(
     formFieldVisibilityService: FormFieldVisibilityService,
     collectAutofillContentService: CollectAutofillContentService
@@ -23,9 +27,15 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     this.collectAutofillContentService = collectAutofillContentService;
   }
 
+  /**
+   * Handles autofill of the forms on the current page based on the
+   * data within the passed fill script object.
+   * @param {AutofillScript} fillScript
+   * @public
+   */
   fillForm(fillScript: AutofillScript) {
     if (
-      !fillScript?.script ||
+      !fillScript.script?.length ||
       this.fillingWithinSandBoxedIframe() ||
       this.userCancelledInsecureUrlAutofill(fillScript.savedUrls) ||
       this.userCancelledUntrustedIframeAutofill(fillScript)

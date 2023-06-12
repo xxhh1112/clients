@@ -123,15 +123,25 @@ describe("AutofillInit", function () {
     });
 
     it("returns a false value if the message handler does not return a response", async function () {
-      message.command = "fillForm";
+      const response1 = await bitwardenAutofillInit["handleExtensionMessage"](
+        message,
+        sender,
+        sendResponse
+      );
+      await Promise.resolve(response1);
 
-      const response = await bitwardenAutofillInit["handleExtensionMessage"](
+      expect(response1).not.toBe(false);
+
+      message.command = "fillForm";
+      message.fillScript = mock<AutofillScript>();
+
+      const response2 = await bitwardenAutofillInit["handleExtensionMessage"](
         message,
         sender,
         sendResponse
       );
 
-      expect(response).toBe(false);
+      expect(response2).toBe(false);
     });
 
     it("returns a true value and calls sendResponse if the message handler returns a response", async function () {

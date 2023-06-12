@@ -58,6 +58,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     }
 
     if (fieldElementsWithOpid.length > 1) {
+      // eslint-disable-next-line no-console
       console.warn(`More than one element found with opid ${opid}`);
     }
 

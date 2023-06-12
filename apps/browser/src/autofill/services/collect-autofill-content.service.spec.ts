@@ -176,6 +176,7 @@ describe("CollectAutofillContentService", function () {
       expect(elementWithOpid0).toEqual(textInput);
       expect(elementWithOpid1).toEqual(textInput);
       expect(elementWithOpid1).not.toEqual(passwordInput);
+      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledWith("More than one element found with opid __1");
     });
 

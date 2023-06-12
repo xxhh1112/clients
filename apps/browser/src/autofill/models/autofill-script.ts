@@ -22,20 +22,15 @@ export type AutofillInsertActions = {
 
 export default class AutofillScript {
   script: FillScript[] = [];
-  /** DEAD CODE? documentUUID is not used anywhere */
-  // documentUUID = "";
-  /** END DEAD CODE */
   properties: AutofillScriptProperties = {};
-  /** DEAD CODE */
-  // options: AutofillScriptOptions = {};
-  /** END DEAD CODE */
   metadata: any = {}; // Unused, not written or read
   autosubmit: any = null; // Appears to be unused, read but not written
   savedUrls: string[];
   untrustedIframe: boolean;
   itemType: string; // Appears to be unused, read but not written
-
   /** DEAD CODE? documentUUID is not used anywhere */
+  // documentUUID = "";
+  // options: AutofillScriptOptions = {};
   // constructor(documentUUID: string) {
   //   this.documentUUID = documentUUID;
   // }
