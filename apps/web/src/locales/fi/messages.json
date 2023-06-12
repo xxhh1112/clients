@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Salasanavihjeesi ei voi olla sama kuin salasanasi."
   },
-  "enrollPasswordReset": {
-    "message": "Liitä tilisi salasanan palautusapuun"
+  "enrollAccountRecovery": {
+    "message": "Liitä tilin palautusapuun"
   },
-  "enrolledPasswordReset": {
-    "message": "Liitetty salasanan palautusapuun"
+  "enrolledAccountRecovery": {
+    "message": "Liitetty tilin palautusapuun"
   },
-  "withdrawPasswordReset": {
-    "message": "Eroa salasanan palautusavusta"
+  "withdrawAccountRecovery": {
+    "message": "Eroa tilin palautusavusta"
   },
   "enrollPasswordResetSuccess": {
     "message": "Liitos onnistui!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Eroaminen onnistui!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Käyttäjä $ID$ liitti tilinsä salasanan palautusapuun.",
+  "eventEnrollAccountRecovery": {
+    "message": "Käyttäjä $ID$ liittyi tilin palautusapuun.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Käyttäjä $ID$ erosi salasanan palautusavusta.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Käyttäjä $ID$ erosi tilin palautusavusta.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi"
   },
-  "resetPasswordPolicy": {
-    "message": "Pääsalasanan palautus"
+  "accountRecoveryPolicy": {
+    "message": "Tilien palautusavun hallinta"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Salli ylläpitäjien palauttaa jäsenten pääsalasanat."
+  "accountRecoveryPolicyDescription": {
+    "message": "Palauta jäsenien tilejä, jos niiden pääsalasana on unohtunut tai pääsy luotettuihin laitteisiin on menetetty. Palautusprosessit perustuvat tilin salausmenetelmään."
   },
   "resetPasswordPolicyWarning": {
     "message": "Organisaation jäsenten on liitytettävä tilinsä itse tai automaattisen liitoksen välityksellä ennen kuin ylläpitäjät voivat palauttaa heidän pääsalasanojaan."
@@ -5665,7 +5665,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Syöte ei saa ylittää $COUNT$ merkkiä.",
+    "message": "Syötteen enimmäismerkkimäärä on $COUNT$.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -6775,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Syöte ei voi sisältää vain tyhjiä merkkejä.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Sulje"
   },
@@ -6813,16 +6817,31 @@
   "trustedDeviceEncryption": {
     "message": "Luotettu laitesalaus"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Kun jäsenet on todennettu, he voivat purkaa holvin salauksen heidän laitteillaan säilytettävällä avaimella.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Tilin palautusapu -hallintakäytäntö",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "automaattisella liitoksella otetaan tämän asetuksen yhteydessä käyttöön.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "Pääsalasanan palautuskäytäntö",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "notFound": {
+    "message": "$RESOURCE$ ei löytynyt",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
   },
-  "memberDecryptionTdeDescEnd": {
-    "message": "automaattisella liitoksella otetaan käyttöön tätä valintaa käytettäessä.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "recoverAccount": {
+    "message": "Palauta tili"
+  },
+  "updatedTempPassword": {
+    "message": "Käyttäjä vaihtoi tilin palautusavun määrittämän salasanan."
   }
 }

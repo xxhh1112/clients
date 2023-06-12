@@ -4492,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Підказка для пароля не може бути такою самою, як ваш пароль."
   },
-  "enrollPasswordReset": {
-    "message": "Подати запит на скидання пароля"
+  "enrollAccountRecovery": {
+    "message": "Розгорнути на відновлення облікового запису"
   },
-  "enrolledPasswordReset": {
-    "message": "Запит на скидання пароля подано"
+  "enrolledAccountRecovery": {
+    "message": "Розгорнуто на відновлення облікового запису"
   },
-  "withdrawPasswordReset": {
-    "message": "Відкликати запит на скидання пароля"
+  "withdrawAccountRecovery": {
+    "message": "Відкликати відновлення облікового запису"
   },
   "enrollPasswordResetSuccess": {
     "message": "Запит успішно подано!"
@@ -4507,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Відмову успішно прийнято!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Користувач $ID$ подав запит на скидання пароля.",
+  "eventEnrollAccountRecovery": {
+    "message": "Користувача $ID$ розгорнуто на відновлення облікового запису.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Користувач $ID$ відмовився від скидання пароля.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Для користувача $ID$ відкликано відновлення облікового запису.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Розгортання дозволить адміністраторам організації змінювати ваш головний пароль"
   },
-  "resetPasswordPolicy": {
-    "message": "Скидання головного пароля"
+  "accountRecoveryPolicy": {
+    "message": "Адміністрування відновлення облікового запису"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Дозволити адміністраторам скидати головний пароль учасників."
+  "accountRecoveryPolicyDescription": {
+    "message": "Відновлення облікових записів учасників у разі втрати головного пароля або довірених пристроїв. Процес відновлення базується на методі шифрування облікового запису."
   },
   "resetPasswordPolicyWarning": {
     "message": "Учасники організації мають подати запит самостійно, або отримати автоматичне подання запиту, перш ніж адміністратори зможуть скинути їхній пароль."
@@ -6775,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Введене значення не повинно містити лише пробіл.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Відхилити"
   },
@@ -6813,16 +6817,31 @@
   "trustedDeviceEncryption": {
     "message": "Шифрування досвіреного пристрою"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Після авторизації учасники розшифровуватимуть дані сховища з використанням ключа, збереженого на їхньому пристрої.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Політика адміністрування відновлення облікових записів",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "з автоматичним розгортанням активується, якщо використовується ця опція.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "Політика скидання головного пароля",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
   },
-  "memberDecryptionTdeDescEnd": {
-    "message": "з автоматичним розгортанням увімкнеться, якщо використовується ця опція.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "recoverAccount": {
+    "message": "Відновити обліковий запис"
+  },
+  "updatedTempPassword": {
+    "message": "Користувач оновив пароль під час відновлення облікового запису."
   }
 }
