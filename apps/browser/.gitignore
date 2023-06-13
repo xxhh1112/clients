@@ -1,7 +1,0 @@
-# Safari
-dist-safari
-!src/safari/safari/app/popup/index.html
-src/safari/safari/app/
-build.safariextension
-xcuserdata
-*.hmap
