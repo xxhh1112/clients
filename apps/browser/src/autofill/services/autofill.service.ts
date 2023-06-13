@@ -32,6 +32,7 @@ export interface GenerateFillScriptOptions {
   onlyEmptyFields: boolean;
   onlyVisibleFields: boolean;
   fillNewPassword: boolean;
+  allowTotpAutofill: boolean;
   cipher: CipherView;
   tabUrl: string;
   defaultUriMatch: UriMatchType;
@@ -139,6 +140,7 @@ export default class AutofillService implements AutofillServiceInterface {
           onlyEmptyFields: options.onlyEmptyFields || false,
           onlyVisibleFields: options.onlyVisibleFields || false,
           fillNewPassword: options.fillNewPassword || false,
+          allowTotpAutofill: options.allowTotpAutofill || false,
           cipher: options.cipher,
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
@@ -246,6 +248,7 @@ export default class AutofillService implements AutofillServiceInterface {
       onlyVisibleFields: !fromCommand,
       fillNewPassword: fromCommand,
       allowUntrustedIframe: fromCommand,
+      allowTotpAutofill: fromCommand,
     });
 
     // Update last used index as autofill has succeed
@@ -430,7 +433,7 @@ export default class AutofillService implements AutofillServiceInterface {
           }
         }
 
-        if (login.totp) {
+        if (options.allowTotpAutofill && login.totp) {
           totp = this.findTotpField(pageDetails, pf, false, false, false);
 
           if (!totp && !options.onlyVisibleFields) {
@@ -465,7 +468,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
       }
 
-      if (login.totp && pf.elementNumber > 0) {
+      if (options.allowTotpAutofill && login.totp && pf.elementNumber > 0) {
         totp = this.findTotpField(pageDetails, pf, false, false, true);
 
         if (!totp && !options.onlyVisibleFields) {
@@ -492,6 +495,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         if (
+          options.allowTotpAutofill &&
           f.viewable &&
           (f.type === "text" || f.type === "number") &&
           (AutofillService.fieldIsFuzzyMatch(f, AutoFillConstants.TotpFieldNames) ||
@@ -522,17 +526,19 @@ export default class AutofillService implements AutofillServiceInterface {
       AutofillService.fillByOpid(fillScript, p, login.password);
     });
 
-    await Promise.all(
-      totps.map(async (t) => {
-        if (Object.prototype.hasOwnProperty.call(filledFields, t.opid)) {
-          return;
-        }
+    if (options.allowTotpAutofill) {
+      await Promise.all(
+        totps.map(async (t) => {
+          if (Object.prototype.hasOwnProperty.call(filledFields, t.opid)) {
+            return;
+          }
 
-        filledFields[t.opid] = t;
-        const totpValue = await this.totpService.getCode(login.totp);
-        AutofillService.fillByOpid(fillScript, t, totpValue);
-      })
-    );
+          filledFields[t.opid] = t;
+          const totpValue = await this.totpService.getCode(login.totp);
+          AutofillService.fillByOpid(fillScript, t, totpValue);
+        })
+      );
+    }
 
     fillScript = AutofillService.setFillScriptForFocus(filledFields, fillScript);
     return fillScript;
