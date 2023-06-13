@@ -2252,5 +2252,8 @@
   "us": {
     "message": "US",
     "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }
