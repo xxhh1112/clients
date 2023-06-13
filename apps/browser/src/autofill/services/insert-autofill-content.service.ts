@@ -36,7 +36,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   fillForm(fillScript: AutofillScript) {
     if (
       !fillScript.script?.length ||
-      this.fillingWithinSandBoxedIframe() ||
+      this.fillingWithinSandboxedIframe() ||
       this.userCancelledInsecureUrlAutofill(fillScript.savedUrls) ||
       this.userCancelledUntrustedIframeAutofill(fillScript)
     ) {
@@ -46,10 +46,23 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     fillScript.script.forEach(this.runFillScriptAction);
   }
 
-  private fillingWithinSandBoxedIframe() {
+  /**
+   * Identifies if the execution of this script is happening
+   * within a sandboxed iframe.
+   * @returns {boolean}
+   * @private
+   */
+  private fillingWithinSandboxedIframe() {
     return String(self.origin).toLowerCase() === "null";
   }
 
+  /**
+   * Checks if the autofill is occurring on a page that can be considered secure. If the page is not secure,
+   * the user is prompted to confirm that they want to autofill on the page.
+   * @param {string[] | null} savedUrls
+   * @returns {boolean}
+   * @private
+   */
   private userCancelledInsecureUrlAutofill(savedUrls?: string[] | null): boolean {
     if (
       !savedUrls?.some((url) => url.startsWith("https://")) ||
@@ -67,14 +80,23 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return !confirm(confirmationWarning);
   }
 
+  /**
+   * Checking if the autofill is occurring within an untrusted iframe. If the page is within an untrusted iframe,
+   * the user is prompted to confirm that they want to autofill on the page. If the user cancels the autofill,
+   * the script will not continue.
+   *
+   * Note: confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
+   * If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
+   * The browser may print a message to the console, but this is not a standard error that we can handle.
+   * @param {AutofillScript} fillScript
+   * @returns {boolean}
+   * @private
+   */
   private userCancelledUntrustedIframeAutofill(fillScript: AutofillScript): boolean {
     if (!fillScript.untrustedIframe) {
       return false;
     }
 
-    // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
-    // If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
-    // The browser may print a message to the console, but this is not a standard error that we can handle.
     const confirmationWarning = [
       chrome.i18n.getMessage("autofillIframeWarning"),
       chrome.i18n.getMessage("autofillIframeWarningTip", [window.location.hostname]),
