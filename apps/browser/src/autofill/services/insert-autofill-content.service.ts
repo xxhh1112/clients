@@ -183,7 +183,8 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   }
 
   /**
-   *
+   * Simulates a keyboard event on the element before assigning the autofilled value to the element, and then
+   * simulates an input change event on the element to trigger expected events after autofill occurs.
    * @param {FormFieldElement} element
    * @private
    */
@@ -199,21 +200,17 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     element.blur();
   }
 
-  private simulateUserMouseClickEventInteractions(element: FormFieldElement): void {
-    this.triggerClickOnElement(element);
-    this.triggerFocusOnElement(element);
-  }
+  private triggerFillAnimationOnElement(element: FormFieldElement): void {
+    const skipAnimatingElement =
+      !(element instanceof HTMLSpanElement) &&
+      !new Set(["email", "text", "password", "number", "tel", "url"]).has(element?.type);
 
-  private simulateUserKeyboardEventInteractions(element: FormFieldElement): void {
-    [EVENTS.KEYDOWN, EVENTS.KEYPRESS, EVENTS.KEYUP].forEach((eventType) =>
-      element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }))
-    );
-  }
+    if (this.formFieldVisibilityService.isFieldHiddenByCss(element) || skipAnimatingElement) {
+      return;
+    }
 
-  private simulateInputElementChangedEvent(element: FormFieldElement): void {
-    [EVENTS.INPUT, EVENTS.CHANGE].forEach((eventType) =>
-      element.dispatchEvent(new Event(eventType, { bubbles: true }))
-    );
+    element.classList.add("com-bitwarden-browser-animated-fill");
+    setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
   }
 
   private triggerClickOnElement(element?: HTMLElement): void {
@@ -232,17 +229,21 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     element.focus();
   }
 
-  private triggerFillAnimationOnElement(element: FormFieldElement): void {
-    const skipAnimatingElement =
-      !(element instanceof HTMLSpanElement) &&
-      !new Set(["email", "text", "password", "number", "tel", "url"]).has(element?.type);
+  private simulateUserMouseClickEventInteractions(element: FormFieldElement): void {
+    this.triggerClickOnElement(element);
+    this.triggerFocusOnElement(element);
+  }
 
-    if (this.formFieldVisibilityService.isFieldHiddenByCss(element) || skipAnimatingElement) {
-      return;
-    }
+  private simulateUserKeyboardEventInteractions(element: FormFieldElement): void {
+    [EVENTS.KEYDOWN, EVENTS.KEYPRESS, EVENTS.KEYUP].forEach((eventType) =>
+      element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }))
+    );
+  }
 
-    element.classList.add("com-bitwarden-browser-animated-fill");
-    setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
+  private simulateInputElementChangedEvent(element: FormFieldElement): void {
+    [EVENTS.INPUT, EVENTS.CHANGE].forEach((eventType) =>
+      element.dispatchEvent(new Event(eventType, { bubbles: true }))
+    );
   }
 }
 

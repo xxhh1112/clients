@@ -316,6 +316,28 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
+  describe("triggerPostInsertEventsOnElement", function () {
+    it("triggers simulated event interactions and blurs the element after", function () {
+      const elementValue = "test";
+      document.body.innerHTML = `<input type="text" id="username" value="${elementValue}"/>`;
+      const element = document.getElementById("username") as FillableControl;
+      jest.spyOn(element, "blur");
+      jest.spyOn(insertAutofillContentService as any, "simulateUserKeyboardEventInteractions");
+      jest.spyOn(insertAutofillContentService as any, "simulateInputElementChangedEvent");
+
+      insertAutofillContentService["triggerPostInsertEventsOnElement"](element);
+
+      expect(
+        insertAutofillContentService["simulateUserKeyboardEventInteractions"]
+      ).toHaveBeenCalledWith(element);
+      expect(insertAutofillContentService["simulateInputElementChangedEvent"]).toHaveBeenCalledWith(
+        element
+      );
+      expect(element.blur).toHaveBeenCalled();
+      expect(element.value).toBe(elementValue);
+    });
+  });
+
   describe("triggerFillAnimationOnElement", function () {
     beforeEach(function () {
       jest.useFakeTimers();
