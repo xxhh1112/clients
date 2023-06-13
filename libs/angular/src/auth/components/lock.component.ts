@@ -162,7 +162,8 @@ export class LockComponent implements OnInit, OnDestroy {
       } else {
         // MP on restart disabled
         userSymKeyPin = await this.stateService.getUserSymKeyPin();
-        oldPinProtected = new EncString(await this.stateService.getEncryptedPinProtected());
+        const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
+        oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
       }
 
       let userSymKey: UserSymKey;

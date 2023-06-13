@@ -10,7 +10,10 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../platform/browser/browser-api";
 
@@ -320,8 +323,8 @@ export class NativeMessagingBackground {
         }
 
         if (message.response === "unlocked") {
-          await this.cryptoService.setKey(
-            new SymmetricCryptoKey(Utils.fromB64ToArray(message.keyB64).buffer)
+          await this.cryptoService.setMasterKey(
+            new SymmetricCryptoKey(Utils.fromB64ToArray(message.keyB64).buffer) as MasterKey
           );
 
           // Verify key is correct by attempting to decrypt a secret
@@ -329,7 +332,7 @@ export class NativeMessagingBackground {
             await this.cryptoService.getFingerprint(await this.stateService.getUserId());
           } catch (e) {
             this.logService.error("Unable to verify key: " + e);
-            await this.cryptoService.clearKey();
+            await this.cryptoService.clearKeys();
             this.showWrongUserDialog();
 
             // Exit early

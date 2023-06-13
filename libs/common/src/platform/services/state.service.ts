@@ -715,16 +715,17 @@ export class StateService<
   }
 
   async getUserSymKeyPin(options?: StorageOptions): Promise<EncString> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.settings?.userSymKeyPin;
+    return EncString.fromJSON(
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.settings?.userSymKeyPin
+    );
   }
 
   async setUserSymKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.settings.userSymKeyPin = value;
+    account.settings.userSymKeyPin = value?.encryptedString;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -732,16 +733,17 @@ export class StateService<
   }
 
   async getUserSymKeyPinEphemeral(options?: StorageOptions): Promise<EncString> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.settings?.userSymKeyPinEphemeral;
+    return EncString.fromJSON(
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
+        ?.settings?.userSymKeyPinEphemeral
+    );
   }
 
   async setUserSymKeyPinEphemeral(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.settings.userSymKeyPinEphemeral = value;
+    account.settings.userSymKeyPinEphemeral = value?.encryptedString;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())

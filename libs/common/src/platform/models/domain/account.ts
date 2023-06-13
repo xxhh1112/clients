@@ -235,8 +235,8 @@ export class AccountSettings {
   passwordGenerationOptions?: any;
   usernameGenerationOptions?: any;
   generatorOptions?: any;
-  userSymKeyPin?: EncString;
-  userSymKeyPinEphemeral?: EncString;
+  userSymKeyPin?: EncryptedString;
+  userSymKeyPinEphemeral?: EncryptedString;
   protectedPin?: string;
   pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>(); // Deprecated
   settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
@@ -256,7 +256,6 @@ export class AccountSettings {
 
     return Object.assign(new AccountSettings(), obj, {
       environmentUrls: EnvironmentUrls.fromJSON(obj?.environmentUrls),
-      userSymKeyPin: EncString.fromJSON(obj.userSymKeyPin),
       pinProtected: EncryptionPair.fromJSON<string, EncString>(
         obj?.pinProtected,
         EncString.fromJSON

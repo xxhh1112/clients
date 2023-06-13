@@ -3,11 +3,11 @@ import { CryptoService } from "@bitwarden/common/platform/services/crypto.servic
 
 export class BrowserCryptoService extends CryptoService {
   protected async retrieveKeyFromStorage(keySuffix: KeySuffixOptions) {
-    if (keySuffix === "biometric") {
+    if (keySuffix === KeySuffixOptions.Biometric) {
       await this.platformUtilService.authenticateBiometric();
-      return (await this.getKey())?.keyB64;
+      return (await this.getUserKeyFromMemory())?.keyB64;
     }
 
-    return await super.retrieveKeyFromStorage(keySuffix);
+    return await super.retrieveUserKeyFromStorage(keySuffix);
   }
 }

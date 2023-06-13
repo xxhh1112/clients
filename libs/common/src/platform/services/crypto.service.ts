@@ -506,7 +506,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     pinProtectedUserSymKey?: EncString
   ): Promise<UserSymKey> {
     pinProtectedUserSymKey ||= await this.stateService.getUserSymKeyPin();
-    if (pinProtectedUserSymKey) {
+    if (!pinProtectedUserSymKey) {
       throw new Error("No PIN protected key found.");
     }
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);

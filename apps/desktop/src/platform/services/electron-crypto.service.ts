@@ -42,16 +42,12 @@ export class ElectronCryptoService extends CryptoService {
     keySuffix: KeySuffixOptions,
     userId?: string
   ): Promise<UserSymKey> {
-    const userKey = super.retrieveUserKeyFromStorage(keySuffix, userId);
-    if (userKey) {
-      return userKey;
-    }
     if (keySuffix === KeySuffixOptions.Biometric) {
       await this.migrateBiometricKeyIfNeeded(userId);
       const userKey = await this.stateService.getUserSymKeyBiometric({ userId: userId });
       return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
     }
-    return null;
+    return await super.retrieveUserKeyFromStorage(keySuffix, userId);
   }
 
   protected async storeBiometricKey(key: UserSymKey, userId?: string): Promise<void> {
@@ -86,15 +82,18 @@ export class ElectronCryptoService extends CryptoService {
   }
 
   private async migrateBiometricKeyIfNeeded(userId?: string) {
-    const oldBiometricKey = await this.stateService.getCryptoMasterKeyBiometric({ userId });
-    if (oldBiometricKey) {
+    if (await this.stateService.hasCryptoMasterKeyBiometric({ userId })) {
+      const oldBiometricKey = await this.stateService.getCryptoMasterKeyBiometric({ userId });
       // decrypt
-      const masterKey = new SymmetricCryptoKey(
-        Utils.fromB64ToArray(oldBiometricKey).buffer
-      ) as MasterKey;
+      const masterKey = new SymmetricCryptoKey(Utils.fromB64ToArray(oldBiometricKey)) as MasterKey;
+      let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
+      encUserKey = encUserKey ?? (await this.stateService.getUserSymKeyMasterKey());
+      if (!encUserKey) {
+        throw new Error("No user key found during biometric migration");
+      }
       const userSymKey = await this.decryptUserSymKeyWithMasterKey(
         masterKey,
-        new EncString(await this.stateService.getEncryptedCryptoSymmetricKey())
+        new EncString(encUserKey)
       );
       // migrate
       await this.storeBiometricKey(userSymKey, userId);
