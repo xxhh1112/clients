@@ -6,9 +6,7 @@ export const TYPE_CHECK = {
 
 export const EVENTS = {
   CHANGE: "change",
-  HTMLEVENTS: "HTMLEvents",
   INPUT: "input",
-  KEYBOARDEVENT: "KeyboardEvent",
   KEYDOWN: "keydown",
   KEYPRESS: "keypress",
   KEYUP: "keyup",
