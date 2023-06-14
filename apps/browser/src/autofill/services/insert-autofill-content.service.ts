@@ -10,9 +10,9 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   private readonly formFieldVisibilityService: FormFieldVisibilityService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly autofillInsertActions: AutofillInsertActions = {
-    fill_by_opid: ({ opid, value }) => this.fillFieldByOpid(opid, value),
-    click_on_opid: ({ opid }) => this.clickOnFieldByOpid(opid),
-    focus_by_opid: ({ opid }) => this.focusOnFieldByOpid(opid),
+    fill_by_opid: ({ opid, value }) => this.handleFillFieldByOpidAction(opid, value),
+    click_on_opid: ({ opid }) => this.handleClickOnFieldByOpidAction(opid),
+    focus_by_opid: ({ opid }) => this.handleFocusOnFieldByOpidAction(opid),
   };
 
   /**
@@ -105,8 +105,16 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return !confirm(confirmationWarning);
   }
 
+  /**
+   * Runs the autofill action based on the action type and the opid.
+   * Each action is subsequently delayed by 20 milliseconds.
+   * @param {FillScriptActions} action
+   * @param {string} opid
+   * @param {string} value
+   * @param {number} actionIndex
+   */
   private runFillScriptAction = ([action, opid, value]: FillScript, actionIndex: number): void => {
-    if (!this.autofillInsertActions[action] || !opid) {
+    if (!opid || !this.autofillInsertActions[action]) {
       return;
     }
 
@@ -117,19 +125,29 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     );
   };
 
-  private fillFieldByOpid(opid: string, value: string) {
+  private handleFillFieldByOpidAction(opid: string, value: string) {
     const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.insertValueIntoField(element, value);
   }
 
-  private clickOnFieldByOpid(opid: string) {
+  /**
+   * Handles finding an element by opid and triggering a click event on the element.
+   * @param {string} opid
+   * @private
+   */
+  private handleClickOnFieldByOpidAction(opid: string) {
     const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.triggerClickOnElement(element);
   }
 
-  private focusOnFieldByOpid(opid: string) {
+  /**
+   * Handles finding an element by opid and triggering click and focus events on the element.
+   * @param {string} opid
+   * @private
+   */
+  private handleFocusOnFieldByOpidAction(opid: string) {
     const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-    this.triggerFocusOnElement(element);
+    this.simulateUserMouseClickAndFocusEventInteractions(element, true);
   }
 
   private insertValueIntoField(element: FormFieldElement, value: string) {
@@ -173,10 +191,19 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     this.triggerFillAnimationOnElement(element);
   }
 
+  /**
+   * Simulates a mouse click event on the element, including focusing the event, and
+   * the triggers a simulated keyboard event on the element. Will attempt to ensure
+   * that the initial element value is not arbitrarily changed by the simulated events.
+   * @param {FormFieldElement} element
+   * @private
+   */
   private triggerPreInsertEventsOnElement(element: FormFieldElement): void {
     const initialElementValue = "value" in element ? element.value : "";
-    this.simulateUserMouseClickEventInteractions(element);
+
+    this.simulateUserMouseClickAndFocusEventInteractions(element);
     this.simulateUserKeyboardEventInteractions(element);
+
     if ("value" in element && initialElementValue !== element.value) {
       element.value = initialElementValue;
     }
@@ -221,17 +248,29 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     element.click();
   }
 
-  private triggerFocusOnElement(element?: HTMLElement): void {
+  private triggerFocusOnElement(element: HTMLElement | undefined, shouldResetValue = false): void {
     if (typeof element?.focus !== TYPE_CHECK.FUNCTION) {
       return;
     }
 
+    let initialValue = "";
+    if (shouldResetValue && "value" in element) {
+      initialValue = String(element.value);
+    }
+
     element.focus();
+
+    if (initialValue && "value" in element) {
+      element.value = initialValue;
+    }
   }
 
-  private simulateUserMouseClickEventInteractions(element: FormFieldElement): void {
+  private simulateUserMouseClickAndFocusEventInteractions(
+    element: FormFieldElement,
+    shouldResetValue = false
+  ): void {
     this.triggerClickOnElement(element);
-    this.triggerFocusOnElement(element);
+    this.triggerFocusOnElement(element, shouldResetValue);
   }
 
   private simulateUserKeyboardEventInteractions(element: FormFieldElement): void {

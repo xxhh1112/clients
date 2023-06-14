@@ -1,5 +1,6 @@
-import AutofillScript from "../models/autofill-script";
-import { FillableControl } from "../types";
+import { EVENTS } from "../constants";
+import AutofillScript, { FillScript, FillScriptActions } from "../models/autofill-script";
+import { FillableControl, FormElementWithAttribute } from "../types";
 
 import CollectAutofillContentService from "./collect-autofill-content.service";
 import FormFieldVisibilityService from "./form-field-visibility.service";
@@ -13,6 +14,35 @@ const mockLoginForm = `
     </form>
   </div>
 `;
+
+const eventsToTest = [
+  EVENTS.CHANGE,
+  EVENTS.INPUT,
+  EVENTS.KEYDOWN,
+  EVENTS.KEYPRESS,
+  EVENTS.KEYUP,
+  "blur",
+  "click",
+  "focus",
+  "focusin",
+  "focusout",
+  "mousedown",
+  "paste",
+  "select",
+  "selectionchange",
+  "touchend",
+  "touchstart",
+];
+
+const initEventCount = Object.freeze(
+  eventsToTest.reduce(
+    (eventCounts, eventName) => ({
+      ...eventCounts,
+      [eventName]: 0,
+    }),
+    {}
+  )
+);
 
 let confirmSpy: jest.SpyInstance<boolean, [message?: string]>;
 let windowSpy: jest.SpyInstance<any>;
@@ -313,6 +343,170 @@ describe("InsertAutofillContentService", function () {
 
       expect(result).toBe(true);
       expect(confirmSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("runFillScriptAction", function () {
+    beforeEach(function () {
+      jest.useFakeTimers();
+    });
+
+    it("returns early if no opid is provided", function () {
+      const action = "fill_by_opid";
+      const opid = "";
+      const value = "value";
+      const scriptAction: FillScript = [action, opid, value];
+      jest.spyOn(insertAutofillContentService["autofillInsertActions"], action);
+
+      insertAutofillContentService["runFillScriptAction"](scriptAction, 0);
+      jest.advanceTimersByTime(20);
+
+      expect(insertAutofillContentService["autofillInsertActions"][action]).not.toHaveBeenCalled();
+    });
+
+    describe("given a valid fill script action and opid", function () {
+      const fillScriptActions: FillScriptActions[] = [
+        "fill_by_opid",
+        "click_on_opid",
+        "focus_by_opid",
+      ];
+      fillScriptActions.forEach((action) => {
+        it(`triggers a ${action} action`, function () {
+          const opid = "opid";
+          const value = "value";
+          const scriptAction: FillScript = [action, opid, value];
+          jest.spyOn(insertAutofillContentService["autofillInsertActions"], action);
+
+          insertAutofillContentService["runFillScriptAction"](scriptAction, 0);
+          jest.advanceTimersByTime(20);
+
+          expect(
+            insertAutofillContentService["autofillInsertActions"][action]
+          ).toHaveBeenCalledWith({
+            opid,
+            value,
+          });
+        });
+      });
+    });
+  });
+
+  describe("handleClickOnFieldByOpidAction", function () {
+    it("clicks on the elements targeted by the passed opid", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      textInput.opid = "__1";
+      let clickEventCount = 0;
+      const expectedClickEventCount = 1;
+      const clickEventHandler: (handledEvent: Event) => void = (handledEvent) => {
+        const eventTarget = handledEvent.target as HTMLInputElement;
+
+        if (eventTarget.id === "username") {
+          clickEventCount++;
+        }
+      };
+      textInput.addEventListener("click", clickEventHandler);
+      jest.spyOn(
+        insertAutofillContentService["collectAutofillContentService"],
+        "getAutofillFieldElementByOpid"
+      );
+      jest.spyOn(insertAutofillContentService as any, "triggerClickOnElement");
+
+      insertAutofillContentService["handleClickOnFieldByOpidAction"]("__1");
+
+      expect(
+        insertAutofillContentService["collectAutofillContentService"].getAutofillFieldElementByOpid
+      ).toBeCalledWith("__1");
+      expect((insertAutofillContentService as any)["triggerClickOnElement"]).toHaveBeenCalledWith(
+        textInput
+      );
+      expect(clickEventCount).toBe(expectedClickEventCount);
+
+      textInput.removeEventListener("click", clickEventHandler);
+    });
+
+    it("should not trigger click when no suitable elements can be found", function () {
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      let clickEventCount = 0;
+      const expectedClickEventCount = 0;
+      const clickEventHandler: (handledEvent: Event) => void = (handledEvent) => {
+        const eventTarget = handledEvent.target as HTMLInputElement;
+
+        if (eventTarget.id === "username") {
+          clickEventCount++;
+        }
+      };
+      textInput.addEventListener("click", clickEventHandler);
+
+      insertAutofillContentService["handleClickOnFieldByOpidAction"]("__2");
+
+      expect(clickEventCount).toEqual(expectedClickEventCount);
+
+      textInput.removeEventListener("click", clickEventHandler);
+    });
+  });
+
+  describe("handleFocusOnFieldByOpidAction", function () {
+    it("simulates click and focus events on the element targeted by the passed opid", function () {
+      const targetInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      targetInput.opid = "__0";
+      const elementEventCount: { [key: string]: number } = {
+        ...initEventCount,
+      };
+      // Testing all the relevant events to ensure downstream side-effects are firing correctly
+      const expectedElementEventCount: { [key: string]: number } = {
+        ...initEventCount,
+        click: 1,
+        focus: 1,
+        focusin: 1,
+      };
+      const eventHandlers: { [key: string]: EventListener } = {};
+      eventsToTest.forEach((eventType) => {
+        eventHandlers[eventType] = (handledEvent) => {
+          elementEventCount[handledEvent.type]++;
+        };
+        targetInput.addEventListener(eventType, eventHandlers[eventType]);
+      });
+      jest.spyOn(
+        insertAutofillContentService["collectAutofillContentService"],
+        "getAutofillFieldElementByOpid"
+      );
+      jest.spyOn(
+        insertAutofillContentService as any,
+        "simulateUserMouseClickAndFocusEventInteractions"
+      );
+
+      insertAutofillContentService["handleFocusOnFieldByOpidAction"]("__0");
+
+      expect(
+        insertAutofillContentService["collectAutofillContentService"].getAutofillFieldElementByOpid
+      ).toBeCalledWith("__0");
+      expect(
+        insertAutofillContentService["simulateUserMouseClickAndFocusEventInteractions"]
+      ).toHaveBeenCalledWith(targetInput, true);
+      expect(elementEventCount).toEqual(expectedElementEventCount);
+    });
+  });
+
+  describe("triggerPreInsertEventsOnElement", function () {
+    it("triggers a simulated click and keyboard event on the element", function () {
+      const initialElementValue = "test";
+      document.body.innerHTML = `<input type="text" id="username" value="${initialElementValue}"/>`;
+      const element = document.getElementById("username") as FillableControl;
+      jest.spyOn(
+        insertAutofillContentService as any,
+        "simulateUserMouseClickAndFocusEventInteractions"
+      );
+      jest.spyOn(insertAutofillContentService as any, "simulateUserKeyboardEventInteractions");
+
+      insertAutofillContentService["triggerPreInsertEventsOnElement"](element);
+
+      expect(
+        insertAutofillContentService["simulateUserMouseClickAndFocusEventInteractions"]
+      ).toHaveBeenCalledWith(element);
+      expect(
+        insertAutofillContentService["simulateUserKeyboardEventInteractions"]
+      ).toHaveBeenCalledWith(element);
+      expect(element.value).toBe(initialElementValue);
     });
   });
 
