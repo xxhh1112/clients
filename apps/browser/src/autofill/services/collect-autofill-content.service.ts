@@ -249,7 +249,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         labelElementsSet.add(currentElement);
       }
 
-      currentElement = currentElement.closest("label");
+      currentElement = currentElement.parentElement.closest("label");
     }
 
     if (

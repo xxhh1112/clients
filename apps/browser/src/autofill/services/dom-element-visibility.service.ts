@@ -128,20 +128,20 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
   /**
    * Checks if the target element is outside the viewport bounds. This is done by checking if the
    * element is too small or is overflowing the viewport bounds.
-   * @param {HTMLElement} element
+   * @param {HTMLElement} targetElement
    * @param {DOMRectReadOnly | null} targetElementBoundingClientRect
    * @returns {boolean}
    * @private
    */
   private isElementOutsideViewportBounds(
-    element: HTMLElement,
+    targetElement: HTMLElement,
     targetElementBoundingClientRect: DOMRectReadOnly | null = null
   ): boolean {
-    const documentElement = element.ownerDocument.documentElement;
+    const documentElement = targetElement.ownerDocument.documentElement;
     const documentElementWidth = documentElement.scrollWidth;
     const documentElementHeight = documentElement.scrollHeight;
     const elementBoundingClientRect =
-      targetElementBoundingClientRect || element.getBoundingClientRect();
+      targetElementBoundingClientRect || targetElement.getBoundingClientRect();
     const elementTopOffset = elementBoundingClientRect.top - documentElement.clientTop;
     const elementLeftOffset = elementBoundingClientRect.left - documentElement.clientLeft;
 
@@ -163,33 +163,47 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
     );
   }
 
+  /**
+   * Checks if a passed FormField is not hidden behind another element. This is done by
+   * checking if the element at the center point of the FormField is the FormField itself
+   * or one of its labels.
+   * @param {FormFieldElement} targetElement
+   * @param {DOMRectReadOnly | null} targetElementBoundingClientRect
+   * @returns {boolean}
+   * @private
+   */
   private formFieldIsNotHiddenBehindAnotherElement(
-    element: FormFieldElement,
+    targetElement: FormFieldElement,
     targetElementBoundingClientRect: DOMRectReadOnly | null = null
   ): boolean {
     const elementBoundingClientRect =
-      targetElementBoundingClientRect || element.getBoundingClientRect();
-    let elementAtCenterPoint = element.ownerDocument.elementFromPoint(
+      targetElementBoundingClientRect || targetElement.getBoundingClientRect();
+    const elementAtCenterPoint = targetElement.ownerDocument.elementFromPoint(
       elementBoundingClientRect.left + elementBoundingClientRect.width / 2,
       elementBoundingClientRect.top + elementBoundingClientRect.height / 2
     );
 
-    if (elementAtCenterPoint === element) {
+    if (elementAtCenterPoint === targetElement) {
       return true;
     }
 
-    while (elementAtCenterPoint && elementAtCenterPoint instanceof HTMLLabelElement) {
-      const labelsSet = new Set((element as FillableFormFieldElement).labels);
-      if (labelsSet.has(elementAtCenterPoint)) {
-        return true;
-      }
-
-      elementAtCenterPoint = elementAtCenterPoint.closest("label");
+    const targetElementLabelsSet = new Set((targetElement as FillableFormFieldElement).labels);
+    if (targetElementLabelsSet.has(elementAtCenterPoint as HTMLLabelElement)) {
+      return true;
     }
 
-    return false;
+    const closestParentLabel = elementAtCenterPoint.parentElement?.closest("label");
+
+    return targetElementLabelsSet.has(closestParentLabel);
   }
 
+  /**
+   * Checks if the IntersectionObserver API is supported and if so, returns a promise that resolves
+   * to the IntersectionObserverEntry of the target element.
+   * @param {HTMLElement} element
+   * @returns {Promise<IntersectionObserverEntry | null>}
+   * @private
+   */
   private async getElementIntersectionObserverEntry(
     element: HTMLElement
   ): Promise<IntersectionObserverEntry | null> {

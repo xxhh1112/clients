@@ -42,9 +42,9 @@ describe("DomElementVisibilityService", function () {
     document.body.innerHTML = `
       <form id="root">
         <label for="username">Username</label>
-        <input type="text" name="username">
+        <input type="text" name="username" id="username">
         <label for="password">Password</label>
-        <input type="password" name="password">
+        <input type="password" name="password" id="password">
       </form>
     `;
     domElementVisibilityService = new DomElementVisibilityService();
@@ -436,6 +436,107 @@ describe("DomElementVisibilityService", function () {
       ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(false);
+    });
+  });
+
+  describe("formFieldIsNotHiddenBehindAnotherElement", function () {
+    it("returns true if the element found at the center point of the passed targetElement is the targetElement itself", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      jest.spyOn(usernameElement, "getBoundingClientRect");
+      document.elementFromPoint = jest.fn(() => usernameElement);
+
+      const formFieldIsNotHiddenBehindAnotherElement =
+        domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"](usernameElement);
+
+      expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(true);
+      expect(document.elementFromPoint).toHaveBeenCalled();
+      expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
+    });
+
+    it("returns true if the element found at the center point of the passed targetElement is an implicit label of the element", function () {
+      document.body.innerHTML = `
+        <label>
+            <span>Username</span>
+            <input type="text" name="username" id="username" />
+        </label>
+      `;
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const labelTextElement = document.querySelector("span");
+      document.elementFromPoint = jest.fn(() => labelTextElement);
+
+      const formFieldIsNotHiddenBehindAnotherElement =
+        domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"](usernameElement);
+
+      expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(true);
+    });
+
+    it("returns true if the element found at the center point of the passed targetElement is a label of the targetElement", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const labelElement = document.querySelector("label[for='username']") as FormFieldElement;
+      const mockBoundingRect = createBoundingClientRectMock({});
+      jest.spyOn(usernameElement, "getBoundingClientRect");
+      document.elementFromPoint = jest.fn(() => labelElement);
+
+      const formFieldIsNotHiddenBehindAnotherElement = domElementVisibilityService[
+        "formFieldIsNotHiddenBehindAnotherElement"
+      ](usernameElement, mockBoundingRect);
+
+      expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(true);
+      expect(document.elementFromPoint).toHaveBeenCalledWith(
+        mockBoundingRect.left + mockBoundingRect.width / 2,
+        mockBoundingRect.top + mockBoundingRect.height / 2
+      );
+      expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
+    });
+
+    it("returns false if the element found at the center point is not the passed targetElement or a label of that element", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      document.elementFromPoint = jest.fn(() => document.createElement("div"));
+
+      const formFieldIsNotHiddenBehindAnotherElement =
+        domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"](usernameElement);
+
+      expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(false);
+    });
+  });
+
+  describe("getElementIntersectionObserverEntry", function () {
+    it("returns null if the IntersectionObserver API is not present within the window", async function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+
+      const getElementIntersectionObserverEntry = await domElementVisibilityService[
+        "getElementIntersectionObserverEntry"
+      ](usernameElement);
+
+      expect(getElementIntersectionObserverEntry).toEqual(null);
+    });
+
+    it("returns an promise with IntersectionObserverEntry of the passed element", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+      });
+      window.IntersectionObserver = jest.fn(() => ({
+        root: null,
+        rootMargin: "0px",
+        thresholds: [],
+        disconnect: jest.fn(),
+        observe: jest.fn().mockResolvedValueOnce(mockIntersectionObserverEntry),
+        takeRecords: jest.fn(),
+        unobserve: jest.fn(),
+      }));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      window.IntersectionObserverEntry = {
+        prototype: {
+          ...createIntersectObserverEntryMock({}),
+        },
+      };
+
+      const getElementIntersectionObserverEntryPromise =
+        domElementVisibilityService["getElementIntersectionObserverEntry"](usernameElement);
+
+      expect(getElementIntersectionObserverEntryPromise).toBeInstanceOf(Promise);
     });
   });
 });
