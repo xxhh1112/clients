@@ -16,27 +16,20 @@ import {
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import {
-  SimpleDialogType,
   DialogServiceAbstraction,
   SimpleDialogCloseType,
   SimpleDialogOptions,
+  SimpleDialogType,
 } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationUserConfirmRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import {
   OrganizationUserBulkResponse,
   OrganizationUserUserDetailsResponse,
 } from "@bitwarden/common/abstractions/organization-user/responses";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction as PolicyApiService } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
@@ -46,16 +39,23 @@ import {
   OrganizationUserType,
   PolicyType,
 } from "@bitwarden/common/admin-console/enums";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
-import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
 import { ProductType } from "@bitwarden/common/enums";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 
-import { EntityEventsComponent } from "../../../admin-console/organizations/manage/entity-events.component";
+import { openEntityEventsDialog } from "../../../admin-console/organizations/manage/entity-events.component";
 import { BasePeopleComponent } from "../../../common/base.people.component";
 import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
@@ -81,8 +81,6 @@ export class PeopleComponent
 {
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
-  @ViewChild("eventsTemplate", { read: ViewContainerRef, static: true })
-  eventsModalRef: ViewContainerRef;
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
   confirmModalRef: ViewContainerRef;
   @ViewChild("resetPasswordTemplate", { read: ViewContainerRef, static: true })
@@ -513,12 +511,14 @@ export class PeopleComponent
   }
 
   async events(user: OrganizationUserView) {
-    await this.modalService.openViewRef(EntityEventsComponent, this.eventsModalRef, (comp) => {
-      comp.name = this.userNamePipe.transform(user);
-      comp.organizationId = this.organization.id;
-      comp.entityId = user.id;
-      comp.showUser = false;
-      comp.entity = "user";
+    await openEntityEventsDialog(this.dialogService, {
+      data: {
+        name: this.userNamePipe.transform(user),
+        organizationId: this.organization.id,
+        entityId: user.id,
+        showUser: false,
+        entity: "user",
+      },
     });
   }
 

@@ -1,6 +1,6 @@
 import { Subject } from "rxjs";
 
-import { Utils } from "@bitwarden/common/misc/utils";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { Message } from "./message";
 import { Channel, MessageWithMetadata, Messenger } from "./messenger";

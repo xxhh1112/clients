@@ -1,4 +1,4 @@
-import { Utils } from "../../../misc/utils";
+import { Utils } from "../../../platform/misc/utils";
 
 export class Fido2Utils {
   static bufferToString(bufferSource: BufferSource): string {

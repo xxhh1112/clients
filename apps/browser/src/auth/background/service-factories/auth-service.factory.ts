@@ -8,49 +8,49 @@ import {
 import {
   apiServiceFactory,
   ApiServiceInitOptions,
-} from "../../../background/service_factories/api-service.factory";
-import { appIdServiceFactory } from "../../../background/service_factories/app-id-service.factory";
+} from "../../../platform/background/service-factories/api-service.factory";
+import { appIdServiceFactory } from "../../../platform/background/service-factories/app-id-service.factory";
 import {
-  cryptoServiceFactory,
   CryptoServiceInitOptions,
-} from "../../../background/service_factories/crypto-service.factory";
+  cryptoServiceFactory,
+} from "../../../platform/background/service-factories/crypto-service.factory";
 import {
-  encryptServiceFactory,
   EncryptServiceInitOptions,
-} from "../../../background/service_factories/encrypt-service.factory";
+  encryptServiceFactory,
+} from "../../../platform/background/service-factories/encrypt-service.factory";
 import {
   environmentServiceFactory,
   EnvironmentServiceInitOptions,
-} from "../../../background/service_factories/environment-service.factory";
+} from "../../../platform/background/service-factories/environment-service.factory";
 import {
   CachedServices,
   factory,
   FactoryOptions,
-} from "../../../background/service_factories/factory-options";
+} from "../../../platform/background/service-factories/factory-options";
 import {
   i18nServiceFactory,
   I18nServiceInitOptions,
-} from "../../../background/service_factories/i18n-service.factory";
+} from "../../../platform/background/service-factories/i18n-service.factory";
 import {
   logServiceFactory,
   LogServiceInitOptions,
-} from "../../../background/service_factories/log-service.factory";
+} from "../../../platform/background/service-factories/log-service.factory";
 import {
   messagingServiceFactory,
   MessagingServiceInitOptions,
-} from "../../../background/service_factories/messaging-service.factory";
-import {
-  passwordGenerationServiceFactory,
-  PasswordGenerationServiceInitOptions,
-} from "../../../background/service_factories/password-generation-service.factory";
+} from "../../../platform/background/service-factories/messaging-service.factory";
 import {
   platformUtilsServiceFactory,
   PlatformUtilsServiceInitOptions,
-} from "../../../background/service_factories/platform-utils-service.factory";
+} from "../../../platform/background/service-factories/platform-utils-service.factory";
 import {
   stateServiceFactory,
   StateServiceInitOptions,
-} from "../../../background/service_factories/state-service.factory";
+} from "../../../platform/background/service-factories/state-service.factory";
+import {
+  passwordStrengthServiceFactory,
+  PasswordStrengthServiceInitOptions,
+} from "../../../tools/background/service_factories/password-strength-service.factory";
 
 import {
   keyConnectorServiceFactory,
@@ -75,7 +75,7 @@ export type AuthServiceInitOptions = AuthServiceFactoyOptions &
   I18nServiceInitOptions &
   EncryptServiceInitOptions &
   PolicyServiceInitOptions &
-  PasswordGenerationServiceInitOptions;
+  PasswordStrengthServiceInitOptions;
 
 export function authServiceFactory(
   cache: { authService?: AbstractAuthService } & CachedServices,
@@ -100,7 +100,7 @@ export function authServiceFactory(
         await twoFactorServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
         await encryptServiceFactory(cache, opts),
-        await passwordGenerationServiceFactory(cache, opts),
+        await passwordStrengthServiceFactory(cache, opts),
         await policyServiceFactory(cache, opts)
       )
   );

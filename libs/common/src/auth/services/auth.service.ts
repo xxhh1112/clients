@@ -1,23 +1,23 @@
 import { Observable, Subject } from "rxjs";
 
 import { ApiService } from "../../abstractions/api.service";
-import { AppIdService } from "../../abstractions/appId.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { EncryptService } from "../../abstractions/encrypt.service";
-import { EnvironmentService } from "../../abstractions/environment.service";
-import { I18nService } from "../../abstractions/i18n.service";
-import { LogService } from "../../abstractions/log.service";
-import { MessagingService } from "../../abstractions/messaging.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
-import { StateService } from "../../abstractions/state.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
 import { KdfType, KeySuffixOptions } from "../../enums";
-import { Utils } from "../../misc/utils";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
 import { PreloginRequest } from "../../models/request/prelogin.request";
 import { ErrorResponse } from "../../models/response/error.response";
 import { AuthRequestPushNotification } from "../../models/response/notification.response";
-import { PasswordGenerationServiceAbstraction } from "../../tools/generator/password";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { EncryptService } from "../../platform/abstractions/encrypt.service";
+import { EnvironmentService } from "../../platform/abstractions/environment.service";
+import { I18nService } from "../../platform/abstractions/i18n.service";
+import { LogService } from "../../platform/abstractions/log.service";
+import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { Utils } from "../../platform/misc/utils";
+import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { PasswordStrengthServiceAbstraction } from "../../tools/password-strength";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
@@ -102,7 +102,7 @@ export class AuthService implements AuthServiceAbstraction {
     protected twoFactorService: TwoFactorService,
     protected i18nService: I18nService,
     protected encryptService: EncryptService,
-    protected passwordGenerationService: PasswordGenerationServiceAbstraction,
+    protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     protected policyService: PolicyService
   ) {}
 
@@ -133,7 +133,7 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
-          this.passwordGenerationService,
+          this.passwordStrengthService,
           this.policyService,
           this
         );

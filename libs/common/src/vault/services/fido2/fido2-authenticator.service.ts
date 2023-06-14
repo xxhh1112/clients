@@ -1,7 +1,7 @@
 import { CBOR } from "cbor-redux";
 
-import { LogService } from "../../../abstractions/log.service";
-import { Utils } from "../../../misc/utils";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { Utils } from "../../../platform/misc/utils";
 import { CipherService } from "../../abstractions/cipher.service";
 import {
   Fido2AlgorithmIdentifier,

@@ -3,7 +3,7 @@ import { TextEncoder } from "util";
 import { CBOR } from "cbor-redux";
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { Utils } from "../../../misc/utils";
+import { Utils } from "../../../platform/misc/utils";
 import { CipherService } from "../../abstractions/cipher.service";
 import {
   Fido2AutenticatorErrorCode,

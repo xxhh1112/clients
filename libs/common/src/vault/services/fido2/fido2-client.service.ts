@@ -1,9 +1,9 @@
 import { parse } from "tldts";
 
-import { ConfigServiceAbstraction } from "../../../abstractions/config/config.service.abstraction";
-import { LogService } from "../../../abstractions/log.service";
 import { FeatureFlag } from "../../../enums/feature-flag.enum";
-import { Utils } from "../../../misc/utils";
+import { ConfigServiceAbstraction } from "../../../platform/abstractions/config/config.service.abstraction";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { Utils } from "../../../platform/misc/utils";
 import {
   Fido2AutenticatorError,
   Fido2AutenticatorErrorCode,

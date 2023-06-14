@@ -150,7 +150,7 @@ const mainConfig = {
     "content/fido2/content-script": "./src/vault/fido2/content/content-script.ts",
     "content/fido2/page-script": "./src/vault/fido2/content/page-script.ts",
     "notification/bar": "./src/autofill/notification/bar.ts",
-    "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
+    "encrypt-worker": "../../libs/common/src/platform/services/cryptography/encrypt.worker.ts",
   },
   optimization: {
     minimize: ENV !== "development",
@@ -243,7 +243,7 @@ if (manifestVersion == 2) {
   // Manifest V2 uses Background Pages which requires a html page.
   mainConfig.plugins.push(
     new HtmlWebpackPlugin({
-      template: "./src/background.html",
+      template: "./src/platform/background.html",
       filename: "background.html",
       chunks: ["vendor", "background"],
     })
@@ -251,7 +251,7 @@ if (manifestVersion == 2) {
 
   // Manifest V2 background pages can be run through the regular build pipeline.
   // Since it's a standard webpage.
-  mainConfig.entry.background = "./src/background.ts";
+  mainConfig.entry.background = "./src/platform/background.ts";
 
   configs.push(mainConfig);
 } else {
@@ -266,7 +266,7 @@ if (manifestVersion == 2) {
     name: "background",
     mode: ENV,
     devtool: false,
-    entry: "./src/background.ts",
+    entry: "./src/platform/background.ts",
     target: "webworker",
     output: {
       filename: "background.js",
