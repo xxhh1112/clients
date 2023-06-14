@@ -3,7 +3,7 @@ import AutofillForm from "../models/autofill-form";
 import AutofillPageDetails from "../models/autofill-page-details";
 import {
   ElementWithOpId,
-  FillableControl,
+  FillableFormFieldElement,
   FormFieldElement,
   FormElementWithAttribute,
 } from "../types";
@@ -229,11 +229,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * associated description term element if no other labels can be found.
    * Returns a string containing all the `textContent` or `innerText`
    * values of the label elements.
-   * @param {FillableControl} element
+   * @param {FillableFormFieldElement} element
    * @returns {string}
    * @private
    */
-  private createAutofillFieldLabelTag(element: FillableControl): string {
+  private createAutofillFieldLabelTag(element: FillableFormFieldElement): string {
     const labelElementsSet: Set<HTMLElement> = new Set(element.labels);
 
     if (labelElementsSet.size) {
@@ -267,11 +267,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * Queries the DOM for label elements associated with the given element
    * by id or name. Returns a NodeList of label elements or null if none
    * are found.
-   * @param {FillableControl} element
+   * @param {FillableFormFieldElement} element
    * @returns {NodeListOf<HTMLLabelElement> | null}
    * @private
    */
-  private queryElementLabels(element: FillableControl): NodeListOf<HTMLLabelElement> | null {
+  private queryElementLabels(
+    element: FillableFormFieldElement
+  ): NodeListOf<HTMLLabelElement> | null {
     let labelQuerySelectors = element.id ? `label[for="${element.id}"]` : "";
     if (element.name) {
       const forElementNameSelector = `label[for="${element.name}"]`;

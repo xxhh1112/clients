@@ -1,6 +1,6 @@
 import { EVENTS } from "../constants";
 import AutofillScript, { FillScript, FillScriptActions } from "../models/autofill-script";
-import { FillableControl, FormElementWithAttribute } from "../types";
+import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
 
 import CollectAutofillContentService from "./collect-autofill-content.service";
 import FormFieldVisibilityService from "./form-field-visibility.service";
@@ -391,6 +391,31 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
+  describe("handleFillFieldByOpidAction", function () {
+    it("finds the field element by opid and inserts the value into the field", function () {
+      const opid = "__1";
+      const value = "value";
+      const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
+      textInput.opid = opid;
+      textInput.value = value;
+      jest.spyOn(
+        insertAutofillContentService["collectAutofillContentService"],
+        "getAutofillFieldElementByOpid"
+      );
+      jest.spyOn(insertAutofillContentService as any, "insertValueIntoField");
+
+      insertAutofillContentService["handleFillFieldByOpidAction"](opid, value);
+
+      expect(
+        insertAutofillContentService["collectAutofillContentService"].getAutofillFieldElementByOpid
+      ).toHaveBeenCalledWith(opid);
+      expect(insertAutofillContentService["insertValueIntoField"]).toHaveBeenCalledWith(
+        textInput,
+        value
+      );
+    });
+  });
+
   describe("handleClickOnFieldByOpidAction", function () {
     it("clicks on the elements targeted by the passed opid", function () {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
@@ -487,11 +512,131 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
+  describe("insertValueIntoField", function () {
+    it("returns early if an element is not provided", function () {
+      const value = "test";
+      const element: FormFieldElement | null = null;
+      jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
+
+      insertAutofillContentService["insertValueIntoField"](element, value);
+
+      expect(
+        insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+      ).not.toHaveBeenCalled();
+    });
+
+    it("returns early if a value is not provided", function () {
+      const value = "";
+      const element: FormFieldElement | null = document.querySelector('input[type="text"]');
+      jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
+
+      insertAutofillContentService["insertValueIntoField"](element, value);
+
+      expect(
+        insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+      ).not.toHaveBeenCalled();
+    });
+
+    it("will set the inner text of the element if a span element is passed", function () {
+      document.body.innerHTML = `<span id="username"></span>`;
+      const value = "test";
+      const element = document.getElementById("username") as FormFieldElement;
+      jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
+
+      insertAutofillContentService["insertValueIntoField"](element, value);
+
+      expect(element.innerText).toBe(value);
+      expect(
+        insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+      ).toHaveBeenCalledWith(element, expect.any(Function));
+    });
+
+    it("will set the `checked` attribute of any passed checkbox or radio elements", function () {
+      document.body.innerHTML = `<input type="checkbox" id="checkbox" /><input type="radio" id="radio" />`;
+      const checkboxElement = document.getElementById("checkbox") as HTMLInputElement;
+      const radioElement = document.getElementById("radio") as HTMLInputElement;
+      jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
+
+      const possibleValues = ["true", "y", "1", "yes", "✓"];
+      possibleValues.forEach((value) => {
+        insertAutofillContentService["insertValueIntoField"](checkboxElement, value);
+        insertAutofillContentService["insertValueIntoField"](radioElement, value);
+
+        expect(checkboxElement.checked).toBe(true);
+        expect(radioElement.checked).toBe(true);
+        expect(
+          insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+        ).toHaveBeenCalledWith(checkboxElement, expect.any(Function));
+        expect(
+          insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+        ).toHaveBeenCalledWith(radioElement, expect.any(Function));
+
+        checkboxElement.checked = false;
+        radioElement.checked = false;
+      });
+    });
+
+    it("will set the `value` attribute of any passed input or textarea elements", function () {
+      document.body.innerHTML = `<input type="text" id="username" /><textarea id="bio"></textarea>`;
+      const value1 = "test";
+      const value2 = "test2";
+      const textInputElement = document.getElementById("username") as HTMLInputElement;
+      textInputElement.value = value1;
+      const textareaElement = document.getElementById("bio") as HTMLTextAreaElement;
+      textareaElement.value = value2;
+      jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
+
+      insertAutofillContentService["insertValueIntoField"](textInputElement, value1);
+
+      expect(textInputElement.value).toBe(value1);
+      expect(
+        insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+      ).toHaveBeenCalledWith(textInputElement, expect.any(Function));
+
+      insertAutofillContentService["insertValueIntoField"](textareaElement, value2);
+
+      expect(textareaElement.value).toBe(value2);
+      expect(
+        insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"]
+      ).toHaveBeenCalledWith(textareaElement, expect.any(Function));
+    });
+  });
+
+  describe("handleInsertValueAndTriggerSimulatedEvents", function () {
+    it("triggers pre- and post-insert events on the element while filling the value into the element", function () {
+      const value = "test";
+      const element = document.querySelector('input[type="text"]') as FormFieldElement;
+      jest.spyOn(insertAutofillContentService as any, "triggerPreInsertEventsOnElement");
+      jest.spyOn(insertAutofillContentService as any, "triggerPostInsertEventsOnElement");
+      jest.spyOn(insertAutofillContentService as any, "triggerFillAnimationOnElement");
+      const valueChangeCallback = jest.fn(
+        () => ((element as FillableFormFieldElement).value = value)
+      );
+
+      insertAutofillContentService["handleInsertValueAndTriggerSimulatedEvents"](
+        element,
+        valueChangeCallback
+      );
+
+      expect(insertAutofillContentService["triggerPreInsertEventsOnElement"]).toHaveBeenCalledWith(
+        element
+      );
+      expect(valueChangeCallback).toHaveBeenCalled();
+      expect(insertAutofillContentService["triggerPostInsertEventsOnElement"]).toHaveBeenCalledWith(
+        element
+      );
+      expect(insertAutofillContentService["triggerFillAnimationOnElement"]).toHaveBeenCalledWith(
+        element
+      );
+      expect((element as FillableFormFieldElement).value).toBe(value);
+    });
+  });
+
   describe("triggerPreInsertEventsOnElement", function () {
     it("triggers a simulated click and keyboard event on the element", function () {
       const initialElementValue = "test";
       document.body.innerHTML = `<input type="text" id="username" value="${initialElementValue}"/>`;
-      const element = document.getElementById("username") as FillableControl;
+      const element = document.getElementById("username") as FillableFormFieldElement;
       jest.spyOn(
         insertAutofillContentService as any,
         "simulateUserMouseClickAndFocusEventInteractions"
@@ -514,7 +659,7 @@ describe("InsertAutofillContentService", function () {
     it("triggers simulated event interactions and blurs the element after", function () {
       const elementValue = "test";
       document.body.innerHTML = `<input type="text" id="username" value="${elementValue}"/>`;
-      const element = document.getElementById("username") as FillableControl;
+      const element = document.getElementById("username") as FillableFormFieldElement;
       jest.spyOn(element, "blur");
       jest.spyOn(insertAutofillContentService as any, "simulateUserKeyboardEventInteractions");
       jest.spyOn(insertAutofillContentService as any, "simulateInputElementChangedEvent");
@@ -541,7 +686,9 @@ describe("InsertAutofillContentService", function () {
     describe("will not trigger the animation when...", function () {
       it("the element is a non-hidden hidden input type", async function () {
         document.body.innerHTML = mockLoginForm + '<input type="hidden" />';
-        const testElement = document.querySelector('input[type="hidden"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="hidden"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -554,7 +701,7 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden textarea", function () {
         document.body.innerHTML = mockLoginForm + "<textarea></textarea>";
-        const testElement = document.querySelector("textarea") as FillableControl;
+        const testElement = document.querySelector("textarea") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -567,7 +714,7 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a unsupported tag", function () {
         document.body.innerHTML = mockLoginForm + '<div id="input-tag"></div>';
-        const testElement = document.querySelector("#input-tag") as FillableControl;
+        const testElement = document.querySelector("#input-tag") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -579,7 +726,9 @@ describe("InsertAutofillContentService", function () {
       });
 
       it("the element has a `visibility: hidden;` CSS rule applied to it", function () {
-        const testElement = document.querySelector('input[type="password"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="password"]'
+        ) as FillableFormFieldElement;
         testElement.style.visibility = "hidden";
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
@@ -592,7 +741,9 @@ describe("InsertAutofillContentService", function () {
       });
 
       it("the element has a `display: none;` CSS rule applied to it", function () {
-        const testElement = document.querySelector('input[type="password"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="password"]'
+        ) as FillableFormFieldElement;
         testElement.style.display = "none";
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
@@ -607,7 +758,9 @@ describe("InsertAutofillContentService", function () {
       it("a parent of the element has an `opacity: 0;` CSS rule applied to it", function () {
         document.body.innerHTML =
           mockLoginForm + '<div style="opacity: 0;"><input type="email" /></div>';
-        const testElement = document.querySelector('input[type="email"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="email"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -621,7 +774,9 @@ describe("InsertAutofillContentService", function () {
 
     describe("will trigger the animation when...", function () {
       it("the element is a non-hidden password field", function () {
-        const testElement = document.querySelector('input[type="password"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="password"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(
           insertAutofillContentService["formFieldVisibilityService"],
           "isFieldHiddenByCss"
@@ -645,7 +800,9 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden email input", function () {
         document.body.innerHTML = mockLoginForm + '<input type="email" />';
-        const testElement = document.querySelector('input[type="email"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="email"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -662,7 +819,9 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden text input", function () {
         document.body.innerHTML = mockLoginForm + '<input type="text" />';
-        const testElement = document.querySelector('input[type="text"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="text"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -679,7 +838,9 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden number input", function () {
         document.body.innerHTML = mockLoginForm + '<input type="number" />';
-        const testElement = document.querySelector('input[type="number"]') as FillableControl;
+        const testElement = document.querySelector(
+          'input[type="number"]'
+        ) as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -696,7 +857,7 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden tel input", function () {
         document.body.innerHTML = mockLoginForm + '<input type="tel" />';
-        const testElement = document.querySelector('input[type="tel"]') as FillableControl;
+        const testElement = document.querySelector('input[type="tel"]') as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -713,7 +874,7 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden url input", function () {
         document.body.innerHTML = mockLoginForm + '<input type="url" />';
-        const testElement = document.querySelector('input[type="url"]') as FillableControl;
+        const testElement = document.querySelector('input[type="url"]') as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -730,7 +891,7 @@ describe("InsertAutofillContentService", function () {
 
       it("the element is a non-hidden span", function () {
         document.body.innerHTML = mockLoginForm + '<span id="input-tag"></span>';
-        const testElement = document.querySelector("#input-tag") as FillableControl;
+        const testElement = document.querySelector("#input-tag") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
 
@@ -742,6 +903,95 @@ describe("InsertAutofillContentService", function () {
         );
         expect(testElement.classList.remove).toHaveBeenCalledWith(
           "com-bitwarden-browser-animated-fill"
+        );
+      });
+    });
+  });
+
+  describe("triggerClickOnElement", function () {
+    it("will trigger a click event on the passed element", function () {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLElement;
+      jest.spyOn(inputElement, "click");
+
+      insertAutofillContentService["triggerClickOnElement"](inputElement);
+
+      expect(inputElement.click).toHaveBeenCalled();
+    });
+  });
+
+  describe("triggerFocusOnElement", function () {
+    it("will trigger a focus event on the passed element and attempt to reset the value", function () {
+      const value = "test";
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      inputElement.value = "test";
+      jest.spyOn(inputElement, "focus");
+      jest.spyOn(window, "String");
+
+      insertAutofillContentService["triggerFocusOnElement"](inputElement, true);
+
+      expect(window.String).toHaveBeenCalledWith(value);
+      expect(inputElement.focus).toHaveBeenCalled();
+      expect(inputElement.value).toEqual(value);
+    });
+
+    it("will not attempt to reset the value but will still focus the element", function () {
+      const value = "test";
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      inputElement.value = "test";
+      jest.spyOn(inputElement, "focus");
+      jest.spyOn(window, "String");
+
+      insertAutofillContentService["triggerFocusOnElement"](inputElement, false);
+
+      expect(window.String).not.toHaveBeenCalledWith();
+      expect(inputElement.focus).toHaveBeenCalled();
+      expect(inputElement.value).toEqual(value);
+    });
+  });
+
+  describe("simulateUserMouseClickAndFocusEventInteractions", function () {
+    it("will trigger click and focus events on the passed element", function () {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      jest.spyOn(insertAutofillContentService as any, "triggerClickOnElement");
+      jest.spyOn(insertAutofillContentService as any, "triggerFocusOnElement");
+
+      insertAutofillContentService["simulateUserMouseClickAndFocusEventInteractions"](inputElement);
+
+      expect(insertAutofillContentService["triggerClickOnElement"]).toHaveBeenCalledWith(
+        inputElement
+      );
+      expect(insertAutofillContentService["triggerFocusOnElement"]).toHaveBeenCalledWith(
+        inputElement,
+        false
+      );
+    });
+  });
+
+  describe("simulateUserKeyboardEventInteractions", function () {
+    it("will trigger `keydown`, `keypress`, and `keyup` events on the passed element", function () {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      jest.spyOn(inputElement, "dispatchEvent");
+
+      insertAutofillContentService["simulateUserKeyboardEventInteractions"](inputElement);
+
+      [EVENTS.KEYDOWN, EVENTS.KEYPRESS, EVENTS.KEYUP].forEach((eventName) => {
+        expect(inputElement.dispatchEvent).toHaveBeenCalledWith(
+          new KeyboardEvent(eventName, { bubbles: true })
+        );
+      });
+    });
+  });
+
+  describe("simulateInputElementChangedEvent", function () {
+    it("will trigger `input` and `change` events on the passed element", function () {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      jest.spyOn(inputElement, "dispatchEvent");
+
+      insertAutofillContentService["simulateInputElementChangedEvent"](inputElement);
+
+      [EVENTS.INPUT, EVENTS.CHANGE].forEach((eventName) => {
+        expect(inputElement.dispatchEvent).toHaveBeenCalledWith(
+          new Event(eventName, { bubbles: true })
         );
       });
     });

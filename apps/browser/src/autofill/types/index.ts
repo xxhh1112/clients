@@ -8,12 +8,12 @@ export type ElementWithOpId<T> = T & {
 /**
  * A Form Element that we can set a value on (fill)
  */
-export type FillableControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type FillableFormFieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 /**
  * This script's definition of a Form Element (only a subset of HTML form elements)
  * This is defined by getFormElements
  */
-export type FormFieldElement = FillableControl | HTMLSpanElement;
+export type FormFieldElement = FillableFormFieldElement | HTMLSpanElement;
 
 export type FormElementWithAttribute = FormFieldElement & Record<string, string | null | undefined>;

@@ -125,6 +125,12 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     );
   };
 
+  /**
+   * Queries the DOM for an element by opid and inserts the passed value into the element.
+   * @param {string} opid
+   * @param {string} value
+   * @private
+   */
   private handleFillFieldByOpidAction(opid: string, value: string) {
     const element = this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
     this.insertValueIntoField(element, value);
@@ -150,7 +156,15 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     this.simulateUserMouseClickAndFocusEventInteractions(element, true);
   }
 
-  private insertValueIntoField(element: FormFieldElement, value: string) {
+  /**
+   * Identifies the type of element passed and inserts the value into the element.
+   * Will trigger simulated events on the element to ensure that the element is
+   * properly updated.
+   * @param {FormFieldElement | null} element
+   * @param {string} value
+   * @private
+   */
+  private insertValueIntoField(element: FormFieldElement | null, value: string) {
     const elementCanBeReadonly =
       element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
     const elementCanBeFilled = elementCanBeReadonly || element instanceof HTMLSelectElement;
@@ -181,6 +195,13 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     this.handleInsertValueAndTriggerSimulatedEvents(element, () => (element.value = value));
   }
 
+  /**
+   * Simulates pre- and post-insert events on the element meant to mimic user interactions
+   * while inserting the autofill value into the element.
+   * @param {FormFieldElement} element
+   * @param {Function} valueChangeCallback
+   * @private
+   */
   private handleInsertValueAndTriggerSimulatedEvents(
     element: FormFieldElement,
     valueChangeCallback: CallableFunction
@@ -227,6 +248,12 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     element.blur();
   }
 
+  /**
+   * Identifies if a passed element can be animated and sets a class on the element
+   * to trigger a CSS animation. The animation is removed after a short delay.
+   * @param {FormFieldElement} element
+   * @private
+   */
   private triggerFillAnimationOnElement(element: FormFieldElement): void {
     const skipAnimatingElement =
       !(element instanceof HTMLSpanElement) &&
@@ -240,6 +267,11 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     setTimeout(() => element.classList.remove("com-bitwarden-browser-animated-fill"), 200);
   }
 
+  /**
+   * Simulates a click  event on the element.
+   * @param {HTMLElement} element
+   * @private
+   */
   private triggerClickOnElement(element?: HTMLElement): void {
     if (typeof element?.click !== TYPE_CHECK.FUNCTION) {
       return;
@@ -248,6 +280,13 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     element.click();
   }
 
+  /**
+   * Simulates a focus event on the element. Will optionally reset the value of the element
+   * if the element has a value property.
+   * @param {HTMLElement | undefined} element
+   * @param {boolean} shouldResetValue
+   * @private
+   */
   private triggerFocusOnElement(element: HTMLElement | undefined, shouldResetValue = false): void {
     if (typeof element?.focus !== TYPE_CHECK.FUNCTION) {
       return;
@@ -265,6 +304,12 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     }
   }
 
+  /**
+   * Simulates a mouse click and focus event on the element.
+   * @param {FormFieldElement} element
+   * @param {boolean} shouldResetValue
+   * @private
+   */
   private simulateUserMouseClickAndFocusEventInteractions(
     element: FormFieldElement,
     shouldResetValue = false
@@ -273,12 +318,23 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     this.triggerFocusOnElement(element, shouldResetValue);
   }
 
+  /**
+   * Simulates several keyboard events on the element, mocking a user interaction with the element.
+   * @param {FormFieldElement} element
+   * @private
+   */
   private simulateUserKeyboardEventInteractions(element: FormFieldElement): void {
     [EVENTS.KEYDOWN, EVENTS.KEYPRESS, EVENTS.KEYUP].forEach((eventType) =>
       element.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }))
     );
   }
 
+  /**
+   * Simulates an input change event on the element, mocking behavior that would occur if a user
+   * manually changed a value for the element.
+   * @param {FormFieldElement} element
+   * @private
+   */
   private simulateInputElementChangedEvent(element: FormFieldElement): void {
     [EVENTS.INPUT, EVENTS.CHANGE].forEach((eventType) =>
       element.dispatchEvent(new Event(eventType, { bubbles: true }))

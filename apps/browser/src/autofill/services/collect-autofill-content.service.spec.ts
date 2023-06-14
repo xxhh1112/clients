@@ -1,6 +1,6 @@
 import {
   ElementWithOpId,
-  FillableControl,
+  FillableFormFieldElement,
   FormFieldElement,
   FormElementWithAttribute,
 } from "../types";
@@ -653,7 +653,7 @@ describe("CollectAutofillContentService", function () {
       formElement.opid = "form-opid";
       const usernameInput = document.getElementById(
         usernameField.id
-      ) as ElementWithOpId<FillableControl>;
+      ) as ElementWithOpId<FillableFormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
         .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
@@ -738,7 +738,7 @@ describe("CollectAutofillContentService", function () {
       formElement.opid = "form-opid";
       const hiddenInput = document.getElementById(
         hiddenField.id
-      ) as ElementWithOpId<FillableControl>;
+      ) as ElementWithOpId<FillableFormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
         .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
@@ -791,7 +791,7 @@ describe("CollectAutofillContentService", function () {
         <input type="text" id="username-id" name="username" />
 
       `;
-      const element = document.querySelector("#username-id") as FillableControl;
+      const element = document.querySelector("#username-id") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
@@ -807,7 +807,7 @@ describe("CollectAutofillContentService", function () {
         <label for="country-id">Country</label>
         <span id="country-id"></span>
       `;
-      const element = document.querySelector("#country-id") as FillableControl;
+      const element = document.querySelector("#country-id") as FillableFormFieldElement;
       const elementLabel = document.querySelector("label[for='country-id']");
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
@@ -824,7 +824,7 @@ describe("CollectAutofillContentService", function () {
         <label for="country-name">Country</label>
         <select name="country-name"></select>
       `;
-      const element = document.querySelector("select") as FillableControl;
+      const element = document.querySelector("select") as FillableFormFieldElement;
       const elementLabel = document.querySelector("label[for='country-name']");
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
@@ -842,7 +842,7 @@ describe("CollectAutofillContentService", function () {
         <label for="country-name">Country</label>
         <div id="country-name" name="country-name"></div>
       `;
-      const element = document.querySelector("#country-name") as FillableControl;
+      const element = document.querySelector("#country-name") as FillableFormFieldElement;
       element.name = "country-name";
       const elementLabel = document.querySelector("label[for='country-name']");
 
@@ -862,7 +862,7 @@ describe("CollectAutofillContentService", function () {
         Username
         <input type="text" id="username-id">
       </label>`;
-      const element = document.querySelector("#username-id") as FillableControl;
+      const element = document.querySelector("#username-id") as FillableFormFieldElement;
       const elementLabel = element.parentElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
@@ -882,7 +882,7 @@ describe("CollectAutofillContentService", function () {
           </dd>
         </dl>
       `;
-      const element = document.querySelector("#username-id") as FillableControl;
+      const element = document.querySelector("#username-id") as FillableFormFieldElement;
       const elementLabel = document.querySelector("#label-element");
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
@@ -897,7 +897,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" id="username-id">
       `;
-      const element = document.querySelector("#username-id") as FillableControl;
+      const element = document.querySelector("#username-id") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldLabelTag"](element);
 
@@ -913,7 +913,7 @@ describe("CollectAutofillContentService", function () {
           <input type="text">
         </label>
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labels = collectAutofillContentService["queryElementLabels"](element);
 
@@ -924,7 +924,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" id="username-id">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labels = collectAutofillContentService["queryElementLabels"](element);
 
@@ -936,7 +936,7 @@ describe("CollectAutofillContentService", function () {
         <label for="username-id">Username</label>
         <input type="text" id="username-id">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labels = collectAutofillContentService["queryElementLabels"](element);
 
@@ -948,7 +948,7 @@ describe("CollectAutofillContentService", function () {
         <label for="username">Username</label>
         <input type="text" name="username" id="username-id">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labels = collectAutofillContentService["queryElementLabels"](element);
 
@@ -988,7 +988,7 @@ describe("CollectAutofillContentService", function () {
           <option value="CA">Canada</option>
         </select>
       `;
-      const element = document.querySelector("select") as FillableControl;
+      const element = document.querySelector("select") as FillableFormFieldElement;
 
       const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
@@ -999,7 +999,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" name="username">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
@@ -1010,7 +1010,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="1000">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
@@ -1021,7 +1021,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="10">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const maxLength = collectAutofillContentService["getAutofillFieldMaxLength"](element);
 
@@ -1034,7 +1034,7 @@ describe("CollectAutofillContentService", function () {
       document.body.innerHTML = `
         <input type="text" name="username">
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
@@ -1046,7 +1046,7 @@ describe("CollectAutofillContentService", function () {
         <input type="text" name="username" id="username-id">
         <label for="username-id">Username</label>
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
@@ -1058,7 +1058,7 @@ describe("CollectAutofillContentService", function () {
         <input type="text" name="username" id="username-id">
         Username
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldRightLabel"](element);
 
@@ -1075,7 +1075,7 @@ describe("CollectAutofillContentService", function () {
           <input type="text" name="username" id="username-id">
         </div>
       `;
-      const element = document.querySelector("input") as FillableControl;
+      const element = document.querySelector("input") as FillableFormFieldElement;
 
       const labelTag = collectAutofillContentService["createAutofillFieldLeftLabel"](element);
 
