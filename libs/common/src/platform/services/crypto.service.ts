@@ -739,10 +739,12 @@ export class CryptoService implements CryptoServiceAbstraction {
     keySuffix: KeySuffixOptions,
     userId?: string
   ): Promise<UserSymKey> {
-    if (keySuffix === KeySuffixOptions.Pin) {
+    if (keySuffix === KeySuffixOptions.Auto) {
       await this.migrateAutoKeyIfNeeded(userId);
       const userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
-      return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+      if (userKey) {
+        return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+      }
     }
     return null;
   }

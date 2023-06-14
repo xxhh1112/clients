@@ -13,6 +13,7 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import {
   MasterKey,
   SymmetricCryptoKey,
+  UserSymKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../platform/browser/browser-api";
@@ -45,6 +46,7 @@ type ReceiveMessage = {
 
   // Unlock key
   keyB64?: string;
+  userKeyB64?: string;
 };
 
 type ReceiveMessageOuter = {
@@ -323,9 +325,41 @@ export class NativeMessagingBackground {
         }
 
         if (message.response === "unlocked") {
-          await this.cryptoService.setMasterKey(
-            new SymmetricCryptoKey(Utils.fromB64ToArray(message.keyB64).buffer) as MasterKey
-          );
+          try {
+            if (message.userKeyB64) {
+              const userKey = new SymmetricCryptoKey(
+                Utils.fromB64ToArray(message.userKeyB64).buffer
+              ) as UserSymKey;
+              await this.cryptoService.setUserKey(userKey);
+            } else if (message.keyB64) {
+              // backwards compatibility
+              let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
+              encUserKey ||= await this.stateService.getUserSymKeyMasterKey();
+              if (!encUserKey) {
+                throw new Error("No encrypted user key found");
+              }
+              const masterKey = new SymmetricCryptoKey(
+                Utils.fromB64ToArray(message.keyB64).buffer
+              ) as MasterKey;
+              const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(
+                masterKey,
+                new EncString(encUserKey)
+              );
+              await this.cryptoService.setMasterKey(masterKey);
+              await this.cryptoService.setUserKey(userKey);
+            } else {
+              throw new Error("No key received");
+            }
+          } catch (e) {
+            this.logService.error("Unable to set key: " + e);
+            this.messagingService.send("showDialog", {
+              title: { key: "biometricsFailedTitle" },
+              content: { key: "biometricsFailedDesc" },
+              acceptButtonText: { key: "ok" },
+              cancelButtonText: null,
+              type: "danger",
+            });
+          }
 
           // Verify key is correct by attempting to decrypt a secret
           try {
