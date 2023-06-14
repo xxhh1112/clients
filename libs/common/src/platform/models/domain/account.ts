@@ -22,7 +22,7 @@ import { CollectionView } from "../../../vault/models/view/collection.view";
 import { Utils } from "../../misc/utils";
 import { ServerConfigData } from "../../models/data/server-config.data";
 
-import { EncString } from "./enc-string";
+import { EncryptedString, EncString } from "./enc-string";
 import { DeviceKey, MasterKey, SymmetricCryptoKey, UserSymKey } from "./symmetric-crypto-key";
 
 export class EncryptionPair<TEncrypted, TDecrypted> {
@@ -99,15 +99,12 @@ export class AccountData {
 }
 
 export class AccountKeys {
-  // new keys
   userSymKey?: UserSymKey;
   masterKey?: MasterKey;
   userSymKeyMasterKey?: string;
   userSymKeyAuto?: string;
   userSymKeyBiometric?: string;
-  // end new keys
-
-  //deprecated keys
+  // deprecated keys
   cryptoMasterKey?: SymmetricCryptoKey;
   cryptoMasterKeyAuto?: string;
   cryptoMasterKeyB64?: string;
@@ -117,7 +114,6 @@ export class AccountKeys {
     SymmetricCryptoKey
   >();
   // end deprecated keys
-
   deviceKey?: DeviceKey;
   organizationKeys?: EncryptionPair<
     { [orgId: string]: EncryptedOrganizationKeyData },
@@ -146,6 +142,8 @@ export class AccountKeys {
     }
 
     return Object.assign(new AccountKeys(), {
+      userSymKey: SymmetricCryptoKey.fromJSON(obj?.userSymKey),
+      masterKey: SymmetricCryptoKey.fromJSON(obj?.masterKey),
       cryptoMasterKey: SymmetricCryptoKey.fromJSON(obj?.cryptoMasterKey),
       cryptoSymmetricKey: EncryptionPair.fromJSON(
         obj?.cryptoSymmetricKey,
