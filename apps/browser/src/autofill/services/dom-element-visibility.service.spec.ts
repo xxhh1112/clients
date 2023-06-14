@@ -4,22 +4,27 @@ import { FormFieldElement } from "../types";
 
 import DomElementVisibilityService from "./dom-element-visibility.service";
 
+function createBoundingClientRectMock(customProperties: Partial<any> = {}): DOMRectReadOnly {
+  return {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: 500,
+    height: 500,
+    x: 0,
+    y: 0,
+    toJSON: jest.fn(),
+    ...customProperties,
+  };
+}
+
 function createIntersectObserverEntryMock(
   customerProperties: Partial<IntersectionObserverEntry> = {}
 ): IntersectionObserverEntry {
   return {
     target: mock<HTMLElement>(),
-    boundingClientRect: {
-      top: 100,
-      bottom: 0,
-      left: 100,
-      right: 0,
-      width: 500,
-      height: 500,
-      x: 0,
-      y: 0,
-      toJSON: jest.fn(),
-    },
+    boundingClientRect: createBoundingClientRectMock({}),
     intersectionRatio: 1,
     isIntersecting: true,
     intersectionRect: mock<DOMRectReadOnly>(),
@@ -321,6 +326,116 @@ describe("DomElementVisibilityService", function () {
           }
         </style>
       `;
+    });
+  });
+
+  describe("isElementOutsideViewportBounds", function () {
+    const mockViewportWidth = 1920;
+    const mockViewportHeight = 1080;
+
+    beforeEach(function () {
+      Object.defineProperty(document.documentElement, "scrollWidth", {
+        writable: true,
+        value: mockViewportWidth,
+      });
+      Object.defineProperty(document.documentElement, "scrollHeight", {
+        writable: true,
+        value: mockViewportHeight,
+      });
+    });
+
+    it("returns true if the passed element's size is not sufficient for visibility", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+        boundingClientRect: createBoundingClientRectMock({
+          width: 9,
+          height: 9,
+        }),
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(true);
+    });
+
+    it("returns true if the passed element is overflowing the left viewport", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+        boundingClientRect: createBoundingClientRectMock({
+          left: -1,
+        }),
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(true);
+    });
+
+    it("returns true if the passed element is overflowing the right viewport", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+        boundingClientRect: createBoundingClientRectMock({
+          left: mockViewportWidth + 1,
+        }),
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(true);
+    });
+
+    it("returns true if the passed element is overflowing the top viewport", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+        boundingClientRect: createBoundingClientRectMock({
+          top: -1,
+        }),
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(true);
+    });
+
+    it("returns true if the passed element is overflowing the bottom viewport", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+        boundingClientRect: createBoundingClientRectMock({
+          top: mockViewportHeight + 1,
+        }),
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(true);
+    });
+
+    it("returns false if the passed element is not outside of the viewport bounds", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+      });
+
+      const isElementOutsideViewportBounds = domElementVisibilityService[
+        "isElementOutsideViewportBounds"
+      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+
+      expect(isElementOutsideViewportBounds).toEqual(false);
     });
   });
 });
