@@ -166,7 +166,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<UserSymKey> {
     masterKey ||= await this.getMasterKey();
     if (masterKey == null) {
-      throw new Error("No Master Key found.");
+      throw new Error("No master key found.");
     }
 
     if (!userSymKey) {
@@ -174,7 +174,7 @@ export class CryptoService implements CryptoServiceAbstraction {
         userId: userId,
       });
       if (userSymKeyMasterKey == null) {
-        throw new Error("No User Key found.");
+        throw new Error("No encrypted user key found.");
       }
       userSymKey = new EncString(userSymKeyMasterKey);
     }
