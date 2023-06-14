@@ -12,14 +12,6 @@ export default class AutofillField {
    * Used to do perform proximal checks for username and password fields on the DOM.
    */
   elementNumber: number;
-
-  /** DEAD CODE - This isn't being used and should be deprecated *.
-  /**
-   * Designates whether the field is visible, based on the element's style
-   */
-  // visible?: boolean;
-  /** END DEAD CODE */
-
   /**
    * Designates whether the field is viewable on the current part of the DOM that the user can see
    */

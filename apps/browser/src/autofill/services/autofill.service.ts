@@ -288,9 +288,6 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    /** DEAD CODE? documentUUID is not used anywhere */
-    // let fillScript = new AutofillScript(pageDetails.documentUUID);
-    /** END DEAD CODE */
     let fillScript = new AutofillScript();
     const filledFields: { [id: string]: AutofillField } = {};
     const fields = options.cipher.fields;

@@ -3,13 +3,6 @@ export type FillScriptActions = "click_on_opid" | "focus_by_opid" | "fill_by_opi
 
 export type FillScript = [action: FillScriptActions, opid: string, value?: string];
 
-/** DEAD CODE */
-// export type AutofillScriptOptions = {
-//   animate?: boolean;
-//   markFilling?: boolean;
-// };
-/** END DEAD CODE */
-
 export type AutofillScriptProperties = {
   delay_between_operations?: number;
 };
@@ -28,11 +21,4 @@ export default class AutofillScript {
   savedUrls: string[];
   untrustedIframe: boolean;
   itemType: string; // Appears to be unused, read but not written
-  /** DEAD CODE? documentUUID is not used anywhere */
-  // documentUUID = "";
-  // options: AutofillScriptOptions = {};
-  // constructor(documentUUID: string) {
-  //   this.documentUUID = documentUUID;
-  // }
-  /** END DEAD CODE */
 }
