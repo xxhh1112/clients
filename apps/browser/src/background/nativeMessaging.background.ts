@@ -359,6 +359,12 @@ export class NativeMessagingBackground {
               cancelButtonText: null,
               type: "danger",
             });
+
+            // Exit early
+            if (this.resolver) {
+              this.resolver(message);
+            }
+            return;
           }
 
           // Verify key is correct by attempting to decrypt a secret
