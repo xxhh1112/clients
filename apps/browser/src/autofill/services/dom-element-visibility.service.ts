@@ -1,14 +1,22 @@
+import { FillableFormFieldElement, FormFieldElement } from "../types";
+
 import { DomElementVisibilityService as domElementVisibilityServiceInterface } from "./abstractions/dom-element-visibility.service";
 
 class DomElementVisibilityService implements domElementVisibilityServiceInterface {
   private cachedComputedStyle: CSSStyleDeclaration | null = null;
 
-  async isFormFieldViewable(element: HTMLElement): Promise<boolean> {
+  /**
+   * Checks if a form field is viewable. This is done by checking if the element is within the
+   * viewport bounds, not hidden by CSS, and not hidden behind another element.
+   * @param {FormFieldElement} element
+   * @returns {Promise<boolean>}
+   */
+  async isFormFieldViewable(element: FormFieldElement): Promise<boolean> {
     const elementObserverEntry = await this.getElementIntersectionObserverEntry(element);
     const elementBoundingClientRect =
       elementObserverEntry?.boundingClientRect || element.getBoundingClientRect();
     if (
-      ("isIntersecting" in elementObserverEntry && !elementObserverEntry.isIntersecting) ||
+      (elementObserverEntry && !elementObserverEntry.isIntersecting) ||
       this.isElementOutsideViewportBounds(element, elementBoundingClientRect) ||
       this.isElementHiddenByCss(element)
     ) {
@@ -38,7 +46,6 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
       return true;
     }
 
-    // Check parent elements to identify if the element is invisible due a zero opacity property.
     let parentElement = element.parentElement;
     while (parentElement && parentElement !== element.ownerDocument.documentElement) {
       this.cachedComputedStyle = null;
@@ -50,33 +57,6 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
     }
 
     return false;
-  }
-
-  private isElementOutsideViewportBounds(
-    element: HTMLElement,
-    elementBoundingClientRect: DOMRectReadOnly | null = null
-  ): boolean {
-    const documentElement = element.ownerDocument.documentElement;
-    const documentElementWidth = documentElement.scrollWidth;
-    const documentElementHeight = documentElement.scrollHeight;
-    const elementTopOffset = elementBoundingClientRect.top - documentElement.clientTop;
-    const elementLeftOffset = elementBoundingClientRect.left - documentElement.clientLeft;
-    const isElementSizeInsufficient =
-      elementBoundingClientRect.width < 10 || elementBoundingClientRect.height < 10;
-    const isElementOverflowingLeftViewport = elementLeftOffset < 0;
-    const isElementOverflowingRightViewport =
-      elementLeftOffset + elementBoundingClientRect.width > documentElementWidth;
-    const isElementOverflowingTopViewport = elementTopOffset < 0;
-    const isElementOverflowingBottomViewport =
-      elementTopOffset + elementBoundingClientRect.height > documentElementHeight;
-
-    return (
-      isElementSizeInsufficient ||
-      isElementOverflowingLeftViewport ||
-      isElementOverflowingRightViewport ||
-      isElementOverflowingTopViewport ||
-      isElementOverflowingBottomViewport
-    );
   }
 
   private getElementStyle(element: HTMLElement, styleProperty: string): string {
@@ -118,8 +98,35 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
     ]).has(this.getElementStyle(element, "clipPath"));
   }
 
-  private formFieldIsNotHiddenBehindAnotherElement(
+  private isElementOutsideViewportBounds(
     element: HTMLElement,
+    elementBoundingClientRect: DOMRectReadOnly | null = null
+  ): boolean {
+    const documentElement = element.ownerDocument.documentElement;
+    const documentElementWidth = documentElement.scrollWidth;
+    const documentElementHeight = documentElement.scrollHeight;
+    const elementTopOffset = elementBoundingClientRect.top - documentElement.clientTop;
+    const elementLeftOffset = elementBoundingClientRect.left - documentElement.clientLeft;
+    const isElementSizeInsufficient =
+      elementBoundingClientRect.width < 10 || elementBoundingClientRect.height < 10;
+    const isElementOverflowingLeftViewport = elementLeftOffset < 0;
+    const isElementOverflowingRightViewport =
+      elementLeftOffset + elementBoundingClientRect.width > documentElementWidth;
+    const isElementOverflowingTopViewport = elementTopOffset < 0;
+    const isElementOverflowingBottomViewport =
+      elementTopOffset + elementBoundingClientRect.height > documentElementHeight;
+
+    return (
+      isElementSizeInsufficient ||
+      isElementOverflowingLeftViewport ||
+      isElementOverflowingRightViewport ||
+      isElementOverflowingTopViewport ||
+      isElementOverflowingBottomViewport
+    );
+  }
+
+  private formFieldIsNotHiddenBehindAnotherElement(
+    element: FormFieldElement,
     elementBoundingClientRect: DOMRectReadOnly
   ): boolean {
     // If the element is intersecting, we need to check if it is actually visible on the page. Check the center
@@ -129,25 +136,22 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
       elementBoundingClientRect.left + elementBoundingClientRect.width / 2,
       elementBoundingClientRect.top + elementBoundingClientRect.height / 2
     );
+    if (elementAtCenterPoint === element) {
+      return true;
+    }
 
     //  If the element at the center point is a label, check if the label is for the element.
     //  If it is, the element is viewable. If it is not, the element is not viewable.
-    while (
-      elementAtCenterPoint &&
-      elementAtCenterPoint !== element &&
-      elementAtCenterPoint instanceof HTMLLabelElement
-    ) {
-      // TODO - Think through cases where a label is a parent of an element and it is implicitly assigned to the label.
-      const labelForAttribute = elementAtCenterPoint.getAttribute("for");
-      const elementAssignedToLabel = element.ownerDocument.getElementById(labelForAttribute);
-      if (elementAssignedToLabel === element) {
+    while (elementAtCenterPoint && elementAtCenterPoint instanceof HTMLLabelElement) {
+      const labelsSet = new Set((element as FillableFormFieldElement).labels);
+      if (labelsSet.has(elementAtCenterPoint)) {
         return true;
       }
 
       elementAtCenterPoint = elementAtCenterPoint.closest("label");
     }
 
-    return elementAtCenterPoint === element;
+    return false;
   }
 
   private async getElementIntersectionObserverEntry(

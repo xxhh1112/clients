@@ -11,8 +11,7 @@ export type ElementWithOpId<T> = T & {
 export type FillableFormFieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 /**
- * This script's definition of a Form Element (only a subset of HTML form elements)
- * This is defined by getFormElements
+ * The autofill script's definition of a Form Element (only a subset of HTML form elements)
  */
 export type FormFieldElement = FillableFormFieldElement | HTMLSpanElement;
 
