@@ -217,16 +217,29 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
     }
 
     return new Promise((resolve) => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          resolve(entries[0]);
-          observer.disconnect();
-        },
+      const observer: IntersectionObserver = new IntersectionObserver(
+        (entries) => this.handleResolvingIntersectionObserverEntry(resolve, observer, entries),
         { root: element.ownerDocument.body, threshold: 0.999 }
       );
       observer.observe(element);
     });
   }
+
+  /**
+   * Handles resolving the IntersectionObserverEntry of the
+   * target element and disconnects the observer.
+   * @param {(value: (IntersectionObserverEntry | null)) => void} resolve
+   * @param {IntersectionObserver} observer
+   * @param {IntersectionObserverEntry[]} entries
+   */
+  private handleResolvingIntersectionObserverEntry = (
+    resolve: (value: IntersectionObserverEntry | null) => void,
+    observer: IntersectionObserver,
+    entries: IntersectionObserverEntry[]
+  ): void => {
+    resolve(entries[0]);
+    observer.disconnect();
+  };
 }
 
 export default DomElementVisibilityService;

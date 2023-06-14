@@ -539,4 +539,32 @@ describe("DomElementVisibilityService", function () {
       expect(getElementIntersectionObserverEntryPromise).toBeInstanceOf(Promise);
     });
   });
+
+  describe("handleResolvingIntersectionObserverEntry", function () {
+    it("calls the resolve callback with the first found entry and disconnects the observer", function () {
+      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
+      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
+        target: usernameElement,
+      });
+      window.IntersectionObserver = jest.fn(() => ({
+        root: null,
+        rootMargin: "0px",
+        thresholds: [],
+        disconnect: jest.fn(),
+        observe: jest.fn(),
+        takeRecords: jest.fn(),
+        unobserve: jest.fn(),
+      }));
+      const observer = new IntersectionObserver(jest.fn(), {});
+      const resolve = jest.fn();
+      jest.spyOn(observer, "disconnect");
+
+      domElementVisibilityService["handleResolvingIntersectionObserverEntry"](resolve, observer, [
+        mockIntersectionObserverEntry,
+      ]);
+
+      expect(resolve).toHaveBeenCalledWith(mockIntersectionObserverEntry);
+      expect(observer.disconnect).toHaveBeenCalled();
+    });
+  });
 });
