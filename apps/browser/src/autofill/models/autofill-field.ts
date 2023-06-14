@@ -2,7 +2,7 @@
  * Represents a single field that is collected from the page source and is potentially autofilled.
  */
 export default class AutofillField {
-  [key: string]: any; // TODO: We need to find a way to remove this and property reference the expected properties of this typing
+  [key: string]: any;
   /**
    * The unique identifier assigned to this field during collection of the page details
    */
