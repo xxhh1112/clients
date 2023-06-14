@@ -1,21 +1,21 @@
-import { FormFieldVisibilityService as FormFieldVisibilityServiceInterface } from "./abstractions/form-field-visibility.service";
+import { DomElementVisibilityService as domElementVisibilityServiceInterface } from "./abstractions/dom-element-visibility.service";
 
-class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface {
+class DomElementVisibilityService implements domElementVisibilityServiceInterface {
   private cachedComputedStyle: CSSStyleDeclaration | null = null;
 
-  async isFieldViewable(element: HTMLElement): Promise<boolean> {
+  async isFormFieldViewable(element: HTMLElement): Promise<boolean> {
     const elementObserverEntry = await this.getElementIntersectionObserverEntry(element);
     const elementBoundingClientRect =
       elementObserverEntry?.boundingClientRect || element.getBoundingClientRect();
     if (
       ("isIntersecting" in elementObserverEntry && !elementObserverEntry.isIntersecting) ||
-      this.isFieldOutsideViewportBounds(element, elementBoundingClientRect) ||
-      this.isFieldHiddenByCss(element)
+      this.isElementOutsideViewportBounds(element, elementBoundingClientRect) ||
+      this.isElementHiddenByCss(element)
     ) {
       return false;
     }
 
-    return this.fieldIsNotHiddenBehindAnotherElement(element, elementBoundingClientRect);
+    return this.formFieldIsNotHiddenBehindAnotherElement(element, elementBoundingClientRect);
   }
 
   /**
@@ -24,8 +24,9 @@ class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface 
    * parent elements to ensure that the target element is not hidden by a parent element.
    * @param {HTMLElement} element
    * @returns {boolean}
+   * @public
    */
-  isFieldHiddenByCss(element: HTMLElement): boolean {
+  isElementHiddenByCss(element: HTMLElement): boolean {
     this.cachedComputedStyle = null;
 
     if (
@@ -37,7 +38,7 @@ class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface 
       return true;
     }
 
-    // Check parent elements to identify if the element is invisible through a zero opacity.
+    // Check parent elements to identify if the element is invisible due a zero opacity property.
     let parentElement = element.parentElement;
     while (parentElement && parentElement !== element.ownerDocument.documentElement) {
       this.cachedComputedStyle = null;
@@ -51,7 +52,7 @@ class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface 
     return false;
   }
 
-  private isFieldOutsideViewportBounds(
+  private isElementOutsideViewportBounds(
     element: HTMLElement,
     elementBoundingClientRect: DOMRectReadOnly | null = null
   ): boolean {
@@ -117,7 +118,7 @@ class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface 
     ]).has(this.getElementStyle(element, "clipPath"));
   }
 
-  private fieldIsNotHiddenBehindAnotherElement(
+  private formFieldIsNotHiddenBehindAnotherElement(
     element: HTMLElement,
     elementBoundingClientRect: DOMRectReadOnly
   ): boolean {
@@ -174,4 +175,4 @@ class FormFieldVisibilityService implements FormFieldVisibilityServiceInterface 
   }
 }
 
-export default FormFieldVisibilityService;
+export default DomElementVisibilityService;

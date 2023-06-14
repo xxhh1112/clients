@@ -9,13 +9,13 @@ import {
 } from "../types";
 
 import { CollectAutofillContentService as CollectAutofillContentServiceInterface } from "./abstractions/collect-autofill-content.service";
-import FormFieldVisibilityService from "./form-field-visibility.service";
+import DomElementVisibilityService from "./dom-element-visibility.service";
 
 class CollectAutofillContentService implements CollectAutofillContentServiceInterface {
-  private readonly formFieldVisibilityService: FormFieldVisibilityService;
+  private readonly domElementVisibilityService: DomElementVisibilityService;
 
-  constructor(formFieldVisibilityService: FormFieldVisibilityService) {
-    this.formFieldVisibilityService = formFieldVisibilityService;
+  constructor(domElementVisibilityService: DomElementVisibilityService) {
+    this.domElementVisibilityService = domElementVisibilityService;
   }
 
   /**
@@ -172,7 +172,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       opid: element.opid,
       elementNumber: index,
       maxLength: this.getAutofillFieldMaxLength(element),
-      viewable: await this.formFieldVisibilityService.isFieldViewable(element),
+      viewable: await this.domElementVisibilityService.isFormFieldViewable(element),
       htmlID: this.getPropertyOrAttribute(element, "id"),
       htmlName: this.getPropertyOrAttribute(element, "name"),
       htmlClass: this.getPropertyOrAttribute(element, "class"),

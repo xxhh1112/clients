@@ -4,10 +4,10 @@ import { FormFieldElement } from "../types";
 
 import { InsertAutofillContentService as InsertAutofillContentServiceInterface } from "./abstractions/insert-autofill-content.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
-import FormFieldVisibilityService from "./form-field-visibility.service";
+import DomElementVisibilityService from "./dom-element-visibility.service";
 
 class InsertAutofillContentService implements InsertAutofillContentServiceInterface {
-  private readonly formFieldVisibilityService: FormFieldVisibilityService;
+  private readonly domElementVisibilityService: DomElementVisibilityService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly autofillInsertActions: AutofillInsertActions = {
     fill_by_opid: ({ opid, value }) => this.handleFillFieldByOpidAction(opid, value),
@@ -17,13 +17,13 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
 
   /**
    * InsertAutofillContentService constructor. Instantiates the
-   * FormFieldVisibilityService and CollectAutofillContentService classes.
+   * DomElementVisibilityService and CollectAutofillContentService classes.
    */
   constructor(
-    formFieldVisibilityService: FormFieldVisibilityService,
+    domElementVisibilityService: DomElementVisibilityService,
     collectAutofillContentService: CollectAutofillContentService
   ) {
-    this.formFieldVisibilityService = formFieldVisibilityService;
+    this.domElementVisibilityService = domElementVisibilityService;
     this.collectAutofillContentService = collectAutofillContentService;
   }
 
@@ -259,7 +259,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
       !(element instanceof HTMLSpanElement) &&
       !new Set(["email", "text", "password", "number", "tel", "url"]).has(element?.type);
 
-    if (this.formFieldVisibilityService.isFieldHiddenByCss(element) || skipAnimatingElement) {
+    if (this.domElementVisibilityService.isElementHiddenByCss(element) || skipAnimatingElement) {
       return;
     }
 

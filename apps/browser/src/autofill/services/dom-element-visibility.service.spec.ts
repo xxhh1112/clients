@@ -1,20 +1,31 @@
-import FormFieldVisibilityService from "./form-field-visibility.service";
+import DomElementVisibilityService from "./dom-element-visibility.service";
 
-describe("FormFieldVisibilityService", function () {
-  let formFieldVisibilityService: FormFieldVisibilityService;
+describe("DomElementVisibilityService", function () {
+  let domElementVisibilityService: DomElementVisibilityService;
 
   beforeEach(function () {
-    formFieldVisibilityService = new FormFieldVisibilityService();
+    jest.clearAllMocks();
+    document.body.innerHTML = `
+      <form id="root">
+        <label for="username">Username</label>
+        <input type="text" name="username">
+        <label for="password">Password</label>
+        <input type="password" name="password">
+      </form>
+    `;
+    domElementVisibilityService = new DomElementVisibilityService();
   });
 
-  describe("isFieldHiddenByCss", function () {
+  // describe("isFormFieldViewable", function () {});
+
+  describe("isElementHiddenByCss", function () {
     it("returns true when a non-hidden element is passed", function () {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" />
       `;
       const usernameElement = document.getElementById("username");
 
-      const isElementHidden = formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+      const isElementHidden = domElementVisibilityService["isElementHiddenByCss"](usernameElement);
 
       expect(isElementHidden).toEqual(false);
     });
@@ -37,9 +48,9 @@ describe("FormFieldVisibilityService", function () {
       jest.spyOn(passwordElement.ownerDocument.defaultView, "getComputedStyle");
 
       const isUsernameElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        domElementVisibilityService["isElementHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        domElementVisibilityService["isElementHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(usernameElement.style.getPropertyValue).toHaveBeenCalled();
@@ -67,9 +78,9 @@ describe("FormFieldVisibilityService", function () {
       const passwordElement = document.getElementById("password");
 
       const isUsernameElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        domElementVisibilityService["isElementHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        domElementVisibilityService["isElementHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(isPasswordElementHidden).toEqual(true);
@@ -89,9 +100,9 @@ describe("FormFieldVisibilityService", function () {
       const passwordElement = document.getElementById("password");
 
       const isUsernameElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](usernameElement);
+        domElementVisibilityService["isElementHiddenByCss"](usernameElement);
       const isPasswordElementHidden =
-        formFieldVisibilityService["isFieldHiddenByCss"](passwordElement);
+        domElementVisibilityService["isElementHiddenByCss"](passwordElement);
 
       expect(isUsernameElementHidden).toEqual(true);
       expect(isPasswordElementHidden).toEqual(true);

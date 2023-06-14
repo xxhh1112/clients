@@ -3,7 +3,7 @@ import AutofillScript, { FillScript, FillScriptActions } from "../models/autofil
 import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
 
 import CollectAutofillContentService from "./collect-autofill-content.service";
-import FormFieldVisibilityService from "./form-field-visibility.service";
+import DomElementVisibilityService from "./dom-element-visibility.service";
 import InsertAutofillContentService from "./insert-autofill-content.service";
 
 const mockLoginForm = `
@@ -56,9 +56,9 @@ function setMockWindowLocationProtocol(protocol: "http:" | "https:") {
 }
 
 describe("InsertAutofillContentService", function () {
-  const formFieldVisibilityService = new FormFieldVisibilityService();
+  const domElementVisibilityService = new DomElementVisibilityService();
   const collectAutofillContentService = new CollectAutofillContentService(
-    formFieldVisibilityService
+    domElementVisibilityService
   );
   let insertAutofillContentService: InsertAutofillContentService;
   let fillScript: AutofillScript;
@@ -68,7 +68,7 @@ describe("InsertAutofillContentService", function () {
     confirmSpy = jest.spyOn(window, "confirm");
     windowSpy = jest.spyOn(window, "window", "get");
     insertAutofillContentService = new InsertAutofillContentService(
-      formFieldVisibilityService,
+      domElementVisibilityService,
       collectAutofillContentService
     );
     fillScript = {
@@ -778,8 +778,8 @@ describe("InsertAutofillContentService", function () {
           'input[type="password"]'
         ) as FillableFormFieldElement;
         jest.spyOn(
-          insertAutofillContentService["formFieldVisibilityService"],
-          "isFieldHiddenByCss"
+          insertAutofillContentService["domElementVisibilityService"],
+          "isElementHiddenByCss"
         );
         jest.spyOn(testElement.classList, "add");
         jest.spyOn(testElement.classList, "remove");
@@ -788,7 +788,7 @@ describe("InsertAutofillContentService", function () {
         jest.advanceTimersByTime(200);
 
         expect(
-          insertAutofillContentService["formFieldVisibilityService"].isFieldHiddenByCss
+          insertAutofillContentService["domElementVisibilityService"].isElementHiddenByCss
         ).toHaveBeenCalledWith(testElement);
         expect(testElement.classList.add).toHaveBeenCalledWith(
           "com-bitwarden-browser-animated-fill"

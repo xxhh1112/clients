@@ -6,7 +6,7 @@ import {
 } from "../types";
 
 import CollectAutofillContentService from "./collect-autofill-content.service";
-import FormFieldVisibilityService from "./form-field-visibility.service";
+import DomElementVisibilityService from "./dom-element-visibility.service";
 
 const mockLoginForm = `
   <div id="root">
@@ -18,13 +18,13 @@ const mockLoginForm = `
 `;
 
 describe("CollectAutofillContentService", function () {
-  const formFieldVisibilityService = new FormFieldVisibilityService();
+  const domElementVisibilityService = new DomElementVisibilityService();
   let collectAutofillContentService: CollectAutofillContentService;
 
   beforeEach(function () {
     jest.clearAllMocks();
     document.body.innerHTML = mockLoginForm;
-    collectAutofillContentService = new CollectAutofillContentService(formFieldVisibilityService);
+    collectAutofillContentService = new CollectAutofillContentService(domElementVisibilityService);
   });
 
   describe("getPageDetails", function () {
@@ -52,7 +52,7 @@ describe("CollectAutofillContentService", function () {
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
       jest
-        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
 
       const pageDetails = await collectAutofillContentService.getPageDetails();
@@ -259,7 +259,7 @@ describe("CollectAutofillContentService", function () {
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldElements");
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldItem");
       jest
-        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
 
       const autofillFieldsPromise = collectAutofillContentService["buildAutofillFieldsData"]();
@@ -548,7 +548,7 @@ describe("CollectAutofillContentService", function () {
       ) as ElementWithOpId<FormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");
@@ -562,7 +562,7 @@ describe("CollectAutofillContentService", function () {
         spanElement
       );
       expect(
-        collectAutofillContentService["formFieldVisibilityService"].isFieldViewable
+        collectAutofillContentService["domElementVisibilityService"].isFormFieldViewable
       ).toHaveBeenCalledWith(spanElement);
       expect(collectAutofillContentService["getPropertyOrAttribute"]).toHaveBeenNthCalledWith(
         1,
@@ -656,7 +656,7 @@ describe("CollectAutofillContentService", function () {
       ) as ElementWithOpId<FillableFormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");
@@ -741,7 +741,7 @@ describe("CollectAutofillContentService", function () {
       ) as ElementWithOpId<FillableFormFieldElement>;
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
       jest
-        .spyOn(collectAutofillContentService["formFieldVisibilityService"], "isFieldViewable")
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
       jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
       jest.spyOn(collectAutofillContentService as any, "getElementValue");

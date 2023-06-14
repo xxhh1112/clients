@@ -1,7 +1,7 @@
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import CollectAutofillContentService from "../services/collect-autofill-content.service";
-import FormFieldVisibilityService from "../services/form-field-visibility.service";
+import DomElementVisibilityService from "../services/dom-element-visibility.service";
 import InsertAutofillContentService from "../services/insert-autofill-content.service";
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "./abstractions/autofill-init";
 
 class AutofillInit implements AutofillInitInterface {
-  private readonly formFieldVisibilityService: FormFieldVisibilityService;
+  private readonly domElementVisibilityService: DomElementVisibilityService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly insertAutofillContentService: InsertAutofillContentService;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
@@ -21,16 +21,16 @@ class AutofillInit implements AutofillInitInterface {
   };
 
   /**
-   * AutofillInit constructor. Initializes the FormFieldVisibilityService,
+   * AutofillInit constructor. Initializes the DomElementVisibilityService,
    * CollectAutofillContentService and InsertAutofillContentService classes.
    */
   constructor() {
-    this.formFieldVisibilityService = new FormFieldVisibilityService();
+    this.domElementVisibilityService = new DomElementVisibilityService();
     this.collectAutofillContentService = new CollectAutofillContentService(
-      this.formFieldVisibilityService
+      this.domElementVisibilityService
     );
     this.insertAutofillContentService = new InsertAutofillContentService(
-      this.formFieldVisibilityService,
+      this.domElementVisibilityService,
       this.collectAutofillContentService
     );
   }
