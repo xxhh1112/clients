@@ -381,8 +381,8 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Migrates the Pin key from encrypting the user's master key to encrypting
-   * the user's symmetric key
+   * Creates a new Pin key that encrypts the user's symmetric key instead of the
+   * master key. Clears the old Pin key from state.
    * @param masterPasswordOnRestart True if Master Password on Restart is enabled
    * @param kdf User's KdfType
    * @param kdfConfig User's KdfConfig
@@ -396,7 +396,7 @@ export class LockComponent implements OnInit, OnDestroy {
     kdfConfig: KdfConfig,
     oldPinProtected?: EncString
   ): Promise<UserSymKey> {
-    // decrypt
+    // Decrypt
     const masterKey = await this.cryptoService.decryptMasterKeyWithPin(
       this.pin,
       this.email,
@@ -409,7 +409,7 @@ export class LockComponent implements OnInit, OnDestroy {
       masterKey,
       new EncString(encUserSymKey)
     );
-    // migrate
+    // Migrate
     const pinKey = await this.cryptoService.makePinKey(this.pin, this.email, kdf, kdfConfig);
     const pinProtectedKey = await this.cryptoService.encrypt(userSymKey.key, pinKey);
     if (masterPasswordOnRestart) {
@@ -418,10 +418,14 @@ export class LockComponent implements OnInit, OnDestroy {
     } else {
       await this.stateService.setEncryptedPinProtected(null);
       await this.stateService.setUserSymKeyPin(pinProtectedKey);
-      // always set the protected pin, even if MP on Restart is disabled
+      // We previously only set the protected pin if MP on Restart was enabled
+      // now we set it regardless
       const encPin = await this.cryptoService.encrypt(this.pin, userSymKey);
       await this.stateService.setProtectedPin(encPin.encryptedString);
     }
+    // This also clears the old Biometrics key since the new Biometrics key will
+    // be created when the user's symmetric key is set.
+    await this.stateService.setCryptoMasterKeyBiometric(null);
     return userSymKey;
   }
 }
