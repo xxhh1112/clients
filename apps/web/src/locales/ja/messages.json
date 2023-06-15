@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "コレクションを表示 - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "アイテムを編集 - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "アイテム $ID$ のパスワードをコピーしました。",
     "placeholders": {
@@ -4474,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "パスワードのヒントをパスワードと同じにすることはできません。"
   },
-  "enrollPasswordReset": {
-    "message": "パスワードリセットに登録"
+  "enrollAccountRecovery": {
+    "message": "アカウント回復に登録する"
   },
-  "enrolledPasswordReset": {
-    "message": "パスワードリセットに登録済み"
+  "enrolledAccountRecovery": {
+    "message": "アカウント回復に登録しました"
   },
-  "withdrawPasswordReset": {
-    "message": "パスワードリセットから退出"
+  "withdrawAccountRecovery": {
+    "message": "アカウント回復から登録解除する"
   },
   "enrollPasswordResetSuccess": {
     "message": "登録に成功しました！"
@@ -4489,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "正常に退出しました！"
   },
-  "eventEnrollPasswordReset": {
-    "message": "ユーザー $ID$ がパスワードリセットの案内に登録しました。",
+  "eventEnrollAccountRecovery": {
+    "message": "ユーザー $ID$ をアカウント回復に登録しました。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4498,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "ユーザー $ID$ がパスワードリセットの案内から退出しました。",
+  "eventWithdrawAccountRecovery": {
+    "message": "ユーザー $ID$ をアカウント回復から登録解除しました。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4558,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "登録すると、組織管理者はマスターパスワードを変更できます。登録してもよろしいですか？"
   },
-  "resetPasswordPolicy": {
-    "message": "マスターパスワードのリセット"
+  "accountRecoveryPolicy": {
+    "message": "アカウント回復の管理"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "組織内の管理者に組織ユーザーのマスターパスワードのリセットを許可します。"
+  "accountRecoveryPolicyDescription": {
+    "message": "マスターパスワードまたは信頼できるデバイスを忘れた、または紛失した場合にメンバーアカウントを回復できます。回復プロセスはアカウントの暗号化方式に基づきます。"
   },
   "resetPasswordPolicyWarning": {
     "message": "管理者がマスターパスワードをリセットするには、組織内のユーザーは自己登録または自動登録する必要があります。"
@@ -5199,9 +5217,6 @@
     "message": "を有効にしてください。",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "キー コネクタの復号を設定するには、SSO 認証と単一の組織ポリシーが必要です。"
-  },
   "memberDecryptionOption": {
     "message": "メンバー復号オプション"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "キーコネクター"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "SSO でログインして自己ホスト型の復号キーサーバーに接続します。このオプションを使用すると、メンバーは保管庫のデータを復号するためにマスターパスワードを使用する必要はありません。"
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "SSO でログインして自己ホスト型の復号キーサーバーに接続します。このオプションを使用すると、メンバーは保管庫のデータを復号するためにマスターパスワードを使用する必要はありません。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "SSO 認証と単一の組織ポリシーが必要です",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "キーコネクターの復号のセットアップに必要です。Bitwarden サポートにお問い合わせください。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "「SSO とキーコネクター複合でのログイン」が有効になっています。このポリシーは、オーナーと管理者にのみ適用されます。"
@@ -5516,7 +5540,7 @@
   },
   "lastSync": {
     "message": "前回の同期",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "セルフホストのスポンサーシップが同期されました。"
@@ -6173,6 +6197,10 @@
     "message": "アクセストークンを取り消しました",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "取り消すアクセストークンが選択されていません",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "サブメニュー"
   },
@@ -6524,6 +6552,18 @@
   "billingSyncHelp": {
     "message": "請求同期のヘルプ"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "有料機能ライセンスのヘルプ"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "サブスクリプションの有効期限が切れた後、60日以内なら期限を更新したライセンスファイルを組織に適用できます。猶予期間は $GRACE_PERIOD_END_DATE$ までです。",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "ライセンスをアップロード"
   },
@@ -6735,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "値を空白のみにしないでください。",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "表示しない"
   },
@@ -6748,6 +6792,17 @@
   "enforceOnLoginDesc": {
     "message": "パスワードを変更するには、メンバーが存在しないといけません"
   },
+  "region": {
+    "message": "リージョン"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "米国",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "このプロジェクトを削除する権限がありません",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6758,5 +6813,35 @@
   },
   "updateKdfSettings": {
     "message": "KDF の設定を更新する"
+  },
+  "trustedDeviceEncryption": {
+    "message": "信頼できるデバイスの暗号化"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "認証が完了すると、メンバーはデバイスに保存されているキーを使用して保管庫のデータを復号します。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "アカウント回復管理ポリシー",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "このオプションを使用すると、自動登録が有効になります。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ が見つかりません",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "アカウント回復"
+  },
+  "updatedTempPassword": {
+    "message": "ユーザーはアカウント回復で発行されたパスワードを更新しました。"
   }
 }

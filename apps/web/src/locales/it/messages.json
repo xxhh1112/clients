@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "Visualizza raccolta - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Modifica elemento - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Password per elemento $ID$ copiata.",
     "placeholders": {
@@ -4474,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Il suggerimento per la password non può essere uguale alla tua password."
   },
-  "enrollPasswordReset": {
-    "message": "Iscriviti al ripristino della password"
+  "enrollAccountRecovery": {
+    "message": "Iscriviti al recupero dell'account"
   },
-  "enrolledPasswordReset": {
-    "message": "Iscritto al ripristino della password"
+  "enrolledAccountRecovery": {
+    "message": "Iscritto al recupero dell'account"
   },
-  "withdrawPasswordReset": {
-    "message": "Rifiuta il ripristino della password"
+  "withdrawAccountRecovery": {
+    "message": "Rifiuta il recupero dell'account"
   },
   "enrollPasswordResetSuccess": {
     "message": "Iscrizione riuscita!"
@@ -4489,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Rinuncia riuscita!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "L'utente $ID$ si è iscritto al ripristino della password.",
+  "eventEnrollAccountRecovery": {
+    "message": "Utente $ID$ si è iscritto al recupero dell'account.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4498,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "L'utente $ID$ ha rifiutato il ripristino della password.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Utente $ID$ ha rifiutato il recupero dell'account.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4558,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Iscriversi consentirà agli amministratori dell'organizzazione di cambiare la tua password principale"
   },
-  "resetPasswordPolicy": {
-    "message": "Ripristina password principale"
+  "accountRecoveryPolicy": {
+    "message": "Amministrazione del recupero dell'account"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Consenti agli amministratori di ripristinare le password principali dei membri."
+  "accountRecoveryPolicyDescription": {
+    "message": "Recupera gli account dei membri quando la password principale o i dispositivi fidati sono dimenticati o persi. I processi di recupero sono basati sul metodo di criptografia dell'account."
   },
   "resetPasswordPolicyWarning": {
     "message": "I membri dell'organizzazione dovranno iscriversi o essere iscritti automaticamente prima che gli amministratori possano ripristinare la loro password principale."
@@ -5199,9 +5217,6 @@
     "message": "per obbligare tutti i membri ad accedere con SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "Le politiche richiedi autenticazione SSO e organizzazione unica sono necessarie per configurare la decriptografia del Key Connector."
-  },
   "memberDecryptionOption": {
     "message": "Opzioni di decriptografia membro"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Connetti la tua autenticazione con SSO al tuo server self-hosted di decriptografia. Usando questa opzione, i membri non avranno bisogno di inserire la loro password principale per decriptografare i dati della cassaforte. Contatta l'assistenza clienti per aiuto nella configurazione."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connetti la tua autenticazione con SSO al tuo server self-hosted di decriptografia. Usando questa opzione, i membri non avranno bisogno di inserire la loro password principale per decriptografare i dati della cassaforte. Le",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "politiche richiedi autenticazione SSO e organizzazione unica",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "sono necessarie per configurare la decriptografia del Key Connector. Contatta l'assistenza clienti per aiuto nella configurazione.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Autenticazione con SSO e decriptografia Key Connector\" è attivato. Questa politica sarà applicata solo ai proprietari e agli amministratori."
@@ -5516,7 +5540,7 @@
   },
   "lastSync": {
     "message": "Ultima sincronizzazione",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Sponsorizzazione self-hosted sincronizzata."
@@ -6173,6 +6197,10 @@
     "message": "Token di accesso revocati",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Nessun token di accesso selezionato",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Sottomenu"
   },
@@ -6524,6 +6552,18 @@
   "billingSyncHelp": {
     "message": "Aiuto per la sincronizzazione della fatturazione"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Guida alle funzionalità a pagamento con licenza"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "Dopo che il tuo abbonamento scade, hai 60 giorni per applicare un file di licenza aggiornato alla tua organizzazione. Il periodo di grazia termina il $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Carica licenza"
   },
@@ -6735,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "L'input non deve contenere solo spazi.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Ignora"
   },
@@ -6748,6 +6792,17 @@
   "enforceOnLoginDesc": {
     "message": "Obbliga i membri esistenti a cambiare le loro password"
   },
+  "region": {
+    "message": "Regione"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "Non hai l'autorizzazione per eliminare questo progetto",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6758,5 +6813,35 @@
   },
   "updateKdfSettings": {
     "message": "Aggiorna impostazioni KDF"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Criptografia dispositivo fidato"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "Una volta autenticati, i membri decriptograferanno i dati della cassaforte usando una chiave memorizzata sul proprio dispositivo. La",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "politica di amministrazione del recupero dell'account",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "con registrazione automatica si attiverà quando questa opzione è usata.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ non trovato",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recupera account"
+  },
+  "updatedTempPassword": {
+    "message": "L'utente ha aggiornato una password emessa tramite il recupero dell'account."
   }
 }

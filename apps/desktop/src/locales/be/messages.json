@@ -2251,5 +2251,19 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Рэкамендаваныя налады абнаўлення"
+  },
+  "region": {
+    "message": "Рэгіён"
+  },
+  "eu": {
+    "message": "ЕС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ЗША",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Уласнае размяшчэнне"
   }
 }

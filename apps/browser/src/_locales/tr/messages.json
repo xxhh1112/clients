@@ -1461,6 +1461,24 @@
   "autoFillSuccess": {
     "message": "Kayıt otomatik dolduruldu "
   },
+  "insecurePageWarning": {
+    "message": "Uyarı: Güvenli olmayan bir HTTP sayfasındasınız. Gönderdiğiniz bilgiler potansiyel olarak başkaları tarafından görülebilir ve değiştirilebilir. Bu hesabı güvenli (HTTPS) bir sayfa üzerinden kaydetmiştiniz."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Yine de bu hesabı doldurmak istiyor musunuz?"
+  },
+  "autofillIframeWarning": {
+    "message": "Bu form, kayıtlı hesabınızın URI'sinden farklı bir alan adında yer alıyor. Yine de otomatik doldurmak isterseniz \"Tamam\"ı, durdurmak için \"İptal\"i seçin."
+  },
+  "autofillIframeWarningTip": {
+    "message": "İleride bu uyarıyı görmek istemiyorsanız bu siteye ait Bitwarden hesap kaydınıza $HOSTNAME$ URI'sini ekleyin.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ana parolayı belirle"
   },
@@ -2203,7 +2221,18 @@
       }
     }
   },
+  "region": {
+    "message": "Bölge"
+  },
   "opensInANewWindow": {
     "message": "Yeni pencerede açılır"
+  },
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABD",
+    "description": "United States"
   }
 }

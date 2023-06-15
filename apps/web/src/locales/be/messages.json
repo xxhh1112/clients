@@ -2750,6 +2750,24 @@
       }
     }
   },
+  "viewCollectionWithName": {
+    "message": "Прагляд калекцыі - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Рэдагаваць элемент - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
+      }
+    }
+  },
   "copiedPasswordItemId": {
     "message": "Скапіяваны пароль для элемента $ID$.",
     "placeholders": {
@@ -4474,14 +4492,14 @@
   "hintEqualsPassword": {
     "message": "Падказка для пароля не можа супадаць з паролем."
   },
-  "enrollPasswordReset": {
-    "message": "Зарэгістравацца на скіданне пароля"
+  "enrollAccountRecovery": {
+    "message": "Зарэгістравацца на аднаўленне ўліковага запісу"
   },
-  "enrolledPasswordReset": {
-    "message": "Зарэгістраваны на скіданне пароля"
+  "enrolledAccountRecovery": {
+    "message": "Зарэгістравацца на аднаўленне ўліковага запісу"
   },
-  "withdrawPasswordReset": {
-    "message": "Адмова ад скідання пароля"
+  "withdrawAccountRecovery": {
+    "message": "Адклікаць аднаўленне ўліковага запісу"
   },
   "enrollPasswordResetSuccess": {
     "message": "Паспяховая рэгістрацыя!"
@@ -4489,8 +4507,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Адмова паспяхова ўжыта!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Карыстальнік $ID$ падаў запыт, каб атрымаць дапамогу ў скіданні пароля.",
+  "eventEnrollAccountRecovery": {
+    "message": "Карыстальнік $ID$ зарэгістраваўся на аднаўленне ўліковага запісу.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4498,8 +4516,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Карыстальнік $ID$ адмовіўся ад дапамогі ў скіданні пароля.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Карыстальнік $ID$ адклікаў аднаўленне ўліковага запісу.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4558,11 +4576,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Рэгістрацыя дазволіць адміністратарам арганізацыі змяняць ваш асноўны пароль"
   },
-  "resetPasswordPolicy": {
-    "message": "Скіданне асноўнага пароля"
+  "accountRecoveryPolicy": {
+    "message": "Адміністраванне аднаўлення ўліковага запісу"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Дазволіць адміністратарам скідаць асноўны пароль для ўдзельнікаў."
+  "accountRecoveryPolicyDescription": {
+    "message": "Аднаўленне ўліковага запісу ўдзельніка, калі асноўны пароль забыты або давераная прылада страчана. Працэс аднаўлення заснаваны на метадзе шыфравання ўліковага запісу."
   },
   "resetPasswordPolicyWarning": {
     "message": "Карыстальнікі арганізацыі павінны зарэгістравацца самастойна або быць зарэгістраванымі аўтаматычна, каб адміністратары маглі скінуць іх асноўны пароль."
@@ -5199,9 +5217,6 @@
     "message": "для таго, каб патрабаваць ва ўсіх удзельнікаў выконваць уваход з SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "Для наладжвання расшыфроўкі Key Connector неабходна палітыка аўтэнтыфікацыі SSO і адзінай арганізацыі."
-  },
   "memberDecryptionOption": {
     "message": "Параметры расшыфроўкі ўдзельніка"
   },
@@ -5211,8 +5226,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Падключыце аўтарызацыю з дапамогай SSO да свайго ўласнага сервера расшыфроўкі ключоў. Пры дапамозе гэтага параметра ўдзельнікам больш непатрэбна будзе выкарыстоўваць свае асноўныя паролі для расшыфроўкі даных сховішча. Звярніцеся ў службу падтрымкі, каб атрымаць дапамогу з наладжваннем."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Падключыце аўтарызацыю з дапамогай SSO да свайго ўласнага сервера расшыфроўкі ключоў. Пры дапамозе гэтага параметра ўдзельнікам больш непатрэбна будзе выкарыстоўваць свае асноўныя паролі для расшыфроўкі даных сховішча.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "Патрабуецца аўтэнтыфікацыя SSO і палітыкі адзінай арганізацыі",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "для наладжвання шыфравання з дапамогай Key Connector. Звярніцеся ў службу падтрымкі Bitwarden, каб атрымаць дапамогу пры наладжванні.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Уваход з дапамогай SSO і расшыфроўкай Key Connector\" уключаны. Гэта палітыка распаўсюджваецца толькі на ўладальнікаў і адміністратараў."
@@ -5516,7 +5540,7 @@
   },
   "lastSync": {
     "message": "Апошняя сінхранізацыя",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Уласнае размяшчэнне спансіравання сінхранізавана."
@@ -6173,6 +6197,10 @@
     "message": "Токены доступу адкліканы",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "Для адклікання не выбраны токен доступу",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Падменю"
   },
@@ -6524,6 +6552,18 @@
   "billingSyncHelp": {
     "message": "Дапамога з плацежнай сінхранізацыяй"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Даведка па платным ліцэнзійным функцыям"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "Пасля таго, як тэрмін дзеяння падпіскі міне ў вас будзе 60 дзён, каб ужыць абноўлены файл ліцэнзіі да вашай арганізацыі. Ільготны перыяд завершыцца: $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Запампаваць ліцэнзію"
   },
@@ -6735,6 +6775,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Уведзенае значэнне не павінна змяшчаць толькі прабелы.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Адхіліць"
   },
@@ -6748,6 +6792,17 @@
   "enforceOnLoginDesc": {
     "message": "Патрабаваць ад існуючых удзельнікаў змены пароляў"
   },
+  "region": {
+    "message": "Рэгіён"
+  },
+  "eu": {
+    "message": "ЕС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ЗША",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас няма правоў для выдалення гэтага праекта",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6758,5 +6813,35 @@
   },
   "updateKdfSettings": {
     "message": "Абнавіце налады KDF"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Шыфраванне даверанай прылады"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "Пасля аўтэнтыфікацыі ўдзельнікі расшыфроўваюць даныя сховішча з выкарыстаннем ключа, якія захоўваецца на іх прыладах",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Палітыка адміністравання аднаўлення ўліковых запісаў",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "з аўтаматычнай рэгістрацыяй уключаецца пры выкарыстанні гэтага параметра.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ не знойдзены",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Аднавіць уліковы запіс"
+  },
+  "updatedTempPassword": {
+    "message": "Карыстальнік абнавіў пароль пры аднаўленні ўліковага запісу."
   }
 }

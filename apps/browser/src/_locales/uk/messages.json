@@ -1461,6 +1461,24 @@
   "autoFillSuccess": {
     "message": "Запис заповнено"
   },
+  "insecurePageWarning": {
+    "message": "Попередження: це незахищена сторінка HTTP, тому будь-яка інформація, яку ви передаєте, потенційно може бути переглянута чи змінена сторонніми. Ці облікові дані було збережено на безпечній сторінці (HTTPS)."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Ви все ще бажаєте заповнити поля для входу?"
+  },
+  "autofillIframeWarning": {
+    "message": "Домен форми входу відрізняється від URL-адреси, за якою його було збережено. Оберіть OK, якщо ви все одно хочете її заповнити, або Скасувати для зупинки."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Щоб надалі не бачити таке попередження, збережіть цей URI, $HOSTNAME$ у записі входу Bitwarden для цього сайту.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Встановити головний пароль"
   },
@@ -2203,7 +2221,18 @@
       }
     }
   },
+  "region": {
+    "message": "Регіон"
+  },
   "opensInANewWindow": {
-    "message": "Opens in a new window"
+    "message": "Відкривається у новому вікні"
+  },
+  "eu": {
+    "message": "ЄС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
   }
 }
