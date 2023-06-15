@@ -1,6 +1,5 @@
 import { mock, mockReset } from "jest-mock-extended";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import {
   EventType,
   FieldType,
@@ -8,6 +7,7 @@ import {
   LoginLinkedId,
   UriMatchType,
 } from "@bitwarden/common/enums";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
@@ -29,8 +29,8 @@ import {
   createGenerateFillScriptOptionsMock,
 } from "../../../jest/autofill-mocks";
 import { triggerTestFailure } from "../../../jest/testing-utils";
-import { BrowserApi } from "../../browser/browserApi";
-import { BrowserStateService } from "../../services/browser-state.service";
+import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserStateService } from "../../platform/services/browser-state.service";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
@@ -298,9 +298,7 @@ describe("AutofillService", function () {
           command: "fillForm",
           fillScript: {
             autosubmit: null,
-            documentUUID: currentAutofillPageDetails.details.documentUUID,
             metadata: {},
-            options: {},
             properties: {
               delay_between_operations: 20,
             },
@@ -942,9 +940,7 @@ describe("AutofillService", function () {
       expect(autofillService["generateLoginFillScript"]).toHaveBeenCalledWith(
         {
           autosubmit: null,
-          documentUUID: "documentUUID",
           metadata: {},
-          options: {},
           properties: {},
           script: [
             ["click_on_opid", "username-field"],
@@ -980,9 +976,7 @@ describe("AutofillService", function () {
       expect(autofillService["generateCardFillScript"]).toHaveBeenCalledWith(
         {
           autosubmit: null,
-          documentUUID: "documentUUID",
           metadata: {},
-          options: {},
           properties: {},
           script: [
             ["click_on_opid", "username-field"],
@@ -1018,9 +1012,7 @@ describe("AutofillService", function () {
       expect(autofillService["generateIdentityFillScript"]).toHaveBeenCalledWith(
         {
           autosubmit: null,
-          documentUUID: "documentUUID",
           metadata: {},
-          options: {},
           properties: {},
           script: [
             ["click_on_opid", "username-field"],
