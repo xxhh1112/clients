@@ -299,7 +299,7 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    let fillScript = new AutofillScript(pageDetails.documentUUID);
+    let fillScript = new AutofillScript();
     const filledFields: { [id: string]: AutofillField } = {};
     const fields = options.cipher.fields;
 
