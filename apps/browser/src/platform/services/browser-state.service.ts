@@ -1,5 +1,12 @@
 import { BehaviorSubject } from "rxjs";
 
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { StateMigrationService } from "@bitwarden/common/platform/abstractions/state-migration.service";
+import {
+  AbstractStorageService,
+  AbstractMemoryStorageService,
+} from "@bitwarden/common/platform/abstractions/storage.service";
+import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/platform/models/domain/storage-options";
 import { StateService as BaseStateService } from "@bitwarden/common/platform/services/state.service";
@@ -33,6 +40,26 @@ export class BrowserStateService
   protected accountDiskCache: BehaviorSubject<Record<string, Account>>;
 
   protected accountDeserializer = Account.fromJSON;
+
+  constructor(
+    storageService: AbstractStorageService,
+    secureStorageService: AbstractStorageService,
+    memoryStorageService: AbstractMemoryStorageService,
+    logService: LogService,
+    stateMigrationService: StateMigrationService,
+    stateFactory: StateFactory<GlobalState, Account>,
+    useAccountCache = false
+  ) {
+    super(
+      storageService,
+      secureStorageService,
+      memoryStorageService,
+      logService,
+      stateMigrationService,
+      stateFactory,
+      useAccountCache
+    );
+  }
 
   async addAccount(account: Account) {
     // Apply browser overrides to default account values
