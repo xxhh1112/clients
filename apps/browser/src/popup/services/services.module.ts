@@ -440,13 +440,20 @@ function getBgService<T>(service: keyof MainBackground) {
         logService: LogServiceAbstraction,
         stateMigrationService: StateMigrationService
       ) => {
+        // hack to share the disk cache between the two contexts.
+        // TODO: we need to figure out a better way of sharing/syncing
+        // the disk cache
+        const bgStateService = getBgService<StateServiceAbstraction>("stateService");
+        const bgDiskCache = bgStateService().accountDiskCache$;
         return new BrowserStateService(
           storageService,
           secureStorageService,
           memoryStorageService,
           logService,
           stateMigrationService,
-          new StateFactory(GlobalState, Account)
+          new StateFactory(GlobalState, Account),
+          true,
+          bgDiskCache
         );
       },
       deps: [
