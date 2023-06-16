@@ -17,6 +17,8 @@ function createAutofillFieldMock(customFields = {}): AutofillField {
     htmlID: "default-htmlID",
     htmlName: "default-htmlName",
     htmlClass: "default-htmlClass",
+    tabindex: "0",
+    title: "default-title",
     "label-left": "default-label-left",
     "label-right": "default-label-right",
     "label-top": "default-label-top",
@@ -39,7 +41,6 @@ function createAutofillFieldMock(customFields = {}): AutofillField {
 
 function createAutofillPageDetailsMock(customFields = {}): AutofillPageDetails {
   return {
-    documentUUID: "documentUUID",
     title: "title",
     url: "url",
     documentUrl: "documentUrl",
@@ -109,9 +110,7 @@ function createAutofillScriptMock(
 
   return {
     autosubmit: null,
-    documentUUID: "documentUUID",
     metadata: {},
-    options: {},
     properties: {
       delay_between_operations: 20,
     },
