@@ -6,12 +6,12 @@ import {
 } from "@bitwarden/sdk-client";
 
 import { BitwardenSdkServiceAbstraction } from "../abstractions/bitwarden-sdk.service.abstraction";
-import { EnvironmentService } from "../abstractions/environment.service";
-import { PlatformUtilsService } from "../abstractions/platformUtils.service";
-import { StateService } from "../abstractions/state.service";
 import { TokenService } from "../auth/abstractions/token.service";
 import { DeviceType } from "../enums/device-type.enum";
 import { KdfType } from "../enums/kdf-type.enum";
+import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
+import { StateService } from "../platform/abstractions/state.service";
 
 export class BitwardenSdkService implements BitwardenSdkServiceAbstraction {
   private client: BitwardenClient;

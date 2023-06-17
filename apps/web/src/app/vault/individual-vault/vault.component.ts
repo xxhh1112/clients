@@ -31,30 +31,32 @@ import {
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { DEFAULT_PBKDF2_ITERATIONS, EventType, KdfType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { Icons } from "@bitwarden/components";
 
 import { UpdateKeyComponent } from "../../settings/update-key.component";
@@ -171,7 +173,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService,
     private searchService: SearchService,
-    private searchPipe: SearchPipe
+    private searchPipe: SearchPipe,
+    private configService: ConfigServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -186,8 +189,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       first(),
       switchMap(async (params: Params) => {
         this.showVerifyEmail = !(await this.tokenService.getEmailVerified());
-        // disable warning for March release -> add await this.isLowKdfIteration(); when ready
-        this.showLowKdf = false;
+        this.showLowKdf = await this.isLowKdfIteration();
         await this.syncService.fullSync(false);
 
         const canAccessPremium = await this.stateService.getCanAccessPremium();
@@ -855,9 +857,17 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async isLowKdfIteration() {
-    const kdfType = await this.stateService.getKdfType();
-    const kdfOptions = await this.stateService.getKdfConfig();
-    return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
+    const showLowKdfEnabled = await this.configService.getFeatureFlagBool(
+      FeatureFlag.DisplayLowKdfIterationWarningFlag
+    );
+
+    if (showLowKdfEnabled) {
+      const kdfType = await this.stateService.getKdfType();
+      const kdfOptions = await this.stateService.getKdfConfig();
+      return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
+    }
+
+    return showLowKdfEnabled;
   }
 
   protected async repromptCipher(ciphers: CipherView[]) {

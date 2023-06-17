@@ -80,7 +80,7 @@ const moduleRules = [
     loader: "@ngtools/webpack",
   },
   {
-    test: /argon2\.wasm$/,
+    test: /argon2(-simd)?\.wasm$/,
     loader: "base64-loader",
     type: "javascript/auto",
   },
@@ -280,6 +280,7 @@ const devServer =
                   https://quack.duckduckgo.com/api/email/addresses
                   https://app.anonaddy.com/api/v1/aliases
                   https://api.fastmail.com
+                  https://api.forwardemail.net
                   http://localhost:5000
                 ;object-src
                   'self'
@@ -365,7 +366,7 @@ const webpackConfig = {
     path: path.resolve(__dirname, "build"),
   },
   module: {
-    noParse: /argon2\.wasm$/,
+    noParse: /argon2(-simd)?\.wasm$/,
     rules: moduleRules,
   },
   experiments: {

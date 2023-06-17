@@ -5,13 +5,7 @@ import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import {
   OrganizationUserStatusType,
   OrganizationUserType,
@@ -19,8 +13,14 @@ import {
   ProviderUserType,
 } from "@bitwarden/common/admin-console/enums";
 import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { OrganizationUserView } from "../admin-console/organizations/core/views/organization-user.view";
 import { UserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
@@ -247,13 +247,17 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
-  async revoke(user: UserType) {
-    const confirmed = await this.dialogService.openSimpleDialog({
+  protected async revokeUserConfirmationDialog(user: UserType) {
+    return this.dialogService.openSimpleDialog({
       title: { key: "revokeAccess", placeholders: [this.userNamePipe.transform(user)] },
       content: this.revokeWarningMessage(),
       acceptButtonText: { key: "revokeAccess" },
       type: SimpleDialogType.WARNING,
     });
+  }
+
+  async revoke(user: UserType) {
+    const confirmed = await this.revokeUserConfirmationDialog(user);
 
     if (!confirmed) {
       return false;

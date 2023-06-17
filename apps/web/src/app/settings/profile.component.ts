@@ -3,16 +3,12 @@ import { Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { BitwardenSdkServiceAbstraction } from "@bitwarden/common/abstractions/bitwarden-sdk.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { UpdateProfileRequest } from "@bitwarden/common/auth/models/request/update-profile.request";
-import { Utils } from "@bitwarden/common/misc/utils";
 import { ProfileResponse } from "@bitwarden/common/models/response/profile.response";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { ChangeAvatarComponent } from "./change-avatar.component";
 
@@ -23,7 +19,7 @@ import { ChangeAvatarComponent } from "./change-avatar.component";
 export class ProfileComponent implements OnInit, OnDestroy {
   loading = true;
   profile: ProfileResponse;
-  fingerprint: string;
+  fingerprintMaterial: string;
 
   formPromise: Promise<any>;
   @ViewChild("avatarModalTemplate", { read: ViewContainerRef, static: true })
@@ -34,23 +30,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private cryptoService: CryptoService,
     private logService: LogService,
-    private keyConnectorService: KeyConnectorService,
     private stateService: StateService,
-    private modalService: ModalService,
-    private bitwardenSdkService: BitwardenSdkServiceAbstraction
+    private modalService: ModalService
   ) {}
 
   async ngOnInit() {
     this.profile = await this.apiService.getProfile();
     this.loading = false;
-
-    const client = await this.bitwardenSdkService.getClient();
-    this.fingerprint = await client.fingerprint(
-      await this.stateService.getUserId(),
-      Utils.fromBufferToB64(await this.cryptoService.getPublicKey())
-    );
+    this.fingerprintMaterial = await this.stateService.getUserId();
   }
 
   async ngOnDestroy() {

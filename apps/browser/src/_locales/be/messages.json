@@ -1461,17 +1461,35 @@
   "autoFillSuccess": {
     "message": "Аўтазапоўнены элемент"
   },
+  "insecurePageWarning": {
+    "message": "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Do you still wish to fill this login?"
+  },
+  "autofillIframeWarning": {
+    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+  },
+  "autofillIframeWarningTip": {
+    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Прызначыць асноўны пароль"
   },
   "currentMasterPass": {
-    "message": "Current master password"
+    "message": "Бягучы асноўны пароль"
   },
   "newMasterPass": {
-    "message": "New master password"
+    "message": "Новы асноўны пароль"
   },
   "confirmNewMasterPass": {
-    "message": "Confirm new master password"
+    "message": "Пацвердзіць новы асноўны пароль"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Адна або больш палітык арганізацыі патрабуе, каб ваш асноўны пароль адпавядаў наступным патрабаванням:"
@@ -1854,7 +1872,7 @@
     "message": "Ваш асноўны пароль нядаўна быў зменены адміністратарам арганізацыі. Для таго, каб атрымаць доступ да вашага сховішча, вы павінны абнавіць яго зараз. Гэта прывядзе да завяршэння бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Аўтаматычная рэгістрацыя"
@@ -1888,7 +1906,7 @@
     }
   },
   "vaultTimeoutPolicyWithActionInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "message": "Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае гадзін: $HOURS$; хвілін: $MINUTES$. Для часу чакання вашага сховішча прызначана дзеянне $ACTION$.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1905,7 +1923,7 @@
     }
   },
   "vaultTimeoutActionPolicyInEffect": {
-    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "message": "Палітыкай вашай арганізацыі прызначана дзеянне $ACTION$ для часу чакання вашага сховішча.",
     "placeholders": {
       "action": {
         "content": "$1",
@@ -2202,5 +2220,19 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Адкрываць у новым акне"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   }
 }

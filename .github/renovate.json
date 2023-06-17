@@ -11,17 +11,45 @@
     ":separateMajorReleases"
   ],
   "prConcurrentLimit": 3,
-  "enabledManagers": ["npm"],
+  "enabledManagers": ["cargo", "github-actions", "npm"],
   "packageRules": [
     {
-      "groupName": "{{manager}}",
-      "matchPackagePatterns": ["*"],
+      "groupName": "cargo minor",
+      "matchManagers": ["cargo"],
       "matchUpdateTypes": ["minor", "patch"]
     },
     {
-      "packageNames": ["typescript"],
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["major", "minor"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["typescript"],
       "matchUpdateTypes": "patch"
+    },
+    {
+      "groupName": "jest",
+      "matchPackageNames": ["@types/jest", "jest", "ts-jest", "jest-preset-angular"],
+      "matchUpdateTypes": "major"
     }
   ],
-  "ignoreDeps": ["bootstrap", "electron-builder", "electron", "node-ipc", "regedit", "zone.js"]
+  "ignoreDeps": [
+    "@types/koa-bodyparser",
+    "bootstrap",
+    "electron-builder",
+    "electron",
+    "node-ipc",
+    "regedit",
+    "zone.js"
+  ]
 }

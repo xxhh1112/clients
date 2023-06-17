@@ -2251,5 +2251,19 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "تحديث الإعدادات الموصى بها"
+  },
+  "region": {
+    "message": "المنطقة"
+  },
+  "eu": {
+    "message": "الاتحاد الأوروبي",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "الولايات المتحدة",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "استضافة ذاتية"
   }
 }

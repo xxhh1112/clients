@@ -1,15 +1,15 @@
 import { ApiService } from "../../abstractions/api.service";
-import { AppIdService } from "../../abstractions/appId.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { LogService } from "../../abstractions/log.service";
-import { MessagingService } from "../../abstractions/messaging.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
-import { StateService } from "../../abstractions/state.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "../../admin-console/models/domain/master-password-policy-options";
 import { HashPurpose } from "../../enums";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
-import { PasswordGenerationServiceAbstraction } from "../../tools/generator/password";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { LogService } from "../../platform/abstractions/log.service";
+import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { PasswordStrengthServiceAbstraction } from "../../tools/password-strength";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -54,7 +54,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
     logService: LogService,
     protected stateService: StateService,
     twoFactorService: TwoFactorService,
-    private passwordGenerationService: PasswordGenerationServiceAbstraction,
+    private passwordStrengthService: PasswordStrengthServiceAbstraction,
     private policyService: PolicyService,
     private authService: AuthService
   ) {
@@ -158,7 +158,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
     { masterPassword, email }: PasswordLogInCredentials,
     options: MasterPasswordPolicyOptions
   ): boolean {
-    const passwordStrength = this.passwordGenerationService.passwordStrength(
+    const passwordStrength = this.passwordStrengthService.getPasswordStrength(
       masterPassword,
       email
     )?.score;
