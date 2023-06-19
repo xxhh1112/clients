@@ -77,16 +77,49 @@ export abstract class StateService<T extends Account = Account> {
   setCollapsedGroupings: (value: string[], options?: StorageOptions) => Promise<void>;
   getConvertAccountToKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
+  /**
+   * gets the user's symmetric key
+   */
   getUserSymKey: (options?: StorageOptions) => Promise<UserSymKey>;
+  /**
+   * Sets the user's symmetric key
+   */
   setUserSymKey: (value: UserSymKey, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the user's master key
+   */
   getMasterKey: (options?: StorageOptions) => Promise<MasterKey>;
+  /**
+   * Sets the user's master key
+   */
   setMasterKey: (value: MasterKey, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the user's symmetric key encrypted by the master key
+   */
   getUserSymKeyMasterKey: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Sets the user's symmetric key encrypted by the master key
+   */
   setUserSymKeyMasterKey: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the user's auto key
+   */
   getUserSymKeyAuto: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Sets the user's auto key
+   */
   setUserSymKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the user's biometric key
+   */
   getUserSymKeyBiometric: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Checks if the user has a biometric key available
+   */
   hasUserSymKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
+  /**
+   * Sets the user's biometric key
+   */
   setUserSymKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's symmetric key encrypted by the Pin key.
@@ -108,8 +141,6 @@ export abstract class StateService<T extends Account = Account> {
    * Used when Master Password on Reset is enabled
    */
   setUserSymKeyPinEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
-
-  // deprecated keys
   /**
    * @deprecated For migration purposes only, use getUserSymKeyMasterKey instead
    */
@@ -118,13 +149,10 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setUserSymKeyMasterKey instead
    */
   setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
-  getDecryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
-  setDecryptedCryptoSymmetricKey: (
-    value: SymmetricCryptoKey,
-    options?: StorageOptions
-  ) => Promise<void>;
+  /**
+   * @deprecated For legacy purposes only, use getMasterKey instead
+   */
   getCryptoMasterKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
-  setCryptoMasterKey: (value: SymmetricCryptoKey, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated For migration purposes only, use getUserSymKeyAuto instead
    */
@@ -133,8 +161,6 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setUserSymKeyAuto instead
    */
   setCryptoMasterKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
-  getCryptoMasterKeyB64: (options?: StorageOptions) => Promise<string>;
-  setCryptoMasterKeyB64: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated For migration purposes only, use getUserSymKeyBiometric instead
    */
@@ -147,8 +173,6 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setUserSymKeyBiometric instead
    */
   setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
-  // end deprecated keys
-
   getDecryptedCiphers: (options?: StorageOptions) => Promise<CipherView[]>;
   setDecryptedCiphers: (value: CipherView[], options?: StorageOptions) => Promise<void>;
   getDecryptedCollections: (options?: StorageOptions) => Promise<CollectionView[]>;
@@ -401,7 +425,13 @@ export abstract class StateService<T extends Account = Account> {
   setUsernameGenerationOptions: (value: any, options?: StorageOptions) => Promise<void>;
   getGeneratorOptions: (options?: StorageOptions) => Promise<any>;
   setGeneratorOptions: (value: any, options?: StorageOptions) => Promise<void>;
+  /**
+   * Gets the user's Pin, encrypted by the user symmetric key
+   */
   getProtectedPin: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Sets the user's Pin, encrypted by the user symmetric key
+   */
   setProtectedPin: (value: string, options?: StorageOptions) => Promise<void>;
   getProviders: (options?: StorageOptions) => Promise<{ [id: string]: ProviderData }>;
   setProviders: (value: { [id: string]: ProviderData }, options?: StorageOptions) => Promise<void>;
