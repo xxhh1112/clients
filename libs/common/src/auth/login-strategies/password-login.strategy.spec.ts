@@ -11,14 +11,14 @@ import { PlatformUtilsService } from "../../platform/abstractions/platform-utils
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
 import {
-  PasswordStrengthService,
-  PasswordStrengthServiceAbstraction,
-} from "../../tools/password-strength";
-import {
   MasterKey,
   SymmetricCryptoKey,
   UserSymKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
+import {
+  PasswordStrengthService,
+  PasswordStrengthServiceAbstraction,
+} from "../../tools/password-strength";
 import { CsprngArray } from "../../types/csprng";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";

@@ -12,14 +12,14 @@ import { Utils } from "../../platform/misc/utils";
 import { Account, AccountProfile, AccountTokens } from "../../platform/models/domain/account";
 import { EncString } from "../../platform/models/domain/enc-string";
 import {
-  PasswordStrengthService,
-  PasswordStrengthServiceAbstraction,
-} from "../../tools/password-strength";
-import {
   MasterKey,
   SymmetricCryptoKey,
   UserSymKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
+import {
+  PasswordStrengthService,
+  PasswordStrengthServiceAbstraction,
+} from "../../tools/password-strength";
 import { CsprngArray } from "../../types/csprng";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";

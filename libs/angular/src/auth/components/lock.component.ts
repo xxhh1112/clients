@@ -24,8 +24,8 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserSymKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
 
