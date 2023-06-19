@@ -6827,12 +6827,79 @@
   },
   "memberDecryptionTdeDescriptionEnd": {
     "message": "in met automatische inschrijving wanneer deze optie wordt gebruikt.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
   },
   "recoverAccount": {
     "message": "Account herstellen"
   },
   "updatedTempPassword": {
     "message": "Gebruiker heeft een via accountherstel uitgegeven wachtwoord bijgewerkt."
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "De vingerafdrukzin van je organisatie",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Apparaat goedkeuringen"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Met het goedkeuren van onderstaande inlogverzoeken kan het verzoekende lid inloggen. Afgewezen verzoeken verlopen na 1 week. Controleer de informatie van het lid voordat je goedkeuring geeft."
+  },
+  "deviceInfo": {
+    "message": "Apparaatinformatie"
+  },
+  "time": {
+    "message": "Tijd"
+  },
+  "denyAllRequests": {
+    "message": "Alle aanvragen afwijzen"
+  },
+  "denyRequest": {
+    "message": "Aanvraag afwijzen"
+  },
+  "approveRequest": {
+    "message": "Aanvraag goedkeuren"
+  },
+  "noDeviceRequests": {
+    "message": "Geen apparaatverzoeken"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Hier verschijnen verzoeken van leden tot het goedkeuren van apparaten"
+  },
+  "loginRequestDenied": {
+    "message": "Inlogverzoek afgewezen"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Alle inlogverzoeken afgewezen"
+  },
+  "loginRequestApproved": {
+    "message": "Inlogverzoek goedgekeurd"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account heeft geen hoofdwachtwoord"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Het verwijderen van $USER$ zonder een hoofdwachtwoord in te stellen kan de toegang tot hun volledige account beperken. Weet u zeker dat u wilt doorgaan?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Geen hoofdwachtwoord"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Het verwijderen van leden die geen hoofdwachtwoorden hebben zonder er een in te stellen, kan de toegang tot hun volledige account beperken."
   }
 }

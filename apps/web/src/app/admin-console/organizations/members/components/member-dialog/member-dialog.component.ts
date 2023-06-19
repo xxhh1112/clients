@@ -12,14 +12,14 @@ import {
 } from "@bitwarden/common/admin-console/enums";
 import { PermissionsApi } from "@bitwarden/common/admin-console/models/api/permissions.api";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
 import { flagEnabled } from "../../../../../../utils/flags";
+import { CollectionAdminService } from "../../../../../vault/core/collection-admin.service";
 import {
   CollectionAccessSelectionView,
-  CollectionAdminService,
   GroupService,
   GroupView,
   OrganizationUserAdminView,
@@ -72,6 +72,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   canUseCustomPermissions: boolean;
   PermissionMode = PermissionMode;
   canUseSecretsManager: boolean;
+  showNoMasterPasswordWarning = false;
 
   protected organization: Organization;
   protected collectionAccessItems: AccessItemView[] = [];
@@ -179,6 +180,9 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
             throw new Error("Could not find user to edit.");
           }
           this.isRevoked = userDetails.status === OrganizationUserStatusType.Revoked;
+          this.showNoMasterPasswordWarning =
+            userDetails.status > OrganizationUserStatusType.Invited &&
+            userDetails.hasMasterPassword === false;
           const assignedCollectionsPermissions = {
             editAssignedCollections: userDetails.permissions.editAssignedCollections,
             deleteAssignedCollections: userDetails.permissions.deleteAssignedCollections,
@@ -366,7 +370,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       ? "removeUserConfirmationKeyConnector"
       : "removeOrgUserConfirmation";
 
-    const confirmed = await this.dialogService.openSimpleDialog({
+    let confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "removeUserIdAccess", placeholders: [this.params.name] },
       content: { key: message },
       type: SimpleDialogType.WARNING,
@@ -374,6 +378,14 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
 
     if (!confirmed) {
       return false;
+    }
+
+    if (this.showNoMasterPasswordWarning) {
+      confirmed = await this.noMasterPasswordConfirmationDialog();
+
+      if (!confirmed) {
+        return false;
+      }
     }
 
     await this.organizationUserService.deleteOrganizationUser(
@@ -394,7 +406,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const confirmed = await this.dialogService.openSimpleDialog({
+    let confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "revokeUserId", placeholders: [this.params.name] },
       content: { key: "revokeUserConfirmation" },
       acceptButtonText: { key: "revokeAccess" },
@@ -403,6 +415,14 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
 
     if (!confirmed) {
       return false;
+    }
+
+    if (this.showNoMasterPasswordWarning) {
+      confirmed = await this.noMasterPasswordConfirmationDialog();
+
+      if (!confirmed) {
+        return false;
+      }
     }
 
     await this.organizationUserService.revokeOrganizationUser(
@@ -449,6 +469,19 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
 
   private close(result: MemberDialogResult) {
     this.dialogRef.close(result);
+  }
+
+  private noMasterPasswordConfirmationDialog() {
+    return this.dialogService.openSimpleDialog({
+      title: {
+        key: "removeOrgUserNoMasterPasswordTitle",
+      },
+      content: {
+        key: "removeOrgUserNoMasterPasswordDesc",
+        placeholders: [this.params.name],
+      },
+      type: SimpleDialogType.WARNING,
+    });
   }
 }
 
