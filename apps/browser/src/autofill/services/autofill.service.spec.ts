@@ -1442,6 +1442,7 @@ describe("AutofillService", function () {
         let nonViewableFieldView: FieldView;
 
         beforeEach(function () {
+          usernameField.htmlName = "username";
           emailField = createAutofillFieldMock({
             opid: "email",
             type: "email",
@@ -1477,6 +1478,7 @@ describe("AutofillService", function () {
             nonViewableFieldView,
           ];
           jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
+          jest.spyOn(AutofillService, "fillByOpid");
         });
 
         it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", function () {
@@ -1507,6 +1509,12 @@ describe("AutofillService", function () {
             4,
             nonViewableField,
             AutoFillConstants.UsernameFieldNames
+          );
+          expect(AutofillService.fillByOpid).toHaveBeenCalledTimes(1);
+          expect(AutofillService.fillByOpid).toHaveBeenCalledWith(
+            fillScript,
+            usernameField,
+            options.cipher.login.username
           );
         });
       });
