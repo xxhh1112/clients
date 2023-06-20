@@ -4,7 +4,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 
 import { EncryptionType } from "../../../enums";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
-import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { OrgKey, SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { ContainerService } from "../../services/container.service";
 
@@ -230,7 +230,7 @@ describe("EncString", () => {
     });
 
     it("gets an organization key if required", async () => {
-      const orgKey = mock<SymmetricCryptoKey>();
+      const orgKey = mock<SymmetricCryptoKey>() as OrgKey;
 
       cryptoService.getOrgKey.calledWith("orgId").mockResolvedValue(orgKey);
 

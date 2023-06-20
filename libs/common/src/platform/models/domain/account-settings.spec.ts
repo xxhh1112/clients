@@ -7,16 +7,6 @@ describe("AccountSettings", () => {
       expect(AccountSettings.fromJSON(JSON.parse("{}"))).toBeInstanceOf(AccountSettings);
     });
 
-    it("should deserialize userSymKeyPin", () => {
-      const accountSettings = new AccountSettings();
-      accountSettings.userSymKeyPin = EncString.fromJSON("encrypted");
-      const jsonObj = JSON.parse(JSON.stringify(accountSettings));
-      const actual = AccountSettings.fromJSON(jsonObj);
-
-      expect(actual.userSymKeyPin).toBeInstanceOf(EncString);
-      expect(actual.userSymKeyPin.encryptedString).toEqual("encrypted");
-    });
-
     it("should deserialize pinProtected", () => {
       const accountSettings = new AccountSettings();
       accountSettings.pinProtected = EncryptionPair.fromJSON<string, EncString>({
