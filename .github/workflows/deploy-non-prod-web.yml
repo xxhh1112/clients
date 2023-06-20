@@ -66,7 +66,6 @@ jobs:
           echo "environment-artifact=web-*-cloud-${{ inputs.environment }}.zip" >> $GITHUB_OUTPUT
           echo "environment-storage-account-name=$ENV_STORAGE_ACCOUNT_NAME" >> $GITHUB_OUTPUT
           echo "environment-key-vault-name=$ENV_KEY_VAULT_NAME" >> $GITHUB_OUTPUT
-          echo "::add-mask::$ENV_KEY_VAULT_SP_SECRET_NAME"
           echo "environment-key-vault-sp-secret-name=$ENV_KEY_VAULT_SP_SECRET_NAME" >> $GITHUB_OUTPUT
 
   azure-deploy:
