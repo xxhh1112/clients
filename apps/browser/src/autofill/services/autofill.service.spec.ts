@@ -1604,6 +1604,513 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("generateCardFillScript", function () {
+    let fillScript: AutofillScript;
+    let pageDetails: AutofillPageDetails;
+    let filledFields: { [id: string]: AutofillField };
+    let options: GenerateFillScriptOptions;
+
+    beforeEach(function () {
+      fillScript = createAutofillScriptMock({
+        script: [],
+      });
+      pageDetails = createAutofillPageDetailsMock();
+      filledFields = {
+        "cardholderName-field": createAutofillFieldMock({
+          opid: "cardholderName-field",
+          form: "validFormId",
+          elementNumber: 1,
+          htmlName: "cc-name",
+        }),
+        "cardNumber-field": createAutofillFieldMock({
+          opid: "cardNumber-field",
+          form: "validFormId",
+          elementNumber: 2,
+          htmlName: "cc-number",
+        }),
+        "expMonth-field": createAutofillFieldMock({
+          opid: "expMonth-field",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "exp-month",
+        }),
+        "expYear-field": createAutofillFieldMock({
+          opid: "expYear-field",
+          form: "validFormId",
+          elementNumber: 4,
+          htmlName: "exp-year",
+        }),
+        "code-field": createAutofillFieldMock({
+          opid: "code-field",
+          form: "validFormId",
+          elementNumber: 1,
+          htmlName: "cvc",
+        }),
+      };
+      options = createGenerateFillScriptOptionsMock();
+      options.cipher.card = mock<CardView>();
+    });
+
+    it("returns null if the passed options contains a cipher with no card view", function () {
+      options.cipher.card = undefined;
+
+      const value = autofillService["generateCardFillScript"](
+        fillScript,
+        pageDetails,
+        filledFields,
+        options
+      );
+
+      expect(value).toBeNull();
+    });
+
+    describe("given an invalid autofill field", function () {
+      const unmodifiedFillScriptValues: AutofillScript = {
+        autosubmit: null,
+        metadata: {},
+        properties: { delay_between_operations: 20 },
+        savedUrls: [],
+        script: [],
+        itemType: "",
+        untrustedIframe: false,
+      };
+
+      it("returns an unmodified fill script when the field is a `span` field", function () {
+        const spanField = createAutofillFieldMock({
+          opid: "span-field",
+          form: "validFormId",
+          elementNumber: 5,
+          htmlName: "spanField",
+          tagName: "span",
+        });
+        pageDetails.fields = [spanField];
+        jest.spyOn(AutofillService, "forCustomFieldsOnly");
+        jest.spyOn(autofillService as any, "isExcludedType");
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(spanField);
+        expect(autofillService["isExcludedType"]).not.toHaveBeenCalled();
+        expect(value).toStrictEqual(unmodifiedFillScriptValues);
+      });
+
+      AutoFillConstants.ExcludedAutofillTypes.forEach((excludedType) => {
+        it(`returns an unmodified fill script when the field has a '${excludedType}' type`, function () {
+          const invalidField = createAutofillFieldMock({
+            opid: `${excludedType}-field`,
+            form: "validFormId",
+            elementNumber: 5,
+            htmlName: "invalidField",
+            type: excludedType,
+          });
+          pageDetails.fields = [invalidField];
+          jest.spyOn(AutofillService, "forCustomFieldsOnly");
+          jest.spyOn(autofillService as any, "isExcludedType");
+
+          const value = autofillService["generateCardFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(invalidField);
+          expect(autofillService["isExcludedType"]).toHaveBeenCalledWith(
+            invalidField.type,
+            AutoFillConstants.ExcludedAutofillTypes
+          );
+          expect(value).toStrictEqual(unmodifiedFillScriptValues);
+        });
+      });
+
+      it("returns an unmodified fill script when the field is not viewable", function () {
+        const notViewableField = createAutofillFieldMock({
+          opid: "invalid-field",
+          form: "validFormId",
+          elementNumber: 5,
+          htmlName: "invalidField",
+          type: "text",
+          viewable: false,
+        });
+        pageDetails.fields = [notViewableField];
+        jest.spyOn(AutofillService, "forCustomFieldsOnly");
+        jest.spyOn(autofillService as any, "isExcludedType");
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(notViewableField);
+        expect(autofillService["isExcludedType"]).toHaveBeenCalled();
+        expect(value).toStrictEqual(unmodifiedFillScriptValues);
+      });
+    });
+
+    describe("given a valid set of autofill fields", function () {
+      let cardholderNameField: AutofillField;
+      let cardholderNameFieldView: FieldView;
+      let cardNumberField: AutofillField;
+      let cardNumberFieldView: FieldView;
+      let expMonthField: AutofillField;
+      let expMonthFieldView: FieldView;
+      let expYearField: AutofillField;
+      let expYearFieldView: FieldView;
+      let codeField: AutofillField;
+      let codeFieldView: FieldView;
+      let brandField: AutofillField;
+      let brandFieldView: FieldView;
+
+      beforeEach(function () {
+        cardholderNameField = createAutofillFieldMock({
+          opid: "cardholderName",
+          form: "validFormId",
+          elementNumber: 1,
+          htmlName: "cc-name",
+        });
+        cardholderNameFieldView = mock<FieldView>({ name: "cardholderName" });
+        cardNumberField = createAutofillFieldMock({
+          opid: "cardNumber",
+          form: "validFormId",
+          elementNumber: 2,
+          htmlName: "cc-number",
+        });
+        cardNumberFieldView = mock<FieldView>({ name: "cardNumber" });
+        expMonthField = createAutofillFieldMock({
+          opid: "expMonth",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "exp-month",
+        });
+        expMonthFieldView = mock<FieldView>({ name: "expMonth" });
+        expYearField = createAutofillFieldMock({
+          opid: "expYear",
+          form: "validFormId",
+          elementNumber: 4,
+          htmlName: "exp-year",
+        });
+        expYearFieldView = mock<FieldView>({ name: "expYear" });
+        codeField = createAutofillFieldMock({
+          opid: "code",
+          form: "validFormId",
+          elementNumber: 1,
+          htmlName: "cvc",
+        });
+        brandField = createAutofillFieldMock({
+          opid: "brand",
+          form: "validFormId",
+          elementNumber: 1,
+          htmlName: "card-brand",
+        });
+        brandFieldView = mock<FieldView>({ name: "brand" });
+        codeFieldView = mock<FieldView>({ name: "code" });
+        pageDetails.fields = [
+          cardholderNameField,
+          cardNumberField,
+          expMonthField,
+          expYearField,
+          codeField,
+          brandField,
+        ];
+        options.cipher.fields = [
+          cardholderNameFieldView,
+          cardNumberFieldView,
+          expMonthFieldView,
+          expYearFieldView,
+          codeFieldView,
+          brandFieldView,
+        ];
+        options.cipher.card.cardholderName = "testCardholderName";
+        options.cipher.card.number = "testCardNumber";
+        options.cipher.card.expMonth = "testExpMonth";
+        options.cipher.card.expYear = "testExpYear";
+        options.cipher.card.code = "testCode";
+        options.cipher.card.brand = "testBrand";
+        jest.spyOn(AutofillService, "forCustomFieldsOnly");
+        jest.spyOn(autofillService as any, "isExcludedType");
+        jest.spyOn(AutofillService as any, "isFieldMatch");
+        jest.spyOn(autofillService as any, "makeScriptAction");
+        jest.spyOn(AutofillService, "hasValue");
+        jest.spyOn(autofillService as any, "fieldAttrsContain");
+        jest.spyOn(AutofillService, "fillByOpid");
+        jest.spyOn(autofillService as any, "makeScriptActionWithValue");
+      });
+
+      it("returns a fill script containing all of the passed card fields", function () {
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledTimes(6);
+        expect(autofillService["isExcludedType"]).toHaveBeenCalledTimes(6);
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalled();
+        expect(autofillService["makeScriptAction"]).toHaveBeenCalledTimes(4);
+        expect(AutofillService["hasValue"]).toHaveBeenCalledTimes(6);
+        expect(autofillService["fieldAttrsContain"]).toHaveBeenCalledTimes(3);
+        expect(AutofillService["fillByOpid"]).toHaveBeenCalledTimes(6);
+        expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledTimes(4);
+        expect(value).toStrictEqual({
+          autosubmit: null,
+          itemType: "",
+          metadata: {},
+          properties: {
+            delay_between_operations: 20,
+          },
+          savedUrls: [],
+          script: [
+            ["click_on_opid", "cardholderName"],
+            ["focus_by_opid", "cardholderName"],
+            ["fill_by_opid", "cardholderName", "testCardholderName"],
+            ["click_on_opid", "cardNumber"],
+            ["focus_by_opid", "cardNumber"],
+            ["fill_by_opid", "cardNumber", "testCardNumber"],
+            ["click_on_opid", "code"],
+            ["focus_by_opid", "code"],
+            ["fill_by_opid", "code", "testCode"],
+            ["click_on_opid", "brand"],
+            ["focus_by_opid", "brand"],
+            ["fill_by_opid", "brand", "testBrand"],
+            ["click_on_opid", "expMonth"],
+            ["focus_by_opid", "expMonth"],
+            ["fill_by_opid", "expMonth", "testExpMonth"],
+            ["click_on_opid", "expYear"],
+            ["focus_by_opid", "expYear"],
+            ["fill_by_opid", "expYear", "testExpYear"],
+          ],
+          untrustedIframe: false,
+        });
+      });
+    });
+
+    describe("given an expiration month field", function () {
+      let expMonthField: AutofillField;
+      let expMonthFieldView: FieldView;
+
+      beforeEach(function () {
+        expMonthField = createAutofillFieldMock({
+          opid: "expMonth",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "exp-month",
+          selectInfo: {
+            options: [
+              ["January", "01"],
+              ["February", "02"],
+              ["March", "03"],
+              ["April", "04"],
+              ["May", "05"],
+              ["June", "06"],
+              ["July", "07"],
+              ["August", "08"],
+              ["September", "09"],
+              ["October", "10"],
+              ["November", "11"],
+              ["December", "12"],
+            ],
+          },
+        });
+        expMonthFieldView = mock<FieldView>({ name: "expMonth" });
+        pageDetails.fields = [expMonthField];
+        options.cipher.fields = [expMonthFieldView];
+        options.cipher.card.expMonth = "05";
+      });
+
+      it("returns an expiration month parsed from found select options within the field", function () {
+        const testValue = "sometestvalue";
+        expMonthField.selectInfo.options[4] = ["May", testValue];
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
+      });
+
+      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the end of the list of options", function () {
+        const testValue = "sometestvalue";
+        expMonthField.selectInfo.options[4] = ["May", testValue];
+        expMonthField.selectInfo.options.push(["", ""]);
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
+      });
+
+      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the start of the list of options", function () {
+        const testValue = "sometestvalue";
+        expMonthField.selectInfo.options[4] = ["May", testValue];
+        expMonthField.selectInfo.options.unshift(["", ""]);
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
+      });
+
+      it("returns an expiration month with a zero attached if the field requires two characters, and the vault item has only one character", function () {
+        options.cipher.card.expMonth = "5";
+        expMonthField.selectInfo = null;
+        expMonthField.placeholder = "mm";
+        expMonthField.maxLength = 2;
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, "05"]);
+      });
+    });
+
+    describe("given an expiration year field", function () {
+      let expYearField: AutofillField;
+      let expYearFieldView: FieldView;
+
+      beforeEach(function () {
+        expYearField = createAutofillFieldMock({
+          opid: "expYear",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "exp-year",
+          selectInfo: {
+            options: [
+              ["2023", "2023"],
+              ["2024", "2024"],
+              ["2025", "2025"],
+            ],
+          },
+        });
+        expYearFieldView = mock<FieldView>({ name: "expYear" });
+        pageDetails.fields = [expYearField];
+        options.cipher.fields = [expYearFieldView];
+        options.cipher.card.expYear = "2024";
+      });
+
+      it("returns an expiration year parsed from the select options if an exact match is found for either the select option text or value", function () {
+        const someTestValue = "sometestvalue";
+        expYearField.selectInfo.options[1] = ["2024", someTestValue];
+        options.cipher.card.expYear = someTestValue;
+
+        let value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, someTestValue]);
+
+        expYearField.selectInfo.options[1] = [someTestValue, "2024"];
+
+        value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, someTestValue]);
+      });
+
+      it("returns an expiration year parsed from the select options if the value of an option contains only two characters and the vault item value contains four characters", function () {
+        const yearValue = "26";
+        expYearField.selectInfo.options.push(["The year 2026", yearValue]);
+        options.cipher.card.expYear = "2026";
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, yearValue]);
+      });
+
+      it("returns an expiration year parsed from the select options if the vault of an option is separated by a colon", function () {
+        const yearValue = "26";
+        const colonSeparatedYearValue = `2:0${yearValue}`;
+        expYearField.selectInfo.options.push(["The year 2026", colonSeparatedYearValue]);
+        options.cipher.card.expYear = yearValue;
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual([
+          "fill_by_opid",
+          expYearField.opid,
+          colonSeparatedYearValue,
+        ]);
+      });
+
+      it("returns an expiration year with `20` prepended to the vault item value if the field to be filled expects a `yyyy` format but the vault item only has two characters", function () {
+        const yearValue = "26";
+        expYearField.selectInfo = null;
+        expYearField.placeholder = "yyyy";
+        expYearField.maxLength = 4;
+        options.cipher.card.expYear = yearValue;
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual([
+          "fill_by_opid",
+          expYearField.opid,
+          `20${yearValue}`,
+        ]);
+      });
+
+      it("returns an expiration year with only the last two values if the field to be filled expects a `yy` format but the vault item contains four characters", function () {
+        const yearValue = "26";
+        expYearField.selectInfo = null;
+        expYearField.placeholder = "yy";
+        expYearField.maxLength = 2;
+        options.cipher.card.expYear = `20${yearValue}`;
+
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, yearValue]);
+      });
+    });
+  });
+
   describe("inUntrustedIframe", function () {
     it("returns a false value if the passed pageUrl is equal to the options tabUrl", function () {
       const pageUrl = "https://www.example.com";
