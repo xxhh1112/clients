@@ -296,13 +296,14 @@ export class AuthService implements AuthServiceAbstraction {
     key: string,
     requestApproved: boolean
   ): Promise<AuthRequestResponse> {
+    // TODO: This currently depends on always having the Master Key and MP Hash
+    // We need to change this to using a different method (possibly server auth code + user sym key)
     const pubKey = Utils.fromB64ToArray(key);
-    // TODO(Jake): Do we need to support old encryption model here?
-    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
-    if (!userSymKey) {
-      throw new Error("User key not found");
+    const masterKey = await this.cryptoService.getMasterKey();
+    if (!masterKey) {
+      throw new Error("Master key not found");
     }
-    const encryptedKey = await this.cryptoService.rsaEncrypt(userSymKey.encKey, pubKey.buffer);
+    const encryptedKey = await this.cryptoService.rsaEncrypt(masterKey.encKey, pubKey.buffer);
     const encryptedMasterPasswordHash = await this.cryptoService.rsaEncrypt(
       Utils.fromUtf8ToArray(await this.stateService.getKeyHash()),
       pubKey.buffer
