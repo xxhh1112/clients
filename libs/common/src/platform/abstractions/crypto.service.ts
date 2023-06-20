@@ -100,6 +100,11 @@ export abstract class CryptoService {
    */
   getMasterKey: (userId?: string) => Promise<MasterKey>;
   /**
+   * Check user has KeyConnector or only uses passwordless technologies to log in
+   * @returns True if the user has a master password
+   */
+  getUsesMasterPassword: () => Promise<boolean>;
+  /**
    * Generates a master key from the provided password
    * @param password The user's master password
    * @param email The user's email
