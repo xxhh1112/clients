@@ -12,7 +12,6 @@ function createAutofillFieldMock(customFields = {}): AutofillField {
   return {
     opid: "default-input-field-opid",
     elementNumber: 0,
-    visible: true,
     viewable: true,
     htmlID: "default-htmlID",
     htmlName: "default-htmlName",

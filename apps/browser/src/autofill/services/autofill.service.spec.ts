@@ -164,6 +164,42 @@ describe("AutofillService", function () {
         },
       ]);
     });
+
+    it("will check for a hidden username field", function () {
+      const usernameInputField = createAutofillFieldMock({
+        opid: "username-field",
+        form: "validFormId",
+        elementNumber: 1,
+        isViewable: false,
+        readonly: true,
+      });
+      const passwordInputField = createAutofillFieldMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+        elementNumber: 2,
+      });
+      pageDetailsMock.fields = [usernameInputField, passwordInputField];
+      jest.spyOn(autofillService as any, "findUsernameField");
+
+      const formData = autofillService.getFormsWithPasswordFields(pageDetailsMock);
+
+      expect(autofillService["findUsernameField"]).toHaveBeenCalledWith(
+        pageDetailsMock,
+        passwordInputField,
+        true,
+        true,
+        false
+      );
+      expect(formData).toStrictEqual([
+        {
+          form: pageDetailsMock.forms.validFormId,
+          password: pageDetailsMock.fields[1],
+          passwords: [pageDetailsMock.fields[1]],
+          username: pageDetailsMock.fields[0],
+        },
+      ]);
+    });
   });
 
   describe("doAutoFill", function () {
@@ -419,6 +455,20 @@ describe("AutofillService", function () {
       expect(cipherService.updateLastUsedDate).not.toHaveBeenCalled();
     });
 
+    it("returns early if the fillScript cannot be generated", async function () {
+      jest.spyOn(autofillService as any, "generateFillScript").mockReturnValueOnce(undefined);
+      jest.spyOn(BrowserApi, "tabSendMessage");
+
+      try {
+        await autofillService.doAutoFill(autofillOptions);
+        triggerTestFailure();
+      } catch (error) {
+        expect(autofillService["generateFillScript"]).toHaveBeenCalled();
+        expect(BrowserApi.tabSendMessage).not.toHaveBeenCalled();
+        expect(error.message).toBe(didNotAutofillError);
+      }
+    });
+
     it("returns a TOTP value", async function () {
       const totpCode = "123456";
       autofillOptions.cipher.login.totp = "totp";
@@ -457,6 +507,17 @@ describe("AutofillService", function () {
       autofillOptions.cipher.login.totp = "totp";
       autofillOptions.cipher.organizationUseTotp = false;
       jest.spyOn(stateService, "getCanAccessPremium").mockResolvedValueOnce(false);
+
+      const autofillResult = await autofillService.doAutoFill(autofillOptions);
+
+      expect(autofillResult).toBeNull();
+    });
+
+    it("returns a null value if the user has disabled `auto TOTP copy`", async function () {
+      autofillOptions.cipher.login.totp = "totp";
+      autofillOptions.cipher.organizationUseTotp = true;
+      jest.spyOn(stateService, "getCanAccessPremium").mockResolvedValueOnce(true);
+      jest.spyOn(stateService, "getDisableAutoTotpCopy").mockResolvedValueOnce(true);
 
       const autofillResult = await autofillService.doAutoFill(autofillOptions);
 
