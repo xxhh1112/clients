@@ -12,8 +12,8 @@ on:
         type: choice
         options:
           - QA
-          - POC2
-          - eudevtest
+          - EU-PROD
+          - EU-DEVTEST
 
 
 jobs:
@@ -27,20 +27,33 @@ jobs:
       environment-branch: ${{ steps.config.outputs.environment-branch }}
       environment-artifact: ${{ steps.config.outputs.environment-artifact }}
       environment-storage-account-name: ${{ steps.config.outputs.environment-storage-account-name }}
+      environment-key-vault-name: ${{ steps.config.outputs.environment-key-vault-name }}
+      environment-key-vault-sp-secret-name: ${{ steps.config.outputs.environment-key-vault-sp-secret-name }}
     steps:
       - name: Configure
         id: config
         run: |
           ENV_NAME_LOWER=$(echo "${{ inputs.environment }}" | awk '{print tolower($0)}')
-
-          # Set the storage account name
+        
+          # Set the storage account information
+          ENV_KEY_VAULT_NAME=""
+          ENV_KEY_VAULT_SP_SECRET_NAME=""
           ENV_STORAGE_ACCOUNT_NAME=""
           case "${{ inputs.environment}}" in
             *QA*)
-              ENV_STORAGE_ACCOUNT_NAME="devops1354"
+              ENV_STORAGE_ACCOUNT_NAME="bwwebvaultrlktusqa"
+              ENV_KEY_VAULT_NAME="bw-webvault-rlktusqa-kv"
+              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_US_QA_SERVICE_PRINCIPAL }}"
               ;;
-            *POC2*)
-              ENV_STORAGE_ACCOUNT_NAME="devops1354"
+            *EU-PROD*)
+              ENV_STORAGE_ACCOUNT_NAME="bwwebvault1itgprod"
+              ENV_KEY_VAULT_NAME="webvault-westeurope-prod"
+              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_EU_PRD_SERVICE_PRINCIPAL }}"
+              ;;
+            *EU-DEVTEST*)
+              ENV_STORAGE_ACCOUNT_NAME="bwwebvaultwesteuropedev"
+              ENV_KEY_VAULT_NAME="webvault-westeurope-dev"
+              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_EU_DEVTEST_SERVICE_PRINCIPAL }}"
               ;;
           esac
           
@@ -51,6 +64,9 @@ jobs:
           echo "environment-name=Web Vault - ${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo "environment-branch=cf-pages-$ENV_NAME_LOWER" >> $GITHUB_OUTPUT
           echo "environment-artifact=web-*-cloud-${{ inputs.environment }}.zip" >> $GITHUB_OUTPUT
+          echo "environment-storage-account-name=$ENV_STORAGE_ACCOUNT_NAME" >> $GITHUB_OUTPUT
+          echo "environment-key-vault-name=$ENV_KEY_VAULT_NAME" >> $GITHUB_OUTPUT
+          echo "environment-key-vault-sp-secret-name=$ENV_KEY_VAULT_SP_SECRET_NAME" >> $GITHUB_OUTPUT
 
   azure-deploy:
     name: Deploy to Azure
@@ -61,41 +77,20 @@ jobs:
       _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
       _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
       _ENV_STORAGE_ACCOUNT: ${{ needs.setup.outputs.environment-storage-account-name }}
+      _ENV_KEY_VAULT: ${{ needs.setup.outputs.environment-key-vault-name }}
+      _ENV_KEY_VAULT_SP_SECRET_NAME: ${{ needs.setup.outputs.environment-key-vault-sp-secret-name }}
     steps:
-      - name: Login to Azure - CI Subscription
+      - name: Login to Azure
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          creds: ${{ env._ENV_KEY_VAULT_SP_SECRET_NAME }}
 
-      # - name: Retrieve storage account connection string
-      #   id: retrieve-bot-secrets
-      #   uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
-      #   with:
-      #     keyvault: bitwarden-ci
-      #     secrets: "sa-bitwarden-web-vault-dev-key-temp"
-
-      - name: Retrieve secrets
+      - name: Retrieve storage account connection string
         id: retrieve-secrets
-        shell: bash
-        env:
-          KEYVAULT: "bitwarden-ci"
-          SECRETS: |
-            sa-bitwarden-web-vault-dev-key-temp,
-            dct-delegate-key
-        run: |
-          for i in ${SECRETS//,/ }
-          do
-            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-
-            while IFS= read -r line; do
-              if [[ -z "$line" ]]; then
-                continue
-              fi
-              echo "::add-mask::$line"
-            done <<< "$VALUE"
-
-            echo "$i<<$VALUE" >> $GITHUB_OUTPUT
-          done
+        uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
+        with:
+          keyvault: ${{ env._ENV_KEY_VAULT }}
+          secrets: "sa-bitwarden-web-vault-dev-key-temp"
 
 
       - name: Download latest cloud asset
@@ -117,7 +112,7 @@ jobs:
         run: |
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
-            --account-name "$_ENV_STORAGE_ACCOUNT" \
+            --account-name "${{ env._ENV_STORAGE_ACCOUNT }}" \
             --connection-string "${{ steps.retrieve-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
             --overwrite \
             --no-progress
