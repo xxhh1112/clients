@@ -2511,6 +2511,13 @@ export class StateService<
     )?.profile?.userId;
   }
 
+  // async getUsesMasterPassword(options?: StorageOptions): Promise<boolean> {
+  //   // TODO: Implement if this is not ok: https://bitwarden.atlassian.net/browse/PM-1203?focusedCommentId=38949
+  //   // return (
+  //   //   await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+  //   // )?.profile?.usesMasterPassword;
+  // }
+
   async getUsesKeyConnector(options?: StorageOptions): Promise<boolean> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
