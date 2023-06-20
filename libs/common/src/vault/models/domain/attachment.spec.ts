@@ -4,7 +4,7 @@ import { makeStaticByteArray, mockEnc, mockFromJson } from "../../../../spec";
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
 import { EncryptedString, EncString } from "../../../platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { OrgKey, SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { ContainerService } from "../../../platform/services/container.service";
 import { AttachmentData } from "../../models/data/attachment.data";
 import { Attachment } from "../../models/domain/attachment";
@@ -110,7 +110,7 @@ describe("Attachment", () => {
       });
 
       it("gets an organization key if required", async () => {
-        const orgKey = mock<SymmetricCryptoKey>();
+        const orgKey = mock<OrgKey>();
         cryptoService.getOrgKey.calledWith("orgId").mockResolvedValue(orgKey);
 
         await attachment.decrypt("orgId", null);

@@ -230,7 +230,7 @@ describe("EncString", () => {
     });
 
     it("gets an organization key if required", async () => {
-      const orgKey = mock<SymmetricCryptoKey>() as OrgKey;
+      const orgKey = mock<OrgKey>();
 
       cryptoService.getOrgKey.calledWith("orgId").mockResolvedValue(orgKey);
 
