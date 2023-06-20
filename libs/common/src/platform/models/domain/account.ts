@@ -107,7 +107,6 @@ export class AccountKeys {
   // deprecated keys
   cryptoMasterKey?: SymmetricCryptoKey;
   cryptoMasterKeyAuto?: string;
-  cryptoMasterKeyB64?: string;
   cryptoMasterKeyBiometric?: string;
   cryptoSymmetricKey?: EncryptionPair<string, SymmetricCryptoKey> = new EncryptionPair<
     string,
