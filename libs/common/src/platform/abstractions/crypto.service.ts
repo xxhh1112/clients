@@ -83,6 +83,12 @@ export abstract class CryptoService {
    */
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   /**
+   * Clears the user's stored version of the user symmetric key
+   * @param keySuffix The desired version of the key to clear
+   * @param userId The desired user
+   */
+  clearStoredUserKey: (keySuffix: KeySuffixOptions, userId?: string) => Promise<void>;
+  /**
    * Stores the master key encrypted user symmetric key
    * @param userSymKeyMasterKey The master key encrypted user symmetric key to set
    * @param userId The desired user

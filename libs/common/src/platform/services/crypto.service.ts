@@ -76,7 +76,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     if (userKey != null) {
       if (!(await this.validateUserKey(userKey))) {
         this.logService.warning("Wrong key, throwing away stored key");
-        await this.clearStoredUserKeys(userId);
+        await this.clearAllStoredUserKeys(userId);
         return null;
       }
 
@@ -121,7 +121,21 @@ export class CryptoService implements CryptoServiceAbstraction {
   async clearUserKey(clearStoredKeys = true, userId?: string): Promise<void> {
     await this.stateService.setUserSymKey(null, { userId: userId });
     if (clearStoredKeys) {
-      await this.clearStoredUserKeys(userId);
+      await this.clearAllStoredUserKeys(userId);
+    }
+  }
+
+  async clearStoredUserKey(keySuffix: KeySuffixOptions, userId?: string): Promise<void> {
+    switch (keySuffix) {
+      case KeySuffixOptions.Auto:
+        this.stateService.setUserSymKeyAuto(null, { userId: userId });
+        break;
+      case KeySuffixOptions.Biometric:
+        this.stateService.setUserSymKeyBiometric(null, { userId: userId });
+        break;
+      case KeySuffixOptions.Pin:
+        this.stateService.setUserSymKeyPinEphemeral(null, { userId: userId });
+        break;
     }
   }
 
@@ -813,7 +827,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return [new SymmetricCryptoKey(newSymKey) as T, protectedSymKey];
   }
 
-  private async clearStoredUserKeys(userId?: string): Promise<void> {
+  private async clearAllStoredUserKeys(userId?: string): Promise<void> {
     await this.stateService.setUserSymKeyAuto(null, { userId: userId });
     await this.stateService.setUserSymKeyBiometric(null, { userId: userId });
     await this.stateService.setUserSymKeyPinEphemeral(null, { userId: userId });

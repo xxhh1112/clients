@@ -597,11 +597,14 @@ export class Program {
 
   protected async exitIfLocked() {
     await this.exitIfNotAuthed();
-    if (await this.main.cryptoService.hasKeyInMemory()) {
+    if (await this.main.cryptoService.hasUserKeyInMemory()) {
       return;
-    } else if (await this.main.cryptoService.hasKeyStored(KeySuffixOptions.Auto)) {
+    } else if (await this.main.cryptoService.hasUserKeyStored(KeySuffixOptions.Auto)) {
       // load key into memory
-      await this.main.cryptoService.getKey();
+      const userAutoKey = await this.main.cryptoService.getUserKeyFromStorage(
+        KeySuffixOptions.Auto
+      );
+      await this.main.cryptoService.setUserKey(userAutoKey);
     } else if (process.env.BW_NOINTERACTION !== "true") {
       // must unlock
       if (await this.main.keyConnectorService.getUsesKeyConnector()) {

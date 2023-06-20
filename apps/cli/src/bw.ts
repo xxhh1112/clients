@@ -334,7 +334,7 @@ export class Main {
     );
 
     const lockedCallback = async () =>
-      await this.cryptoService.clearStoredKey(KeySuffixOptions.Auto);
+      await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
       this.cryptoService,

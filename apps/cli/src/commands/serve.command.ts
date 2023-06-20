@@ -421,11 +421,14 @@ export class ServeCommand {
       this.processResponse(res, Response.error("You are not logged in."));
       return true;
     }
-    if (await this.main.cryptoService.hasKeyInMemory()) {
+    if (await this.main.cryptoService.hasUserKeyInMemory()) {
       return false;
-    } else if (await this.main.cryptoService.hasKeyStored(KeySuffixOptions.Auto)) {
+    } else if (await this.main.cryptoService.hasUserKeyStored(KeySuffixOptions.Auto)) {
       // load key into memory
-      await this.main.cryptoService.getKey();
+      const userAutoKey = await this.main.cryptoService.getUserKeyFromStorage(
+        KeySuffixOptions.Auto
+      );
+      await this.main.cryptoService.setUserKey(userAutoKey);
       return false;
     }
     this.processResponse(res, Response.error("Vault is locked."));
