@@ -1513,9 +1513,7 @@ describe("AutofillService", function () {
         );
         expect(value).toStrictEqual({
           autosubmit: null,
-          documentUUID: "documentUUID",
           metadata: {},
-          options: {},
           properties: { delay_between_operations: 20 },
           savedUrls: ["https://www.example.com"],
           script: [
