@@ -620,7 +620,6 @@ export class StateService<
    * so we can unlock with MP offline
    */
   async getUserSymKeyMasterKey(options?: StorageOptions): Promise<string> {
-    // TODO(Jake): defaultOnDiskOptions? Other's are saved in secure storage
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.keys.userSymKeyMasterKey;
@@ -631,7 +630,6 @@ export class StateService<
    * so we can unlock with MP offline
    */
   async setUserSymKeyMasterKey(value: string, options?: StorageOptions): Promise<void> {
-    // TODO(Jake): defaultOnDiskOptions? Other's are saved in secure storage
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );

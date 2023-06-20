@@ -51,7 +51,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     // Legacy support: encryption used to be done with the master key (derived from master password).
     // Users who have not migrated will have a null user key and must use the master key instead.
-    return await this.stateService.getCryptoMasterKey();
+    return await this.getMasterKey();
   }
 
   async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
@@ -126,7 +126,6 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async setUserSymKeyMasterKey(userSymKeyMasterKey: string, userId?: string): Promise<void> {
-    // TODO(Jake): is this the best way to handle this from the identity token?
     await this.stateService.setUserSymKeyMasterKey(userSymKeyMasterKey, { userId: userId });
   }
 
@@ -135,7 +134,9 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async getMasterKey(userId?: string): Promise<MasterKey> {
-    return await this.stateService.getMasterKey({ userId: userId });
+    let masterKey = await this.stateService.getMasterKey({ userId: userId });
+    masterKey ||= (await this.stateService.getCryptoMasterKey({ userId: userId })) as MasterKey;
+    return masterKey;
   }
 
   async makeMasterKey(
@@ -192,7 +193,6 @@ export class CryptoService implements CryptoServiceAbstraction {
       return null;
     }
 
-    // TODO(Jake): Do we want to set the user key here?
     return new SymmetricCryptoKey(decUserKey) as UserSymKey;
   }
 
@@ -724,10 +724,12 @@ export class CryptoService implements CryptoServiceAbstraction {
         break;
       }
       case KeySuffixOptions.Pin: {
-        const protectedPin = await this.stateService.getProtectedPin();
+        const protectedPin = await this.stateService.getProtectedPin({ userId: userId });
         // This could cause a possible timing issue. Need to make sure the ephemeral key is set before
         // we set our user key
-        const userSymKeyPinEphemeral = await this.stateService.getUserSymKeyPinEphemeral();
+        const userSymKeyPinEphemeral = await this.stateService.getUserSymKeyPinEphemeral({
+          userId: userId,
+        });
         shouldStoreKey = !!protectedPin && !userSymKeyPinEphemeral;
         break;
       }
