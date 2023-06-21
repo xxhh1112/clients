@@ -2109,6 +2109,72 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, yearValue]);
       });
     });
+
+    describe("given a generic expiration date field", function () {
+      let expirationDateField: AutofillField;
+      let expirationDateFieldView: FieldView;
+
+      beforeEach(function () {
+        expirationDateField = createAutofillFieldMock({
+          opid: "expirationDate",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "expiration-date",
+        });
+        filledFields["exp-field"] = expirationDateField;
+        expirationDateFieldView = mock<FieldView>({ name: "exp" });
+        pageDetails.fields = [expirationDateField];
+        options.cipher.fields = [expirationDateFieldView];
+        options.cipher.card.expMonth = "05";
+        options.cipher.card.expYear = "2024";
+      });
+
+      const expectedDateFormats = [
+        ["mm/yyyy", "05/2024"],
+        ["mm/yy", "05/24"],
+        ["yyyy/mm", "2024/05"],
+        ["yy/mm", "24/05"],
+        ["mm-yyyy", "05-2024"],
+        ["mm-yy", "05-24"],
+        ["yyyy-mm", "2024-05"],
+        ["yy-mm", "24-05"],
+        ["yyyymm", "202405"],
+        ["yymm", "2405"],
+        ["mmyyyy", "052024"],
+        ["mmyy", "0524"],
+      ];
+      expectedDateFormats.forEach((dateFormat, index) => {
+        it(`returns an expiration date format matching '${dateFormat[0]}'`, function () {
+          expirationDateField.placeholder = dateFormat[0];
+          if (index === 0) {
+            options.cipher.card.expYear = "24";
+          }
+          if (index === 1) {
+            options.cipher.card.expMonth = "5";
+          }
+
+          const value = autofillService["generateCardFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(value.script[2]).toStrictEqual(["fill_by_opid", "expirationDate", dateFormat[1]]);
+        });
+      });
+
+      it("returns an expiration date format matching `yyyy-mm` if no valid format can be identified", function () {
+        const value = autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", "expirationDate", "2024-05"]);
+      });
+    });
   });
 
   describe("inUntrustedIframe", function () {

@@ -704,6 +704,15 @@ export default class AutofillService implements AutofillServiceInterface {
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] +
               "/" +
+              CreditCardAutoFillConstants.YearAbbrLong[i]
+          )
+        ) {
+          exp = fullMonth + "/" + fullYear;
+        } else if (
+          this.fieldAttrsContain(
+            fillFields.exp,
+            CreditCardAutoFillConstants.MonthAbbr[i] +
+              "/" +
               CreditCardAutoFillConstants.YearAbbrShort[i]
           ) &&
           partYear != null
@@ -712,12 +721,12 @@ export default class AutofillService implements AutofillServiceInterface {
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
+            CreditCardAutoFillConstants.YearAbbrLong[i] +
               "/" +
-              CreditCardAutoFillConstants.YearAbbrLong[i]
+              CreditCardAutoFillConstants.MonthAbbr[i]
           )
         ) {
-          exp = fullMonth + "/" + fullYear;
+          exp = fullYear + "/" + fullMonth;
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -731,12 +740,12 @@ export default class AutofillService implements AutofillServiceInterface {
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] +
-              "/" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
+            CreditCardAutoFillConstants.MonthAbbr[i] +
+              "-" +
+              CreditCardAutoFillConstants.YearAbbrLong[i]
           )
         ) {
-          exp = fullYear + "/" + fullMonth;
+          exp = fullMonth + "-" + fullYear;
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -750,12 +759,12 @@ export default class AutofillService implements AutofillServiceInterface {
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
+            CreditCardAutoFillConstants.YearAbbrLong[i] +
               "-" +
-              CreditCardAutoFillConstants.YearAbbrLong[i]
+              CreditCardAutoFillConstants.MonthAbbr[i]
           )
         ) {
-          exp = fullMonth + "-" + fullYear;
+          exp = fullYear + "-" + fullMonth;
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -769,12 +778,10 @@ export default class AutofillService implements AutofillServiceInterface {
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] +
-              "-" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
+            CreditCardAutoFillConstants.YearAbbrLong[i] + CreditCardAutoFillConstants.MonthAbbr[i]
           )
         ) {
-          exp = fullYear + "-" + fullMonth;
+          exp = fullYear + fullMonth;
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -786,10 +793,10 @@ export default class AutofillService implements AutofillServiceInterface {
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] + CreditCardAutoFillConstants.MonthAbbr[i]
+            CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrLong[i]
           )
         ) {
-          exp = fullYear + fullMonth;
+          exp = fullMonth + fullYear;
         } else if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -798,13 +805,6 @@ export default class AutofillService implements AutofillServiceInterface {
           partYear != null
         ) {
           exp = fullMonth + partYear;
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrLong[i]
-          )
-        ) {
-          exp = fullMonth + fullYear;
         }
 
         if (exp != null) {
