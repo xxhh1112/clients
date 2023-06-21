@@ -450,7 +450,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
           if (!totp && !options.onlyVisibleFields) {
             // not able to find any viewable totp fields. maybe there are some "hidden" ones?
-            totp = this.findTotpField(pageDetails, pf, true, true, true);
+            totp = this.findTotpField(pageDetails, pf, true, true, false);
           }
 
           if (totp) {
@@ -1362,7 +1362,8 @@ export default class AutofillService implements AutofillServiceInterface {
         (canBeReadOnly || !f.readonly) &&
         (withoutForm || f.form === passwordField.form) &&
         (canBeHidden || f.viewable) &&
-        (f.type === "text" || f.type === "number")
+        (f.type === "text" || f.type === "number") &&
+        AutofillService.fieldIsFuzzyMatch(f, AutoFillConstants.TotpFieldNames)
       ) {
         totpField = f;
 

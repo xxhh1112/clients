@@ -1146,6 +1146,11 @@ describe("AutofillService", function () {
           form: "validFormId",
           elementNumber: 2,
         }),
+        "totp-field": createAutofillFieldMock({
+          opid: "totp-field",
+          form: "validFormId",
+          elementNumber: 3,
+        }),
       };
       defaultLoginUriView = mock<LoginUriView>({
         uri: "https://www.example.com",
@@ -1247,6 +1252,8 @@ describe("AutofillService", function () {
       let usernameFieldView: FieldView;
       let passwordField: AutofillField;
       let passwordFieldView: FieldView;
+      let totpField: AutofillField;
+      let totpFieldView: FieldView;
 
       beforeEach(function () {
         usernameField = createAutofillFieldMock({
@@ -1266,11 +1273,22 @@ describe("AutofillService", function () {
         passwordFieldView = mock<FieldView>({
           name: "password",
         });
-        pageDetails.fields = [usernameField, passwordField];
-        options.cipher.fields = [usernameFieldView, passwordFieldView];
+        totpField = createAutofillFieldMock({
+          opid: "totp",
+          type: "text",
+          form: "validFormId",
+          htmlName: "totpcode",
+          elementNumber: 3,
+        });
+        totpFieldView = mock<FieldView>({
+          name: "totp",
+        });
+        pageDetails.fields = [usernameField, passwordField, totpField];
+        options.cipher.fields = [usernameFieldView, passwordFieldView, totpFieldView];
         options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
         options.cipher.login.username = "username";
         options.cipher.login.password = "password";
+        options.cipher.login.totp = "totp";
       });
 
       it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", async function () {
@@ -1314,7 +1332,10 @@ describe("AutofillService", function () {
         beforeEach(function () {
           usernameField.viewable = false;
           usernameField.readonly = true;
+          totpField.viewable = false;
+          totpField.readonly = true;
           jest.spyOn(autofillService as any, "findUsernameField");
+          jest.spyOn(autofillService as any, "findTotpField");
         });
 
         it("will attempt to find a username field from hidden fields if no visible username fields are found", async function () {
@@ -1372,12 +1393,84 @@ describe("AutofillService", function () {
             false
           );
         });
+
+        it("will attempt to find a totp field from hidden fields if no visible totp fields are found", async function () {
+          options.allowTotpAutofill = true;
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findTotpField"]).toHaveBeenCalledTimes(2);
+          expect(autofillService["findTotpField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            false
+          );
+          expect(autofillService["findTotpField"]).toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            false
+          );
+        });
+
+        it("will not attempt to find a totp field from hidden fields if the passed options indicate only visible fields should be referenced", async function () {
+          options.allowTotpAutofill = true;
+          options.onlyVisibleFields = true;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findTotpField"]).toHaveBeenCalledTimes(1);
+          expect(autofillService["findTotpField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            false
+          );
+          expect(autofillService["findTotpField"]).not.toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            false
+          );
+        });
+
+        it("will not attempt to find a totp field from hidden fields if the passed options do not allow for TOTP values to be filled", async function () {
+          options.allowTotpAutofill = false;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findTotpField"]).not.toHaveBeenCalled();
+        });
       });
 
-      describe("given an empty list of fields within the passed page details", function () {
+      describe("given a list of fields without forms within the passed page details", function () {
         beforeEach(function () {
           pageDetails.forms = undefined;
           jest.spyOn(autofillService as any, "findUsernameField");
+          jest.spyOn(autofillService as any, "findTotpField");
         });
 
         it("will attempt to match a password field that does not contain a form to a username field", async function () {
@@ -1458,6 +1551,58 @@ describe("AutofillService", function () {
             true
           );
         });
+
+        it("will attempt to match a password field that does not contain a form to a TOTP field", async function () {
+          options.allowTotpAutofill = true;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findTotpField"]).toHaveBeenCalledTimes(1);
+          expect(autofillService["findTotpField"]).toHaveBeenCalledWith(
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            true
+          );
+        });
+
+        it("will attempt to match a password field that does not contain a form to a TOTP field that is not visible", async function () {
+          options.onlyVisibleFields = false;
+          options.allowTotpAutofill = true;
+          totpField.viewable = false;
+          totpField.readonly = true;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(autofillService["findTotpField"]).toHaveBeenCalledTimes(2);
+          expect(autofillService["findTotpField"]).toHaveBeenNthCalledWith(
+            1,
+            pageDetails,
+            passwordField,
+            false,
+            false,
+            true
+          );
+          expect(autofillService["findTotpField"]).toHaveBeenNthCalledWith(
+            2,
+            pageDetails,
+            passwordField,
+            true,
+            true,
+            true
+          );
+        });
       });
 
       describe("given a set of page details that does not contain a password field", function () {
@@ -1465,6 +1610,8 @@ describe("AutofillService", function () {
         let emailFieldView: FieldView;
         let telephoneField: AutofillField;
         let telephoneFieldView: FieldView;
+        let totpField: AutofillField;
+        let totpFieldView: FieldView;
         let nonViewableField: AutofillField;
         let nonViewableFieldView: FieldView;
 
@@ -1488,6 +1635,16 @@ describe("AutofillService", function () {
           telephoneFieldView = mock<FieldView>({
             name: "telephone",
           });
+          totpField = createAutofillFieldMock({
+            opid: "totp",
+            type: "text",
+            form: "validFormId",
+            htmlName: "totpcode",
+            elementNumber: 4,
+          });
+          totpFieldView = mock<FieldView>({
+            name: "totp",
+          });
           nonViewableField = createAutofillFieldMock({
             opid: "non-viewable",
             form: "validFormId",
@@ -1497,11 +1654,18 @@ describe("AutofillService", function () {
           nonViewableFieldView = mock<FieldView>({
             name: "non-viewable",
           });
-          pageDetails.fields = [usernameField, emailField, telephoneField, nonViewableField];
+          pageDetails.fields = [
+            usernameField,
+            emailField,
+            telephoneField,
+            totpField,
+            nonViewableField,
+          ];
           options.cipher.fields = [
             usernameFieldView,
             emailFieldView,
             telephoneFieldView,
+            totpFieldView,
             nonViewableFieldView,
           ];
           jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
@@ -1516,7 +1680,7 @@ describe("AutofillService", function () {
             options
           );
 
-          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenCalledTimes(3);
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenCalledTimes(4);
           expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenNthCalledWith(
             1,
             usernameField,
@@ -1532,8 +1696,13 @@ describe("AutofillService", function () {
             telephoneField,
             AutoFillConstants.UsernameFieldNames
           );
-          expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenNthCalledWith(
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenNthCalledWith(
             4,
+            totpField,
+            AutoFillConstants.UsernameFieldNames
+          );
+          expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenNthCalledWith(
+            5,
             nonViewableField,
             AutoFillConstants.UsernameFieldNames
           );
@@ -1542,6 +1711,54 @@ describe("AutofillService", function () {
             fillScript,
             usernameField,
             options.cipher.login.username
+          );
+        });
+
+        it("will not attempt to fuzzy match a username if the username fill is being skipped", async function () {
+          options.skipUsernameOnlyFill = true;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenCalledWith(
+            expect.anything(),
+            AutoFillConstants.UsernameFieldNames
+          );
+        });
+
+        it("will attempt to fuzzy match a totp field if totp autofill is allowed", async function () {
+          options.allowTotpAutofill = true;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(AutofillService.fieldIsFuzzyMatch).toHaveBeenCalledWith(
+            expect.anything(),
+            AutoFillConstants.TotpFieldNames
+          );
+        });
+
+        it("will not attempt to fuzzy match a totp field if totp autofill is not allowed", async function () {
+          options.allowTotpAutofill = false;
+
+          await autofillService["generateLoginFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+
+          expect(AutofillService.fieldIsFuzzyMatch).not.toHaveBeenCalledWith(
+            expect.anything(),
+            AutoFillConstants.TotpFieldNames
           );
         });
       });
