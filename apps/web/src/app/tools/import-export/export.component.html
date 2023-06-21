@@ -24,83 +24,79 @@
     </bit-select>
   </bit-form-field>
 
-  <div class="row">
-    <div class="form-group col-6">
-      <ng-container *ngIf="format === 'encrypted_json'">
-        <bit-radio-group formControlName="fileEncryptionType" aria-label="exportTypeHeading">
-          <bit-label>{{ "exportTypeHeading" | i18n }}</bit-label>
+  <ng-container *ngIf="format === 'encrypted_json'">
+    <bit-radio-group formControlName="fileEncryptionType" aria-label="exportTypeHeading">
+      <bit-label>{{ "exportTypeHeading" | i18n }}</bit-label>
 
-          <bit-radio-button
-            id="AccountEncrypted"
-            name="fileEncryptionType"
-            class="tw-block"
-            [value]="encryptedExportType.AccountEncrypted"
-            checked="fileEncryptionType === encryptedExportType.AccountEncrypted"
-          >
-            <bit-label for="AccountEncrypted">{{ "accountRestricted" | i18n }}</bit-label>
-            <bit-hint>{{ "accountRestrictedOptionDescription" | i18n }}</bit-hint>
-          </bit-radio-button>
-
-          <bit-radio-button
-            id="FileEncrypted"
-            name="fileEncryptionType"
-            class="tw-block"
-            [value]="encryptedExportType.FileEncrypted"
-            checked="fileEncryptionType === encryptedExportType.FileEncrypted"
-          >
-            <bit-label for="FileEncrypted">{{ "passwordProtected" | i18n }}</bit-label>
-            <bit-hint>{{ "passwordProtectedOptionDescription" | i18n }}</bit-hint>
-          </bit-radio-button>
-        </bit-radio-group>
-
-        <ng-container *ngIf="fileEncryptionType == encryptedExportType.FileEncrypted">
-          <bit-form-field>
-            <bit-label>{{ "filePassword" | i18n }}</bit-label>
-            <input
-              bitInput
-              type="password"
-              id="filePassword"
-              formControlName="filePassword"
-              name="password"
-            />
-            <button
-              type="button"
-              bitSuffix
-              bitIconButton
-              bitPasswordInputToggle
-              [(toggled)]="showFilePassword"
-            ></button>
-            <bit-hint>{{ "exportPasswordDescription" | i18n }}</bit-hint>
-          </bit-form-field>
-          <bit-form-field>
-            <bit-label>{{ "confirmFilePassword" | i18n }}</bit-label>
-            <input
-              bitInput
-              type="password"
-              id="confirmFilePassword"
-              formControlName="confirmFilePassword"
-              name="confirmFilePassword"
-            />
-            <button
-              type="button"
-              bitSuffix
-              bitIconButton
-              bitPasswordInputToggle
-              [(toggled)]="showFilePassword"
-            ></button>
-          </bit-form-field>
-        </ng-container>
-      </ng-container>
-
-      <button
-        bitButton
-        type="submit"
-        buttonType="primary"
-        [loading]="form.loading"
-        [disabled]="disabledByPolicy"
+      <bit-radio-button
+        id="AccountEncrypted"
+        name="fileEncryptionType"
+        class="tw-block"
+        [value]="encryptedExportType.AccountEncrypted"
+        checked="fileEncryptionType === encryptedExportType.AccountEncrypted"
       >
-        {{ "confirmFormat" | i18n }}
-      </button>
-    </div>
-  </div>
+        <bit-label for="AccountEncrypted">{{ "accountRestricted" | i18n }}</bit-label>
+        <bit-hint>{{ "accountRestrictedOptionDescription" | i18n }}</bit-hint>
+      </bit-radio-button>
+
+      <bit-radio-button
+        id="FileEncrypted"
+        name="fileEncryptionType"
+        class="tw-block"
+        [value]="encryptedExportType.FileEncrypted"
+        checked="fileEncryptionType === encryptedExportType.FileEncrypted"
+      >
+        <bit-label for="FileEncrypted">{{ "passwordProtected" | i18n }}</bit-label>
+        <bit-hint>{{ "passwordProtectedOptionDescription" | i18n }}</bit-hint>
+      </bit-radio-button>
+    </bit-radio-group>
+
+    <ng-container *ngIf="fileEncryptionType == encryptedExportType.FileEncrypted">
+      <bit-form-field>
+        <bit-label>{{ "filePassword" | i18n }}</bit-label>
+        <input
+          bitInput
+          type="password"
+          id="filePassword"
+          formControlName="filePassword"
+          name="password"
+        />
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showFilePassword"
+        ></button>
+        <bit-hint>{{ "exportPasswordDescription" | i18n }}</bit-hint>
+      </bit-form-field>
+      <bit-form-field>
+        <bit-label>{{ "confirmFilePassword" | i18n }}</bit-label>
+        <input
+          bitInput
+          type="password"
+          id="confirmFilePassword"
+          formControlName="confirmFilePassword"
+          name="confirmFilePassword"
+        />
+        <button
+          type="button"
+          bitSuffix
+          bitIconButton
+          bitPasswordInputToggle
+          [(toggled)]="showFilePassword"
+        ></button>
+      </bit-form-field>
+    </ng-container>
+  </ng-container>
+
+  <button
+    bitButton
+    type="submit"
+    buttonType="primary"
+    [loading]="form.loading"
+    [disabled]="disabledByPolicy"
+  >
+    {{ "confirmFormat" | i18n }}
+  </button>
 </form>
