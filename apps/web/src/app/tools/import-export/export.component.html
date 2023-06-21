@@ -17,16 +17,13 @@
     *ngIf="!disabledByPolicy"
   ></app-export-scope-callout>
 
-  <div class="row">
-    <div class="col-6">
-      <bit-form-field>
-        <bit-label class="tw-text-lg" for="format">{{ "fileFormat" | i18n }}</bit-label>
-        <select bitInput name="format" formControlName="format">
-          <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
-        </select>
-      </bit-form-field>
-    </div>
-  </div>
+  <bit-form-field>
+    <bit-label for="format">{{ "fileFormat" | i18n }}</bit-label>
+    <bit-select bitInput name="format" formControlName="format">
+      <bit-option *ngFor="let f of formatOptions" [value]="f.value" [label]="f.name" />
+    </bit-select>
+  </bit-form-field>
+
   <div class="row">
     <div class="form-group col-6">
       <ng-container *ngIf="format === 'encrypted_json'">
