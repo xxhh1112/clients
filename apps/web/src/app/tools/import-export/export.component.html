@@ -9,9 +9,9 @@
 >
   <h1 bitTypography="h1">{{ "exportVault" | i18n }}</h1>
 
-  <app-callout type="error" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
+  <bit-callout type="danger" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
     {{ "personalVaultExportPolicyInEffect" | i18n }}
-  </app-callout>
+  </bit-callout>
   <app-export-scope-callout
     [organizationId]="organizationId"
     *ngIf="!disabledByPolicy"
