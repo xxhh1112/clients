@@ -30,58 +30,31 @@
   <div class="row">
     <div class="form-group col-6">
       <ng-container *ngIf="format === 'encrypted_json'">
-        <div role="radiogroup" aria-labelledby="exportTypeHeading">
-          <label id="exportTypeHeading" class="tw-semi-bold tw-text-lg">
-            {{ "exportTypeHeading" | i18n }}
-          </label>
+        <bit-radio-group formControlName="fileEncryptionType" aria-label="exportTypeHeading">
+          <bit-label>{{ "exportTypeHeading" | i18n }}</bit-label>
 
-          <div appBoxRow name="FileTypeOptions" class="tw-flex tw-items-center">
-            <div>
-              <input
-                type="radio"
-                class="radio"
-                name="fileEncryptionType"
-                id="AccountEncrypted"
-                [value]="encryptedExportType.AccountEncrypted"
-                formControlName="fileEncryptionType"
-                [checked]="fileEncryptionType === encryptedExportType.AccountEncrypted"
-              />
-            </div>
-            <div>
-              <label class="tw-semi-bold tw-text-md tw-my-1 tw-ml-1" for="AccountEncrypted">
-                {{ "accountRestricted" | i18n }}
-              </label>
-            </div>
-          </div>
+          <bit-radio-button
+            id="AccountEncrypted"
+            name="fileEncryptionType"
+            class="tw-block"
+            [value]="encryptedExportType.AccountEncrypted"
+            checked="fileEncryptionType === encryptedExportType.AccountEncrypted"
+          >
+            <bit-label for="AccountEncrypted">{{ "accountRestricted" | i18n }}</bit-label>
+            <bit-hint>{{ "accountRestrictedOptionDescription" | i18n }}</bit-hint>
+          </bit-radio-button>
 
-          <div class="tw-regular ml-3 pb-2 tw-text-sm">
-            {{ "accountRestrictedOptionDescription" | i18n }}
-          </div>
-
-          <div class="tw-flex tw-items-center">
-            <div>
-              <input
-                type="radio"
-                class="radio"
-                name="fileEncryptionType"
-                id="FileEncrypted"
-                [value]="encryptedExportType.FileEncrypted"
-                formControlName="fileEncryptionType"
-                [checked]="fileEncryptionType === encryptedExportType.FileEncrypted"
-              />
-            </div>
-            <div>
-              <label class="tw-semi-bold tw-text-md tw-my-1 tw-ml-1" for="FileEncrypted">{{
-                "passwordProtected" | i18n
-              }}</label>
-            </div>
-          </div>
-
-          <div class="tw-regular ml-3 tw-text-sm">
-            {{ "passwordProtectedOptionDescription" | i18n }}
-          </div>
-        </div>
-        <br />
+          <bit-radio-button
+            id="FileEncrypted"
+            name="fileEncryptionType"
+            class="tw-block"
+            [value]="encryptedExportType.FileEncrypted"
+            checked="fileEncryptionType === encryptedExportType.FileEncrypted"
+          >
+            <bit-label for="FileEncrypted">{{ "passwordProtected" | i18n }}</bit-label>
+            <bit-hint>{{ "passwordProtectedOptionDescription" | i18n }}</bit-hint>
+          </bit-radio-button>
+        </bit-radio-group>
 
         <ng-container *ngIf="fileEncryptionType == encryptedExportType.FileEncrypted">
           <bit-form-field>
