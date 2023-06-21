@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { StateMigrationService } from "@bitwarden/common/platform/abstractions/state-migration.service";
@@ -44,7 +44,7 @@ export class BrowserStateService
     stateMigrationService: StateMigrationService,
     stateFactory: StateFactory<GlobalState, Account>,
     useAccountCache = true,
-    accountCache: BehaviorSubject<Record<string, Account>> = null
+    accountCache: Observable<Record<string, Account>> = null
   ) {
     super(
       storageService,
@@ -59,7 +59,7 @@ export class BrowserStateService
     // Hack to allow shared disk cache between contexts on browser
     // TODO: Remove when services are consolidated to a single context
     if (useAccountCache && accountCache) {
-      this.accountDiskCache = accountCache;
+      accountCache.subscribe(this.accountDiskCacheSubject);
     }
   }
 

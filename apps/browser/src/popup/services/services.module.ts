@@ -444,7 +444,7 @@ function getBgService<T>(service: keyof MainBackground) {
         // TODO: we need to figure out a better way of sharing/syncing
         // the disk cache
         const bgStateService = getBgService<StateServiceAbstraction>("stateService");
-        const bgDiskCache = bgStateService().accountDiskCache;
+        const bgDiskCache = bgStateService().accountDiskCache$;
         return new BrowserStateService(
           storageService,
           secureStorageService,

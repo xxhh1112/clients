@@ -95,8 +95,8 @@ export class StateService<
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  // eslint-disable-next-line rxjs/no-exposed-subjects
-  accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
+  protected accountDiskCacheSubject = new BehaviorSubject<Record<string, TAccount>>({});
+  accountDiskCache$ = this.accountDiskCacheSubject.asObservable();
 
   // default account serializer, must be overridden by child class
   protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
@@ -2769,7 +2769,7 @@ export class StateService<
     }
 
     if (this.useAccountCache) {
-      const cachedAccount = this.accountDiskCache.value[options.userId];
+      const cachedAccount = this.accountDiskCacheSubject.value[options.userId];
       if (cachedAccount != null) {
         return cachedAccount;
       }
@@ -3165,15 +3165,15 @@ export class StateService<
 
   private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {
     if (this.useAccountCache) {
-      this.accountDiskCache.value[key] = value;
-      this.accountDiskCache.next(this.accountDiskCache.value);
+      this.accountDiskCacheSubject.value[key] = value;
+      this.accountDiskCacheSubject.next(this.accountDiskCacheSubject.value);
     }
   }
 
   private deleteDiskCache(key: string) {
     if (this.useAccountCache) {
-      delete this.accountDiskCache.value[key];
-      this.accountDiskCache.next(this.accountDiskCache.value);
+      delete this.accountDiskCacheSubject.value[key];
+      this.accountDiskCacheSubject.next(this.accountDiskCacheSubject.value);
     }
   }
 }
