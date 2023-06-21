@@ -67,6 +67,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     if (
       !savedUrls?.some((url) => url.startsWith(`https://${window.location.hostname}`)) ||
       window.location.protocol !== "http:" ||
+      // @TODO: Probably need to do a search for password fields within shadowDOM elements as well
       !document.querySelectorAll("input[type=password]")?.length
     ) {
       return false;

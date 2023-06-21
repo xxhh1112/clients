@@ -25,8 +25,12 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @public
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
-    const autofillFormsData: Record<string, AutofillForm> = this.buildAutofillFormsData();
-    const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData();
+    const { formElements, formFieldElements } = this.queryAutofillFormAndFieldElements();
+    const autofillFormsData: Record<string, AutofillForm> =
+      this.buildAutofillFormsData(formElements);
+    const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData(
+      formFieldElements as FormFieldElement[]
+    );
 
     return {
       title: document.title,
@@ -46,15 +50,15 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @returns {FormFieldElement | null}
    */
   getAutofillFieldElementByOpid(opid: string): FormFieldElement | null {
-    const fieldElements = this.getAutofillFieldElements();
-    const fieldElementsWithOpid = fieldElements.filter(
+    const formFieldElements = this.getAutofillFieldElements();
+    const fieldElementsWithOpid = formFieldElements.filter(
       (fieldElement) => (fieldElement as ElementWithOpId<FormFieldElement>).opid === opid
     ) as ElementWithOpId<FormFieldElement>[];
 
     if (!fieldElementsWithOpid.length) {
       const elementIndex = parseInt(opid.split("__")[1], 10);
 
-      return fieldElements[elementIndex] || null;
+      return formFieldElements[elementIndex] || null;
     }
 
     if (fieldElementsWithOpid.length > 1) {
@@ -71,11 +75,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @returns {Record<string, AutofillForm>}
    * @private
    */
-  private buildAutofillFormsData(): Record<string, AutofillForm> {
+  private buildAutofillFormsData(formElements: Node[]): Record<string, AutofillForm> {
     const autofillForms: Record<string, AutofillForm> = {};
-    const documentFormElements = document.querySelectorAll("form");
-
-    documentFormElements.forEach((formElement: HTMLFormElement, index: number) => {
+    formElements.forEach((formElement: HTMLFormElement, index: number) => {
       formElement.opid = `__form__${index}`;
 
       autofillForms[formElement.opid] = {
@@ -99,8 +101,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @returns {Promise<AutofillField[]>}
    * @private
    */
-  private async buildAutofillFieldsData(): Promise<AutofillField[]> {
-    const autofillFieldElements = this.getAutofillFieldElements(50);
+  private async buildAutofillFieldsData(
+    formFieldElements: FormFieldElement[]
+  ): Promise<AutofillField[]> {
+    const autofillFieldElements = this.getAutofillFieldElements(50, formFieldElements);
     const autofillFieldDataPromises = autofillFieldElements.map(this.buildAutofillFieldItem);
 
     return Promise.all(autofillFieldDataPromises);
@@ -111,18 +115,19 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * and returns a list limited to the given `fieldsLimit` number that
    * is ordered by priority.
    * @param {number} fieldsLimit - The maximum number of fields to return
+   * @param {FormFieldElement[]} previouslyFoundFormFieldElements - The list of all the field elements
    * @returns {FormFieldElement[]}
    * @private
    */
-  private getAutofillFieldElements(fieldsLimit?: number): FormFieldElement[] {
-    const formFieldElements: FormFieldElement[] = [
-      ...(document.querySelectorAll(
-        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), ' +
-          "textarea:not([data-bwignore]), " +
-          "select:not([data-bwignore]), " +
-          "span[data-bwautofill]"
-      ) as NodeListOf<FormFieldElement>),
-    ];
+  private getAutofillFieldElements(
+    fieldsLimit?: number,
+    previouslyFoundFormFieldElements?: FormFieldElement[]
+  ): FormFieldElement[] {
+    const formFieldElements =
+      previouslyFoundFormFieldElements ||
+      (this.queryAllTreeWalkerNodes(document.documentElement, (node: Node) =>
+        this.isNodeFormFieldElement(node)
+      ) as FormFieldElement[]);
 
     if (!fieldsLimit || formFieldElements.length <= fieldsLimit) {
       return formFieldElements;
@@ -197,7 +202,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         "label-data": this.getPropertyOrAttribute(element, "data-label"),
         "label-aria": this.getPropertyOrAttribute(element, "aria-label"),
         "label-top": this.createAutofillFieldTopLabel(element),
-        "label-right": this.createAutofillFieldRightLabel(element),
+        "label-right": this.createAutofillFieldRightLabel(element), // TODO: This is likely not a useful element... consider removing.
         "label-left": this.createAutofillFieldLeftLabel(element),
         placeholder: this.getPropertyOrAttribute(element, "placeholder"),
       };
@@ -286,7 +291,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       return null;
     }
 
-    return document.querySelectorAll(labelQuerySelectors);
+    return (element.getRootNode() as Document | ShadowRoot).querySelectorAll(labelQuerySelectors);
   }
 
   /**
@@ -572,6 +577,94 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     });
 
     return { options };
+  }
+
+  /** EXPERIMENTS **/
+  private queryAutofillFormAndFieldElements(): {
+    formElements: Node[];
+    formFieldElements: Node[];
+  } {
+    const formElements: Node[] = [];
+    const formFieldElements: Node[] = [];
+    this.queryAllTreeWalkerNodes(document.documentElement, (node: Node) => {
+      if (node instanceof HTMLFormElement) {
+        formElements.push(node);
+        return true;
+      }
+
+      if (this.isNodeFormFieldElement(node)) {
+        formFieldElements.push(node);
+        return true;
+      }
+
+      return false;
+    });
+
+    return { formElements, formFieldElements };
+  }
+
+  private isNodeFormFieldElement(node: Node): boolean {
+    const nodeIsSpanElementWithAutofillAttribute =
+      node instanceof HTMLSpanElement && node.hasAttribute("data-bwautofill");
+
+    const ignoredInputTypes = new Set(["hidden", "submit", "reset", "button", "image", "file"]);
+    const nodeIsValidInputElement =
+      node instanceof HTMLInputElement && !ignoredInputTypes.has(node.type);
+
+    const nodeIsTextAreaOrSelectElement =
+      node instanceof HTMLTextAreaElement || node instanceof HTMLSelectElement;
+
+    const nodeIsNonIgnoredFillableControlElement =
+      (nodeIsTextAreaOrSelectElement || nodeIsValidInputElement) &&
+      !node.hasAttribute("data-bwignore");
+
+    return nodeIsSpanElementWithAutofillAttribute || nodeIsNonIgnoredFillableControlElement;
+  }
+
+  private getShadowRoot(node: Node): ShadowRoot | null {
+    if (!(node instanceof HTMLElement)) {
+      return null;
+    }
+
+    if ((chrome as any).dom?.openOrClosedShadowRoot) {
+      return (chrome as any).dom.openOrClosedShadowRoot(node);
+    }
+
+    return (node as any).openOrClosedShadowRoot || node.shadowRoot;
+  }
+
+  queryAllTreeWalkerNodes(rootNode: Node, filterCallback: CallableFunction): Node[] {
+    const treeWalkerQueryResults: Node[] = [];
+
+    this.buildTreeWalkerNodesQueryResults(rootNode, treeWalkerQueryResults, filterCallback);
+
+    return treeWalkerQueryResults;
+  }
+
+  buildTreeWalkerNodesQueryResults(
+    rootNode: Node,
+    treeWalkerQueryResults: Node[],
+    filterCallback: CallableFunction
+  ) {
+    const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT);
+    let currentNode = treeWalker.currentNode;
+
+    while (currentNode) {
+      if (filterCallback(currentNode)) {
+        treeWalkerQueryResults.push(currentNode);
+      }
+
+      const nodeShadowRoot = this.getShadowRoot(currentNode);
+      if (nodeShadowRoot) {
+        this.buildTreeWalkerNodesQueryResults(
+          nodeShadowRoot,
+          treeWalkerQueryResults,
+          filterCallback
+        );
+      }
+
+      currentNode = treeWalker.nextNode();
+    }
   }
 }
 
