@@ -82,6 +82,7 @@ function createGenerateFillScriptOptionsMock(customFields = {}): GenerateFillScr
     onlyEmptyFields: false,
     onlyVisibleFields: false,
     fillNewPassword: false,
+    allowTotpAutofill: false,
     cipher: mock<CipherView>(),
     tabUrl: "https://tacos.com",
     defaultUriMatch: UriMatchType.Domain,

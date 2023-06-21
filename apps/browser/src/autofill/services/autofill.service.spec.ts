@@ -320,6 +320,7 @@ describe("AutofillService", function () {
           onlyEmptyFields: autofillOptions.onlyEmptyFields || false,
           onlyVisibleFields: autofillOptions.onlyVisibleFields || false,
           fillNewPassword: autofillOptions.fillNewPassword || false,
+          allowTotpAutofill: autofillOptions.allowTotpAutofill || false,
           cipher: autofillOptions.cipher,
           tabUrl: autofillOptions.tab.url,
           defaultUriMatch: 0,
@@ -621,6 +622,7 @@ describe("AutofillService", function () {
           onlyVisibleFields: !fromCommand,
           fillNewPassword: fromCommand,
           allowUntrustedIframe: fromCommand,
+          allowTotpAutofill: fromCommand,
         });
         expect(result).toBe(totpCode);
       });
@@ -649,6 +651,7 @@ describe("AutofillService", function () {
           onlyVisibleFields: !fromCommand,
           fillNewPassword: fromCommand,
           allowUntrustedIframe: fromCommand,
+          allowTotpAutofill: fromCommand,
         });
         expect(result).toBe(totpCode);
       });
@@ -674,6 +677,7 @@ describe("AutofillService", function () {
           onlyVisibleFields: !fromCommand,
           fillNewPassword: fromCommand,
           allowUntrustedIframe: fromCommand,
+          allowTotpAutofill: fromCommand,
         });
         expect(result).toBe(totpCode);
       });
@@ -823,22 +827,28 @@ describe("AutofillService", function () {
       ];
     });
 
-    it("returns null if the page details are not provided", function () {
-      const value = autofillService["generateFillScript"](undefined, generateFillScriptOptions);
+    it("returns null if the page details are not provided", async function () {
+      const value = await autofillService["generateFillScript"](
+        undefined,
+        generateFillScriptOptions
+      );
 
       expect(value).toBeNull();
     });
 
-    it("returns null if the passed options do not contain a valid cipher", function () {
+    it("returns null if the passed options do not contain a valid cipher", async function () {
       generateFillScriptOptions.cipher = undefined;
 
-      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+      const value = await autofillService["generateFillScript"](
+        pageDetail,
+        generateFillScriptOptions
+      );
 
       expect(value).toBeNull();
     });
 
     describe("given a valid set of cipher fields and page detail fields", function () {
-      it("will not attempt to fill by opid duplicate fields found within the page details", function () {
+      it("will not attempt to fill by opid duplicate fields found within the page details", async function () {
         const duplicateUsernameField: AutofillField = createAutofillFieldMock({
           opid: "username-field",
           form: "validFormId",
@@ -850,7 +860,7 @@ describe("AutofillService", function () {
         jest.spyOn(autofillService as any, "findMatchingFieldIndex");
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
           expect.anything(),
@@ -859,11 +869,11 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will not attempt to fill by opid fields that are not viewable and are not a `span` element", function () {
+      it("will not attempt to fill by opid fields that are not viewable and are not a `span` element", async function () {
         defaultUsernameField.viewable = false;
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
           expect.anything(),
@@ -872,12 +882,12 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields that are not viewable but are a `span` element", function () {
+      it("will fill by opid fields that are not viewable but are a `span` element", async function () {
         defaultUsernameField.viewable = false;
         defaultUsernameField.tagName = "span";
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
           1,
@@ -887,11 +897,11 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will not attempt to fill by opid fields that do not contain a property that matches the field name", function () {
+      it("will not attempt to fill by opid fields that do not contain a property that matches the field name", async function () {
         defaultUsernameField.htmlID = "does-not-match-username";
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(AutofillService.fillByOpid).not.toHaveBeenCalledWith(
           expect.anything(),
@@ -900,12 +910,12 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields that contain a property that matches the field name", function () {
+      it("will fill by opid fields that contain a property that matches the field name", async function () {
         jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
         jest.spyOn(autofillService as any, "findMatchingFieldIndex");
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(autofillService["findMatchingFieldIndex"]).toHaveBeenCalledTimes(2);
         expect(generateFillScriptOptions.cipher.linkedFieldValue).not.toHaveBeenCalled();
@@ -923,7 +933,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("it will fill by opid fields of type Linked", function () {
+      it("it will fill by opid fields of type Linked", async function () {
         const fieldLinkedId: LinkedIdType = LoginLinkedId.Username;
         const linkedFieldValue = "linkedFieldValue";
         defaultUsernameFieldView.type = FieldType.Linked;
@@ -933,7 +943,7 @@ describe("AutofillService", function () {
           .mockReturnValueOnce(linkedFieldValue);
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(generateFillScriptOptions.cipher.linkedFieldValue).toHaveBeenCalledTimes(1);
         expect(generateFillScriptOptions.cipher.linkedFieldValue).toHaveBeenCalledWith(
@@ -953,13 +963,13 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields of type Boolean", function () {
+      it("will fill by opid fields of type Boolean", async function () {
         defaultUsernameFieldView.type = FieldType.Boolean;
         defaultUsernameFieldView.value = "true";
         jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(generateFillScriptOptions.cipher.linkedFieldValue).not.toHaveBeenCalled();
         expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
@@ -970,12 +980,12 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields of type Boolean with a value of false if no value is provided", function () {
+      it("will fill by opid fields of type Boolean with a value of false if no value is provided", async function () {
         defaultUsernameFieldView.type = FieldType.Boolean;
         defaultUsernameFieldView.value = undefined;
         jest.spyOn(AutofillService, "fillByOpid");
 
-        autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+        await autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
 
         expect(AutofillService.fillByOpid).toHaveBeenNthCalledWith(
           1,
@@ -986,7 +996,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns a fill script generated for a login autofill", function () {
+    it("returns a fill script generated for a login autofill", async function () {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "username-field": "username-value", "password-value": "password-value" }
@@ -996,7 +1006,10 @@ describe("AutofillService", function () {
         .spyOn(autofillService as any, "generateLoginFillScript")
         .mockReturnValueOnce(fillScriptMock);
 
-      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+      const value = await autofillService["generateFillScript"](
+        pageDetail,
+        generateFillScriptOptions
+      );
 
       expect(autofillService["generateLoginFillScript"]).toHaveBeenCalledWith(
         {
@@ -1022,7 +1035,7 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns a fill script generated for a card autofill", function () {
+    it("returns a fill script generated for a card autofill", async function () {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
@@ -1032,7 +1045,10 @@ describe("AutofillService", function () {
         .spyOn(autofillService as any, "generateCardFillScript")
         .mockReturnValueOnce(fillScriptMock);
 
-      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+      const value = await autofillService["generateFillScript"](
+        pageDetail,
+        generateFillScriptOptions
+      );
 
       expect(autofillService["generateCardFillScript"]).toHaveBeenCalledWith(
         {
@@ -1058,7 +1074,7 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns a fill script generated for an identity autofill", function () {
+    it("returns a fill script generated for an identity autofill", async function () {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
@@ -1068,7 +1084,10 @@ describe("AutofillService", function () {
         .spyOn(autofillService as any, "generateIdentityFillScript")
         .mockReturnValueOnce(fillScriptMock);
 
-      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+      const value = await autofillService["generateFillScript"](
+        pageDetail,
+        generateFillScriptOptions
+      );
 
       expect(autofillService["generateIdentityFillScript"]).toHaveBeenCalledWith(
         {
@@ -1094,10 +1113,13 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns null if the cipher type is not for a login, card, or identity", function () {
+    it("returns null if the cipher type is not for a login, card, or identity", async function () {
       generateFillScriptOptions.cipher.type = CipherType.SecureNote;
 
-      const value = autofillService["generateFillScript"](pageDetail, generateFillScriptOptions);
+      const value = await autofillService["generateFillScript"](
+        pageDetail,
+        generateFillScriptOptions
+      );
 
       expect(value).toBeNull();
     });
@@ -1136,7 +1158,7 @@ describe("AutofillService", function () {
       options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
     });
 
-    it("returns null if the cipher does not have login data", function () {
+    it("returns null if the cipher does not have login data", async function () {
       options.cipher.login = undefined;
       jest.spyOn(autofillService as any, "inUntrustedIframe");
       jest.spyOn(AutofillService, "loadPasswordFields");
@@ -1145,7 +1167,7 @@ describe("AutofillService", function () {
       jest.spyOn(AutofillService, "fillByOpid");
       jest.spyOn(AutofillService, "setFillScriptForFocus");
 
-      const value = autofillService["generateLoginFillScript"](
+      const value = await autofillService["generateLoginFillScript"](
         fillScript,
         pageDetails,
         filledFields,
@@ -1162,10 +1184,10 @@ describe("AutofillService", function () {
     });
 
     describe("given a list of login uri views", function () {
-      it("returns an empty array of saved login uri views if the login cipher has no login uri views", function () {
+      it("returns an empty array of saved login uri views if the login cipher has no login uri views", async function () {
         options.cipher.login.uris = [];
 
-        const value = autofillService["generateLoginFillScript"](
+        const value = await autofillService["generateLoginFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -1175,7 +1197,7 @@ describe("AutofillService", function () {
         expect(value.savedUrls).toStrictEqual([]);
       });
 
-      it("returns a list of saved login uri views within the fill script", function () {
+      it("returns a list of saved login uri views within the fill script", async function () {
         const secondUriView = mock<LoginUriView>({
           uri: "https://www.second-example.com",
         });
@@ -1184,7 +1206,7 @@ describe("AutofillService", function () {
         });
         options.cipher.login.uris = [defaultLoginUriView, secondUriView, thirdUriView];
 
-        const value = autofillService["generateLoginFillScript"](
+        const value = await autofillService["generateLoginFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -1198,7 +1220,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("skips adding any login uri views that have a UriMatchType of Never to the list of saved urls", function () {
+      it("skips adding any login uri views that have a UriMatchType of Never to the list of saved urls", async function () {
         const secondUriView = mock<LoginUriView>({
           uri: "https://www.second-example.com",
         });
@@ -1208,7 +1230,7 @@ describe("AutofillService", function () {
         });
         options.cipher.login.uris = [defaultLoginUriView, secondUriView, thirdUriView];
 
-        const value = autofillService["generateLoginFillScript"](
+        const value = await autofillService["generateLoginFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -1251,7 +1273,7 @@ describe("AutofillService", function () {
         options.cipher.login.password = "password";
       });
 
-      it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", function () {
+      it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", async function () {
         pageDetails.fields = [
           createAutofillFieldMock({
             opid: "password-field",
@@ -1262,7 +1284,12 @@ describe("AutofillService", function () {
         ];
         jest.spyOn(AutofillService, "loadPasswordFields");
 
-        autofillService["generateLoginFillScript"](fillScript, pageDetails, filledFields, options);
+        await autofillService["generateLoginFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
 
         expect(AutofillService.loadPasswordFields).toHaveBeenCalledTimes(2);
         expect(AutofillService.loadPasswordFields).toHaveBeenNthCalledWith(
@@ -1290,8 +1317,8 @@ describe("AutofillService", function () {
           jest.spyOn(autofillService as any, "findUsernameField");
         });
 
-        it("will attempt to find a username field from hidden fields if no visible username fields are found", function () {
-          autofillService["generateLoginFillScript"](
+        it("will attempt to find a username field from hidden fields if no visible username fields are found", async function () {
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1317,10 +1344,10 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to find a username field from hidden fields if the passed options indicate only visible fields should be referenced", function () {
+        it("will not attempt to find a username field from hidden fields if the passed options indicate only visible fields should be referenced", async function () {
           options.onlyVisibleFields = true;
 
-          autofillService["generateLoginFillScript"](
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1353,8 +1380,8 @@ describe("AutofillService", function () {
           jest.spyOn(autofillService as any, "findUsernameField");
         });
 
-        it("will attempt to match a password field that does not contain a form to a username field", function () {
-          autofillService["generateLoginFillScript"](
+        it("will attempt to match a password field that does not contain a form to a username field", async function () {
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1371,11 +1398,11 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to match a password field that does not contain a form to a username field that is not visible", function () {
+        it("will attempt to match a password field that does not contain a form to a username field that is not visible", async function () {
           usernameField.viewable = false;
           usernameField.readonly = true;
 
-          autofillService["generateLoginFillScript"](
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1401,12 +1428,12 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to match a password field that does not contain a form to a username field that is not visible if the passed options indicate only visible fields", function () {
+        it("will not attempt to match a password field that does not contain a form to a username field that is not visible if the passed options indicate only visible fields", async function () {
           usernameField.viewable = false;
           usernameField.readonly = true;
           options.onlyVisibleFields = true;
 
-          autofillService["generateLoginFillScript"](
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1481,8 +1508,8 @@ describe("AutofillService", function () {
           jest.spyOn(AutofillService, "fillByOpid");
         });
 
-        it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", function () {
-          autofillService["generateLoginFillScript"](
+        it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", async function () {
+          await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -1519,10 +1546,10 @@ describe("AutofillService", function () {
         });
       });
 
-      it("returns a value indicating if the page url is in an untrusted iframe", function () {
+      it("returns a value indicating if the page url is in an untrusted iframe", async function () {
         jest.spyOn(autofillService as any, "inUntrustedIframe").mockReturnValueOnce(true);
 
-        const value = autofillService["generateLoginFillScript"](
+        const value = await autofillService["generateLoginFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -1532,7 +1559,7 @@ describe("AutofillService", function () {
         expect(value.untrustedIframe).toBe(true);
       });
 
-      it("returns a fill script used to autofill a login item", function () {
+      it("returns a fill script used to autofill a login item", async function () {
         jest.spyOn(autofillService as any, "inUntrustedIframe");
         jest.spyOn(AutofillService, "loadPasswordFields");
         jest.spyOn(autofillService as any, "findUsernameField");
@@ -1540,7 +1567,7 @@ describe("AutofillService", function () {
         jest.spyOn(AutofillService, "fillByOpid");
         jest.spyOn(AutofillService, "setFillScriptForFocus");
 
-        const value = autofillService["generateLoginFillScript"](
+        const value = await autofillService["generateLoginFillScript"](
           fillScript,
           pageDetails,
           filledFields,

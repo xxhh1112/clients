@@ -22,6 +22,7 @@ export interface AutoFillOptions {
   fillNewPassword?: boolean;
   skipLastUsed?: boolean;
   allowUntrustedIframe?: boolean;
+  allowTotpAutofill?: boolean;
 }
 
 export interface FormData {
@@ -36,6 +37,7 @@ export interface GenerateFillScriptOptions {
   onlyEmptyFields: boolean;
   onlyVisibleFields: boolean;
   fillNewPassword: boolean;
+  allowTotpAutofill: boolean;
   cipher: CipherView;
   tabUrl: string;
   defaultUriMatch: UriMatchType;
