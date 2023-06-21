@@ -910,7 +910,15 @@ export default class AutofillService implements AutofillServiceInterface {
     return !matchesUri;
   }
 
-  private fieldAttrsContain(field: AutofillField, containsVal: string) {
+  /**
+   * Used when handling autofill on credit card fields. Determines whether
+   * the field has an attribute that matches the given value.
+   * @param {AutofillField} field
+   * @param {string} containsVal
+   * @returns {boolean}
+   * @private
+   */
+  private fieldAttrsContain(field: AutofillField, containsVal: string): boolean {
     if (!field) {
       return false;
     }
@@ -930,6 +938,15 @@ export default class AutofillService implements AutofillServiceInterface {
     return doesContain;
   }
 
+  /**
+   * Generates the autofill script for the specified page details and identify cipher item.
+   * @param {AutofillScript} fillScript
+   * @param {AutofillPageDetails} pageDetails
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @param {GenerateFillScriptOptions} options
+   * @returns {AutofillScript}
+   * @private
+   */
   private generateIdentityFillScript(
     fillScript: AutofillScript,
     pageDetails: AutofillPageDetails,
