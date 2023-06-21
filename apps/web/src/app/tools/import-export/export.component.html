@@ -7,9 +7,7 @@
   [formGroup]="exportForm"
   *ngIf="exportForm"
 >
-  <div class="page-header">
-    <h1>{{ "exportVault" | i18n }}</h1>
-  </div>
+  <h1 bitTypography="h1">{{ "exportVault" | i18n }}</h1>
 
   <app-callout type="error" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
     {{ "personalVaultExportPolicyInEffect" | i18n }}
