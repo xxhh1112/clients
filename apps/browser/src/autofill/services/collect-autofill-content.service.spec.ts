@@ -208,7 +208,6 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-/*
   describe("buildAutofillFormsData", function () {
     it("returns an object of AutofillForm objects with the form id as a key", function () {
       const documentTitle = "Test Page";
@@ -234,7 +233,9 @@ describe("CollectAutofillContentService", function () {
         </form>
       `;
 
-      const autofillFormsData = collectAutofillContentService["buildAutofillFormsData"]();
+      const { formElements } = collectAutofillContentService["queryAutofillFormAndFieldElements"]();
+      const autofillFormsData =
+        collectAutofillContentService["buildAutofillFormsData"](formElements);
 
       expect(autofillFormsData).toStrictEqual({
         __form__0: {
@@ -254,9 +255,7 @@ describe("CollectAutofillContentService", function () {
       });
     });
   });
-*/
 
-/*
   describe("buildAutofillFieldsData", function () {
     it("returns a promise containing an array of AutofillField objects", async function () {
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldElements");
@@ -265,10 +264,17 @@ describe("CollectAutofillContentService", function () {
         .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
         .mockResolvedValue(true);
 
-      const autofillFieldsPromise = collectAutofillContentService["buildAutofillFieldsData"]();
+      const { formFieldElements } =
+        collectAutofillContentService["queryAutofillFormAndFieldElements"]();
+      const autofillFieldsPromise = collectAutofillContentService["buildAutofillFieldsData"](
+        formFieldElements as FormFieldElement[]
+      );
       const autofillFieldsData = await Promise.resolve(autofillFieldsPromise);
 
-      expect(collectAutofillContentService["getAutofillFieldElements"]).toHaveBeenCalledWith(50);
+      expect(collectAutofillContentService["getAutofillFieldElements"]).toHaveBeenCalledWith(
+        50,
+        formFieldElements
+      );
       expect(collectAutofillContentService["buildAutofillFieldItem"]).toHaveBeenCalledTimes(2);
       expect(autofillFieldsPromise).toBeInstanceOf(Promise);
       expect(autofillFieldsData).toStrictEqual([
@@ -339,9 +345,7 @@ describe("CollectAutofillContentService", function () {
       ]);
     });
   });
-*/
 
-/*
   describe("getAutofillFieldElements", function () {
     it("returns all form elements from the targeted document if no limit is set", function () {
       document.body.innerHTML = `
@@ -373,9 +377,6 @@ describe("CollectAutofillContentService", function () {
       const formElements: FormFieldElement[] =
         collectAutofillContentService["getAutofillFieldElements"]();
 
-      expect(document.querySelectorAll).toHaveBeenCalledWith(
-        'input:not([type="hidden"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), textarea:not([data-bwignore]), select:not([data-bwignore]), span[data-bwautofill]'
-      );
       expect(collectAutofillContentService["getPropertyOrAttribute"]).not.toHaveBeenCalled();
       expect(formElements).toEqual([
         usernameInput,
@@ -537,7 +538,6 @@ describe("CollectAutofillContentService", function () {
       ]);
     });
   });
-*/
 
   describe("buildAutofillFieldItem", function () {
     it("returns the AutofillField base data values without the field labels or input values if the passed element is a span element", async function () {
