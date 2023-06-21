@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
 import { OrganizationData } from "../../admin-console/models/data/organization.data";
@@ -37,7 +37,8 @@ export abstract class StateService<T extends Account = Account> {
   accounts$: Observable<{ [userId: string]: T }>;
   activeAccount$: Observable<string>;
   activeAccountUnlocked$: Observable<boolean>;
-  accountDiskCache$: Observable<Record<string, T>>;
+  // eslint-disable-next-line rxjs/no-exposed-subjects
+  accountDiskCache: BehaviorSubject<Record<string, T>>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
