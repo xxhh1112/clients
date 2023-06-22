@@ -2725,7 +2725,7 @@ describe("AutofillService", function () {
         expect(value.script[8]).toStrictEqual(["fill_by_opid", lastNameField.opid, lastName]);
       });
 
-      it("will match title, and email fields to the vault item identity value", function () {
+      it("will match title and email fields to the vault item identity value", function () {
         const titleField = createAutofillFieldMock({ opid: "title", htmlName: "title" });
         const emailField = createAutofillFieldMock({ opid: "email", htmlName: "email" });
         pageDetails.fields = [titleField, emailField];
@@ -2803,6 +2803,179 @@ describe("AutofillService", function () {
           fullAddressField.opid,
           `${address1}, ${address2}, ${address3}`,
         ]);
+      });
+
+      it("will match address1, address2, address3, postalCode, city, state, country, phone, username, and company fields to their corresponding vault item identity values", function () {
+        const address1Field = createAutofillFieldMock({ opid: "address1", htmlName: "address-1" });
+        const address2Field = createAutofillFieldMock({ opid: "address2", htmlName: "address-2" });
+        const address3Field = createAutofillFieldMock({ opid: "address3", htmlName: "address-3" });
+        const postalCodeField = createAutofillFieldMock({
+          opid: "postalCode",
+          htmlName: "postal-code",
+        });
+        const cityField = createAutofillFieldMock({ opid: "city", htmlName: "city" });
+        const stateField = createAutofillFieldMock({ opid: "state", htmlName: "state" });
+        const countryField = createAutofillFieldMock({ opid: "country", htmlName: "country" });
+        const phoneField = createAutofillFieldMock({ opid: "phone", htmlName: "phone" });
+        const usernameField = createAutofillFieldMock({ opid: "username", htmlName: "username" });
+        const companyField = createAutofillFieldMock({ opid: "company", htmlName: "company" });
+        pageDetails.fields = [
+          address1Field,
+          address2Field,
+          address3Field,
+          postalCodeField,
+          cityField,
+          stateField,
+          countryField,
+          phoneField,
+          usernameField,
+          companyField,
+        ];
+        const address1 = "123 Main St.";
+        const address2 = "Apt. 1";
+        const address3 = "P.O. Box 123";
+        const postalCode = "12345";
+        const city = "City";
+        const state = "State";
+        const country = "Country";
+        const phone = "123-456-7890";
+        const username = "username";
+        const company = "Company";
+        options.cipher.identity.address1 = address1;
+        options.cipher.identity.address2 = address2;
+        options.cipher.identity.address3 = address3;
+        options.cipher.identity.postalCode = postalCode;
+        options.cipher.identity.city = city;
+        options.cipher.identity.state = state;
+        options.cipher.identity.country = country;
+        options.cipher.identity.phone = phone;
+        options.cipher.identity.username = username;
+        options.cipher.identity.company = company;
+
+        const value = autofillService["generateIdentityFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          address1Field.htmlName,
+          IdentityAutoFillConstants.Address1FieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          address2Field.htmlName,
+          IdentityAutoFillConstants.Address2FieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          address3Field.htmlName,
+          IdentityAutoFillConstants.Address3FieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          postalCodeField.htmlName,
+          IdentityAutoFillConstants.PostalCodeFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          cityField.htmlName,
+          IdentityAutoFillConstants.CityFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          stateField.htmlName,
+          IdentityAutoFillConstants.StateFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          countryField.htmlName,
+          IdentityAutoFillConstants.CountryFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          phoneField.htmlName,
+          IdentityAutoFillConstants.PhoneFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          usernameField.htmlName,
+          IdentityAutoFillConstants.UserNameFieldNames
+        );
+        expect(AutofillService["isFieldMatch"]).toHaveBeenCalledWith(
+          companyField.htmlName,
+          IdentityAutoFillConstants.CompanyFieldNames
+        );
+        expect(autofillService["makeScriptAction"]).toHaveBeenCalled();
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", address1Field.opid, address1]);
+        expect(value.script[5]).toStrictEqual(["fill_by_opid", address2Field.opid, address2]);
+        expect(value.script[8]).toStrictEqual(["fill_by_opid", address3Field.opid, address3]);
+        expect(value.script[11]).toStrictEqual(["fill_by_opid", cityField.opid, city]);
+        expect(value.script[14]).toStrictEqual(["fill_by_opid", postalCodeField.opid, postalCode]);
+        expect(value.script[17]).toStrictEqual(["fill_by_opid", companyField.opid, company]);
+        expect(value.script[20]).toStrictEqual(["fill_by_opid", phoneField.opid, phone]);
+        expect(value.script[23]).toStrictEqual(["fill_by_opid", usernameField.opid, username]);
+        expect(value.script[26]).toStrictEqual(["fill_by_opid", stateField.opid, state]);
+        expect(value.script[29]).toStrictEqual(["fill_by_opid", countryField.opid, country]);
+      });
+
+      it("will find the two character IsoState value for an identity cipher that contains the full name of a state", function () {
+        const stateField = createAutofillFieldMock({ opid: "state", htmlName: "state" });
+        pageDetails.fields = [stateField];
+        const state = "California";
+        options.cipher.identity.state = state;
+
+        const value = autofillService["generateIdentityFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledWith(
+          fillScript,
+          "CA",
+          expect.anything(),
+          expect.anything()
+        );
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", stateField.opid, "CA"]);
+      });
+
+      it("will find the two character IsoProvince value for an identity cipher that contains the full name of a province", function () {
+        const stateField = createAutofillFieldMock({ opid: "state", htmlName: "state" });
+        pageDetails.fields = [stateField];
+        const state = "Ontario";
+        options.cipher.identity.state = state;
+
+        const value = autofillService["generateIdentityFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledWith(
+          fillScript,
+          "ON",
+          expect.anything(),
+          expect.anything()
+        );
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", stateField.opid, "ON"]);
+      });
+
+      it("will find the two character IsoCountry value for an identity cipher that contains the full name of a country", function () {
+        const countryField = createAutofillFieldMock({ opid: "country", htmlName: "country" });
+        pageDetails.fields = [countryField];
+        const country = "Somalia";
+        options.cipher.identity.country = country;
+
+        const value = autofillService["generateIdentityFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledWith(
+          fillScript,
+          "SO",
+          expect.anything(),
+          expect.anything()
+        );
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", countryField.opid, "SO"]);
       });
     });
   });
