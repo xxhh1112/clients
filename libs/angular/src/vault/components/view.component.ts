@@ -16,6 +16,7 @@ import { EventCollectionService } from "@bitwarden/common/abstractions/event/eve
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { EventType, FieldType } from "@bitwarden/common/enums";
+import { PasswordRepromptProtectedFields } from "@bitwarden/common/enums/password-reprompt-protected-fields.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -231,7 +232,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async togglePassword() {
-    if (!(await this.promptPassword())) {
+    if (await this.failedPasswordRepromptForFieldToggle(this.showPassword)) {
       return;
     }
 
@@ -254,7 +255,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async toggleCardNumber() {
-    if (!(await this.promptPassword())) {
+    if (await this.failedPasswordRepromptForFieldToggle(this.showCardNumber)) {
       return;
     }
 
@@ -268,7 +269,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async toggleCardCode() {
-    if (!(await this.promptPassword())) {
+    if (await this.failedPasswordRepromptForFieldToggle(this.showCardCode)) {
       return;
     }
 
@@ -279,6 +280,10 @@ export class ViewComponent implements OnDestroy, OnInit {
         this.cipherId
       );
     }
+  }
+
+  async failedPasswordRepromptForFieldToggle(isFieldShowing = false): Promise<boolean> {
+    return !isFieldShowing && !(await this.promptPassword(false));
   }
 
   async checkPassword() {
@@ -323,7 +328,8 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     if (
       this.passwordRepromptService.protectedFields().includes(aType) &&
-      !(await this.promptPassword())
+      !this.copiedFieldIsVisible(aType) &&
+      !(await this.promptPassword(false))
     ) {
       return false;
     }
@@ -345,6 +351,20 @@ export class ViewComponent implements OnDestroy, OnInit {
     }
 
     return true;
+  }
+
+  copiedFieldIsVisible(fieldType: string): boolean {
+    const { Password, CardNumber, SecurityCode } = PasswordRepromptProtectedFields;
+
+    if (fieldType === CardNumber) {
+      return this.showCardNumber;
+    }
+
+    if (fieldType === SecurityCode) {
+      return this.showCardCode;
+    }
+
+    return fieldType === Password && this.showPassword;
   }
 
   setTextDataOnDrag(event: DragEvent, data: string) {
@@ -422,12 +442,15 @@ export class ViewComponent implements OnDestroy, OnInit {
     return this.cipherService.restoreWithServer(this.cipher.id);
   }
 
-  protected async promptPassword() {
+  protected async promptPassword(storePasswordRepromptValue = true) {
     if (this.cipher.reprompt === CipherRepromptType.None || this.passwordReprompted) {
       return true;
     }
 
-    return (this.passwordReprompted = await this.passwordRepromptService.showPasswordPrompt());
+    const passwordReprompted = await this.passwordRepromptService.showPasswordPrompt();
+    this.passwordReprompted = storePasswordRepromptValue && passwordReprompted;
+
+    return passwordReprompted;
   }
 
   private cleanUp() {
