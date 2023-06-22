@@ -442,15 +442,15 @@ export class ViewComponent implements OnDestroy, OnInit {
     return this.cipherService.restoreWithServer(this.cipher.id);
   }
 
-  protected async promptPassword(storePasswordRepromptValue = true) {
+  protected async promptPassword(storePasswordRepromptResult = true) {
     if (this.cipher.reprompt === CipherRepromptType.None || this.passwordReprompted) {
       return true;
     }
 
-    const passwordReprompted = await this.passwordRepromptService.showPasswordPrompt();
-    this.passwordReprompted = storePasswordRepromptValue && passwordReprompted;
+    const passwordRepromptSucceeded = await this.passwordRepromptService.showPasswordPrompt();
+    this.passwordReprompted = storePasswordRepromptResult && passwordRepromptSucceeded;
 
-    return passwordReprompted;
+    return passwordRepromptSucceeded;
   }
 
   private cleanUp() {
