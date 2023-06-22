@@ -122,7 +122,7 @@ export class StateService<
           // FIXME: This should be refactored into AuthService or a similar service,
           //  as checking for the existence of the crypto key is a low level
           //  implementation detail.
-          this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
+          this.activeAccountUnlockedSubject.next((await this.getUserSymKey()) != null);
         })
       )
       .subscribe();
