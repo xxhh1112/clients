@@ -1,28 +1,28 @@
 import * as papa from "papaparse";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
-import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType } from "@bitwarden/common/enums";
-import { Utils } from "@bitwarden/common/misc/utils";
 import {
   CipherWithIdExport,
   CollectionWithIdExport,
   FolderWithIdExport,
 } from "@bitwarden/common/models/export";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import { Folder } from "@bitwarden/common/vault/models/domain/folder";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { ExportHelper } from "../../export-helper";

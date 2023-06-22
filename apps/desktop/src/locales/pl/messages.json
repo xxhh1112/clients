@@ -2251,5 +2251,22 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Aktualizacja ustawień zalecanych"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "UE",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Samodzielnie hostowany"
+  },
+  "accessDenied": {
+    "message": "Odmowa dostępu. Nie masz uprawnień do przeglądania tej strony."
   }
 }

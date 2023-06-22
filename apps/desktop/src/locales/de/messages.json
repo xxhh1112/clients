@@ -2251,5 +2251,22 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Empfohlene Aktualisierung der Einstellungen"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Selbst gehostet"
+  },
+  "accessDenied": {
+    "message": "Zugriff verweigert. Du hast keine Berechtigung, diese Seite anzuzeigen."
   }
 }

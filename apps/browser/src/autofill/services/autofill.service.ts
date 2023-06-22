@@ -1,16 +1,16 @@
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { EventType, FieldType, UriMatchType } from "@bitwarden/common/enums";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
-import { BrowserApi } from "../../browser/browserApi";
-import { BrowserStateService } from "../../services/abstractions/browser-state.service";
+import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserStateService } from "../../platform/services/abstractions/browser-state.service";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
@@ -372,12 +372,6 @@ export default class AutofillService implements AutofillServiceInterface {
       login?.uris?.filter((u) => u.match != UriMatchType.Never).map((u) => u.uri) ?? [];
 
     fillScript.untrustedIframe = this.inUntrustedIframe(pageDetails.url, options);
-
-    if (!login.password || login.password === "") {
-      // No password for this login. Maybe they just wanted to auto-fill some custom fields?
-      fillScript = AutofillService.setFillScriptForFocus(filledFields, fillScript);
-      return fillScript;
-    }
 
     let passwordFields = AutofillService.loadPasswordFields(
       pageDetails,

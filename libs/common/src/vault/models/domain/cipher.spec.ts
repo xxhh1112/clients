@@ -3,12 +3,12 @@ import { Substitute, Arg } from "@fluffy-spoon/substitute";
 import { Jsonify } from "type-fest";
 
 import { makeStaticByteArray, mockEnc, mockFromJson } from "../../../../spec/utils";
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { EncryptService } from "../../../abstractions/encrypt.service";
 import { FieldType, SecureNoteType, UriMatchType } from "../../../enums";
-import { EncString } from "../../../models/domain/enc-string";
-import { ContainerService } from "../../../services/container.service";
-import { InitializerKey } from "../../../services/cryptography/initializer-key";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { EncryptService } from "../../../platform/abstractions/encrypt.service";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { ContainerService } from "../../../platform/services/container.service";
+import { InitializerKey } from "../../../platform/services/cryptography/initializer-key";
 import { CipherService } from "../../abstractions/cipher.service";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";

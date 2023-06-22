@@ -1,11 +1,11 @@
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import {
   CipherWithIdExport,
   CollectionWithIdExport,
   FolderWithIdExport,
 } from "@bitwarden/common/models/export";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { ImportResult } from "../../models/import-result";

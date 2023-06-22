@@ -2221,7 +2221,21 @@
       }
     }
   },
+  "region": {
+    "message": "Apgabals"
+  },
   "opensInANewWindow": {
     "message": "Atver jaunā logā"
+  },
+  "eu": {
+    "message": "ES",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ASV",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Piekļuve liegta. Nav nepieciešamo atļauju, lai skatītu šo lapu."
   }
 }

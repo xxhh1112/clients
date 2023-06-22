@@ -2221,7 +2221,21 @@
       }
     }
   },
+  "region": {
+    "message": "Region"
+  },
   "opensInANewWindow": {
     "message": "Åbnes i et nyt vindue"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "USA",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Adgang nægtet. Nødvendig tilladelse til at se siden mangler."
   }
 }
