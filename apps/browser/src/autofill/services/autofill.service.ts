@@ -1181,10 +1181,29 @@ export default class AutofillService implements AutofillServiceInterface {
     return fillScript;
   }
 
+  /**
+   * Accepts an HTMLInputElement type value and a list of
+   * excluded types and returns true if the type is excluded.
+   * @param {string} type
+   * @param {string[]} excludedTypes
+   * @returns {boolean}
+   * @private
+   */
   private isExcludedType(type: string, excludedTypes: string[]) {
     return excludedTypes.indexOf(type) > -1;
   }
 
+  /**
+   * Accepts the value of a field, a list of possible options that define if
+   * a field can be matched to a vault cipher, and a secondary optional list
+   * of options that define if a field can be matched to a vault cipher. Returns
+   * true if the field value matches one of the options.
+   * @param {string} value
+   * @param {string[]} options
+   * @param {string[]} containsOptions
+   * @returns {boolean}
+   * @private
+   */
   private static isFieldMatch(
     value: string,
     options: string[],
@@ -1206,6 +1225,17 @@ export default class AutofillService implements AutofillServiceInterface {
     return false;
   }
 
+  /**
+   * Helper method used to create a script action for a field. Conditionally
+   * accepts a fieldProp value that will be used in place of the dataProp value.
+   * @param {AutofillScript} fillScript
+   * @param cipherData
+   * @param {{[p: string]: AutofillField}} fillFields
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @param {string} dataProp
+   * @param {string} fieldProp
+   * @private
+   */
   private makeScriptAction(
     fillScript: AutofillScript,
     cipherData: any,
@@ -1223,6 +1253,17 @@ export default class AutofillService implements AutofillServiceInterface {
     );
   }
 
+  /**
+   * Handles updating the list of filled fields and adding a script action
+   * to the fill script. If a select field is passed as part of the fill options,
+   * we iterate over the options to check if the passed value matches one of the
+   * options. If it does, we add a script action to select the option.
+   * @param {AutofillScript} fillScript
+   * @param dataValue
+   * @param {AutofillField} field
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @private
+   */
   private makeScriptActionWithValue(
     fillScript: AutofillScript,
     dataValue: any,

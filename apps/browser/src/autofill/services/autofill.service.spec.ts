@@ -2980,6 +2980,236 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("isExcludedType", function () {
+    it("returns true if the passed type is within the excluded type list", function () {
+      const value = autofillService["isExcludedType"](
+        "hidden",
+        AutoFillConstants.ExcludedAutofillTypes
+      );
+
+      expect(value).toBe(true);
+    });
+
+    it("returns true if the passed type is within the excluded type list", function () {
+      const value = autofillService["isExcludedType"](
+        "text",
+        AutoFillConstants.ExcludedAutofillTypes
+      );
+
+      expect(value).toBe(false);
+    });
+  });
+
+  describe("isFieldMatch", function () {
+    it("returns true if the passed value is equal to one of the values in the passed options list", function () {
+      const passedAttribute = "cc-name";
+      const passedOptions = ["cc-name", "cc_full_name"];
+
+      const value = AutofillService["isFieldMatch"](passedAttribute, passedOptions);
+
+      expect(value).toBe(true);
+    });
+
+    it("should returns true if the passed options contain a value within the containsOptions list and the passed value partial matches the option", function () {
+      const passedAttribute = "cc-name-full";
+      const passedOptions = ["cc-name", "cc_full_name"];
+      const containsOptions = ["cc-name"];
+
+      const value = AutofillService["isFieldMatch"](
+        passedAttribute,
+        passedOptions,
+        containsOptions
+      );
+
+      expect(value).toBe(true);
+    });
+
+    it("returns false if the value is not a partial match to an option found within the containsOption list", function () {
+      const passedAttribute = "cc-full-name";
+      const passedOptions = ["cc-name", "cc_full_name"];
+      const containsOptions = ["cc-name"];
+
+      const value = AutofillService["isFieldMatch"](
+        passedAttribute,
+        passedOptions,
+        containsOptions
+      );
+
+      expect(value).toBe(false);
+    });
+  });
+
+  describe("makeScriptAction", function () {
+    let fillScript: AutofillScript;
+    let options: GenerateFillScriptOptions;
+    let mockLoginView: any;
+    let fillFields: { [key: string]: AutofillField };
+    const filledFields = {};
+
+    beforeEach(function () {
+      fillScript = createAutofillScriptMock({});
+      options = createGenerateFillScriptOptionsMock({});
+      mockLoginView = mock<LoginView>() as any;
+      options.cipher.login = mockLoginView;
+      fillFields = {
+        "username-field": createAutofillFieldMock({ opid: "username-field" }),
+      };
+      jest.spyOn(autofillService as any, "makeScriptActionWithValue");
+    });
+
+    it("makes a call to makeScriptActionWithValue using the passed dataProp value", function () {
+      const dataProp = "username-field";
+
+      autofillService["makeScriptAction"](
+        fillScript,
+        options.cipher.login,
+        fillFields,
+        filledFields,
+        dataProp
+      );
+
+      expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledWith(
+        fillScript,
+        mockLoginView[dataProp],
+        fillFields[dataProp],
+        filledFields
+      );
+    });
+
+    it("makes a call to makeScriptActionWithValue using the passed fieldProp value used for fillFields", function () {
+      const dataProp = "value";
+      const fieldProp = "username-field";
+
+      autofillService["makeScriptAction"](
+        fillScript,
+        options.cipher.login,
+        fillFields,
+        filledFields,
+        dataProp,
+        fieldProp
+      );
+
+      expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledWith(
+        fillScript,
+        mockLoginView[dataProp],
+        fillFields[fieldProp],
+        filledFields
+      );
+    });
+  });
+
+  describe("makeScriptActionWithValue", function () {
+    let fillScript: AutofillScript;
+    let options: GenerateFillScriptOptions;
+    let mockLoginView: any;
+    let fillFields: { [key: string]: AutofillField };
+    const filledFields = {};
+
+    beforeEach(function () {
+      fillScript = createAutofillScriptMock({});
+      options = createGenerateFillScriptOptionsMock({});
+      mockLoginView = mock<LoginView>() as any;
+      options.cipher.login = mockLoginView;
+      fillFields = {
+        "username-field": createAutofillFieldMock({ opid: "username-field" }),
+      };
+      jest.spyOn(autofillService as any, "makeScriptActionWithValue");
+      jest.spyOn(AutofillService, "hasValue");
+      jest.spyOn(AutofillService, "fillByOpid");
+    });
+
+    it("will not add an autofill action to the fill script if the value does not exist", function () {
+      const dataValue = "";
+
+      autofillService["makeScriptActionWithValue"](
+        fillScript,
+        dataValue,
+        fillFields["username-field"],
+        filledFields
+      );
+
+      expect(AutofillService.hasValue).toHaveBeenCalledWith(dataValue);
+      expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
+    });
+
+    it("will not add an autofill action to the fill script if a field is not passed", function () {
+      const dataValue = "username";
+
+      autofillService["makeScriptActionWithValue"](fillScript, dataValue, null, filledFields);
+
+      expect(AutofillService.hasValue).toHaveBeenCalledWith(dataValue);
+      expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
+    });
+
+    it("will add an autofill action to the fill script", function () {
+      const dataValue = "username";
+
+      autofillService["makeScriptActionWithValue"](
+        fillScript,
+        dataValue,
+        fillFields["username-field"],
+        filledFields
+      );
+
+      expect(AutofillService.hasValue).toHaveBeenCalledWith(dataValue);
+      expect(AutofillService.fillByOpid).toHaveBeenCalledWith(
+        fillScript,
+        fillFields["username-field"],
+        dataValue
+      );
+    });
+
+    describe("given a autofill field value that indicates the field is a `select` input", function () {
+      it("will not add an autofil action to the fill script if the dataValue cannot be found in the select options", function () {
+        const dataValue = "username";
+        const selectField = createAutofillFieldMock({
+          opid: "username-field",
+          tagName: "select",
+          type: "select-one",
+          selectInfo: {
+            options: [["User Name", "Some Other Username Value"]],
+          },
+        });
+
+        autofillService["makeScriptActionWithValue"](
+          fillScript,
+          dataValue,
+          selectField,
+          filledFields
+        );
+
+        expect(AutofillService.hasValue).toHaveBeenCalledWith(dataValue);
+        expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
+      });
+
+      it("will update the data value to the value found in the select options, and add an autofill action to the fill script", function () {
+        const dataValue = "username";
+        const selectField = createAutofillFieldMock({
+          opid: "username-field",
+          tagName: "select",
+          type: "select-one",
+          selectInfo: {
+            options: [["username", "Some Other Username Value"]],
+          },
+        });
+
+        autofillService["makeScriptActionWithValue"](
+          fillScript,
+          dataValue,
+          selectField,
+          filledFields
+        );
+
+        expect(AutofillService.hasValue).toHaveBeenCalledWith(dataValue);
+        expect(AutofillService.fillByOpid).toHaveBeenCalledWith(
+          fillScript,
+          selectField,
+          "Some Other Username Value"
+        );
+      });
+    });
+  });
+
   describe("forCustomFieldsOnly", function () {
     it("returns a true value if the passed field has a tag name of `span`", function () {
       const field = createAutofillFieldMock({ tagName: "span" });
