@@ -633,19 +633,43 @@ export class CipherService implements CipherServiceAbstraction {
     data: ArrayBuffer,
     admin = false
   ): Promise<Cipher> {
+    // CHANGED CODE TO UPLOAD ATTACHMENTS AS IN V0 ANCIENT TIMES.
+    // THIS IS ONLY FOR QA PURPOSES TO HAVE AN ARTIFACT
+    // THAT WORKS WITH THIS WAY OF ENCRYPTIONG AND UPLOADING
+
     const key = await this.cryptoService.getOrgKey(cipher.organizationId);
     const encFileName = await this.cryptoService.encrypt(filename, key);
+    const encData = await this.cryptoService.encryptToBytes(data, key);
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
-    const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
+    const fd = new FormData();
+    try {
+      const blob = new Blob([encData.buffer], { type: "application/octet-stream" });
+      fd.append("data", blob, encFileName.encryptedString);
+    } catch (e) {
+      if (Utils.isNode && !Utils.isBrowser) {
+        fd.append(
+          "data",
+          Buffer.from(encData.buffer) as any,
+          {
+            filepath: encFileName.encryptedString,
+            contentType: "application/octet-stream",
+          } as any
+        );
+      } else {
+        throw e;
+      }
+    }
 
-    const response = await this.cipherFileUploadService.upload(
-      cipher,
-      encFileName,
-      encData,
-      admin,
-      dataEncKey
-    );
+    let response: CipherResponse;
+    try {
+      if (admin) {
+        response = await this.apiService.postCipherAttachmentAdminLegacy(cipher.id, fd);
+      } else {
+        response = await this.apiService.postCipherAttachmentLegacy(cipher.id, fd);
+      }
+    } catch (e) {
+      throw new Error((e as ErrorResponse).getSingleMessage());
+    }
 
     const cData = new CipherData(response, cipher.collectionIds);
     if (!admin) {
