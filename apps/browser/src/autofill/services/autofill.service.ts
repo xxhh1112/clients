@@ -1470,6 +1470,14 @@ export default class AutofillService implements AutofillServiceInterface {
     return totpField;
   }
 
+  /**
+   * Accepts a field and returns the index of the first matching property
+   * present in a list of attribute names.
+   * @param {AutofillField} field
+   * @param {string[]} names
+   * @returns {number}
+   * @private
+   */
   private findMatchingFieldIndex(field: AutofillField, names: string[]): number {
     for (let i = 0; i < names.length; i++) {
       if (names[i].indexOf("=") > -1) {
@@ -1522,6 +1530,17 @@ export default class AutofillService implements AutofillServiceInterface {
     return -1;
   }
 
+  /**
+   * Accepts a field, property, name, and prefix and returns true if the field
+   * contains a value that matches the given prefixed property.
+   * @param field
+   * @param {string} property
+   * @param {string} name
+   * @param {string} prefix
+   * @param {string} separator
+   * @returns {boolean}
+   * @private
+   */
   private fieldPropertyIsPrefixMatch(
     field: any,
     property: string,

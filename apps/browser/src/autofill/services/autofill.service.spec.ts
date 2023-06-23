@@ -3776,6 +3776,89 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("findMatchingFieldIndex", function () {
+    beforeEach(function () {
+      jest.spyOn(autofillService as any, "fieldPropertyIsMatch");
+    });
+
+    it("returns the index of a value that matches a property prefix", function () {
+      const attributes = [
+        ["htmlID", "id"],
+        ["htmlName", "name"],
+        ["label-aria", "label"],
+        ["label-tag", "label"],
+        ["label-right", "label"],
+        ["label-left", "label"],
+        ["placeholder", "placeholder"],
+      ];
+      const value = "username";
+
+      attributes.forEach((attribute) => {
+        const field = createAutofillFieldMock({ [attribute[0]]: value });
+
+        const result = autofillService["findMatchingFieldIndex"](field, [
+          `${attribute[1]}=${value}`,
+        ]);
+
+        expect(autofillService["fieldPropertyIsMatch"]).toHaveBeenCalledWith(
+          field,
+          attribute[0],
+          value
+        );
+        expect(result).toBe(0);
+      });
+    });
+
+    it("returns the index of a value that matches a property", function () {
+      const attributes = [
+        "htmlID",
+        "htmlName",
+        "label-aria",
+        "label-tag",
+        "label-right",
+        "label-left",
+        "placeholder",
+      ];
+      const value = "username";
+
+      attributes.forEach((attribute) => {
+        const field = createAutofillFieldMock({ [attribute]: value });
+
+        const result = autofillService["findMatchingFieldIndex"](field, [value]);
+
+        expect(result).toBe(0);
+      });
+    });
+  });
+
+  describe("fieldPropertyIsPrefixMatch", function () {
+    it("returns true if the field contains a property whose value is a match", function () {
+      const field = createAutofillFieldMock({ htmlID: "username" });
+
+      const result = autofillService["fieldPropertyIsPrefixMatch"](
+        field,
+        "htmlID",
+        "id=username",
+        "id"
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it("returns false if the field contains a property whose value is not a match", function () {
+      const field = createAutofillFieldMock({ htmlID: "username" });
+
+      const result = autofillService["fieldPropertyIsPrefixMatch"](
+        field,
+        "htmlID",
+        "id=some-othername",
+        "id"
+      );
+
+      expect(result).toBe(false);
+    });
+  });
+
   describe("forCustomFieldsOnly", function () {
     it("returns a true value if the passed field has a tag name of `span`", function () {
       const field = createAutofillFieldMock({ tagName: "span" });
