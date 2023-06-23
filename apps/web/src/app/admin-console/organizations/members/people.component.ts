@@ -61,6 +61,7 @@ import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
 
 import { BulkConfirmComponent } from "./components/bulk/bulk-confirm.component";
+import { BulkEnableSecretsManagerComponent } from "./components/bulk/bulk-enable-sm.component";
 import { BulkRemoveComponent } from "./components/bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./components/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./components/bulk/bulk-status.component";
@@ -510,6 +511,14 @@ export class PeopleComponent
 
     await modal.onClosedPromise();
     await this.load();
+  }
+
+  async bulkEnableSM() {
+    this.dialogService.open(BulkEnableSecretsManagerComponent, {
+      data: {
+        users: this.getCheckedUsers(),
+      },
+    });
   }
 
   async events(user: OrganizationUserView) {

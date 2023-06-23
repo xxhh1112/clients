@@ -99,6 +99,11 @@
               ></button>
 
               <bit-menu #headerMenu>
+                <button type="button" bitMenuItem (click)="bulkEnableSM()">
+                  <!-- <i class="bwi bwi-fw bwi-envelope" aria-hidden="true"></i> -->
+                  Enable Secrets Manager
+                </button>
+                <bit-menu-divider></bit-menu-divider>
                 <button type="button" bitMenuItem (click)="bulkReinvite()">
                   <i class="bwi bwi-fw bwi-envelope" aria-hidden="true"></i>
                   {{ "reinviteSelected" | i18n }}

@@ -154,6 +154,16 @@ export abstract class OrganizationUserService {
   ): Promise<ListResponse<OrganizationUserBulkResponse>>;
 
   /**
+   * Confirm many organization users that have accepted their invitations
+   * @param organizationId - Identifier for the organization to confirm users
+   * @param request - Bulk request details for confirming the user
+   */
+  abstract postOrganizationUserBulkEnableSecretsManager(
+    organizationId: string,
+    ids: string[]
+  ): Promise<void>;
+
+  /**
    * Update an organization users
    * @param organizationId - Identifier for the organization the user belongs to
    * @param id - Organization user identifier

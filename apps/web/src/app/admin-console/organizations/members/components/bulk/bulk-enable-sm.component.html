@@ -1,0 +1,49 @@
+<bit-dialog dialogSize="large">
+  <span bitDialogTitle>ENABLE SECRETS MANAGER</span>
+  <span bitDialogContent>
+    <p>
+      Grant the following members access to Secrets Manager. The role granted in the Password
+      Manager will apply to Secrets Manager.
+    </p>
+    <bit-table [dataSource]="dataSource">
+      <ng-container header>
+        <tr>
+          <th bitCell>Member</th>
+          <th bitCell>Role</th>
+        </tr>
+      </ng-container>
+      <ng-template body let-rows$>
+        <tr bitRow *ngFor="let u of rows$ | async">
+          <td bitCell>
+            <div class="tw-flex tw-items-center">
+              <bit-avatar
+                size="small"
+                [text]="u | userName"
+                [id]="u.userId"
+                [color]="u.avatarColor"
+                class="tw-mr-3"
+              ></bit-avatar>
+              <div class="tw-flex tw-flex-col">
+                <div>
+                  <button type="button" bitLink>
+                    {{ u.name ?? u.email }}
+                  </button>
+                </div>
+                <div class="tw-text-sm tw-text-muted" *ngIf="u.name">
+                  {{ u.email }}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td bitCell>{{ u.type | userType }}</td>
+        </tr>
+      </ng-template>
+    </bit-table>
+  </span>
+  <ng-container bitDialogFooter>
+    <button type="button" bitButton buttonType="primary" (click)="enableAccess()">
+      Enable access
+    </button>
+    <button type="button" bitButton buttonType="secondary" bitDialogClose>Close</button>
+  </ng-container>
+</bit-dialog>
