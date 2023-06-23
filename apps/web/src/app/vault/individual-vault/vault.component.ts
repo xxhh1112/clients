@@ -194,7 +194,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         const canAccessPremium = await this.stateService.getCanAccessPremium();
         this.showPremiumCallout =
           !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
-        this.showUpdateKey = !(await this.cryptoService.hasEncKey());
+        this.showUpdateKey = !(await this.cryptoService.hasUserKey());
 
         const cipherId = getCipherIdFromParams(params);
         if (!cipherId) {

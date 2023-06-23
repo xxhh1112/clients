@@ -8,10 +8,17 @@ import { MessagingService } from "../../platform/abstractions/messaging.service"
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../../platform/models/domain/symmetric-crypto-key";
+import { CsprngArray } from "../../types/csprng";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { SsoLogInCredentials } from "../models/domain/log-in-credentials";
+import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 import { identityTokenResponseFactory } from "./login.strategy.spec";
 import { SsoLogInStrategy } from "./sso-login.strategy";
@@ -98,33 +105,58 @@ describe("SsoLogInStrategy", () => {
 
     await ssoLogInStrategy.logIn(credentials);
 
-    expect(cryptoService.setEncPrivateKey).not.toHaveBeenCalled();
-    expect(cryptoService.setEncKey).not.toHaveBeenCalled();
+    expect(cryptoService.setMasterKey).not.toHaveBeenCalled();
+    expect(cryptoService.setUserKey).not.toHaveBeenCalled();
+    expect(cryptoService.setPrivateKey).not.toHaveBeenCalled();
   });
 
-  it("gets and sets KeyConnector key for enrolled user", async () => {
-    const tokenResponse = identityTokenResponseFactory();
-    tokenResponse.keyConnectorUrl = keyConnectorUrl;
+  describe("Key Connector", () => {
+    let tokenResponse: IdentityTokenResponse;
+    beforeEach(() => {
+      tokenResponse = identityTokenResponseFactory();
+      tokenResponse.keyConnectorUrl = keyConnectorUrl;
+    });
 
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    it("gets and sets the master key if Key Connector is enabled", async () => {
+      const masterKey = new SymmetricCryptoKey(
+        new Uint8Array(64).buffer as CsprngArray
+      ) as MasterKey;
 
-    await ssoLogInStrategy.logIn(credentials);
+      apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+      cryptoService.getMasterKey.mockResolvedValue(masterKey);
 
-    expect(keyConnectorService.getAndSetKey).toHaveBeenCalledWith(keyConnectorUrl);
-  });
+      await ssoLogInStrategy.logIn(credentials);
 
-  it("converts new SSO user to Key Connector on first login", async () => {
-    const tokenResponse = identityTokenResponseFactory();
-    tokenResponse.keyConnectorUrl = keyConnectorUrl;
-    tokenResponse.key = null;
+      expect(keyConnectorService.getAndSetMasterKey).toHaveBeenCalledWith(keyConnectorUrl);
+    });
 
-    apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+    it("converts new SSO user to Key Connector on first login", async () => {
+      tokenResponse.key = null;
 
-    await ssoLogInStrategy.logIn(credentials);
+      apiService.postIdentityToken.mockResolvedValue(tokenResponse);
 
-    expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
-      tokenResponse,
-      ssoOrgId
-    );
+      await ssoLogInStrategy.logIn(credentials);
+
+      expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
+        tokenResponse,
+        ssoOrgId
+      );
+    });
+
+    it("decrypts and sets the user key if Key Connector is enabled", async () => {
+      const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
+      const masterKey = new SymmetricCryptoKey(
+        new Uint8Array(64).buffer as CsprngArray
+      ) as MasterKey;
+
+      apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+      cryptoService.getMasterKey.mockResolvedValue(masterKey);
+      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+
+      await ssoLogInStrategy.logIn(credentials);
+
+      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+    });
   });
 });

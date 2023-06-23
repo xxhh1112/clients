@@ -47,13 +47,13 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
 
   async updateTrustedDeviceKeys(
     deviceIdentifier: string,
-    devicePublicKeyEncryptedUserSymKey: string,
-    userSymKeyEncryptedDevicePublicKey: string,
+    devicePublicKeyEncryptedUserKey: string,
+    userKeyEncryptedDevicePublicKey: string,
     deviceKeyEncryptedDevicePrivateKey: string
   ): Promise<DeviceResponse> {
     const request = new TrustedDeviceKeysRequest(
-      devicePublicKeyEncryptedUserSymKey,
-      userSymKeyEncryptedDevicePublicKey,
+      devicePublicKeyEncryptedUserKey,
+      userKeyEncryptedDevicePublicKey,
       deviceKeyEncryptedDevicePrivateKey
     );
 

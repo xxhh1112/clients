@@ -42,8 +42,8 @@ export class ChangeEmailComponent implements OnInit {
   }
 
   async submit() {
-    const hasEncKey = await this.cryptoService.hasEncKey();
-    if (!hasEncKey) {
+    const hasUserKey = await this.cryptoService.hasUserKey();
+    if (!hasUserKey) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("updateKey"));
       return;
     }
@@ -67,7 +67,7 @@ export class ChangeEmailComponent implements OnInit {
       request.masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, null);
       const kdf = await this.stateService.getKdfType();
       const kdfConfig = await this.stateService.getKdfConfig();
-      const newKey = await this.cryptoService.makeKey(
+      const newMasterKey = await this.cryptoService.makeMasterKey(
         this.masterPassword,
         this.newEmail,
         kdf,
@@ -75,10 +75,10 @@ export class ChangeEmailComponent implements OnInit {
       );
       request.newMasterPasswordHash = await this.cryptoService.hashPassword(
         this.masterPassword,
-        newKey
+        newMasterKey
       );
-      const newEncKey = await this.cryptoService.remakeEncKey(newKey);
-      request.key = newEncKey[1].encryptedString;
+      const newUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey);
+      request.key = newUserKey[1].encryptedString;
       try {
         this.formPromise = this.apiService.postEmail(request);
         await this.formPromise;

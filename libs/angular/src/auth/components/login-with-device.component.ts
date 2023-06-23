@@ -22,7 +22,10 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
@@ -207,19 +210,22 @@ export class LoginWithDeviceComponent
     requestId: string,
     response: AuthRequestResponse
   ): Promise<PasswordlessLogInCredentials> {
-    const decKey = await this.cryptoService.rsaDecrypt(response.key, this.authRequestKeyPair[1]);
+    const decMasterKeyArray = await this.cryptoService.rsaDecrypt(
+      response.key,
+      this.authRequestKeyPair[1]
+    );
     const decMasterPasswordHash = await this.cryptoService.rsaDecrypt(
       response.masterPasswordHash,
       this.authRequestKeyPair[1]
     );
-    const key = new SymmetricCryptoKey(decKey);
+    const decMasterKey = new SymmetricCryptoKey(decMasterKeyArray) as MasterKey;
     const localHashedPassword = Utils.fromBufferToUtf8(decMasterPasswordHash);
 
     return new PasswordlessLogInCredentials(
       this.email,
       this.passwordlessRequest.accessCode,
       requestId,
-      key,
+      decMasterKey,
       localHashedPassword
     );
   }

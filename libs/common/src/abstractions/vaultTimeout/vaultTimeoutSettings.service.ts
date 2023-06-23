@@ -7,6 +7,10 @@ export abstract class VaultTimeoutSettingsService {
   ) => Promise<void>;
   getVaultTimeout: (userId?: string) => Promise<number>;
   getVaultTimeoutAction: (userId?: string) => Promise<VaultTimeoutAction>;
+  /**
+   * Has the user enabled unlock with Pin.
+   * @returns [Pin with MP on Restart enabled, Pin without MP on Restart enabled]
+   */
   isPinLockSet: () => Promise<[boolean, boolean]>;
   isBiometricLockSet: () => Promise<boolean>;
   clear: (userId?: string) => Promise<void>;

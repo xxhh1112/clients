@@ -11,8 +11,8 @@ export abstract class DevicesApiServiceAbstraction {
 
   updateTrustedDeviceKeys: (
     deviceIdentifier: string,
-    devicePublicKeyEncryptedUserSymKey: string,
-    userSymKeyEncryptedDevicePublicKey: string,
+    devicePublicKeyEncryptedUserKey: string,
+    userKeyEncryptedDevicePublicKey: string,
     deviceKeyEncryptedDevicePrivateKey: string
   ) => Promise<DeviceResponse>;
 }

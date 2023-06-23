@@ -45,9 +45,16 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   }
 
   async isPinLockSet(): Promise<[boolean, boolean]> {
-    const protectedPin = await this.stateService.getProtectedPin();
-    const pinProtectedKey = await this.stateService.getEncryptedPinProtected();
-    return [protectedPin != null, pinProtectedKey != null];
+    // we can't check the protected pin for both because old accounts only
+    // used it for MP on Restart
+    const pinIsEnabled = !!(await this.stateService.getProtectedPin());
+    const aUserKeyPinIsSet = !!(await this.stateService.getUserKeyPin());
+    const anOldUserKeyPinIsSet = !!(await this.stateService.getEncryptedPinProtected());
+
+    return [
+      pinIsEnabled && !aUserKeyPinIsSet && !anOldUserKeyPinIsSet,
+      aUserKeyPinIsSet || anOldUserKeyPinIsSet,
+    ];
   }
 
   async isBiometricLockSet(): Promise<boolean> {
@@ -104,7 +111,8 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   async clear(userId?: string): Promise<void> {
     await this.stateService.setEverBeenUnlocked(false, { userId: userId });
-    await this.stateService.setDecryptedPinProtected(null, { userId: userId });
+    await this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
     await this.stateService.setProtectedPin(null, { userId: userId });
+    await this.cryptoService.clearOldPinKeys(userId);
   }
 }

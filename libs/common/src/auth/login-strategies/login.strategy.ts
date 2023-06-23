@@ -58,9 +58,6 @@ export abstract class LogInStrategy {
       | PasswordlessLogInCredentials
   ): Promise<AuthResult>;
 
-  // The user key comes from different sources depending on the login strategy
-  protected abstract setUserKey(response: IdentityTokenResponse): Promise<void>;
-
   async logInTwoFactor(
     twoFactor: TokenTwoFactorRequest,
     captchaResponse: string = null
@@ -144,26 +141,39 @@ export abstract class LogInStrategy {
       result.forcePasswordReset = ForceResetPasswordReason.AdminForcePasswordReset;
     }
 
+    // Must come before setting keys, user key needs email to update additional keys
     await this.saveAccountInformation(response);
 
     if (response.twoFactorToken != null) {
       await this.tokenService.setTwoFactorToken(response);
     }
 
+    await this.setMasterKey(response);
+
     await this.setUserKey(response);
 
-    // Must come after the user Key is set, otherwise createKeyPairForOldAccount will fail
-    const newSsoUser = response.key == null;
-    if (!newSsoUser) {
-      await this.cryptoService.setEncKey(response.key);
-      await this.cryptoService.setEncPrivateKey(
-        response.privateKey ?? (await this.createKeyPairForOldAccount())
-      );
-    }
+    await this.setPrivateKey(response);
 
     this.messagingService.send("loggedIn");
 
     return result;
+  }
+
+  // The keys comes from different sources depending on the login strategy
+  protected abstract setMasterKey(response: IdentityTokenResponse): Promise<void>;
+
+  protected abstract setUserKey(response: IdentityTokenResponse): Promise<void>;
+
+  protected abstract setPrivateKey(response: IdentityTokenResponse): Promise<void>;
+
+  protected async createKeyPairForOldAccount() {
+    try {
+      const [publicKey, privateKey] = await this.cryptoService.makeKeyPair();
+      await this.apiService.postAccountKeys(new KeysRequest(publicKey, privateKey.encryptedString));
+      return privateKey.encryptedString;
+    } catch (e) {
+      this.logService.error(e);
+    }
   }
 
   private async processTwoFactorResponse(response: IdentityTwoFactorResponse): Promise<AuthResult> {
@@ -181,15 +191,5 @@ export abstract class LogInStrategy {
     const result = new AuthResult();
     result.captchaSiteKey = response.siteKey;
     return result;
-  }
-
-  private async createKeyPairForOldAccount() {
-    try {
-      const [publicKey, privateKey] = await this.cryptoService.makeKeyPair();
-      await this.apiService.postAccountKeys(new KeysRequest(publicKey, privateKey.encryptedString));
-      return privateKey.encryptedString;
-    } catch (e) {
-      this.logService.error(e);
-    }
   }
 }

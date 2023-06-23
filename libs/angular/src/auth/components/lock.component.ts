@@ -11,9 +11,10 @@ import { InternalPolicyService } from "@bitwarden/common/admin-console/abstracti
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { MasterPasswordPolicyResponse } from "@bitwarden/common/auth/models/response/master-password-policy.response";
-import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/enums";
+import { HashPurpose, KdfType, KeySuffixOptions } from "@bitwarden/common/enums";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -23,7 +24,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
@@ -115,13 +116,13 @@ export class LockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const success = (await this.cryptoService.getKey(KeySuffixOptions.Biometric)) != null;
+    const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Biometric);
 
-    if (success) {
-      await this.doContinue(false);
+    if (userKey) {
+      await this.setKeyAndContinue(userKey, false);
     }
 
-    return success;
+    return !!userKey;
   }
 
   togglePassword() {
@@ -152,25 +153,41 @@ export class LockComponent implements OnInit, OnDestroy {
     try {
       const kdf = await this.stateService.getKdfType();
       const kdfConfig = await this.stateService.getKdfConfig();
+      let userKeyPin: EncString;
+      let oldPinProtected: EncString;
       if (this.pinSet[0]) {
-        const key = await this.cryptoService.makeKeyFromPin(
+        // MP on restart enabled
+        userKeyPin = await this.stateService.getUserKeyPinEphemeral();
+        oldPinProtected = await this.stateService.getDecryptedPinProtected();
+      } else {
+        // MP on restart disabled
+        userKeyPin = await this.stateService.getUserKeyPin();
+        const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
+        oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
+      }
+
+      let userKey: UserKey;
+      if (oldPinProtected) {
+        userKey = await this.decryptAndMigrateOldPinKey(true, kdf, kdfConfig, oldPinProtected);
+      } else {
+        userKey = await this.cryptoService.decryptUserKeyWithPin(
           this.pin,
           this.email,
           kdf,
           kdfConfig,
-          await this.stateService.getDecryptedPinProtected()
+          userKeyPin
         );
-        const encKey = await this.cryptoService.getEncKey(key);
-        const protectedPin = await this.stateService.getProtectedPin();
-        const decPin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), encKey);
-        failed = decPin !== this.pin;
-        if (!failed) {
-          await this.setKeyAndContinue(key);
-        }
-      } else {
-        const key = await this.cryptoService.makeKeyFromPin(this.pin, this.email, kdf, kdfConfig);
-        failed = false;
-        await this.setKeyAndContinue(key);
+      }
+
+      const protectedPin = await this.stateService.getProtectedPin();
+      const decryptedPin = await this.cryptoService.decryptToUtf8(
+        new EncString(protectedPin),
+        userKey
+      );
+      failed = decryptedPin !== this.pin;
+
+      if (!failed) {
+        await this.setKeyAndContinue(userKey);
       }
     } catch {
       failed = true;
@@ -206,18 +223,28 @@ export class LockComponent implements OnInit, OnDestroy {
     const kdf = await this.stateService.getKdfType();
     const kdfConfig = await this.stateService.getKdfConfig();
 
-    const key = await this.cryptoService.makeKey(this.masterPassword, this.email, kdf, kdfConfig);
+    const masterKey = await this.cryptoService.makeMasterKey(
+      this.masterPassword,
+      this.email,
+      kdf,
+      kdfConfig
+    );
     const storedKeyHash = await this.cryptoService.getKeyHash();
 
     let passwordValid = false;
 
     if (storedKeyHash != null) {
-      passwordValid = await this.cryptoService.compareAndUpdateKeyHash(this.masterPassword, key);
+      // Offline unlock possible
+      passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
+        this.masterPassword,
+        masterKey
+      );
     } else {
+      // Online only
       const request = new SecretVerificationRequest();
       const serverKeyHash = await this.cryptoService.hashPassword(
         this.masterPassword,
-        key,
+        masterKey,
         HashPurpose.ServerAuthorization
       );
       request.masterPasswordHash = serverKeyHash;
@@ -228,12 +255,14 @@ export class LockComponent implements OnInit, OnDestroy {
         passwordValid = true;
         const localKeyHash = await this.cryptoService.hashPassword(
           this.masterPassword,
-          key,
+          masterKey,
           HashPurpose.LocalAuthorization
         );
         await this.cryptoService.setKeyHash(localKeyHash);
       } catch (e) {
         this.logService.error(e);
+      } finally {
+        this.formPromise = null;
       }
     }
 
@@ -246,19 +275,23 @@ export class LockComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+
+    // if MP on restart is enabled, use it to get the PIN and store the ephemeral
+    // pin protected user key
     if (this.pinSet[0]) {
       const protectedPin = await this.stateService.getProtectedPin();
-      const encKey = await this.cryptoService.getEncKey(key);
-      const decPin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), encKey);
-      const pinKey = await this.cryptoService.makePinKey(decPin, this.email, kdf, kdfConfig);
-      await this.stateService.setDecryptedPinProtected(
-        await this.cryptoService.encrypt(key.key, pinKey)
+      const pin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), userKey);
+      const pinKey = await this.cryptoService.makePinKey(pin, this.email, kdf, kdfConfig);
+      await this.stateService.setUserKeyPinEphemeral(
+        await this.cryptoService.encrypt(userKey.key, pinKey)
       );
     }
-    await this.setKeyAndContinue(key, true);
+    await this.setKeyAndContinue(userKey, true);
   }
-  private async setKeyAndContinue(key: SymmetricCryptoKey, evaluatePasswordAfterUnlock = false) {
-    await this.cryptoService.setKey(key);
+
+  private async setKeyAndContinue(key: UserKey, evaluatePasswordAfterUnlock = false) {
+    await this.cryptoService.setUserKey(key);
     await this.doContinue(evaluatePasswordAfterUnlock);
   }
 
@@ -297,13 +330,15 @@ export class LockComponent implements OnInit, OnDestroy {
 
   private async load() {
     this.pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
-    this.pinLock =
-      (this.pinSet[0] && (await this.stateService.getDecryptedPinProtected()) != null) ||
-      this.pinSet[1];
+
+    let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
+    ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
+    this.pinLock = (this.pinSet[0] && !!ephemeralPinSet) || this.pinSet[1];
+
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
-      ((await this.cryptoService.hasKeyStored(KeySuffixOptions.Biometric)) ||
+      ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();
@@ -346,5 +381,54 @@ export class LockComponent implements OnInit, OnDestroy {
       this.masterPassword,
       this.enforcedMasterPasswordOptions
     );
+  }
+
+  /**
+   * Creates a new Pin key that encrypts the user key instead of the
+   * master key. Clears the old Pin key from state.
+   * @param masterPasswordOnRestart True if Master Password on Restart is enabled
+   * @param kdf User's KdfType
+   * @param kdfConfig User's KdfConfig
+   * @param oldPinProtected The old Pin key from state (retrieved from different
+   * places depending on if Master Password on Restart was enabled)
+   * @returns The user key
+   */
+  private async decryptAndMigrateOldPinKey(
+    masterPasswordOnRestart: boolean,
+    kdf: KdfType,
+    kdfConfig: KdfConfig,
+    oldPinProtected?: EncString
+  ): Promise<UserKey> {
+    // Decrypt
+    const masterKey = await this.cryptoService.decryptMasterKeyWithPin(
+      this.pin,
+      this.email,
+      kdf,
+      kdfConfig,
+      oldPinProtected
+    );
+    const encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
+    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
+      masterKey,
+      new EncString(encUserKey)
+    );
+    // Migrate
+    const pinKey = await this.cryptoService.makePinKey(this.pin, this.email, kdf, kdfConfig);
+    const pinProtectedKey = await this.cryptoService.encrypt(userKey.key, pinKey);
+    if (masterPasswordOnRestart) {
+      await this.stateService.setDecryptedPinProtected(null);
+      await this.stateService.setUserKeyPinEphemeral(pinProtectedKey);
+    } else {
+      await this.stateService.setEncryptedPinProtected(null);
+      await this.stateService.setUserKeyPin(pinProtectedKey);
+      // We previously only set the protected pin if MP on Restart was enabled
+      // now we set it regardless
+      const encPin = await this.cryptoService.encrypt(this.pin, userKey);
+      await this.stateService.setProtectedPin(encPin.encryptedString);
+    }
+    // This also clears the old Biometrics key since the new Biometrics key will
+    // be created when the user key is set.
+    await this.stateService.setCryptoMasterKeyBiometric(null);
+    return userKey;
   }
 }

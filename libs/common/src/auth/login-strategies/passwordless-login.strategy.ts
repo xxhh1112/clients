@@ -5,13 +5,13 @@ import { LogService } from "../../platform/abstractions/log.service";
 import { MessagingService } from "../../platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
-import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { AuthResult } from "../models/domain/auth-result";
 import { PasswordlessLogInCredentials } from "../models/domain/log-in-credentials";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
+import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
 import { LogInStrategy } from "./login.strategy";
 
@@ -40,8 +40,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     messagingService: MessagingService,
     logService: LogService,
     stateService: StateService,
-    twoFactorService: TwoFactorService,
-    private authService: AuthService
+    twoFactorService: TwoFactorService
   ) {
     super(
       cryptoService,
@@ -56,20 +55,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     );
   }
 
-  async setUserKey() {
-    await this.cryptoService.setKey(this.passwordlessCredentials.decKey);
-    await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
-  }
-
-  async logInTwoFactor(
-    twoFactor: TokenTwoFactorRequest,
-    captchaResponse: string
-  ): Promise<AuthResult> {
-    this.tokenRequest.captchaResponse = captchaResponse ?? this.captchaBypassToken;
-    return super.logInTwoFactor(twoFactor);
-  }
-
-  async logIn(credentials: PasswordlessLogInCredentials) {
+  override async logIn(credentials: PasswordlessLogInCredentials) {
     this.passwordlessCredentials = credentials;
 
     this.tokenRequest = new PasswordTokenRequest(
@@ -83,5 +69,34 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
     this.tokenRequest.setPasswordlessAccessCode(credentials.authRequestId);
     const [authResult] = await this.startLogIn();
     return authResult;
+  }
+
+  override async logInTwoFactor(
+    twoFactor: TokenTwoFactorRequest,
+    captchaResponse: string
+  ): Promise<AuthResult> {
+    this.tokenRequest.captchaResponse = captchaResponse ?? this.captchaBypassToken;
+    return super.logInTwoFactor(twoFactor);
+  }
+
+  protected override async setMasterKey(response: IdentityTokenResponse) {
+    await this.cryptoService.setMasterKey(this.passwordlessCredentials.decKey);
+    await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
+  }
+
+  protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
+    await this.cryptoService.setUserKeyMasterKey(response.key);
+
+    const masterKey = await this.cryptoService.getMasterKey();
+    if (masterKey) {
+      const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+      await this.cryptoService.setUserKey(userKey);
+    }
+  }
+
+  protected override async setPrivateKey(response: IdentityTokenResponse): Promise<void> {
+    await this.cryptoService.setPrivateKey(
+      response.privateKey ?? (await this.createKeyPairForOldAccount())
+    );
   }
 }

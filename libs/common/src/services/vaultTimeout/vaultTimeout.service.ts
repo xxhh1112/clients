@@ -71,8 +71,10 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
     if (await this.keyConnectorService.getUsesKeyConnector()) {
       const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
-      const pinLock =
-        (pinSet[0] && (await this.stateService.getDecryptedPinProtected()) != null) || pinSet[1];
+
+      let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
+      ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
+      const pinLock = (pinSet[0] && ephemeralPinSet != null) || pinSet[1];
 
       if (!pinLock && !(await this.vaultTimeoutSettingsService.isBiometricLockSet())) {
         await this.logOut(userId);
@@ -85,12 +87,13 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     }
 
     await this.stateService.setEverBeenUnlocked(true, { userId: userId });
+    await this.stateService.setUserKeyAuto(null, { userId: userId });
     await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
 
-    await this.cryptoService.clearKey(false, userId);
+    await this.cryptoService.clearUserKey(false, userId);
+    await this.cryptoService.clearMasterKey(userId);
     await this.cryptoService.clearOrgKeys(true, userId);
     await this.cryptoService.clearKeyPair(true, userId);
-    await this.cryptoService.clearEncKey(true, userId);
 
     await this.cipherService.clearCache(userId);
     await this.collectionService.clearCache(userId);

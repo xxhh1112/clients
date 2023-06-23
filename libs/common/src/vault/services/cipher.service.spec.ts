@@ -10,7 +10,7 @@ import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
 import { EncString } from "../../platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { OrgKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { Cipher } from "../models/domain/cipher";
 
@@ -59,7 +59,9 @@ describe("Cipher Service", () => {
   it("attachments upload encrypted file contents", async () => {
     const fileName = "filename";
     const fileData = new Uint8Array(10).buffer;
-    cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
+    cryptoService
+      .getOrgKey(Arg.any())
+      .resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer) as OrgKey);
 
     await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
 
