@@ -25,7 +25,7 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import {
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -176,7 +176,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
           // Decrypt User's Reset Password Key to get EncKey
           const decValue = await this.cryptoService.rsaDecrypt(resetPasswordKey, decPrivateKey);
-          const existingUserSymKey = new SymmetricCryptoKey(decValue) as UserSymKey;
+          const existingUserKey = new SymmetricCryptoKey(decValue) as UserKey;
 
           // Create new master key and hash new password
           const newMasterKey = await this.cryptoService.makeMasterKey(
@@ -190,15 +190,15 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             newMasterKey
           );
 
-          // Create new encrypted user symmetric key for the User
-          const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
+          // Create new encrypted user key for the User
+          const newUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(
             newMasterKey,
-            existingUserSymKey
+            existingUserKey
           );
 
           // Create request
           const request = new OrganizationUserResetPasswordRequest();
-          request.key = newUserSymKey[1].encryptedString;
+          request.key = newUserKey[1].encryptedString;
           request.newMasterPasswordHash = newPasswordHash;
 
           // Change user's password

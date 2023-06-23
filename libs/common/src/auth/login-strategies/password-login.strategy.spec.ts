@@ -13,7 +13,7 @@ import { Utils } from "../../platform/misc/utils";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
 import {
   PasswordStrengthService,
@@ -134,19 +134,17 @@ describe("PasswordLogInStrategy", () => {
   });
 
   it("sets keys after a successful authentication", async () => {
-    const userSymKey = new SymmetricCryptoKey(
-      new Uint8Array(64).buffer as CsprngArray
-    ) as UserSymKey;
+    const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
 
     cryptoService.getMasterKey.mockResolvedValue(masterKey);
-    cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+    cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
     await passwordLogInStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
     expect(cryptoService.setKeyHash).toHaveBeenCalledWith(localHashedPassword);
-    expect(cryptoService.setUserSymKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
-    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userSymKey);
+    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });
 

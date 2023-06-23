@@ -76,7 +76,7 @@ export class UnlockCommand {
 
     if (passwordValid) {
       await this.cryptoService.setMasterKey(masterKey);
-      const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(masterKey);
+      const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
       await this.cryptoService.setUserKey(userKey);
 
       if (await this.keyConnectorService.getConvertAccountRequired()) {

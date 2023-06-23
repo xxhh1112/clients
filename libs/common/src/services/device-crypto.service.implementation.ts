@@ -9,7 +9,7 @@ import { StateService } from "../platform/abstractions/state.service";
 import {
   SymmetricCryptoKey,
   DeviceKey,
-  UserSymKey,
+  UserKey,
 } from "../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../types/csprng";
 
@@ -24,11 +24,11 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
   ) {}
 
   async trustDevice(): Promise<DeviceResponse> {
-    // Attempt to get user symmetric key
-    const userSymKey: UserSymKey = await this.cryptoService.getUserKeyFromMemory();
+    // Attempt to get user key
+    const userKey: UserKey = await this.cryptoService.getUserKeyFromMemory();
 
-    // If user symmetric key is not found, throw error
-    if (!userSymKey) {
+    // If user key is not found, throw error
+    if (!userKey) {
       throw new Error("User symmetric key not found");
     }
 
@@ -41,15 +41,15 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
     );
 
     const [
-      devicePublicKeyEncryptedUserSymKey,
-      userSymKeyEncryptedDevicePublicKey,
+      devicePublicKeyEncryptedUserKey,
+      userKeyEncryptedDevicePublicKey,
       deviceKeyEncryptedDevicePrivateKey,
     ] = await Promise.all([
-      // Encrypt user symmetric key with the DevicePublicKey
-      this.cryptoService.rsaEncrypt(userSymKey.encKey, devicePublicKey),
+      // Encrypt user key with the DevicePublicKey
+      this.cryptoService.rsaEncrypt(userKey.encKey, devicePublicKey),
 
-      // Encrypt devicePublicKey with user symmetric key
-      this.encryptService.encrypt(devicePublicKey, userSymKey),
+      // Encrypt devicePublicKey with user key
+      this.encryptService.encrypt(devicePublicKey, userKey),
 
       // Encrypt devicePrivateKey with deviceKey
       this.encryptService.encrypt(devicePrivateKey, deviceKey),
@@ -59,8 +59,8 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
     const deviceIdentifier = await this.appIdService.getAppId();
     return this.devicesApiService.updateTrustedDeviceKeys(
       deviceIdentifier,
-      devicePublicKeyEncryptedUserSymKey.encryptedString,
-      userSymKeyEncryptedDevicePublicKey.encryptedString,
+      devicePublicKeyEncryptedUserKey.encryptedString,
+      userKeyEncryptedDevicePublicKey.encryptedString,
       deviceKeyEncryptedDevicePrivateKey.encryptedString
     );
   }

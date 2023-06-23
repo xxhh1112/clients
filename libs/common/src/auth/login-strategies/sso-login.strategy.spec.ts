@@ -11,7 +11,7 @@ import { Utils } from "../../platform/misc/utils";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../../types/csprng";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
@@ -143,22 +143,20 @@ describe("SsoLogInStrategy", () => {
       );
     });
 
-    it("decrypts and sets the user symmetric key if Key Connector is enabled", async () => {
-      const userSymKey = new SymmetricCryptoKey(
-        new Uint8Array(64).buffer as CsprngArray
-      ) as UserSymKey;
+    it("decrypts and sets the user key if Key Connector is enabled", async () => {
+      const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
       const masterKey = new SymmetricCryptoKey(
         new Uint8Array(64).buffer as CsprngArray
       ) as MasterKey;
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       cryptoService.getMasterKey.mockResolvedValue(masterKey);
-      cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await ssoLogInStrategy.logIn(credentials);
 
-      expect(cryptoService.decryptUserSymKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userSymKey);
+      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     });
   });
 });

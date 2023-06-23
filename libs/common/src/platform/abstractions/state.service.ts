@@ -30,7 +30,7 @@ import {
   DeviceKey,
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../models/domain/symmetric-crypto-key";
 
 export abstract class StateService<T extends Account = Account> {
@@ -78,13 +78,13 @@ export abstract class StateService<T extends Account = Account> {
   getConvertAccountToKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
   /**
-   * gets the user's symmetric key
+   * gets the user key
    */
-  getUserSymKey: (options?: StorageOptions) => Promise<UserSymKey>;
+  getUserKey: (options?: StorageOptions) => Promise<UserKey>;
   /**
-   * Sets the user's symmetric key
+   * Sets the user key
    */
-  setUserSymKey: (value: UserSymKey, options?: StorageOptions) => Promise<void>;
+  setUserKey: (value: UserKey, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's master key
    */
@@ -94,59 +94,59 @@ export abstract class StateService<T extends Account = Account> {
    */
   setMasterKey: (value: MasterKey, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the user's symmetric key encrypted by the master key
+   * Gets the user key encrypted by the master key
    */
-  getUserSymKeyMasterKey: (options?: StorageOptions) => Promise<string>;
+  getUserKeyMasterKey: (options?: StorageOptions) => Promise<string>;
   /**
-   * Sets the user's symmetric key encrypted by the master key
+   * Sets the user key encrypted by the master key
    */
-  setUserSymKeyMasterKey: (value: string, options?: StorageOptions) => Promise<void>;
+  setUserKeyMasterKey: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's auto key
    */
-  getUserSymKeyAuto: (options?: StorageOptions) => Promise<string>;
+  getUserKeyAuto: (options?: StorageOptions) => Promise<string>;
   /**
    * Sets the user's auto key
    */
-  setUserSymKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
+  setUserKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's biometric key
    */
-  getUserSymKeyBiometric: (options?: StorageOptions) => Promise<string>;
+  getUserKeyBiometric: (options?: StorageOptions) => Promise<string>;
   /**
    * Checks if the user has a biometric key available
    */
-  hasUserSymKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
+  hasUserKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   /**
    * Sets the user's biometric key
    */
-  setUserSymKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
+  setUserKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the user's symmetric key encrypted by the Pin key.
+   * Gets the user key encrypted by the Pin key.
    * Used when Master Password on Reset is disabled
    */
-  getUserSymKeyPin: (options?: StorageOptions) => Promise<EncString>;
+  getUserKeyPin: (options?: StorageOptions) => Promise<EncString>;
   /**
-   * Sets the user's symmetric key encrypted by the Pin key.
+   * Sets the user key encrypted by the Pin key.
    * Used when Master Password on Reset is disabled
    */
-  setUserSymKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
+  setUserKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the ephemeral version of the user's symmetric key encrypted by the Pin key.
+   * Gets the ephemeral version of the user key encrypted by the Pin key.
    * Used when Master Password on Reset is enabled
    */
-  getUserSymKeyPinEphemeral: (options?: StorageOptions) => Promise<EncString>;
+  getUserKeyPinEphemeral: (options?: StorageOptions) => Promise<EncString>;
   /**
-   * Sets the ephemeral version of the user's symmetric key encrypted by the Pin key.
+   * Sets the ephemeral version of the user key encrypted by the Pin key.
    * Used when Master Password on Reset is enabled
    */
-  setUserSymKeyPinEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
+  setUserKeyPinEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
-   * @deprecated For migration purposes only, use getUserSymKeyMasterKey instead
+   * @deprecated For migration purposes only, use getUserKeyMasterKey instead
    */
   getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
   /**
-   * @deprecated For migration purposes only, use setUserSymKeyMasterKey instead
+   * @deprecated For migration purposes only, use setUserKeyMasterKey instead
    */
   setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
   /**
@@ -154,23 +154,23 @@ export abstract class StateService<T extends Account = Account> {
    */
   getCryptoMasterKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
   /**
-   * @deprecated For migration purposes only, use getUserSymKeyAuto instead
+   * @deprecated For migration purposes only, use getUserKeyAuto instead
    */
   getCryptoMasterKeyAuto: (options?: StorageOptions) => Promise<string>;
   /**
-   * @deprecated For migration purposes only, use setUserSymKeyAuto instead
+   * @deprecated For migration purposes only, use setUserKeyAuto instead
    */
   setCryptoMasterKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
   /**
-   * @deprecated For migration purposes only, use getUserSymKeyBiometric instead
+   * @deprecated For migration purposes only, use getUserKeyBiometric instead
    */
   getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
   /**
-   * @deprecated For migration purposes only, use hasUserSymKeyBiometric instead
+   * @deprecated For migration purposes only, use hasUserKeyBiometric instead
    */
   hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   /**
-   * @deprecated For migration purposes only, use setUserSymKeyBiometric instead
+   * @deprecated For migration purposes only, use setUserKeyBiometric instead
    */
   setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   getDecryptedCiphers: (options?: StorageOptions) => Promise<CipherView[]>;
@@ -192,11 +192,11 @@ export abstract class StateService<T extends Account = Account> {
     options?: StorageOptions
   ) => Promise<void>;
   /**
-   * @deprecated For migration purposes only, use getDecryptedUserSymKeyPin instead
+   * @deprecated For migration purposes only, use getDecryptedUserKeyPin instead
    */
   getDecryptedPinProtected: (options?: StorageOptions) => Promise<EncString>;
   /**
-   * @deprecated For migration purposes only, use setDecryptedUserSymKeyPin instead
+   * @deprecated For migration purposes only, use setDecryptedUserKeyPin instead
    */
   setDecryptedPinProtected: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
@@ -325,11 +325,11 @@ export abstract class StateService<T extends Account = Account> {
     options?: StorageOptions
   ) => Promise<void>;
   /**
-   * @deprecated For migration purposes only, use getEncryptedUserSymKeyPin instead
+   * @deprecated For migration purposes only, use getEncryptedUserKeyPin instead
    */
   getEncryptedPinProtected: (options?: StorageOptions) => Promise<string>;
   /**
-   * @deprecated For migration purposes only, use setEncryptedUserSymKeyPin instead
+   * @deprecated For migration purposes only, use setEncryptedUserKeyPin instead
    */
   setEncryptedPinProtected: (value: string, options?: StorageOptions) => Promise<void>;
   /**
@@ -426,11 +426,11 @@ export abstract class StateService<T extends Account = Account> {
   getGeneratorOptions: (options?: StorageOptions) => Promise<any>;
   setGeneratorOptions: (value: any, options?: StorageOptions) => Promise<void>;
   /**
-   * Gets the user's Pin, encrypted by the user symmetric key
+   * Gets the user's Pin, encrypted by the user key
    */
   getProtectedPin: (options?: StorageOptions) => Promise<string>;
   /**
-   * Sets the user's Pin, encrypted by the user symmetric key
+   * Sets the user's Pin, encrypted by the user key
    */
   setProtectedPin: (value: string, options?: StorageOptions) => Promise<void>;
   getProviders: (options?: StorageOptions) => Promise<{ [id: string]: ProviderData }>;

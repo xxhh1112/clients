@@ -64,12 +64,12 @@ export class UserApiLogInStrategy extends LogInStrategy {
   }
 
   protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
-    await this.cryptoService.setUserSymKeyMasterKey(response.key);
+    await this.cryptoService.setUserKeyMasterKey(response.key);
 
     if (response.apiUseKeyConnector) {
       const masterKey = await this.cryptoService.getMasterKey();
       if (masterKey) {
-        const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(masterKey);
+        const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
         await this.cryptoService.setUserKey(userKey);
       }
     }

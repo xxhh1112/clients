@@ -10,90 +10,90 @@ import {
   OrgKey,
   PinKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
   /**
    * Use for encryption/decryption of data in order to support legacy
-   * encryption models. It will return the user symmetric key if available,
+   * encryption models. It will return the user key if available,
    * if not it will return the master key.
    */
   getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
 
   /**
-   * Sets the provided user symmetric key and stores
+   * Sets the provided user key and stores
    * any other necessary versions, such as biometrics
-   * @param key The user symmetric key to set
+   * @param key The user key to set
    * @param userId The desired user
    */
-  setUserKey: (key: UserSymKey) => Promise<void>;
+  setUserKey: (key: UserKey) => Promise<void>;
   /**
    * Gets the user key from memory and sets it again,
    * kicking off a refresh of any additional keys that are needed.
    */
   toggleKey: () => Promise<void>;
   /**
-   * Retrieves the user's symmetric key
+   * Retrieves the user key
    * @param keySuffix The desired version of the user's key to retrieve
    * from storage if it is not available in memory
    * @param userId The desired user
-   * @returns The user's symmetric key
+   * @returns The user key
    */
-  getUserKeyFromMemory: (userId?: string) => Promise<UserSymKey>;
+  getUserKeyFromMemory: (userId?: string) => Promise<UserKey>;
   /**
-   * Retrieves the user's symmetric key from storage
+   * Retrieves the user key from storage
    * @param keySuffix The desired version of the user's key to retrieve
    * @param userId The desired user
-   * @returns The user's symmetric key
+   * @returns The user key
    */
   getUserKeyFromStorage: (
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
-  ) => Promise<UserSymKey>;
+  ) => Promise<UserKey>;
   /**
-   * @returns True if any version of the user symmetric key is available
+   * @returns True if any version of the user key is available
    */
   hasUserKey: () => Promise<boolean>;
   /**
    * @param userId The desired user
-   * @returns True if the user symmetric key is set in memory
+   * @returns True if the user key is set in memory
    */
   hasUserKeyInMemory: (userId?: string) => Promise<boolean>;
   /**
    * @param keySuffix The desired version of the user's key to check
    * @param userId The desired user
-   * @returns True if the provided version of the user symmetric key is stored
+   * @returns True if the provided version of the user key is stored
    */
   hasUserKeyStored: (
     keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ) => Promise<boolean>;
   /**
-   * Generates a new user symmetric key
+   * Generates a new user key
    * @param masterKey The user's master key
-   * @returns A new user symmetric key and the master key protected version of it
+   * @returns A new user key and the master key protected version of it
    */
-  makeUserSymKey: (key: MasterKey) => Promise<[UserSymKey, EncString]>;
+  makeUserKey: (key: MasterKey) => Promise<[UserKey, EncString]>;
   /**
-   * Clears the user's symmetric key
+   * Clears the user key
    * @param clearStoredKeys Clears all stored versions of the user keys as well,
    * such as the biometrics key
    * @param userId The desired user
    */
   clearUserKey: (clearSecretStorage?: boolean, userId?: string) => Promise<void>;
   /**
-   * Clears the user's stored version of the user symmetric key
+   * Clears the user's stored version of the user key
    * @param keySuffix The desired version of the key to clear
    * @param userId The desired user
    */
   clearStoredUserKey: (keySuffix: KeySuffixOptions, userId?: string) => Promise<void>;
   /**
-   * Stores the master key encrypted user symmetric key
-   * @param userSymKeyMasterKey The master key encrypted user symmetric key to set
+   * Stores the master key encrypted user key
+   * @param userKeyMasterKey The master key encrypted user key to set
    * @param userId The desired user
    */
-  setUserSymKeyMasterKey: (UserSymKeyMasterKey: string, userId?: string) => Promise<void>;
+  setUserKeyMasterKey: (UserKeyMasterKey: string, userId?: string) => Promise<void>;
   /**
    * Sets the user's master key
    * @param key The user's master key to set
@@ -125,28 +125,28 @@ export abstract class CryptoService {
    */
   clearMasterKey: (userId?: string) => Promise<void>;
   /**
-   * Encrypts the existing (or provided) user symmetric key with the
+   * Encrypts the existing (or provided) user key with the
    * provided master key
    * @param masterKey The user's master key
-   * @param userSymKey The user's symmetric key
-   * @returns The user's symmetric key and the master key protected version of it
+   * @param userKey The user key
+   * @returns The user key and the master key protected version of it
    */
-  encryptUserSymKeyWithMasterKey: (
+  encryptUserKeyWithMasterKey: (
     masterKey: MasterKey,
-    userSymKey?: UserSymKey
-  ) => Promise<[UserSymKey, EncString]>;
+    userKey?: UserKey
+  ) => Promise<[UserKey, EncString]>;
   /**
-   * Decrypts the user symmetric key with the provided master key
+   * Decrypts the user key with the provided master key
    * @param masterKey The user's master key
-   * @param userSymKey The user's encrypted symmetric key
+   * @param userKey The user's encrypted symmetric key
    * @param userId The desired user
-   * @returns The user's symmetric key
+   * @returns The user key
    */
-  decryptUserSymKeyWithMasterKey: (
+  decryptUserKeyWithMasterKey: (
     masterKey: MasterKey,
-    userSymKey?: EncString,
+    userKey?: EncString,
     userId?: string
-  ) => Promise<UserSymKey>;
+  ) => Promise<UserKey>;
   /**
    * Creates a master password hash from the user's master password. Can
    * be used for local authentication or for server authentication depending
@@ -265,7 +265,7 @@ export abstract class CryptoService {
   /**
    * Generates a new keypair
    * @param key A key to encrypt the private key with. If not provided,
-   * defaults to the user's symmetric key
+   * defaults to the user key
    * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
    */
   makeKeyPair: (key?: SymmetricCryptoKey) => Promise<[string, EncString]>;
@@ -284,7 +284,7 @@ export abstract class CryptoService {
    */
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
   /**
-   * Clears the user's pin protected user symmetric key
+   * Clears the user's pin protected user key
    * @param userId The desired user
    */
   clearPinProtectedKey: (userId?: string) => Promise<void>;
@@ -294,22 +294,22 @@ export abstract class CryptoService {
    */
   clearOldPinKeys: (userId?: string) => Promise<void>;
   /**
-   * Decrypts the user's symmetric key with their pin
+   * Decrypts the user key with their pin
    * @param pin The user's PIN
    * @param salt The user's salt
    * @param kdf The user's KDF
    * @param kdfConfig The user's KDF config
-   * @param pinProtectedUserSymKey The user's PIN protected symmetric key, if not provided
+   * @param pinProtectedUserKey The user's PIN protected symmetric key, if not provided
    * it will be retrieved from storage
-   * @returns The decrypted user's symmetric key
+   * @returns The decrypted user key
    */
-  decryptUserSymKeyWithPin: (
+  decryptUserKeyWithPin: (
     pin: string,
     salt: string,
     kdf: KdfType,
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
-  ) => Promise<UserSymKey>;
+  ) => Promise<UserKey>;
   /**
    * @param keyMaterial The key material to derive the send key from
    * @returns A new send key
@@ -337,7 +337,7 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
 
   /**
-   * @deprecated Left for migration purposes. Use decryptUserSymKeyWithPin instead.
+   * @deprecated Left for migration purposes. Use decryptUserKeyWithPin instead.
    */
   decryptMasterKeyWithPin: (
     pin: string,

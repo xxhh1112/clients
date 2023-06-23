@@ -87,8 +87,8 @@ export class ChangeKdfConfirmationComponent {
       masterPassword,
       newMasterKey
     );
-    const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(newMasterKey);
-    request.key = newUserSymKey[1].encryptedString;
+    const newUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey);
+    request.key = newUserKey[1].encryptedString;
 
     await this.apiService.postAccountKdf(request);
   }

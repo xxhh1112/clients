@@ -12,10 +12,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import {
-  MasterKey,
-  UserSymKey,
-} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { MasterKey, UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
@@ -95,17 +92,15 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       newMasterKey
     );
 
-    let newProtectedUserSymKey: [UserSymKey, EncString] = null;
-    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
-    if (userSymKey == null) {
-      newProtectedUserSymKey = await this.cryptoService.makeUserSymKey(newMasterKey);
+    let newProtectedUserKey: [UserKey, EncString] = null;
+    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    if (userKey == null) {
+      newProtectedUserKey = await this.cryptoService.makeUserKey(newMasterKey);
     } else {
-      newProtectedUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
-        newMasterKey
-      );
+      newProtectedUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey);
     }
 
-    await this.performSubmitActions(newMasterPasswordHash, newMasterKey, newProtectedUserSymKey);
+    await this.performSubmitActions(newMasterPasswordHash, newMasterKey, newProtectedUserKey);
   }
 
   async setupSubmitActions(): Promise<boolean> {
@@ -117,7 +112,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   async performSubmitActions(
     masterPasswordHash: string,
     masterKey: MasterKey,
-    userSymKey: [UserSymKey, EncString]
+    userKey: [UserKey, EncString]
   ) {
     // Override in sub-class
   }

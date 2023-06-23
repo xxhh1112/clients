@@ -69,7 +69,7 @@ export class UpdateKeyComponent {
 
   private async makeRequest(): Promise<UpdateKeyRequest> {
     const masterKey = await this.cryptoService.getMasterKey();
-    const newUserKey = await this.cryptoService.makeUserSymKey(masterKey);
+    const newUserKey = await this.cryptoService.makeUserKey(masterKey);
     const privateKey = await this.cryptoService.getPrivateKey();
     let encPrivateKey: EncString = null;
     if (privateKey != null) {

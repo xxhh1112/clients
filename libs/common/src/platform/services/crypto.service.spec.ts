@@ -10,7 +10,7 @@ import {
   MasterKey,
   PinKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../models/domain/symmetric-crypto-key";
 import { CryptoService } from "../services/crypto.service";
 
@@ -44,33 +44,33 @@ describe("cryptoService", () => {
   });
 
   describe("getKeyForUserDecryption", () => {
-    let mockUserSymKey: UserSymKey;
+    let mockUserKey: UserKey;
     let mockMasterKey: MasterKey;
-    let stateSvcGetUserSymKey: jest.SpyInstance;
+    let stateSvcGetUserKey: jest.SpyInstance;
     let stateSvcGetMasterKey: jest.SpyInstance;
 
     beforeEach(() => {
       const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
-      mockUserSymKey = new SymmetricCryptoKey(mockRandomBytes) as UserSymKey;
+      mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
       mockMasterKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as MasterKey;
 
-      stateSvcGetUserSymKey = jest.spyOn(stateService, "getUserSymKey");
+      stateSvcGetUserKey = jest.spyOn(stateService, "getUserKey");
       stateSvcGetMasterKey = jest.spyOn(stateService, "getMasterKey");
     });
 
-    it("returns the user's symmetric key if available", async () => {
-      stateSvcGetUserSymKey.mockResolvedValue(mockUserSymKey);
+    it("returns the user key if available", async () => {
+      stateSvcGetUserKey.mockResolvedValue(mockUserKey);
 
       const encryptionKey = await cryptoService.getKeyForUserEncryption();
 
-      expect(stateSvcGetUserSymKey).toHaveBeenCalled();
+      expect(stateSvcGetUserKey).toHaveBeenCalled();
       expect(stateSvcGetMasterKey).not.toHaveBeenCalled();
 
-      expect(encryptionKey).toEqual(mockUserSymKey);
+      expect(encryptionKey).toEqual(mockUserKey);
     });
 
     it("returns the user's master key when symmetric key is not available", async () => {
-      stateSvcGetUserSymKey.mockResolvedValue(null);
+      stateSvcGetUserKey.mockResolvedValue(null);
       stateSvcGetMasterKey.mockResolvedValue(mockMasterKey);
 
       const encryptionKey = await cryptoService.getKeyForUserEncryption();
@@ -82,32 +82,32 @@ describe("cryptoService", () => {
 
   describe("setUserKey", () => {
     const mockUserId = "example user id";
-    let mockUserSymKey: UserSymKey;
+    let mockUserKey: UserKey;
 
     beforeEach(() => {
       const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
-      mockUserSymKey = new SymmetricCryptoKey(mockRandomBytes) as UserSymKey;
+      mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
     });
 
     it("saves an Auto key if needed", async () => {
       stateService.getVaultTimeout.mockResolvedValue(null);
 
-      await cryptoService.setUserKey(mockUserSymKey, mockUserId);
+      await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-      expect(stateService.setUserSymKeyAuto).toHaveBeenCalled();
-      expect(stateService.setUserSymKeyAuto).not.toHaveBeenCalledWith(null, { userId: mockUserId });
+      expect(stateService.setUserKeyAuto).toHaveBeenCalled();
+      expect(stateService.setUserKeyAuto).not.toHaveBeenCalledWith(null, { userId: mockUserId });
     });
 
     it("saves a Pin key if needed", async () => {
-      stateService.getUserSymKeyPinEphemeral.mockResolvedValue(null);
+      stateService.getUserKeyPinEphemeral.mockResolvedValue(null);
       const cryptoSvcMakePinKey = jest.spyOn(cryptoService, "makePinKey");
       cryptoSvcMakePinKey.mockResolvedValue(
         new SymmetricCryptoKey(new Uint8Array(64).buffer) as PinKey
       );
 
-      await cryptoService.setUserKey(mockUserSymKey, mockUserId);
+      await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-      expect(stateService.setUserSymKeyPin).toHaveBeenCalled();
+      expect(stateService.setUserKeyPin).toHaveBeenCalled();
     });
   });
 });

@@ -16,10 +16,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import {
-  MasterKey,
-  UserSymKey,
-} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { MasterKey, UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { Verification } from "@bitwarden/common/types/verification";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -128,16 +125,16 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
         newMasterKey
       );
 
-      // Grab user's symmetric key
+      // Grab user key
       const userKey = await this.cryptoService.getUserKeyFromMemory();
 
-      // Encrypt user's symmetric key with new master key
-      const newProtectedUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
+      // Encrypt user key with new master key
+      const newProtectedUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(
         newMasterKey,
         userKey
       );
 
-      await this.performSubmitActions(newPasswordHash, newMasterKey, newProtectedUserSymKey);
+      await this.performSubmitActions(newPasswordHash, newMasterKey, newProtectedUserKey);
     } catch (e) {
       this.logService.error(e);
     }
@@ -146,15 +143,15 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   async performSubmitActions(
     masterPasswordHash: string,
     masterKey: MasterKey,
-    userSymKey: [UserSymKey, EncString]
+    userKey: [UserKey, EncString]
   ) {
     try {
       switch (this.reason) {
         case ForceResetPasswordReason.AdminForcePasswordReset:
-          this.formPromise = this.updateTempPassword(masterPasswordHash, userSymKey);
+          this.formPromise = this.updateTempPassword(masterPasswordHash, userKey);
           break;
         case ForceResetPasswordReason.WeakMasterPassword:
-          this.formPromise = this.updatePassword(masterPasswordHash, userSymKey);
+          this.formPromise = this.updatePassword(masterPasswordHash, userKey);
           break;
       }
 
@@ -176,26 +173,23 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       this.logService.error(e);
     }
   }
-  private async updateTempPassword(
-    masterPasswordHash: string,
-    userSymKey: [UserSymKey, EncString]
-  ) {
+  private async updateTempPassword(masterPasswordHash: string, userKey: [UserKey, EncString]) {
     const request = new UpdateTempPasswordRequest();
-    request.key = userSymKey[1].encryptedString;
+    request.key = userKey[1].encryptedString;
     request.newMasterPasswordHash = masterPasswordHash;
     request.masterPasswordHint = this.hint;
 
     return this.apiService.putUpdateTempPassword(request);
   }
 
-  private async updatePassword(newMasterPasswordHash: string, userSymKey: [UserSymKey, EncString]) {
+  private async updatePassword(newMasterPasswordHash: string, userKey: [UserKey, EncString]) {
     const request = await this.userVerificationService.buildRequest(
       this.verification,
       PasswordRequest
     );
     request.masterPasswordHint = this.hint;
     request.newMasterPasswordHash = newMasterPasswordHash;
-    request.key = userSymKey[1].encryptedString;
+    request.key = userKey[1].encryptedString;
 
     return this.apiService.postPassword(request);
   }

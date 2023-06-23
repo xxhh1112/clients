@@ -83,14 +83,14 @@ export class SsoLogInStrategy extends LogInStrategy {
     const newSsoUser = tokenResponse.key == null;
 
     if (!newSsoUser) {
-      await this.cryptoService.setUserSymKeyMasterKey(tokenResponse.key);
+      await this.cryptoService.setUserKeyMasterKey(tokenResponse.key);
 
       if (tokenResponse.keyConnectorUrl != null) {
         const masterKey = await this.cryptoService.getMasterKey();
         if (!masterKey) {
           throw new Error("Master key not found");
         }
-        const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(masterKey);
+        const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
         await this.cryptoService.setUserKey(userKey);
       }
     }

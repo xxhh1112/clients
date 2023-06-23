@@ -31,7 +31,7 @@ import {
   OrgKey,
   PinKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../models/domain/symmetric-crypto-key";
 
 export class CryptoService implements CryptoServiceAbstraction {
@@ -54,8 +54,8 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.getMasterKey();
   }
 
-  async setUserKey(key: UserSymKey, userId?: string): Promise<void> {
-    await this.stateService.setUserSymKey(key, { userId: userId });
+  async setUserKey(key: UserKey, userId?: string): Promise<void> {
+    await this.stateService.setUserKey(key, { userId: userId });
     await this.storeAdditionalKeys(key, userId);
   }
 
@@ -64,14 +64,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.setUserKey(key);
   }
 
-  async getUserKeyFromMemory(userId?: string): Promise<UserSymKey> {
-    return await this.stateService.getUserSymKey({ userId: userId });
+  async getUserKeyFromMemory(userId?: string): Promise<UserKey> {
+    return await this.stateService.getUserKey({ userId: userId });
   }
 
   async getUserKeyFromStorage(
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
-  ): Promise<UserSymKey> {
+  ): Promise<UserKey> {
     const userKey = await this.retrieveUserKeyFromStorage(keySuffix, userId);
     if (userKey != null) {
       if (!(await this.validateUserKey(userKey))) {
@@ -94,7 +94,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async hasUserKeyInMemory(userId?: string): Promise<boolean> {
-    return (await this.stateService.getUserSymKey({ userId: userId })) != null;
+    return (await this.stateService.getUserKey({ userId: userId })) != null;
   }
 
   async hasUserKeyStored(
@@ -103,23 +103,23 @@ export class CryptoService implements CryptoServiceAbstraction {
   ): Promise<boolean> {
     if (keySuffix === KeySuffixOptions.Biometric) {
       const oldKey = await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId });
-      return oldKey || (await this.stateService.hasUserSymKeyBiometric({ userId: userId }));
+      return oldKey || (await this.stateService.hasUserKeyBiometric({ userId: userId }));
     }
     return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
   }
 
-  async makeUserSymKey(masterKey: MasterKey): Promise<[UserSymKey, EncString]> {
+  async makeUserKey(masterKey: MasterKey): Promise<[UserKey, EncString]> {
     masterKey ||= await this.getMasterKey();
     if (masterKey == null) {
       throw new Error("No Master Key found.");
     }
 
-    const newUserSymKey = await this.cryptoFunctionService.randomBytes(64);
-    return this.buildProtectedSymmetricKey(masterKey, newUserSymKey);
+    const newUserKey = await this.cryptoFunctionService.randomBytes(64);
+    return this.buildProtectedSymmetricKey(masterKey, newUserKey);
   }
 
   async clearUserKey(clearStoredKeys = true, userId?: string): Promise<void> {
-    await this.stateService.setUserSymKey(null, { userId: userId });
+    await this.stateService.setUserKey(null, { userId: userId });
     if (clearStoredKeys) {
       await this.clearAllStoredUserKeys(userId);
     }
@@ -128,19 +128,19 @@ export class CryptoService implements CryptoServiceAbstraction {
   async clearStoredUserKey(keySuffix: KeySuffixOptions, userId?: string): Promise<void> {
     switch (keySuffix) {
       case KeySuffixOptions.Auto:
-        this.stateService.setUserSymKeyAuto(null, { userId: userId });
+        this.stateService.setUserKeyAuto(null, { userId: userId });
         break;
       case KeySuffixOptions.Biometric:
-        this.stateService.setUserSymKeyBiometric(null, { userId: userId });
+        this.stateService.setUserKeyBiometric(null, { userId: userId });
         break;
       case KeySuffixOptions.Pin:
-        this.stateService.setUserSymKeyPinEphemeral(null, { userId: userId });
+        this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
         break;
     }
   }
 
-  async setUserSymKeyMasterKey(userSymKeyMasterKey: string, userId?: string): Promise<void> {
-    await this.stateService.setUserSymKeyMasterKey(userSymKeyMasterKey, { userId: userId });
+  async setUserKeyMasterKey(userKeyMasterKey: string, userId?: string): Promise<void> {
+    await this.stateService.setUserKeyMasterKey(userKeyMasterKey, { userId: userId });
   }
 
   async setMasterKey(key: MasterKey, userId?: string): Promise<void> {
@@ -166,40 +166,40 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.stateService.setMasterKey(null, { userId: userId });
   }
 
-  async encryptUserSymKeyWithMasterKey(
+  async encryptUserKeyWithMasterKey(
     masterKey: MasterKey,
-    userSymKey?: UserSymKey
-  ): Promise<[UserSymKey, EncString]> {
-    userSymKey ||= await this.getUserKeyFromMemory();
-    return this.buildProtectedSymmetricKey(masterKey, userSymKey.key);
+    userKey?: UserKey
+  ): Promise<[UserKey, EncString]> {
+    userKey ||= await this.getUserKeyFromMemory();
+    return this.buildProtectedSymmetricKey(masterKey, userKey.key);
   }
 
-  async decryptUserSymKeyWithMasterKey(
+  async decryptUserKeyWithMasterKey(
     masterKey: MasterKey,
-    userSymKey?: EncString,
+    userKey?: EncString,
     userId?: string
-  ): Promise<UserSymKey> {
+  ): Promise<UserKey> {
     masterKey ||= await this.getMasterKey();
     if (masterKey == null) {
       throw new Error("No master key found.");
     }
 
-    if (!userSymKey) {
-      const userSymKeyMasterKey = await this.stateService.getUserSymKeyMasterKey({
+    if (!userKey) {
+      const userKeyMasterKey = await this.stateService.getUserKeyMasterKey({
         userId: userId,
       });
-      if (userSymKeyMasterKey == null) {
+      if (userKeyMasterKey == null) {
         throw new Error("No encrypted user key found.");
       }
-      userSymKey = new EncString(userSymKeyMasterKey);
+      userKey = new EncString(userKeyMasterKey);
     }
 
     let decUserKey: ArrayBuffer;
-    if (userSymKey.encryptionType === EncryptionType.AesCbc256_B64) {
-      decUserKey = await this.decryptToBytes(userSymKey, masterKey);
-    } else if (userSymKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
+    if (userKey.encryptionType === EncryptionType.AesCbc256_B64) {
+      decUserKey = await this.decryptToBytes(userKey, masterKey);
+    } else if (userKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
       const newKey = await this.stretchKey(masterKey);
-      decUserKey = await this.decryptToBytes(userSymKey, newKey);
+      decUserKey = await this.decryptToBytes(userKey, newKey);
     } else {
       throw new Error("Unsupported encryption type.");
     }
@@ -207,7 +207,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       return null;
     }
 
-    return new SymmetricCryptoKey(decUserKey) as UserSymKey;
+    return new SymmetricCryptoKey(decUserKey) as UserKey;
   }
 
   async hashPassword(password: string, key: MasterKey, hashPurpose?: HashPurpose): Promise<string> {
@@ -503,7 +503,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async clearPinProtectedKey(userId?: string): Promise<void> {
-    await this.stateService.setUserSymKeyPin(null, { userId: userId });
+    await this.stateService.setUserKeyPin(null, { userId: userId });
     await this.clearOldPinKeys(userId);
   }
 
@@ -512,20 +512,20 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.stateService.setDecryptedPinProtected(null, { userId: userId });
   }
 
-  async decryptUserSymKeyWithPin(
+  async decryptUserKeyWithPin(
     pin: string,
     salt: string,
     kdf: KdfType,
     kdfConfig: KdfConfig,
-    pinProtectedUserSymKey?: EncString
-  ): Promise<UserSymKey> {
-    pinProtectedUserSymKey ||= await this.stateService.getUserSymKeyPin();
-    if (!pinProtectedUserSymKey) {
+    pinProtectedUserKey?: EncString
+  ): Promise<UserKey> {
+    pinProtectedUserKey ||= await this.stateService.getUserKeyPin();
+    if (!pinProtectedUserKey) {
       throw new Error("No PIN protected key found.");
     }
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
-    const userSymKey = await this.decryptToBytes(pinProtectedUserSymKey, pinKey);
-    return new SymmetricCryptoKey(userSymKey) as UserSymKey;
+    const userKey = await this.decryptToBytes(pinProtectedUserKey, pinKey);
+    return new SymmetricCryptoKey(userKey) as UserKey;
   }
 
   async decryptMasterKeyWithPin(
@@ -669,7 +669,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   // ---HELPERS---
 
-  protected async validateUserKey(key?: UserSymKey): Promise<boolean> {
+  protected async validateUserKey(key?: UserKey): Promise<boolean> {
     key ||= await this.getUserKeyFromMemory();
     if (key == null) {
       return false;
@@ -692,27 +692,27 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   /**
    * Regenerates any additional keys if needed. Useful to make sure
-   * other keys stay in sync when the user's symmetric key has been rotated.
-   * @param key The user's symmetric key
+   * other keys stay in sync when the user key has been rotated.
+   * @param key The user key
    * @param userId The desired user
    */
-  protected async storeAdditionalKeys(key: UserSymKey, userId?: string) {
+  protected async storeAdditionalKeys(key: UserKey, userId?: string) {
     const storeAuto = await this.shouldStoreKey(KeySuffixOptions.Auto, userId);
     if (storeAuto) {
-      await this.stateService.setUserSymKeyAuto(key.keyB64, { userId: userId });
+      await this.stateService.setUserKeyAuto(key.keyB64, { userId: userId });
     } else {
-      await this.stateService.setUserSymKeyAuto(null, { userId: userId });
+      await this.stateService.setUserKeyAuto(null, { userId: userId });
     }
 
     const storePin = await this.shouldStoreKey(KeySuffixOptions.Pin, userId);
     if (storePin) {
       await this.storePinKey(key);
     } else {
-      await this.stateService.setUserSymKeyPin(null, { userId: userId });
+      await this.stateService.setUserKeyPin(null, { userId: userId });
     }
   }
 
-  protected async storePinKey(key: UserSymKey) {
+  protected async storePinKey(key: UserKey) {
     const email = await this.stateService.getEmail();
     const kdf = await this.stateService.getKdfType();
     const kdfConfig = await this.stateService.getKdfConfig();
@@ -721,7 +721,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       key
     );
     const pinKey = await this.makePinKey(pin, email, kdf, kdfConfig);
-    await this.stateService.setUserSymKeyPin(await this.encrypt(key.key, pinKey));
+    await this.stateService.setUserKeyPin(await this.encrypt(key.key, pinKey));
   }
 
   protected async shouldStoreKey(keySuffix: KeySuffixOptions, userId?: string) {
@@ -741,10 +741,10 @@ export class CryptoService implements CryptoServiceAbstraction {
         const protectedPin = await this.stateService.getProtectedPin({ userId: userId });
         // This could cause a possible timing issue. Need to make sure the ephemeral key is set before
         // we set our user key
-        const userSymKeyPinEphemeral = await this.stateService.getUserSymKeyPinEphemeral({
+        const userKeyPinEphemeral = await this.stateService.getUserKeyPinEphemeral({
           userId: userId,
         });
-        shouldStoreKey = !!protectedPin && !userSymKeyPinEphemeral;
+        shouldStoreKey = !!protectedPin && !userKeyPinEphemeral;
         break;
       }
     }
@@ -754,12 +754,12 @@ export class CryptoService implements CryptoServiceAbstraction {
   protected async retrieveUserKeyFromStorage(
     keySuffix: KeySuffixOptions,
     userId?: string
-  ): Promise<UserSymKey> {
+  ): Promise<UserKey> {
     if (keySuffix === KeySuffixOptions.Auto) {
       await this.migrateAutoKeyIfNeeded(userId);
-      const userKey = await this.stateService.getUserSymKeyAuto({ userId: userId });
+      const userKey = await this.stateService.getUserKeyAuto({ userId: userId });
       if (userKey) {
-        return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserSymKey;
+        return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserKey;
       }
     }
     return null;
@@ -772,12 +772,12 @@ export class CryptoService implements CryptoServiceAbstraction {
       const masterKey = new SymmetricCryptoKey(
         Utils.fromB64ToArray(oldAutoKey).buffer
       ) as MasterKey;
-      const userSymKey = await this.decryptUserSymKeyWithMasterKey(
+      const userKey = await this.decryptUserKeyWithMasterKey(
         masterKey,
         new EncString(await this.stateService.getEncryptedCryptoSymmetricKey())
       );
       // migrate
-      await this.stateService.setUserSymKeyAuto(userSymKey.keyB64, { userId: userId });
+      await this.stateService.setUserKeyAuto(userKey.keyB64, { userId: userId });
       await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
     }
   }
@@ -828,9 +828,9 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   private async clearAllStoredUserKeys(userId?: string): Promise<void> {
-    await this.stateService.setUserSymKeyAuto(null, { userId: userId });
-    await this.stateService.setUserSymKeyBiometric(null, { userId: userId });
-    await this.stateService.setUserSymKeyPinEphemeral(null, { userId: userId });
+    await this.stateService.setUserKeyAuto(null, { userId: userId });
+    await this.stateService.setUserKeyBiometric(null, { userId: userId });
+    await this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
   }
 
   async makeKey(

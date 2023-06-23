@@ -39,7 +39,7 @@ export class SystemService implements SystemServiceAbstraction {
     }
 
     // User has set a PIN, with ask for master password on restart, to protect their vault
-    const ephemeralPin = await this.stateService.getUserSymKeyPinEphemeral();
+    const ephemeralPin = await this.stateService.getUserKeyPinEphemeral();
     if (ephemeralPin != null) {
       return;
     }

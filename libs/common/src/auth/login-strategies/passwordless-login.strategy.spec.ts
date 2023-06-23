@@ -11,7 +11,7 @@ import { Utils } from "../../platform/misc/utils";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../../types/csprng";
 import { TokenService } from "../abstractions/token.service";
@@ -85,19 +85,17 @@ describe("SsoLogInStrategy", () => {
 
   it("sets keys after a successful authentication", async () => {
     const masterKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as MasterKey;
-    const userSymKey = new SymmetricCryptoKey(
-      new Uint8Array(64).buffer as CsprngArray
-    ) as UserSymKey;
+    const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
 
     cryptoService.getMasterKey.mockResolvedValue(masterKey);
-    cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+    cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
     await passwordlessLoginStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
     expect(cryptoService.setKeyHash).toHaveBeenCalledWith(localPasswordHash);
-    expect(cryptoService.setUserSymKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
-    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userSymKey);
+    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });
 });

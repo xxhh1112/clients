@@ -12,7 +12,7 @@ import { Utils } from "../../platform/misc/utils";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../../types/csprng";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
@@ -107,14 +107,14 @@ describe("UserApiLogInStrategy", () => {
     expect(stateService.addAccount).toHaveBeenCalled();
   });
 
-  it("sets the encrypted user symmetric key and private key from the identity token response", async () => {
+  it("sets the encrypted user key and private key from the identity token response", async () => {
     const tokenResponse = identityTokenResponseFactory();
 
     apiService.postIdentityToken.mockResolvedValue(tokenResponse);
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(cryptoService.setUserSymKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });
 
@@ -130,10 +130,8 @@ describe("UserApiLogInStrategy", () => {
     expect(keyConnectorService.getAndSetMasterKey).toHaveBeenCalledWith(keyConnectorUrl);
   });
 
-  it("decrypts and sets the user symmetric key if Key Connector is enabled", async () => {
-    const userSymKey = new SymmetricCryptoKey(
-      new Uint8Array(64).buffer as CsprngArray
-    ) as UserSymKey;
+  it("decrypts and sets the user key if Key Connector is enabled", async () => {
+    const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
     const masterKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as MasterKey;
 
     const tokenResponse = identityTokenResponseFactory();
@@ -142,11 +140,11 @@ describe("UserApiLogInStrategy", () => {
     apiService.postIdentityToken.mockResolvedValue(tokenResponse);
     environmentService.getKeyConnectorUrl.mockReturnValue(keyConnectorUrl);
     cryptoService.getMasterKey.mockResolvedValue(masterKey);
-    cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+    cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(cryptoService.decryptUserSymKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userSymKey);
+    expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
   });
 });

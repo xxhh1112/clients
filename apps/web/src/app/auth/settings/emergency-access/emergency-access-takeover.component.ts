@@ -19,7 +19,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import {
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
@@ -94,9 +94,9 @@ export class EmergencyAccessTakeoverComponent
     );
 
     const oldKeyBuffer = await this.cryptoService.rsaDecrypt(takeoverResponse.keyEncrypted);
-    const oldUserSymKey = new SymmetricCryptoKey(oldKeyBuffer) as UserSymKey;
+    const oldUserKey = new SymmetricCryptoKey(oldKeyBuffer) as UserKey;
 
-    if (oldUserSymKey == null) {
+    if (oldUserKey == null) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -120,10 +120,7 @@ export class EmergencyAccessTakeoverComponent
       masterKey
     );
 
-    const encKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
-      masterKey,
-      oldUserSymKey
-    );
+    const encKey = await this.cryptoService.encryptUserKeyWithMasterKey(masterKey, oldUserKey);
 
     const request = new EmergencyAccessPasswordRequest();
     request.newMasterPasswordHash = masterPasswordHash;

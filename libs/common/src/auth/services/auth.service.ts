@@ -297,7 +297,7 @@ export class AuthService implements AuthServiceAbstraction {
     requestApproved: boolean
   ): Promise<AuthRequestResponse> {
     // TODO: This currently depends on always having the Master Key and MP Hash
-    // We need to change this to using a different method (possibly server auth code + user sym key)
+    // We need to change this to using a different method (possibly server auth code + user key)
     const pubKey = Utils.fromB64ToArray(key);
     const masterKey = await this.cryptoService.getMasterKey();
     if (!masterKey) {

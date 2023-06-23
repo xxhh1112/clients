@@ -18,10 +18,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import {
-  MasterKey,
-  UserSymKey,
-} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { MasterKey, UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
@@ -105,7 +102,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
   async performSubmitActions(
     masterPasswordHash: string,
     masterKey: MasterKey,
-    userKey: [UserSymKey, EncString]
+    userKey: [UserKey, EncString]
   ) {
     const newKeyPair = await this.cryptoService.makeKeyPair(userKey[0]);
     const request = new SetPasswordRequest(
@@ -134,7 +131,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
             const userId = await this.stateService.getUserId();
             const publicKey = Utils.fromB64ToArray(response.publicKey);
 
-            // RSA Encrypt user's symmetric key with organization public key
+            // RSA Encrypt user key with organization public key
             const userKey = await this.cryptoService.getUserKeyFromMemory();
             const encryptedUserKey = await this.cryptoService.rsaEncrypt(
               userKey.key,
@@ -176,7 +173,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
 
   private async onSetPasswordSuccess(
     masterKey: MasterKey,
-    userKey: [UserSymKey, EncString],
+    userKey: [UserKey, EncString],
     keyPair: [string, EncString]
   ) {
     await this.stateService.setKdfType(this.kdf);

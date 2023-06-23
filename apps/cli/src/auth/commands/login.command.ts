@@ -408,7 +408,7 @@ export class LoginCommand {
     try {
       const {
         newPasswordHash,
-        newUserSymKey: newEncKey,
+        newUserKey: newEncKey,
         hint,
       } = await this.collectNewMasterPasswordDetails(
         "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now."
@@ -450,7 +450,7 @@ export class LoginCommand {
     try {
       const {
         newPasswordHash,
-        newUserSymKey: newEncKey,
+        newUserKey: newEncKey,
         hint,
       } = await this.collectNewMasterPasswordDetails(
         "An organization administrator recently changed your master password. In order to access the vault, you must update your master password now."
@@ -476,7 +476,7 @@ export class LoginCommand {
   /**
    * Collect new master password and hint from the CLI. The collected password
    * is validated against any applicable master password policies, a new master
-   * key is generated, and we use it to re-encrypt the user symmetric key
+   * key is generated, and we use it to re-encrypt the user key
    * @param prompt - Message that is displayed during the initial prompt
    * @param error
    */
@@ -485,7 +485,7 @@ export class LoginCommand {
     error?: string
   ): Promise<{
     newPasswordHash: string;
-    newUserSymKey: [SymmetricCryptoKey, EncString];
+    newUserKey: [SymmetricCryptoKey, EncString];
     hint?: string;
   }> {
     if (this.email == null || this.email === "undefined") {
@@ -575,19 +575,16 @@ export class LoginCommand {
     );
     const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newMasterKey);
 
-    // Grab user's symmetric key
-    const userSymKey = await this.cryptoService.getUserKeyFromMemory();
-    if (!userSymKey) {
+    // Grab user key
+    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    if (!userKey) {
       throw new Error("User key not found.");
     }
 
-    // Re-encrypt user's symmetric key with new master key
-    const newUserSymKey = await this.cryptoService.encryptUserSymKeyWithMasterKey(
-      newMasterKey,
-      userSymKey
-    );
+    // Re-encrypt user key with new master key
+    const newUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey, userKey);
 
-    return { newPasswordHash, newUserSymKey, hint: masterPasswordHint };
+    return { newPasswordHash, newUserKey: newUserKey, hint: masterPasswordHint };
   }
 
   private async handleCaptchaRequired(

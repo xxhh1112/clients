@@ -13,7 +13,7 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../platform/browser/browser-api";
@@ -329,19 +329,19 @@ export class NativeMessagingBackground {
             if (message.userKeyB64) {
               const userKey = new SymmetricCryptoKey(
                 Utils.fromB64ToArray(message.userKeyB64).buffer
-              ) as UserSymKey;
+              ) as UserKey;
               await this.cryptoService.setUserKey(userKey);
             } else if (message.keyB64) {
               // backwards compatibility
               let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
-              encUserKey ||= await this.stateService.getUserSymKeyMasterKey();
+              encUserKey ||= await this.stateService.getUserKeyMasterKey();
               if (!encUserKey) {
                 throw new Error("No encrypted user key found");
               }
               const masterKey = new SymmetricCryptoKey(
                 Utils.fromB64ToArray(message.keyB64).buffer
               ) as MasterKey;
-              const userKey = await this.cryptoService.decryptUserSymKeyWithMasterKey(
+              const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
                 masterKey,
                 new EncString(encUserKey)
               );

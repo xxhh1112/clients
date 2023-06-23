@@ -48,12 +48,12 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     // we can't check the protected pin for both because old accounts only
     // used it for MP on Restart
     const pinIsEnabled = !!(await this.stateService.getProtectedPin());
-    const aUserSymKeyPinIsSet = !!(await this.stateService.getUserSymKeyPin());
-    const anOldUserSymKeyPinIsSet = !!(await this.stateService.getEncryptedPinProtected());
+    const aUserKeyPinIsSet = !!(await this.stateService.getUserKeyPin());
+    const anOldUserKeyPinIsSet = !!(await this.stateService.getEncryptedPinProtected());
 
     return [
-      pinIsEnabled && !aUserSymKeyPinIsSet && !anOldUserSymKeyPinIsSet,
-      aUserSymKeyPinIsSet || anOldUserSymKeyPinIsSet,
+      pinIsEnabled && !aUserKeyPinIsSet && !anOldUserKeyPinIsSet,
+      aUserKeyPinIsSet || anOldUserKeyPinIsSet,
     ];
   }
 
@@ -111,7 +111,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   async clear(userId?: string): Promise<void> {
     await this.stateService.setEverBeenUnlocked(false, { userId: userId });
-    await this.stateService.setUserSymKeyPinEphemeral(null, { userId: userId });
+    await this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
     await this.stateService.setProtectedPin(null, { userId: userId });
     await this.cryptoService.clearOldPinKeys(userId);
   }

@@ -14,7 +14,7 @@ import { EncString } from "../../platform/models/domain/enc-string";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
 import {
   PasswordStrengthService,
@@ -43,7 +43,7 @@ const masterPassword = "password";
 const deviceId = Utils.newGuid();
 const accessToken = "ACCESS_TOKEN";
 const refreshToken = "REFRESH_TOKEN";
-const userSymKey = "USER_SYM_KEY";
+const userKey = "USER_KEY";
 const privateKey = "PRIVATE_KEY";
 const captchaSiteKey = "CAPTCHA_SITE_KEY";
 const kdf = 0;
@@ -70,7 +70,7 @@ export function identityTokenResponseFactory(
     ForcePasswordReset: false,
     Kdf: kdf,
     KdfIterations: kdfIterations,
-    Key: userSymKey,
+    Key: userKey,
     PrivateKey: privateKey,
     ResetMasterPassword: false,
     access_token: accessToken,
@@ -135,15 +135,15 @@ describe("LogInStrategy", () => {
   });
 
   describe("base class", () => {
-    const userSymKeyBytesLength = 64;
+    const userKeyBytesLength = 64;
     const masterKeyBytesLength = 64;
-    let userSymKey: UserSymKey;
+    let userKey: UserKey;
     let masterKey: MasterKey;
 
     beforeEach(() => {
-      userSymKey = new SymmetricCryptoKey(
-        new Uint8Array(userSymKeyBytesLength).buffer as CsprngArray
-      ) as UserSymKey;
+      userKey = new SymmetricCryptoKey(
+        new Uint8Array(userKeyBytesLength).buffer as CsprngArray
+      ) as UserKey;
       masterKey = new SymmetricCryptoKey(
         new Uint8Array(masterKeyBytesLength).buffer as CsprngArray
       ) as MasterKey;
@@ -206,7 +206,7 @@ describe("LogInStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       cryptoService.getMasterKey.mockResolvedValue(masterKey);
-      cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       const result = await passwordLogInStrategy.logIn(credentials);
 
@@ -225,7 +225,7 @@ describe("LogInStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       cryptoService.getMasterKey.mockResolvedValue(masterKey);
-      cryptoService.decryptUserSymKeyWithMasterKey.mockResolvedValue(userSymKey);
+      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await passwordLogInStrategy.logIn(credentials);
 

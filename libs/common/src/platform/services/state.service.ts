@@ -54,7 +54,7 @@ import {
   DeviceKey,
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "../models/domain/symmetric-crypto-key";
 
 const keys = {
@@ -69,7 +69,7 @@ const keys = {
 const partialKeys = {
   userAutoKey: "_user_auto",
   userBiometricKey: "_user_biometric",
-  userSymKey: "_user_sym",
+  userKey: "_user_key",
 
   autoKey: "_masterkey_auto",
   biometricKey: "_masterkey_biometric",
@@ -122,7 +122,7 @@ export class StateService<
           // FIXME: This should be refactored into AuthService or a similar service,
           //  as checking for the existence of the crypto key is a low level
           //  implementation detail.
-          this.activeAccountUnlockedSubject.next((await this.getUserSymKey()) != null);
+          this.activeAccountUnlockedSubject.next((await this.getUserKey()) != null);
         })
       )
       .subscribe();
@@ -559,23 +559,23 @@ export class StateService<
   }
 
   /**
-   * User's symmetric key used to encrypt/decrypt data
+   * user key used to encrypt/decrypt data
    */
-  async getUserSymKey(options?: StorageOptions): Promise<UserSymKey> {
+  async getUserKey(options?: StorageOptions): Promise<UserKey> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    return account?.keys?.userSymKey as UserSymKey;
+    return account?.keys?.userKey as UserKey;
   }
 
   /**
-   * User's symmetric key used to encrypt/decrypt data
+   * user key used to encrypt/decrypt data
    */
-  async setUserSymKey(value: UserSymKey, options?: StorageOptions): Promise<void> {
+  async setUserKey(value: UserKey, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.keys.userSymKey = value;
+    account.keys.userKey = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -619,21 +619,21 @@ export class StateService<
    * The master key encrypted User symmetric key, saved on every auth
    * so we can unlock with MP offline
    */
-  async getUserSymKeyMasterKey(options?: StorageOptions): Promise<string> {
+  async getUserKeyMasterKey(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.keys.userSymKeyMasterKey;
+    )?.keys.userKeyMasterKey;
   }
 
   /**
    * The master key encrypted User symmetric key, saved on every auth
    * so we can unlock with MP offline
    */
-  async setUserSymKeyMasterKey(value: string, options?: StorageOptions): Promise<void> {
+  async setUserKeyMasterKey(value: string, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.keys.userSymKeyMasterKey = value;
+    account.keys.userKeyMasterKey = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -641,9 +641,9 @@ export class StateService<
   }
 
   /**
-   * User's symmetric key when using the "never" option of vault timeout
+   * user key when using the "never" option of vault timeout
    */
-  async getUserSymKeyAuto(options?: StorageOptions): Promise<string> {
+  async getUserKeyAuto(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
       await this.defaultSecureStorageOptions()
@@ -658,9 +658,9 @@ export class StateService<
   }
 
   /**
-   * User's symmetric key when using the "never" option of vault timeout
+   * user key when using the "never" option of vault timeout
    */
-  async setUserSymKeyAuto(value: string, options?: StorageOptions): Promise<void> {
+  async setUserKeyAuto(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
       await this.defaultSecureStorageOptions()
@@ -674,7 +674,7 @@ export class StateService<
   /**
    * User's encrypted symmetric key when using biometrics
    */
-  async getUserSymKeyBiometric(options?: StorageOptions): Promise<string> {
+  async getUserKeyBiometric(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
       await this.defaultSecureStorageOptions()
@@ -688,7 +688,7 @@ export class StateService<
     );
   }
 
-  async hasUserSymKeyBiometric(options?: StorageOptions): Promise<boolean> {
+  async hasUserKeyBiometric(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
       await this.defaultSecureStorageOptions()
@@ -702,7 +702,7 @@ export class StateService<
     );
   }
 
-  async setUserSymKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
+  async setUserKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
       await this.defaultSecureStorageOptions()
@@ -713,36 +713,36 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
   }
 
-  async getUserSymKeyPin(options?: StorageOptions): Promise<EncString> {
+  async getUserKeyPin(options?: StorageOptions): Promise<EncString> {
     return EncString.fromJSON(
       (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.settings?.userSymKeyPin
+        ?.settings?.userKeyPin
     );
   }
 
-  async setUserSymKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
+  async setUserKeyPin(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.settings.userSymKeyPin = value?.encryptedString;
+    account.settings.userKeyPin = value?.encryptedString;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
 
-  async getUserSymKeyPinEphemeral(options?: StorageOptions): Promise<EncString> {
+  async getUserKeyPinEphemeral(options?: StorageOptions): Promise<EncString> {
     return EncString.fromJSON(
       (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.settings?.userSymKeyPinEphemeral
+        ?.settings?.userKeyPinEphemeral
     );
   }
 
-  async setUserSymKeyPinEphemeral(value: EncString, options?: StorageOptions): Promise<void> {
+  async setUserKeyPinEphemeral(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
-    account.settings.userSymKeyPinEphemeral = value?.encryptedString;
+    account.settings.userKeyPinEphemeral = value?.encryptedString;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -750,7 +750,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKeyAuto instead
+   * @deprecated Use UserKeyAuto instead
    */
   async getCryptoMasterKeyAuto(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
@@ -767,7 +767,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKeyAuto instead
+   * @deprecated Use UserKeyAuto instead
    */
   async setCryptoMasterKeyAuto(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
@@ -806,7 +806,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKeyBiometric instead
+   * @deprecated Use UserKeyBiometric instead
    */
   async getCryptoMasterKeyBiometric(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
@@ -823,7 +823,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKeyBiometric instead
+   * @deprecated Use UserKeyBiometric instead
    */
   async hasCryptoMasterKeyBiometric(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(
@@ -840,7 +840,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKeyBiometric instead
+   * @deprecated Use UserKeyBiometric instead
    */
   async setCryptoMasterKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
@@ -890,7 +890,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKey instead
+   * @deprecated Use UserKey instead
    */
   async getDecryptedCryptoSymmetricKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     const account = await this.getAccount(
@@ -900,7 +900,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKey instead
+   * @deprecated Use UserKey instead
    */
   async setDecryptedCryptoSymmetricKey(
     value: SymmetricCryptoKey,
@@ -1601,7 +1601,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKey instead
+   * @deprecated Use UserKey instead
    */
   async getEncryptedCryptoSymmetricKey(options?: StorageOptions): Promise<string> {
     return (
@@ -1610,7 +1610,7 @@ export class StateService<
   }
 
   /**
-   * @deprecated Use UserSymKey instead
+   * @deprecated Use UserKey instead
    */
   async setEncryptedCryptoSymmetricKey(value: string, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
@@ -3018,8 +3018,8 @@ export class StateService<
 
   protected async removeAccountFromSecureStorage(userId: string = null): Promise<void> {
     userId = userId ?? (await this.state())?.activeUserId;
-    await this.setUserSymKeyAuto(null, { userId: userId });
-    await this.setUserSymKeyBiometric(null, { userId: userId });
+    await this.setUserKeyAuto(null, { userId: userId });
+    await this.setUserKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyAuto(null, { userId: userId });
     await this.setCryptoMasterKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyB64(null, { userId: userId });

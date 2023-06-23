@@ -26,7 +26,7 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import {
   MasterKey,
   SymmetricCryptoKey,
-  UserSymKey,
+  UserKey,
 } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SendWithIdRequest } from "@bitwarden/common/tools/send/models/request/send-with-id.request";
@@ -184,7 +184,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   async performSubmitActions(
     newMasterPasswordHash: string,
     newMasterKey: MasterKey,
-    newUserKey: [UserSymKey, EncString]
+    newUserKey: [UserKey, EncString]
   ) {
     const request = new PasswordRequest();
     request.masterPasswordHash = await this.cryptoService.hashPassword(
@@ -218,15 +218,15 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   private async updateKey(masterKey: MasterKey, masterPasswordHash: string) {
-    const userSymKey = await this.cryptoService.makeUserSymKey(masterKey);
+    const userKey = await this.cryptoService.makeUserKey(masterKey);
     const privateKey = await this.cryptoService.getPrivateKey();
     let encPrivateKey: EncString = null;
     if (privateKey != null) {
-      encPrivateKey = await this.cryptoService.encrypt(privateKey, userSymKey[0]);
+      encPrivateKey = await this.cryptoService.encrypt(privateKey, userKey[0]);
     }
     const request = new UpdateKeyRequest();
     request.privateKey = encPrivateKey != null ? encPrivateKey.encryptedString : null;
-    request.key = userSymKey[1].encryptedString;
+    request.key = userKey[1].encryptedString;
     request.masterPasswordHash = masterPasswordHash;
 
     const folders = await firstValueFrom(this.folderService.folderViews$);
@@ -234,7 +234,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       if (folders[i].id == null) {
         continue;
       }
-      const folder = await this.folderService.encrypt(folders[i], userSymKey[0]);
+      const folder = await this.folderService.encrypt(folders[i], userKey[0]);
       request.folders.push(new FolderWithIdRequest(folder));
     }
 
@@ -244,7 +244,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
         continue;
       }
 
-      const cipher = await this.cipherService.encrypt(ciphers[i], userSymKey[0]);
+      const cipher = await this.cipherService.encrypt(ciphers[i], userKey[0]);
       request.ciphers.push(new CipherWithIdRequest(cipher));
     }
 
@@ -252,16 +252,16 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     await Promise.all(
       sends.map(async (send) => {
         const sendKey = await this.cryptoService.decryptToBytes(send.key, null);
-        send.key = (await this.cryptoService.encrypt(sendKey, userSymKey[0])) ?? send.key;
+        send.key = (await this.cryptoService.encrypt(sendKey, userKey[0])) ?? send.key;
         request.sends.push(new SendWithIdRequest(send));
       })
     );
 
     await this.apiService.postAccountKey(request);
 
-    await this.updateEmergencyAccesses(userSymKey[0]);
+    await this.updateEmergencyAccesses(userKey[0]);
 
-    await this.updateAllResetPasswordKeys(userSymKey[0], masterPasswordHash);
+    await this.updateAllResetPasswordKeys(userKey[0], masterPasswordHash);
   }
 
   private async updateEmergencyAccesses(encKey: SymmetricCryptoKey) {
@@ -289,7 +289,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     }
   }
 
-  private async updateAllResetPasswordKeys(userSymKey: UserSymKey, masterPasswordHash: string) {
+  private async updateAllResetPasswordKeys(userKey: UserKey, masterPasswordHash: string) {
     const orgs = await this.organizationService.getAll();
 
     for (const org of orgs) {
@@ -303,7 +303,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       const publicKey = Utils.fromB64ToArray(response?.publicKey);
 
       // Re-enroll - encrypt user's encKey.key with organization public key
-      const encryptedKey = await this.cryptoService.rsaEncrypt(userSymKey.key, publicKey.buffer);
+      const encryptedKey = await this.cryptoService.rsaEncrypt(userKey.key, publicKey.buffer);
 
       // Create/Execute request
       const request = new OrganizationUserResetPasswordEnrollmentRequest();
