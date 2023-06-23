@@ -3605,6 +3605,177 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("findTotpField", function () {
+    let pageDetails: AutofillPageDetails;
+    let passwordField: AutofillField;
+    let totpField: AutofillField;
+
+    beforeEach(function () {
+      pageDetails = createAutofillPageDetailsMock({});
+      passwordField = createAutofillFieldMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+        elementNumber: 0,
+      });
+      totpField = createAutofillFieldMock({
+        opid: "totp-field",
+        type: "text",
+        form: "validFormId",
+        htmlName: "totp",
+        elementNumber: 1,
+      });
+      pageDetails.fields = [passwordField, totpField];
+      jest.spyOn(AutofillService, "forCustomFieldsOnly");
+      jest.spyOn(autofillService as any, "findMatchingFieldIndex");
+      jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
+    });
+
+    it("returns null when passed a field that is a `span` element", function () {
+      const field = createAutofillFieldMock({ tagName: "span" });
+      pageDetails.fields = [field];
+
+      const result = autofillService["findTotpField"](pageDetails, field, false, false, false);
+
+      expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(field);
+      expect(result).toBe(null);
+    });
+
+    it("returns null if the passed totp field is disabled", function () {
+      totpField.disabled = true;
+
+      const result = autofillService["findTotpField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(null);
+    });
+
+    describe("given a field that is readonly", function () {
+      beforeEach(function () {
+        totpField.readonly = true;
+      });
+
+      it("returns null if the field cannot be readonly", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the field can be readonly", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          false,
+          true,
+          false
+        );
+
+        expect(result).toBe(totpField);
+      });
+    });
+
+    describe("given a totp field that does not contain a form that matches the password field", function () {
+      beforeEach(function () {
+        totpField.form = "invalidFormId";
+      });
+
+      it("returns null if the field cannot be without a form", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the username field can be without a form", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          true
+        );
+
+        expect(result).toBe(totpField);
+      });
+    });
+
+    describe("given a field that is not viewable", function () {
+      beforeEach(function () {
+        totpField.viewable = false;
+        totpField.type = "number";
+      });
+
+      it("returns null if the field cannot be hidden", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the field can be hidden", function () {
+        const result = autofillService["findTotpField"](
+          pageDetails,
+          passwordField,
+          true,
+          false,
+          false
+        );
+
+        expect(result).toBe(totpField);
+      });
+    });
+
+    it("returns null if the totp field does not have a type of `text`, or `number`", function () {
+      totpField.type = "checkbox";
+
+      const result = autofillService["findTotpField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(null);
+    });
+
+    it("returns the field if the autoCompleteType is `one-time-code`", function () {
+      totpField.autoCompleteType = "one-time-code";
+      jest.spyOn(autofillService as any, "findMatchingFieldIndex").mockReturnValueOnce(-1);
+
+      const result = autofillService["findTotpField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(totpField);
+    });
+  });
+
   describe("forCustomFieldsOnly", function () {
     it("returns a true value if the passed field has a tag name of `span`", function () {
       const field = createAutofillFieldMock({ tagName: "span" });

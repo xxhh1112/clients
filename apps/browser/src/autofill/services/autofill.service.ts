@@ -1422,13 +1422,24 @@ export default class AutofillService implements AutofillServiceInterface {
     return usernameField;
   }
 
+  /**
+   * Accepts a pageDetails object with a list of fields and returns a list of
+   * fields that are likely to be TOTP fields.
+   * @param {AutofillPageDetails} pageDetails
+   * @param {AutofillField} passwordField
+   * @param {boolean} canBeHidden
+   * @param {boolean} canBeReadOnly
+   * @param {boolean} withoutForm
+   * @returns {AutofillField}
+   * @private
+   */
   private findTotpField(
     pageDetails: AutofillPageDetails,
     passwordField: AutofillField,
     canBeHidden: boolean,
     canBeReadOnly: boolean,
     withoutForm: boolean
-  ) {
+  ): AutofillField | null {
     let totpField: AutofillField = null;
     for (let i = 0; i < pageDetails.fields.length; i++) {
       const f = pageDetails.fields[i];
