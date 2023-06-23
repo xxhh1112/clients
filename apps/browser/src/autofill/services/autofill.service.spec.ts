@@ -3210,6 +3210,186 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("loadPasswordFields", function () {
+    let pageDetails: AutofillPageDetails;
+    let passwordField: AutofillField;
+
+    beforeEach(function () {
+      pageDetails = createAutofillPageDetailsMock({});
+      passwordField = createAutofillFieldMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+      });
+      jest.spyOn(AutofillService, "forCustomFieldsOnly");
+    });
+
+    it("returns an empty array if passed a field that is a `span` element", function () {
+      const customField = createAutofillFieldMock({ tagName: "span" });
+      pageDetails.fields = [customField];
+
+      const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+      expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(customField);
+      expect(result).toStrictEqual([]);
+    });
+
+    it("returns an empty array if passed a disabled field", function () {
+      passwordField.disabled = true;
+      pageDetails.fields = [passwordField];
+
+      const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+      expect(result).toStrictEqual([]);
+    });
+
+    describe("given a field that is readonly", function () {
+      it("returns an empty array if the field cannot be readonly", function () {
+        passwordField.readonly = true;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns the field within an array if the field can be readonly", function () {
+        passwordField.readonly = true;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, true, false, true);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+    });
+
+    describe("give a field that is not of type `password`", function () {
+      beforeEach(function () {
+        passwordField.type = "text";
+      });
+
+      it("returns an empty array if the field type is not `text`", function () {
+        passwordField.type = "email";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns an empty array if the `htmlID`, `htmlName`, or `placeholder` of the field's values do not include the word `password`", function () {
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns an empty array if the `htmlID` of the field is `null", function () {
+        passwordField.htmlID = null;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns an empty array if the `htmlID` of the field is equal to `onetimepassword`", function () {
+        passwordField.htmlID = "onetimepassword";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns the field in an array if the field's htmlID contains the word `password`", function () {
+        passwordField.htmlID = "password";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+
+      it("returns the field in an array if the field's htmlName contains the word `password`", function () {
+        passwordField.htmlName = "password";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+
+      it("returns the field in an array if the field's placeholder contains the word `password`", function () {
+        passwordField.placeholder = "password";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+    });
+
+    describe("given a field that is not viewable", function () {
+      it("returns an empty array if the field cannot be hidden", function () {
+        passwordField.viewable = false;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns the field within an array if the field can be hidden", function () {
+        passwordField.viewable = false;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, true, false, false, true);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+    });
+
+    describe("given a need for the passed to be empty", function () {
+      it("returns an empty array if the passed field contains a value that is not null or empty", function () {
+        passwordField.value = "Some Password Value";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, true, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns the field within an array if the field contains a null value", function () {
+        passwordField.value = null;
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, true, false);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+
+      it("returns the field within an array if the field contains an empty value", function () {
+        passwordField.value = "";
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, true, false);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+    });
+
+    it("returns an empty array if not filling a new password and the autoCompleteType is `new-password`", function () {
+      passwordField.autoCompleteType = "new-password";
+      pageDetails.fields = [passwordField];
+
+      const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+      expect(result).toStrictEqual([]);
+    });
+  });
+
   describe("forCustomFieldsOnly", function () {
     it("returns a true value if the passed field has a tag name of `span`", function () {
       const field = createAutofillFieldMock({ tagName: "span" });

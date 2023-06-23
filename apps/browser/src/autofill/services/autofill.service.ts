@@ -1303,6 +1303,16 @@ export default class AutofillService implements AutofillServiceInterface {
     }
   }
 
+  /**
+   * Accepts a pageDetails object with a list of fields and returns a list of
+   * fields that are likely to be password fields.
+   * @param {AutofillPageDetails} pageDetails
+   * @param {boolean} canBeHidden
+   * @param {boolean} canBeReadOnly
+   * @param {boolean} mustBeEmpty
+   * @param {boolean} fillNewPassword
+   * @returns {AutofillField[]}
+   */
   static loadPasswordFields(
     pageDetails: AutofillPageDetails,
     canBeHidden: boolean,
