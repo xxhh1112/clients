@@ -76,6 +76,7 @@ export class CipherExport {
     domain.notes = req.notes != null ? new EncString(req.notes) : null;
     domain.favorite = req.favorite;
     domain.reprompt = req.reprompt ?? CipherRepromptType.None;
+    domain.key = req.key != null ? new EncString(req.key) : null;
 
     if (req.fields != null) {
       domain.fields = req.fields.map((f) => FieldExport.toDomain(f));
@@ -112,6 +113,7 @@ export class CipherExport {
   card: CardExport;
   identity: IdentityExport;
   reprompt: CipherRepromptType;
+  key: string;
 
   // Use build method instead of ctor so that we can control order of JSON stringify for pretty print
   build(o: CipherView | CipherDomain) {
@@ -126,6 +128,7 @@ export class CipherExport {
     } else {
       this.name = o.name?.encryptedString;
       this.notes = o.notes?.encryptedString;
+      this.key = o.key?.encryptedString;
     }
 
     this.favorite = o.favorite;
