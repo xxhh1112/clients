@@ -406,11 +406,7 @@ export class LoginCommand {
     }
 
     try {
-      const {
-        newPasswordHash,
-        newUserKey: newEncKey,
-        hint,
-      } = await this.collectNewMasterPasswordDetails(
+      const { newPasswordHash, newUserKey, hint } = await this.collectNewMasterPasswordDetails(
         "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now."
       );
 
@@ -418,7 +414,7 @@ export class LoginCommand {
       request.masterPasswordHash = await this.cryptoService.hashPassword(currentPassword, null);
       request.masterPasswordHint = hint;
       request.newMasterPasswordHash = newPasswordHash;
-      request.key = newEncKey[1].encryptedString;
+      request.key = newUserKey[1].encryptedString;
 
       await this.apiService.postPassword(request);
 
@@ -448,16 +444,12 @@ export class LoginCommand {
     }
 
     try {
-      const {
-        newPasswordHash,
-        newUserKey: newEncKey,
-        hint,
-      } = await this.collectNewMasterPasswordDetails(
+      const { newPasswordHash, newUserKey, hint } = await this.collectNewMasterPasswordDetails(
         "An organization administrator recently changed your master password. In order to access the vault, you must update your master password now."
       );
 
       const request = new UpdateTempPasswordRequest();
-      request.key = newEncKey[1].encryptedString;
+      request.key = newUserKey[1].encryptedString;
       request.newMasterPasswordHash = newPasswordHash;
       request.masterPasswordHint = hint;
 

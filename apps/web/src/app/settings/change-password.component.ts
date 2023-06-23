@@ -42,7 +42,7 @@ import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/fold
   templateUrl: "change-password.component.html",
 })
 export class ChangePasswordComponent extends BaseChangePasswordComponent {
-  rotateEncKey = false;
+  rotateUserKey = false;
   currentMasterPassword: string;
   masterPasswordHint: string;
   checkForBreaches = true;
@@ -92,8 +92,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     this.characterMinimumMessage = this.i18nService.t("characterMinimum", this.minimumLength);
   }
 
-  async rotateEncKeyClicked() {
-    if (this.rotateEncKey) {
+  async rotateUserKeyClicked() {
+    if (this.rotateUserKey) {
       const ciphers = await this.cipherService.getAllDecrypted();
       let hasOldAttachments = false;
       if (ciphers != null) {
@@ -119,7 +119,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
             "https://bitwarden.com/help/attachments/#add-storage-space"
           );
         }
-        this.rotateEncKey = false;
+        this.rotateUserKey = false;
         return;
       }
 
@@ -135,7 +135,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       });
 
       if (!result) {
-        this.rotateEncKey = false;
+        this.rotateUserKey = false;
       }
     }
   }
@@ -174,7 +174,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       return false;
     }
 
-    if (this.rotateEncKey) {
+    if (this.rotateUserKey) {
       await this.syncService.fullSync(true);
     }
 
@@ -196,7 +196,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     request.key = newUserKey[1].encryptedString;
 
     try {
-      if (this.rotateEncKey) {
+      if (this.rotateUserKey) {
         this.formPromise = this.apiService.postPassword(request).then(() => {
           return this.updateKey(newMasterKey, request.newMasterPasswordHash);
         });

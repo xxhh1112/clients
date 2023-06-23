@@ -174,7 +174,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             orgSymKey
           );
 
-          // Decrypt User's Reset Password Key to get EncKey
+          // Decrypt User's Reset Password Key to get UserKey
           const decValue = await this.cryptoService.rsaDecrypt(resetPasswordKey, decPrivateKey);
           const existingUserKey = new SymmetricCryptoKey(decValue) as UserKey;
 
