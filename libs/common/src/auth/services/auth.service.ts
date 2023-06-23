@@ -304,10 +304,13 @@ export class AuthService implements AuthServiceAbstraction {
       throw new Error("Master key not found");
     }
     const encryptedKey = await this.cryptoService.rsaEncrypt(masterKey.encKey, pubKey.buffer);
-    const encryptedMasterPasswordHash = await this.cryptoService.rsaEncrypt(
-      Utils.fromUtf8ToArray(await this.stateService.getKeyHash()),
-      pubKey.buffer
-    );
+    let encryptedMasterPasswordHash = null;
+    if ((await this.stateService.getKeyHash()) != null) {
+      encryptedMasterPasswordHash = await this.cryptoService.rsaEncrypt(
+        Utils.fromUtf8ToArray(await this.stateService.getKeyHash()),
+        pubKey.buffer
+      );
+    }
     const request = new PasswordlessAuthRequest(
       encryptedKey.encryptedString,
       encryptedMasterPasswordHash.encryptedString,
