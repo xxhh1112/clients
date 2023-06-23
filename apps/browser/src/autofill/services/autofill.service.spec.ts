@@ -3380,13 +3380,228 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns an empty array if not filling a new password and the autoCompleteType is `new-password`", function () {
-      passwordField.autoCompleteType = "new-password";
-      pageDetails.fields = [passwordField];
+    describe("given a field with a new password", function () {
+      beforeEach(function () {
+        passwordField.autoCompleteType = "new-password";
+      });
 
-      const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+      it("returns an empty array if not filling a new password and the autoCompleteType is `new-password`", function () {
+        pageDetails.fields = [passwordField];
 
-      expect(result).toStrictEqual([]);
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
+
+        expect(result).toStrictEqual([]);
+      });
+
+      it("returns the field within an array if filling a new password and the autoCompleteType is `new-password`", function () {
+        pageDetails.fields = [passwordField];
+
+        const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, true);
+
+        expect(result).toStrictEqual([passwordField]);
+      });
+    });
+  });
+
+  describe("findUsernameField", function () {
+    let pageDetails: AutofillPageDetails;
+    let usernameField: AutofillField;
+    let passwordField: AutofillField;
+
+    beforeEach(function () {
+      pageDetails = createAutofillPageDetailsMock({});
+      usernameField = createAutofillFieldMock({
+        opid: "username-field",
+        type: "text",
+        form: "validFormId",
+        elementNumber: 0,
+      });
+      passwordField = createAutofillFieldMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+        elementNumber: 1,
+      });
+      pageDetails.fields = [usernameField, passwordField];
+      jest.spyOn(AutofillService, "forCustomFieldsOnly");
+      jest.spyOn(autofillService as any, "findMatchingFieldIndex");
+    });
+
+    it("returns null when passed a field that is a `span` element", function () {
+      const field = createAutofillFieldMock({ tagName: "span" });
+      pageDetails.fields = [field];
+
+      const result = autofillService["findUsernameField"](pageDetails, field, false, false, false);
+
+      expect(AutofillService.forCustomFieldsOnly).toHaveBeenCalledWith(field);
+      expect(result).toBe(null);
+    });
+
+    it("returns null when the passed username field has a larger elementNumber than the passed password field", function () {
+      usernameField.elementNumber = 2;
+
+      const result = autofillService["findUsernameField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(null);
+    });
+
+    it("returns null if the passed username field is disabled", function () {
+      usernameField.disabled = true;
+
+      const result = autofillService["findUsernameField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(null);
+    });
+
+    describe("given a field that is readonly", function () {
+      beforeEach(function () {
+        usernameField.readonly = true;
+      });
+
+      it("returns null if the field cannot be readonly", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the field can be readonly", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          false,
+          true,
+          false
+        );
+
+        expect(result).toBe(usernameField);
+      });
+    });
+
+    describe("given a username field that does not contain a form that matches the password field", function () {
+      beforeEach(function () {
+        usernameField.form = "invalidFormId";
+        usernameField.type = "tel";
+      });
+
+      it("returns null if the field cannot be without a form", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the username field can be without a form", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          true
+        );
+
+        expect(result).toBe(usernameField);
+      });
+    });
+
+    describe("given a field that is not viewable", function () {
+      beforeEach(function () {
+        usernameField.viewable = false;
+        usernameField.type = "email";
+      });
+
+      it("returns null if the field cannot be hidden", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          false,
+          false,
+          false
+        );
+
+        expect(result).toBe(null);
+      });
+
+      it("returns the field if the field can be hidden", function () {
+        const result = autofillService["findUsernameField"](
+          pageDetails,
+          passwordField,
+          true,
+          false,
+          false
+        );
+
+        expect(result).toBe(usernameField);
+      });
+    });
+
+    it("returns null if the username field does not have a type of `text`, `email`, or `tel`", function () {
+      usernameField.type = "checkbox";
+
+      const result = autofillService["findUsernameField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(null);
+    });
+
+    it("returns the username field whose attributes most closely describe the username of the password field", function () {
+      const usernameField2 = createAutofillFieldMock({
+        opid: "username-field-2",
+        type: "text",
+        form: "validFormId",
+        htmlName: "username",
+        elementNumber: 1,
+      });
+      const usernameField3 = createAutofillFieldMock({
+        opid: "username-field-3",
+        type: "text",
+        form: "validFormId",
+        elementNumber: 1,
+      });
+      passwordField.elementNumber = 3;
+      pageDetails.fields = [usernameField, usernameField2, usernameField3, passwordField];
+
+      const result = autofillService["findUsernameField"](
+        pageDetails,
+        passwordField,
+        false,
+        false,
+        false
+      );
+
+      expect(result).toBe(usernameField2);
+      expect(autofillService["findMatchingFieldIndex"]).toHaveBeenCalledTimes(2);
+      expect(autofillService["findMatchingFieldIndex"]).not.toHaveBeenCalledWith(
+        usernameField3,
+        AutoFillConstants.UsernameFieldNames
+      );
     });
   });
 
