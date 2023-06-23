@@ -161,7 +161,7 @@ export abstract class OrganizationUserService {
   abstract postOrganizationUserBulkEnableSecretsManager(
     organizationId: string,
     ids: string[]
-  ): Promise<void>;
+  ): Promise<ListResponse<OrganizationUserBulkResponse>>;
 
   /**
    * Update an organization users

@@ -516,6 +516,7 @@ export class PeopleComponent
   async bulkEnableSM() {
     this.dialogService.open(BulkEnableSecretsManagerComponent, {
       data: {
+        orgId: this.organization.id,
         users: this.getCheckedUsers(),
       },
     });
