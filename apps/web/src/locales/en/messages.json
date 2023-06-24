@@ -6613,11 +6613,14 @@
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
+  },
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
   },
   "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
