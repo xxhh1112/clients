@@ -206,7 +206,7 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
     return new ListResponse(r, OrganizationUserBulkResponse);
   }
 
-  async postOrganizationUserBulkEnableSecretsManager(
+  async putOrganizationUserBulkEnableSecretsManager(
     organizationId: string,
     ids: string[]
   ): Promise<ListResponse<OrganizationUserBulkResponse>> {

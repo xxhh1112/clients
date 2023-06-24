@@ -61,7 +61,7 @@ import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
 
 import { BulkConfirmComponent } from "./components/bulk/bulk-confirm.component";
-import { BulkEnableSecretsManagerComponent } from "./components/bulk/bulk-enable-sm.component";
+import { BulkEnableSecretsManagerDialogComponent } from "./components/bulk/bulk-enable-sm.component";
 import { BulkRemoveComponent } from "./components/bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./components/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./components/bulk/bulk-status.component";
@@ -514,12 +514,31 @@ export class PeopleComponent
   }
 
   async bulkEnableSM() {
-    this.dialogService.open(BulkEnableSecretsManagerComponent, {
-      data: {
-        orgId: this.organization.id,
-        users: this.getCheckedUsers(),
-      },
+    const users = this.getCheckedUsers();
+    if (users.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("noSelectedUsersApplicable")
+      );
+      return;
+    }
+
+    const dialog = BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
+      orgId: this.organization.id,
+      users,
     });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === "error") {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+    } else if (result === "success") {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("enabledAccessToSecretsManager")
+      );
+    }
   }
 
   async events(user: OrganizationUserView) {

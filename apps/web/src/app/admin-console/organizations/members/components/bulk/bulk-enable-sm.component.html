@@ -1,15 +1,12 @@
 <bit-dialog dialogSize="large">
-  <span bitDialogTitle>ENABLE SECRETS MANAGER</span>
+  <span bitDialogTitle>{{ "enableSecretsManager" | i18n }}</span>
   <span bitDialogContent>
-    <p>
-      Grant the following members access to Secrets Manager. The role granted in the Password
-      Manager will apply to Secrets Manager.
-    </p>
+    <p>{{ "bulkEnableSecretsManagerDescription" | i18n }}</p>
     <bit-table [dataSource]="dataSource">
       <ng-container header>
         <tr>
-          <th bitCell>Member</th>
-          <th bitCell>Role</th>
+          <th bitCell>{{ "member" | i18n }}</th>
+          <th bitCell>{{ "role" | i18n }}</th>
         </tr>
       </ng-container>
       <ng-template body let-rows$>
@@ -41,8 +38,8 @@
     </bit-table>
   </span>
   <ng-container bitDialogFooter>
-    <button type="button" bitButton buttonType="primary" (click)="enableAccess()">
-      Enable access
+    <button type="button" bitButton buttonType="primary" [bitAction]="enableAccess">
+      {{ "enableAccess" | i18n }}
     </button>
     <button type="button" bitButton buttonType="secondary" bitDialogClose>Close</button>
   </ng-container>
