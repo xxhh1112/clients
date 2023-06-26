@@ -133,6 +133,11 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
                         status = SecKeychainFindGenericPassword(nil, UInt32(ServiceNameBiometric.utf8.count), ServiceNameBiometric, UInt32(fallbackName.utf8.count), fallbackName, &passwordLength, &passwordPtr, nil)
                     }
 
+                    if status != errSecSuccess {
+                        let secondaryFallbackName = "_masterkey_biometric"
+                        status = SecKeychainFindGenericPassword(nil, UInt32(ServiceNameBiometric.utf8.count), ServiceNameBiometric, UInt32(secondaryFallbackName.utf8.count), secondaryFallbackName, &passwordLength, &passwordPtr, nil)
+                    }
+
                     if status == errSecSuccess {
                         let result = NSString(bytes: passwordPtr!, length: Int(passwordLength), encoding: String.Encoding.utf8.rawValue) as String?
                                     SecKeychainItemFreeContent(nil, passwordPtr)
