@@ -6,6 +6,8 @@ import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { StateService } from "../../platform/abstractions/state.service";
 
+export type PinLockType = "DISABLED" | "ENABLED" | "ENABLED_WITH_MP_ON_RESET";
+
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
   constructor(
     private cryptoService: CryptoService,
@@ -44,17 +46,20 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     await this.cryptoService.toggleKey();
   }
 
-  async isPinLockSet(): Promise<[boolean, boolean]> {
+  async isPinLockSet(): Promise<PinLockType> {
     // we can't check the protected pin for both because old accounts only
     // used it for MP on Restart
     const pinIsEnabled = !!(await this.stateService.getProtectedPin());
     const aUserKeyPinIsSet = !!(await this.stateService.getUserKeyPin());
     const anOldUserKeyPinIsSet = !!(await this.stateService.getEncryptedPinProtected());
 
-    return [
-      pinIsEnabled && !aUserKeyPinIsSet && !anOldUserKeyPinIsSet,
-      aUserKeyPinIsSet || anOldUserKeyPinIsSet,
-    ];
+    if (aUserKeyPinIsSet || anOldUserKeyPinIsSet) {
+      return "ENABLED";
+    } else if (pinIsEnabled && !aUserKeyPinIsSet && !anOldUserKeyPinIsSet) {
+      return "ENABLED_WITH_MP_ON_RESET";
+    } else {
+      return "DISABLED";
+    }
   }
 
   async isBiometricLockSet(): Promise<boolean> {

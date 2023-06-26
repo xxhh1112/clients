@@ -219,11 +219,11 @@ export class SettingsComponent implements OnInit {
     );
 
     // Load initial values
-    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
     const initialValues = {
       vaultTimeout: await this.vaultTimeoutSettingsService.getVaultTimeout(),
       vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
-      pin: pinSet[0] || pinSet[1],
+      pin: pinStatus !== "DISABLED",
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       autoPromptBiometrics: !(await this.stateService.getDisableAutoBiometricsPrompt()),
       requirePasswordOnStart:

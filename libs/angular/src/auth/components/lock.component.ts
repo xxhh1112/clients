@@ -25,6 +25,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { PinLockType } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
@@ -35,7 +36,7 @@ export class LockComponent implements OnInit, OnDestroy {
   pin = "";
   showPassword = false;
   email: string;
-  pinLock = false;
+  pinEnabled = false;
   webVaultHostname = "";
   formPromise: Promise<MasterPasswordPolicyResponse>;
   supportsBiometric: boolean;
@@ -48,7 +49,7 @@ export class LockComponent implements OnInit, OnDestroy {
   protected onSuccessfulSubmit: () => Promise<void>;
 
   private invalidPinAttempts = 0;
-  private pinSet: [boolean, boolean];
+  private pinStatus: PinLockType;
 
   private enforcedMasterPasswordOptions: MasterPasswordPolicyOptions = undefined;
 
@@ -91,7 +92,7 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    if (this.pinLock) {
+    if (this.pinEnabled) {
       return await this.handlePinRequiredUnlock();
     }
 
@@ -127,7 +128,7 @@ export class LockComponent implements OnInit, OnDestroy {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
-    const input = document.getElementById(this.pinLock ? "pin" : "masterPassword");
+    const input = document.getElementById(this.pinEnabled ? "pin" : "masterPassword");
     if (this.ngZone.isStable) {
       input.focus();
     } else {
@@ -155,15 +156,25 @@ export class LockComponent implements OnInit, OnDestroy {
       const kdfConfig = await this.stateService.getKdfConfig();
       let userKeyPin: EncString;
       let oldPinProtected: EncString;
-      if (this.pinSet[0]) {
-        // MP on restart enabled
-        userKeyPin = await this.stateService.getUserKeyPinEphemeral();
-        oldPinProtected = await this.stateService.getDecryptedPinProtected();
-      } else {
-        // MP on restart disabled
-        userKeyPin = await this.stateService.getUserKeyPin();
-        const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
-        oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
+      switch (this.pinStatus) {
+        case "ENABLED": {
+          userKeyPin = await this.stateService.getUserKeyPin();
+          const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
+          oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
+          break;
+        }
+        case "ENABLED_WITH_MP_ON_RESET": {
+          userKeyPin = await this.stateService.getUserKeyPinEphemeral();
+          oldPinProtected = await this.stateService.getDecryptedPinProtected();
+          break;
+        }
+        case "DISABLED": {
+          return;
+        }
+        default: {
+          const _exhaustiveCheck: never = this.pinStatus;
+          return _exhaustiveCheck;
+        }
       }
 
       let userKey: UserKey;
@@ -279,7 +290,7 @@ export class LockComponent implements OnInit, OnDestroy {
 
     // if MP on restart is enabled, use it to get the PIN and store the ephemeral
     // pin protected user key
-    if (this.pinSet[0]) {
+    if (this.pinStatus === `ENABLED_WITH_MP_ON_RESET`) {
       const protectedPin = await this.stateService.getProtectedPin();
       const pin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), userKey);
       const pinKey = await this.cryptoService.makePinKey(pin, this.email, kdf, kdfConfig);
@@ -329,11 +340,13 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   private async load() {
-    this.pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+    this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
     let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
     ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
-    this.pinLock = (this.pinSet[0] && !!ephemeralPinSet) || this.pinSet[1];
+    this.pinEnabled =
+      (this.pinStatus === "ENABLED_WITH_MP_ON_RESET" && !!ephemeralPinSet) ||
+      this.pinStatus === "ENABLED";
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
@@ -343,10 +356,10 @@ export class LockComponent implements OnInit, OnDestroy {
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();
     const usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
-    this.hideInput = usesKeyConnector && !this.pinLock;
+    this.hideInput = usesKeyConnector && !this.pinEnabled;
 
     // Users with key connector and without biometric or pin has no MP to unlock using
-    if (usesKeyConnector && !(this.biometricLock || this.pinLock)) {
+    if (usesKeyConnector && !(this.biometricLock || this.pinEnabled)) {
       await this.vaultTimeoutService.logOut();
     }
 

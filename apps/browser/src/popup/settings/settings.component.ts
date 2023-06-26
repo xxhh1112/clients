@@ -140,12 +140,12 @@ export class SettingsComponent implements OnInit {
     if (timeout === -2 && !showOnLocked) {
       timeout = -1;
     }
-    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
     const initialValues = {
       vaultTimeout: timeout,
       vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
-      pin: pinSet[0] || pinSet[1],
+      pin: pinStatus !== "DISABLED",
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       enableAutoBiometricsPrompt: !(await this.stateService.getDisableAutoBiometricsPrompt()),
     };
