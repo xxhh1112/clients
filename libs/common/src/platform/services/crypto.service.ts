@@ -669,9 +669,8 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   // ---HELPERS---
 
-  protected async validateUserKey(key?: UserKey): Promise<boolean> {
-    key ||= await this.getUserKeyFromMemory();
-    if (key == null) {
+  protected async validateUserKey(key: UserKey): Promise<boolean> {
+    if (!key) {
       return false;
     }
 
