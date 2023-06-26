@@ -1,13 +1,11 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
-import { CollectionData } from "../../admin-console/models/data/collection.data";
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
 import { OrganizationData } from "../../admin-console/models/data/organization.data";
 import { PolicyData } from "../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../admin-console/models/data/provider.data";
 import { Policy } from "../../admin-console/models/domain/policy";
-import { CollectionView } from "../../admin-console/models/view/collection.view";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
@@ -26,9 +24,11 @@ import { GeneratedPasswordHistory } from "../../tools/generator/password";
 import { SendData } from "../../tools/send/models/data/send.data";
 import { SendView } from "../../tools/send/models/view/send.view";
 import { CipherData } from "../../vault/models/data/cipher.data";
+import { CollectionData } from "../../vault/models/data/collection.data";
 import { FolderData } from "../../vault/models/data/folder.data";
 import { LocalData } from "../../vault/models/data/local.data";
 import { CipherView } from "../../vault/models/view/cipher.view";
+import { CollectionView } from "../../vault/models/view/collection.view";
 import { AddEditCipherInfo } from "../../vault/types/add-edit-cipher-info";
 import { LogService } from "../abstractions/log.service";
 import { StateMigrationService } from "../abstractions/state-migration.service";
@@ -1592,6 +1592,28 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
     globals.environmentUrls = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getRegion(options?: StorageOptions): Promise<string> {
+    if ((await this.state())?.activeUserId == null) {
+      options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
+      return (await this.getGlobals(options)).region ?? null;
+    }
+    options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
+    return (await this.getAccount(options))?.settings?.region ?? null;
+  }
+
+  async setRegion(value: string, options?: StorageOptions): Promise<void> {
+    // Global values are set on each change and the current global settings are passed to any newly authed accounts.
+    // This is to allow setting region values before an account is active, while still allowing individual accounts to have their own region.
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    globals.region = value;
     await this.saveGlobals(
       globals,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
