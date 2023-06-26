@@ -482,7 +482,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const publicB64 = Utils.fromBufferToB64(keyPair[0]);
-    const privateEnc = await this.encrypt(keyPair[1], key);
+    const privateEnc = await this.encryptService.encrypt(keyPair[1], key);
     return [publicB64, privateEnc];
   }
 
@@ -721,7 +721,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       key
     );
     const pinKey = await this.makePinKey(pin, email, kdf, kdfConfig);
-    await this.stateService.setUserKeyPin(await this.encrypt(key.key, pinKey));
+    await this.stateService.setUserKeyPin(await this.encryptService.encrypt(key.key, pinKey));
   }
 
   protected async shouldStoreKey(keySuffix: KeySuffixOptions, userId?: string) {
@@ -818,9 +818,9 @@ export class CryptoService implements CryptoServiceAbstraction {
     let protectedSymKey: EncString = null;
     if (encryptionKey.key.byteLength === 32) {
       const stretchedEncryptionKey = await this.stretchKey(encryptionKey);
-      protectedSymKey = await this.encrypt(newSymKey, stretchedEncryptionKey);
+      protectedSymKey = await this.encryptService.encrypt(newSymKey, stretchedEncryptionKey);
     } else if (encryptionKey.key.byteLength === 64) {
-      protectedSymKey = await this.encrypt(newSymKey, encryptionKey);
+      protectedSymKey = await this.encryptService.encrypt(newSymKey, encryptionKey);
     } else {
       throw new Error("Invalid key size.");
     }
