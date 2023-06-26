@@ -6619,7 +6619,7 @@
   "secretsManagerAccessDesc": {
     "message": "Enable user access to Secrets Manager."
   },
-  "userAccessSecretsManager": {
+  "userAccessSecretsManagerGA": {
     "message": "This user can access Secrets Manager"
   },
   "important": {
