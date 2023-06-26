@@ -149,7 +149,10 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   async getMasterKey(userId?: string): Promise<MasterKey> {
     let masterKey = await this.stateService.getMasterKey({ userId: userId });
-    masterKey ||= (await this.stateService.getCryptoMasterKey({ userId: userId })) as MasterKey;
+    if (!masterKey) {
+      masterKey = (await this.stateService.getCryptoMasterKey({ userId: userId })) as MasterKey;
+      await this.setMasterKey(masterKey, userId);
+    }
     return masterKey;
   }
 
