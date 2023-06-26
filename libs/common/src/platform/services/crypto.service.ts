@@ -196,10 +196,10 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     let decUserKey: ArrayBuffer;
     if (userKey.encryptionType === EncryptionType.AesCbc256_B64) {
-      decUserKey = await this.decryptToBytes(userKey, masterKey);
+      decUserKey = await this.encryptService.decryptToBytes(userKey, masterKey);
     } else if (userKey.encryptionType === EncryptionType.AesCbc256_HmacSha256_B64) {
       const newKey = await this.stretchKey(masterKey);
-      decUserKey = await this.decryptToBytes(userKey, newKey);
+      decUserKey = await this.encryptService.decryptToBytes(userKey, newKey);
     } else {
       throw new Error("Unsupported encryption type.");
     }
@@ -455,7 +455,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       return null;
     }
 
-    const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), null);
+    const privateKey = await this.encryptService.decryptToBytes(new EncString(encPrivateKey), null);
     await this.stateService.setDecryptedPrivateKey(privateKey);
     return privateKey;
   }
@@ -524,7 +524,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       throw new Error("No PIN protected key found.");
     }
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
-    const userKey = await this.decryptToBytes(pinProtectedUserKey, pinKey);
+    const userKey = await this.encryptService.decryptToBytes(pinProtectedUserKey, pinKey);
     return new SymmetricCryptoKey(userKey) as UserKey;
   }
 
@@ -543,7 +543,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       pinProtectedMasterKey = new EncString(pinProtectedMasterKeyString);
     }
     const pinKey = await this.makePinKey(pin, salt, kdf, kdfConfig);
-    const masterKey = await this.decryptToBytes(pinProtectedMasterKey, pinKey);
+    const masterKey = await this.encryptService.decryptToBytes(pinProtectedMasterKey, pinKey);
     return new SymmetricCryptoKey(masterKey) as MasterKey;
   }
 
@@ -681,7 +681,10 @@ export class CryptoService implements CryptoServiceAbstraction {
         return false;
       }
 
-      const privateKey = await this.decryptToBytes(new EncString(encPrivateKey), key);
+      const privateKey = await this.encryptService.decryptToBytes(
+        new EncString(encPrivateKey),
+        key
+      );
       await this.cryptoFunctionService.rsaExtractPublicKey(privateKey);
     } catch (e) {
       return false;
@@ -716,7 +719,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     const email = await this.stateService.getEmail();
     const kdf = await this.stateService.getKdfType();
     const kdfConfig = await this.stateService.getKdfConfig();
-    const pin = await this.decryptToUtf8(
+    const pin = await this.encryptService.decryptToUtf8(
       new EncString(await this.stateService.getProtectedPin()),
       key
     );
