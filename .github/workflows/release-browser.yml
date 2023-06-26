@@ -168,3 +168,33 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+
+  release-stores:
+    name: Release to Stores
+    runs-on: ubuntu-22.04
+    needs:
+      - setup
+      - release
+    env:
+      _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
+    steps:
+      - name: Download latest Release build artifacts
+        uses: bitwarden/gh-actions/download-artifacts@37ffa14164a7308bc273829edfe75c97cd562375
+        with:
+          workflow: build-browser.yml
+          workflow_conclusion: success
+          branch: ${{ github.event.inputs.release_type == 'Dry Run' && 'master' || github.ref_name }}
+          artifacts: 'browser-source-*.zip,
+                      dist-edge-*.zip'
+
+      - name: Rename build artifacts
+        run: |
+          mv browser-source.zip browser-source-${{ env._PACKAGE_VERSION }}.zip
+          mv dist-edge.zip dist-edge-${{ env._PACKAGE_VERSION }}.zip
+
+      - name: Upload to stores [Edge]
+        uses: PlasmoHQ/bpp@ba887a93e8ed778819c630e0e943f06190e4545d # v3.5.0
+        with:
+          keys: ${{ secrets.BROWSER_RELEASE_KEYS }}
+          edge-file: dist-edge-${{ env._PACKAGE_VERSION }}
