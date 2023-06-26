@@ -20,6 +20,11 @@
     "dist:safari:dmg": "npm run build:prod && gulp dist:safari:dmg",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:watch:all": "jest --watchAll"
+    "test:watch:all": "jest --watchAll",
+    "test:autofill:build": "rimraf tests-out && tsc --incremental -p tests/tsconfig.json",
+    "test:autofill:run": "playwright test",
+    "test:autofill:run:debug": "playwright test --project=chromium --debug --reporter=line",
+    "test:autofill": "npm run test:autofill:build && npm run test:autofill:run",
+    "test:autofill:debug": "npm run test:autofill:build && npm run test:autofill:run:debug"
   }
 }

@@ -46,6 +46,7 @@
     "@electron/rebuild": "3.2.13",
     "@fluffy-spoon/substitute": "1.208.0",
     "@ngtools/webpack": "15.2.8",
+    "@playwright/test": "^1.35.1",
     "@storybook/addon-a11y": "7.0.18",
     "@storybook/addon-actions": "7.0.18",
     "@storybook/addon-essentials": "7.0.18",

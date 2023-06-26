@@ -5,3 +5,7 @@ src/safari/safari/app/
 build.safariextension
 xcuserdata
 *.hmap
+tests-out
+test-results
+.env
+playwright-report

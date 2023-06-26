@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "../tests-out",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "paths": {
+      "@bitwarden/common/*": ["../../../libs/common/src/*"],
+      "@bitwarden/angular/*": ["../../../libs/angular/src/*"],
+      "@bitwarden/browser/*": ["../src/*"],
+      "@bitwarden/exporter/*": ["../../../libs/exporter/src/*"]
+    }
+  },
+  "include": ["./*.spec.ts", "../src/*"]
+}
