@@ -524,21 +524,10 @@ export class PeopleComponent
       return;
     }
 
-    const dialog = BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
+    BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
       orgId: this.organization.id,
       users,
     });
-
-    const result = await lastValueFrom(dialog.closed);
-    if (result === "error") {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
-    } else if (result === "success") {
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("enabledAccessToSecretsManager")
-      );
-    }
   }
 
   async events(user: OrganizationUserView) {
