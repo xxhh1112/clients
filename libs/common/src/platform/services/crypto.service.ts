@@ -734,11 +734,6 @@ export class CryptoService implements CryptoServiceAbstraction {
         shouldStoreKey = vaultTimeout == null;
         break;
       }
-      case KeySuffixOptions.Biometric: {
-        const biometricUnlock = await this.stateService.getBiometricUnlock({ userId: userId });
-        shouldStoreKey = biometricUnlock && this.platformUtilService.supportsSecureStorage();
-        break;
-      }
       case KeySuffixOptions.Pin: {
         const protectedPin = await this.stateService.getProtectedPin({ userId: userId });
         // This could cause a possible timing issue. Need to make sure the ephemeral key is set before

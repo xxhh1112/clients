@@ -61,6 +61,14 @@ export class ElectronCryptoService extends CryptoService {
     );
   }
 
+  protected async shouldStoreKey(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      const biometricUnlock = await this.stateService.getBiometricUnlock({ userId: userId });
+      return biometricUnlock && this.platformUtilService.supportsSecureStorage();
+    }
+    return await super.shouldStoreKey(keySuffix, userId);
+  }
+
   private async getBiometricEncryptionClientKeyHalf(userId?: string): Promise<CsprngString | null> {
     try {
       let biometricKey = await this.stateService
