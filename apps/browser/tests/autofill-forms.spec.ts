@@ -1,57 +1,73 @@
 import { Page } from "@playwright/test";
 
+import { testPages } from "./constants";
 import { test, expect } from "./fixtures";
 
-let page: Page;
+let testPage: Page;
 
 test.describe("Extension autofills forms when triggered", () => {
-  test("Autofill basic form", async ({ context, extensionId }) => {
-    // Log in to the extension vault
-    page = await context.newPage();
-    await page.goto(`chrome-extension://${extensionId}/popup/index.html?uilocation=popout`);
-    await page.getByLabel("Email address").click();
-    await page.getByLabel("Email address").fill(process?.env?.VAULT_EMAIL || "");
-    await page.getByRole("button", { name: "Continue" }).click();
+  test("Log in to the vault, open pages, and autofill forms", async ({ context, extensionId }) => {
+    const contextPages = context.pages();
 
-    // @TODO temporary workaround for the live URL-encoding not matching output of `encodeURI` or `encodeURIComponent`
-    const urlEncodedLoginEmail = encodeURI(process?.env?.VAULT_EMAIL || "").replace("+", "%2B");
-    await page.waitForURL(
-      `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/login?email=${urlEncodedLoginEmail}`
-    );
-    await page.getByLabel("Master password").fill(process?.env?.VAULT_PASSWORD || "");
-    await page.getByRole("button", { name: "Log in with master password" }).click();
-    await page.waitForURL(
-      `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/tabs/vault`
-    );
-    await page.waitForTimeout(2000);
+    // Close the extension welcome page if it pops up
+    const welcomePage = contextPages[1];
+    if (welcomePage) {
+      welcomePage.close();
+    }
 
-    // Open the test page
-    const testPage = await context.newPage();
-    await testPage.goto("tests/test-pages/basic-form.html");
-    await testPage.waitForURL("tests/test-pages/basic-form.html");
-    await testPage.waitForTimeout(1000);
+    testPage = contextPages[0];
+
+    await test.step("Log in to the extension vault", async () => {
+      await testPage.goto(`chrome-extension://${extensionId}/popup/index.html?uilocation=popout`);
+      await testPage.getByLabel("Email address").click();
+      await testPage.getByLabel("Email address").fill(process?.env?.VAULT_EMAIL || "");
+      await testPage.getByRole("button", { name: "Continue" }).click();
+
+      // @TODO temporary workaround for the live URL-encoding not matching output of `encodeURI` or `encodeURIComponent`
+      const urlEncodedLoginEmail = encodeURI(process?.env?.VAULT_EMAIL || "").replace("+", "%2B");
+      await testPage.waitForURL(
+        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/login?email=${urlEncodedLoginEmail}`
+      );
+      await testPage.getByLabel("Master password").fill(process?.env?.VAULT_PASSWORD || "");
+      await testPage.getByRole("button", { name: "Log in with master password" }).click();
+      await testPage.waitForURL(
+        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/tabs/vault`
+      );
+      await testPage.waitForTimeout(2000);
+    });
 
     const [backgroundPage] = context.backgroundPages();
 
-    backgroundPage.evaluate(() =>
-      chrome.tabs.query(
-        { active: true },
-        (tabs) =>
-          tabs[0] &&
-          chrome.tabs.sendMessage(tabs[0]?.id || 0, {
-            command: "collectPageDetails",
-            tab: tabs[0],
-            sender: "autofill_cmd",
-          })
-      )
-    );
+    for (const page of testPages) {
+      const { url, inputs } = page;
 
-    expect(testPage.locator("#username")).toHaveValue("jsmith");
-    expect(testPage.locator("#password")).toHaveValue("areallygoodpassword");
+      await test.step(`Autofill the form on page ${url}`, async () => {
+        await testPage.goto(url);
+        await testPage.waitForURL(url);
+        await testPage.waitForTimeout(1000);
+
+        backgroundPage.evaluate(() =>
+          chrome.tabs.query(
+            { active: true },
+            (tabs) =>
+              tabs[0] &&
+              chrome.tabs.sendMessage(tabs[0]?.id || 0, {
+                command: "collectPageDetails",
+                tab: tabs[0],
+                sender: "autofill_cmd",
+              })
+          )
+        );
+
+        for (const inputKey of Object.keys(inputs)) {
+          await expect
+            .soft(testPage.locator(inputs[inputKey].selector))
+            .toHaveValue(inputs[inputKey].value);
+        }
+      });
+    }
 
     // Hold the window open (don't close out)
-    // await testPage.waitForTimeout(20000000); // @TODO set to true when finished debugging
-
-    context.close();
+    // await testPage.waitForTimeout(10000000); // @TODO remove when finished debugging
   });
 });
