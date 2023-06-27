@@ -14,12 +14,15 @@ import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/ide
 import { TwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/two-factor-email.request";
 import { TwoFactorProviders } from "@bitwarden/common/auth/services/two-factor.service";
 import { WebAuthnIFrame } from "@bitwarden/common/auth/webauthn-iframe";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
@@ -44,6 +47,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
 
   protected loginRoute = "login";
   protected successRoute = "vault";
+  protected trustedDeviceEncRoute = "login-initiated";
 
   constructor(
     protected authService: AuthService,
@@ -58,7 +62,8 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     protected logService: LogService,
     protected twoFactorService: TwoFactorService,
     protected appIdService: AppIdService,
-    protected loginService: LoginService
+    protected loginService: LoginService,
+    protected configService: ConfigServiceAbstraction
   ) {
     super(environmentService, i18nService, platformUtilsService);
     this.webAuthnSupported = this.platformUtilsService.supportsWebAuthn(win);
@@ -207,6 +212,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       this.onSuccessfulLogin();
     }
     if (response.resetMasterPassword) {
+      // TODO: for TDE, we are going to deprecate using response.resetMasterPassword
+      // and instead rely on accountDecryptionOptions to determine if the user needs to set a password
+      // Users are allowed to not have a MP if TDE feature enabled + TDE configured. Otherwise, they must set a MP
+      // src: https://bitwarden.atlassian.net/browse/PM-2759?focusedCommentId=39438
       this.successRoute = "set-password";
     }
     if (response.forcePasswordReset !== ForceResetPasswordReason.None) {
@@ -217,11 +226,28 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       await this.onSuccessfulLoginNavigate();
     } else {
       this.loginService.clearValues();
-      this.router.navigate([this.successRoute], {
-        queryParams: {
-          identifier: this.identifier,
-        },
-      });
+
+      const ssoTo2faFlowActive = this.route.snapshot.queryParamMap.get("sso") === "true";
+      const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
+        FeatureFlag.TrustedDeviceEncryption
+      );
+
+      const accountDecryptionOptions: AccountDecryptionOptions =
+        await this.stateService.getAccountDecryptionOptions();
+
+      if (
+        ssoTo2faFlowActive &&
+        trustedDeviceEncryptionFeatureActive &&
+        accountDecryptionOptions.trustedDeviceOption !== undefined
+      ) {
+        this.router.navigate([this.trustedDeviceEncRoute]);
+      } else {
+        this.router.navigate([this.successRoute], {
+          queryParams: {
+            identifier: this.identifier,
+          },
+        });
+      }
     }
   }
 

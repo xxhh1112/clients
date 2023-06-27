@@ -294,6 +294,17 @@ export class AccountDecryptionOptions {
     }
   }
 
+  // TODO: these nice getters don't work because the Account object is not properly being deserialized out of
+  // JSON (the Account static fromJSON method is not running) so these getters don't exist on the
+  // account decryptions options object when pulled out of state.  This is a bug that needs to be fixed later on
+  // get hasTrustedDeviceOption(): boolean {
+  //   return this.trustedDeviceOption !== null && this.trustedDeviceOption !== undefined;
+  // }
+
+  // get hasKeyConnectorOption(): boolean {
+  //   return this.keyConnectorOption !== null && this.keyConnectorOption !== undefined;
+  // }
+
   static fromResponse(response: UserDecryptionOptionsResponse): AccountDecryptionOptions {
     if (response == null) {
       return null;
@@ -322,7 +333,21 @@ export class AccountDecryptionOptions {
       return null;
     }
 
-    return Object.assign(new AccountDecryptionOptions(), obj);
+    const accountDecryptionOptions = Object.assign(new AccountDecryptionOptions(), obj);
+
+    if (obj.trustedDeviceOption) {
+      accountDecryptionOptions.trustedDeviceOption = new TrustedDeviceUserDecryptionOption(
+        obj.trustedDeviceOption.hasAdminApproval
+      );
+    }
+
+    if (obj.keyConnectorOption) {
+      accountDecryptionOptions.keyConnectorOption = new KeyConnectorUserDecryptionOption(
+        obj.keyConnectorOption.keyConnectorUrl
+      );
+    }
+
+    return accountDecryptionOptions;
   }
 }
 

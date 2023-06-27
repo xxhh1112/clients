@@ -1,13 +1,13 @@
 <div id="login-decryption-options-page">
   <div id="content" class="content">
     <img class="logo-image" alt="Bitwarden" />
-    <h1 id="heading">{{ "logInInitiated" | i18n }}</h1>
 
     <div class="container loading-spinner" *ngIf="loading">
       <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
     </div>
 
     <ng-container *ngIf="!loading">
+      <h1 id="heading">{{ "logInInitiated" | i18n }}</h1>
       <h6 id="subHeading" class="standard-bottom-margin">{{ "deviceApprovalRequired" | i18n }}</h6>
 
       <form id="rememberDeviceForm" class="standard-bottom-margin" [formGroup]="rememberDeviceForm">

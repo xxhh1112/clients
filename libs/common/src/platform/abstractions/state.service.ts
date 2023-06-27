@@ -263,8 +263,10 @@ export abstract class StateService<T extends Account = Account> {
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
   setDeviceKey: (value: DeviceKey, options?: StorageOptions) => Promise<void>;
-  getAcctDecryptionOptions: (options?: StorageOptions) => Promise<AccountDecryptionOptions | null>;
-  setAcctDecryptionOptions: (
+  getAccountDecryptionOptions: (
+    options?: StorageOptions
+  ) => Promise<AccountDecryptionOptions | null>;
+  setAccountDecryptionOptions: (
     value: AccountDecryptionOptions,
     options?: StorageOptions
   ) => Promise<void>;

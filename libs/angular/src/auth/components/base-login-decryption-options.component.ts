@@ -1,22 +1,28 @@
 import { Directive, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { Observable, Subject, catchError, forkJoin, from, of, finalize, takeUntil } from "rxjs";
 
-import { DevicesApiServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices-api.service.abstraction";
+import { DevicesServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { DeviceType } from "@bitwarden/common/enums/device-type.enum";
+import {
+  DesktopDeviceTypes,
+  DeviceType,
+  MobileDeviceTypes,
+} from "@bitwarden/common/enums/device-type.enum";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 
-// TODO: replace this base component with a service per latest ADR
 @Directive()
 export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
-  private componentDestroyed$: Subject<void> = new Subject();
+  private destroy$ = new Subject<void>();
 
-  userEmail: string = null;
+  showApproveFromOtherDeviceBtn: boolean;
+  showReqAdminApprovalBtn: boolean;
+  showApproveWithMasterPasswordBtn: boolean;
+  userEmail: string;
 
   rememberDeviceForm = this.formBuilder.group({
     rememberDevice: [true],
@@ -24,55 +30,99 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
   loading = true;
 
-  showApproveFromOtherDeviceBtn = false;
-  showReqAdminApprovalBtn = false;
-  showApproveWithMasterPasswordBtn = false;
-
   constructor(
     protected formBuilder: FormBuilder,
-    protected devicesApiService: DevicesApiServiceAbstraction,
+    protected devicesService: DevicesServiceAbstraction,
     protected stateService: StateService,
     protected router: Router,
     protected messagingService: MessagingService,
-    protected tokenService: TokenService,
-    protected loginService: LoginService
+    protected loginService: LoginService,
+    private validationService: ValidationService
   ) {}
 
-  async ngOnInit() {
-    // Determine if the user has any mobile or desktop devices
-    // to determine if we should show the approve from other device button
-    const devicesListResponse = await this.devicesApiService.getDevices();
-    for (const device of devicesListResponse.data) {
-      if (
-        device.type === DeviceType.Android ||
-        device.type === DeviceType.iOS ||
-        device.type === DeviceType.AndroidAmazon ||
-        device.type === DeviceType.WindowsDesktop ||
-        device.type === DeviceType.MacOsDesktop ||
-        device.type === DeviceType.LinuxDesktop ||
-        device.type === DeviceType.UWP
-      ) {
-        this.showApproveFromOtherDeviceBtn = true;
-        break;
-      }
-    }
+  ngOnInit() {
+    // Note: this is probably not a comprehensive write up of all scenarios:
 
-    const acctDecryptionOptions: AccountDecryptionOptions =
-      await this.stateService.getAcctDecryptionOptions();
+    // If the TDE feature flag is enabled and TDE is configured for the org that the user is a member of,
+    // then new and existing users can be redirected here after completing the SSO flow (and 2FA if enabled).
 
-    // Get user's email from access token:
-    this.userEmail = await this.tokenService.getEmail();
+    // First we must determine user type (new or existing):
 
-    // Show the admin approval btn if user has TDE enabled and the org admin approval policy is set && user email is not null
-    this.showReqAdminApprovalBtn =
-      !!acctDecryptionOptions.trustedDeviceOption?.hasAdminApproval && this.userEmail != null;
+    // New User
+    // - present user with option to remember the device or not (trust the device)
+    // - present a continue button to proceed to the vault
+    //  - loadNewUserData() --> will need to load enrollment status and user email address.
 
-    this.showApproveWithMasterPasswordBtn = acctDecryptionOptions.hasMasterPassword;
+    // Existing User
+    // - Determine if user is an admin with access to account recovery in admin console
+    //  - Determine if user has a MP or not, if not, they must be redirected to set one (see PM-1035)
+    // - Determine if device is trusted or not via device crypto service (method not yet written)
+    //  - If not trusted, present user with login decryption options (approve from other device, approve with master password, request admin approval)
+    //    - loadUntrustedDeviceData()
 
-    // TODO: do I extend the lock guard for the lock screen to prevent the user from getting to the lock screen
-    // if they do not have a master password set
+    this.loadUntrustedDeviceData();
+  }
 
-    this.loading = false;
+  loadUntrustedDeviceData() {
+    this.loading = true;
+
+    const mobileAndDesktopDeviceTypes: DeviceType[] = Array.from(MobileDeviceTypes).concat(
+      Array.from(DesktopDeviceTypes)
+    );
+
+    // Note: Each obs must handle error here and protect inner observable b/c we are using forkJoin below
+    // as per RxJs docs: if any given observable errors at some point, then
+    // forkJoin will error as well and immediately unsubscribe from the other observables.
+    const mobileOrDesktopDevicesExistence$ = this.devicesService
+      .getDevicesExistenceByTypes$(mobileAndDesktopDeviceTypes)
+      .pipe(
+        catchError((err: unknown) => {
+          this.validationService.showError(err);
+          return of(undefined);
+        }),
+        takeUntil(this.destroy$)
+      );
+
+    const accountDecryptionOptions$: Observable<AccountDecryptionOptions> = from(
+      this.stateService.getAccountDecryptionOptions()
+    ).pipe(
+      catchError((err: unknown) => {
+        this.validationService.showError(err);
+        return of(undefined);
+      }),
+      takeUntil(this.destroy$)
+    );
+
+    const email$ = from(this.stateService.getEmail()).pipe(
+      catchError((err: unknown) => {
+        this.validationService.showError(err);
+        return of(undefined);
+      }),
+      takeUntil(this.destroy$)
+    );
+
+    forkJoin({
+      mobileOrDesktopDevicesExistence: mobileOrDesktopDevicesExistence$,
+      accountDecryptionOptions: accountDecryptionOptions$,
+      email: email$,
+    })
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
+      .subscribe(({ mobileOrDesktopDevicesExistence, accountDecryptionOptions, email }) => {
+        this.showApproveFromOtherDeviceBtn = mobileOrDesktopDevicesExistence || false;
+
+        this.showReqAdminApprovalBtn =
+          !!accountDecryptionOptions?.trustedDeviceOption?.hasAdminApproval || false;
+
+        this.showApproveWithMasterPasswordBtn =
+          accountDecryptionOptions?.hasMasterPassword || false;
+
+        this.userEmail = email;
+      });
   }
 
   approveFromOtherDevice() {
@@ -108,7 +158,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.componentDestroyed$.next();
-    this.componentDestroyed$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

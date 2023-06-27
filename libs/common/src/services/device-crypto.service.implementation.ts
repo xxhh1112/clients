@@ -86,4 +86,25 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
 
     return deviceKey;
   }
+
+  // TODO: add proper types to parameters once we have them coming down from server
+  async decryptUserKey(encryptedDevicePrivateKey: any, encryptedUserKey: any): Promise<UserKey> {
+    // get device key
+    const existingDeviceKey = await this.stateService.getDeviceKey();
+
+    if (!existingDeviceKey) {
+      // TODO: not sure what to do here
+      // User doesn't have a device key anymore so device is untrusted
+      return;
+    }
+
+    // attempt to decrypt encryptedDevicePrivateKey with device key
+    const devicePrivateKey = await this.encryptService.decryptToBytes(
+      encryptedDevicePrivateKey,
+      existingDeviceKey
+    );
+    // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
+    const userKey = await this.cryptoService.rsaDecrypt(encryptedUserKey, devicePrivateKey);
+    return new SymmetricCryptoKey(userKey) as UserKey;
+  }
 }

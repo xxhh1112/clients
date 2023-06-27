@@ -1,5 +1,6 @@
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
+import { DeviceType } from "../../enums";
 import { ListResponse } from "../../models/response/list.response";
 import { Utils } from "../../platform/misc/utils";
 import { ApiService } from "../api.service";
@@ -43,6 +44,18 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
   async getDevices(): Promise<ListResponse<DeviceResponse>> {
     const r = await this.apiService.send("GET", "/devices", null, true, true, null);
     return new ListResponse(r, DeviceResponse);
+  }
+
+  async getDevicesExistenceByTypes(deviceTypes: DeviceType[]): Promise<boolean> {
+    const r = await this.apiService.send(
+      "POST",
+      "/devices/exist-by-types",
+      deviceTypes,
+      true,
+      true,
+      null
+    );
+    return Boolean(r);
   }
 
   async updateTrustedDeviceKeys(

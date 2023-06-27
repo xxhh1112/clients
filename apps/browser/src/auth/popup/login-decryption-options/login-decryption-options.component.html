@@ -41,9 +41,6 @@
           (click)="approveFromOtherDevice()"
           type="button"
           class="btn primary block"
-          [ngClass]="{
-            'btn-bottom-margin': showReqAdminApprovalBtn || showApproveWithMasterPasswordBtn
-          }"
         >
           <b>{{ "approveFromYourOtherDevice" | i18n }}</b>
         </button>
@@ -51,14 +48,13 @@
           *ngIf="showReqAdminApprovalBtn"
           (click)="requestAdminApproval()"
           type="button"
-          class="btn block"
-          [ngClass]="{ 'btn-bottom-margin': showApproveWithMasterPasswordBtn }"
+          class="btn block btn-top-margin"
         >
           {{ "requestAdminApproval" | i18n }}
         </button>
         <button
           type="button"
-          class="btn block"
+          class="btn block btn-top-margin"
           *ngIf="showApproveWithMasterPasswordBtn"
           (click)="approveWithMasterPassword()"
         >
@@ -70,7 +66,9 @@
 
       <div class="small mx-5px">
         <p class="no-margin">{{ "loggingInAs" | i18n }} {{ userEmail }}</p>
-        <a [routerLink]="[]" (click)="logOut()">{{ "notYou" | i18n }}</a>
+        <a tabindex="0" role="button" style="cursor: pointer" (click)="logOut()">{{
+          "notYou" | i18n
+        }}</a>
       </div>
     </ng-container>
   </div>

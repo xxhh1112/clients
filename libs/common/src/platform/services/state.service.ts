@@ -1321,7 +1321,7 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getAcctDecryptionOptions(
+  async getAccountDecryptionOptions(
     options?: StorageOptions
   ): Promise<AccountDecryptionOptions | null> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
@@ -1335,7 +1335,7 @@ export class StateService<
     return account?.decryptionOptions as AccountDecryptionOptions;
   }
 
-  async setAcctDecryptionOptions(
+  async setAccountDecryptionOptions(
     value: AccountDecryptionOptions,
     options?: StorageOptions
   ): Promise<void> {

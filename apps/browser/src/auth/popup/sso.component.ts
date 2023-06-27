@@ -6,6 +6,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -35,6 +36,7 @@ export class SsoComponent extends BaseSsoComponent {
     syncService: SyncService,
     environmentService: EnvironmentService,
     logService: LogService,
+    configService: ConfigServiceAbstraction,
     private vaultTimeoutService: VaultTimeoutService
   ) {
     super(
@@ -48,7 +50,8 @@ export class SsoComponent extends BaseSsoComponent {
       cryptoFunctionService,
       environmentService,
       passwordGenerationService,
-      logService
+      logService,
+      configService
     );
 
     const url = this.environmentService.getWebVaultUrl();
