@@ -9,6 +9,7 @@ import {
   MasterKey,
   OrgKey,
   PinKey,
+  ProviderKey,
   SymmetricCryptoKey,
   UserKey,
 } from "../models/domain/symmetric-crypto-key";
@@ -221,11 +222,11 @@ export abstract class CryptoService {
    * @param providerId The desired provider
    * @returns The provider's symmetric key
    */
-  getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
+  getProviderKey: (providerId: string) => Promise<ProviderKey>;
   /**
    * @returns A map of the provider Ids to their symmetric keys
    */
-  getProviderKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  getProviderKeys: () => Promise<Map<string, ProviderKey>>;
   /**
    * @param memoryOnly Clear only the in-memory keys
    * @param userId The desired user
@@ -238,10 +239,10 @@ export abstract class CryptoService {
    */
   getPublicKey: () => Promise<ArrayBuffer>;
   /**
-   * Create's a new 64 byte key and encrypts it with the user's public key
+   * Creates a new 64 byte key and encrypts it with the user's public key
    * @returns The new encrypted share key and the decrypted key itself
    */
-  makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
+  makeOrgKey: <T extends OrgKey | ProviderKey>() => Promise<[EncString, T]>;
   /**
    * Sets the the user's encrypted private key in storage and
    * clears the decrypted private key from memory

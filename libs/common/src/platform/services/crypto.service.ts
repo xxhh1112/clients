@@ -30,6 +30,7 @@ import {
   MasterKey,
   OrgKey,
   PinKey,
+  ProviderKey,
   SymmetricCryptoKey,
   UserKey,
 } from "../models/domain/symmetric-crypto-key";
@@ -364,7 +365,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return await this.stateService.setEncryptedProviderKeys(providerKeys);
   }
 
-  async getProviderKey(providerId: string): Promise<SymmetricCryptoKey> {
+  async getProviderKey(providerId: string): Promise<ProviderKey> {
     if (providerId == null) {
       return null;
     }
@@ -378,11 +379,11 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   @sequentialize(() => "getProviderKeys")
-  async getProviderKeys(): Promise<Map<string, SymmetricCryptoKey>> {
-    const providerKeys: Map<string, SymmetricCryptoKey> = new Map<string, SymmetricCryptoKey>();
+  async getProviderKeys(): Promise<Map<string, ProviderKey>> {
+    const providerKeys: Map<string, ProviderKey> = new Map<string, ProviderKey>();
     const decryptedProviderKeys = await this.stateService.getDecryptedProviderKeys();
     if (decryptedProviderKeys != null && decryptedProviderKeys.size > 0) {
-      return decryptedProviderKeys;
+      return decryptedProviderKeys as Map<string, ProviderKey>;
     }
 
     const encProviderKeys = await this.stateService.getEncryptedProviderKeys();
@@ -399,7 +400,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       }
 
       const decValue = await this.rsaDecrypt(encProviderKeys[orgId]);
-      providerKeys.set(orgId, new SymmetricCryptoKey(decValue));
+      providerKeys.set(orgId, new SymmetricCryptoKey(decValue) as ProviderKey);
       setKey = true;
     }
 
@@ -433,11 +434,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     return publicKey;
   }
 
-  async makeShareKey(): Promise<[EncString, SymmetricCryptoKey]> {
+  async makeOrgKey<T extends OrgKey | ProviderKey>(): Promise<[EncString, T]> {
     const shareKey = await this.cryptoFunctionService.randomBytes(64);
     const publicKey = await this.getPublicKey();
     const encShareKey = await this.rsaEncrypt(shareKey, publicKey);
-    return [encShareKey, new SymmetricCryptoKey(shareKey)];
+    return [encShareKey, new SymmetricCryptoKey(shareKey) as T];
   }
 
   async setPrivateKey(encPrivateKey: string): Promise<void> {
