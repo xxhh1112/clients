@@ -36,6 +36,7 @@ export class ElectronCryptoService extends CryptoService {
     } else {
       await this.stateService.setUserKeyBiometric(null, { userId: userId });
     }
+    await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
   }
 
   protected override async getKeyFromStorage(

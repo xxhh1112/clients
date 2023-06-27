@@ -293,7 +293,7 @@ export abstract class CryptoService {
    * Clears the user's old pin keys from storage
    * @param userId The desired user
    */
-  clearOldPinKeys: (userId?: string) => Promise<void>;
+  clearDeprecatedPinKeys: (userId?: string) => Promise<void>;
   /**
    * Decrypts the user key with their pin
    * @param pin The user's PIN

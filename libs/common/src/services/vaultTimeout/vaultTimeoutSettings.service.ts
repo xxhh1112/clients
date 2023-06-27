@@ -118,6 +118,6 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     await this.stateService.setEverBeenUnlocked(false, { userId: userId });
     await this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
     await this.stateService.setProtectedPin(null, { userId: userId });
-    await this.cryptoService.clearOldPinKeys(userId);
+    await this.cryptoService.clearDeprecatedPinKeys(userId);
   }
 }
