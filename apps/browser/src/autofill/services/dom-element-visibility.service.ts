@@ -219,7 +219,10 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
     return new Promise((resolve) => {
       const observer: IntersectionObserver = new IntersectionObserver(
         (entries) => this.handleResolvingIntersectionObserverEntry(resolve, observer, entries),
-        { root: element.ownerDocument.body, threshold: 0.999 }
+        {
+          root: element.ownerDocument.body,
+          threshold: 0.999, // Safari has a bug that doesn't recognize 1 as fully visible, and instead requires a value of 0.999.
+        }
       );
       observer.observe(element);
     });
