@@ -255,30 +255,7 @@ export class Main {
 
     this.searchService = new SearchService(this.logService, this.i18nService);
 
-    this.configApiService = new ConfigApiService(this.apiService, this.authService);
-
-    this.cipherService = new CipherService(
-      this.cryptoService,
-      this.settingsService,
-      this.apiService,
-      this.i18nService,
-      this.searchService,
-      this.stateService,
-      this.encryptService,
-      this.cipherFileUploadService,
-      this.configApiService
-    );
-
     this.broadcasterService = new BroadcasterService();
-
-    this.folderService = new FolderService(
-      this.cryptoService,
-      this.i18nService,
-      this.cipherService,
-      this.stateService
-    );
-
-    this.folderApiService = new FolderApiService(this.folderService, this.apiService);
 
     this.collectionService = new CollectionService(
       this.cryptoService,
@@ -338,6 +315,29 @@ export class Main {
       this.passwordStrengthService,
       this.policyService
     );
+
+    this.configApiService = new ConfigApiService(this.apiService, this.authService);
+
+    this.cipherService = new CipherService(
+      this.cryptoService,
+      this.settingsService,
+      this.apiService,
+      this.i18nService,
+      this.searchService,
+      this.stateService,
+      this.encryptService,
+      this.cipherFileUploadService,
+      this.configApiService
+    );
+
+    this.folderService = new FolderService(
+      this.cryptoService,
+      this.i18nService,
+      this.cipherService,
+      this.stateService
+    );
+
+    this.folderApiService = new FolderApiService(this.folderService, this.apiService);
 
     const lockedCallback = async () =>
       await this.cryptoService.clearStoredKey(KeySuffixOptions.Auto);
