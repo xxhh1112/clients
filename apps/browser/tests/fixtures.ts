@@ -10,8 +10,9 @@ export const test = base.extend<{
   context: async ({}, use) => {
     const pathToExtension = path.join(__dirname, "../build");
     const context = await chromium.launchPersistentContext("", {
-      headless: false, // @TODO set to `true` when finished debugging
+      headless: false, // should always be `false`, even when testing headless Chrome
       args: [
+        // `--headless=new`, // use for headless testing on Chrome
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],

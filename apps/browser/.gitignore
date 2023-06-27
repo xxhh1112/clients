@@ -9,3 +9,4 @@ tests-out
 test-results
 .env
 playwright-report
+--cache-strategy
