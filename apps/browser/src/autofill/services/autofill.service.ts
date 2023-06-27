@@ -44,11 +44,11 @@ export default class AutofillService implements AutofillServiceInterface {
    * the refactor of the core autofill script if the feature flag
    * is enabled.
    * @param {chrome.runtime.MessageSender} sender
-   * @param {boolean} enableAutofillV2
+   * @param {boolean} autofillV2
    * @returns {Promise<void>}
    */
-  async injectAutofillScripts(sender: chrome.runtime.MessageSender, enableAutofillV2 = false) {
-    const mainAutofillScript = enableAutofillV2 ? `autofill-init.js` : "autofill.js";
+  async injectAutofillScripts(sender: chrome.runtime.MessageSender, autofillV2 = false) {
+    const mainAutofillScript = autofillV2 ? `autofill-init.js` : "autofill.js";
     const injectedScripts = [
       mainAutofillScript,
       "autofiller.js",
