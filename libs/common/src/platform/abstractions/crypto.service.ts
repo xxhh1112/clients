@@ -204,7 +204,7 @@ export abstract class CryptoService {
    * Uses the org key to derive a new symmetric key for encrypting data
    * @param orgKey The organization's symmetric key
    */
-  makeOrgDataEncKey: (orgKey: OrgKey) => Promise<[SymmetricCryptoKey, EncString]>;
+  makeDataEncKey: <T extends UserKey | OrgKey>(key: T) => Promise<[SymmetricCryptoKey, EncString]>;
   /**
    * Clears the user's stored organization keys
    * @param memoryOnly Clear only the in-memory keys

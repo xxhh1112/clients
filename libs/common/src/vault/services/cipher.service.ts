@@ -13,7 +13,11 @@ import { Utils } from "../../platform/misc/utils";
 import Domain from "../../platform/models/domain/domain-base";
 import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
 import { EncString } from "../../platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import {
+  OrgKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../../platform/models/domain/symmetric-crypto-key";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherType } from "../enums/cipher-type";
@@ -633,11 +637,14 @@ export class CipherService implements CipherServiceAbstraction {
     data: ArrayBuffer,
     admin = false
   ): Promise<Cipher> {
-    const orgKey = await this.cryptoService.getOrgKey(cipher.organizationId);
-    const encFileName = await this.cryptoService.encrypt(filename, orgKey);
+    let encKey: UserKey | OrgKey;
+    encKey = await this.cryptoService.getOrgKey(cipher.organizationId);
+    encKey ||= (await this.cryptoService.getKeyForUserEncryption()) as UserKey;
 
-    const dataEncKey = await this.cryptoService.makeOrgDataEncKey(orgKey);
-    const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
+    const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
+
+    const encFileName = await this.encryptService.encrypt(filename, encKey);
+    const encData = await this.encryptService.encryptToBytes(data, dataEncKey[0]);
 
     const response = await this.cipherFileUploadService.upload(
       cipher,
@@ -946,11 +953,15 @@ export class CipherService implements CipherServiceAbstraction {
 
     const encBuf = await EncArrayBuffer.fromResponse(attachmentResponse);
     const decBuf = await this.cryptoService.decryptFromBytes(encBuf, null);
-    const orgKey = await this.cryptoService.getOrgKey(organizationId);
-    const encFileName = await this.cryptoService.encrypt(attachmentView.fileName, orgKey);
 
-    const dataEncKey = await this.cryptoService.makeOrgDataEncKey(orgKey);
-    const encData = await this.cryptoService.encryptToBytes(decBuf, dataEncKey[0]);
+    let encKey: UserKey | OrgKey;
+    encKey = await this.cryptoService.getOrgKey(organizationId);
+    encKey ||= (await this.cryptoService.getKeyForUserEncryption()) as UserKey;
+
+    const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
+
+    const encFileName = await this.encryptService.encrypt(attachmentView.fileName, encKey);
+    const encData = await this.encryptService.encryptToBytes(decBuf, dataEncKey[0]);
 
     const fd = new FormData();
     try {

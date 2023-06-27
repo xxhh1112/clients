@@ -336,13 +336,15 @@ export class CryptoService implements CryptoServiceAbstraction {
     return result;
   }
 
-  async makeOrgDataEncKey(orgKey: OrgKey): Promise<[SymmetricCryptoKey, EncString]> {
-    if (orgKey == null) {
-      throw new Error("No Org Key provided");
+  async makeDataEncKey<T extends OrgKey | UserKey>(
+    key: T
+  ): Promise<[SymmetricCryptoKey, EncString]> {
+    if (key == null) {
+      throw new Error("No key provided");
     }
 
     const newSymKey = await this.cryptoFunctionService.randomBytes(64);
-    return this.buildProtectedSymmetricKey(orgKey, newSymKey);
+    return this.buildProtectedSymmetricKey(key, newSymKey);
   }
 
   async clearOrgKeys(memoryOnly?: boolean, userId?: string): Promise<void> {
