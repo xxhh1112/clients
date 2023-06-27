@@ -225,7 +225,7 @@ describe("EncString", () => {
 
       await encString.decrypt(null, key);
 
-      expect(cryptoService.getKeyForUserEncryption).not.toHaveBeenCalled();
+      expect(cryptoService.getUserKeyWithLegacySupport).not.toHaveBeenCalled();
       expect(encryptService.decryptToUtf8).toHaveBeenCalledWith(encString, key);
     });
 
@@ -243,11 +243,11 @@ describe("EncString", () => {
     it("gets the user's decryption key if required", async () => {
       const userKey = mock<SymmetricCryptoKey>();
 
-      cryptoService.getKeyForUserEncryption.mockResolvedValue(userKey);
+      cryptoService.getUserKeyWithLegacySupport.mockResolvedValue(userKey);
 
       await encString.decrypt(null, null);
 
-      expect(cryptoService.getKeyForUserEncryption).toHaveBeenCalledWith();
+      expect(cryptoService.getUserKeyWithLegacySupport).toHaveBeenCalledWith();
       expect(encryptService.decryptToUtf8).toHaveBeenCalledWith(encString, userKey);
     });
   });

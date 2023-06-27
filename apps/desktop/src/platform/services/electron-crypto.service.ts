@@ -26,6 +26,23 @@ export class ElectronCryptoService extends CryptoService {
     super(cryptoFunctionService, encryptService, platformUtilsService, logService, stateService);
   }
 
+  override async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      const oldKey = await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId });
+      return oldKey || (await this.stateService.hasUserKeyBiometric({ userId: userId }));
+    }
+    return super.hasUserKeyStored(keySuffix, userId);
+  }
+
+  override async clearStoredUserKey(keySuffix: KeySuffixOptions, userId?: string): Promise<void> {
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      this.stateService.setUserKeyBiometric(null, { userId: userId });
+      this.clearDeprecatedKeys(KeySuffixOptions.Biometric, userId);
+      return;
+    }
+    super.clearStoredUserKey(keySuffix, userId);
+  }
+
   protected override async storeAdditionalKeys(key: UserKey, userId?: string) {
     await super.storeAdditionalKeys(key, userId);
 
@@ -36,7 +53,7 @@ export class ElectronCryptoService extends CryptoService {
     } else {
       await this.stateService.setUserKeyBiometric(null, { userId: userId });
     }
-    await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
+    await this.clearDeprecatedKeys(KeySuffixOptions.Biometric, userId);
   }
 
   protected override async getKeyFromStorage(
@@ -70,13 +87,18 @@ export class ElectronCryptoService extends CryptoService {
     return await super.shouldStoreKey(keySuffix, userId);
   }
 
+  protected override async clearAllStoredUserKeys(userId?: string): Promise<void> {
+    await this.stateService.setUserKeyBiometric(null, { userId: userId });
+    super.clearAllStoredUserKeys(userId);
+  }
+
   private async getBiometricEncryptionClientKeyHalf(userId?: string): Promise<CsprngString | null> {
     try {
       let biometricKey = await this.stateService
         .getBiometricEncryptionClientKeyHalf({ userId })
         .then((result) => result?.decrypt(null /* user encrypted */))
         .then((result) => result as CsprngString);
-      const userKey = await this.getKeyForUserEncryption();
+      const userKey = await this.getUserKeyWithLegacySupport();
       if (biometricKey == null && userKey != null) {
         const keyBytes = await this.cryptoFunctionService.randomBytes(32);
         biometricKey = Utils.fromBufferToUtf8(keyBytes) as CsprngString;
@@ -88,6 +110,18 @@ export class ElectronCryptoService extends CryptoService {
     } catch {
       return null;
     }
+  }
+
+  // --LEGACY METHODS--
+  // We previously used the master key for additional keys, but now we use the user key.
+  // These methods support migrating the old keys to the new ones.
+
+  override async clearDeprecatedKeys(keySuffix: KeySuffixOptions, userId?: string) {
+    if (keySuffix === KeySuffixOptions.Biometric) {
+      await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
+    }
+
+    super.clearDeprecatedKeys(keySuffix, userId);
   }
 
   private async migrateBiometricKeyIfNeeded(userId?: string) {

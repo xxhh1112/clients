@@ -93,7 +93,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     );
 
     let newProtectedUserKey: [UserKey, EncString] = null;
-    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    const userKey = await this.cryptoService.getUserKey();
     if (userKey == null) {
       newProtectedUserKey = await this.cryptoService.makeUserKey(newMasterKey);
     } else {

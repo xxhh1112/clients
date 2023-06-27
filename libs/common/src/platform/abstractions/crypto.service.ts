@@ -16,44 +16,43 @@ import {
 
 export abstract class CryptoService {
   /**
-   * Use for encryption/decryption of data in order to support legacy
-   * encryption models. It will return the user key if available,
-   * if not it will return the master key.
-   */
-  getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
-
-  /**
    * Sets the provided user key and stores
-   * any other necessary versions, such as biometrics
+   * any other necessary versions (such as auto, biometrics,
+   * or pin)
    * @param key The user key to set
    * @param userId The desired user
    */
   setUserKey: (key: UserKey) => Promise<void>;
   /**
    * Gets the user key from memory and sets it again,
-   * kicking off a refresh of any additional keys that are needed.
+   * kicking off a refresh of any additional keys
+   * (such as auto, biometrics, or pin)
    */
-  toggleKey: () => Promise<void>;
+  refreshAdditionalKeys: () => Promise<void>;
+
   /**
    * Retrieves the user key
-   * @param keySuffix The desired version of the user's key to retrieve
-   * from storage if it is not available in memory
    * @param userId The desired user
    * @returns The user key
    */
-  getUserKeyFromMemory: (userId?: string) => Promise<UserKey>;
+  getUserKey: (userId?: string) => Promise<UserKey>;
+  /**
+   * Use for encryption/decryption of data in order to support legacy
+   * encryption models. It will return the user key if available,
+   * if not it will return the master key.
+   * @param userId The desired user
+   */
+  getUserKeyWithLegacySupport: (userId?: string) => Promise<UserKey>;
   /**
    * Retrieves the user key from storage
    * @param keySuffix The desired version of the user's key to retrieve
    * @param userId The desired user
    * @returns The user key
    */
-  getUserKeyFromStorage: (
-    keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
-    userId?: string
-  ) => Promise<UserKey>;
+  getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserKey>;
+
   /**
-   * @returns True if any version of the user key is available
+   * @returns True if the user key is available
    */
   hasUserKey: () => Promise<boolean>;
   /**
@@ -66,10 +65,7 @@ export abstract class CryptoService {
    * @param userId The desired user
    * @returns True if the provided version of the user key is stored
    */
-  hasUserKeyStored: (
-    keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
-    userId?: string
-  ) => Promise<boolean>;
+  hasUserKeyStored: (keySuffix: KeySuffixOptions, userId?: string) => Promise<boolean>;
   /**
    * Generates a new user key
    * @param masterKey The user's master key
@@ -285,15 +281,12 @@ export abstract class CryptoService {
    */
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
   /**
-   * Clears the user's pin protected user key
+   * Clears the user's pin keys from storage
+   * Note: This will remove the stored pin and as a result,
+   * disable pin protection for the user
    * @param userId The desired user
    */
-  clearPinProtectedKey: (userId?: string) => Promise<void>;
-  /**
-   * Clears the user's old pin keys from storage
-   * @param userId The desired user
-   */
-  clearDeprecatedPinKeys: (userId?: string) => Promise<void>;
+  clearPinKeys: (userId?: string) => Promise<void>;
   /**
    * Decrypts the user key with their pin
    * @param pin The user's PIN
@@ -347,6 +340,14 @@ export abstract class CryptoService {
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
   ) => Promise<MasterKey>;
+  /**
+   * Previously, the master key was used for any additional key like the biometrics or pin key.
+   * We have switched to using the user key for these purposes. This method is for clearing the state
+   * of the older keys on logout or post migration.
+   * @param keySuffix The desired type of key to clear
+   * @param userId The desired user
+   */
+  clearDeprecatedKeys: (keySuffix: KeySuffixOptions, userId?: string) => Promise<void>;
   /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.encrypt

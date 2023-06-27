@@ -269,7 +269,6 @@ export class SettingsComponent implements OnInit {
 
       this.form.controls.pin.setValue(await ref.onClosedPromise());
     } else {
-      await this.cryptoService.clearPinProtectedKey();
       await this.vaultTimeoutSettingsService.clear();
     }
   }
@@ -324,7 +323,7 @@ export class SettingsComponent implements OnInit {
       });
 
       await this.stateService.setBiometricAwaitingAcceptance(true);
-      await this.cryptoService.toggleKey();
+      await this.cryptoService.refreshAdditionalKeys();
 
       await Promise.race([
         submitted.then(async (result) => {

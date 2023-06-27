@@ -2,6 +2,7 @@ import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction }
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "../../admin-console/enums";
 import { TokenService } from "../../auth/abstractions/token.service";
+import { KeySuffixOptions } from "../../enums/key-suffix-options.enum";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { StateService } from "../../platform/abstractions/state.service";
@@ -43,7 +44,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     await this.tokenService.setClientId(clientId);
     await this.tokenService.setClientSecret(clientSecret);
 
-    await this.cryptoService.toggleKey();
+    await this.cryptoService.refreshAdditionalKeys();
   }
 
   async isPinLockSet(): Promise<PinLockType> {
@@ -116,8 +117,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   async clear(userId?: string): Promise<void> {
     await this.stateService.setEverBeenUnlocked(false, { userId: userId });
-    await this.stateService.setUserKeyPinEphemeral(null, { userId: userId });
-    await this.stateService.setProtectedPin(null, { userId: userId });
-    await this.cryptoService.clearDeprecatedPinKeys(userId);
+    await this.cryptoService.clearPinKeys(userId);
+    await this.cryptoService.clearDeprecatedKeys(KeySuffixOptions.Pin, userId);
   }
 }

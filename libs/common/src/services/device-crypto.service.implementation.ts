@@ -25,7 +25,7 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
 
   async trustDevice(): Promise<DeviceResponse> {
     // Attempt to get user key
-    const userKey: UserKey = await this.cryptoService.getUserKeyFromMemory();
+    const userKey: UserKey = await this.cryptoService.getUserKey();
 
     // If user key is not found, throw error
     if (!userKey) {

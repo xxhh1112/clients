@@ -287,17 +287,6 @@ export class LockComponent implements OnInit, OnDestroy {
     }
 
     const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
-
-    // if MP on restart is enabled, use it to get the PIN and store the ephemeral
-    // pin protected user key
-    if (this.pinStatus === `ENABLED_WITH_MP_ON_RESET`) {
-      const protectedPin = await this.stateService.getProtectedPin();
-      const pin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), userKey);
-      const pinKey = await this.cryptoService.makePinKey(pin, this.email, kdf, kdfConfig);
-      await this.stateService.setUserKeyPinEphemeral(
-        await this.cryptoService.encrypt(userKey.key, pinKey)
-      );
-    }
     await this.setKeyAndContinue(userKey, true);
   }
 

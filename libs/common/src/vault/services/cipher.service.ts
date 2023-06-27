@@ -336,7 +336,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     const ciphers = await this.getAll();
     const orgKeys = await this.cryptoService.getOrgKeys();
-    const userKey = await this.cryptoService.getKeyForUserEncryption();
+    const userKey = await this.cryptoService.getUserKeyWithLegacySupport();
 
     // Group ciphers by orgId or under 'null' for the user's ciphers
     const grouped = ciphers.reduce((agg, c) => {
@@ -639,7 +639,7 @@ export class CipherService implements CipherServiceAbstraction {
   ): Promise<Cipher> {
     let encKey: UserKey | OrgKey;
     encKey = await this.cryptoService.getOrgKey(cipher.organizationId);
-    encKey ||= (await this.cryptoService.getKeyForUserEncryption()) as UserKey;
+    encKey ||= await this.cryptoService.getUserKeyWithLegacySupport();
 
     const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
 
@@ -956,7 +956,7 @@ export class CipherService implements CipherServiceAbstraction {
 
     let encKey: UserKey | OrgKey;
     encKey = await this.cryptoService.getOrgKey(organizationId);
-    encKey ||= (await this.cryptoService.getKeyForUserEncryption()) as UserKey;
+    encKey ||= (await this.cryptoService.getUserKeyWithLegacySupport()) as UserKey;
 
     const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
 

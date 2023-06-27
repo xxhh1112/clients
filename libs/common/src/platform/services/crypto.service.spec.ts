@@ -61,7 +61,7 @@ describe("cryptoService", () => {
     it("returns the user key if available", async () => {
       stateSvcGetUserKey.mockResolvedValue(mockUserKey);
 
-      const encryptionKey = await cryptoService.getKeyForUserEncryption();
+      const encryptionKey = await cryptoService.getUserKeyWithLegacySupport();
 
       expect(stateSvcGetUserKey).toHaveBeenCalled();
       expect(stateSvcGetMasterKey).not.toHaveBeenCalled();
@@ -73,7 +73,7 @@ describe("cryptoService", () => {
       stateSvcGetUserKey.mockResolvedValue(null);
       stateSvcGetMasterKey.mockResolvedValue(mockMasterKey);
 
-      const encryptionKey = await cryptoService.getKeyForUserEncryption();
+      const encryptionKey = await cryptoService.getUserKeyWithLegacySupport();
 
       expect(stateSvcGetMasterKey).toHaveBeenCalled();
       expect(encryptionKey).toEqual(mockMasterKey);

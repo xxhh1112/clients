@@ -162,7 +162,7 @@ export class EncString implements Encrypted {
     const cryptoService = Utils.getContainerService().getCryptoService();
     return orgId != null
       ? await cryptoService.getOrgKey(orgId)
-      : await cryptoService.getKeyForUserEncryption();
+      : await cryptoService.getUserKeyWithLegacySupport();
   }
 }
 
