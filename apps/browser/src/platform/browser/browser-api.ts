@@ -286,6 +286,18 @@ export class BrowserApi {
    * @returns {Promise<unknown>}
    */
   static executeScriptInTab(tabId: number, details: chrome.tabs.InjectDetails) {
+    if (BrowserApi.manifestVersion === 3) {
+      return chrome.scripting.executeScript({
+        target: {
+          tabId: tabId,
+          allFrames: details.allFrames,
+          frameIds: details.frameId ? [details.frameId] : null,
+        },
+        files: details.file ? [details.file] : null,
+        injectImmediately: details.runAt === "document_start",
+      });
+    }
+
     return new Promise((resolve) => {
       chrome.tabs.executeScript(tabId, details, (result) => {
         resolve(result);
