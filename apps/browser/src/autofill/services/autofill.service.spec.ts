@@ -3859,6 +3859,300 @@ describe("AutofillService", function () {
     });
   });
 
+  describe("fieldPropertyIsMatch", function () {
+    let field: AutofillField;
+
+    beforeEach(function () {
+      field = createAutofillFieldMock();
+      jest.spyOn(AutofillService, "hasValue");
+    });
+
+    it("returns false if the property within the field does not have a value", function () {
+      field.htmlID = "";
+
+      const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "some-value");
+
+      expect(AutofillService.hasValue).toHaveBeenCalledWith("");
+      expect(result).toBe(false);
+    });
+
+    it("returns true if the property within the field provides a value that is equal to the passed `name`", function () {
+      field.htmlID = "some-value";
+
+      const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "some-value");
+
+      expect(AutofillService.hasValue).toHaveBeenCalledWith("some-value");
+      expect(result).toBe(true);
+    });
+
+    describe("given a passed `name` value that is expecting a regex check", function () {
+      it("returns false if the property within the field fails the `name` regex check", function () {
+        field.htmlID = "some-false-value";
+
+        const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=some-value");
+
+        expect(result).toBe(false);
+      });
+
+      it("returns true if the property within the field equals the `name` regex check", function () {
+        field.htmlID = "some-value";
+
+        const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=some-value");
+
+        expect(result).toBe(true);
+      });
+
+      it("returns true if the property within the field has a partial match to the `name` regex check", function () {
+        field.htmlID = "some-value";
+
+        const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=value");
+
+        expect(result).toBe(true);
+      });
+
+      it("will log an error when the regex triggers a catch block", function () {
+        field.htmlID = "some-value";
+        jest.spyOn(autofillService["logService"], "error");
+
+        const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=+");
+
+        expect(autofillService["logService"].error).toHaveBeenCalled();
+        expect(result).toBe(false);
+      });
+    });
+
+    describe("given a passed `name` value that is checking comma separated values", function () {
+      it("returns false if the property within the field does not have a value that matches the values within the `name` CSV", function () {
+        field.htmlID = "some-false-value";
+
+        const result = autofillService["fieldPropertyIsMatch"](
+          field,
+          "htmlID",
+          "csv=some-value,some-other-value,some-third-value"
+        );
+
+        expect(result).toBe(false);
+      });
+
+      it("returns true if the property within the field matches a value within the `name` CSV", function () {
+        field.htmlID = "some-other-value";
+
+        const result = autofillService["fieldPropertyIsMatch"](
+          field,
+          "htmlID",
+          "csv=some-value,some-other-value,some-third-value"
+        );
+
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe("fieldIsFuzzyMatch", function () {
+    let field: AutofillField;
+    const fieldProperties = [
+      "htmlID",
+      "htmlName",
+      "label-aria",
+      "label-tag",
+      "label-top",
+      "label-left",
+      "placeholder",
+    ];
+
+    beforeEach(function () {
+      field = createAutofillFieldMock();
+      jest.spyOn(AutofillService, "hasValue");
+      jest.spyOn(AutofillService as any, "fuzzyMatch");
+    });
+
+    it("returns false if the field properties do not have any values", function () {
+      fieldProperties.forEach((property) => {
+        field[property] = "";
+      });
+
+      const result = AutofillService["fieldIsFuzzyMatch"](field, ["some-value"]);
+
+      expect(AutofillService.hasValue).toHaveBeenCalledTimes(7);
+      expect(AutofillService["fuzzyMatch"]).not.toHaveBeenCalled();
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the field properties do not have a value that is a fuzzy match", function () {
+      fieldProperties.forEach((property) => {
+        field[property] = "some-false-value";
+
+        const result = AutofillService["fieldIsFuzzyMatch"](field, ["some-value"]);
+
+        expect(AutofillService.hasValue).toHaveBeenCalled();
+        expect(AutofillService["fuzzyMatch"]).toHaveBeenCalledWith(
+          ["some-value"],
+          "some-false-value"
+        );
+        expect(result).toBe(false);
+
+        field[property] = "";
+      });
+    });
+
+    it("returns true if the field property has a value that is a fuzzy match", function () {
+      fieldProperties.forEach((property) => {
+        field[property] = "some-value";
+
+        const result = AutofillService["fieldIsFuzzyMatch"](field, ["some-value"]);
+
+        expect(AutofillService.hasValue).toHaveBeenCalled();
+        expect(AutofillService["fuzzyMatch"]).toHaveBeenCalledWith(["some-value"], "some-value");
+        expect(result).toBe(true);
+
+        field[property] = "";
+      });
+    });
+  });
+
+  describe("fuzzyMatch", function () {
+    it("returns false if the passed options is null", function () {
+      const result = AutofillService["fuzzyMatch"](null, "some-value");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the passed options contains an empty array", function () {
+      const result = AutofillService["fuzzyMatch"]([], "some-value");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the passed value is null", function () {
+      const result = AutofillService["fuzzyMatch"](["some-value"], null);
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the passed value is an empty string", function () {
+      const result = AutofillService["fuzzyMatch"](["some-value"], "");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the passed value is not present in the options array", function () {
+      const result = AutofillService["fuzzyMatch"](["some-value"], "some-other-value");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns true if the passed value is within the options array", function () {
+      const result = AutofillService["fuzzyMatch"](
+        ["some-other-value", "some-value"],
+        "some-value"
+      );
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe("hasValue", function () {
+    it("returns false if the passed string is null", function () {
+      const result = AutofillService.hasValue(null);
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false if the passed string is an empty string", function () {
+      const result = AutofillService.hasValue("");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns true if the passed string is not null or an empty string", function () {
+      const result = AutofillService.hasValue("some-value");
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe("setFillScriptForFocus", function () {
+    let usernameField: AutofillField;
+    let passwordField: AutofillField;
+    let filledFields: { [key: string]: AutofillField };
+    let fillScript: AutofillScript;
+
+    beforeEach(function () {
+      usernameField = createAutofillFieldMock({
+        opid: "username-field",
+        type: "text",
+        form: "validFormId",
+        elementNumber: 0,
+      });
+      passwordField = createAutofillFieldMock({
+        opid: "password-field",
+        type: "password",
+        form: "validFormId",
+        elementNumber: 1,
+      });
+      filledFields = {
+        "username-field": usernameField,
+        "password-field": passwordField,
+      };
+      fillScript = createAutofillScriptMock({ script: [] });
+    });
+
+    it("returns a fill script with an unmodified actions list if an empty filledFields value is passed", function () {
+      const result = AutofillService.setFillScriptForFocus({}, fillScript);
+
+      expect(result.script).toStrictEqual([]);
+    });
+
+    it("returns a fill script with the password field prioritized when adding a `focus_by_opid` action", function () {
+      const result = AutofillService.setFillScriptForFocus(filledFields, fillScript);
+
+      expect(result.script).toStrictEqual([["focus_by_opid", "password-field"]]);
+    });
+
+    it("returns a fill script with the username field if a password field is not present when adding a `focus_by_opid` action", function () {
+      delete filledFields["password-field"];
+
+      const result = AutofillService.setFillScriptForFocus(filledFields, fillScript);
+
+      expect(result.script).toStrictEqual([["focus_by_opid", "username-field"]]);
+    });
+  });
+
+  describe("fillByOpid", function () {
+    let usernameField: AutofillField;
+    let fillScript: AutofillScript;
+
+    beforeEach(function () {
+      usernameField = createAutofillFieldMock({
+        opid: "username-field",
+        type: "text",
+        form: "validFormId",
+        elementNumber: 0,
+      });
+      fillScript = createAutofillScriptMock({ script: [] });
+    });
+
+    it("returns a list of fill script actions for the passed field", function () {
+      usernameField.maxLength = 5;
+      AutofillService.fillByOpid(fillScript, usernameField, "some-long-value");
+
+      expect(fillScript.script).toStrictEqual([
+        ["click_on_opid", "username-field"],
+        ["focus_by_opid", "username-field"],
+        ["fill_by_opid", "username-field", "some-long-value"],
+      ]);
+    });
+
+    it("returns only the `fill_by_opid` action if the passed field is a `span` element", function () {
+      usernameField.tagName = "span";
+      AutofillService.fillByOpid(fillScript, usernameField, "some-long-value");
+
+      expect(fillScript.script).toStrictEqual([
+        ["fill_by_opid", "username-field", "some-long-value"],
+      ]);
+    });
+  });
+
   describe("forCustomFieldsOnly", function () {
     it("returns a true value if the passed field has a tag name of `span`", function () {
       const field = createAutofillFieldMock({ tagName: "span" });

@@ -1556,6 +1556,18 @@ export default class AutofillService implements AutofillServiceInterface {
     return false;
   }
 
+  /**
+   * Identifies if a given property within a field matches the value
+   * of the passed "name" parameter. If the name starts with "regex=",
+   * the value is tested against a case-insensitive regular expression.
+   * If the name starts with "csv=", the value is treated as a
+   * comma-separated list of values to match.
+   * @param field
+   * @param {string} property
+   * @param {string} name
+   * @returns {boolean}
+   * @private
+   */
   private fieldPropertyIsMatch(field: any, property: string, name: string): boolean {
     let fieldVal = field[property] as string;
     if (!AutofillService.hasValue(fieldVal)) {
@@ -1590,6 +1602,13 @@ export default class AutofillService implements AutofillServiceInterface {
     return fieldVal.toLowerCase() === name;
   }
 
+  /**
+   * Accepts a field and returns true if the field contains a
+   * value that matches any of the names in the provided list.
+   * @param {AutofillField} field
+   * @param {string[]} names
+   * @returns {boolean}
+   */
   static fieldIsFuzzyMatch(field: AutofillField, names: string[]): boolean {
     if (AutofillService.hasValue(field.htmlID) && this.fuzzyMatch(names, field.htmlID)) {
       return true;
@@ -1628,6 +1647,14 @@ export default class AutofillService implements AutofillServiceInterface {
     return false;
   }
 
+  /**
+   * Accepts a list of options and a value and returns
+   * true if the value matches any of the options.
+   * @param {string[]} options
+   * @param {string} value
+   * @returns {boolean}
+   * @private
+   */
   private static fuzzyMatch(options: string[], value: string): boolean {
     if (options == null || options.length === 0 || value == null || value === "") {
       return false;
@@ -1647,10 +1674,23 @@ export default class AutofillService implements AutofillServiceInterface {
     return false;
   }
 
+  /**
+   * Accepts a string and returns true if the
+   * string is not falsy and not empty.
+   * @param {string} str
+   * @returns {boolean}
+   */
   static hasValue(str: string): boolean {
-    return str && str !== "";
+    return Boolean(str && str !== "");
   }
 
+  /**
+   * Sets the `focus_by_opid` autofill script
+   * action to the last field that was filled.
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @param {AutofillScript} fillScript
+   * @returns {AutofillScript}
+   */
   static setFillScriptForFocus(
     filledFields: { [id: string]: AutofillField },
     fillScript: AutofillScript
@@ -1679,6 +1719,13 @@ export default class AutofillService implements AutofillServiceInterface {
     return fillScript;
   }
 
+  /**
+   * Updates a fill script to place the `cilck_on_opid`, `focus_on_opid`, and `fill_by_opid`
+   * fill script actions associated with the provided field.
+   * @param {AutofillScript} fillScript
+   * @param {AutofillField} field
+   * @param {string} value
+   */
   static fillByOpid(fillScript: AutofillScript, field: AutofillField, value: string): void {
     if (field.maxLength && value && value.length > field.maxLength) {
       value = value.substr(0, value.length);
@@ -1691,8 +1738,8 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   /**
-   * Identifies if the field is a custom field.
-   *
+   * Identifies if the field is a custom field, a custom
+   * field is defined as a field that is a `span` element.
    * @param {AutofillField} field
    * @returns {boolean}
    */
