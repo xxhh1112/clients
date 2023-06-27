@@ -41,8 +41,8 @@ describe("Cipher Service", () => {
     searchService = Substitute.for<SearchService>();
     encryptService = Substitute.for<EncryptService>();
 
-    cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
-    cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
+    encryptService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
+    encryptService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
 
     cipherService = new CipherService(
       cryptoService,
