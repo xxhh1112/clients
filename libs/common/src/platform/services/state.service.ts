@@ -581,7 +581,7 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    if (options.userId == this.activeAccountSubject.getValue()) {
+    if (options?.userId == this.activeAccountSubject.getValue()) {
       const nextValue = value != null;
 
       // Avoid emitting if we are already unlocked
