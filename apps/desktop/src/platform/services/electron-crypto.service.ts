@@ -38,7 +38,7 @@ export class ElectronCryptoService extends CryptoService {
     }
   }
 
-  protected override async retrieveUserKeyFromStorage(
+  protected override async getKeyFromStorage(
     keySuffix: KeySuffixOptions,
     userId?: string
   ): Promise<UserKey> {
@@ -47,7 +47,7 @@ export class ElectronCryptoService extends CryptoService {
       const userKey = await this.stateService.getUserKeyBiometric({ userId: userId });
       return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserKey;
     }
-    return await super.retrieveUserKeyFromStorage(keySuffix, userId);
+    return await super.getKeyFromStorage(keySuffix, userId);
   }
 
   protected async storeBiometricKey(key: UserKey, userId?: string): Promise<void> {

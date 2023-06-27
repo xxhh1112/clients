@@ -73,7 +73,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
     userId?: string
   ): Promise<UserKey> {
-    const userKey = await this.retrieveUserKeyFromStorage(keySuffix, userId);
+    const userKey = await this.getKeyFromStorage(keySuffix, userId);
     if (userKey != null) {
       if (!(await this.validateUserKey(userKey))) {
         this.logService.warning("Wrong key, throwing away stored key");
@@ -106,7 +106,7 @@ export class CryptoService implements CryptoServiceAbstraction {
       const oldKey = await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId });
       return oldKey || (await this.stateService.hasUserKeyBiometric({ userId: userId }));
     }
-    return (await this.retrieveUserKeyFromStorage(keySuffix, userId)) != null;
+    return (await this.getKeyFromStorage(keySuffix, userId)) != null;
   }
 
   async makeUserKey(masterKey: MasterKey): Promise<[UserKey, EncString]> {
@@ -757,7 +757,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return shouldStoreKey;
   }
 
-  protected async retrieveUserKeyFromStorage(
+  protected async getKeyFromStorage(
     keySuffix: KeySuffixOptions,
     userId?: string
   ): Promise<UserKey> {
