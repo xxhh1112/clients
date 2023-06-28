@@ -31,7 +31,7 @@ export class BulkEnableSecretsManagerDialogComponent implements OnInit {
     this.dataSource.data = this.data.users;
   }
 
-  enableAccess = async () => {
+  submit = async () => {
     await this.organizationUserService.putOrganizationUserBulkEnableSecretsManager(
       this.data.orgId,
       this.dataSource.data.map((u) => u.id)

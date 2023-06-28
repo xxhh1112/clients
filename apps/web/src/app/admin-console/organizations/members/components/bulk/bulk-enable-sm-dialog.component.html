@@ -22,9 +22,7 @@
               ></bit-avatar>
               <div class="tw-flex tw-flex-col">
                 <div>
-                  <button type="button" bitLink>
-                    {{ u.name ?? u.email }}
-                  </button>
+                  {{ u | userName }}
                 </div>
                 <div class="tw-text-sm tw-text-muted" *ngIf="u.name">
                   {{ u.email }}
@@ -38,7 +36,7 @@
     </bit-table>
   </span>
   <ng-container bitDialogFooter>
-    <button type="button" bitButton buttonType="primary" [bitAction]="enableAccess">
+    <button type="button" bitButton buttonType="primary" [bitAction]="submit">
       {{ "enableAccess" | i18n }}
     </button>
     <button type="button" bitButton buttonType="secondary" bitDialogClose>
