@@ -37,7 +37,6 @@ export abstract class StateService<T extends Account = Account> {
   accounts$: Observable<{ [userId: string]: T }>;
   activeAccount$: Observable<string>;
   activeAccountUnlocked$: Observable<boolean>;
-  accountDiskCache$: Observable<Record<string, T>>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
