@@ -4,7 +4,11 @@ import { mock, MockProxy } from "jest-mock-extended";
 
 import { EncryptionType } from "../../../enums";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
-import { OrgKey, SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import {
+  OrgKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../../../platform/models/domain/symmetric-crypto-key";
 import { CryptoService } from "../../abstractions/crypto.service";
 import { ContainerService } from "../../services/container.service";
 
@@ -241,7 +245,7 @@ describe("EncString", () => {
     });
 
     it("gets the user's decryption key if required", async () => {
-      const userKey = mock<SymmetricCryptoKey>();
+      const userKey = mock<UserKey>();
 
       cryptoService.getUserKeyWithLegacySupport.mockResolvedValue(userKey);
 
