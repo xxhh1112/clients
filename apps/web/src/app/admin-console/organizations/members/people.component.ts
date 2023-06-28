@@ -7,6 +7,7 @@ import {
   from,
   lastValueFrom,
   map,
+  Observable,
   shareReplay,
   Subject,
   switchMap,
@@ -55,6 +56,7 @@ import { CollectionData } from "@bitwarden/common/vault/models/data/collection.d
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 
+import { flagEnabled } from "../../../../utils/flags";
 import { openEntityEventsDialog } from "../../../admin-console/organizations/manage/entity-events.component";
 import { BasePeopleComponent } from "../../../common/base.people.component";
 import { GroupService } from "../core";
@@ -101,6 +103,7 @@ export class PeopleComponent
   status: OrganizationUserStatusType = null;
   orgResetPasswordPolicyEnabled = false;
 
+  protected canUseSecretsManager$: Observable<boolean>;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -147,6 +150,10 @@ export class PeopleComponent
     const organization$ = this.route.params.pipe(
       map((params) => this.organizationService.get(params.organizationId)),
       shareReplay({ refCount: true, bufferSize: 1 })
+    );
+
+    this.canUseSecretsManager$ = organization$.pipe(
+      map((org) => org.useSecretsManager && flagEnabled("secretsManager"))
     );
 
     const policies$ = organization$.pipe(
