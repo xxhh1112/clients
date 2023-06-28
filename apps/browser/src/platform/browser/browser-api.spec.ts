@@ -7,6 +7,7 @@ describe("BrowserApi", function () {
 
   beforeEach(function () {
     jest.clearAllMocks();
+    jest.spyOn(BrowserApi, "manifestVersion", "get").mockReturnValue(2);
     chrome.tabs = {
       executeScript: jest.fn((tabId, injectDetails, callback) => callback(executeScriptResult)),
     } as any;

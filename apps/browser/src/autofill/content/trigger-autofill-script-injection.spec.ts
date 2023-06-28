@@ -1,13 +1,7 @@
-import { TriggerAutofillScriptInjection } from "./abstractions/trigger-autofill-script-injection";
-
 describe("TriggerAutofillScriptInjection", function () {
-  let bitwardenTriggerAutofillScriptInjection: TriggerAutofillScriptInjection;
-
   beforeEach(function () {
     jest.resetModules();
     jest.clearAllMocks();
-    require("../content/trigger-autofill-script-injection");
-    bitwardenTriggerAutofillScriptInjection = window.bitwardenTriggerAutofillScriptInjection;
     chrome.runtime = {
       sendMessage: jest.fn(),
     } as any;
@@ -15,7 +9,7 @@ describe("TriggerAutofillScriptInjection", function () {
 
   describe("init", function () {
     it("sends a message to the extension background", function () {
-      bitwardenTriggerAutofillScriptInjection.init();
+      require("../content/trigger-autofill-script-injection");
 
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
         command: "triggerAutofillScriptInjection",
