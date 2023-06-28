@@ -37,13 +37,13 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
 
   readonly euUrls: Urls = {
     base: null,
-    api: "https://api.bitwarden.eu",
-    identity: "https://identity.bitwarden.eu",
-    icons: "https://icons.bitwarden.eu",
-    webVault: "https://vault.bitwarden.eu",
-    notifications: "https://notifications.bitwarden.eu",
-    events: "https://events.bitwarden.eu",
-    scim: "https://scim.bitwarden.eu/v2",
+    api: "https://api.bitwarden.net",
+    identity: "https://identity.bitwarden.net",
+    icons: "https://icons.bitwarden.net",
+    webVault: "https://vault.bitwarden.net",
+    notifications: "https://notifications.bitwarden.net",
+    events: "https://events.bitwarden.net",
+    scim: "https://scim.bitwarden.net/v2",
   };
 
   constructor(private stateService: StateService) {
@@ -313,8 +313,8 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     return [
       "https://api.bitwarden.com",
       "https://vault.bitwarden.com/api",
-      "https://api.bitwarden.eu",
-      "https://vault.bitwarden.eu/api",
+      "https://api.bitwarden.net",
+      "https://vault.bitwarden.net/api",
     ].includes(this.getApiUrl());
   }
 
@@ -322,8 +322,8 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     return ![
       "http://vault.bitwarden.com",
       "https://vault.bitwarden.com",
-      "http://vault.bitwarden.eu",
-      "https://vault.bitwarden.eu",
+      "http://vault.bitwarden.net",
+      "https://vault.bitwarden.net",
       "http://vault.qa.bitwarden.pw",
       "https://vault.qa.bitwarden.pw",
     ].includes(this.getWebVaultUrl());
