@@ -61,7 +61,7 @@ import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
 
 import { BulkConfirmComponent } from "./components/bulk/bulk-confirm.component";
-import { BulkEnableSecretsManagerDialogComponent } from "./components/bulk/bulk-enable-sm.component";
+import { BulkEnableSecretsManagerDialogComponent } from "./components/bulk/bulk-enable-sm-dialog.component";
 import { BulkRemoveComponent } from "./components/bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./components/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./components/bulk/bulk-status.component";
