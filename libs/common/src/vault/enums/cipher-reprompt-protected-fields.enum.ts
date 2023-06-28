@@ -1,4 +1,4 @@
-export const PasswordRepromptProtectedFields = {
+export const CipherRepromptProtectedFields = {
   TOTP: "TOTP",
   Password: "Password",
   H_Field: "H_Field",

@@ -16,7 +16,6 @@ import { EventCollectionService } from "@bitwarden/common/abstractions/event/eve
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { EventType, FieldType } from "@bitwarden/common/enums";
-import { PasswordRepromptProtectedFields } from "@bitwarden/common/enums/password-reprompt-protected-fields.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -29,6 +28,7 @@ import { EncArrayBuffer } from "@bitwarden/common/platform/models/domain/enc-arr
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { CipherRepromptProtectedFields } from "@bitwarden/common/vault/enums/cipher-reprompt-protected-fields.enum";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.view";
@@ -354,7 +354,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   copiedFieldIsVisible(fieldType: string): boolean {
-    const { Password, CardNumber, SecurityCode } = PasswordRepromptProtectedFields;
+    const { Password, CardNumber, SecurityCode } = CipherRepromptProtectedFields;
 
     if (fieldType === CardNumber) {
       return this.showCardNumber;

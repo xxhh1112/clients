@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
-import { PasswordRepromptProtectedFields } from "@bitwarden/common/enums/password-reprompt-protected-fields.enum";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { CipherRepromptProtectedFields } from "@bitwarden/common/vault/enums/cipher-reprompt-protected-fields.enum";
 
 import { ModalService } from "../../services/modal.service";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
@@ -21,7 +21,7 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   ) {}
 
   protectedFields() {
-    return Object.values(PasswordRepromptProtectedFields);
+    return Object.values(CipherRepromptProtectedFields);
   }
 
   async showPasswordPrompt() {
