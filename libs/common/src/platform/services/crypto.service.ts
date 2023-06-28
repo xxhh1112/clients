@@ -712,7 +712,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     const storePin = await this.shouldStoreKey(KeySuffixOptions.Pin, userId);
     if (storePin) {
-      await this.storePinKey(key);
+      await this.storePinKey(key, userId);
       // We can't always clear deprecated keys because the pin is only
       // migrated once used to unlock
       await this.clearDeprecatedKeys(KeySuffixOptions.Pin, userId);
@@ -727,23 +727,23 @@ export class CryptoService implements CryptoServiceAbstraction {
    * ephemeral version.
    * @param key The user key
    */
-  protected async storePinKey(key: UserKey) {
+  protected async storePinKey(key: UserKey, userId?: string) {
     const pin = await this.encryptService.decryptToUtf8(
-      new EncString(await this.stateService.getProtectedPin()),
+      new EncString(await this.stateService.getProtectedPin({ userId: userId })),
       key
     );
     const pinKey = await this.makePinKey(
       pin,
-      await this.stateService.getEmail(),
-      await this.stateService.getKdfType(),
-      await this.stateService.getKdfConfig()
+      await this.stateService.getEmail({ userId: userId }),
+      await this.stateService.getKdfType({ userId: userId }),
+      await this.stateService.getKdfConfig({ userId: userId })
     );
     const encPin = await this.encryptService.encrypt(key.key, pinKey);
 
     if ((await this.stateService.getUserKeyPin()) != null) {
-      await this.stateService.setUserKeyPin(encPin);
+      await this.stateService.setUserKeyPin(encPin, { userId: userId });
     } else {
-      await this.stateService.setUserKeyPinEphemeral(encPin);
+      await this.stateService.setUserKeyPinEphemeral(encPin, { userId: userId });
     }
   }
 

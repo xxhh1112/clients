@@ -268,7 +268,7 @@ describe("deviceCryptoService", () => {
         );
       });
 
-      const methodsToTestForErrorsOrInvalidReturns = [
+      const methodsToTestForErrorsOrInvalidReturns: any = [
         {
           method: "makeDeviceKey",
           spy: () => makeDeviceKeySpy,
