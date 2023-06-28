@@ -7,15 +7,17 @@ let testPage: Page;
 
 test.describe("Extension autofills forms when triggered", () => {
   test("Log in to the vault, open pages, and autofill forms", async ({ context, extensionId }) => {
+    const [backgroundPage] = context.backgroundPages();
     const contextPages = context.pages();
 
-    // Close the extension welcome page if it pops up
-    const welcomePage = contextPages[1];
-    if (welcomePage) {
-      welcomePage.close();
-    }
+    await test.step("Close the extension welcome page when it pops up", async () => {
+      const welcomePage = contextPages[1];
+      if (welcomePage) {
+        welcomePage.close();
+      }
 
-    testPage = contextPages[0];
+      testPage = contextPages[0];
+    });
 
     await test.step("Log in to the extension vault", async () => {
       await testPage.goto(`chrome-extension://${extensionId}/popup/index.html?uilocation=popout`);
@@ -26,25 +28,25 @@ test.describe("Extension autofills forms when triggered", () => {
       // @TODO temporary workaround for the live URL-encoding not matching output of `encodeURI` or `encodeURIComponent`
       const urlEncodedLoginEmail = encodeURI(process?.env?.VAULT_EMAIL || "").replace("+", "%2B");
       await testPage.waitForURL(
-        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/login?email=${urlEncodedLoginEmail}`
+        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/login?email=${urlEncodedLoginEmail}`,
+        { waitUntil: "load" }
       );
       await testPage.getByLabel("Master password").fill(process?.env?.VAULT_PASSWORD || "");
       await testPage.getByRole("button", { name: "Log in with master password" }).click();
       await testPage.waitForURL(
-        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/tabs/vault`
+        `chrome-extension://${extensionId}/popup/index.html?uilocation=popout#/tabs/vault`,
+        { waitUntil: "load" }
       );
-      await testPage.waitForTimeout(2000);
+      const vaultIsLoaded = testPage.locator("main app-vault-select");
+      await vaultIsLoaded.waitFor();
     });
-
-    const [backgroundPage] = context.backgroundPages();
 
     for (const page of testPages) {
       const { url, inputs } = page;
 
       await test.step(`Autofill the form on page ${url}`, async () => {
         await testPage.goto(url);
-        await testPage.waitForURL(url);
-        await testPage.waitForTimeout(1000);
+        await testPage.waitForURL(url, { waitUntil: "load" });
 
         backgroundPage.evaluate(() =>
           chrome.tabs.query(
@@ -68,6 +70,6 @@ test.describe("Extension autofills forms when triggered", () => {
     }
 
     // Hold the window open (don't close out)
-    // await testPage.waitForTimeout(10000000); // @TODO remove when finished debugging
+    // await testPage.pause(); // @TODO remove when finished debugging
   });
 });

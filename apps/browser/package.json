@@ -23,7 +23,7 @@
     "test:watch:all": "jest --watchAll",
     "test:autofill:build": "rimraf tests-out && tsc --incremental -p tests/tsconfig.json",
     "test:autofill:run": "playwright test --reporter=line",
-    "test:autofill:run:debug": "playwright test --project=chromium --debug --reporter=line",
+    "test:autofill:run:debug": "playwright test --debug",
     "test:autofill": "npm run build && npm run test:autofill:build && npm run test:autofill:run",
     "test:autofill:debug": "npm run test:autofill:build && npm run test:autofill:run:debug"
   }
