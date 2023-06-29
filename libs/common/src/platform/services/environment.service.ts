@@ -164,7 +164,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       await this.setRegion(Region.US);
       return;
     }
-    if (savedUrls.base === "https://vault.bitwarden.eu") {
+    if (savedUrls.base === "https://vault.bitwarden.net") {
       await this.setRegion(Region.EU);
       return;
     }
