@@ -530,10 +530,13 @@ export class PeopleComponent
       return;
     }
 
-    BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
+    const dialogRef = BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
       orgId: this.organization.id,
       users,
     });
+
+    await lastValueFrom(dialogRef.closed);
+    this.selectAll(false);
   }
 
   async events(user: OrganizationUserView) {
