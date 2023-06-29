@@ -1,17 +1,20 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { ApiService } from "../../abstractions/api.service";
-import { AppIdService } from "../../abstractions/appId.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { LogService } from "../../abstractions/log.service";
-import { MessagingService } from "../../abstractions/messaging.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
-import { StateService } from "../../abstractions/state.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
-import { Utils } from "../../misc/utils";
-import { Account, AccountProfile, AccountTokens } from "../../models/domain/account";
-import { EncString } from "../../models/domain/enc-string";
-import { PasswordGenerationService } from "../../tools/generator/password";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { LogService } from "../../platform/abstractions/log.service";
+import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { Utils } from "../../platform/misc/utils";
+import { Account, AccountProfile, AccountTokens } from "../../platform/models/domain/account";
+import { EncString } from "../../platform/models/domain/enc-string";
+import {
+  PasswordStrengthService,
+  PasswordStrengthServiceAbstraction,
+} from "../../tools/password-strength";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -85,7 +88,7 @@ describe("LogInStrategy", () => {
   let twoFactorService: MockProxy<TwoFactorService>;
   let authService: MockProxy<AuthService>;
   let policyService: MockProxy<PolicyService>;
-  let passwordGenerationService: MockProxy<PasswordGenerationService>;
+  let passwordStrengthService: MockProxy<PasswordStrengthServiceAbstraction>;
 
   let passwordLogInStrategy: PasswordLogInStrategy;
   let credentials: PasswordLogInCredentials;
@@ -102,7 +105,7 @@ describe("LogInStrategy", () => {
     twoFactorService = mock<TwoFactorService>();
     authService = mock<AuthService>();
     policyService = mock<PolicyService>();
-    passwordGenerationService = mock<PasswordGenerationService>();
+    passwordStrengthService = mock<PasswordStrengthService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.decodeToken.calledWith(accessToken).mockResolvedValue(decodedToken);
@@ -118,7 +121,7 @@ describe("LogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
-      passwordGenerationService,
+      passwordStrengthService,
       policyService,
       authService
     );

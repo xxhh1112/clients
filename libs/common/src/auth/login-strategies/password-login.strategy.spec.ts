@@ -1,17 +1,20 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { ApiService } from "../../abstractions/api.service";
-import { AppIdService } from "../../abstractions/appId.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { LogService } from "../../abstractions/log.service";
-import { MessagingService } from "../../abstractions/messaging.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
-import { StateService } from "../../abstractions/state.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
 import { HashPurpose } from "../../enums";
-import { Utils } from "../../misc/utils";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
-import { PasswordGenerationService } from "../../tools/generator/password";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { LogService } from "../../platform/abstractions/log.service";
+import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { Utils } from "../../platform/misc/utils";
+import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import {
+  PasswordStrengthService,
+  PasswordStrengthServiceAbstraction,
+} from "../../tools/password-strength";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -51,7 +54,7 @@ describe("PasswordLogInStrategy", () => {
   let twoFactorService: MockProxy<TwoFactorService>;
   let authService: MockProxy<AuthService>;
   let policyService: MockProxy<PolicyService>;
-  let passwordGenerationService: MockProxy<PasswordGenerationService>;
+  let passwordStrengthService: MockProxy<PasswordStrengthServiceAbstraction>;
 
   let passwordLogInStrategy: PasswordLogInStrategy;
   let credentials: PasswordLogInCredentials;
@@ -68,7 +71,7 @@ describe("PasswordLogInStrategy", () => {
     twoFactorService = mock<TwoFactorService>();
     authService = mock<AuthService>();
     policyService = mock<PolicyService>();
-    passwordGenerationService = mock<PasswordGenerationService>();
+    passwordStrengthService = mock<PasswordStrengthService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
     tokenService.decodeToken.mockResolvedValue({});
@@ -94,7 +97,7 @@ describe("PasswordLogInStrategy", () => {
       logService,
       stateService,
       twoFactorService,
-      passwordGenerationService,
+      passwordStrengthService,
       policyService,
       authService
     );
@@ -141,7 +144,7 @@ describe("PasswordLogInStrategy", () => {
   });
 
   it("does not force the user to update their master password when it meets requirements", async () => {
-    passwordGenerationService.passwordStrength.mockReturnValue({ score: 5 } as any);
+    passwordStrengthService.getPasswordStrength.mockReturnValue({ score: 5 } as any);
     policyService.evaluateMasterPassword.mockReturnValue(true);
 
     const result = await passwordLogInStrategy.logIn(credentials);
@@ -151,7 +154,7 @@ describe("PasswordLogInStrategy", () => {
   });
 
   it("forces the user to update their master password on successful login when it does not meet master password policy requirements", async () => {
-    passwordGenerationService.passwordStrength.mockReturnValue({ score: 0 } as any);
+    passwordStrengthService.getPasswordStrength.mockReturnValue({ score: 0 } as any);
     policyService.evaluateMasterPassword.mockReturnValue(false);
 
     const result = await passwordLogInStrategy.logIn(credentials);
@@ -164,7 +167,7 @@ describe("PasswordLogInStrategy", () => {
   });
 
   it("forces the user to update their master password on successful 2FA login when it does not meet master password policy requirements", async () => {
-    passwordGenerationService.passwordStrength.mockReturnValue({ score: 0 } as any);
+    passwordStrengthService.getPasswordStrength.mockReturnValue({ score: 0 } as any);
     policyService.evaluateMasterPassword.mockReturnValue(false);
 
     const token2FAResponse = new IdentityTwoFactorResponse({
