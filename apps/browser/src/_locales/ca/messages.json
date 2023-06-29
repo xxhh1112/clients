@@ -2222,17 +2222,20 @@
     }
   },
   "region": {
-    "message": "Region"
+    "message": "Regió"
   },
   "opensInANewWindow": {
     "message": "S'obri en una finestra nova"
   },
   "eu": {
-    "message": "EU",
+    "message": "UE",
     "description": "European Union"
   },
   "us": {
-    "message": "US",
+    "message": "EUA",
     "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Accés denegat. No teniu permís per veure aquesta pàgina."
   }
 }

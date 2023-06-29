@@ -2253,17 +2253,20 @@
     "message": "Actualització de configuració recomanada"
   },
   "region": {
-    "message": "Region"
+    "message": "Regió"
   },
   "eu": {
-    "message": "EU",
+    "message": "UE",
     "description": "European Union"
   },
   "us": {
-    "message": "US",
+    "message": "EUA",
     "description": "United States"
   },
   "selfHosted": {
-    "message": "Self-hosted"
+    "message": "Autoallotjat"
+  },
+  "accessDenied": {
+    "message": "Accés denegat. No teniu permís per veure aquesta pàgina."
   }
 }
