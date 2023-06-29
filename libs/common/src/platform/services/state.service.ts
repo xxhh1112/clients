@@ -3169,7 +3169,7 @@ export class StateService<
     }
   }
 
-  private deleteDiskCache(key: string) {
+  protected deleteDiskCache(key: string) {
     if (this.useAccountCache) {
       delete this.accountDiskCache.value[key];
       this.accountDiskCache.next(this.accountDiskCache.value);
