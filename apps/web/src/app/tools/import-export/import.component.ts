@@ -1,41 +1,43 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import * as JSZip from "jszip";
-import { firstValueFrom } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import {
   ImportOption,
-  ImportType,
   ImportResult,
   ImportServiceAbstraction,
+  ImportType,
 } from "@bitwarden/importer";
 
-import { ImportSuccessDialogComponent, FilePasswordPromptComponent } from "./dialog";
+import { FilePasswordPromptComponent, ImportSuccessDialogComponent } from "./dialog";
 
 @Component({
   selector: "app-import",
   templateUrl: "import.component.html",
 })
-export class ImportComponent implements OnInit {
+export class ImportComponent implements OnInit, OnDestroy {
   featuredImportOptions: ImportOption[];
   importOptions: ImportOption[];
   format: ImportType = null;
   fileContents: string;
   fileSelected: File;
   loading = false;
-  importBlockedByPolicy = false;
 
   protected organizationId: string = null;
-  protected successNavigate: any[] = ["vault"];
+  protected destroy$ = new Subject<void>();
+
+  private _importBlockedByPolicy = false;
 
   constructor(
     protected i18nService: I18nService,
@@ -49,12 +51,26 @@ export class ImportComponent implements OnInit {
     protected dialogService: DialogServiceAbstraction
   ) {}
 
-  async ngOnInit() {
+  protected get importBlockedByPolicy(): boolean {
+    return this._importBlockedByPolicy;
+  }
+
+  /**
+   * Callback that is called after a successful import.
+   */
+  protected async onSuccessfulImport(): Promise<void> {
+    await this.router.navigate(["vault"]);
+  }
+
+  ngOnInit() {
     this.setImportOptions();
 
-    this.importBlockedByPolicy = await firstValueFrom(
-      this.policyService.policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
-    );
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.PersonalOwnership)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this._importBlockedByPolicy = policyAppliesToActiveUser;
+      });
   }
 
   async submit() {
@@ -134,7 +150,7 @@ export class ImportComponent implements OnInit {
       });
 
       this.syncService.fullSync(true);
-      this.router.navigate(this.successNavigate);
+      await this.onSuccessfulImport();
     } catch (e) {
       this.error(e);
       this.logService.error(e);
@@ -263,5 +279,10 @@ export class ImportComponent implements OnInit {
     }
 
     return await ref.onClosedPromise();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
-import { EntityEventsComponent as OrgEntityEventsComponent } from "../admin-console/organizations/manage/entity-events.component";
 import { EventsComponent as OrgEventsComponent } from "../admin-console/organizations/manage/events.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 import { AcceptFamilySponsorshipComponent } from "../admin-console/organizations/sponsorships/accept-family-sponsorship.component";
@@ -44,6 +43,7 @@ import { TwoFactorVerifyComponent } from "../auth/settings/two-factor-verify.com
 import { TwoFactorWebAuthnComponent } from "../auth/settings/two-factor-webauthn.component";
 import { TwoFactorYubiKeyComponent } from "../auth/settings/two-factor-yubikey.component";
 import { VerifyEmailComponent } from "../auth/settings/verify-email.component";
+import { UserVerificationModule } from "../auth/shared/components/user-verification";
 import { SsoComponent } from "../auth/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/two-factor.component";
@@ -108,7 +108,7 @@ import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-
 import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
 import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-vault/collections.component";
 
-import { UserVerificationModule } from "./components/user-verification";
+import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
 import { SharedModule } from "./shared.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
@@ -122,6 +122,7 @@ import { SharedModule } from "./shared.module";
     UserVerificationModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
+    AccountFingerprintComponent,
   ],
   declarations: [
     PremiumBadgeComponent,
@@ -166,7 +167,6 @@ import { SharedModule } from "./shared.module";
     OrganizationPlansComponent,
     OrgAttachmentsComponent,
     OrgCollectionsComponent,
-    OrgEntityEventsComponent,
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,
@@ -230,6 +230,7 @@ import { SharedModule } from "./shared.module";
     LowKdfComponent,
   ],
   exports: [
+    UserVerificationModule,
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
     AcceptOrganizationComponent,
@@ -271,7 +272,6 @@ import { SharedModule } from "./shared.module";
     OrganizationPlansComponent,
     OrgAttachmentsComponent,
     OrgCollectionsComponent,
-    OrgEntityEventsComponent,
     OrgEventsComponent,
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,

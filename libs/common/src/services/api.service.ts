@@ -1,9 +1,5 @@
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
-import { AppIdService } from "../abstractions/appId.service";
-import { EnvironmentService } from "../abstractions/environment.service";
-import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { OrganizationConnectionType } from "../admin-console/enums";
-import { CollectionRequest } from "../admin-console/models/request/collection.request";
 import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/request/organization/organization-sponsorship-redeem.request";
 import { OrganizationConnectionRequest } from "../admin-console/models/request/organization-connection.request";
@@ -18,10 +14,6 @@ import { ProviderUserConfirmRequest } from "../admin-console/models/request/prov
 import { ProviderUserInviteRequest } from "../admin-console/models/request/provider/provider-user-invite.request";
 import { ProviderUserUpdateRequest } from "../admin-console/models/request/provider/provider-user-update.request";
 import { SelectionReadOnlyRequest } from "../admin-console/models/request/selection-read-only.request";
-import {
-  CollectionAccessDetailsResponse,
-  CollectionResponse,
-} from "../admin-console/models/response/collection.response";
 import {
   OrganizationConnectionConfigApis,
   OrganizationConnectionResponse,
@@ -112,7 +104,6 @@ import { SubscriptionResponse } from "../billing/models/response/subscription.re
 import { TaxInfoResponse } from "../billing/models/response/tax-info.response";
 import { TaxRateResponse } from "../billing/models/response/tax-rate.response";
 import { DeviceType } from "../enums";
-import { Utils } from "../misc/utils";
 import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { EventRequest } from "../models/request/event.request";
@@ -135,6 +126,10 @@ import { EventResponse } from "../models/response/event.response";
 import { ListResponse } from "../models/response/list.response";
 import { ProfileResponse } from "../models/response/profile.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
+import { AppIdService } from "../platform/abstractions/app-id.service";
+import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
+import { Utils } from "../platform/misc/utils";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
@@ -144,9 +139,14 @@ import { CipherCreateRequest } from "../vault/models/request/cipher-create.reque
 import { CipherPartialRequest } from "../vault/models/request/cipher-partial.request";
 import { CipherShareRequest } from "../vault/models/request/cipher-share.request";
 import { CipherRequest } from "../vault/models/request/cipher.request";
+import { CollectionRequest } from "../vault/models/request/collection.request";
 import { AttachmentUploadDataResponse } from "../vault/models/response/attachment-upload-data.response";
 import { AttachmentResponse } from "../vault/models/response/attachment.response";
 import { CipherResponse } from "../vault/models/response/cipher.response";
+import {
+  CollectionAccessDetailsResponse,
+  CollectionResponse,
+} from "../vault/models/response/collection.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
 
 /**

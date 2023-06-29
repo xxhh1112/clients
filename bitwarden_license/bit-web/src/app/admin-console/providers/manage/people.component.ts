@@ -7,13 +7,7 @@ import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
 import { ProviderUserStatusType, ProviderUserType } from "@bitwarden/common/admin-console/enums";
 import { ProviderUserBulkRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-user-bulk.request";
@@ -21,7 +15,13 @@ import { ProviderUserConfirmRequest } from "@bitwarden/common/admin-console/mode
 import { ProviderUserBulkResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user-bulk.response";
 import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { EntityEventsComponent } from "@bitwarden/web-vault/app/admin-console/organizations/manage/entity-events.component";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { openEntityEventsDialog } from "@bitwarden/web-vault/app/admin-console/organizations/manage/entity-events.component";
 import { BulkStatusComponent } from "@bitwarden/web-vault/app/admin-console/organizations/members/components/bulk/bulk-status.component";
 import { BasePeopleComponent } from "@bitwarden/web-vault/app/common/base.people.component";
 
@@ -41,8 +41,6 @@ export class PeopleComponent
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
-  @ViewChild("eventsTemplate", { read: ViewContainerRef, static: true })
-  eventsModalRef: ViewContainerRef;
   @ViewChild("bulkStatusTemplate", { read: ViewContainerRef, static: true })
   bulkStatusModalRef: ViewContainerRef;
   @ViewChild("bulkConfirmTemplate", { read: ViewContainerRef, static: true })
@@ -167,12 +165,14 @@ export class PeopleComponent
   }
 
   async events(user: ProviderUserUserDetailsResponse) {
-    await this.modalService.openViewRef(EntityEventsComponent, this.eventsModalRef, (comp) => {
-      comp.name = this.userNamePipe.transform(user);
-      comp.providerId = this.providerId;
-      comp.entityId = user.id;
-      comp.showUser = false;
-      comp.entity = "user";
+    await openEntityEventsDialog(this.dialogService, {
+      data: {
+        name: this.userNamePipe.transform(user),
+        providerId: this.providerId,
+        entityId: user.id,
+        showUser: false,
+        entity: "user",
+      },
     });
   }
 
