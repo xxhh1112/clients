@@ -1,10 +1,10 @@
+import { DialogRef } from "@angular/cdk/dialog";
 import { Directive } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
 
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-
-import { ModalRef } from "../../components/modal/modal.ref";
 
 /**
  * Used to verify the user's Master Password for the "Master Password Re-prompt" feature only.
@@ -13,21 +13,27 @@ import { ModalRef } from "../../components/modal/modal.ref";
 @Directive()
 export class PasswordRepromptComponent {
   showPassword = false;
-  masterPassword = "";
+
+  formGroup = this.formBuilder.group({
+    masterPassword: ["", [Validators.required]],
+  });
 
   constructor(
-    private modalRef: ModalRef,
+    private dialogRef: DialogRef,
     private cryptoService: CryptoService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private formBuilder: FormBuilder
   ) {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  async submit() {
-    if (!(await this.cryptoService.compareAndUpdateKeyHash(this.masterPassword, null))) {
+  submit = async () => {
+    if (
+      !(await this.cryptoService.compareAndUpdateKeyHash(this.formGroup.value.masterPassword, null))
+    ) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -36,6 +42,6 @@ export class PasswordRepromptComponent {
       return;
     }
 
-    this.modalRef.close(true);
-  }
+    this.dialogRef.close(true);
+  };
 }
