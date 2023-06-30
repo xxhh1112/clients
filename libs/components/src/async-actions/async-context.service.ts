@@ -61,12 +61,12 @@ export class AsyncContextService {
     this._disabled$.next(value);
   }
 
-  private get loading() {
-    return this._disabled$.value;
+  get loading() {
+    return this._loading$.value;
   }
 
-  private set loading(value: boolean) {
-    this._disabled$.next(value);
+  set loading(value: boolean) {
+    this._loading$.next(value);
   }
 
   run(action: FunctionReturningAwaitable) {

@@ -1,7 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
-import { delay, firstValueFrom, of } from "rxjs";
+import {
+  BehaviorSubject,
+  delay,
+  firstValueFrom,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
@@ -38,7 +47,9 @@ class SimpleExampleComponent {
 @Component({
   template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
     <ng-container *ngIf="!initialLoading">
-      <button bitButton buttonType="primary" [bitAsyncClick]="action">Perform action</button>
+      <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-ml-2">
+        Perform action
+      </button>
     </ng-container>
     <button bitButton buttonType="secondary" [bitAsyncClick]="init" class="tw-ml-2">
       Re-run initialization
@@ -47,10 +58,10 @@ class SimpleExampleComponent {
   providers: [AsyncContextService],
 })
 class InitialDataFetchExampleComponent implements OnInit {
-  private fakeDataService = { getData$: () => of("fake data").pipe(delay(5000)) };
+  private fakeDataService = createFakeDataService();
 
   protected initialLoading = true;
-  protected fakeData: string;
+  protected fakeData: number;
 
   constructor(private asyncContextService: AsyncContextService) {}
 
@@ -71,6 +82,71 @@ class InitialDataFetchExampleComponent implements OnInit {
   };
 }
 
+@Component({
+  template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
+    <ng-container *ngIf="!initialLoading">
+      Data: {{ data }}
+      <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-ml-2">
+        Perform action
+      </button>
+    </ng-container>
+    <button
+      bitButton
+      buttonType="secondary"
+      (click)="refresh()"
+      [loading]="refreshing"
+      class="tw-ml-2"
+    >
+      Refresh
+    </button>`,
+  selector: "app-reactive-data-refresh-example",
+  providers: [AsyncContextService],
+})
+class ReactiveDataRefreshExampleComponent implements OnInit, OnDestroy {
+  private fakeDataService = createFakeDataService();
+  private destroy$ = new Subject<void>();
+  private refresh$ = new BehaviorSubject<void>(undefined);
+
+  protected initialLoading = true;
+  protected refreshing = false;
+  protected data: number;
+
+  constructor(private asyncContextService: AsyncContextService) {}
+
+  ngOnInit(): void {
+    this.refresh$
+      .pipe(
+        tap(() => {
+          this.refreshing = true;
+          this.asyncContextService.loading = true;
+        }),
+        switchMap(() => this.fakeDataService.getData$()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data) => {
+        this.refreshing = false;
+        this.initialLoading = false;
+        this.asyncContextService.loading = false;
+        this.data = data;
+      });
+  }
+
+  refresh() {
+    this.refresh$.next();
+  }
+
+  action = async () => {
+    await new Promise<void>((resolve, reject) => {
+      setTimeout(resolve, 2000);
+    });
+  };
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}
+
 export default {
   title: "Component Library/Async Actions/Contexts",
   decorators: [
@@ -80,6 +156,7 @@ export default {
         BitAsyncDisableDirective,
         SimpleExampleComponent,
         InitialDataFetchExampleComponent,
+        ReactiveDataRefreshExampleComponent,
       ],
       imports: [ButtonModule, IconButtonModule],
       providers: [
@@ -102,6 +179,7 @@ export default {
 
 type SimpleStory = StoryObj<SimpleExampleComponent>;
 type InitialDataFetchStory = StoryObj<InitialDataFetchExampleComponent>;
+type ReactiveDataRefreshStory = StoryObj<ReactiveDataRefreshExampleComponent>;
 
 export const Simple: SimpleStory = {
   render: (args) => ({
@@ -117,6 +195,13 @@ export const InitialDataFetch: InitialDataFetchStory = {
   }),
 };
 
+export const ReactiveDataWithRefresh: ReactiveDataRefreshStory = {
+  render: (args) => ({
+    props: args,
+    template: `<app-reactive-data-refresh-example />`,
+  }),
+};
+
 // export const UsingObservable: ObservableStory = {
 //   render: (args) => ({
 //     template: `<app-observable-example></app-observable-example>`,
@@ -128,3 +213,12 @@ export const InitialDataFetch: InitialDataFetchStory = {
 //     template: `<app-rejected-promise-example></app-rejected-promise-example>`,
 //   }),
 // };
+
+function createFakeDataService() {
+  return {
+    data: 0,
+    getData$() {
+      return of(this.data++).pipe(delay(5000));
+    },
+  };
+}
