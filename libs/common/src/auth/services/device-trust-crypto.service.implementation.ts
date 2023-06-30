@@ -1,19 +1,19 @@
-import { DeviceCryptoServiceAbstraction } from "../abstractions/device-crypto.service.abstraction";
-import { DevicesApiServiceAbstraction } from "../abstractions/devices/devices-api.service.abstraction";
-import { DeviceResponse } from "../abstractions/devices/responses/device.response";
-import { AppIdService } from "../platform/abstractions/app-id.service";
-import { CryptoFunctionService } from "../platform/abstractions/crypto-function.service";
-import { CryptoService } from "../platform/abstractions/crypto.service";
-import { EncryptService } from "../platform/abstractions/encrypt.service";
-import { StateService } from "../platform/abstractions/state.service";
+import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
+import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { EncryptService } from "../../platform/abstractions/encrypt.service";
+import { StateService } from "../../platform/abstractions/state.service";
 import {
   SymmetricCryptoKey,
   DeviceKey,
   UserKey,
-} from "../platform/models/domain/symmetric-crypto-key";
-import { CsprngArray } from "../types/csprng";
+} from "../../platform/models/domain/symmetric-crypto-key";
+import { CsprngArray } from "../../types/csprng";
+import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
 
-export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
+export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstraction {
   constructor(
     protected cryptoFunctionService: CryptoFunctionService,
     protected cryptoService: CryptoService,
@@ -22,6 +22,18 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
     protected appIdService: AppIdService,
     protected devicesApiService: DevicesApiServiceAbstraction
   ) {}
+
+  /**
+   * @description Retrieves the users choice to trust the device which can only happen after decryption
+   * Note: this value should only be used once and then reset
+   */
+  async getUserTrustDeviceChoiceForDecryption(): Promise<boolean> {
+    return await this.stateService.getUserTrustDeviceChoiceForDecryption();
+  }
+
+  async setUserTrustDeviceChoiceForDecryption(value: boolean): Promise<void> {
+    await this.stateService.setUserTrustDeviceChoiceForDecryption(value);
+  }
 
   async trustDevice(): Promise<DeviceResponse> {
     // Attempt to get user key
@@ -88,7 +100,11 @@ export class DeviceCryptoService implements DeviceCryptoServiceAbstraction {
   }
 
   // TODO: add proper types to parameters once we have them coming down from server
-  async decryptUserKey(encryptedDevicePrivateKey: any, encryptedUserKey: any): Promise<UserKey> {
+  // TODO: add tests for this method
+  async decryptUserKeyWithDeviceKey(
+    encryptedDevicePrivateKey: any,
+    encryptedUserKey: any
+  ): Promise<UserKey> {
     // get device key
     const existingDeviceKey = await this.stateService.getDeviceKey();
 

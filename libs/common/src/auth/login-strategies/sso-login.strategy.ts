@@ -90,7 +90,7 @@ export class SsoLogInStrategy extends LogInStrategy {
       // DeviceKey(DevicePrivateKey)
 
       // Once we have device keys coming back on id token response we can use this code
-      // const userKey = await this.deviceCryptoService.decryptUserKey(
+      // const userKey = await this.deviceCryptoService.decryptUserKeyWithDeviceKey(
       //   encryptedDevicePrivateKey,
       //   encryptedUserKey
       // );

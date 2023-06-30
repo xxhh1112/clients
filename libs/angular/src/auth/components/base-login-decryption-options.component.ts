@@ -1,9 +1,10 @@
 import { Directive, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable, Subject, catchError, forkJoin, from, of, finalize, takeUntil } from "rxjs";
 
 import { DevicesServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices.service.abstraction";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import {
   DesktopDeviceTypes,
@@ -24,9 +25,14 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   showApproveWithMasterPasswordBtn: boolean;
   userEmail: string;
 
+  // Remember device means for the user to trust the device
   rememberDeviceForm = this.formBuilder.group({
     rememberDevice: [true],
   });
+
+  get rememberDevice(): FormControl<boolean> {
+    return this.rememberDeviceForm?.controls.rememberDevice;
+  }
 
   loading = true;
 
@@ -37,7 +43,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected router: Router,
     protected messagingService: MessagingService,
     protected loginService: LoginService,
-    private validationService: ValidationService
+    protected validationService: ValidationService,
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {}
 
   ngOnInit() {
@@ -148,7 +155,10 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     // UNTIL the Admin Console team finishes their work to turn on Single Org policy when Admin Acct Recovery is enabled.
   }
 
-  approveWithMasterPassword() {
+  async approveWithMasterPassword() {
+    await this.deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(
+      this.rememberDevice.value
+    );
     this.router.navigate(["/lock"]);
   }
 

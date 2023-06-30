@@ -248,6 +248,7 @@ export class AccountSettings {
   activateAutoFillOnPageLoadFromPolicy?: boolean;
   region?: string;
   smOnboardingTasks?: Record<string, Record<string, boolean>>;
+  trustDeviceChoiceForDecryption?: boolean;
 
   static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {
     if (obj == null) {

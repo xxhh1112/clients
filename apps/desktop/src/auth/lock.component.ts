@@ -9,6 +9,7 @@ import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { DeviceType, KeySuffixOptions } from "@bitwarden/common/enums";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
@@ -52,7 +53,8 @@ export class LockComponent extends BaseLockComponent {
     passwordStrengthService: PasswordStrengthServiceAbstraction,
     logService: LogService,
     keyConnectorService: KeyConnectorService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogServiceAbstraction,
+    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {
     super(
       router,
@@ -71,7 +73,8 @@ export class LockComponent extends BaseLockComponent {
       policyApiService,
       policyService,
       passwordStrengthService,
-      dialogService
+      dialogService,
+      deviceTrustCryptoService
     );
   }
 

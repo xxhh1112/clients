@@ -9,6 +9,7 @@ import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaul
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
@@ -71,7 +72,8 @@ export class LockComponent implements OnInit, OnDestroy {
     protected policyApiService: PolicyApiServiceAbstraction,
     protected policyService: InternalPolicyService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogServiceAbstraction,
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -292,6 +294,15 @@ export class LockComponent implements OnInit, OnDestroy {
 
   private async setKeyAndContinue(key: UserKey, evaluatePasswordAfterUnlock = false) {
     await this.cryptoService.setUserKey(key);
+
+    // Now that we have a decrypted user key in memory, we can check if we
+    // need to establish trust on the current device
+    if (this.deviceTrustCryptoService.getUserTrustDeviceChoiceForDecryption()) {
+      await this.deviceTrustCryptoService.trustDevice();
+      // reset the trust choice
+      await this.deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(false);
+    }
+
     await this.doContinue(evaluatePasswordAfterUnlock);
   }
 

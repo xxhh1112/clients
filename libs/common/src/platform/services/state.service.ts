@@ -1321,6 +1321,34 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
+  async getUserTrustDeviceChoiceForDecryption(options?: StorageOptions): Promise<boolean> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.settings?.trustDeviceChoiceForDecryption ?? false;
+  }
+
+  async setUserTrustDeviceChoiceForDecryption(
+    value: boolean,
+    options?: StorageOptions
+  ): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.settings.trustDeviceChoiceForDecryption = value;
+
+    await this.saveAccount(account, options);
+  }
+
   async getAccountDecryptionOptions(
     options?: StorageOptions
   ): Promise<AccountDecryptionOptions | null> {

@@ -223,6 +223,8 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     }
     if (this.onSuccessfulLoginNavigate != null) {
       this.loginService.clearValues();
+      // TODO: this function is defined when coming SSO with 2FA for authenticator app
+      // see two goAfterLogIn functions (one in web login.component.ts and one in web two factor component.ts )
       await this.onSuccessfulLoginNavigate();
     } else {
       this.loginService.clearValues();
