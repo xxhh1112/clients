@@ -46,6 +46,7 @@ import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/pla
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
+import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
@@ -505,6 +506,8 @@ export default class MainBackground {
       this.i18nService,
       this.userVerificationApiService
     );
+
+    this.configApiService = new ConfigApiService(this.apiService, this.authService);
 
     this.configService = new ConfigService(
       this.stateService,

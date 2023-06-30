@@ -70,6 +70,49 @@ describe("AutofillService", function () {
     } as any;
   });
 
+  describe("injectAutofillScripts", function () {
+    const autofillV1Script = "autofill.js";
+    const autofillV2Script = "autofill-init.js";
+    const defaultAutofillScripts = ["autofiller.js", "notificationBar.js", "contextMenuHandler.js"];
+    const defaultExecuteScriptOptions = { allFrames: true, runAt: "document_start" };
+    let tabMock: chrome.tabs.Tab;
+    let sender: chrome.runtime.MessageSender;
+
+    beforeEach(function () {
+      tabMock = createChromeTabMock();
+      sender = { tab: tabMock };
+      jest.spyOn(BrowserApi, "executeScriptInTab").mockImplementation();
+    });
+
+    it("accepts an extension message sender and injects the autofill scripts into the tab of the sender", async function () {
+      await autofillService.injectAutofillScripts(sender);
+
+      [autofillV1Script, ...defaultAutofillScripts].forEach((scriptName) => {
+        expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
+          file: `content/${scriptName}`,
+          ...defaultExecuteScriptOptions,
+        });
+      });
+      expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
+        file: `content/${autofillV2Script}`,
+        ...defaultExecuteScriptOptions,
+      });
+    });
+
+    it("will inject the autofill-init class if the enableAutofillV2 flag is set", function () {
+      autofillService.injectAutofillScripts(sender, true);
+
+      expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
+        file: `content/${autofillV2Script}`,
+        ...defaultExecuteScriptOptions,
+      });
+      expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
+        file: `content/${autofillV1Script}`,
+        ...defaultExecuteScriptOptions,
+      });
+    });
+  });
+
   describe("getFormsWithPasswordFields", function () {
     let pageDetailsMock: AutofillPageDetails;
 
