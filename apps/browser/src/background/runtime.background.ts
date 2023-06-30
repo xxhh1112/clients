@@ -213,6 +213,10 @@ export default class RuntimeBackground {
       case "getClickedElementResponse":
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
+      case "openAutofillOverlayList":
+        // eslint-disable-next-line
+        console.log("calling open overlay");
+        break;
       default:
         break;
     }

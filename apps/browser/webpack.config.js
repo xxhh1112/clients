@@ -98,6 +98,11 @@ const plugins = [
     filename: "notification/bar.html",
     chunks: ["notification/bar"],
   }),
+  new HtmlWebpackPlugin({
+    template: "./src/autofill/overlay/button.html",
+    filename: "overlay/button.html",
+    chunks: ["overlay/button"],
+  }),
   new CopyWebpackPlugin({
     patterns: [
       manifestVersion == 3
@@ -126,7 +131,7 @@ const plugins = [
     process: "process/browser.js",
   }),
   new webpack.SourceMapDevToolPlugin({
-    exclude: [/content\/.*/, /notification\/.*/],
+    exclude: [/content\/.*/, /notification\/.*/, /overlay\/.*/],
     filename: "[file].map",
   }),
   ...requiredPlugins,
@@ -147,14 +152,16 @@ const mainConfig = {
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
     "content/message_handler": "./src/autofill/content/message_handler.ts",
+    "content/overlay": "./src/autofill/content/overlay.ts",
     "notification/bar": "./src/autofill/notification/bar.ts",
+    "overlay/button": "./src/autofill/overlay/button.ts",
     "encrypt-worker": "../../libs/common/src/platform/services/cryptography/encrypt.worker.ts",
   },
   optimization: {
     minimize: ENV !== "development",
     minimizer: [
       new TerserPlugin({
-        exclude: [/content\/.*/, /notification\/.*/],
+        exclude: [/content\/.*/, /notification\/.*/, /overlay\/.*/],
         terserOptions: {
           // Replicate Angular CLI behaviour
           compress: {
