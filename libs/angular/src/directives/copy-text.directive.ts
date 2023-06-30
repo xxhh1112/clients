@@ -3,12 +3,12 @@ import { Directive, ElementRef, HostListener, Input } from "@angular/core";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Directive({
-  selector: "[appSelectCopy]",
+  selector: "[appCopyText]",
 })
-export class SelectCopyDirective {
+export class CopyTextDirective {
   constructor(private el: ElementRef, private platformUtilsService: PlatformUtilsService) {}
 
-  @Input("appSelectCopy") copyText: string;
+  @Input("appCopyText") copyText: string;
 
   @HostListener("copy") onCopy() {
     if (window == null) {
