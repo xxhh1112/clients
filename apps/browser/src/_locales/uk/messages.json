@@ -1146,7 +1146,7 @@
     "message": "Mx"
   },
   "firstName": {
-    "message": "Ім’я"
+    "message": "Ім'я"
   },
   "middleName": {
     "message": "По батькові"
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Запис заповнено"
   },
+  "insecurePageWarning": {
+    "message": "Попередження: це незахищена сторінка HTTP, тому будь-яка інформація, яку ви передаєте, потенційно може бути переглянута чи змінена сторонніми. Ці облікові дані було збережено на безпечній сторінці (HTTPS)."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Ви все ще бажаєте заповнити поля для входу?"
+  },
+  "autofillIframeWarning": {
+    "message": "Домен форми входу відрізняється від URL-адреси, за якою його було збережено. Оберіть OK, якщо ви все одно хочете її заповнити, або Скасувати для зупинки."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Щоб надалі не бачити таке попередження, збережіть цей URI, $HOSTNAME$ у записі входу Bitwarden для цього сайту.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Встановити головний пароль"
+  },
+  "currentMasterPass": {
+    "message": "Поточний головний пароль"
+  },
+  "newMasterPass": {
+    "message": "Новий головний пароль"
+  },
+  "confirmNewMasterPass": {
+    "message": "Підтвердьте новий головний пароль"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Одна або декілька політик організації вимагають дотримання таких вимог для головного пароля:"
@@ -1628,7 +1655,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Досягнуто максимальну кількість доступів",
+    "message": "Досягнуто максимальної кількості доступів",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
@@ -1691,7 +1718,7 @@
     "message": "Файл, який ви хочете відправити."
   },
   "deletionDate": {
-    "message": "Дата видалення"
+    "message": "Термін дії"
   },
   "deletionDateDesc": {
     "message": "Відправлення буде остаточно видалено у вказаний час.",
@@ -1717,7 +1744,7 @@
     }
   },
   "custom": {
-    "message": "Спеціальний"
+    "message": "Власний"
   },
   "maximumAccessCount": {
     "message": "Максимальна кількість доступів"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, вам необхідно оновити його зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматичне розгортання"
   },
@@ -1863,7 +1893,7 @@
     "message": "Хвилин"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин",
+    "message": "Політикою вашої організації встановлено максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Політики вашої організації впливають на час очікування сховища. Максимальний дозволений час очікування сховища $HOURS$ годин, $MINUTES$ хвилин. Для часу очікування вашого сховища встановлена дія $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Політикою вашої організації встановлено дію для часу очікування сховища $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Записи у вимкнених організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Вхід до $DOMAIN$",
     "placeholders": {
@@ -2120,11 +2173,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Політикою вашої організації було увімкнено автозаповнення на сторінці."
+  },
   "howToAutofill": {
     "message": "Як працює автозаповнення"
   },
-  "autofillSelectInfo": {
-    "message": "Виберіть елемент на цій сторінці або скористайтеся комбінацією клавіш: $COMMAND$. Ви також можете спробувати автозаповнення під час завантаження сторінки.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Виберіть елемент із цієї сторінки або використайте комбінацію клавіш: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2188,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Виберіть елемент на цій сторінці або встановіть комбінацію клавіш. Ви також можете спробувати автозаповнення під час завантаження сторінки."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Виберіть елемент із цієї сторінки або встановіть комбінацію клавіш у налаштуваннях."
   },
   "gotIt": {
     "message": "Зрозуміло"
@@ -2164,5 +2220,22 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Регіон"
+  },
+  "opensInANewWindow": {
+    "message": "Відкривається у новому вікні"
+  },
+  "eu": {
+    "message": "ЄС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Доступ заборонено. У вас немає дозволу на перегляд цієї сторінки."
   }
 }

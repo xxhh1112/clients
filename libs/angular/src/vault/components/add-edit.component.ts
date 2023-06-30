@@ -2,27 +2,24 @@ import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angu
 import { Observable, Subject, takeUntil, concatMap } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import {
-  isNotProviderUser,
+  isMember,
   OrganizationService,
-} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+} from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { OrganizationUserStatusType, PolicyType } from "@bitwarden/common/admin-console/enums";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { EventType, SecureNoteType, UriMatchType } from "@bitwarden/common/enums";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -30,11 +27,14 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { CardView } from "@bitwarden/common/vault/models/view/card.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
+
+import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
 
 @Directive()
 export class AddEditComponent implements OnInit, OnDestroy {
@@ -99,7 +99,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected policyService: PolicyService,
     private logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    protected sendApiService: SendApiService,
+    protected dialogService: DialogServiceAbstraction
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
@@ -118,7 +120,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
       { name: "Maestro", value: "Maestro" },
       { name: "UnionPay", value: "UnionPay" },
       { name: "RuPay", value: "RuPay" },
-      { name: i18nService.t("cardBrandMir"), value: "Mir" },
       { name: i18nService.t("other"), value: "Other" },
     ];
     this.cardExpMonthOptions = [
@@ -194,7 +195,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const orgs = await this.organizationService.getAll();
     orgs
-      .filter(isNotProviderUser)
+      .filter(isMember)
       .sort(Utils.getSortFunction(this.i18nService, "name"))
       .forEach((o) => {
         if (o.enabled && o.status === OrganizationUserStatusType.Confirmed) {
@@ -367,6 +368,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  onCardNumberChange(): void {
+    this.cipher.card.brand = CardView.getCardBrandByPatterns(this.cipher.card.number);
+  }
+
   getCardExpMonthDisplay() {
     return this.cardExpMonthOptions.find((x) => x.value == this.cipher.card.expMonth)?.name;
   }
@@ -392,17 +397,14 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   async delete(): Promise<boolean> {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t(
-        this.cipher.isDeleted ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation"
-      ),
-      this.i18nService.t("deleteItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning",
-      false,
-      this.componentName != "" ? this.componentName + " .modal-content" : null
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "deleteItem" },
+      content: {
+        key: this.cipher.isDeleted ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation",
+      },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
@@ -431,13 +433,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("restoreItemConfirmation"),
-      this.i18nService.t("restoreItem"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "restoreItem" },
+      content: { key: "restoreItemConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return false;
     }
@@ -457,12 +458,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   async generateUsername(): Promise<boolean> {
     if (this.cipher.login?.username?.length) {
-      const confirmed = await this.platformUtilsService.showDialog(
-        this.i18nService.t("overwriteUsernameConfirmation"),
-        this.i18nService.t("overwriteUsername"),
-        this.i18nService.t("yes"),
-        this.i18nService.t("no")
-      );
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "overwriteUsername" },
+        content: { key: "overwriteUsernameConfirmation" },
+        type: SimpleDialogType.WARNING,
+      });
+
       if (!confirmed) {
         return false;
       }
@@ -474,12 +475,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   async generatePassword(): Promise<boolean> {
     if (this.cipher.login?.password?.length) {
-      const confirmed = await this.platformUtilsService.showDialog(
-        this.i18nService.t("overwritePasswordConfirmation"),
-        this.i18nService.t("overwritePassword"),
-        this.i18nService.t("yes"),
-        this.i18nService.t("no")
-      );
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "overwritePassword" },
+        content: { key: "overwritePasswordConfirmation" },
+        type: SimpleDialogType.WARNING,
+      });
+
       if (!confirmed) {
         return false;
       }
@@ -605,13 +606,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   protected deleteCipher() {
+    const asAdmin = this.organization?.canEditAnyCollection;
     return this.cipher.isDeleted
-      ? this.cipherService.deleteWithServer(this.cipher.id)
-      : this.cipherService.softDeleteWithServer(this.cipher.id);
+      ? this.cipherService.deleteWithServer(this.cipher.id, asAdmin)
+      : this.cipherService.softDeleteWithServer(this.cipher.id, asAdmin);
   }
 
   protected restoreCipher() {
-    return this.cipherService.restoreWithServer(this.cipher.id);
+    const asAdmin = this.organization?.canEditAnyCollection;
+    return this.cipherService.restoreWithServer(this.cipher.id, asAdmin);
   }
 
   get defaultOwnerId(): string | null {

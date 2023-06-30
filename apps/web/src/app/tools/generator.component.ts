@@ -1,14 +1,14 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/components/generator.component";
-import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { UsernameGenerationService } from "@bitwarden/common/abstractions/usernameGeneration.service";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 
 import { PasswordGeneratorHistoryComponent } from "./password-generator-history.component";
 
@@ -17,18 +17,15 @@ import { PasswordGeneratorHistoryComponent } from "./password-generator-history.
   templateUrl: "generator.component.html",
 })
 export class GeneratorComponent extends BaseGeneratorComponent {
-  @ViewChild("historyTemplate", { read: ViewContainerRef, static: true })
-  historyModalRef: ViewContainerRef;
-
   constructor(
-    passwordGenerationService: PasswordGenerationService,
-    usernameGenerationService: UsernameGenerationService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
+    usernameGenerationService: UsernameGenerationServiceAbstraction,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     logService: LogService,
     route: ActivatedRoute,
-    private modalService: ModalService
+    private dialogService: DialogServiceAbstraction
   ) {
     super(
       passwordGenerationService,
@@ -41,21 +38,13 @@ export class GeneratorComponent extends BaseGeneratorComponent {
       window
     );
     if (platformUtilsService.isSelfHost()) {
-      // Cannot use Firefox Relay on self hosted web vaults due to CORS issues with Firefox Relay API
-      this.forwardOptions.splice(
-        this.forwardOptions.findIndex((o) => o.value === "firefoxrelay"),
-        1
-      );
-      // Also cannot use Duck Duck Go on self hosted web vaults due to CORS issues
-      this.forwardOptions.splice(
-        this.forwardOptions.findIndex((o) => o.value === "duckduckgo"),
-        1
-      );
+      // Allow only valid email forwarders for self host
+      this.forwardOptions = this.forwardOptions.filter((forwarder) => forwarder.validForSelfHosted);
     }
   }
 
   async history() {
-    await this.modalService.openViewRef(PasswordGeneratorHistoryComponent, this.historyModalRef);
+    this.dialogService.open(PasswordGeneratorHistoryComponent);
   }
 
   lengthChanged() {

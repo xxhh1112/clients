@@ -45,7 +45,7 @@
     "message": "Delen"
   },
   "moveToOrganization": {
-    "message": "Naar organisatie verplaatsen"
+    "message": "Verplaats naar organisatie"
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ verplaatst naar $ORGNAME$",
@@ -119,7 +119,7 @@
     "message": "Starten"
   },
   "copyValue": {
-    "message": "Waarde kopiëren",
+    "message": "Kopieer waarde",
     "description": "Copy value to clipboard"
   },
   "minimizeOnCopyToClipboard": {
@@ -257,7 +257,7 @@
     "message": "Overig"
   },
   "generatePassword": {
-    "message": "Wachtwoord genereren"
+    "message": "Genereer wachtwoord"
   },
   "type": {
     "message": "Categorie"
@@ -349,50 +349,50 @@
     "message": "Naam is vereist."
   },
   "addedItem": {
-    "message": "Item is toegevoegd"
+    "message": "Item toegevoegd"
   },
   "editedItem": {
-    "message": "Item is bewerkt"
+    "message": "Item opgeslagen"
   },
   "deleteItem": {
-    "message": "Item verwijderen"
+    "message": "Verwijder item"
   },
   "deleteFolder": {
-    "message": "Map verwijderen"
+    "message": "Verwijder folder"
   },
   "deleteAttachment": {
-    "message": "Bijlage verwijderen"
+    "message": "Verwijder bijlage"
   },
   "deleteItemConfirmation": {
     "message": "Weet je zeker dat je dit naar de prullenbak wilt verplaatsen?"
   },
   "deletedItem": {
-    "message": "Item is verwijderd"
+    "message": "Item verwijderd"
   },
   "overwritePasswordConfirmation": {
     "message": "Weet je zeker dat je het huidige wachtwoord wilt overschrijven?"
   },
   "overwriteUsername": {
-    "message": "Gebruikersnaam overschrijven"
+    "message": "Overschrijf gebruikersnaam"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?"
+    "message": "Weet je zeker dat je de huidige gebruikersnaam wilt wijzigen?"
   },
   "noneFolder": {
     "message": "Geen map",
     "description": "This is the folder for uncategorized items"
   },
   "addFolder": {
-    "message": "Map toevoegen"
+    "message": "Voeg map toe"
   },
   "editFolder": {
-    "message": "Map bewerken"
+    "message": "Wijzig map"
   },
   "regeneratePassword": {
-    "message": "Opnieuw genereren"
+    "message": "Genereer wachtwoord"
   },
   "copyPassword": {
-    "message": "Wachtwoord kopiëren"
+    "message": "Kopieer wachtwoord"
   },
   "copyUri": {
     "message": "URI kopiëren"
@@ -769,6 +769,9 @@
   },
   "contactUs": {
     "message": "Contact opnemen"
+  },
+  "helpAndFeedback": {
+    "message": "Hulp en feedback"
   },
   "getHelp": {
     "message": "Hulp vragen"
@@ -1389,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Ontgrendelen met Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Extra Windows Hello-instellingen"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verifiëren voor Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Ontgrendelen met Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Extra Touch ID-instellingen"
   },
   "touchIdConsentMessage": {
     "message": "ontgrendel je kluis"
@@ -1403,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Vraag om Touch ID bij opstarten"
+  },
+  "requirePasswordOnStart": {
+    "message": "Wachtwoord of pincode vereisen bij starten van de app"
+  },
+  "recommendedForSecurity": {
+    "message": "Aanbevolen voor veiligheid."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bij herstart vergrendelen met hoofdwachtwoord"
@@ -1523,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "Voor het inloggen met SSO moet je een hoofdwachtwoord instellen voor toegang tot en bescherming van je kluis."
+  },
+  "currentMasterPass": {
+    "message": "Huidig hoofdwachtwoord"
   },
   "newMasterPass": {
     "message": "Nieuw hoofdwachtwoord"
@@ -1840,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Je hoofdwachtwoord is onlangs veranderd door een beheerder in jouw organisatie. Om toegang te krijgen tot de kluis, moet je deze nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
+  },
   "hours": {
     "message": "Uren"
   },
@@ -1856,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "De beleidsinstellingen van je organisatie hebben invloed op de time-out van je kluis. De maximale toegestane kluis time-out is $HOURS$ uur en $MINUTES$ minuten. Jouw time-out is ingesteld op $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "De beleidsinstellingen van je organisatie hebben je kluis time-out ingesteld op $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2035,9 +2082,6 @@
   "neverLockWarning": {
     "message": "Weet je zeker dat je de optie \"Nooit\" wilt gebruiken? De vergrendelingsoptie \"Nooit\" bewaart de sleutel van je kluis op je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Kluis"
   },
@@ -2201,5 +2245,28 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden advisseert het aanpassen van je biometrische instellingen zodat je hoofdwachtwoord (of PIN) bij de eerste ontgrendeling vereist is. Wil je je instellingen nu bijwerken?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Aanbevolen instellingen"
+  },
+  "region": {
+    "message": "Regio"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Zelfgehost"
+  },
+  "accessDenied": {
+    "message": "Toegang geweigerd. Je hebt geen toestemming om deze pagina te bekijken."
   }
 }

@@ -1,26 +1,33 @@
 import { NgModule } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { ImportApiServiceAbstraction } from "@bitwarden/common/abstractions/import/import-api.service.abstraction";
-import { ImportService as ImportServiceAbstraction } from "@bitwarden/common/abstractions/import/import.service.abstraction";
-import { ImportApiService } from "@bitwarden/common/services/import/import-api.service";
-import { ImportService } from "@bitwarden/common/services/import/import.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import {
+  ImportService,
+  ImportServiceAbstraction,
+  ImportApiService,
+  ImportApiServiceAbstraction,
+} from "@bitwarden/importer";
 
 import { LooseComponentsModule, SharedModule } from "../../shared";
 
+import { ImportSuccessDialogComponent, FilePasswordPromptComponent } from "./dialog";
 import { ExportComponent } from "./export.component";
-import { FilePasswordPromptComponent } from "./file-password-prompt.component";
 import { ImportExportRoutingModule } from "./import-export-routing.module";
 import { ImportComponent } from "./import.component";
 
 @NgModule({
   imports: [SharedModule, LooseComponentsModule, ImportExportRoutingModule],
-  declarations: [ImportComponent, ExportComponent, FilePasswordPromptComponent],
+  declarations: [
+    ImportComponent,
+    ExportComponent,
+    FilePasswordPromptComponent,
+    ImportSuccessDialogComponent,
+  ],
   providers: [
     {
       provide: ImportApiServiceAbstraction,

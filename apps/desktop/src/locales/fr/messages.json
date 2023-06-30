@@ -98,7 +98,7 @@
     "message": "Phrase de passe"
   },
   "editItem": {
-    "message": "Modifier l'élément"
+    "message": "Éditer l'élément"
   },
   "emailAddress": {
     "message": "Adresse électronique"
@@ -129,7 +129,7 @@
     "message": "Réduire l'application lors de la copie des données d'un élément dans le presse-papiers."
   },
   "toggleVisibility": {
-    "message": "Afficher/Masquer"
+    "message": "Afficher/masquer la visibilité"
   },
   "toggleCollapse": {
     "message": "Déplier ou replier",
@@ -151,7 +151,7 @@
     "message": "Code de sécurité"
   },
   "identityName": {
-    "message": "identityName"
+    "message": "Nom d'identité"
   },
   "company": {
     "message": "Société"
@@ -269,7 +269,7 @@
     "message": "Deuxième prénom"
   },
   "lastName": {
-    "message": "Nom"
+    "message": "Nom de famille"
   },
   "fullName": {
     "message": "Nom complet"
@@ -308,7 +308,7 @@
     "message": "Favori"
   },
   "edit": {
-    "message": "Modifier"
+    "message": "Édition"
   },
   "authenticatorKeyTotp": {
     "message": "Clé d'authentification (TOTP)"
@@ -352,10 +352,10 @@
     "message": "Élément ajouté"
   },
   "editedItem": {
-    "message": "Élément modifié"
+    "message": "Élément enregistré"
   },
   "deleteItem": {
-    "message": "Supprimer l'identifiant"
+    "message": "Supprimer l'élément"
   },
   "deleteFolder": {
     "message": "Supprimer le dossier"
@@ -367,7 +367,7 @@
     "message": "Êtes-vous sûr de vouloir envoyer cet élément vers la corbeille ?"
   },
   "deletedItem": {
-    "message": "L'élément a été envoyé à la corbeille"
+    "message": "Élément envoyé à la corbeille"
   },
   "overwritePasswordConfirmation": {
     "message": "Êtes-vous sûr de vouloir écraser le mot de passe actuel ?"
@@ -379,14 +379,14 @@
     "message": "Êtes-vous sûr de vouloir remplacer le mot de passe actuel ?"
   },
   "noneFolder": {
-    "message": "Pas de dossier",
+    "message": "Aucun dossier",
     "description": "This is the folder for uncategorized items"
   },
   "addFolder": {
     "message": "Ajouter un dossier"
   },
   "editFolder": {
-    "message": "Modifier le dossier"
+    "message": "Éditer le dossier"
   },
   "regeneratePassword": {
     "message": "Re-générer un mot de passe"
@@ -464,7 +464,7 @@
     "message": "Êtes-vous sûr de vouloir supprimer cette pièce jointe ?"
   },
   "attachmentSaved": {
-    "message": "La pièce jointe a été enregistrée."
+    "message": "Pièce jointe enregistrée"
   },
   "file": {
     "message": "Fichier"
@@ -479,7 +479,7 @@
     "message": "Vous ne pouvez pas utiliser cette fonctionnalité tant que vous ne mettez pas à jour votre clé de chiffrement."
   },
   "editedFolder": {
-    "message": "Dossier modifié"
+    "message": "Dossier enregistré"
   },
   "addedFolder": {
     "message": "Dossier ajouté"
@@ -497,7 +497,7 @@
     "message": "Créer un compte"
   },
   "logIn": {
-    "message": "S'identifier"
+    "message": "Se connecter"
   },
   "submit": {
     "message": "Soumettre"
@@ -564,7 +564,7 @@
     "message": "Une erreur inattendue est survenue."
   },
   "itemInformation": {
-    "message": "Information sur l'identifiant"
+    "message": "Informations sur l'élément"
   },
   "noItemsInList": {
     "message": "Aucun élément à afficher."
@@ -769,6 +769,9 @@
   },
   "contactUs": {
     "message": "Nous contacter"
+  },
+  "helpAndFeedback": {
+    "message": "Aide et commentaires"
   },
   "getHelp": {
     "message": "Obtenir de l'aide"
@@ -1114,7 +1117,7 @@
     "message": "Actualisation terminée"
   },
   "passwordHistory": {
-    "message": "Historique des mots de passe"
+    "message": "Historique du mot de passe"
   },
   "clear": {
     "message": "Effacer",
@@ -1266,7 +1269,7 @@
     "description": "Text for a button that toggles the visibility of the window. Shows the window when it is hidden or hides the window if it is currently open."
   },
   "hideToTray": {
-    "message": "Masquer"
+    "message": "Masquer dans la barre des tâches"
   },
   "alwaysOnTop": {
     "message": "Toujours au premier plan",
@@ -1389,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Déverrouiller avec Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Paramètres supplémentaires de Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Vérifier pour Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Déverrouiller avec Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Paramètres supplémentaires de Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "déverouiller votre coffre"
@@ -1403,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Demander à Touch ID au démarrage"
+  },
+  "requirePasswordOnStart": {
+    "message": "Exiger un mot de passe ou un code PIN au démarrage de Bitwarden"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommandé pour la sécurité."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Verrouiller avec le mot de passe principal au redémarrage"
@@ -1457,16 +1472,16 @@
     "message": "Politique de confidentialité"
   },
   "unsavedChangesConfirmation": {
-    "message": "Êtes-vous sûr de vouloir quitter ? Si vous le faites maintenant, vos informations actuelles ne seront pas sauvegardées."
+    "message": "Êtes-vous sûr de vouloir quitter ? Si vous quittez maintenant, vos informations actuelles ne seront pas enregistrées."
   },
   "unsavedChangesTitle": {
-    "message": "Il y a des modifications non enregistrées"
+    "message": "Modifications non enregistrées"
   },
   "clone": {
     "message": "Cloner"
   },
   "passwordGeneratorPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent les paramètres de votre générateur."
   },
   "vaultTimeoutAction": {
     "message": "Action après délai d'expiration du coffre"
@@ -1475,7 +1490,7 @@
     "message": "Un mot de passe principal ou une autre méthode de déverrouillage est nécessaire pour accéder à nouveau à votre coffre."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Un coffre déconnecté nécessite que vous vous ré-authentifiez pour y accéder de nouveau."
+    "message": "Une nouvelle authentification est requise pour accéder à nouveau à votre coffre."
   },
   "lock": {
     "message": "Verrouiller",
@@ -1513,7 +1528,7 @@
     "message": "La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Confirmation de l'action lors de l'expiration du délai"
+    "message": "Confirmation de l'action après délai d'expiration"
   },
   "enterpriseSingleSignOn": {
     "message": "Portail de connexion unique d'entreprise"
@@ -1524,6 +1539,9 @@
   "ssoCompleteRegistration": {
     "message": "Afin de finaliser la connexion avec SSO, veuillez définir un mot de passe principal pour accéder et protéger votre coffre."
   },
+  "currentMasterPass": {
+    "message": "Mot de passe principal actuel"
+  },
   "newMasterPass": {
     "message": "Nouveau mot de passe principal"
   },
@@ -1531,7 +1549,7 @@
     "message": "Confirmer le nouveau mot de passe principal"
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
   },
   "policyInEffectMinComplexity": {
     "message": "Score de complexité minimum de $SCORE$",
@@ -1570,13 +1588,13 @@
     }
   },
   "masterPasswordPolicyRequirementsNotMet": {
-    "message": "Votre nouveau mot de passe principal ne répond pas aux exigences en matière de politique de sécurité."
+    "message": "Votre nouveau mot de passe principal ne répond pas aux exigences de politique de sécurité."
   },
   "acceptPolicies": {
-    "message": "En cochant cette case, vous acceptez les éléments suivants :"
+    "message": "En cochant cette case vous acceptez ce qui suit :"
   },
   "acceptPoliciesRequired": {
-    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
+    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
   },
   "enableBrowserIntegration": {
     "message": "Activer l'intégration avec le navigateur"
@@ -1814,7 +1832,7 @@
     "message": "Masquer mon adresse électronique aux destinataires."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation affectent vos options Send."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation affectent vos options Send."
   },
   "emailVerificationRequired": {
     "message": "Vérification de courriel requise"
@@ -1840,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Votre mot de passe principal a été récemment changé par un administrateur de votre organisation. Pour pouvoir accéder au coffre, vous devez le mettre à jour maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Votre mot de passe principal ne répond pas aux exigences de politique de sécurité de cette organisation. Pour pouvoir accéder au coffre, vous devez mettre à jour votre mot de passe principal dès maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuver rester actives pendant encore une heure."
+  },
   "hours": {
     "message": "Heures"
   },
@@ -1847,7 +1868,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s)",
+    "message": "Les politiques de sécurité de votre organisation ont défini le délai d'expiration de votre coffre à $HOURS$ heure(s) et $MINUTES$ minute(s) maximum.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1856,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Les politiques de sécurité de votre organisation affectent le délai d'expiration de votre coffre. Le délai autorisé d'expiration du coffre est de $HOURS$ heure(s) et $MINUTES$ minute(s) au maximum. L'action après délai d'expiration de votre coffre est fixée à $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Les politiques de sécurité de votre organisation ont défini l'action après délai d'expiration de votre coffre à $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1872,7 +1919,7 @@
     "message": "Export du coffre supprimé"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel."
+    "message": "Une ou plusieurs politiques de sécurité de l'organisation vous empêchent d'exporter votre coffre individuel."
   },
   "addAccount": {
     "message": "Ajouter un compte"
@@ -2034,9 +2081,6 @@
   },
   "neverLockWarning": {
     "message": "Êtes-vous sûr de vouloir utiliser l'option \"Jamais\" ? Définir le verrouillage sur \"Jamais\" stocke la clé de chiffrement de votre coffre sur votre appareil. Si vous utilisez cette option, vous devez vous assurer de correctement protéger votre appareil."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Coffre"
@@ -2201,5 +2245,28 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommande de mettre à jour vos paramètres biométriques pour exiger votre mot de passe principal (ou votre code PIN) lors du premier déverrouillage. Voulez-vous mettre à jour vos paramètres maintenant ?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Une mise à jour des paramètres est recommandée"
+  },
+  "region": {
+    "message": "Région"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Auto-hébergé"
+  },
+  "accessDenied": {
+    "message": "Accès refusé. Vous n'avez pas l'autorisation de voir cette page."
   }
 }

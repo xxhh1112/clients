@@ -49,11 +49,11 @@
         </div>
       </div>
       <div id="masterPasswordHelp" class="box-footer">
-        {{ "loggedInAsOn" | i18n: email:webVaultHostname }}
+        {{ "loggedInAsOn" | i18n : email : webVaultHostname }}
       </div>
     </div>
     <div class="buttons with-rows">
-      <div class="buttons-row" *ngIf="supportsBiometric && biometricLock">
+      <div class="buttons-row" *ngIf="supportsBiometric && biometricLock && biometricReady">
         <button
           type="button"
           class="btn block"

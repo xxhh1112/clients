@@ -2,25 +2,28 @@ import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
-import { OrganizationUserType } from "@bitwarden/common/enums/organizationUserType";
-import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
-import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
-import { Utils } from "@bitwarden/common/misc/utils";
+import {
+  OrganizationUserStatusType,
+  OrganizationUserType,
+  ProviderUserStatusType,
+  ProviderUserType,
+} from "@bitwarden/common/admin-console/enums";
+import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { ProviderUserUserDetailsResponse } from "@bitwarden/common/models/response/provider/provider-user.response";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
-import { OrganizationUserView } from "../organizations/core/views/organization-user.view";
-import { UserConfirmComponent } from "../organizations/manage/user-confirm.component";
+import { OrganizationUserView } from "../admin-console/organizations/core/views/organization-user.view";
+import { UserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 
 type StatusType = OrganizationUserStatusType | ProviderUserStatusType;
 
@@ -106,7 +109,8 @@ export abstract class BasePeopleComponent<
     private logService: LogService,
     private searchPipe: SearchPipe,
     protected userNamePipe: UserNamePipe,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected dialogService: DialogServiceAbstraction
   ) {}
 
   abstract edit(user: UserType): void;
@@ -215,13 +219,11 @@ export abstract class BasePeopleComponent<
   }
 
   protected async removeUserConfirmationDialog(user: UserType) {
-    return this.platformUtilsService.showDialog(
-      this.i18nService.t("removeUserConfirmation"),
-      this.userNamePipe.transform(user),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    return this.dialogService.openSimpleDialog({
+      title: this.userNamePipe.transform(user),
+      content: { key: "removeUserConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
   }
 
   async remove(user: UserType) {
@@ -245,14 +247,17 @@ export abstract class BasePeopleComponent<
     this.actionPromise = null;
   }
 
+  protected async revokeUserConfirmationDialog(user: UserType) {
+    return this.dialogService.openSimpleDialog({
+      title: { key: "revokeAccess", placeholders: [this.userNamePipe.transform(user)] },
+      content: this.revokeWarningMessage(),
+      acceptButtonText: { key: "revokeAccess" },
+      type: SimpleDialogType.WARNING,
+    });
+  }
+
   async revoke(user: UserType) {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.revokeWarningMessage(),
-      this.i18nService.t("revokeUserId", this.userNamePipe.transform(user)),
-      this.i18nService.t("revokeAccess"),
-      this.i18nService.t("cancel"),
-      "warning"
-    );
+    const confirmed = await this.revokeUserConfirmationDialog(user);
 
     if (!confirmed) {
       return false;

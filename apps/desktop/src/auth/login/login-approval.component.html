@@ -6,12 +6,12 @@
       </div>
       <div class="content">
         <div class="section">
-          <h4>{{ "logInAttemptBy" | i18n: email }}</h4>
+          <h4>{{ "logInAttemptBy" | i18n : email }}</h4>
         </div>
 
         <div class="section">
           <h4 class="label">{{ "fingerprintPhraseHeader" | i18n }}</h4>
-          <code>{{ authRequestResponse?.requestFingerprint }}</code>
+          <code>{{ fingerprintPhrase }}</code>
         </div>
 
         <div class="section">

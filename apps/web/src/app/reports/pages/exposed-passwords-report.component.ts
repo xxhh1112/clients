@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -27,14 +27,8 @@ export class ExposedPasswordsReportComponent extends CipherReportComponent imple
     super(modalService, messagingService, true, passwordRepromptService);
   }
 
-  ngOnInit() {
-    this.checkAccess();
-  }
-
-  async load() {
-    if (await this.checkAccess()) {
-      super.load();
-    }
+  async ngOnInit() {
+    await super.load();
   }
 
   async setCiphers() {

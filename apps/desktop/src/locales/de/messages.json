@@ -15,7 +15,7 @@
     "message": "Typen"
   },
   "typeLogin": {
-    "message": "Anmeldung"
+    "message": "Zugangsdaten"
   },
   "typeCard": {
     "message": "Karte"
@@ -132,7 +132,7 @@
     "message": "Sichtbarkeit umschalten"
   },
   "toggleCollapse": {
-    "message": "Ein- und ausklappen",
+    "message": "Ein-/ausklappen",
     "description": "Toggling an expand/collapse state."
   },
   "cardholderName": {
@@ -494,7 +494,7 @@
     "message": "Einloggen oder einen neuen Account erstellen, um auf den Tresor zuzugreifen."
   },
   "createAccount": {
-    "message": "Account erstellen"
+    "message": "Konto erstellen"
   },
   "logIn": {
     "message": "Anmelden"
@@ -770,6 +770,9 @@
   "contactUs": {
     "message": "Kontakt"
   },
+  "helpAndFeedback": {
+    "message": "Hilfe und Feedback"
+  },
   "getHelp": {
     "message": "Hilfe erhalten"
   },
@@ -914,7 +917,7 @@
     "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
   },
   "enableMinToTray": {
-    "message": "Zum Taskleisten-Symbol minimieren"
+    "message": "In Infobereich-Symbol minimieren"
   },
   "enableMinToTrayDesc": {
     "message": "Zeige ein Symbol in der Taskleiste, wenn das Fenster minimiert wird."
@@ -926,7 +929,7 @@
     "message": "Bei minimiertem Fenster stattdessen ein Symbol in der Menüleiste anzeigen."
   },
   "enableCloseToTray": {
-    "message": "In die Taskleiste minimieren"
+    "message": "In Infobereich minimieren"
   },
   "enableCloseToTrayDesc": {
     "message": "Zeige ein Symbol in der Taskleiste, wenn das Fenster geschlossen wird."
@@ -938,13 +941,13 @@
     "message": "Beim Schließen des Fensters stattdessen ein Symbol in der Menüleiste anzeigen."
   },
   "enableTray": {
-    "message": "Taskleisten-Symbol anzeigen"
+    "message": "Infobereich-Symbol anzeigen"
   },
   "enableTrayDesc": {
     "message": "Dauerhaft ein Symbol in der Taskleiste anzeigen."
   },
   "startToTray": {
-    "message": "Minimiert in Taskleiste starten"
+    "message": "Minimiert im Infobereich starten"
   },
   "startToTrayDesc": {
     "message": "Beim ersten Start der Anwendung nur minimiert in der Taskleiste anzeigen."
@@ -968,10 +971,10 @@
     "message": "Das Bitwarden-Symbol im Dock anzeigen, auch wenn es in die Menüleiste minimiert wird."
   },
   "confirmTrayTitle": {
-    "message": "In Taskleiste minimieren bestätigen"
+    "message": "In Infobereich minimieren bestätigen"
   },
   "confirmTrayDesc": {
-    "message": "Durch Deaktivieren dieser Einstellung werden auch alle anderen Taskleisten-bezogenen Einstellungen deaktiviert."
+    "message": "Durch Deaktivieren dieser Einstellung werden auch alle anderen Infobereich-bezogenen Einstellungen deaktiviert."
   },
   "language": {
     "message": "Sprache"
@@ -1241,7 +1244,7 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Match-Erkennung",
+    "message": "Übereinstimmungserkennung",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
@@ -1249,7 +1252,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Umschaltoptionen"
+    "message": "Optionen umschalten"
   },
   "organization": {
     "message": "Organisation",
@@ -1266,7 +1269,7 @@
     "description": "Text for a button that toggles the visibility of the window. Shows the window when it is hidden or hides the window if it is currently open."
   },
   "hideToTray": {
-    "message": "In Taskleiste verstecken"
+    "message": "In Infobereich verstecken"
   },
   "alwaysOnTop": {
     "message": "Immer im Vordergrund",
@@ -1389,11 +1392,17 @@
   "unlockWithWindowsHello": {
     "message": "Mit Windows Hello entsperren"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Zusätzliche Einstellungen für Windows Hello"
+  },
   "windowsHelloConsentMessage": {
     "message": "Für Bitwarden verifizieren."
   },
   "unlockWithTouchId": {
     "message": "Mit Touch ID entsperren"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Zusätzliche Einstellungen für Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "Deinen Tresor entsperren"
@@ -1403,6 +1412,12 @@
   },
   "autoPromptTouchId": {
     "message": "Beim Start nach Touch ID fragen"
+  },
+  "requirePasswordOnStart": {
+    "message": "Passwort oder PIN beim Start der App verlangen"
+  },
+  "recommendedForSecurity": {
+    "message": "Aus Sicherheitsgründen empfohlen."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Beim Neustart mit Master-Passwort sperren"
@@ -1524,6 +1539,9 @@
   "ssoCompleteRegistration": {
     "message": "Bitte lege ein Masterpasswort für den Schutz deines Tresors fest, um die Anmeldung über SSO abzuschließen."
   },
+  "currentMasterPass": {
+    "message": "Aktuelles Master-Passwort"
+  },
   "newMasterPass": {
     "message": "Neues Master-Passwort"
   },
@@ -1579,13 +1597,13 @@
     "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
   },
   "enableBrowserIntegration": {
-    "message": "Browser-Einbindung aktivieren"
+    "message": "Browser-Integration erlauben"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Die Browser-Integration wird für Biometrie im Browser verwendet."
   },
   "enableDuckDuckGoBrowserIntegration": {
-    "message": "DuckDuckGo Browser-Einbindung erlauben"
+    "message": "DuckDuckGo Browser-Integration erlauben"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
     "message": "Verwende deinen Bitwarden-Tresor, wenn du mit DuckDuckGo surfst."
@@ -1840,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Dein Master-Passwort wurde kürzlich von einem Administrator deiner Organisation geändert. Um auf den Tresor zuzugreifen, musst du es jetzt aktualisieren. Wenn du fortfährst, wirst du aus der aktuellen Sitzung abgemeldet und eine erneute Anmeldung ist erforderlich. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben."
+  },
   "hours": {
     "message": "Stunden"
   },
@@ -1847,7 +1868,7 @@
     "message": "Minuten"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Die Unternehmensrichtlinien beeinflussen deinen Tresor-Timeout. Das maximal zulässige Tresor-Timeout ist $HOURS$ Stunde(n) und $MINUTES$ Minute(n)",
+    "message": "Deine Unternehmensrichtlinien haben das maximal zulässige Tresor-Timeout auf $HOURS$ Stunde(n) und $MINUTES$ Minute(n) festgelegt.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1856,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Deine Organisationsrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt $HOURS$ Stunde(n) und $MINUTES$ Minute(n). Deine Tresor-Timeout-Aktion ist auf $ACTION$ gesetzt.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Deine Organisationsrichtlinien haben deine Tresor-Timeout-Aktion auf $ACTION$ gesetzt.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1935,7 +1982,7 @@
     "message": "Optionen"
   },
   "sessionTimeout": {
-    "message": "Deine Sitzung ist abgelaufen. Bitte gehe zurück und versuche dich erneut einzuloggen."
+    "message": "Deine Sitzung ist abgelaufen. Bitte gehe zurück und versuche dich erneut anzumelden."
   },
   "exportingPersonalVaultTitle": {
     "message": "Persönlichen Tresor exportieren"
@@ -1974,7 +2021,7 @@
     "message": "Benutzernamentyp"
   },
   "plusAddressedEmail": {
-    "message": "Mit Plus adressierte E-Mail-Adresse",
+    "message": "Plus-adressierte E-Mail-Adresse",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
@@ -2034,9 +2081,6 @@
   },
   "neverLockWarning": {
     "message": "Bist du sicher, dass du die Option \"Nie\" verwenden möchtest? Durch das Setzen der Sperroptionen zu \"Nie\" wird der Verschlüsselungscode deines Tresors auf deinem Gerät gespeichert. Wenn du diese Option verwendest, solltest du sicherstellen, dass dein Gerät ausreichend geschützt ist."
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "Tresor"
@@ -2201,5 +2245,28 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden empfiehlt, die Biometrie-Einstellungen zu aktualisieren, um beim ersten Entsperren dein Master-Passwort (oder deine PIN) zu verlangen. Möchtest du deine Einstellungen jetzt aktualisieren?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Empfohlene Aktualisierung der Einstellungen"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Selbst gehostet"
+  },
+  "accessDenied": {
+    "message": "Zugriff verweigert. Du hast keine Berechtigung, diese Seite anzuzeigen."
   }
 }

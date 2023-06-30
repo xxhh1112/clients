@@ -1,15 +1,15 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
-import { setAlarmTime } from "../../alarms/alarm-state";
-import { BrowserApi } from "../../browser/browserApi";
-import { BrowserStateService } from "../../services/abstractions/browser-state.service";
+import { setAlarmTime } from "../../platform/alarms/alarm-state";
+import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserStateService } from "../../platform/services/abstractions/browser-state.service";
 
 import { clearClipboardAlarmName } from "./clear-clipboard";
 import { GeneratePasswordToClipboardCommand } from "./generate-password-to-clipboard-command";
 
-jest.mock("../../alarms/alarm-state", () => {
+jest.mock("../../platform/alarms/alarm-state", () => {
   return {
     setAlarmTime: jest.fn(),
   };
@@ -18,13 +18,13 @@ jest.mock("../../alarms/alarm-state", () => {
 const setAlarmTimeMock = setAlarmTime as jest.Mock;
 
 describe("GeneratePasswordToClipboardCommand", () => {
-  let passwordGenerationService: MockProxy<PasswordGenerationService>;
+  let passwordGenerationService: MockProxy<PasswordGenerationServiceAbstraction>;
   let stateService: MockProxy<BrowserStateService>;
 
   let sut: GeneratePasswordToClipboardCommand;
 
   beforeEach(() => {
-    passwordGenerationService = mock<PasswordGenerationService>();
+    passwordGenerationService = mock<PasswordGenerationServiceAbstraction>();
     stateService = mock<BrowserStateService>();
 
     passwordGenerationService.getOptions.mockResolvedValue([{ length: 8 }, {} as any]);

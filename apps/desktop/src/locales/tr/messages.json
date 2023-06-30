@@ -542,7 +542,7 @@
     "message": "Ana parolayı yeniden yazmalısınız."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Ana parola en az $VALUE$ karakter uzunluğunda olmalıdır.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -769,6 +769,9 @@
   },
   "contactUs": {
     "message": "Bize ulaşın"
+  },
+  "helpAndFeedback": {
+    "message": "Yardım ve geribildirim"
   },
   "getHelp": {
     "message": "Yardım al"
@@ -1389,20 +1392,32 @@
   "unlockWithWindowsHello": {
     "message": "Kilidi Windows Hello ile aç"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Ekstra Windows Hello ayarları"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden için doğrulayın."
   },
   "unlockWithTouchId": {
     "message": "Kilidi Touch ID ile aç"
   },
+  "additionalTouchIdSettings": {
+    "message": "Ekstra Touch ID ayarları"
+  },
   "touchIdConsentMessage": {
     "message": "kasanızın kilidini açma"
   },
   "autoPromptWindowsHello": {
-    "message": "Açılışta Windows Hello doğrulaması iste"
+    "message": "Uygulamayı başlatırken Windows Hello doğrulaması iste"
   },
   "autoPromptTouchId": {
-    "message": "Açılışta Touch ID doğrulaması iste"
+    "message": "Uygulamayı başlatırken Touch ID iste"
+  },
+  "requirePasswordOnStart": {
+    "message": "Uygulamayı başlatırken parola veya PIN iste"
+  },
+  "recommendedForSecurity": {
+    "message": "Güvenliğiniz için önerilir."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Yeniden başlatmada ana şifre ile kilitle"
@@ -1523,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "SSO ile girişinizi tamamlamak için lütfen kasanıza erişirken kullanacağınız ana parolayı belirleyin."
+  },
+  "currentMasterPass": {
+    "message": "Mevcut ana parola"
   },
   "newMasterPass": {
     "message": "Yeni ana parola"
@@ -1840,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ana parolanız kuruluşunuzdaki bir yönetici tarafından yakın zamanda değiştirildi. Kasanıza erişmek için parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
+  },
   "hours": {
     "message": "Saat"
   },
@@ -1847,7 +1868,7 @@
     "message": "Dakika"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı $HOURS$ saat $MINUTES$ dakikadır",
+    "message": "Kuruluş ilkeleriniz izin verilen maksimum kasa zaman aşımını $HOURS$ saat $MINUTES$ dakika olarak belirlemiş.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1856,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı $HOURS$ saat $MINUTES$ dakikadır. Kasa zaman aşımı eyleminiz $ACTION$ olarak ayarlanmış.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Kuruluş ilkeleriniz, kasa zaman aşımı eyleminizi $ACTION$ olarak ayarladı.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2035,9 +2082,6 @@
   "neverLockWarning": {
     "message": "\"Asla\" seçeneğini kullanmak istediğinizden emin misiniz? Kilit seçeneklerinizi \"Asla\" olarak ayarlarsanız kasanızın şifreleme anahtarı cihazınızda saklanacaktır. Bu seçeneği kullanırsanız cihazınızı çok iyi korumalısınız."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Kasa"
   },
@@ -2201,5 +2245,28 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden, ilk kilit açmada ana parola veya PIN girmeyi zorunlu tutacak şekilde biyometri ayarlarınızı güncellemenizi öneriyor. Ayarlarınızı hemen güncellemek ister misiniz?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Önerilen Ayarlar Güncellemesi"
+  },
+  "region": {
+    "message": "Bölge"
+  },
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABD",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Barındırılan"
+  },
+  "accessDenied": {
+    "message": "Erişim engellendi. Bu sayfayı görüntüleme iznine sahip değilsiniz."
   }
 }

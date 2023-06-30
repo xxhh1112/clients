@@ -2,34 +2,34 @@ import { KeyConnectorService as AbstractKeyConnectorService } from "@bitwarden/c
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 
 import {
+  OrganizationServiceInitOptions,
+  organizationServiceFactory,
+} from "../../../admin-console/background/service-factories/organization-service.factory";
+import {
   apiServiceFactory,
   ApiServiceInitOptions,
-} from "../../../background/service_factories/api-service.factory";
+} from "../../../platform/background/service-factories/api-service.factory";
 import {
-  cryptoFunctionServiceFactory,
   CryptoFunctionServiceInitOptions,
-} from "../../../background/service_factories/crypto-function-service.factory";
+  cryptoFunctionServiceFactory,
+} from "../../../platform/background/service-factories/crypto-function-service.factory";
 import {
   CryptoServiceInitOptions,
   cryptoServiceFactory,
-} from "../../../background/service_factories/crypto-service.factory";
+} from "../../../platform/background/service-factories/crypto-service.factory";
 import {
   FactoryOptions,
   CachedServices,
   factory,
-} from "../../../background/service_factories/factory-options";
+} from "../../../platform/background/service-factories/factory-options";
 import {
   logServiceFactory,
   LogServiceInitOptions,
-} from "../../../background/service_factories/log-service.factory";
-import {
-  OrganizationServiceInitOptions,
-  organizationServiceFactory,
-} from "../../../background/service_factories/organization-service.factory";
+} from "../../../platform/background/service-factories/log-service.factory";
 import {
   stateServiceFactory,
   StateServiceInitOptions,
-} from "../../../background/service_factories/state-service.factory";
+} from "../../../platform/background/service-factories/state-service.factory";
 
 import { TokenServiceInitOptions, tokenServiceFactory } from "./token-service.factory";
 

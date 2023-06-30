@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Confirmar la exportación de la bóveda"
   },
+  "confirmSecretsExport": {
+    "message": "Confirmar exportación de secretos"
+  },
   "exportWarningDesc": {
     "message": "Esta exportación contiene los datos de tu caja fuerte en un formato no cifrado. No deberías almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínalo inmediatamente cuando termines de utilizarlo."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Ésta exportación contiene sus datos de secretos en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo."
   },
   "encExportKeyWarningDesc": {
     "message": "Esta exportación encripta sus datos usando la clave de cifrado de su cuenta. Si alguna vez gira la clave de cifrado de su cuenta debe volver a exportar, ya que no podrá descifrar este archivo de exportación."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Exportar caja fuerte"
+  },
+  "exportSecrets": {
+    "message": "Exportar secretos"
   },
   "fileFormat": {
     "message": "Formato de archivo"
@@ -1254,6 +1263,15 @@
   },
   "importSuccess": {
     "message": "La información ha sido importada correctamente en tu caja fuerte."
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Un total de $AMOUNT$ elementos fueron importados.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Datos exportados con éxito"
@@ -2019,6 +2037,9 @@
   "cancelSubscription": {
     "message": "Cancelar suscripción"
   },
+  "subscriptionExpiration": {
+    "message": "Caducidad de la suscripción"
+  },
   "subscriptionCanceled": {
     "message": "La suscripción ha sido cancelada."
   },
@@ -2645,6 +2666,12 @@
   "failedLogin2fa": {
     "message": "Intento de acceso fallido con autenticación en dos pasos incorrecta."
   },
+  "incorrectPassword": {
+    "message": "Contraseña incorrecta"
+  },
+  "incorrectCode": {
+    "message": "Código incorrecto"
+  },
   "exportedVault": {
     "message": "Caja fuerte exportada."
   },
@@ -2735,6 +2762,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "Ver colección - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Editar elemento - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -3112,6 +3157,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Puede acceder a esta organización una vez que un administrador confirme su membresía. Te enviaremos un correo electrónico cuando eso suceda."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "Ahora puede acceder a esta organización."
   },
   "inviteAcceptFailed": {
     "message": "No se puede aceptar la invitación. Pida a un administrador de la organización que envíe una nueva invitación."
@@ -4459,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "La pista de su contraseña no puede ser la misma que la contraseña."
   },
-  "enrollPasswordReset": {
-    "message": "Inscribirse en el restablecimiento de contraseña"
+  "enrollAccountRecovery": {
+    "message": "Inscribirse en la recuperación de la cuenta"
   },
-  "enrolledPasswordReset": {
-    "message": "Inscrito en el restablecimiento de contraseña"
+  "enrolledAccountRecovery": {
+    "message": "Inscrito en la recuperación de la cuenta"
   },
-  "withdrawPasswordReset": {
-    "message": "Retirar del restablecimiento de contraseña"
+  "withdrawAccountRecovery": {
+    "message": "Retirarse de la recuperación de la cuenta"
   },
   "enrollPasswordResetSuccess": {
     "message": "Inscripción exitosa!"
@@ -4474,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "¡Retiro exitoso!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Usuario $ID$ inscrito en la asistencia para restablecer contraseña.",
+  "eventEnrollAccountRecovery": {
+    "message": "Usuario $ID$ inscrito en la recuperación de la cuenta.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4483,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "El usuario $ID$ se retiró de la asistencia para restablecer contraseña.",
+  "eventWithdrawAccountRecovery": {
+    "message": "El usuario $ID$ se retiró de la recuperación de la cuenta.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4543,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "La inscripción permitirá a los administradores de la organización cambiar su contraseña maestra. ¿Está seguro de que desea inscribirse?"
   },
-  "resetPasswordPolicy": {
-    "message": "Restablecer contraseña maestra"
+  "accountRecoveryPolicy": {
+    "message": "Administración de recuperación de cuenta"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Permitir a los administradores de la organización restablecer la contraseña maestra de los usuarios de la organización."
+  "accountRecoveryPolicyDescription": {
+    "message": "Recupera las cuentas de los miembros cuando se olvide o se pierda la contraseña maestra o los dispositivos de confianza. Los procesos de recuperación se basan en el método de cifrado de cuenta."
   },
   "resetPasswordPolicyWarning": {
     "message": "Los usuarios de la organización tendrán que autoinscribirse o estar inscritos antes de que los administradores puedan restablecer su contraseña maestra."
@@ -4797,6 +4845,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Su contraseña maestra no cumple con los requisitos de la política de esta organización. Para unirse a la organización, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Su contraseña maestra no cumple con una o más de las políticas de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
+  },
   "maximumVaultTimeout": {
     "message": "Tiempo de espera de la caja fuerte excedido"
   },
@@ -4828,6 +4879,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Las políticas de su organización están afectando al tiempo de espera de tu caja fuerte. El tiempo de espera de tu caja fuerte máximo permitido es de $HOURS$ hora(s) y $MINUTES$ minuto(s). La acción de tiempo de espera de tu caja fuerte está establecida en $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Los criterios de su organización han establecido su acción de tiempo de espera de tu caja fuerte en $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "Tiempo de espera personalizado para la caja fuerte"
   },
@@ -4851,6 +4928,18 @@
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Una o más políticas de tu organización te impiden exportar tu caja fuerte personal."
+  },
+  "activateAutofill": {
+    "message": "Activar autocompletar"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Active el autocompletar con los ajustes de carga de página en la extensión del navegador para todos los miembros existentes y nuevos."
+  },
+  "experimentalFeature": {
+    "message": "Los sitios web comprometidos o no confiables pueden explotar autocompletar al cargar la página."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Más información sobre autocompletar"
   },
   "selectType": {
     "message": "Seleccionar tipo de SSO"
@@ -5143,9 +5232,6 @@
     "message": "para requerir que todos los miembros inicien sesión con SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "Se requieren políticas de autenticación de SSO y de una Única Organización para configurar el descifrado del Conector de Claves."
-  },
   "memberDecryptionOption": {
     "message": "Opciones de descifrado de miembros"
   },
@@ -5155,8 +5241,17 @@
   "keyConnector": {
     "message": "Conector de claves"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Conecte el inicio de sesión con SSO a su servidor de claves de descifrado autoalojado. Usando esta opción, los miembros no necesitarán usar sus contraseñas maestras para descifrar datos de la caja fuerte. Póngase en contacto con el soporte de Bitwarden para asistencia en la configuración."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "Está habilitado \"Iniciar sesión con SSO y el descifrado del Conectore de claves\" Esta política sólo se aplicará a propietarios y administradores."
@@ -5372,6 +5467,15 @@
     "message": "Organización actual",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Cuenta: Sesión iniciada como $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Configuración de la cuenta"
   },
@@ -5451,7 +5555,7 @@
   },
   "lastSync": {
     "message": "Última sincronización",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Los patrocinios autohospedados están sincronizados."
@@ -5593,6 +5697,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "El valor introducido debe ser al menos $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "El valor de entrada no debe exceder $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "Una o más direcciones de correo electrónico no son válidas"
   },
@@ -5625,9 +5747,6 @@
   },
   "reporting": {
     "message": "Informando"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Número de usuarios"
@@ -5736,10 +5855,10 @@
     "description": "The action to delete multiple secrets from the system."
   },
   "hardDeleteSecret": {
-    "message": "Permanently delete secret"
+    "message": "Eliminar secreto permanentemente"
   },
   "hardDeleteSecrets": {
-    "message": "Permanently delete secrets"
+    "message": "Eliminar secretos de forma permanente"
   },
   "secretProjectAssociationDescription": {
     "message": "Seleccione los proyectos con los que se asociará el secreto. Sólo los usuarios de la organización con acceso a estos proyectos podrán ver el secreto.",
@@ -5818,7 +5937,7 @@
     "description": "Message to encourage the user to start adding secrets."
   },
   "secretsTrashNoItemsMessage": {
-    "message": "There are no secrets in the trash."
+    "message": "No hay secretos en la papelera."
   },
   "serviceAccountsNoItemsMessage": {
     "message": "Crear una nueva cuenta de servicio para comenzar a automatizar el acceso secreto.",
@@ -5866,7 +5985,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "La cuenta de servicio ha sido eliminada"
+    "message": "Cuenta de servicio eliminada"
   },
   "deleteServiceAccountsToast": {
     "message": "Cuentas de servicio eliminadas"
@@ -5912,13 +6031,13 @@
     "description": "Notifies that the selected secrets have been moved to the trash"
   },
   "hardDeleteSecretConfirmation": {
-    "message": "Are you sure you want to permanently delete this secret?"
+    "message": "¿Está seguro que desea eliminar permanentemente este secreto?"
   },
   "hardDeleteSecretsConfirmation": {
-    "message": "Are you sure you want to permanently delete these secrets?"
+    "message": "¿Está seguro que desea eliminar permanentemente estos secretos?"
   },
   "hardDeletesSuccessToast": {
-    "message": "Secrets permanently deleted"
+    "message": "Secretos eliminados permanentemente"
   },
   "smAccess": {
     "message": "Acceso",
@@ -6021,14 +6140,14 @@
     "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
   "hardDeleteSuccessToast": {
-    "message": "Secret permanently deleted"
+    "message": "Secreto eliminado permanentemente"
   },
   "accessTokens": {
     "message": "Tokens de acceso",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Crear un token de acceso",
+  "newAccessToken": {
+    "message": "Nuevo token de acceso",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6075,10 +6194,6 @@
     "message": "Token de acceso creado y copiado al portapapeles",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "La administración de permisos no está disponible para la versión beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revocar token de acceso",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6092,6 +6207,10 @@
   "accessTokenRevoked": {
     "message": "Tokens de acceso revocados",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "Ningún token de acceso seleccionado para revocar",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "Submenú"
@@ -6444,6 +6563,18 @@
   "billingSyncHelp": {
     "message": "Ayuda de sincronización de facturación"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Ayuda a las funciones por licencia premium"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "Después de que caduque su suscripción, tiene 60 días para aplicar un archivo de licencia actualizado a su organización. El periodo de gracia termina $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Subir licencia"
   },
@@ -6472,7 +6603,7 @@
     "message": "Asignar proyectos a esta cuenta de servicio. "
   },
   "serviceAccountEmptyProjectAccesspolicies": {
-    "message": "Add projects to grant access"
+    "message": "Añadir proyectos para conceder acceso"
   },
   "canReadWrite": {
     "message": "Puede leer, escribir"
@@ -6483,23 +6614,23 @@
   "lowKdfIterations": {
     "message": "Iteraciones KDF bajas"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Aumente los ajustes de cifrado de KDF para mejorar la seguridad de su cuenta."
-  },
-  "changeKdfSettings": {
-    "message": "Cambiar ajustes de KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Actualice sus ajustes de cifrado para cumplir con las nuevas recomendaciones de seguridad y mejorar la protección de la cuenta."
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora. Recomendamos exportar su caja fuerte antes de cambiar su configuración de cifrado para prevenir la pérdida de datos."
+    "message": "Al continuar, saldrá de todas las sesiones activas. Deberá volver a iniciar sesión y completar la configuración de inicio de sesión en dos pasos. Le recomendamos que exporte su caja fuerte antes de cambiar la configuración de cifrado para evitar la pérdida de datos."
   },
   "secretsManagerBeta": {
     "message": "Administrador de secretos Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Habilitar el acceso de usuario al Administrador de Secretos sin costo alguno durante el programa Beta."
+  "secretsManager": {
+    "message": "Administrador de secretos"
   },
-  "userAccessSecretsManager": {
-    "message": "Este usuario puede acceder al Administrador Secretos Beta"
+  "secretsManagerAccessDesc": {
+    "message": "Habilitar el acceso de usuario al Administrador de Secretos."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "Este usuario puede acceder al Administrador Secretos"
   },
   "important": {
     "message": "Importante:"
@@ -6549,7 +6680,7 @@
     "message": "Crear un proyecto"
   },
   "createServiceAccount": {
-    "message": "Create a service account"
+    "message": "Crear cuenta de servicio"
   },
   "downloadThe": {
     "message": "Descargar el",
@@ -6578,22 +6709,22 @@
     }
   },
   "restoreSecret": {
-    "message": "Restore secret"
+    "message": "Restaurar secreto"
   },
   "restoreSecrets": {
-    "message": "Restore secrets"
+    "message": "Restaurar secretos"
   },
   "restoreSecretPrompt": {
-    "message": "Are you sure you want to restore this secret?"
+    "message": "¿Está seguro de que desea restaurar este secreto?"
   },
   "restoreSecretsPrompt": {
-    "message": "Are you sure you want to restore these secrets?"
+    "message": "¿Estás seguro de que quieres restaurar estos secretos?"
   },
   "secretRestoredSuccessToast": {
-    "message": "Secret restored"
+    "message": "Secreto restaurado"
   },
   "secretsRestoredSuccessToast": {
-    "message": "Secrets restored"
+    "message": "Secretos restaurados"
   },
   "selectionIsRequired": {
     "message": "Debe seleccionar una opción."
@@ -6608,22 +6739,22 @@
     "message": "Tokens de acceso todavía disponibles"
   },
   "saPeopleWarningMessage": {
-    "message": "Removing people from a service account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a service account."
+    "message": "Eliminar a la gente de una cuenta de servicio no elimina los tokens de acceso que crearon. Para las mejores prácticas de seguridad, se recomienda revocar los tokens de acceso creados por personas eliminadas de una cuenta de servicio."
   },
   "smAccessRemovalWarningProjectTitle": {
-    "message": "Remove access to this project"
+    "message": "Eliminar acceso a este proyecto"
   },
   "smAccessRemovalWarningProjectMessage": {
-    "message": "This action will remove your access to the project."
+    "message": "Esta acción eliminará su acceso al proyecto."
   },
   "smAccessRemovalWarningSaTitle": {
-    "message": "Remove access to this service account"
+    "message": "Eliminar el acceso a esta cuenta de servicio"
   },
   "smAccessRemovalWarningSaMessage": {
-    "message": "This action will remove your access to the service account."
+    "message": "Esta acción eliminará su acceso a la cuenta de servicio."
   },
   "removeAccess": {
-    "message": "Remove access"
+    "message": "Eliminar acceso"
   },
   "checkForBreaches": {
     "message": "Comprobar filtración de datos conocidas para esta contraseña"
@@ -6658,7 +6789,145 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "La entrada no debe contener sólo espacios en blanco.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
-    "message": "Dismiss"
+    "message": "Descartar"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "Esta funcionalidad no está disponible para organizaciones gratuitas. Contacte con el propietario de su organización para mejorar."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Póngase en contacto con el administrador de su organización para administrar secretos para este proyecto.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Requiere que los miembros existentes cambien sus contraseñas"
+  },
+  "region": {
+    "message": "Región"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EEUU",
+    "description": "United States"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "No tiene permisos para eliminar este proyecto",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Los siguientes proyectos no pueden ser eliminados. ¿Desea continuar?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Actualizar ajustes de KDF"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Cifrado de dispositivo de confianza"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "Una vez autenticados, los miembros descifrarán los datos de la caja fuerte utilizando una clave almacenada en su dispositivo. La",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "política de administración de recuperación de cuenta",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "con inscripción automática se activará cuando se utilice esta opción.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ no encontrado",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recuperar cuenta"
+  },
+  "updatedTempPassword": {
+    "message": "El usuario actualizó una contraseña solicitada a través de la recuperación de la cuenta."
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Acceso habilitado al Administrador de Secretos",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Activar acceso"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Otorgar a los siguientes miembros acceso al Administrador de Secretos. El rol otorgado en el Administrador de contraseñas se aplicará al Administrador de Secretos.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Habilitar Administrador de secretos"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Frase de la huella digital de su organización",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Aprobaciones de dispositivo"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Aprobar las solicitudes de inicio de sesión a continuación para permitir que el miembro solicitante termine de iniciar sesión. Las solicitudes no aprobadas caducan después de 1 semana. Verifique la información del miembro antes de aprobar."
+  },
+  "deviceInfo": {
+    "message": "Información del dispositivo"
+  },
+  "time": {
+    "message": "Hora"
+  },
+  "denyAllRequests": {
+    "message": "Rechazar todas las solicitudes"
+  },
+  "denyRequest": {
+    "message": "Rechazar solicitud"
+  },
+  "approveRequest": {
+    "message": "Aprobar solicitud"
+  },
+  "noDeviceRequests": {
+    "message": "No hay solicitudes de dispositivo"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Las solicitudes de aprobación del dispositivo de los miembros aparecerán aquí"
+  },
+  "loginRequestDenied": {
+    "message": "Solicitud de inicio de sesión denegada"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Todas las solicitudes de inicio de sesión denegadas"
+  },
+  "loginRequestApproved": {
+    "message": "Solicitud de inicio de sesión aprobada"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "La cuenta no tiene contraseña maestra"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Eliminar $USER$ sin establecer una contraseña maestra puede restringir el acceso a su cuenta completa. ¿Está seguro de que desea continuar?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Sin contraseña maestra"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Quitar miembros que no tengan contraseñas maestras sin establecer una para ellos puede restringir el acceso a su cuenta completa."
   }
 }

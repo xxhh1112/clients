@@ -281,35 +281,35 @@
     "message": "즐겨찾기 검색"
   },
   "searchLogin": {
-    "message": "Search logins",
+    "message": "로그인 검색",
     "description": "Search Login type"
   },
   "searchCard": {
-    "message": "Search cards",
+    "message": "카드 검색",
     "description": "Search Card type"
   },
   "searchIdentity": {
-    "message": "Search identities",
+    "message": "신원 검색",
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "Search secure notes",
+    "message": "보안 메모 검색",
     "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "보관함 검색"
   },
   "searchMyVault": {
-    "message": "Search my vault"
+    "message": "내 보관함 검색"
   },
   "searchOrganization": {
-    "message": "Search organization"
+    "message": "조직 검색"
   },
   "searchMembers": {
-    "message": "Search members"
+    "message": "구성원 검색"
   },
   "searchGroups": {
-    "message": "Search groups"
+    "message": "그룹 검색"
   },
   "allItems": {
     "message": "모든 항목"
@@ -393,7 +393,7 @@
     "message": "선택"
   },
   "newItem": {
-    "message": "New item"
+    "message": "새 항목"
   },
   "addItem": {
     "message": "항목 추가"
@@ -409,7 +409,7 @@
     "description": "for adding new items"
   },
   "item": {
-    "message": "Item"
+    "message": "항목"
   },
   "ex": {
     "message": "예)",
@@ -477,7 +477,7 @@
     "message": "보관함 항목"
   },
   "filter": {
-    "message": "Filter"
+    "message": "필터"
   },
   "moveSelectedToOrg": {
     "message": "선택한 항목을 조직으로 이동함"
@@ -589,7 +589,7 @@
     "message": "Edit info"
   },
   "access": {
-    "message": "Access"
+    "message": "접근"
   },
   "loggedOut": {
     "message": "로그아웃됨"
@@ -616,19 +616,19 @@
     "message": "안전 보관함에 접근하려면 로그인하거나 새 계정을 만드세요."
   },
   "loginWithDevice": {
-    "message": "Log in with device"
+    "message": "기기로 로그인"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden mobile app. Need another option?"
+    "message": "기기로 로그인하려면 Bitwarden 모바일 앱 설정에서 설정해야 합니다. 다른 방식이 필요하신가요?"
   },
   "loginWithMasterPassword": {
-    "message": "Log in with master password"
+    "message": "마스터 비밀번호로 로그인"
   },
   "createAccount": {
     "message": "계정 만들기"
   },
   "newAroundHere": {
-    "message": "New around here?"
+    "message": "새로 찾아오셨나요?"
   },
   "startTrial": {
     "message": "평가판 시작"
@@ -649,7 +649,7 @@
     "message": "이름"
   },
   "yourNameDesc": {
-    "message": "당신은 어떻게 불립니까?"
+    "message": "어떻게 불러드릴까요?"
   },
   "masterPass": {
     "message": "마스터 비밀번호"
@@ -697,7 +697,7 @@
     "message": "마스터 비밀번호를 재입력해야 합니다."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "마스터 비밀번호는 최소 $VALUE$자 이상이어야 합니다.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -713,7 +713,7 @@
     "message": "계정 생성이 완료되었습니다! 이제 로그인하실 수 있습니다."
   },
   "trialAccountCreated": {
-    "message": "Account created successfully."
+    "message": "계정 생성에 성공했습니다."
   },
   "masterPassSent": {
     "message": "마스터 비밀번호 힌트가 담긴 이메일을 보냈습니다."
@@ -747,7 +747,7 @@
     "message": "잘못된 마스터 비밀번호"
   },
   "invalidFilePassword": {
-    "message": "Invalid file password, please use the password you entered when you created the export file."
+    "message": "파일 암호가 잘못되었습니다. 내보낸 파일을 생성했을 때 사용한 암호를 입력하세요."
   },
   "lockNow": {
     "message": "지금 잠그기"
@@ -756,7 +756,7 @@
     "message": "항목이 없습니다."
   },
   "noPermissionToViewAllCollectionItems": {
-    "message": "You do not have permission to view all items in this collection."
+    "message": "이 컬렉션의 모든 항목을 볼 권한이 없습니다."
   },
   "noCollectionsInList": {
     "message": "콜렉션이 없습니다."
@@ -780,7 +780,7 @@
     "message": "당신은 어떤 조직에도 속해있지 않습니다. 조직은 다른 사용자들과 안전하게 항목을 공유할 수 있게 해줍니다."
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "기기에 알림이 전송되었습니다."
   },
   "versionNumber": {
     "message": "버전 $VERSION_NUMBER$",
@@ -924,7 +924,7 @@
     }
   },
   "deleteSelectedConfirmation": {
-    "message": "Are you sure you want to continue?"
+    "message": "정말 계속하시겠습니까?"
   },
   "moveSelectedItemsDesc": {
     "message": "선택된 $COUNT$ 개의 항목을 옮길 폴더를 선택하십시오.",
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "보관함 내보내기 확인"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "내보내기는 보관함 데이터가 암호화되지 않은 형식으로 포함됩니다. 내보낸 파일을 안전하지 않은 채널(예: 이메일)을 통해 저장하거나 보내지 마십시오. 사용이 끝난 후에는 즉시 삭제하십시오."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "이 내보내기는 계정의 암호화 키를 사용하여 데이터를 암호화합니다. 추후 계정의 암호화 키를 교체할 경우 다시 내보내기를 진행해야 합니다. 그러지 않을 경우 이 내보내기 파일을 해독할 수 없게 됩니다."
@@ -979,6 +985,9 @@
   "exportVault": {
     "message": "보관함 내보내기"
   },
+  "exportSecrets": {
+    "message": "Export secrets"
+  },
   "fileFormat": {
     "message": "파일 형식"
   },
@@ -989,16 +998,16 @@
     "message": "This password will be used to export and import this file"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "마스터 비밀번호 확인"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "형식 확인"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "파일 암호"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "파일 암호 확인"
   },
   "accountRestrictedOptionDescription": {
     "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
@@ -1016,13 +1025,13 @@
     "message": "Password protected"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "'파일 암호'와 '파일 암호 확인'이 일치하지 않습니다."
   },
   "confirmVaultImport": {
-    "message": "Confirm vault import"
+    "message": "보관함 가져오기 확인"
   },
   "confirmVaultImportDesc": {
-    "message": "This file is password-protected. Please enter the file password to import data."
+    "message": "이 파일은 암호로 보호받고 있습니다. 데이터를 가져오려면 파일 암호를 입력하세요."
   },
   "exportSuccess": {
     "message": "보관함 데이터를 내보냈습니다."
@@ -1165,14 +1174,14 @@
     }
   },
   "kdfMemory": {
-    "message": "KDF memory (MB)",
+    "message": "KDF 메모리 (MB)",
     "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
   },
   "argon2Warning": {
     "message": "Setting your KDF iterations, memory, and parallelism too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend changing these individually in small increments and then test all of your devices."
   },
   "kdfParallelism": {
-    "message": "KDF parallelism"
+    "message": "KDF 병렬화"
   },
   "argon2Desc": {
     "message": "Higher KDF iterations, memory, and parallelism can help protect your master password from being brute forced by an attacker."
@@ -1255,6 +1264,15 @@
   "importSuccess": {
     "message": "데이터를 보관함으로 성공적으로 불러왔습니다."
   },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "dataExportSuccess": {
     "message": "Data successfully exported"
   },
@@ -1283,10 +1301,10 @@
     "message": "불러올 파일"
   },
   "chooseFile": {
-    "message": "Choose File"
+    "message": "파일 선택"
   },
   "noFileChosen": {
-    "message": "No file chosen"
+    "message": "선택된 파일 없음"
   },
   "orCopyPasteFileContents": {
     "message": "또는 가져온 파일 내용 복사/붙여넣기"
@@ -1388,7 +1406,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
+    "message": "2단계 인증 정책"
   },
   "twoStepLoginOrganizationDuoDesc": {
     "message": "To enforce Two-step Login through Duo, use the options below."
@@ -2019,6 +2037,9 @@
   "cancelSubscription": {
     "message": "구독 취소"
   },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
+  },
   "subscriptionCanceled": {
     "message": "구독을 취소했습니다."
   },
@@ -2511,13 +2532,13 @@
     "message": "컬렉션 편집"
   },
   "collectionInfo": {
-    "message": "Collection info"
+    "message": "컬렉션 정보"
   },
   "deleteCollectionConfirmation": {
     "message": "정말 이 컬렉션을 삭제하시겠습니까?"
   },
   "editMember": {
-    "message": "Edit member"
+    "message": "구성원 편집"
   },
   "fieldOnTabRequiresAttention": {
     "message": "A field on the '$TAB$' tab requires your attention.",
@@ -2645,6 +2666,12 @@
   "failedLogin2fa": {
     "message": "잘못된 2단계 로그인으로 로그인 시도가 실패했습니다."
   },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
   "exportedVault": {
     "message": "보관함을 내보냈습니다."
   },
@@ -2691,7 +2718,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "모든 로그인 방식 보기"
   },
   "viewedItemId": {
     "message": "$ID$ 항목을 확인했습니다.",
@@ -2735,6 +2762,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "View collection - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edit item - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -2793,7 +2838,7 @@
     }
   },
   "deletedCollections": {
-    "message": "Deleted collections"
+    "message": "삭제된 컬렉션"
   },
   "deletedCollectionId": {
     "message": "$ID$ 컬렉션이 삭제되었습니다.",
@@ -3113,6 +3158,9 @@
   "inviteAcceptedDesc": {
     "message": "관리자의 확인을 받으면 조직에 액세스할 수 있습니다. 승인이 이뤄지면 이메일을 보내드리겠습니다."
   },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
+  },
   "inviteAcceptFailed": {
     "message": "초대를 수락할 수 없습니다. 조직 관리자에게 새 초대장을 보내도록 요청하십시오."
   },
@@ -3199,7 +3247,7 @@
     "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
-    "message": "Change Plan",
+    "message": "요금제 업그레이드",
     "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
@@ -3568,7 +3616,7 @@
     "message": "Fingerprint phrase"
   },
   "dontAskFingerprintAgain": {
-    "message": "지문 구절을 다시 확인하지 않음",
+    "message": "초대된 사용자의 지문 구절을 확인하지 않음 (권장되지 않음)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "free": {
@@ -4459,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "비밀번호 힌트는 비밀번호와 같을 수 없습니다."
   },
-  "enrollPasswordReset": {
-    "message": "비밀번호 초기화에 등록"
+  "enrollAccountRecovery": {
+    "message": "Enroll in account recovery"
   },
-  "enrolledPasswordReset": {
-    "message": "비밀번호 초기화에 등록됨"
+  "enrolledAccountRecovery": {
+    "message": "Enrolled in account recovery"
   },
-  "withdrawPasswordReset": {
-    "message": "비밀번호 초기화에서 등록 해제"
+  "withdrawAccountRecovery": {
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "성공적으로 등록됨!"
@@ -4474,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "성공적으로 등록 해제됨!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "$ID$ 사용자가 비밀번호 초기화 지원에 등록되었습니다.",
+  "eventEnrollAccountRecovery": {
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4483,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "$ID$ 사용자가 비밀번호 초기화 지원에서 등록 해제되었습니다.",
+  "eventWithdrawAccountRecovery": {
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4543,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "등록하면 조직 관리자가 마스터 비밀번호를 변경할 수 있습니다. 등록하시겠습니까?"
   },
-  "resetPasswordPolicy": {
-    "message": "마스터 비밀번호 재설정"
+  "accountRecoveryPolicy": {
+    "message": "Account recovery administration"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "조직 관리자가 조직 사용자의 마스터 비밀번호를 재설정할 수 있도록 허용합니다."
+  "accountRecoveryPolicyDescription": {
+    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
   },
   "resetPasswordPolicyWarning": {
     "message": "조직의 사용자는 관리자가 마스터 암호를 재설정하기 전에 직접 등록 또는 자동 등록이 되어야 합니다."
@@ -4797,6 +4845,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Your master password does not meet the policy requirements of this organization. In order to join the organization, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "maximumVaultTimeout": {
     "message": "보관함 시간 제한"
   },
@@ -4816,7 +4867,7 @@
     "message": "분"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4825,6 +4876,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -4851,6 +4928,18 @@
   },
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your individual vault."
+  },
+  "activateAutofill": {
+    "message": "Activate auto-fill"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Learn more about auto-fill"
   },
   "selectType": {
     "message": "SSO 유형 선택"
@@ -5054,7 +5143,7 @@
     }
   },
   "freeFamiliesPlan": {
-    "message": "Free Families plan"
+    "message": "무료 가족 요금제"
   },
   "redeemNow": {
     "message": "Redeem now"
@@ -5143,9 +5232,6 @@
     "message": "to require all members to log in with SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
-  },
   "memberDecryptionOption": {
     "message": "멤버 복호화 옵션"
   },
@@ -5155,8 +5241,17 @@
   "keyConnector": {
     "message": "키 커넥터"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
@@ -5372,6 +5467,15 @@
     "message": "Current organization",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Account settings"
   },
@@ -5451,7 +5555,7 @@
   },
   "lastSync": {
     "message": "Last sync",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Self-hosted sponsorships synced."
@@ -5593,6 +5697,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "1 or more emails are invalid"
   },
@@ -5621,13 +5743,10 @@
     "message": "On"
   },
   "members": {
-    "message": "Members"
+    "message": "구성원"
   },
   "reporting": {
     "message": "Reporting"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Number of users"
@@ -5678,7 +5797,7 @@
     "message": "Custom Color"
   },
   "selectPlaceholder": {
-    "message": "-- Select --"
+    "message": "-- 선택 --"
   },
   "multiSelectPlaceholder": {
     "message": "-- Type to filter --"
@@ -5866,7 +5985,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Service accounts deleted"
@@ -6027,8 +6146,8 @@
     "message": "Access tokens",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Create access token",
+  "newAccessToken": {
+    "message": "New access token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6075,10 +6194,6 @@
     "message": "Access token created and copied to clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6093,6 +6208,10 @@
     "message": "Access tokens revoked",
     "description": "Toast message after deleting one or multiple access tokens."
   },
+  "noAccessTokenSelected": {
+    "message": "No access token selected to revoke",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
+  },
   "submenu": {
     "message": "Submenu"
   },
@@ -6103,7 +6222,7 @@
     "message": "To"
   },
   "member": {
-    "message": "Member"
+    "message": "구성원"
   },
   "update": {
     "message": "Update"
@@ -6118,7 +6237,7 @@
     }
   },
   "groupInfo": {
-    "message": "Group info"
+    "message": "그룹 정보"
   },
   "editGroupMembersDesc": {
     "message": "Grant members access to the group's assigned collections."
@@ -6133,7 +6252,7 @@
     "message": "If checked, this will replace all other collection permissions."
   },
   "selectMembers": {
-    "message": "Select members"
+    "message": "구성원 선택"
   },
   "selectCollections": {
     "message": "Select collections"
@@ -6142,7 +6261,7 @@
     "message": "Role"
   },
   "removeMember": {
-    "message": "Remove member"
+    "message": "구성원 제거"
   },
   "collection": {
     "message": "Collection"
@@ -6166,7 +6285,7 @@
     "message": "No collections added"
   },
   "noMembersAdded": {
-    "message": "No members added"
+    "message": "추가된 구성원이 없습니다"
   },
   "noGroupsAdded": {
     "message": "No groups added"
@@ -6178,7 +6297,7 @@
     "message": "This group can access and modify all items."
   },
   "memberAccessAll": {
-    "message": "This member can access and modify all items."
+    "message": "이 구성원은 모든 항목에 접근 및 수정이 가능합니다."
   },
   "domainVerification": {
     "message": "Domain verification"
@@ -6316,7 +6435,7 @@
     "message": "Member/Group"
   },
   "groupAndMemberColumnHeader": {
-    "message": "Member"
+    "message": "구성원"
   },
   "selectGroupsAndMembers": {
     "message": "Select groups and members"
@@ -6337,13 +6456,13 @@
     "message": "Member status filter"
   },
   "inviteMember": {
-    "message": "Invite member"
+    "message": "구성원 초대"
   },
   "needsConfirmation": {
     "message": "Needs confirmation"
   },
   "memberRole": {
-    "message": "Member role"
+    "message": "구성원 역할"
   },
   "moreFromBitwarden": {
     "message": "More from Bitwarden"
@@ -6406,7 +6525,7 @@
     }
   },
   "fileUpload": {
-    "message": "File upload"
+    "message": "파일 업로드"
   },
   "acceptedFormats": {
     "message": "Accepted Formats:"
@@ -6443,6 +6562,18 @@
   },
   "billingSyncHelp": {
     "message": "Billing Sync help"
+  },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
   },
   "uploadLicense": {
     "message": "Upload license"
@@ -6483,23 +6614,23 @@
   "lowKdfIterations": {
     "message": "Low KDF Iterations"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Increase your KDF encryption settings to improve the security of your account."
-  },
-  "changeKdfSettings": {
-    "message": "Change KDF settings"
+  "updateLowKdfIterationsDesc": {
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
@@ -6527,7 +6658,7 @@
     "message": "Description"
   },
   "errorReadingImportFile": {
-    "message": "An error occurred when trying to read the import file"
+    "message": "가져온 파일을 읽는 도중 오류가 발생했습니다"
   },
   "accessedSecret": {
     "message": "Accessed secret $SECRET_ID$.",
@@ -6546,7 +6677,7 @@
     "message": "Create a secret"
   },
   "createProject": {
-    "message": "Create a project"
+    "message": "프로젝트 생성"
   },
   "createServiceAccount": {
     "message": "Create a service account"
@@ -6641,7 +6772,7 @@
     "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "$LENGTH$자 이상이어야 합니다",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -6650,7 +6781,7 @@
     }
   },
   "masterPasswordMinimumlength": {
-    "message": "Master password must be at least $LENGTH$ characters long.",
+    "message": "마스터 비밀번호는 최소 $LENGTH$자 이상이어야 합니다.",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -6658,7 +6789,145 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Contact your organization's admin to manage secrets for this project.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Require existing members to change their passwords"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "You don't have permissions to delete this project",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "The following projects can not be deleted. Would you like to continue?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Update KDF settings"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Trusted device encryption"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "account recovery administration policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recover account"
+  },
+  "updatedTempPassword": {
+    "message": "User updated a password issued through account recovery."
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Enable access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   }
 }

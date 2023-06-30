@@ -1,6 +1,6 @@
-import { Collection as CollectionDomain } from "../domain/collection";
-import { EncString } from "../domain/enc-string";
-import { CollectionView } from "../view/collection.view";
+import { EncString } from "../../platform/models/domain/enc-string";
+import { Collection as CollectionDomain } from "../../vault/models/domain/collection";
+import { CollectionView } from "../../vault/models/view/collection.view";
 
 export class CollectionExport {
   static template(): CollectionExport {

@@ -31,7 +31,7 @@ const moduleRules = [
     test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
     exclude: /loading(|-white).svg/,
     generator: {
-      filename: "fonts/[name][ext]",
+      filename: "fonts/[name].[contenthash][ext]",
     },
     type: "asset/resource",
   },
@@ -280,6 +280,7 @@ const devServer =
                   https://quack.duckduckgo.com/api/email/addresses
                   https://app.anonaddy.com/api/v1/aliases
                   https://api.fastmail.com
+                  https://api.forwardemail.net
                   http://localhost:5000
                 ;object-src
                   'self'

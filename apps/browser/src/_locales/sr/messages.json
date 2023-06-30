@@ -3,15 +3,15 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden - Бесплатни Менаџер Лозинки",
+    "message": "Bitwarden - бесплатни менаџер лозинки",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Сигурни и бесплатни менаџер лозинке за све ваше уређаје.",
+    "message": "Сигурни и бесплатни менаџер лозинки за све ваше уређаје.",
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Пријавите се или креирајте нови налог за приступ Сефу."
+    "message": "Пријавите се или креирајте нови налог за приступ сефу."
   },
   "createAccount": {
     "message": "Креирај налог"
@@ -345,7 +345,7 @@
     "message": "Молимо вас да размотрите да нам помогнете уз добру оцену!"
   },
   "browserNotSupportClipboard": {
-    "message": "Ваш прегледач не подржава једноставно копирање у привремену меморију. Уместо тога копирајте га ручно."
+    "message": "Ваш прегледач не подржава једноставно копирање у клипборду. Уместо тога копирајте га ручно."
   },
   "verifyIdentity": {
     "message": "Потврдите идентитет"
@@ -439,7 +439,7 @@
     "message": "Поновно уписивање главне лозинке је неопходно."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Главна лозинка мора бити дужине најмање $VALUE$ карактера.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -976,7 +976,7 @@
     "message": "Ако се открије образац за пријаву, извршите аутоматско попуњавање када се веб страница учита."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Компромитоване или непоуздане веб локације могу да искористе ауто-пуњење при учитавању странице."
   },
   "learnMoreAboutAutofill": {
     "message": "Сазнајте више о ауто-пуњење"
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Ставка ауто-попуњена"
   },
+  "insecurePageWarning": {
+    "message": "Упозорење: ово је необезбеђена ХТТП страница и све информације које пошаљете потенцијално могу други да виде и промене. Ова пријава је првобитно била сачувана на безбедној (ХТТПС) страници."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Да ли и даље желите да попуните ову пријаву?"
+  },
+  "autofillIframeWarning": {
+    "message": "Образац је хостован на другом домену од УРЛ-а ваше сачуване пријаве. Изаберите ОК да бисте ипак аутоматски попунили или Откажи да бисте зауставили."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Да бисте спречили ово упозорење у будућности, сачувајте ову УРЛ, $HOSTNAME$, у Bitwarden пријавју за овај сајт.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Постави Главну Лозинку"
+  },
+  "currentMasterPass": {
+    "message": "Тренутна главна лозинка"
+  },
+  "newMasterPass": {
+    "message": "Нова главна лозинка"
+  },
+  "confirmNewMasterPass": {
+    "message": "Потрдити нову главну лозинку"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Једна или више смерница организације захтевају да ваша главна лозинка испуни следеће захтеве:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ваша главна лозинка је недавно промењена од стране администратора организације. Како  бисте приступили сефу, морате да је ажурирате. Ако наставите бићете одјављени из ваше тренутне сесије, што ће захтевати да се поново пријавите. Активне сесије на другим уређајима ће можда наставити да раде до сат времена."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Ауто пријављивање"
   },
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Смернице ваше организације утичу на временско ограничење сефа. Максимално дозвољено ограничење сефа је $HOURS$ сат(и) и $MINUTES$ минут(а). Ваша радња временског ограничења сефа је подешена на $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Смернице ваше организације су поставиле вашу радњу временског ограничења сефа на $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Није могуће приступити ставкама у онемогућене организације. Обратите се власнику организације за помоћ."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Пријављивање на $DOMAIN$",
     "placeholders": {
@@ -2091,28 +2144,28 @@
     "message": "Пријава је покренута"
   },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "Изложена главна лозинка"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "Лозинка је пронађена у случају повреде података. Користите јединствену лозинку да бисте заштитили свој налог. Да ли сте сигурни да желите да користите откривену лозинку?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "Слаба и изложена главна лозинка"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+    "message": "Идентификована је слаба лозинка и пронађена у упаду података. Користите јаку и јединствену лозинку да заштитите свој налог. Да ли сте сигурни да желите да користите ову лозинку?"
   },
   "checkForBreaches": {
-    "message": "Check known data breaches for this password"
+    "message": "Проверите познате упада података за ову лозинку"
   },
   "important": {
-    "message": "Important:"
+    "message": "Важно:"
   },
   "masterPasswordHint": {
-    "message": "Your master password cannot be recovered if you forget it!"
+    "message": "Ваша главна лозинка се не може повратити ако је заборавите!"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "Минимум $LENGTH$ карактера",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -2120,11 +2173,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Смернице ваше организације су укључиле ауто-пуњење при учитавању странице."
+  },
   "howToAutofill": {
     "message": "Како ауто-попуњавати"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Изаберите ставку са ове странице или користите пречицу: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2188,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Изаберите ставку са ове странице или поставите пречицу у подешавањима. Такође можете покушати са аутоматским попуњавањем при учитавању странице."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Изаберите ставку са ове странице или поставите пречицу у подешавањима."
   },
   "gotIt": {
     "message": "Разумем"
@@ -2164,5 +2220,22 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Регион"
+  },
+  "opensInANewWindow": {
+    "message": "Отвара се у новом прозору"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Одбијен приступ. Немате дозволу да видите ову страницу."
   }
 }

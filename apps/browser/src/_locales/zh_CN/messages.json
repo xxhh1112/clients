@@ -439,7 +439,7 @@
     "message": "必须填写确认主密码。"
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "主密码必须至少 $VALUE$ 个字符长度。",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -507,7 +507,7 @@
     "message": "您可以在 bitwarden.com 网页版密码库修改主密码。您现在要访问这个网站吗？"
   },
   "twoStepLoginConfirmation": {
-    "message": "两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码中设置。您现在要访问这个网站吗？"
+    "message": "两步登录要求您从其他设备（例如安全钥匙、验证器应用、短信、电话或者电子邮件）来验证您的登录，这能使您的账户更加安全。两步登录需要在 bitwarden.com 网页版密码库中设置。现在访问此网站吗？"
   },
   "editedFolder": {
     "message": "文件夹已保存"
@@ -678,10 +678,10 @@
     "message": "导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。"
   },
   "encExportKeyWarningDesc": {
-    "message": "此导出将使用您账户的加密密钥来加密您的数据。 如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
+    "message": "此导出将使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
   },
   "encExportAccountWarningDesc": {
-    "message": "账户加密密钥对每个 Bitwarden 用户账户都是唯一的，所以您不能将加密的导出导入到另一个账户。"
+    "message": "每个 Bitwarden 用户账户的账户加密密钥都是唯一的，因此您无法将加密的导出导入到另一个账户。"
   },
   "exportMasterPassword": {
     "message": "输入主密码来导出你的密码库。"
@@ -976,7 +976,7 @@
     "message": "网页加载时如果检测到登录表单，则执行自动填充。"
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "不完整或不信任的网站可以在页面加载时自动填充。"
   },
   "learnMoreAboutAutofill": {
     "message": "了解更多关于自动填充的信息"
@@ -1077,13 +1077,13 @@
     "message": "品牌"
   },
   "expirationMonth": {
-    "message": "到期月份"
+    "message": "过期月份"
   },
   "expirationYear": {
-    "message": "到期年份"
+    "message": "过期年份"
   },
   "expiration": {
-    "message": "到期"
+    "message": "过期日"
   },
   "january": {
     "message": "一月"
@@ -1230,7 +1230,7 @@
     "message": "集合"
   },
   "favorites": {
-    "message": "收藏"
+    "message": "收藏夹"
   },
   "popOutNewWindow": {
     "message": "弹出到新窗口"
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "项目已自动填充 "
   },
+  "insecurePageWarning": {
+    "message": "警告：这是一个不安全的 HTTP 页面，您提交的任何信息都可能被其他人看到和更改。此登录信息最初保存在安全 (HTTPS) 页面上。"
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "您仍然想要填充此登录信息吗？"
+  },
+  "autofillIframeWarning": {
+    "message": "该表单由不同于您保存的登录的 URI 域名托管。选择「确定」以自动填充，或选择「取消」停止填充。"
+  },
+  "autofillIframeWarningTip": {
+    "message": "要防止以后出现此警告，请将此站点的 URI $HOSTNAME$ 保存到您的 Bitwarden 登录项目中。",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "设置主密码"
+  },
+  "currentMasterPass": {
+    "message": "当前主密码"
+  },
+  "newMasterPass": {
+    "message": "新主密码"
+  },
+  "confirmNewMasterPass": {
+    "message": "确认新主密码"
   },
   "masterPasswordPolicyInEffect": {
     "message": "一个或多个组织策略要求您的主密码满足下列要求："
@@ -1495,7 +1522,7 @@
     "message": "至少包含一个数字"
   },
   "policyInEffectSpecial": {
-    "message": "至少包含一个下列的特殊字符：$CHARS$",
+    "message": "至少包含一个以下特殊字符 $CHARS$",
     "placeholders": {
       "chars": {
         "content": "$1",
@@ -1698,7 +1725,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "到期日期"
+    "message": "过期日期"
   },
   "expirationDateDesc": {
     "message": "设置后，对此 Send 的访问将在指定的日期和时间后过期。",
@@ -1800,19 +1827,19 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To use a calendar style date picker click here **to pop out your window.**'"
   },
   "expirationDateIsInvalid": {
-    "message": "所提供的到期日期无效。"
+    "message": "所提供的过期日期无效。"
   },
   "deletionDateIsInvalid": {
     "message": "所提供的删除日期无效。"
   },
   "expirationDateAndTimeRequired": {
-    "message": "需要到期日期和时间。"
+    "message": "需要过期日期和时间。"
   },
   "deletionDateAndTimeRequired": {
     "message": "需要删除日期和时间。"
   },
   "dateParsingError": {
-    "message": "保存您的删除和到期日期时出错。"
+    "message": "保存您的删除和过期日期时出错。"
   },
   "hideEmail": {
     "message": "对收件人隐藏我的电子邮件地址。"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "您的主密码最近被您组织的管理员更改过。要访问密码库，您必须立即更新它。继续操作将使您退出当前会话并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自动注册"
   },
@@ -1863,7 +1893,7 @@
     "message": "分钟"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 $HOURS$ 小时 $MINUTES$ 分钟。",
+    "message": "您的组织策略已将您最大允许的密码库超时时间设置为 $HOURS$ 小时 $MINUTES$ 分钟。",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 $HOURS$ 小时 $MINUTES$ 分钟。您的密码库超时动作被设置为 $ACTION$。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "您的组织策略已将您的密码库超时动作设置为 $ACTION$。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1998,13 +2054,10 @@
     "message": "需要高级版订阅"
   },
   "organizationIsDisabled": {
-    "message": "组织已暂停。"
+    "message": "组织已停用。"
   },
   "disabledOrganizationFilterError": {
-    "message": "无法访问已暂停组织中的项目。请联系您的组织所有者获取帮助。"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
+    "message": "无法访问已停用组织中的项目。请联系您的组织所有者获取协助。"
   },
   "loggingInTo": {
     "message": "正在登录到 $DOMAIN$",
@@ -2067,16 +2120,16 @@
     "message": "记住电子邮件地址"
   },
   "loginWithDevice": {
-    "message": "使用设备登录"
+    "message": "设备登录"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "必须在 Bitwarden 应用程序的设置中启用设备登录。需要其他选项吗？"
   },
   "fingerprintPhraseHeader": {
     "message": "指纹短语"
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。"
   },
   "resendNotification": {
     "message": "重新发送通知"
@@ -2091,28 +2144,28 @@
     "message": "登录已发起"
   },
   "exposedMasterPassword": {
-    "message": "暴露的主密码"
+    "message": "已暴露的主密码"
   },
   "exposedMasterPasswordDesc": {
-    "message": "数据泄露中发现的密码。使用独特的密码来保护您的帐户。您确定要使用已暴露的密码吗？"
+    "message": "密码在数据泄露中被发现。请使用一个唯一的密码以保护您的账户。确定要使用已暴露的密码吗？"
   },
   "weakAndExposedMasterPassword": {
-    "message": "弱而暴露的主密码"
+    "message": "主密码弱且曾经暴露"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "已经识别和发现在数据泄露中的弱密码。使用强大且独特的密码来保护您的帐户。您确定要使用此密码吗？"
+    "message": "识别到弱密码且其出现在数据泄露中。请使用一个强且唯一的密码以保护你的账户。确定要使用这个密码吗？"
   },
   "checkForBreaches": {
     "message": "检查已知的数据泄露是否包含此密码。"
   },
   "important": {
-    "message": "简体中文：重要"
+    "message": "重要："
   },
   "masterPasswordHint": {
-    "message": "检查此密码的已知数据泄露"
+    "message": "主密码忘记后，将无法恢复！"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "至少 $LENGTH$ 个字符",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -2120,11 +2173,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "您的组织策略已开启在页面加载时的自动填充。"
+  },
   "howToAutofill": {
     "message": "如何自动填充"
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "autofillSelectInfoWithCommand": {
+    "message": "从此页面选择一个项目，或使用快捷方式：$COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2188,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "从此页面选择一个项目，或者在设置中设置一个快捷方式。"
   },
   "gotIt": {
     "message": "明白了"
@@ -2145,10 +2201,10 @@
     "message": "自动填充键盘快捷键"
   },
   "autofillShortcutNotSet": {
-    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+    "message": "未设置自动填充快捷方式。请在浏览器设置中更改此设置。"
   },
   "autofillShortcutText": {
-    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "message": "自动填充快捷方式为： $COMMAND$。在浏览器设置中更改此项。",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2157,12 +2213,29 @@
     }
   },
   "autofillShortcutTextSafari": {
-    "message": "默认自动填充快捷键：$COMMAND$",
+    "message": "默认自动填充快捷方式：$COMMAND$。",
     "placeholders": {
       "command": {
         "content": "$1",
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "区域"
+  },
+  "opensInANewWindow": {
+    "message": "在新窗口中打开"
+  },
+  "eu": {
+    "message": "欧盟",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "美国",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "访问被拒绝。您没有权限查看此页面。"
   }
 }

@@ -1,27 +1,27 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { CollectionData } from "@bitwarden/common/models/data/collection.data";
-import { Collection } from "@bitwarden/common/models/domain/collection";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/list.response";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import {
   CollectionDetailsResponse as ApiCollectionDetailsResponse,
   CollectionResponse as ApiCollectionResponse,
-} from "@bitwarden/common/models/response/collection.response";
-import { ListResponse as ApiListResponse } from "@bitwarden/common/models/response/list.response";
-import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+} from "@bitwarden/common/vault/models/response/collection.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { OrganizationUserResponse } from "../admin-console/models/response/organization-user.response";
+import { OrganizationResponse } from "../admin-console/models/response/organization.response";
 import { Response } from "../models/response";
-import { CollectionResponse } from "../models/response/collection.response";
 import { ListResponse } from "../models/response/list.response";
-import { OrganizationUserResponse } from "../models/response/organization-user.response";
-import { OrganizationResponse } from "../models/response/organization.response";
 import { CliUtils } from "../utils";
 import { CipherResponse } from "../vault/models/cipher.response";
+import { CollectionResponse } from "../vault/models/collection.response";
 import { FolderResponse } from "../vault/models/folder.response";
 
 export class ListCommand {

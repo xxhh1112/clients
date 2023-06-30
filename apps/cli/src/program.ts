@@ -2,7 +2,7 @@ import * as chalk from "chalk";
 import * as program from "commander";
 
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
+import { KeySuffixOptions } from "@bitwarden/common/enums";
 
 import { LockCommand } from "./auth/commands/lock.command";
 import { LoginCommand } from "./auth/commands/login.command";
@@ -12,7 +12,6 @@ import { Main } from "./bw";
 import { CompletionCommand } from "./commands/completion.command";
 import { ConfigCommand } from "./commands/config.command";
 import { EncodeCommand } from "./commands/encode.command";
-import { GenerateCommand } from "./commands/generate.command";
 import { ServeCommand } from "./commands/serve.command";
 import { StatusCommand } from "./commands/status.command";
 import { UpdateCommand } from "./commands/update.command";
@@ -21,6 +20,7 @@ import { ListResponse } from "./models/response/list.response";
 import { MessageResponse } from "./models/response/message.response";
 import { StringResponse } from "./models/response/string.response";
 import { TemplateResponse } from "./models/response/template.response";
+import { GenerateCommand } from "./tools/generate.command";
 import { CliUtils } from "./utils";
 import { SyncCommand } from "./vault/sync.command";
 
@@ -145,6 +145,7 @@ export class Program {
             this.main.cryptoFunctionService,
             this.main.environmentService,
             this.main.passwordGenerationService,
+            this.main.passwordStrengthService,
             this.main.platformUtilsService,
             this.main.stateService,
             this.main.cryptoService,
@@ -152,10 +153,12 @@ export class Program {
             this.main.twoFactorService,
             this.main.syncService,
             this.main.keyConnectorService,
+            this.main.policyApiService,
+            this.main.organizationService,
             async () => await this.main.logout()
           );
           const response = await command.run(email, password, options);
-          this.processResponse(response);
+          this.processResponse(response, true);
         }
       });
 

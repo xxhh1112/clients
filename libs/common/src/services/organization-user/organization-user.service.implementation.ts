@@ -1,6 +1,7 @@
 import { ApiService } from "../../abstractions/api.service";
 import { OrganizationUserService } from "../../abstractions/organization-user/organization-user.service";
 import {
+  OrganizationUserAcceptInitRequest,
   OrganizationUserAcceptRequest,
   OrganizationUserBulkConfirmRequest,
   OrganizationUserConfirmRequest,
@@ -14,7 +15,7 @@ import {
   OrganizationUserBulkPublicKeyResponse,
   OrganizationUserBulkResponse,
   OrganizationUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
+  OrganizationUserResetPasswordDetailsResponse,
   OrganizationUserUserDetailsResponse,
 } from "../../abstractions/organization-user/responses";
 import { ListResponse } from "../../models/response/list.response";
@@ -87,7 +88,7 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
   async getOrganizationUserResetPasswordDetails(
     organizationId: string,
     id: string
-  ): Promise<OrganizationUserResetPasswordDetailsReponse> {
+  ): Promise<OrganizationUserResetPasswordDetailsResponse> {
     const r = await this.apiService.send(
       "GET",
       "/organizations/" + organizationId + "/users/" + id + "/reset-password-details",
@@ -95,7 +96,7 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
       true,
       true
     );
-    return new OrganizationUserResetPasswordDetailsReponse(r);
+    return new OrganizationUserResetPasswordDetailsResponse(r);
   }
 
   postOrganizationUserInvite(
@@ -133,6 +134,20 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
       true
     );
     return new ListResponse(r, OrganizationUserBulkResponse);
+  }
+
+  postOrganizationUserAcceptInit(
+    organizationId: string,
+    id: string,
+    request: OrganizationUserAcceptInitRequest
+  ): Promise<void> {
+    return this.apiService.send(
+      "POST",
+      "/organizations/" + organizationId + "/users/" + id + "/accept-init",
+      request,
+      true,
+      false
+    );
   }
 
   postOrganizationUserAccept(
@@ -185,6 +200,20 @@ export class OrganizationUserServiceImplementation implements OrganizationUserSe
       "POST",
       "/organizations/" + organizationId + "/users/confirm",
       request,
+      true,
+      true
+    );
+    return new ListResponse(r, OrganizationUserBulkResponse);
+  }
+
+  async putOrganizationUserBulkEnableSecretsManager(
+    organizationId: string,
+    ids: string[]
+  ): Promise<ListResponse<OrganizationUserBulkResponse>> {
+    const r = await this.apiService.send(
+      "PUT",
+      "/organizations/" + organizationId + "/users/enable-secrets-manager",
+      new OrganizationUserBulkRequest(ids),
       true,
       true
     );

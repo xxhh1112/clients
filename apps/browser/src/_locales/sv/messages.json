@@ -202,7 +202,7 @@
     "message": "Utforska Bitwardens communityforum"
   },
   "contactSupport": {
-    "message": "Contact Bitwarden support"
+    "message": "Kontakta Bitwarden support"
   },
   "sync": {
     "message": "Synkronisera"
@@ -439,7 +439,7 @@
     "message": "Huvudlösenord måste anges igen."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Huvudlösenordet måste vara minst $VALUE$ tecken långt.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -952,7 +952,7 @@
     "message": "Server-URL"
   },
   "apiUrl": {
-    "message": "API server-URL"
+    "message": "API-server-URL"
   },
   "webVaultUrl": {
     "message": "Webbvalvsserver-URL"
@@ -976,10 +976,10 @@
     "message": "Utför automatisk ifyllnad om ett inloggningsformulär upptäcks när webbsidan laddas."
   },
   "experimentalFeature": {
-    "message": "Compromised or untrusted websites can exploit auto-fill on page load."
+    "message": "Komprometterade eller ej betrodda webbplatser kan utnyttja automatisk ifyllnad vid sidladdning."
   },
   "learnMoreAboutAutofill": {
-    "message": "Learn more about auto-fill"
+    "message": "Läs mer om automatisk ifyllnad"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Standardinställning för autofyll för inloggningsobjekt"
@@ -1143,7 +1143,7 @@
     "message": "Dr"
   },
   "mx": {
-    "message": "Mx"
+    "message": "Vederbörande"
   },
   "firstName": {
     "message": "Förnamn"
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Fyllde i objektet automatiskt"
   },
+  "insecurePageWarning": {
+    "message": "Varning: Detta är en icke säkrad HTTP-sida, och all information du skickar kan potentiellt ses och ändras av andra. Denna inloggning sparades ursprungligen på en säker (HTTPS) sida."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Vill du fortfarande fylla i denna inloggning?"
+  },
+  "autofillIframeWarning": {
+    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+  },
+  "autofillIframeWarningTip": {
+    "message": "För att förhindra denna varning i framtiden, spara denna URI, $HOSTNAME$, till ditt Bitwarden inloggningsobjekt för denna webbplats.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ange huvudlösenord"
+  },
+  "currentMasterPass": {
+    "message": "Nuvarande huvudlösenord"
+  },
+  "newMasterPass": {
+    "message": "Nytt huvudlösenord"
+  },
+  "confirmNewMasterPass": {
+    "message": "Bekräfta nytt huvudlösenord"
   },
   "masterPasswordPolicyInEffect": {
     "message": "En eller flera organisationspolicyer kräver att ditt huvudlösenord uppfyller följande krav:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera det nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatiskt deltagande"
   },
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Objekt i inaktiverade organisationer är inte åtkomliga. Kontakta organisationens ägare för att få hjälp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Loggar in på $DOMAIN$",
     "placeholders": {
@@ -2070,16 +2123,16 @@
     "message": "Logga in med enhet"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "\"Logga in med enhet\" måste ställas in i inställningarna i Bitwardens app. Behöver du ett annat alternativ?"
   },
   "fingerprintPhraseHeader": {
     "message": "Fingeravtrycksfras"
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
+    "message": "Se till att ditt valv är upplåst och att fingeravtrycksfrasen matchar på den andra enheten."
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "Skicka avisering igen"
   },
   "viewAllLoginOptions": {
     "message": "Visa alla inloggningsalternativ"
@@ -2088,16 +2141,16 @@
     "message": "En avisering har skickats till din enhet."
   },
   "logInInitiated": {
-    "message": "Log in initiated"
+    "message": "Inloggning påbörjad"
   },
   "exposedMasterPassword": {
-    "message": "Huvudlösenordet har avslöjats"
+    "message": "Huvudlösenordet har exponerats"
   },
   "exposedMasterPasswordDesc": {
     "message": "Lösenordet avslöjades vid ett dataintrång. Använd ett unikt lösenord för att skydda ditt konto. Är du säker på att du vill använda ett lösenord som avslöjats?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Huvudlösenordet är svagt och har avslöjats"
+    "message": "Huvudlösenordet är svagt och har exponerats"
   },
   "weakAndBreachedMasterPasswordDesc": {
     "message": "Lösenordet är svagt och avslöjades vid ett dataintrång. Använd ett starkt och unikt lösenord för att skydda ditt konto. Är det säkert att du vill använda detta lösenord?"
@@ -2120,11 +2173,14 @@
       }
     }
   },
-  "howToAutofill": {
-    "message": "How to auto-fill"
+  "autofillPageLoadPolicyActivated": {
+    "message": "Dina organisationspolicyer har aktiverat automatisk ifyllnad vid sidladdning."
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "howToAutofill": {
+    "message": "Hur du fyller i automatiskt"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Välj ett objekt från denna sida eller använd genvägen: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,23 +2188,23 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Välj ett objekt från den här sidan eller ange en genväg i inställningarna."
   },
   "gotIt": {
-    "message": "Got it"
+    "message": "Förstått"
   },
   "autofillSettings": {
-    "message": "Auto-fill settings"
+    "message": "Inställningar för automatisk ifyllnad"
   },
   "autofillShortcut": {
-    "message": "Auto-fill keyboard shortcut"
+    "message": "Tangentbordsgenväg för automatisk ifyllnad"
   },
   "autofillShortcutNotSet": {
-    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+    "message": "Genvägen för automatisk ifyllnad är inte satt. Ändra detta i webbläsarens inställningar."
   },
   "autofillShortcutText": {
-    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "message": "Genvägen för automatisk ifyllnad är: $COMMAND$. Ändra detta i webbläsarens inställningar.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2157,12 +2213,29 @@
     }
   },
   "autofillShortcutTextSafari": {
-    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "message": "Standardgenväg för automatisk ifyllnad: $COMMAND$.",
     "placeholders": {
       "command": {
         "content": "$1",
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Öppnas i ett nytt fönster"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

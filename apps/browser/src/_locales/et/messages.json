@@ -439,7 +439,7 @@
     "message": "Vajalik on ülemparooli uuesti sisestamine."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Ülemparool peab olema vähemalt $VALUE$ tähemärgi pikkune.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Kirje täideti"
   },
+  "insecurePageWarning": {
+    "message": "Hoiatus: See on ebaturvaline HTTP lehekülg. Teised osapooled võivad sinu sisestatud infot potentsiaalselt näha ja muuta. Algselt oli see kirje salvestatud turvalise (HTTPS) lehe jaoks."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Soovid kirje automaattäita?"
+  },
+  "autofillIframeWarning": {
+    "message": "See vorm on majutatud teistsugusel domeenil kui sinu salvestatud URI. Vajuta OK, et automaattäita või Tühista, et täitmine peatada."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Selleks, et antud teavitust edaspidi ei kuvataks, salvesta see URI $HOSTNAME$ Bitwardeni kirjesse.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Määra ülemparool"
+  },
+  "currentMasterPass": {
+    "message": "Praegune ülemparool"
+  },
+  "newMasterPass": {
+    "message": "Uus ülemparool"
+  },
+  "confirmNewMasterPass": {
+    "message": "Kinnita uus ülemparool"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Üks või enam organisatsiooni eeskirja nõuavad, et ülemparool vastaks nendele nõudmistele:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead seda nüüd uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automaatne liitumine"
   },
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on $HOURS$ tund(i) ja $MINUTES$ minut(it). Sinu hoidla ajalõpu tegevus on $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisatsiooni poliitika on sinu hoidla ajalõpu tegevuse seadistanud $ACTION$ peale.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Organisatsiooni alla kuuluvatele kirjetele ei ole ligipääsu. Kontakteeru oma organisatsiooni omanikuga."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Sisselogimine läbi $DOMAIN$",
     "placeholders": {
@@ -2120,11 +2173,14 @@
       }
     }
   },
-  "howToAutofill": {
-    "message": "How to auto-fill"
+  "autofillPageLoadPolicyActivated": {
+    "message": "Sinu organisatsioon ei võimalda lehe laadimisel automaatset kontoandmete täitmist kasutada."
   },
-  "autofillSelectInfo": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+  "howToAutofill": {
+    "message": "Kuidas automaatselt täita"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Vali sellele lehelt kirje või kasuta otseteed: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,23 +2188,23 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Select an item from this page or set a shortcut in settings. You can also try auto-fill on page load."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Vali sellelt lehelt kirje või määra seadetes otsetee."
   },
   "gotIt": {
-    "message": "Got it"
+    "message": "Selge"
   },
   "autofillSettings": {
-    "message": "Auto-fill settings"
+    "message": "Automaattäite seaded"
   },
   "autofillShortcut": {
-    "message": "Auto-fill keyboard shortcut"
+    "message": "Automaattäite klaviatuuri otseteed"
   },
   "autofillShortcutNotSet": {
-    "message": "The auto-fill shortcut is not set. Change this in the browser's settings."
+    "message": "Automaattäite otsetee pole määratud. Muuda seda brauseri seadetes."
   },
   "autofillShortcutText": {
-    "message": "The auto-fill shortcut is: $COMMAND$. Change this in the browser's settings.",
+    "message": "Automaattäite otsetee on: $COMMAND$. Saad seda brauseri seadetes muuta.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2157,12 +2213,29 @@
     }
   },
   "autofillShortcutTextSafari": {
-    "message": "Default auto-fill shortcut: $COMMAND$.",
+    "message": "Vaike automaattäite otsetee on: $COMMAND$.",
     "placeholders": {
       "command": {
         "content": "$1",
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Piirkond"
+  },
+  "opensInANewWindow": {
+    "message": "Avaneb uues aknas"
+  },
+  "eu": {
+    "message": "EL",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "USA",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

@@ -4,11 +4,11 @@ import * as path from "path";
 import * as inquirer from "inquirer";
 import * as JSZip from "jszip";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { NodeUtils } from "@bitwarden/common/misc/nodeUtils";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { Response } from "./models/response";

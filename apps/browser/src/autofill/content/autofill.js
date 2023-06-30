@@ -31,114 +31,20 @@
   /*
   MODIFICATIONS FROM ORIGINAL
 
-  1.  Populate isFirefox
-  2.  Remove isChrome and isSafari since they are not used.
-  3.  Unminify and format to meet Mozilla review requirements.
-  4.  Remove unnecessary input types from getFormElements query selector and limit number of elements returned.
-  5.  Remove fakeTested prop.
-  6.  Rename com.agilebits.* stuff to com.bitwarden.*
-  7.  Remove "some useful globals" on window
-  8.  Add ability to autofill span[data-bwautofill] elements
-  9.  Add new handler, for new command that responds with page details in response callback
+  1. Populate isFirefox
+  2. Remove isChrome and isSafari since they are not used.
+  3. Unminify and format to meet Mozilla review requirements.
+  4. Remove unnecessary input types from getFormElements query selector and limit number of elements returned.
+  5. Remove fakeTested prop.
+  6. Rename com.agilebits.* stuff to com.bitwarden.*
+  7. Remove "some useful globals" on window
+  8. Add ability to autofill span[data-bwautofill] elements
+  9. Add new handler, for new command that responds with page details in response callback
   10. Handle sandbox iframe and sandbox rule in CSP
   11. Work on array of saved urls instead of just one to determine if we should autofill non-https sites
   12. Remove setting of attribute com.browser.browser.userEdited on user-inputs
   13. Handle null value URLs in urlNotSecure
-  14. Implement new HTML element query logic to be able to traverse into ShadowRoot
   */
-
-  /*
-   * `openOrClosedShadowRoot` is only available to WebExtensions.
-   * We need to use the correct implementation based on browser.
-   */
-  // START MODIFICATION
-  var getShadowRoot;
-
-  if (chrome.dom && chrome.dom.openOrClosedShadowRoot) {
-      // Chromium 88+
-      // https://developer.chrome.com/docs/extensions/reference/dom/
-      getShadowRoot = function (element) {
-          if (!(element instanceof HTMLElement)) {
-              return null;
-          }
-
-          return chrome.dom.openOrClosedShadowRoot(element);
-      };
-  } else {
-      getShadowRoot = function (element) {
-          // `openOrClosedShadowRoot` is currently available for Firefox 63+
-          // https://developer.mozilla.org/en-US/docs/Web/API/Element/openOrClosedShadowRoot
-          // Fallback to usual shadowRoot if it doesn't exist, which will only find open ShadowRoots, not closed ones.
-          // https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot#browser_compatibility
-          return element.openOrClosedShadowRoot || element.shadowRoot;
-      };
-  }
-
-  /*
-   * Returns elements like Document.querySelectorAll does, but traverses the document and shadow
-   * roots, yielding a visited node only if it passes the predicate in filterCallback.
-   */
-  function queryDocAll(doc, rootEl, filterCallback) {
-      var accumulatedNodes = [];
-
-      // mutates accumulatedNodes
-      accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes);
-
-      return accumulatedNodes;
-  }
-
-  function accumulatingQueryDocAll(doc, rootEl, filterCallback, accumulatedNodes) {
-      var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-      var node;
-
-      while (node = treeWalker.nextNode()) {
-        if (filterCallback(node)) {
-            accumulatedNodes.push(node);
-        }
-
-        // If node contains a ShadowRoot we want to step into it and also traverse all child nodes inside.
-        var nodeShadowRoot = getShadowRoot(node);
-
-        if (!nodeShadowRoot) {
-          continue;
-        }
-
-        // recursively traverse into ShadowRoot
-        accumulatingQueryDocAll(doc, nodeShadowRoot, filterCallback, accumulatedNodes);
-    }
-  }
-
-  /*
-   * Returns an element like Document.querySelector does, but traverses the document and shadow
-   * roots, yielding a visited node only if it passes the predicate in filterCallback.
-   */
-  function queryDoc(doc, rootEl, filterCallback) {
-      var treeWalker = doc.createTreeWalker(rootEl, NodeFilter.SHOW_ELEMENT);
-      var node;
-
-      while (node = treeWalker.nextNode()) {
-          if (filterCallback(node)) {
-              return node;
-          }
-
-          // If node contains a ShadowRoot we want to step into it and also traverse all child nodes inside.
-          var nodeShadowRoot = getShadowRoot(node);
-
-          if (!nodeShadowRoot) {
-            continue;
-          }
-
-          // recursively traverse into ShadowRoot
-          var subQueryResult = queryDoc(doc, nodeShadowRoot, filterCallback);
-
-          if (subQueryResult) {
-              return subQueryResult;
-          }
-      }
-
-      return null;
-  }
-  // END MODIFICATION
 
   function collect(document, undefined) {
       // START MODIFICATION
@@ -292,22 +198,12 @@
                   theLabels = Array.prototype.slice.call(el.labels);
               } else {
                   if (el.id) {
-                      // START MODIFICATION
-                      var elId = JSON.stringify(el.id);
-                      var labelsByReferencedId = queryDocAll(theDoc, theDoc.body, function (node) {
-                          return node.nodeName === 'LABEL' && node.htmlFor === elId;
-                      });
-                      theLabels = theLabels.concat(labelsByReferencedId);
-                      // END MODIFICATION
+                      theLabels = theLabels.concat(Array.prototype.slice.call(
+                          queryDoc(theDoc, 'label[for=' + JSON.stringify(el.id) + ']')));
                   }
 
                   if (el.name) {
-                      // START MODIFICATION
-                      var elName = JSON.stringify(el.name);
-                      docLabel = queryDocAll(theDoc, theDoc.body, function (node) {
-                          return node.nodeName === 'LABEL' && node.htmlFor === elName;
-                      });
-                      // END MODIFICATION
+                      docLabel = queryDoc(theDoc, 'label[for=' + JSON.stringify(el.name) + ']');
 
                       for (var labelIndex = 0; labelIndex < docLabel.length; labelIndex++) {
                           if (-1 === theLabels.indexOf(docLabel[labelIndex])) {
@@ -364,21 +260,28 @@
           function toLowerString(s) {
               return 'string' === typeof s ? s.toLowerCase() : ('' + s).toLowerCase();
           }
-          // START MODIFICATION
-          // renamed queryDoc to queryDocAll and moved to top
-          // END MODIFICATION
+
+          /**
+           * Query the document `doc` for elements matching the selector `selector`
+           * @param {Document} doc
+           * @param {string} query
+           * @returns {HTMLElement[]} An array of elements matching the selector
+           */
+          function queryDoc(doc, query) {
+              var els = [];
+              try {
+                  els = doc.querySelectorAll(query);
+              } catch (e) { }
+              return els;
+          }
+
           // end helpers
 
           var theView = theDoc.defaultView ? theDoc.defaultView : window,
               passwordRegEx = RegExp('((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|(\\\\b|_|-)passe(\\\\b|_|-)|contraseña|senha|密码|adgangskode|hasło|wachtwoord)', 'i');
 
           // get all the docs
-          // START MODIFICATION
-          var formNodes = queryDocAll(theDoc, theDoc.body, function (el) {
-              return el.nodeName === 'FORM';
-          });
-          var theForms = formNodes.map(function (formEl, elIndex) {
-          // END MODIFICATION
+          var theForms = Array.prototype.slice.call(queryDoc(theDoc, 'form')).map(function (formEl, elIndex) {
               var op = {},
                   formOpId = '__form__' + elIndex;
 
@@ -524,7 +427,6 @@
               title: theDoc.title,
               url: theView.location.href,
               documentUrl: theDoc.location.href,
-              tabUrl: theView.location.href,
               forms: function (forms) {
                   var formObj = {};
                   forms.forEach(function (f) {
@@ -537,12 +439,8 @@
           };
 
           // get proper page title. maybe they are using the special meta tag?
-          // START MODIFICATION
-          var theTitle = queryDoc(theDoc, theDoc, function (node) {
-              return node.hasAttribute('data-onepassword-title');
-          });
-          // END MODIFICATION
-          if (theTitle && theTitle.dataset[DISPLAY_TITLE_ATTRIBUE]) {
+          var theTitle = document.querySelector('[data-onepassword-title]')
+          if (theTitle && theTitle.dataset[DISPLAY_TITLE_ATTRIBUTE]) {
               pageDetails.displayTitle = theTitle.dataset.onepasswordTitle;
           }
 
@@ -657,10 +555,7 @@
           // walk the dom tree until we reach the top
           for (var elStyle; theEl && theEl !== document;) {
               // Calculate the style of the element
-              // START MODIFICATION
-              elStyle = el.getComputedStyle && theEl instanceof Element ? el.getComputedStyle(theEl, null) : theEl.style;
-              // END MODIFICATION
-
+              elStyle = el.getComputedStyle ? el.getComputedStyle(theEl, null) : theEl.style;
               // If there's no computed style at all, we're done, as we know that it's not hidden
               if (!elStyle) {
                   return true;
@@ -770,28 +665,6 @@
           }
       }
 
-      var ignoredInputTypes = {
-        hidden: true,
-        submit: true,
-        reset: true,
-        button: true,
-        image: true,
-        file: true,
-      };
-
-      /*
-       * inputEl MUST BE an instanceof HTMLInputElement, else inputEl.type.toLowerCase will throw an error
-       */
-      function isRelevantInputField(inputEl) {
-        if (inputEl.hasAttribute('data-bwignore')) {
-          return false;
-        }
-
-        const isIgnoredInputType = ignoredInputTypes.hasOwnProperty(inputEl.type.toLowerCase());
-
-        return !isIgnoredInputType;
-      }
-
       /**
        * Query `theDoc` for form elements that we can use for autofill, ranked by importance and limited by `limit`
        * @param {Document} theDoc The Document to query
@@ -800,19 +673,13 @@
        */
       function getFormElements(theDoc, limit) {
           // START MODIFICATION
-
-          var els = queryDocAll(theDoc, theDoc.body, function (el) {
-              switch (el.nodeName) {
-                  case 'SELECT':
-                      return true;
-                  case 'SPAN':
-                      return el.hasAttribute('data-bwautofill');
-                  case 'INPUT':
-                      return isRelevantInputField(el);
-                  default:
-                      return false;
-              }
-          });
+          var els = [];
+          try {
+              var elsList = theDoc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
+                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, textarea, ' +
+                  'span[data-bwautofill]');
+              els = Array.prototype.slice.call(elsList);
+          } catch (e) { }
 
           if (!limit || els.length <= limit) {
               return els;
@@ -842,8 +709,8 @@
           }
 
           return returnEls;
+          // END MODIFICATION
       }
-      // END MODIFICATION
 
       /**
        * Focus the element `el` and optionally restore its original value
@@ -872,22 +739,31 @@
       var markTheFilling = true,
           animateTheFilling = true;
 
-      function queryPasswordInputs() {
-        return queryDocAll(document, document.body, function (el) {
-          return el.nodeName === 'INPUT' && el.type.toLowerCase() === 'password';
-        })
-      }
-
       // Check if URL is not secure when the original saved one was
       function urlNotSecure(savedURLs) {
-          var passwordInputs = null;
-          if (!savedURLs) {
+          if (!savedURLs || !savedURLs.length) {
               return false;
           }
 
-          return savedURLs.some(url => url?.indexOf('https://') === 0) && 'http:' === document.location.protocol && (passwordInputs = queryPasswordInputs(),
-              0 < passwordInputs.length && (confirmResult = confirm('Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page.\n\nDo you still wish to fill this login?'),
-                  0 == confirmResult)) ? true : false;
+          const confirmationWarning = [
+              chrome.i18n.getMessage("insecurePageWarning"),
+              chrome.i18n.getMessage("insecurePageWarningFillPrompt", [window.location.hostname])
+          ].join('\n\n');
+
+          if (
+              // At least one of the `savedURLs` uses SSL
+              savedURLs.some(url => url.startsWith('https://')) &&
+              // The current page is not using SSL
+              document.location.protocol === 'http:' &&
+              // There are password inputs on the page
+              document.querySelectorAll('input[type=password]')?.length
+          ) {
+              // The user agrees the page is unsafe or not
+              return !confirm(confirmationWarning);
+          }
+
+          // The page is secure
+          return false;
       }
 
       // Detect if within an iframe, and the iframe is sandboxed
@@ -910,6 +786,22 @@
 
           if (isSandboxed() || urlNotSecure(fillScript.savedUrls)) {
               return;
+          }
+
+          if (fillScript.untrustedIframe) {
+            // confirm() is blocked by sandboxed iframes, but we don't want to fill sandboxed iframes anyway.
+            // If this occurs, confirm() returns false without displaying the dialog box, and autofill will be aborted.
+            // The browser may print a message to the console, but this is not a standard error that we can handle.
+            const confirmationWarning = [
+              chrome.i18n.getMessage("autofillIframeWarning"),
+              chrome.i18n.getMessage("autofillIframeWarningTip", [window.location.hostname])
+            ].join('\n\n');
+
+            const acceptedIframeWarning = confirm(confirmationWarning);
+
+            if (!acceptedIframeWarning) {
+              return;
+            }
           }
 
           doOperation = function (ops, theOperation) {
@@ -1224,12 +1116,9 @@
        */
       function getAllFields() {
           var r = RegExp('((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|passe|contraseña|senha|密码|adgangskode|hasło|wachtwoord)', 'i');
-          return queryDocAll(document, document.body, function (el) {
-              return el.nodeName === 'INPUT' &&
-                  el.type.toLowerCase() === 'text' &&
-                  el.value &&
-                  r.test(el.value);
-          });
+          return Array.prototype.slice.call(selectAllFromDoc("input[type='text']")).filter(function (el) {
+              return el.value && r.test(el.value);
+          }, this);
       }
 
       /**
@@ -1254,9 +1143,7 @@
               a: {
                   currentEl = el;
                   for (var owner = el.ownerDocument, owner = owner ? owner.defaultView : {}, theStyle; currentEl && currentEl !== document;) {
-                      // START MODIFICATION
-                      theStyle = owner.getComputedStyle && currentEl instanceof Element ? owner.getComputedStyle(currentEl, null) : currentEl.style;
-                      // END MODIFICATION
+                      theStyle = owner.getComputedStyle ? owner.getComputedStyle(currentEl, null) : currentEl.style;
                       if (!theStyle) {
                           currentEl = true;
                           break a;
@@ -1290,19 +1177,12 @@
           }
           try {
               // START MODIFICATION
-              var filteredElements = queryDocAll(document, document.body, function (el) {
-                  switch (el.nodeName) {
-                      case 'INPUT':
-                      case 'SELECT':
-                      case 'BUTTON':
-                          return el.opid === theOpId;
-                      case 'SPAN':
-                          return el.hasAttribute('data-bwautofill') && el.opid === theOpId;
-                  }
-
-                  return false;
-              });
+              var elements = Array.prototype.slice.call(selectAllFromDoc('input, select, button, textarea, ' +
+                  'span[data-bwautofill]'));
               // END MODIFICATION
+              var filteredElements = elements.filter(function (o) {
+                  return o.opid == theOpId;
+              });
               if (0 < filteredElements.length) {
                   theElement = filteredElements[0],
                       1 < filteredElements.length && console.warn('More than one element found with opid ' + theOpId);
@@ -1323,11 +1203,11 @@
        * @returns
        */
       function selectAllFromDoc(theSelector) {
-          // START MODIFICATION
-          return queryDocAll(document, document, function(node) {
-              return node.matches(theSelector);
-          });
-          // END MODIFICATION
+          var d = document, elements = [];
+          try {
+              elements = d.querySelectorAll(theSelector);
+          } catch (e) { }
+          return elements;
       }
 
       /**

@@ -1461,8 +1461,35 @@
   "autoFillSuccess": {
     "message": "Element avto-dolduruldu"
   },
+  "insecurePageWarning": {
+    "message": "Xəbərdarlıq: Bu, güvənli olmayan bir HTTP səhifəsidir və göndərdiyiniz istənilən məlumat başqaları tərəfindən görünə və dəyişdirilə bilər. Bu Giriş, orijinal olaraq güvənli (HTTPS) bir səhifədə saxlanılmışdır."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Hələ də bu girişi doldurmaq istəyirsiniz?"
+  },
+  "autofillIframeWarning": {
+    "message": "Form sahibliyi, saxlanılmış girişinizin URI-ından fərqli bir domen tərəfindən həyata keçirilir. Yenə də avto-doldurmaq üçün \"Oldu\"ya, dayandırmaq üçün \"İmtina\"ya basın."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Gələcəkdə bu xəbərdarlığın qarşısını almaq üçün, $HOSTNAME$ URI-nı bu sayt üçün Bitwarden giriş elementinizdə saxlayın.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Ana parolu tənzimlə"
+  },
+  "currentMasterPass": {
+    "message": "Hazırkı ana parol"
+  },
+  "newMasterPass": {
+    "message": "Yeni ana parol"
+  },
+  "confirmNewMasterPass": {
+    "message": "Yeni ana parolu təsdiqlə"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Bir və ya daha çox təşkilat siyasəti, aşağıdakı tələbləri qarşılamaq üçün ana parolunuzu tələb edir:"
@@ -1844,6 +1871,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ana parolunuz təzəlikcə təşkilatınızdakı bir administrator tərəfindən dəyişdirildi. Anbara müraciət üçün indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Avtomatik qeydiyyat"
   },
@@ -1872,6 +1902,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt $HOURS$ saat $MINUTES$ dəqiqədir. Anbar vaxt bitişi əməliyyatı $ACTION$ olaraq tənzimləndi.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Təşkilatınızın siyasətləri, anbar vaxt bitişi əməliyyatınızı $ACTION$ olaraq tənzimlədi.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Sıradan çıxarılmış Təşkilatlardakı elementlərə müraciət edilə bilmir. Kömək üçün Təşkilatınızın sahibi ilə əlaqə saxlayın."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "$DOMAIN$ domeninə giriş edilir",
     "placeholders": {
@@ -2120,11 +2173,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Təşkilatınızın siyasətləri, səhifə yüklənəndə avto-doldurmanı işə saldı."
+  },
   "howToAutofill": {
     "message": "Avto-doldurma necə edilir"
   },
-  "autofillSelectInfo": {
-    "message": "Bu səhifədən bir element seçin və ya qısayol istifadə edin: $COMMAND$. Həmçinin səhifə yüklənəndə avto-doldurmanı sınaya bilərsiniz.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Bu səhifədən bir element seçin və ya qısayolu istifadə edin: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2188,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Bu səhifədən bir element seçin və ya tənzimləmələrdə bir qısayol tənzimləyin. Həmçinin səhifə yüklənəndə avto-doldurmanı sınaya bilərsiniz."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Bu səhifədən bir element seçin və ya tənzimləmələrdə bir qısayol tənzimləyin."
   },
   "gotIt": {
     "message": "Anladım"
@@ -2164,5 +2220,22 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Bölgə"
+  },
+  "opensInANewWindow": {
+    "message": "Yeni bir pəncərədə açılır"
+  },
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABŞ",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Müraciət rədd edildi. Bu səhifəyə baxmaq üçün icazəniz yoxdur."
   }
 }

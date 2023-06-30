@@ -3,9 +3,9 @@ import * as url from "url";
 
 import { app, BrowserWindow, screen } from "electron";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { WindowState } from "@bitwarden/common/models/domain/window-state";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { cleanUserAgent, isDev, isMacAppStore, isSnapStore } from "../utils";
 
@@ -20,12 +20,12 @@ export class WindowMain {
   private windowStates: { [key: string]: WindowState } = {};
   private enableAlwaysOnTop = false;
 
+  readonly defaultWidth = 950;
+  readonly defaultHeight = 600;
+
   constructor(
     private stateService: StateService,
     private logService: LogService,
-    private hideTitleBar = false,
-    private defaultWidth = 950,
-    private defaultHeight = 600,
     private argvCallback: (argv: string[]) => void = null,
     private createWindowCallback: (win: BrowserWindow) => void
   ) {}
@@ -118,7 +118,7 @@ export class WindowMain {
       y: this.windowStates[mainWindowSizeKey].y,
       title: app.name,
       icon: process.platform === "linux" ? path.join(__dirname, "/images/icon.png") : undefined,
-      titleBarStyle: this.hideTitleBar && process.platform === "darwin" ? "hiddenInset" : undefined,
+      titleBarStyle: process.platform === "darwin" ? "hiddenInset" : undefined,
       show: false,
       backgroundColor: "#fff",
       alwaysOnTop: this.enableAlwaysOnTop,

@@ -1,26 +1,21 @@
-import { firstValueFrom } from "rxjs";
-
 import { ApiService } from "../../abstractions/api.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { EncryptService } from "../../abstractions/encrypt.service";
-import { FileUploadService } from "../../abstractions/fileUpload.service";
-import { I18nService } from "../../abstractions/i18n.service";
-import { LogService } from "../../abstractions/log.service";
 import { SearchService } from "../../abstractions/search.service";
 import { SettingsService } from "../../abstractions/settings.service";
-import { StateService } from "../../abstractions/state.service";
-import { FieldType } from "../../enums/fieldType";
-import { UriMatchType } from "../../enums/uriMatchType";
-import { sequentialize } from "../../misc/sequentialize";
-import { Utils } from "../../misc/utils";
-import { AccountSettingsSettings } from "../../models/domain/account";
-import Domain from "../../models/domain/domain-base";
-import { EncArrayBuffer } from "../../models/domain/enc-array-buffer";
-import { EncString } from "../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
+import { FieldType, UriMatchType } from "../../enums";
 import { ErrorResponse } from "../../models/response/error.response";
 import { View } from "../../models/view/view";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { EncryptService } from "../../platform/abstractions/encrypt.service";
+import { I18nService } from "../../platform/abstractions/i18n.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { sequentialize } from "../../platform/misc/sequentialize";
+import { Utils } from "../../platform/misc/utils";
+import Domain from "../../platform/models/domain/domain-base";
+import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
+import { EncString } from "../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
+import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherType } from "../enums/cipher-type";
 import { CipherData } from "../models/data/cipher.data";
 import { Attachment } from "../models/domain/attachment";
@@ -33,7 +28,6 @@ import { LoginUri } from "../models/domain/login-uri";
 import { Password } from "../models/domain/password";
 import { SecureNote } from "../models/domain/secure-note";
 import { SortedCiphersCache } from "../models/domain/sorted-ciphers-cache";
-import { AttachmentRequest } from "../models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../models/request/cipher-bulk-move.request";
 import { CipherBulkRestoreRequest } from "../models/request/cipher-bulk-restore.request";
@@ -49,10 +43,6 @@ import { CipherView } from "../models/view/cipher.view";
 import { FieldView } from "../models/view/field.view";
 import { PasswordHistoryView } from "../models/view/password-history.view";
 
-const DomainMatchBlacklist = new Map<string, Set<string>>([
-  ["google.com", new Set(["script.google.com"])],
-]);
-
 export class CipherService implements CipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
     this.sortCiphersByLastUsed
@@ -62,12 +52,11 @@ export class CipherService implements CipherServiceAbstraction {
     private cryptoService: CryptoService,
     private settingsService: SettingsService,
     private apiService: ApiService,
-    private fileUploadService: FileUploadService,
     private i18nService: I18nService,
-    private searchService: () => SearchService,
-    private logService: LogService,
+    private searchService: SearchService,
     private stateService: StateService,
-    private encryptService: EncryptService
+    private encryptService: EncryptService,
+    private cipherFileUploadService: CipherFileUploadService
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -79,9 +68,9 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setDecryptedCiphers(value);
     if (this.searchService != null) {
       if (value == null) {
-        this.searchService().clearIndex();
+        this.searchService.clearIndex();
       } else {
-        this.searchService().indexCiphers();
+        this.searchService.indexCiphers(value);
       }
     }
   }
@@ -369,9 +358,9 @@ export class CipherService implements CipherServiceAbstraction {
   private async reindexCiphers() {
     const userId = await this.stateService.getUserId();
     const reindexRequired =
-      this.searchService != null && (this.searchService().indexedEntityId ?? userId) !== userId;
+      this.searchService != null && (this.searchService.indexedEntityId ?? userId) !== userId;
     if (reindexRequired) {
-      await this.searchService().indexCiphers(userId, await this.getDecryptedCipherCache());
+      this.searchService.indexCiphers(await this.getDecryptedCipherCache(), userId);
     }
   }
 
@@ -405,37 +394,9 @@ export class CipherService implements CipherServiceAbstraction {
       return Promise.resolve([]);
     }
 
-    const domain = Utils.getDomain(url);
-    const eqDomainsPromise =
-      domain == null
-        ? Promise.resolve([])
-        : firstValueFrom(this.settingsService.settings$).then(
-            (settings: AccountSettingsSettings) => {
-              let matches: any[] = [];
-              settings?.equivalentDomains?.forEach((eqDomain: any) => {
-                if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-                  matches = matches.concat(eqDomain);
-                }
-              });
-
-              if (!matches.length) {
-                matches.push(domain);
-              }
-
-              return matches;
-            }
-          );
-
-    const result = await Promise.all([eqDomainsPromise, this.getAllDecrypted()]);
-    const matchingDomains = result[0];
-    const ciphers = result[1];
-
-    if (defaultMatch == null) {
-      defaultMatch = await this.stateService.getDefaultUriMatch();
-      if (defaultMatch == null) {
-        defaultMatch = UriMatchType.Domain;
-      }
-    }
+    const equivalentDomains = this.settingsService.getEquivalentDomains(url);
+    const ciphers = await this.getAllDecrypted();
+    defaultMatch ??= await this.stateService.getDefaultUriMatch();
 
     return ciphers.filter((cipher) => {
       if (cipher.deletedDate != null) {
@@ -445,59 +406,8 @@ export class CipherService implements CipherServiceAbstraction {
         return true;
       }
 
-      if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
-        for (let i = 0; i < cipher.login.uris.length; i++) {
-          const u = cipher.login.uris[i];
-          if (u.uri == null) {
-            continue;
-          }
-
-          const match = u.match == null ? defaultMatch : u.match;
-          switch (match) {
-            case UriMatchType.Domain:
-              if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
-                if (DomainMatchBlacklist.has(u.domain)) {
-                  const domainUrlHost = Utils.getHost(url);
-                  if (!DomainMatchBlacklist.get(u.domain).has(domainUrlHost)) {
-                    return true;
-                  }
-                } else {
-                  return true;
-                }
-              }
-              break;
-            case UriMatchType.Host: {
-              const urlHost = Utils.getHost(url);
-              if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
-                return true;
-              }
-              break;
-            }
-            case UriMatchType.Exact:
-              if (url === u.uri) {
-                return true;
-              }
-              break;
-            case UriMatchType.StartsWith:
-              if (url.startsWith(u.uri)) {
-                return true;
-              }
-              break;
-            case UriMatchType.RegularExpression:
-              try {
-                const regex = new RegExp(u.uri, "i");
-                if (regex.test(url)) {
-                  return true;
-                }
-              } catch (e) {
-                this.logService.error(e);
-              }
-              break;
-            case UriMatchType.Never:
-            default:
-              break;
-          }
-        }
+      if (cipher.type === CipherType.Login && cipher.login !== null) {
+        return cipher.login.matchesUri(url, equivalentDomains, defaultMatch);
       }
 
       return false;
@@ -729,93 +639,19 @@ export class CipherService implements CipherServiceAbstraction {
     const dataEncKey = await this.cryptoService.makeEncKey(key);
     const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
 
-    const request: AttachmentRequest = {
-      key: dataEncKey[1].encryptedString,
-      fileName: encFileName.encryptedString,
-      fileSize: encData.buffer.byteLength,
-      adminRequest: admin,
-    };
-
-    let response: CipherResponse;
-    try {
-      const uploadDataResponse = await this.apiService.postCipherAttachment(cipher.id, request);
-      response = admin ? uploadDataResponse.cipherMiniResponse : uploadDataResponse.cipherResponse;
-      await this.fileUploadService.uploadCipherAttachment(
-        admin,
-        uploadDataResponse,
-        encFileName,
-        encData
-      );
-    } catch (e) {
-      if (
-        (e instanceof ErrorResponse && (e as ErrorResponse).statusCode === 404) ||
-        (e as ErrorResponse).statusCode === 405
-      ) {
-        response = await this.legacyServerAttachmentFileUpload(
-          admin,
-          cipher.id,
-          encFileName,
-          encData,
-          dataEncKey[1]
-        );
-      } else if (e instanceof ErrorResponse) {
-        throw new Error((e as ErrorResponse).getSingleMessage());
-      } else {
-        throw e;
-      }
-    }
+    const response = await this.cipherFileUploadService.upload(
+      cipher,
+      encFileName,
+      encData,
+      admin,
+      dataEncKey
+    );
 
     const cData = new CipherData(response, cipher.collectionIds);
     if (!admin) {
       await this.upsert(cData);
     }
     return new Cipher(cData);
-  }
-
-  /**
-   * @deprecated Mar 25 2021: This method has been deprecated in favor of direct uploads.
-   * This method still exists for backward compatibility with old server versions.
-   */
-  async legacyServerAttachmentFileUpload(
-    admin: boolean,
-    cipherId: string,
-    encFileName: EncString,
-    encData: EncArrayBuffer,
-    key: EncString
-  ) {
-    const fd = new FormData();
-    try {
-      const blob = new Blob([encData.buffer], { type: "application/octet-stream" });
-      fd.append("key", key.encryptedString);
-      fd.append("data", blob, encFileName.encryptedString);
-    } catch (e) {
-      if (Utils.isNode && !Utils.isBrowser) {
-        fd.append("key", key.encryptedString);
-        fd.append(
-          "data",
-          Buffer.from(encData.buffer) as any,
-          {
-            filepath: encFileName.encryptedString,
-            contentType: "application/octet-stream",
-          } as any
-        );
-      } else {
-        throw e;
-      }
-    }
-
-    let response: CipherResponse;
-    try {
-      if (admin) {
-        response = await this.apiService.postCipherAttachmentAdminLegacy(cipherId, fd);
-      } else {
-        response = await this.apiService.postCipherAttachmentLegacy(cipherId, fd);
-      }
-    } catch (e) {
-      throw new Error((e as ErrorResponse).getSingleMessage());
-    }
-
-    return response;
   }
 
   async saveCollectionsWithServer(cipher: Cipher): Promise<any> {
@@ -893,13 +729,22 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  async deleteWithServer(id: string): Promise<any> {
-    await this.apiService.deleteCipher(id);
+  async deleteWithServer(id: string, asAdmin = false): Promise<any> {
+    if (asAdmin) {
+      await this.apiService.deleteCipherAdmin(id);
+    } else {
+      await this.apiService.deleteCipher(id);
+    }
+
     await this.delete(id);
   }
 
-  async deleteManyWithServer(ids: string[]): Promise<any> {
-    await this.apiService.deleteManyCiphers(new CipherBulkDeleteRequest(ids));
+  async deleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    if (asAdmin) {
+      await this.apiService.deleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+    } else {
+      await this.apiService.deleteManyCiphers(new CipherBulkDeleteRequest(ids));
+    }
     await this.delete(ids);
   }
 
@@ -1023,13 +868,23 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  async softDeleteWithServer(id: string): Promise<any> {
-    await this.apiService.putDeleteCipher(id);
+  async softDeleteWithServer(id: string, asAdmin = false): Promise<any> {
+    if (asAdmin) {
+      await this.apiService.putDeleteCipherAdmin(id);
+    } else {
+      await this.apiService.putDeleteCipher(id);
+    }
+
     await this.softDelete(id);
   }
 
-  async softDeleteManyWithServer(ids: string[]): Promise<any> {
-    await this.apiService.putDeleteManyCiphers(new CipherBulkDeleteRequest(ids));
+  async softDeleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    if (asAdmin) {
+      await this.apiService.putDeleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+    } else {
+      await this.apiService.putDeleteManyCiphers(new CipherBulkDeleteRequest(ids));
+    }
+
     await this.softDelete(ids);
   }
 
@@ -1059,8 +914,10 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setEncryptedCiphers(ciphers);
   }
 
-  async restoreWithServer(id: string): Promise<any> {
-    const response = await this.apiService.putRestoreCipher(id);
+  async restoreWithServer(id: string, asAdmin = false): Promise<any> {
+    const response = asAdmin
+      ? await this.apiService.putRestoreCipherAdmin(id)
+      : await this.apiService.putRestoreCipher(id);
     await this.restore({ id: id, revisionDate: response.revisionDate });
   }
 

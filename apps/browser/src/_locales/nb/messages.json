@@ -1412,7 +1412,7 @@
     "message": "Klon"
   },
   "passwordGeneratorPolicyInEffect": {
-    "message": "En eller flere av organisasjonens vilkår påvirker generatorinnstillingene dine."
+    "message": "En eller flere av virksomhetens regler påvirker generatorinnstillingene dine."
   },
   "vaultTimeoutAction": {
     "message": "Handling ved tidsavbrudd i hvelvet"
@@ -1461,11 +1461,38 @@
   "autoFillSuccess": {
     "message": "Autoutfylt element"
   },
+  "insecurePageWarning": {
+    "message": "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Do you still wish to fill this login?"
+  },
+  "autofillIframeWarning": {
+    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+  },
+  "autofillIframeWarningTip": {
+    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Angi hovedpassord"
   },
+  "currentMasterPass": {
+    "message": "Current master password"
+  },
+  "newMasterPass": {
+    "message": "New master password"
+  },
+  "confirmNewMasterPass": {
+    "message": "Confirm new master password"
+  },
   "masterPasswordPolicyInEffect": {
-    "message": "Ett eller flere av organisasjonens vilkår krever at hovedpassordet oppfyller følgende krav:"
+    "message": "En eller flere av virksomhetens regler krever at hovedpassordet oppfyller følgende krav:"
   },
   "policyInEffectMinComplexity": {
     "message": "Minimumspoengsum for kompleksistet er $SCORE$",
@@ -1504,7 +1531,7 @@
     }
   },
   "masterPasswordPolicyRequirementsNotMet": {
-    "message": "Det nye hovedpassordet ditt oppfyller ikke vilkårene."
+    "message": "Det nye hovedpassordet ditt oppfyller ikke vilkår i virksomhetsreglene."
   },
   "acceptPolicies": {
     "message": "Ved å merke av denne boksen sier du deg enig i følgende:"
@@ -1585,10 +1612,10 @@
     "message": "Denne handlingen kan ikke gjøres i sidestolpen, prøv på nytt i sprettoppvinduet eller popvindu."
   },
   "personalOwnershipSubmitError": {
-    "message": "På grunn av bedrifsretningslinjer er du begrenset fra å lagre objekter til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger."
+    "message": "På grunn av en virksomhetsregel er du begrenset fra å lagre objekter til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger."
   },
   "personalOwnershipPolicyInEffect": {
-    "message": "En bedriftsretningslinje påvirker dine eierskapsinnstillinger."
+    "message": "En virksomhetsregel påvirker dine eierskapsinnstillinger."
   },
   "excludedDomains": {
     "message": "Ekskluderte domener"
@@ -1818,7 +1845,7 @@
     "message": "Skjul min e-postadresse fra mottakere."
   },
   "sendOptionsPolicyInEffect": {
-    "message": "En eller flere av organisasjons retningslinjer påvirker generatorinnstillingene dine."
+    "message": "En eller flere av virksomhetens regler påvirker generatorinnstillingene dine."
   },
   "passwordPrompt": {
     "message": "Forespørsel om hovedpassord på nytt"
@@ -1844,11 +1871,14 @@
   "updateMasterPasswordWarning": {
     "message": "Hovedpassordet ditt ble nylig endret av en administrator i organisasjonen din. For å få tilgang til hvelvet, må du oppdatere det nå. Hvis du fortsetter, logges du ut av den nåværende økten, og du må logge på igjen. Aktive økter på andre enheter kan fortsette å være aktive i opptil én time."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatisk registrering"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "Denne organisasjonen har en bedriftsoppsettsregel som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt."
+    "message": "Denne organisasjonen har en virksomhetsregel som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt."
   },
   "selectFolder": {
     "message": "Velg mappe …"
@@ -1863,7 +1893,7 @@
     "message": "Minutter"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisasjonens retningslinjer påvirker tidsavbruddet for hvelvet ditt. Maksimalt tillatt tidsavbrudd for hvelv er $HOURS$ time(r) og $MINUTES$ minutt(er)",
+    "message": "Din virksomhets regler påvirker tidsavbruddet for hvelvet ditt. Maksimalt tillatt tidsavbrudd for hvelv er $HOURS$ time(r) og $MINUTES$ minutt(er)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1875,6 +1905,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "vaultTimeoutTooLarge": {
     "message": "Tidsavbrudd i hvelvet ditt overskrider restriksjoner fastsatt av din organisasjon."
   },
@@ -1882,7 +1938,7 @@
     "message": "Hvelveksportering er skrudd av"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "En eller flere regler i organisasjonsoppsettet forhindrer deg i å eksportere ditt personlige hvelv."
+    "message": "En eller flere virksomhetsregler forhindrer deg i å eksportere ditt personlige hvelv."
   },
   "copyCustomFieldNameInvalidElement": {
     "message": "Klarte ikke å identifisere et gyldig skjemaelement. Prøv å inspisere HTML-en i stedet."
@@ -2003,9 +2059,6 @@
   "disabledOrganizationFilterError": {
     "message": "Elementer i deaktiverte organisasjoner kan ikke aksesseres. Kontakt organisasjonseier for hjelp."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Logger inn på $DOMAIN$",
     "placeholders": {
@@ -2120,11 +2173,14 @@
       }
     }
   },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Virksomhetsreglene dine har slått på automatisk utfylling av sidene."
+  },
   "howToAutofill": {
     "message": "Hvordan bruke auto-utfylling"
   },
-  "autofillSelectInfo": {
-    "message": "Velg et element fra denne siden eller bruk snarveien: $COMMAND$. Du kan også prøve autoutfylling når siden lastes inn.",
+  "autofillSelectInfoWithCommand": {
+    "message": "Velg et element fra denne siden eller bruk snarveien: $COMMAND$",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2132,8 +2188,8 @@
       }
     }
   },
-  "autofillSelectInfoNoCommand": {
-    "message": "Velg et element fra denne siden eller sett en snarvei i innstillinger. Du kan også prøve autoutfylling når siden lastes inn."
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Velg et element fra denne siden eller angi en snarvei i innstillingene."
   },
   "gotIt": {
     "message": "Skjønner"
@@ -2164,5 +2220,22 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "region": {
+    "message": "Region"
+  },
+  "opensInANewWindow": {
+    "message": "Opens in a new window"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

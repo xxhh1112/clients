@@ -1,7 +1,7 @@
 import { Component, InjectionToken, Injector, Input, OnDestroy, OnInit } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/tree-node";
 
 import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
@@ -85,10 +85,6 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
 
   get addInfo() {
     return this.section.add;
-  }
-
-  get showAddButton() {
-    return this.section.add && !this.section.add.route;
   }
 
   get showAddLink() {
