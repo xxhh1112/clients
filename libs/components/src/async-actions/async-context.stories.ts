@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
-import { delay, of } from "rxjs";
+import { delay, firstValueFrom, of } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
@@ -18,7 +18,7 @@ import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
       Perform action
     </button>
     <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>`,
-  selector: "app-promise-example",
+  selector: "app-simple-example",
   providers: [AsyncContextService],
 })
 class SimpleExampleComponent {
@@ -36,25 +36,37 @@ class SimpleExampleComponent {
 }
 
 @Component({
-  template: ``,
-  selector: "app-observable-example",
+  template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
+    <ng-container *ngIf="!initialLoading">
+      <button bitButton buttonType="primary" [bitAsyncClick]="action">Perform action</button>
+    </ng-container>
+    <button bitButton buttonType="secondary" [bitAsyncClick]="init" class="tw-ml-2">
+      Re-run initialization
+    </button>`,
+  selector: "app-initial-data-fetch-example",
   providers: [AsyncContextService],
 })
-class ObservableExampleComponent {
-  action = () => {
-    return of("fake observable").pipe(delay(2000));
-  };
-}
+class InitialDataFetchExampleComponent implements OnInit {
+  private fakeDataService = { getData$: () => of("fake data").pipe(delay(5000)) };
 
-@Component({
-  template: ``,
-  selector: "app-rejected-promise-example",
-  providers: [AsyncContextService],
-})
-class RejectedPromiseExampleComponent {
+  protected initialLoading = true;
+  protected fakeData: string;
+
+  constructor(private asyncContextService: AsyncContextService) {}
+
+  ngOnInit(): void {
+    this.asyncContextService.run(this.init);
+  }
+
+  init = async () => {
+    this.initialLoading = true;
+    this.fakeData = await firstValueFrom(this.fakeDataService.getData$());
+    this.initialLoading = false;
+  };
+
   action = async () => {
     await new Promise<void>((resolve, reject) => {
-      setTimeout(() => reject(new Error("Simulated error")), 2000);
+      setTimeout(resolve, 2000);
     });
   };
 }
@@ -67,8 +79,7 @@ export default {
         BitAsyncClickDirective,
         BitAsyncDisableDirective,
         SimpleExampleComponent,
-        ObservableExampleComponent,
-        RejectedPromiseExampleComponent,
+        InitialDataFetchExampleComponent,
       ],
       imports: [ButtonModule, IconButtonModule],
       providers: [
@@ -89,24 +100,31 @@ export default {
   ],
 } as Meta;
 
-type PromiseStory = StoryObj<SimpleExampleComponent>;
-type ObservableStory = StoryObj<ObservableExampleComponent>;
+type SimpleStory = StoryObj<SimpleExampleComponent>;
+type InitialDataFetchStory = StoryObj<InitialDataFetchExampleComponent>;
 
-export const Simple: PromiseStory = {
+export const Simple: SimpleStory = {
   render: (args) => ({
     props: args,
-    template: `<app-promise-example></app-promise-example>`,
+    template: `<app-simple-example />`,
   }),
 };
 
-export const UsingObservable: ObservableStory = {
+export const InitialDataFetch: InitialDataFetchStory = {
   render: (args) => ({
-    template: `<app-observable-example></app-observable-example>`,
+    props: args,
+    template: `<app-initial-data-fetch-example />`,
   }),
 };
 
-export const RejectedPromise: ObservableStory = {
-  render: (args) => ({
-    template: `<app-rejected-promise-example></app-rejected-promise-example>`,
-  }),
-};
+// export const UsingObservable: ObservableStory = {
+//   render: (args) => ({
+//     template: `<app-observable-example></app-observable-example>`,
+//   }),
+// };
+
+// export const RejectedPromise: ObservableStory = {
+//   render: (args) => ({
+//     template: `<app-rejected-promise-example></app-rejected-promise-example>`,
+//   }),
+// };

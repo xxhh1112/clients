@@ -11,7 +11,7 @@ export class AsyncContextService {
   private destroy$ = new Subject<void>();
 
   private _requestedAction$ = new Subject<FunctionReturningAwaitable>();
-  private _currentAction$ = new Subject<FunctionReturningAwaitable>();
+  private _currentAction$ = new BehaviorSubject<FunctionReturningAwaitable | undefined>(undefined);
   private _loading$ = new BehaviorSubject<boolean>(false);
   private _disabled$ = new BehaviorSubject<boolean>(false);
 
@@ -25,13 +25,12 @@ export class AsyncContextService {
   ) {
     this._requestedAction$
       .pipe(
-        filter(() => !this.disabled),
+        filter(() => !this.disabled && !this.loading),
         switchMap((action) => {
-          const awaitable = functionToObservable(action);
-
-          this._currentAction$.next(action);
           this._loading$.next(true);
+          this._currentAction$.next(action);
 
+          const awaitable = functionToObservable(action);
           return awaitable.pipe(
             catchError((err: unknown) => {
               logService?.error(`Async action exception: ${err}`);
@@ -43,8 +42,14 @@ export class AsyncContextService {
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: () => this._loading$.next(false),
-        complete: () => this._loading$.next(false),
+        next: () => {
+          this._loading$.next(false);
+          this._currentAction$.next(undefined);
+        },
+        complete: () => {
+          this._loading$.next(false);
+          this._currentAction$.next(undefined);
+        },
       });
   }
 
@@ -53,6 +58,14 @@ export class AsyncContextService {
   }
 
   private set disabled(value: boolean) {
+    this._disabled$.next(value);
+  }
+
+  private get loading() {
+    return this._disabled$.value;
+  }
+
+  private set loading(value: boolean) {
     this._disabled$.next(value);
   }
 
