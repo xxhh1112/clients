@@ -167,4 +167,17 @@ export class BrowserStateService
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
   }
+
+  // Overriding the base class to prevent deleting the cache on save. We register a storage listener
+  // to delete the cache in the constructor above.
+  protected override async saveAccountToDisk(
+    account: Account,
+    options: StorageOptions
+  ): Promise<void> {
+    const storageLocation = options.useSecureStorage
+      ? this.secureStorageService
+      : this.storageService;
+
+    await storageLocation.save(`${options.userId}`, account, options);
+  }
 }
