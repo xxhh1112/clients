@@ -22,7 +22,7 @@
     <div
       class="generated-wrapper"
       [innerHTML]="password | colorPassword"
-      [appSelectCopy]="password"
+      [appCopyText]="password"
     ></div>
     <div class="action-buttons">
       <button
@@ -48,7 +48,7 @@
     <div
       class="generated-wrapper"
       [innerHTML]="username | colorPassword"
-      [appSelectCopy]="username"
+      [appCopyText]="username"
     ></div>
     <div class="action-buttons" #form [appApiAction]="usernameGeneratingPromise">
       <button
