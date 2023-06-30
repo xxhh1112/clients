@@ -1,5 +1,6 @@
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import AutofillOverlayContentService from "../services/autofill-overlay-content.service";
 import CollectAutofillContentService from "../services/collect-autofill-content.service";
 import DomElementVisibilityService from "../services/dom-element-visibility.service";
 import InsertAutofillContentService from "../services/insert-autofill-content.service";
@@ -12,12 +13,14 @@ import {
 
 class AutofillInit implements AutofillInitInterface {
   private readonly domElementVisibilityService: DomElementVisibilityService;
+  private readonly autofillOverlayContentService: AutofillOverlayContentService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly insertAutofillContentService: InsertAutofillContentService;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
+    openAutofillOverlayList: () => this.openAutofillOverlayList(),
   };
 
   /**
@@ -26,8 +29,10 @@ class AutofillInit implements AutofillInitInterface {
    */
   constructor() {
     this.domElementVisibilityService = new DomElementVisibilityService();
+    this.autofillOverlayContentService = new AutofillOverlayContentService();
     this.collectAutofillContentService = new CollectAutofillContentService(
-      this.domElementVisibilityService
+      this.domElementVisibilityService,
+      this.autofillOverlayContentService
     );
     this.insertAutofillContentService = new InsertAutofillContentService(
       this.domElementVisibilityService,
@@ -81,6 +86,10 @@ class AutofillInit implements AutofillInitInterface {
    */
   private fillForm(fillScript: AutofillScript) {
     this.insertAutofillContentService.fillForm(fillScript);
+  }
+
+  private openAutofillOverlayList() {
+    this.autofillOverlayContentService.openAutofillOverlayList();
   }
 
   /**

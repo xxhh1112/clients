@@ -2,6 +2,7 @@ import { EVENTS } from "../constants";
 import AutofillScript, { FillScript, FillScriptActions } from "../models/autofill-script";
 import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
 
+import AutofillOverlayContentService from "./autofill-overlay-content.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
 import DomElementVisibilityService from "./dom-element-visibility.service";
 import InsertAutofillContentService from "./insert-autofill-content.service";
@@ -57,8 +58,10 @@ function setMockWindowLocationProtocol(protocol: "http:" | "https:") {
 
 describe("InsertAutofillContentService", function () {
   const domElementVisibilityService = new DomElementVisibilityService();
+  const autofillOverlayContentService = new AutofillOverlayContentService();
   const collectAutofillContentService = new CollectAutofillContentService(
-    domElementVisibilityService
+    domElementVisibilityService,
+    autofillOverlayContentService
   );
   let insertAutofillContentService: InsertAutofillContentService;
   let fillScript: AutofillScript;

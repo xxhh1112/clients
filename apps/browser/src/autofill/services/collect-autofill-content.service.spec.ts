@@ -5,6 +5,7 @@ import {
   FormElementWithAttribute,
 } from "../types";
 
+import AutofillOverlayContentService from "./autofill-overlay-content.service";
 import CollectAutofillContentService from "./collect-autofill-content.service";
 import DomElementVisibilityService from "./dom-element-visibility.service";
 
@@ -19,12 +20,16 @@ const mockLoginForm = `
 
 describe("CollectAutofillContentService", function () {
   const domElementVisibilityService = new DomElementVisibilityService();
+  const autofillOverlayContentService = new AutofillOverlayContentService();
   let collectAutofillContentService: CollectAutofillContentService;
 
   beforeEach(function () {
     jest.clearAllMocks();
     document.body.innerHTML = mockLoginForm;
-    collectAutofillContentService = new CollectAutofillContentService(domElementVisibilityService);
+    collectAutofillContentService = new CollectAutofillContentService(
+      domElementVisibilityService,
+      autofillOverlayContentService
+    );
   });
 
   describe("getPageDetails", function () {

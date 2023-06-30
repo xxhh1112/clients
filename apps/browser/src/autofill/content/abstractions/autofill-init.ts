@@ -5,6 +5,7 @@ type AutofillExtensionMessage = {
   tab?: chrome.tabs.Tab;
   sender?: string;
   fillScript?: AutofillScript;
+  ciphers?: any;
 };
 
 type AutofillExtensionMessageHandlers = {
@@ -12,6 +13,7 @@ type AutofillExtensionMessageHandlers = {
   collectPageDetails: (message: { message: AutofillExtensionMessage }) => void;
   collectPageDetailsImmediately: (message: { message: AutofillExtensionMessage }) => void;
   fillForm: (message: { message: AutofillExtensionMessage }) => void;
+  openAutofillOverlayList: () => void;
 };
 
 interface AutofillInit {

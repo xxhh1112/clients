@@ -95,7 +95,8 @@
     "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",
-    "overlay/button.html"
+    "overlay/button.html",
+    "overlay/list.html"
   ],
   "applications": {
     "gecko": {

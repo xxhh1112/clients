@@ -104,6 +104,7 @@ import { BrowserOrganizationService } from "../admin-console/services/browser-or
 import { BrowserPolicyService } from "../admin-console/services/browser-policy.service";
 import ContextMenusBackground from "../autofill/background/context-menus.background";
 import NotificationBackground from "../autofill/background/notification.background";
+import OverlayBackground from "../autofill/background/overlay.background";
 import TabsBackground from "../autofill/background/tabs.background";
 import { CipherContextMenuHandler } from "../autofill/browser/cipher-context-menu-handler";
 import { ContextMenuClickedHandler } from "../autofill/browser/context-menu-clicked-handler";
@@ -208,6 +209,7 @@ export default class MainBackground {
   private contextMenusBackground: ContextMenusBackground;
   private idleBackground: IdleBackground;
   private notificationBackground: NotificationBackground;
+  private overlayBackground: OverlayBackground;
   private runtimeBackground: RuntimeBackground;
   private tabsBackground: TabsBackground;
   private webRequestBackground: WebRequestBackground;
@@ -575,8 +577,13 @@ export default class MainBackground {
       this.folderService,
       this.stateService
     );
+    this.overlayBackground = new OverlayBackground(this.cipherService, this.autofillService);
 
-    this.tabsBackground = new TabsBackground(this, this.notificationBackground);
+    this.tabsBackground = new TabsBackground(
+      this,
+      this.notificationBackground,
+      this.overlayBackground
+    );
     if (!this.popupOnlyContext) {
       const contextMenuClickedHandler = new ContextMenuClickedHandler(
         (options) => this.platformUtilsService.copyToClipboard(options.text, { window: self }),

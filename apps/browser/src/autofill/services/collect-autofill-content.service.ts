@@ -8,14 +8,20 @@ import {
   FormElementWithAttribute,
 } from "../types";
 
+import { AutofillOverlayContentService } from "./abstractions/autofill-overlay-content.service";
 import { CollectAutofillContentService as CollectAutofillContentServiceInterface } from "./abstractions/collect-autofill-content.service";
-import DomElementVisibilityService from "./dom-element-visibility.service";
+import { DomElementVisibilityService } from "./abstractions/dom-element-visibility.service";
 
 class CollectAutofillContentService implements CollectAutofillContentServiceInterface {
   private readonly domElementVisibilityService: DomElementVisibilityService;
+  private readonly autofillOverlayContentService: AutofillOverlayContentService;
 
-  constructor(domElementVisibilityService: DomElementVisibilityService) {
+  constructor(
+    domElementVisibilityService: DomElementVisibilityService,
+    autofillOverlayContentService: AutofillOverlayContentService
+  ) {
     this.domElementVisibilityService = domElementVisibilityService;
+    this.autofillOverlayContentService = autofillOverlayContentService;
   }
 
   /**
@@ -182,6 +188,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     };
 
     if (element instanceof HTMLSpanElement) {
+      this.autofillOverlayContentService.setupOverlayButtonListenerOnField(
+        element,
+        autofillFieldBase
+      );
       return autofillFieldBase;
     }
 
@@ -203,7 +213,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       };
     }
 
-    return {
+    const autofillField = {
       ...autofillFieldBase,
       ...autofillFieldLabels,
       rel: this.getPropertyOrAttribute(element, "rel"),
@@ -221,6 +231,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       "aria-haspopup": this.getPropertyOrAttribute(element, "aria-haspopup") === "true",
       "data-stripe": this.getPropertyOrAttribute(element, "data-stripe"),
     };
+
+    this.autofillOverlayContentService.setupOverlayButtonListenerOnField(element, autofillField);
+
+    return autofillField;
   };
 
   /**

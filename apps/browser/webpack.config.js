@@ -101,6 +101,11 @@ const plugins = [
     filename: "overlay/button.html",
     chunks: ["overlay/button"],
   }),
+  new HtmlWebpackPlugin({
+    template: "./src/autofill/overlay/list.html",
+    filename: "overlay/list.html",
+    chunks: ["overlay/list"],
+  }),
   new CopyWebpackPlugin({
     patterns: [
       manifestVersion == 3
@@ -154,9 +159,9 @@ const mainConfig = {
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
     "content/message_handler": "./src/autofill/content/message_handler.ts",
-    "content/overlay": "./src/autofill/content/overlay.ts",
     "notification/bar": "./src/autofill/notification/bar.ts",
     "overlay/button": "./src/autofill/overlay/button.ts",
+    "overlay/list": "./src/autofill/overlay/list.ts",
     "encrypt-worker": "../../libs/common/src/platform/services/cryptography/encrypt.worker.ts",
   },
   optimization: {

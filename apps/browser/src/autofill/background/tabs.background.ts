@@ -1,11 +1,13 @@
 import MainBackground from "../../background/main.background";
 
 import NotificationBackground from "./notification.background";
+import OverlayBackground from "./overlay.background";
 
 export default class TabsBackground {
   constructor(
     private main: MainBackground,
-    private notificationBackground: NotificationBackground
+    private notificationBackground: NotificationBackground,
+    private overlayBackground: OverlayBackground
   ) {}
 
   private focusedWindowId: number;
@@ -21,12 +23,14 @@ export default class TabsBackground {
       }
 
       this.focusedWindowId = windowId;
+      await this.overlayBackground.updateCurrentContextualCiphers();
       this.main.messagingService.send("windowChanged");
     });
 
     chrome.tabs.onActivated.addListener(async (activeInfo: chrome.tabs.TabActiveInfo) => {
       await this.main.refreshBadge();
       await this.main.refreshMenu();
+      await this.overlayBackground.updateCurrentContextualCiphers();
       this.main.messagingService.send("tabChanged");
     });
 
@@ -39,6 +43,7 @@ export default class TabsBackground {
       await this.notificationBackground.checkNotificationQueue();
       await this.main.refreshBadge();
       await this.main.refreshMenu();
+      await this.overlayBackground.updateCurrentContextualCiphers();
       this.main.messagingService.send("tabChanged");
     });
 
@@ -60,6 +65,7 @@ export default class TabsBackground {
         await this.notificationBackground.checkNotificationQueue(tab);
         await this.main.refreshBadge();
         await this.main.refreshMenu();
+        await this.overlayBackground.updateCurrentContextualCiphers();
         this.main.messagingService.send("tabChanged");
       }
     );

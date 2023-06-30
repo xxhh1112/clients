@@ -5,33 +5,30 @@ $button-color-primary: #175ddc;
 }
 
 body {
-  padding: 0;
-  margin: 0;
-  background: $button-color-primary;
-}
-.overlay-button-root {
   width: 100%;
   min-width: 100vw;
   height: 100%;
   min-height: 100vh;
   padding: 0;
   margin: 0;
-  border: none;
   background: $button-color-primary;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
+}
+autofill-overlay-button {
+  width: 100%;
+  height: auto;
 }
 
 .overlay-button {
-  width: 100%;
+  display: block;
+  width: 92%;
   padding: 0;
   margin: auto;
   border: none;
   background: $button-color-primary;
 
   svg {
+    display: block;
     width: 100%;
     height: auto;
   }
