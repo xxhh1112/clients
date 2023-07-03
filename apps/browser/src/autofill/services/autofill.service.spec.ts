@@ -21,16 +21,16 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
+import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserStateService } from "../../platform/services/browser-state.service";
 import {
   createAutofillFieldMock,
   createAutofillPageDetailsMock,
   createAutofillScriptMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
-} from "../../../jest/autofill-mocks";
-import { triggerTestFailure } from "../../../jest/testing-utils";
-import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserStateService } from "../../platform/services/browser-state.service";
+} from "../jest/autofill-mocks";
+import { triggerTestFailure } from "../jest/testing-utils";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";

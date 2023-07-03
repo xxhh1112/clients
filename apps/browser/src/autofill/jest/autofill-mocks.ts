@@ -3,10 +3,10 @@ import { mock } from "jest-mock-extended";
 import { UriMatchType } from "@bitwarden/common/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import AutofillField from "../src/autofill/models/autofill-field";
-import AutofillPageDetails from "../src/autofill/models/autofill-page-details";
-import AutofillScript, { FillScript } from "../src/autofill/models/autofill-script";
-import { GenerateFillScriptOptions } from "../src/autofill/services/abstractions/autofill.service";
+import AutofillField from "../models/autofill-field";
+import AutofillPageDetails from "../models/autofill-page-details";
+import AutofillScript, { FillScript } from "../models/autofill-script";
+import { GenerateFillScriptOptions } from "../services/abstractions/autofill.service";
 
 function createAutofillFieldMock(customFields = {}): AutofillField {
   return {
