@@ -9,4 +9,9 @@ export abstract class UserVerificationService {
   ) => Promise<T>;
   verifyUser: (verification: Verification) => Promise<boolean>;
   requestOTP: () => Promise<void>;
+  /**
+   * Check if user has master password or only uses passwordless technologies to log in
+   * @returns True if the user has a master password
+   */
+  hasMasterPassword: () => Promise<boolean>;
 }

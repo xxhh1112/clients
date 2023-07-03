@@ -573,6 +573,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: UserVerificationServiceAbstraction,
       useClass: UserVerificationService,
       deps: [
+        StateServiceAbstraction,
         CryptoServiceAbstraction,
         I18nServiceAbstraction,
         UserVerificationApiServiceAbstraction,

@@ -408,6 +408,7 @@ export class Main {
     this.userVerificationApiService = new UserVerificationApiService(this.apiService);
 
     this.userVerificationService = new UserVerificationService(
+      this.stateService,
       this.cryptoService,
       this.i18nService,
       this.userVerificationApiService
