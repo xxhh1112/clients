@@ -395,4 +395,6 @@ export abstract class StateService<T extends Account = Account> {
     value: Record<string, Record<string, boolean>>,
     options?: StorageOptions
   ) => Promise<void>;
+  getPreviousUrl: (options?: StorageOptions) => Promise<string>;
+  setPreviousUrl: (url: string, options?: StorageOptions) => Promise<void>;
 }

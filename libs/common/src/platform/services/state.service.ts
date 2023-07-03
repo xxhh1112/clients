@@ -2447,6 +2447,23 @@ export class StateService<
     );
   }
 
+  async getPreviousUrl(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.previousUrl;
+  }
+
+  async setPreviousUrl(url: string, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.previousUrl = url;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {
     let globals: TGlobalState;
     if (this.useMemory(options.storageLocation)) {
