@@ -964,14 +964,8 @@
   "confirmVaultExport": {
     "message": "برون ریزی گاوصندوق را تأیید کنید"
   },
-  "confirmSecretsExport": {
-    "message": "Confirm secrets export"
-  },
   "exportWarningDesc": {
     "message": "این برون ریزی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید."
-  },
-  "exportSecretsWarningDesc": {
-    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "این برون ریزی با استفاده از کلید رمزگذاری حساب شما، اطلاعاتتان را رمزگذاری می کند. اگر زمانی کلید رمزگذاری حساب خود را بچرخانید، باید دوباره خروجی بگیرید، چون قادر به رمزگشایی این پرونده برون ریزی نخواهید بود."
@@ -984,9 +978,6 @@
   },
   "exportVault": {
     "message": "برون ریزی گاوصندوق"
-  },
-  "exportSecrets": {
-    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "فرمت پرونده"
@@ -2665,12 +2656,6 @@
   },
   "failedLogin2fa": {
     "message": "تلاش ناموفق برای ورود با ورود دو مرحله ای اشتباه."
-  },
-  "incorrectPassword": {
-    "message": "Incorrect password"
-  },
-  "incorrectCode": {
-    "message": "Incorrect code"
   },
   "exportedVault": {
     "message": "گاوصندوق برون ریزی شد"
@@ -4508,13 +4493,13 @@
     "message": "اشاره به کلمه عبور شما نمی‌تواند همان کلمه عبور شما باشد."
   },
   "enrollAccountRecovery": {
-    "message": "در بازیابی حساب کاربری ثبت نام کنید"
+    "message": "Enroll in account recovery"
   },
   "enrolledAccountRecovery": {
-    "message": "در بازیابی حساب کاربری ثبت نام شد"
+    "message": "Enrolled in account recovery"
   },
   "withdrawAccountRecovery": {
-    "message": "برداشت از بازیابی حساب"
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "ثبت‌نام موفقیت آمیز بود!"
@@ -4523,7 +4508,7 @@
     "message": "خروج موفقیت آمیز بود!"
   },
   "eventEnrollAccountRecovery": {
-    "message": "کاربر $ID$ در بازیابی حساب کاربری ثبت نام کرد.",
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4532,7 +4517,7 @@
     }
   },
   "eventWithdrawAccountRecovery": {
-    "message": "کاربر $ID$ از بازیابی حساب کاربری خارج شد.",
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4592,10 +4577,10 @@
     "message": "ثبت نام به مدیران سازمان امکان می‌دهد کلمه عبور اصلی شما را تغییر دهند"
   },
   "accountRecoveryPolicy": {
-    "message": "مدیریت بازیابی حساب کاربری"
+    "message": "Account recovery administration"
   },
   "accountRecoveryPolicyDescription": {
-    "message": "هنگامی که کلمه عبور اصلی یا دستگاه‌های قابل اعتماد فراموش یا گم می‌شوند، حساب‌های کاربری اعضا را بازیابی کنید. فرآیندهای بازیابی بر اساس روش رمزگذاری حساب کاربری است."
+    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
   },
   "resetPasswordPolicyWarning": {
     "message": "قبل از اینکه مدیران بتوانند کلمه عبور اصلی خود را بازنشانی کنند، اعضای سازمان باید خودجوش ثبت نام کنند یا به صورت خودکار ثبت نام کنند."
@@ -6194,6 +6179,10 @@
     "message": "توکن دسترسی ایجاد و در کلیپ بورد کپی شد",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "مدیریت مجوزها برای نسخه بتا در دسترس نیست.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
+  },
   "revokeAccessToken": {
     "message": "لغو دسترسی به توکن",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6623,14 +6612,11 @@
   "secretsManagerBeta": {
     "message": "بتا مدیر اسرار"
   },
-  "secretsManager": {
-    "message": "Secrets Manager"
+  "secretsManagerBetaDesc": {
+    "message": "در طول برنامه بتا، دسترسی کاربر به مدیر اسرار را بدون هیچ هزینه ای فعال کنید."
   },
-  "secretsManagerAccessDesc": {
-    "message": "Enable user access to Secrets Manager."
-  },
-  "userAccessSecretsManagerGA": {
-    "message": "This user can access Secrets Manager"
+  "userAccessSecretsManager": {
+    "message": "این کاربر می‌تواند به بتای مدیر اسرار دسترسی داشته باشد"
   },
   "important": {
     "message": "مهم:"
@@ -6790,7 +6776,7 @@
     }
   },
   "inputTrimValidator": {
-    "message": "ورودی نباید فقط حاوی فضای خالی باشد.",
+    "message": "Input must not contain only whitespace.",
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "dismiss": {
@@ -6807,14 +6793,14 @@
     "message": "از اعضای موجود بخواهید کلمه‌های عبور خود را تغییر دهند"
   },
   "region": {
-    "message": "منطقه"
+    "message": "Region"
   },
   "eu": {
-    "message": "اروپا",
+    "message": "EU",
     "description": "European Union"
   },
   "us": {
-    "message": "امریکا",
+    "message": "US",
     "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
@@ -6832,19 +6818,19 @@
     "message": "رمزگذاری دستگاه مورد اعتماد"
   },
   "memberDecryptionTdeDescriptionStart": {
-    "message": "پس از احراز هویت، اعضا با استفاده از کلید ذخیره شده در دستگاه خود، داده‌های گاوصندوق را رمزگشایی می‌کنند.",
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLink": {
-    "message": "سیایت مدیریت بازیابی حساب کاربری",
+    "message": "account recovery administration policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionEnd": {
-    "message": "با ثبت نام خودکار زمانی که از این گزینه استفاده می‌شود روشن می‌شود.",
+    "message": "with automatic enrollment will turn on when this option is used.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
-    "message": "$RESOURCE$ پیدا نشد",
+    "message": "$RESOURCE$ not found",
     "placeholders": {
       "resource": {
         "content": "$1",
@@ -6853,70 +6839,56 @@
     }
   },
   "recoverAccount": {
-    "message": "بازیابی حساب کاربری"
+    "message": "Recover account"
   },
   "updatedTempPassword": {
-    "message": "کاربر کلمه عبور برون ریزی شده از طریق بازیابی حساب کاربری را به‌روز کرد."
-  },
-  "enabledAccessToSecretsManager": {
-    "message": "Enabled access to Secrets Manager",
-    "description": "Confirmation message that one or more users gained access to Secrets Manager"
-  },
-  "enableAccess": {
-    "message": "Enable access"
-  },
-  "bulkEnableSecretsManagerDescription": {
-    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
-    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
-  },
-  "enableSecretsManager": {
-    "message": "Enable Secrets Manager"
+    "message": "User updated a password issued through account recovery."
   },
   "yourOrganizationsFingerprint": {
-    "message": "عبارت اثر انگشت سازمان شما",
+    "message": "Your organization's fingerprint phrase",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
   },
   "deviceApprovals": {
-    "message": "دستگاه تایید شد"
+    "message": "Device approvals"
   },
   "deviceApprovalsDesc": {
-    "message": "درخواست‌های ورود به سیستم را در زیر تأیید کنید تا به عضو درخواست‌کننده اجازه دهید ورود به سیستم را تکمیل کند. درخواست‌های تأیید نشده پس از 1 هفته منقضی می‌شوند. قبل از تأیید، اطلاعات عضو را بررسی کنید."
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
   },
   "deviceInfo": {
-    "message": "اطلاعات دستگاه"
+    "message": "Device info"
   },
   "time": {
-    "message": "زمان"
+    "message": "Time"
   },
   "denyAllRequests": {
-    "message": "رد کردن همه درخواست‌ها"
+    "message": "Deny all requests"
   },
   "denyRequest": {
-    "message": "رد کردن درخواست"
+    "message": "Deny request"
   },
   "approveRequest": {
-    "message": "درخواست تأیید"
+    "message": "Approve request"
   },
   "noDeviceRequests": {
-    "message": "بدون درخواست دستگاه"
+    "message": "No device requests"
   },
   "noDeviceRequestsDesc": {
-    "message": "درخواست‌های تأیید دستگاه عضو در اینجا ظاهر می‌شود"
+    "message": "Member device approval requests will appear here"
   },
   "loginRequestDenied": {
-    "message": "درخواست ورود رد شد"
+    "message": "Login request denied"
   },
   "allLoginRequestsDenied": {
-    "message": "همه درخواست‌های ورود رد شد"
+    "message": "All login requests denied"
   },
   "loginRequestApproved": {
-    "message": "درخواست ورود تأیید شد"
+    "message": "Login request approved"
   },
   "removeOrgUserNoMasterPasswordTitle": {
-    "message": "حساب کاربری کلمه عبور اصلی ندارد"
+    "message": "Account does not have master password"
   },
   "removeOrgUserNoMasterPasswordDesc": {
-    "message": "حذف $USER$ بدون تنظیم کلمه عبور اصلی برای آنها ممکن است دسترسی به حساب کامل آنها را محدود کند. آیا مطمئن هستید که می‌خواهید ادامه دهید؟",
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -6925,9 +6897,9 @@
     }
   },
   "noMasterPassword": {
-    "message": "بدون کلمه عبور اصلی"
+    "message": "No master password"
   },
   "removeMembersWithoutMasterPasswordWarning": {
-    "message": "حذف اعضایی که کلمه عبور اصلی ندارند بدون تعیین کلمه عبور برای آنها ممکن است دسترسی به حساب کامل آن‌ها را محدود کند."
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   }
 }
