@@ -33,8 +33,8 @@ const BroadcasterSubscriptionId = "LoginComponent";
 export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
-  @ViewChild(EnvironmentSelectorComponent)
-  environmentSelector!: EnvironmentSelectorComponent;
+  @ViewChild("environmentSelector", { read: ViewContainerRef, static: true })
+  environmentSelector: EnvironmentSelectorComponent;
 
   protected componentDestroyed$: Subject<void> = new Subject();
   webVaultHostname = "";
@@ -121,11 +121,6 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       });
     });
     this.messagingService.send("getWindowIsFocused");
-    this.environmentSelector.onOpenSelfHostedSettings
-      .pipe(takeUntil(this.componentDestroyed$))
-      .subscribe(() => {
-        this.settings();
-      });
   }
 
   ngOnDestroy() {
@@ -151,6 +146,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     // eslint-disable-next-line rxjs/no-async-subscribe
     childComponent.onSaved.pipe(takeUntil(this.componentDestroyed$)).subscribe(async () => {
       modal.close();
+      this.environmentSelector.updateEnvironmentInfo();
       await this.getLoginWithDevice(this.loggedEmail);
     });
   }
