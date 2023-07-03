@@ -8,12 +8,16 @@ on:
       environment:
         description: 'Environment'
         required: true
-        default: 'QA'
+        default: 'US-QA'
         type: choice
         options:
-          - QA
-          - EU-PROD
-          - EU-DEVTEST
+          - US-QA
+          - EU-QA
+      branch:
+        description: "Branch name to deploy (examples: 'master', 'feature/sm')"
+        required: true
+        type: string
+        default: master
 
 
 jobs:
@@ -34,62 +38,33 @@ jobs:
         id: config
         run: |
           ENV_NAME_LOWER=$(echo "${{ inputs.environment }}" | awk '{print tolower($0)}')
-        
-          # Set the storage account information
-          ENV_KEY_VAULT_NAME=""
-          ENV_KEY_VAULT_SP_SECRET_NAME=""
-          ENV_STORAGE_ACCOUNT_NAME=""
-          case "${{ inputs.environment}}" in
-            *QA*)
-              ENV_STORAGE_ACCOUNT_NAME="bwwebvaultrlktusqa"
-              ENV_KEY_VAULT_NAME="bw-webvault-rlktusqa-kv"
-              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_US_QA_SERVICE_PRINCIPAL }}"
-              ;;
-            *EU-PROD*)
-              ENV_STORAGE_ACCOUNT_NAME="bwwebvault1itgprod"
-              ENV_KEY_VAULT_NAME="webvault-westeurope-prod"
-              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_EU_PRD_SERVICE_PRINCIPAL }}"
-              ;;
-            *EU-DEVTEST*)
-              ENV_STORAGE_ACCOUNT_NAME="bwwebvaultwesteuropedev"
-              ENV_KEY_VAULT_NAME="webvault-westeurope-dev"
-              ENV_KEY_VAULT_SP_SECRET_NAME="${{ secrets.AZURE_KV_EU_DEVTEST_SERVICE_PRINCIPAL }}"
-              ;;
-          esac
-          
-          echo "environment-storage-account-name=$ENV_STORAGE_ACCOUNT_NAME" >> $GITHUB_ENV
           echo "configuring the Web deploy for ${{ inputs.environment }}"
           echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo "environment-url=http://vault.$ENV_NAME_LOWER.bitwarden.pw" >> $GITHUB_OUTPUT
           echo "environment-name=Web Vault - ${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo "environment-branch=cf-pages-$ENV_NAME_LOWER" >> $GITHUB_OUTPUT
           echo "environment-artifact=web-*-cloud-${{ inputs.environment }}.zip" >> $GITHUB_OUTPUT
-          echo "environment-storage-account-name=$ENV_STORAGE_ACCOUNT_NAME" >> $GITHUB_OUTPUT
-          echo "environment-key-vault-name=$ENV_KEY_VAULT_NAME" >> $GITHUB_OUTPUT
-          echo "environment-key-vault-sp-secret-name=$ENV_KEY_VAULT_SP_SECRET_NAME" >> $GITHUB_OUTPUT
 
   azure-deploy:
     name: Deploy to Azure
     runs-on: ubuntu-22.04
     needs:
       - setup
+    environment: ${{ inputs.environment }}
     env:
       _ENVIRONMENT: ${{ needs.setup.outputs.environment }}
       _ENVIRONMENT_ARTIFACT: ${{ needs.setup.outputs.environment-artifact }}
-      _ENV_STORAGE_ACCOUNT: ${{ needs.setup.outputs.environment-storage-account-name }}
-      _ENV_KEY_VAULT: ${{ needs.setup.outputs.environment-key-vault-name }}
-      _ENV_KEY_VAULT_SP_SECRET_NAME: ${{ needs.setup.outputs.environment-key-vault-sp-secret-name }}
     steps:
       - name: Login to Azure
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
         with:
-          creds: ${{ env._ENV_KEY_VAULT_SP_SECRET_NAME }}
+          creds: ${{ secrets.KEY_VAULT_SP_SECRET_NAME }}
 
       - name: Retrieve storage account connection string
         id: retrieve-secrets
         uses: bitwarden/gh-actions/get-keyvault-secrets@82bfda66185116020992660f6c73aa53277d081d
         with:
-          keyvault: ${{ env._ENV_KEY_VAULT }}
+          keyvault: ${{ secrets.KEY_VAULT_NAME }}
           secrets: "sa-bitwarden-web-vault-dev-key-temp"
 
 
@@ -99,8 +74,7 @@ jobs:
           workflow: build-web.yml
           path: apps/web
           workflow_conclusion: success
-          # branch: ${{ github.ref_name }}
-          branch: master
+          branch: ${{ inputs.branch }}
           artifacts: ${{ env._ENVIRONMENT_ARTIFACT }}
 
       - name: Unzip build asset
@@ -112,7 +86,7 @@ jobs:
         run: |
           az storage blob upload-batch --source "./build" \
             --destination "\$web" \
-            --account-name "${{ env._ENV_STORAGE_ACCOUNT }}" \
+            --account-name "${{ secrets.STORAGE_ACCOUNT_NAME }}" \
             --connection-string "${{ steps.retrieve-secrets.outputs.sa-bitwarden-web-vault-dev-key-temp }}" \
             --overwrite \
             --no-progress
