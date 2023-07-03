@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
@@ -13,14 +13,17 @@ import { BitAsyncClickDirective } from "./bit-async-click.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
 
 @Component({
-  template: `<button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
+  template: `<h3 *ngIf="name" class="tw-text-main">{{ name }}</h3>
+    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
       Perform action
     </button>
     <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>`,
-  selector: "app-simple-example",
+  selector: "app-group",
   providers: [AsyncContextService],
 })
-class SimpleExampleComponent {
+class GroupComponent {
+  @Input() name?: string = undefined;
+
   action = async () => {
     await new Promise<void>((resolve, reject) => {
       setTimeout(resolve, 2000);
@@ -34,11 +37,35 @@ class SimpleExampleComponent {
   };
 }
 
+@Component({
+  template: `<h2 *ngIf="name" class="tw-text-main">Parent</h2>
+    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
+      Perform action
+    </button>
+    <ng-content></ng-content>`,
+  selector: "app-parent",
+  providers: [AsyncContextService],
+})
+class ParentComponent {
+  @Input() name?: string = undefined;
+
+  action = async () => {
+    await new Promise<void>((resolve, reject) => {
+      setTimeout(resolve, 2000);
+    });
+  };
+}
+
 export default {
   title: "Component Library/Async Actions/Contexts",
   decorators: [
     moduleMetadata({
-      declarations: [BitAsyncClickDirective, BitAsyncDisableDirective, SimpleExampleComponent],
+      declarations: [
+        BitAsyncClickDirective,
+        BitAsyncDisableDirective,
+        GroupComponent,
+        ParentComponent,
+      ],
       imports: [ButtonModule, IconButtonModule],
       providers: [
         {
@@ -58,11 +85,31 @@ export default {
   ],
 } as Meta;
 
-type SimpleStory = StoryObj<SimpleExampleComponent>;
+type SimpleStory = StoryObj<GroupComponent>;
+type ParentWithSiblingsStory = StoryObj<ParentComponent>;
 
 export const Simple: SimpleStory = {
   render: (args) => ({
     props: args,
-    template: `<app-simple-example />`,
+    template: `<app-group />`,
+  }),
+};
+
+export const NestedParentWithSiblings: ParentWithSiblingsStory = {
+  render: (args) => ({
+    props: args,
+    template: `
+    <app-parent class="tw-block tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+      <app-parent class="tw-block tw-mt-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+        <div class="tw-mt-3 tw-flex">
+          <div class="tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+            <app-group name="Nested group A" />
+          </div>
+          <div class="tw-ml-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+            <app-group name="Nested group B" />
+          </div>
+        </div>
+      </app-parent>
+    </app-parent>`,
   }),
 };

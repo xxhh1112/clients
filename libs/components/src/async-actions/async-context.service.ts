@@ -1,5 +1,17 @@
-import { Injectable, Optional } from "@angular/core";
-import { BehaviorSubject, catchError, filter, of, Subject, switchMap, takeUntil } from "rxjs";
+import { Injectable, Optional, SkipSelf } from "@angular/core";
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  filter,
+  first,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
@@ -12,22 +24,45 @@ export class AsyncContextService {
 
   private _requestedAction$ = new Subject<FunctionReturningAwaitable>();
   private _currentAction$ = new BehaviorSubject<FunctionReturningAwaitable | undefined>(undefined);
-  private _loading$ = new BehaviorSubject<boolean>(false);
-  private _disabled$ = new BehaviorSubject<boolean>(false);
+  private _selfLoading$ = new BehaviorSubject<boolean>(false);
+  private _selfDisabled$ = new BehaviorSubject<boolean>(false);
 
   readonly currentAction$ = this._currentAction$.asObservable();
-  readonly disabled$ = this._disabled$.asObservable();
-  readonly loading$ = this._loading$.asObservable();
+  readonly disabled$: Observable<boolean>;
+  readonly loading$: Observable<boolean>;
 
   constructor(
-    @Optional() validationService?: ValidationService,
+    @Optional() @SkipSelf() parentContext: AsyncContextService,
+    validationService?: ValidationService,
     @Optional() logService?: LogService
   ) {
+    if (parentContext) {
+      this.disabled$ = combineLatest({
+        parentDisabled: parentContext.disabled$,
+        selfDisabled: this._selfDisabled$,
+      }).pipe(map(({ parentDisabled, selfDisabled }) => parentDisabled || selfDisabled));
+
+      this.loading$ = combineLatest({
+        parentLoading: parentContext.loading$,
+        selfLoading: this._selfLoading$,
+      }).pipe(map(({ parentLoading, selfLoading }) => parentLoading || selfLoading));
+    } else {
+      this.disabled$ = this._selfDisabled$.asObservable();
+      this.loading$ = this._selfLoading$.asObservable();
+    }
+
     this._requestedAction$
       .pipe(
-        filter(() => !this.disabled && !this.loading),
-        switchMap((action) => {
-          this._loading$.next(true);
+        switchMap((action) =>
+          combineLatest({
+            action: of(action),
+            disabled: this.disabled$.pipe(first()),
+            loading: this.loading$.pipe(first()),
+          })
+        ),
+        filter(({ disabled, loading }) => !disabled && !loading),
+        switchMap(({ action }) => {
+          this._selfLoading$.next(true);
           this._currentAction$.next(action);
 
           const awaitable = functionToObservable(action);
@@ -43,30 +78,30 @@ export class AsyncContextService {
       )
       .subscribe({
         next: () => {
-          this._loading$.next(false);
+          this._selfLoading$.next(false);
           this._currentAction$.next(undefined);
         },
         complete: () => {
-          this._loading$.next(false);
+          this._selfLoading$.next(false);
           this._currentAction$.next(undefined);
         },
       });
   }
 
   private get disabled() {
-    return this._disabled$.value;
+    return this._selfDisabled$.value;
   }
 
   private set disabled(value: boolean) {
-    this._disabled$.next(value);
+    this._selfDisabled$.next(value);
   }
 
   get loading() {
-    return this._loading$.value;
+    return this._selfLoading$.value;
   }
 
   set loading(value: boolean) {
-    this._loading$.next(value);
+    this._selfLoading$.next(value);
   }
 
   run(action: FunctionReturningAwaitable) {
