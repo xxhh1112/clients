@@ -65,7 +65,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
    */
   private userCancelledInsecureUrlAutofill(savedUrls?: string[] | null): boolean {
     if (
-      !savedUrls?.some((url) => url.startsWith("https://")) ||
+      !savedUrls?.some((url) => url.startsWith(`https://${window.location.hostname}`)) ||
       window.location.protocol !== "http:" ||
       !document.querySelectorAll("input[type=password]")?.length
     ) {

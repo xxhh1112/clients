@@ -47,10 +47,17 @@ const initEventCount = Object.freeze(
 let confirmSpy: jest.SpyInstance<boolean, [message?: string]>;
 let windowSpy: jest.SpyInstance<any>;
 let savedURLs: string[] | null = ["https://bitwarden.com"];
-function setMockWindowLocationProtocol(protocol: "http:" | "https:") {
+function setMockWindowLocation({
+  protocol,
+  hostname,
+}: {
+  protocol: "http:" | "https:";
+  hostname: string;
+}) {
   windowSpy.mockImplementation(() => ({
     location: {
       protocol,
+      hostname,
     },
   }));
 }
@@ -226,14 +233,16 @@ describe("InsertAutofillContentService", function () {
   });
 
   describe("userCancelledInsecureUrlAutofill", function () {
+    const currentHostname = "bitwarden.com";
+
     beforeEach(() => {
-      savedURLs = ["https://bitwarden.com"];
+      savedURLs = [`https://${currentHostname}`];
     });
 
     describe("returns false if Autofill occurring...", function () {
       it("when there are no saved URLs", function () {
         savedURLs = [];
-        setMockWindowLocationProtocol("http:");
+        setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
           insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
@@ -251,7 +260,7 @@ describe("InsertAutofillContentService", function () {
 
       it("on http page and saved URLs contain no https values", function () {
         savedURLs = ["http://bitwarden.com"];
-        setMockWindowLocationProtocol("http:");
+        setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
           insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
@@ -261,7 +270,7 @@ describe("InsertAutofillContentService", function () {
       });
 
       it("on https page with saved https URL", function () {
-        setMockWindowLocationProtocol("https:");
+        setMockWindowLocation({ protocol: "https:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
           insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
@@ -271,7 +280,7 @@ describe("InsertAutofillContentService", function () {
       });
 
       it("on page with no password field", function () {
-        setMockWindowLocationProtocol("https:");
+        setMockWindowLocation({ protocol: "https:", hostname: currentHostname });
 
         document.body.innerHTML = `
         <div id="root">
@@ -289,7 +298,7 @@ describe("InsertAutofillContentService", function () {
       });
 
       it("on http page with saved https URL and user approval", function () {
-        setMockWindowLocationProtocol("http:");
+        setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
         confirmSpy.mockImplementation(jest.fn(() => true));
 
         const userCancelledInsecureUrlAutofill =
@@ -301,7 +310,7 @@ describe("InsertAutofillContentService", function () {
     });
 
     it("returns true if Autofill occurring on http page with saved https URL and user disapproval", function () {
-      setMockWindowLocationProtocol("http:");
+      setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
       confirmSpy.mockImplementation(jest.fn(() => false));
 
       const userCancelledInsecureUrlAutofill =
@@ -309,6 +318,17 @@ describe("InsertAutofillContentService", function () {
 
       expect(confirmSpy).toHaveBeenCalled();
       expect(userCancelledInsecureUrlAutofill).toBe(true);
+    });
+
+    it("returns false if the vault item contains uris with both secure and insecure uris, but a insecure uri is being used on a insecure web page", function () {
+      setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
+      savedURLs = ["http://bitwarden.com", "https://some-other-uri.com"];
+
+      const userCancelledInsecureUrlAutofill =
+        insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
+
+      expect(confirmSpy).not.toHaveBeenCalled();
+      expect(userCancelledInsecureUrlAutofill).toBe(false);
     });
   });
 
