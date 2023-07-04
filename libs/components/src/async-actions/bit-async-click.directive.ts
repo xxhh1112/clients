@@ -22,9 +22,10 @@ export class BitAsyncClickDirective implements OnInit {
       loading: this.asyncContext.loading$,
       currentAction: this.asyncContext.currentAction$,
     }).subscribe(({ loading, currentAction }) => {
-      if (currentAction === this.handler) {
+      if (loading && currentAction === this.handler) {
         this.buttonComponent.loading = loading;
       } else {
+        this.buttonComponent.loading = false;
         this.buttonComponent.disabled = loading;
       }
     });
