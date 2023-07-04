@@ -14,9 +14,7 @@ import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
 
 @Component({
   template: `<h3 *ngIf="name" class="tw-text-main">{{ name }}</h3>
-    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
-      Perform action
-    </button>
+    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">Save</button>
     <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>`,
   selector: "app-group",
   providers: [AsyncContextService],
@@ -93,6 +91,36 @@ export const Simple: SimpleStory = {
     props: args,
     template: `<app-group />`,
   }),
+  parameters: {
+    docs: {
+      source: {
+        language: "typescript",
+        code: `
+@Component({
+  template: \`
+    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">Save</button>
+    <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>\`,
+  selector: "app-group",
+  providers: [AsyncContextService],
+})
+class GroupComponent {
+  @Input() name?: string = undefined;
+
+  action = async () => {
+    await new Promise<void>((resolve, reject) => {
+      setTimeout(resolve, 2000);
+    });
+  };
+
+  trash = async () => {
+    await new Promise<void>((resolve, reject) => {
+      setTimeout(resolve, 2000);
+    });
+  };
+}`,
+      },
+    },
+  },
 };
 
 export const NestedParentWithSiblings: ParentWithSiblingsStory = {
