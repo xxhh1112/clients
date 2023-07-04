@@ -17,7 +17,7 @@
 
   <bit-form-field>
     <bit-label>{{ "fileFormat" | i18n }}</bit-label>
-    <bit-select name="format" formControlName="format">
+    <bit-select formControlName="format">
       <bit-option *ngFor="let f of formatOptions" [value]="f.value" [label]="f.name" />
     </bit-select>
   </bit-form-field>
