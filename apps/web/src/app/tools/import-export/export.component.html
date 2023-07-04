@@ -16,7 +16,7 @@
   ></app-export-scope-callout>
 
   <bit-form-field>
-    <bit-label for="format">{{ "fileFormat" | i18n }}</bit-label>
+    <bit-label>{{ "fileFormat" | i18n }}</bit-label>
     <bit-select bitInput name="format" formControlName="format">
       <bit-option *ngFor="let f of formatOptions" [value]="f.value" [label]="f.name" />
     </bit-select>
@@ -33,7 +33,7 @@
         [value]="encryptedExportType.AccountEncrypted"
         checked="fileEncryptionType === encryptedExportType.AccountEncrypted"
       >
-        <bit-label for="AccountEncrypted">{{ "accountRestricted" | i18n }}</bit-label>
+        <bit-label>{{ "accountRestricted" | i18n }}</bit-label>
         <bit-hint>{{ "accountRestrictedOptionDescription" | i18n }}</bit-hint>
       </bit-radio-button>
 
@@ -44,7 +44,7 @@
         [value]="encryptedExportType.FileEncrypted"
         checked="fileEncryptionType === encryptedExportType.FileEncrypted"
       >
-        <bit-label for="FileEncrypted">{{ "passwordProtected" | i18n }}</bit-label>
+        <bit-label>{{ "passwordProtected" | i18n }}</bit-label>
         <bit-hint>{{ "passwordProtectedOptionDescription" | i18n }}</bit-hint>
       </bit-radio-button>
     </bit-radio-group>
