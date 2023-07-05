@@ -75,8 +75,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
       ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
       const pinEnabled =
-        (pinStatus === "ENABLED_WITH_MP_ON_RESET" && ephemeralPinSet != null) ||
-        pinStatus === "ENABLED";
+        (pinStatus === "TRANSIENT" && ephemeralPinSet != null) || pinStatus === "PERSISTANT";
 
       if (!pinEnabled && !(await this.vaultTimeoutSettingsService.isBiometricLockSet())) {
         await this.logOut(userId);
