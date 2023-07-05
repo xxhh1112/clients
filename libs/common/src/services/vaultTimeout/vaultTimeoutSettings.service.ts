@@ -7,7 +7,12 @@ import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { StateService } from "../../platform/abstractions/state.service";
 
-export type PinLockType = "DISABLED" | "ENABLED" | "ENABLED_WITH_MP_ON_RESET";
+/**
+ * - DISABLED: No Pin set
+ * - PERSISTENT: Pin is set and survives client reset
+ * - TRANSIENT: Pin is set and requires password unlock after client reset
+ */
+export type PinLockType = "DISABLED" | "PERSISTANT" | "TRANSIENT";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
   constructor(
@@ -55,9 +60,9 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     const anOldUserKeyPinIsSet = !!(await this.stateService.getEncryptedPinProtected());
 
     if (aUserKeyPinIsSet || anOldUserKeyPinIsSet) {
-      return "ENABLED";
+      return "PERSISTANT";
     } else if (pinIsEnabled && !aUserKeyPinIsSet && !anOldUserKeyPinIsSet) {
-      return "ENABLED_WITH_MP_ON_RESET";
+      return "TRANSIENT";
     } else {
       return "DISABLED";
     }

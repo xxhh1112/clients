@@ -157,13 +157,13 @@ export class LockComponent implements OnInit, OnDestroy {
       let userKeyPin: EncString;
       let oldPinProtected: EncString;
       switch (this.pinStatus) {
-        case "ENABLED": {
+        case "PERSISTANT": {
           userKeyPin = await this.stateService.getUserKeyPin();
           const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
           oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
           break;
         }
-        case "ENABLED_WITH_MP_ON_RESET": {
+        case "TRANSIENT": {
           userKeyPin = await this.stateService.getUserKeyPinEphemeral();
           oldPinProtected = await this.stateService.getDecryptedPinProtected();
           break;
@@ -334,8 +334,7 @@ export class LockComponent implements OnInit, OnDestroy {
     let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
     ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
     this.pinEnabled =
-      (this.pinStatus === "ENABLED_WITH_MP_ON_RESET" && !!ephemeralPinSet) ||
-      this.pinStatus === "ENABLED";
+      (this.pinStatus === "TRANSIENT" && !!ephemeralPinSet) || this.pinStatus === "PERSISTANT";
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
