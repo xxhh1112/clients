@@ -232,7 +232,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async togglePassword() {
-    if (await this.failedPasswordRepromptForFieldToggle(this.showPassword)) {
+    if (!(await this.isFieldPasswordRepromptSuccessful(this.showPassword))) {
       return;
     }
 
@@ -255,7 +255,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async toggleCardNumber() {
-    if (await this.failedPasswordRepromptForFieldToggle(this.showCardNumber)) {
+    if (!(await this.isFieldPasswordRepromptSuccessful(this.showCardNumber))) {
       return;
     }
 
@@ -269,7 +269,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async toggleCardCode() {
-    if (await this.failedPasswordRepromptForFieldToggle(this.showCardCode)) {
+    if (!(await this.isFieldPasswordRepromptSuccessful(this.showCardCode))) {
       return;
     }
 
@@ -282,8 +282,8 @@ export class ViewComponent implements OnDestroy, OnInit {
     }
   }
 
-  async failedPasswordRepromptForFieldToggle(isFieldShowing = false): Promise<boolean> {
-    return !isFieldShowing && !(await this.promptPassword(false));
+  async isFieldPasswordRepromptSuccessful(isFieldShowing = true): Promise<boolean> {
+    return isFieldShowing || (await this.promptPassword(false));
   }
 
   async checkPassword() {
@@ -328,7 +328,7 @@ export class ViewComponent implements OnDestroy, OnInit {
 
     if (
       this.passwordRepromptService.protectedFields().includes(aType) &&
-      !this.copiedFieldIsVisible(aType) &&
+      !this.isCopiedFieldVisible(aType) &&
       !(await this.promptPassword(false))
     ) {
       return false;
@@ -353,7 +353,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     return true;
   }
 
-  copiedFieldIsVisible(fieldType: string): boolean {
+  isCopiedFieldVisible(fieldType: string): boolean {
     const { Password, CardNumber, SecurityCode } = CipherRepromptProtectedFields;
 
     if (fieldType === CardNumber) {
