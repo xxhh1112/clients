@@ -20,6 +20,11 @@ There are two way of creating a context, which one you use depends on your use c
 
 ### Using `AsyncContextService`
 
+This method is useful when you need to interact with the service directly, for example during
+initialization when you might want to manually set the loading state while fetching data. For more
+information about how to interact with the async context during data fetching, see
+[Data Fetching](?path=/docs/component-library-async-actions-data-fetching--docs)
+
 To create a context, simply add `AsyncContextService` as a provider to your component:
 
 ```typescript
