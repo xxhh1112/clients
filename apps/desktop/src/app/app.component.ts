@@ -271,6 +271,7 @@ export class AppComponent implements OnInit, OnDestroy {
             }
             break;
           case "ssoCallback":
+            console.log("Device Key: ", message.deviceKey);
             this.router.navigate(["sso"], {
               queryParams: { code: message.code, state: message.state },
             });

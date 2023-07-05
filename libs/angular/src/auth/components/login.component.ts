@@ -199,7 +199,10 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       numbers: true,
       special: false,
     };
-    const state = await this.passwordGenerationService.generatePassword(passwordOptions);
+    // const state = await this.passwordGenerationService.generatePassword(passwordOptions);
+    const state =
+      (await this.passwordGenerationService.generatePassword(passwordOptions)) +
+      ":clientId=desktop";
     const ssoCodeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
     const codeVerifierHash = await this.cryptoFunctionService.hash(ssoCodeVerifier, "sha256");
     const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);

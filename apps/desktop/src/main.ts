@@ -212,7 +212,11 @@ export class Main {
         const code = url.searchParams.get("code");
         const receivedState = url.searchParams.get("state");
         if (code != null && receivedState != null) {
-          this.messagingService.send("ssoCallback", { code: code, state: receivedState });
+          this.messagingService.send("ssoCallback", {
+            code: code,
+            state: receivedState,
+            deviceKey: url.searchParams.get("deviceKey"),
+          });
         }
       });
   }

@@ -133,7 +133,10 @@ export class SsoComponent {
     }
 
     if (state == null) {
-      state = await this.passwordGenerationService.generatePassword(passwordOptions);
+      // state = await this.passwordGenerationService.generatePassword(passwordOptions);
+      state =
+        (await this.passwordGenerationService.generatePassword(passwordOptions)) +
+        ":clientId=desktop";
       if (returnUri) {
         state += `_returnUri='${returnUri}'`;
       }

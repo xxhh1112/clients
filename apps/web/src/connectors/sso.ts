@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (state != null && state.includes(":clientId=browser")) {
     initiateBrowserSso(code, state);
+  } else if (state != null && state.includes(":clientId=desktop")) {
+    var deviceKey = localStorage.getItem("deviceKey");
+    window.location.href =
+      "bitwarden://sso?code=" + code + "&state=" + state + "&deviceKey=" + deviceKey;
   } else {
     window.location.href = window.location.origin + "/#/sso?code=" + code + "&state=" + state;
     // Match any characters between "_returnUri='" and the next "'"
