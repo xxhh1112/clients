@@ -65,11 +65,25 @@ There are some standard contexts that are provided by the library:
 The root context which all actions will run in by default. If you do not specify a context, your
 action will run here and effectively disable all other async actions in the client.
 
+### Menu
+
+> **Warning:** Not implemented yet
+
+> **Dev comment**: Should this stretch to the parent context somehow? Dropdown menus don't have
+> backdrops so it would be weird if the user could start triggering actions on other parts of the
+> application that might be related? Maybe menus shouldn't automatically create contexts, and
+> instead leave this up to the developer?
+
+Dropdown menus are place where many buttons are grouped together, all acting within the same context
+(usually upon the same entity). When a button in a menu triggers a long running task, it is
+important that the other buttons in the menu are disabled to avoid confusion and accidental data
+loss. The menu context is created automatically when a menu is opened and any active actions inside
+of it will prevent the menu from closing.
+
 ### Dialog
 
 > **Warning:** Not implemented yet
 
 Dialogs are in a sense a sub-page of the application and provide a natural boundary in which actions
-are usually scoped to. Dialogs there always create their own contexts and actions will only run in
-the context of the dialog they were created in. The dialog service also subscribes to the context to
-disable actions such as closing the dialog while an action is running.
+are usually scoped to. The dialog context is created automatically when a dialog is opened and any
+active actions inside of it will prevent the dialog from closing.
