@@ -14,15 +14,14 @@ import { BitAsyncContextDirective } from "./bit-async-context.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
 
 @Component({
-  template: `<h3 *ngIf="name" class="tw-text-main">{{ name }}</h3>
-    <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">Save</button>
+  template: ` <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
+      Save
+    </button>
     <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>`,
   selector: "app-group",
   providers: [AsyncContextService],
 })
 class GroupComponent {
-  @Input() name?: string = undefined;
-
   action = async () => {
     await new Promise<void>((resolve, reject) => {
       setTimeout(resolve, 2000);
@@ -87,7 +86,8 @@ export default {
 
 type SimpleStory = StoryObj<GroupComponent>;
 type StandaloneButtonStory = StoryObj<unknown>;
-type ParentWithSiblingsStory = StoryObj<ParentComponent>;
+type HierarchyUsingComponentsStory = StoryObj<ParentComponent>;
+type HierarchyUsingDirectivesStory = StoryObj<unknown>;
 
 export const Simple: SimpleStory = {
   render: (args) => ({
@@ -143,7 +143,7 @@ export const StandaloneButton: StandaloneButtonStory = {
   },
 };
 
-export const NestedParentWithSiblings: ParentWithSiblingsStory = {
+export const HierarchyUsingComponents: HierarchyUsingComponentsStory = {
   render: (args) => ({
     props: args,
     template: `
@@ -151,13 +151,56 @@ export const NestedParentWithSiblings: ParentWithSiblingsStory = {
       <app-parent class="tw-block tw-mt-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
         <div class="tw-mt-3 tw-flex">
           <div class="tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
-            <app-group name="Nested group A" />
+            <app-group />
           </div>
           <div class="tw-ml-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
-            <app-group name="Nested group B" />
+            <app-group />
           </div>
         </div>
       </app-parent>
     </app-parent>`,
   }),
+};
+
+const HierarchyUsingDirectivesTemplate = `
+<div bitAsyncContext class="tw-block tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+  <button bitButton buttonType="primary" [bitAsyncClick]="actionA">Perform action</button>
+
+  <div bitAsyncContext class="tw-block tw-mt-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+    <button bitButton buttonType="primary" [bitAsyncClick]="actionB">Perform action</button>
+
+    <div class="tw-mt-3 tw-flex">
+      <div bitAsyncContext class="tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+        <button bitButton buttonType="primary" [bitAsyncClick]="actionC" class="tw-mr-2">Save</button>
+        <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="actionD"></button>
+      </div>
+      <div bitAsyncContext class="tw-ml-3 tw-border tw-border-solid tw-border-secondary-500 tw-p-3">
+        <button bitButton buttonType="primary" [bitAsyncClick]="actionE" class="tw-mr-2">Save</button>
+        <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="actionF"></button>
+      </div>
+    </div>
+
+  </div>
+</div>`;
+const createAction = () => () => new Promise<void>((resolve) => setTimeout(resolve, 2000));
+export const HierarchyUsingDirectives: HierarchyUsingDirectivesStory = {
+  render: (args: object) => ({
+    props: {
+      actionA: createAction(),
+      actionB: createAction(),
+      actionC: createAction(),
+      actionD: createAction(),
+      actionE: createAction(),
+      actionF: createAction(),
+      ...args,
+    },
+    template: HierarchyUsingDirectivesTemplate,
+  }),
+  parameters: {
+    docs: {
+      source: {
+        code: HierarchyUsingDirectivesTemplate,
+      },
+    },
+  },
 };
