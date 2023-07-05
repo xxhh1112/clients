@@ -87,48 +87,54 @@ describe("deviceTrustCryptoService", () => {
     const userKeyBytesLength = 64;
 
     describe("getDeviceKey", () => {
-      let mockRandomBytes: CsprngArray;
-      let mockDeviceKey: SymmetricCryptoKey;
       let existingDeviceKey: DeviceKey;
       let stateSvcGetDeviceKeySpy: jest.SpyInstance;
-      let makeDeviceKeySpy: jest.SpyInstance;
 
       beforeEach(() => {
-        mockRandomBytes = new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray;
-        mockDeviceKey = new SymmetricCryptoKey(mockRandomBytes);
         existingDeviceKey = new SymmetricCryptoKey(
           new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray
         ) as DeviceKey;
 
         stateSvcGetDeviceKeySpy = jest.spyOn(stateService, "getDeviceKey");
-        makeDeviceKeySpy = jest.spyOn(deviceTrustCryptoService as any, "makeDeviceKey");
       });
 
-      it("gets a device key when there is not an existing device key", async () => {
+      it("returns null when there is not an existing device key", async () => {
         stateSvcGetDeviceKeySpy.mockResolvedValue(null);
-        makeDeviceKeySpy.mockResolvedValue(mockDeviceKey);
 
         const deviceKey = await deviceTrustCryptoService.getDeviceKey();
 
         expect(stateSvcGetDeviceKeySpy).toHaveBeenCalledTimes(1);
-        expect(makeDeviceKeySpy).toHaveBeenCalledTimes(1);
 
-        expect(deviceKey).not.toBeNull();
-        expect(deviceKey).toBeInstanceOf(SymmetricCryptoKey);
-        expect(deviceKey).toEqual(mockDeviceKey);
+        expect(deviceKey).toBeNull();
       });
 
-      it("returns the existing device key without creating a new one when there is an existing device key", async () => {
+      it("returns the device key when there is an existing device key", async () => {
         stateSvcGetDeviceKeySpy.mockResolvedValue(existingDeviceKey);
 
         const deviceKey = await deviceTrustCryptoService.getDeviceKey();
 
         expect(stateSvcGetDeviceKeySpy).toHaveBeenCalledTimes(1);
-        expect(makeDeviceKeySpy).not.toHaveBeenCalled();
 
         expect(deviceKey).not.toBeNull();
         expect(deviceKey).toBeInstanceOf(SymmetricCryptoKey);
         expect(deviceKey).toEqual(existingDeviceKey);
+      });
+    });
+
+    describe("setDeviceKey", () => {
+      it("sets the device key in the state service", async () => {
+        const stateSvcSetDeviceKeySpy = jest.spyOn(stateService, "setDeviceKey");
+
+        const deviceKey = new SymmetricCryptoKey(
+          new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray
+        ) as DeviceKey;
+
+        // TypeScript will allow calling private methods if the object is of type 'any'
+        // This is a hacky workaround, but it allows for cleaner tests
+        await (deviceTrustCryptoService as any).setDeviceKey(deviceKey);
+
+        expect(stateSvcSetDeviceKeySpy).toHaveBeenCalledTimes(1);
+        expect(stateSvcSetDeviceKeySpy).toHaveBeenCalledWith(deviceKey);
       });
     });
 
@@ -140,8 +146,6 @@ describe("deviceTrustCryptoService", () => {
           .spyOn(cryptoFunctionService, "randomBytes")
           .mockResolvedValue(mockRandomBytes);
 
-        const stateSvcSetDeviceKeySpy = jest.spyOn(stateService, "setDeviceKey");
-
         // TypeScript will allow calling private methods if the object is of type 'any'
         // This is a hacky workaround, but it allows for cleaner tests
         const deviceKey = await (deviceTrustCryptoService as any).makeDeviceKey();
@@ -151,9 +155,6 @@ describe("deviceTrustCryptoService", () => {
 
         expect(deviceKey).not.toBeNull();
         expect(deviceKey).toBeInstanceOf(SymmetricCryptoKey);
-
-        expect(stateSvcSetDeviceKeySpy).toHaveBeenCalledTimes(1);
-        expect(stateSvcSetDeviceKeySpy).toHaveBeenCalledWith(deviceKey);
       });
     });
 

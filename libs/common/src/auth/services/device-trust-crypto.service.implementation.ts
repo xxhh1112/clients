@@ -69,32 +69,30 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
 
     // Send encrypted keys to server
     const deviceIdentifier = await this.appIdService.getAppId();
-    return this.devicesApiService.updateTrustedDeviceKeys(
+    const deviceResponse = await this.devicesApiService.updateTrustedDeviceKeys(
       deviceIdentifier,
       devicePublicKeyEncryptedUserKey.encryptedString,
       userKeyEncryptedDevicePublicKey.encryptedString,
       deviceKeyEncryptedDevicePrivateKey.encryptedString
     );
+
+    // store device key in local/secure storage if enc keys posted to server successfully
+    await this.setDeviceKey(deviceKey);
+    return deviceResponse;
   }
 
   async getDeviceKey(): Promise<DeviceKey> {
-    // Check if device key is already stored
-    const existingDeviceKey = await this.stateService.getDeviceKey();
+    return await this.stateService.getDeviceKey();
+  }
 
-    if (existingDeviceKey != null) {
-      return existingDeviceKey;
-    } else {
-      return this.makeDeviceKey();
-    }
+  private async setDeviceKey(deviceKey: DeviceKey): Promise<void> {
+    await this.stateService.setDeviceKey(deviceKey);
   }
 
   private async makeDeviceKey(): Promise<DeviceKey> {
     // Create 512-bit device key
     const randomBytes: CsprngArray = await this.cryptoFunctionService.randomBytes(64);
     const deviceKey = new SymmetricCryptoKey(randomBytes) as DeviceKey;
-
-    // Save device key in secure storage
-    await this.stateService.setDeviceKey(deviceKey);
 
     return deviceKey;
   }
@@ -106,7 +104,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     encryptedUserKey: any
   ): Promise<UserKey> {
     // get device key
-    const existingDeviceKey = await this.stateService.getDeviceKey();
+    const existingDeviceKey = await this.getDeviceKey();
 
     if (!existingDeviceKey) {
       // TODO: not sure what to do here
