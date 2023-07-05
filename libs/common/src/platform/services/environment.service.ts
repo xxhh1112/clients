@@ -320,12 +320,18 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
 
   isSelfHosted(): boolean {
     return ![
-      "http://vault.bitwarden.com",
+      "http://vault.bitwarden.com", // Prod US
       "https://vault.bitwarden.com",
-      "http://vault.bitwarden.eu",
+      "http://vault.bitwarden.eu", // Prod EU
       "https://vault.bitwarden.eu",
-      "http://vault.qa.bitwarden.pw",
+      "http://vault.qa.bitwarden.pw", // QA US
       "https://vault.qa.bitwarden.pw",
+      "http://vault.euqa.bitwarden.pw", // QA EU
+      "https://vault.euqa.bitwarden.pw",
+      "http://vault.usdevtest.bitwarden.pw", // Dev US
+      "https://vault.usdevtest.bitwarden.pw",
+      "http://vault.eudevtest.bitwarden.pw", // Dev EU
+      "https://vault.eudevtest.bitwarden.pw",
     ].includes(this.getWebVaultUrl());
   }
 }
