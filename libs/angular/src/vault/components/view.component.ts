@@ -282,7 +282,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     }
   }
 
-  async isFieldPasswordRepromptSuccessful(isFieldShowing = true): Promise<boolean> {
+  async isFieldPasswordRepromptSuccessful(isFieldShowing: boolean): Promise<boolean> {
     return isFieldShowing || (await this.promptPassword(false));
   }
 
