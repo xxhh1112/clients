@@ -36,7 +36,6 @@ export class BitAsyncClickDirective implements OnInit {
     if (!this.handler || this.buttonComponent.disabled) {
       return;
     }
-
     this.asyncContext.run(this.handler);
   }
 }

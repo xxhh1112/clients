@@ -10,6 +10,7 @@ import { IconButtonModule } from "../icon-button";
 
 import { AsyncContextService } from "./async-context.service";
 import { BitAsyncClickDirective } from "./bit-async-click.directive";
+import { BitAsyncContextDirective } from "./bit-async-context.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
 
 @Component({
@@ -61,6 +62,7 @@ export default {
       declarations: [
         BitAsyncClickDirective,
         BitAsyncDisableDirective,
+        BitAsyncContextDirective,
         GroupComponent,
         ParentComponent,
       ],
@@ -84,6 +86,7 @@ export default {
 } as Meta;
 
 type SimpleStory = StoryObj<GroupComponent>;
+type StandaloneButtonStory = StoryObj<unknown>;
 type ParentWithSiblingsStory = StoryObj<ParentComponent>;
 
 export const Simple: SimpleStory = {
@@ -118,6 +121,23 @@ class GroupComponent {
     });
   };
 }`,
+      },
+    },
+  },
+};
+
+export const StandaloneButton: StandaloneButtonStory = {
+  render: (args: object) => ({
+    props: {
+      action: () => new Promise<void>((resolve) => setTimeout(resolve, 2000)),
+      ...args,
+    },
+    template: `<button bitButton buttonType="primary" bitAsyncContext [bitAsyncClick]="action">Standalone</button>`,
+  }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<button bitButton buttonType="primary" bitAsyncContext [bitAsyncClick]="action">Standalone</button>`,
       },
     },
   },

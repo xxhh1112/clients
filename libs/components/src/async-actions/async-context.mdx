@@ -14,7 +14,7 @@ might want to disable the "Delete" button while the "Save" action is running, an
 
 <Canvas of={AsyncContextStories.Simple} />
 
-## How to creating a context
+## How to create a context
 
 There are two way of creating a context, which one you use depends on your use case.
 
@@ -32,11 +32,11 @@ To create a context, simply add `AsyncContextService` as a provider to your comp
 
 > **Warning:** Not implemented yet
 
-You can also use the `bitAsyncContext` directive to create a context:
+You can also use the `bitAsyncContext` directive to create a context, which is useful when you don't
+want to create a whole new component just for the async context. The simplest example of this would
+be a standalone button:
 
-```html
-<ng-container bitAsyncContext></ng-container>
-```
+<Canvas of={AsyncContextStories.StandaloneButton} />
 
 ## When to create a context
 
