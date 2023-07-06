@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
 import { PasswordRepromptService as BasePasswordRepromptService } from "@bitwarden/angular/vault/services/password-reprompt.service";
 
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
-import { lastValueFrom } from "rxjs";
 
 @Injectable()
 export class PasswordRepromptService extends BasePasswordRepromptService {
