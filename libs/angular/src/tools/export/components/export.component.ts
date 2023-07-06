@@ -48,7 +48,6 @@ export class ExportComponent implements OnInit, OnDestroy {
     protected exportService: VaultExportServiceAbstraction,
     protected eventCollectionService: EventCollectionService,
     private policyService: PolicyService,
-    protected win: Window,
     private logService: LogService,
     private userVerificationService: UserVerificationService,
     private formBuilder: UntypedFormBuilder,

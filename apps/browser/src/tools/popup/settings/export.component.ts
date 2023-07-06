@@ -37,7 +37,6 @@ export class ExportComponent extends BaseExportComponent {
       exportService,
       eventCollectionService,
       policyService,
-      window,
       logService,
       userVerificationService,
       formBuilder,
