@@ -8,7 +8,6 @@ import { EventCollectionService } from "@bitwarden/common/abstractions/event/eve
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EncryptedExportType } from "@bitwarden/common/enums";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -27,7 +26,6 @@ export class ExportComponent extends BaseExportComponent {
   protected showFilePassword: boolean;
 
   constructor(
-    cryptoService: CryptoService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     exportService: VaultExportServiceAbstraction,
@@ -40,7 +38,6 @@ export class ExportComponent extends BaseExportComponent {
     dialogService: DialogServiceAbstraction
   ) {
     super(
-      cryptoService,
       i18nService,
       platformUtilsService,
       exportService,
