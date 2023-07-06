@@ -120,7 +120,7 @@ export class LockComponent implements OnInit, OnDestroy {
     const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Biometric);
 
     if (userKey) {
-      await this.setKeyAndContinue(userKey, false);
+      await this.setUserKeyAndContinue(userKey, false);
     }
 
     return !!userKey;
@@ -198,7 +198,7 @@ export class LockComponent implements OnInit, OnDestroy {
       failed = decryptedPin !== this.pin;
 
       if (!failed) {
-        await this.setKeyAndContinue(userKey);
+        await this.setUserKeyAndContinue(userKey);
       }
     } catch {
       failed = true;
@@ -240,36 +240,36 @@ export class LockComponent implements OnInit, OnDestroy {
       kdf,
       kdfConfig
     );
-    const storedKeyHash = await this.cryptoService.getKeyHash();
+    const storedPasswordHash = await this.cryptoService.getPasswordHash();
 
     let passwordValid = false;
 
-    if (storedKeyHash != null) {
+    if (storedPasswordHash != null) {
       // Offline unlock possible
-      passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
+      passwordValid = await this.cryptoService.compareAndUpdatePasswordHash(
         this.masterPassword,
         masterKey
       );
     } else {
       // Online only
       const request = new SecretVerificationRequest();
-      const serverKeyHash = await this.cryptoService.hashPassword(
+      const serverPasswordHash = await this.cryptoService.hashPassword(
         this.masterPassword,
         masterKey,
         HashPurpose.ServerAuthorization
       );
-      request.masterPasswordHash = serverKeyHash;
+      request.masterPasswordHash = serverPasswordHash;
       try {
         this.formPromise = this.apiService.postAccountVerifyPassword(request);
         const response = await this.formPromise;
         this.enforcedMasterPasswordOptions = MasterPasswordPolicyOptions.fromResponse(response);
         passwordValid = true;
-        const localKeyHash = await this.cryptoService.hashPassword(
+        const localPasswordHash = await this.cryptoService.hashPassword(
           this.masterPassword,
           masterKey,
           HashPurpose.LocalAuthorization
         );
-        await this.cryptoService.setKeyHash(localKeyHash);
+        await this.cryptoService.setPasswordHash(localPasswordHash);
       } catch (e) {
         this.logService.error(e);
       } finally {
@@ -288,10 +288,10 @@ export class LockComponent implements OnInit, OnDestroy {
 
     const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
     await this.cryptoService.setMasterKey(masterKey);
-    await this.setKeyAndContinue(userKey, true);
+    await this.setUserKeyAndContinue(userKey, true);
   }
 
-  private async setKeyAndContinue(key: UserKey, evaluatePasswordAfterUnlock = false) {
+  private async setUserKeyAndContinue(key: UserKey, evaluatePasswordAfterUnlock = false) {
     await this.cryptoService.setUserKey(key);
     await this.doContinue(evaluatePasswordAfterUnlock);
   }

@@ -142,7 +142,7 @@ describe("PasswordLogInStrategy", () => {
     await passwordLogInStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setKeyHash).toHaveBeenCalledWith(localHashedPassword);
+    expect(cryptoService.setPasswordHash).toHaveBeenCalledWith(localHashedPassword);
     expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);

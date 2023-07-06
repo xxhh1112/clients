@@ -220,38 +220,41 @@ export class CryptoService implements CryptoServiceAbstraction {
     return Utils.fromBufferToB64(hash);
   }
 
-  async setKeyHash(keyHash: string): Promise<void> {
+  async setPasswordHash(keyHash: string): Promise<void> {
     await this.stateService.setKeyHash(keyHash);
   }
 
-  async getKeyHash(): Promise<string> {
+  async getPasswordHash(): Promise<string> {
     return await this.stateService.getKeyHash();
   }
 
-  async clearKeyHash(userId?: string): Promise<void> {
+  async clearPasswordHash(userId?: string): Promise<void> {
     return await this.stateService.setKeyHash(null, { userId: userId });
   }
 
-  async compareAndUpdateKeyHash(masterPassword: string, key: MasterKey): Promise<boolean> {
-    const storedKeyHash = await this.getKeyHash();
-    if (masterPassword != null && storedKeyHash != null) {
+  async compareAndUpdatePasswordHash(
+    masterPassword: string,
+    masterKey: MasterKey
+  ): Promise<boolean> {
+    const storedPasswordHash = await this.getPasswordHash();
+    if (masterPassword != null && storedPasswordHash != null) {
       const localKeyHash = await this.hashPassword(
         masterPassword,
-        key,
+        masterKey,
         HashPurpose.LocalAuthorization
       );
-      if (localKeyHash != null && storedKeyHash === localKeyHash) {
+      if (localKeyHash != null && storedPasswordHash === localKeyHash) {
         return true;
       }
 
       // TODO: remove serverKeyHash check in 1-2 releases after everyone's keyHash has been updated
       const serverKeyHash = await this.hashPassword(
         masterPassword,
-        key,
+        masterKey,
         HashPurpose.ServerAuthorization
       );
-      if (serverKeyHash != null && storedKeyHash === serverKeyHash) {
-        await this.setKeyHash(localKeyHash);
+      if (serverKeyHash != null && storedPasswordHash === serverKeyHash) {
+        await this.setPasswordHash(localKeyHash);
         return true;
       }
     }
@@ -561,7 +564,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   async clearKeys(userId?: string): Promise<any> {
     await this.clearUserKey(true, userId);
-    await this.clearKeyHash(userId);
+    await this.clearPasswordHash(userId);
     await this.clearOrgKeys(false, userId);
     await this.clearProviderKeys(false, userId);
     await this.clearKeyPair(false, userId);
