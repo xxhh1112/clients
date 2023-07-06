@@ -65,20 +65,36 @@ export class SsoComponent {
       if (qParams.code != null && qParams.state != null) {
         const codeVerifier = await this.stateService.getSsoCodeVerifier();
         const state = await this.stateService.getSsoState();
+        const clientId = this.getValueFromState(qParams.state, "clientId");
+
+        if (clientId != this.clientId) {
+          // response is intended for another client
+          // TODO: To we want to have a separate state for redirect to another client?
+          // Maybe show some help text? "Continue login in another client"
+          this.loggingIn = true;
+          const clientUri = this.getValueFromState(qParams.state, "clientUri", true);
+          this.platformUtilsService.launchUri(
+            `${clientUri}?code=${qParams.code}&state=${qParams.state}`,
+            { sameWindow: true }
+          );
+          return;
+        }
+
         await this.stateService.setSsoCodeVerifier(null);
         await this.stateService.setSsoState(null);
         if (
-          qParams.code != null &&
-          codeVerifier != null &&
-          state != null &&
-          this.checkState(state, qParams.state)
+          codeVerifier == null ||
+          codeVerifier == null ||
+          !this.checkState(state, qParams.state)
         ) {
-          await this.logIn(
-            qParams.code,
-            codeVerifier,
-            this.getOrgIdentifierFromState(qParams.state)
-          );
+          return;
         }
+
+        await this.logIn(
+          qParams.code,
+          codeVerifier,
+          this.getValueFromState(qParams.state, "identifier")
+        );
       } else if (
         qParams.clientId != null &&
         qParams.redirectUri != null &&
@@ -138,15 +154,18 @@ export class SsoComponent {
       await this.stateService.setSsoCodeVerifier(codeVerifier);
     }
 
+    // Add Organization Identifier and clientId to state
+    state += `_identifier=${this.identifier}`;
+    state += `_clientId=${this.clientId}`;
+
     if (state == null) {
       state = await this.passwordGenerationService.generatePassword(passwordOptions);
       if (returnUri) {
         state += `_returnUri='${returnUri}'`;
       }
+    } else if (this.clientId != "web") {
+      state += `_clientUri='${encodeURIComponent(this.redirectUri)}'`;
     }
-
-    // Add Organization Identifier to state
-    state += `_identifier=${this.identifier}`;
 
     // Save state (regardless of new or existing)
     await this.stateService.setSsoState(state);
@@ -157,7 +176,7 @@ export class SsoComponent {
       "client_id=" +
       this.clientId +
       "&redirect_uri=" +
-      encodeURIComponent(this.redirectUri) +
+      encodeURIComponent(`${window.location.origin}/sso-connector.html`) +
       "&" +
       "response_type=code&scope=api offline_access&" +
       "state=" +
@@ -185,7 +204,9 @@ export class SsoComponent {
       const credentials = new SsoLogInCredentials(
         code,
         codeVerifier,
-        this.redirectUri,
+        // TODO: Figure out why the real value doesn't work with the server
+        "https://localhost:8080/sso-connector.html",
+        // this.redirectUri,
         orgIdFromState
       );
       this.formPromise = this.authService.logIn(credentials);
@@ -263,15 +284,6 @@ export class SsoComponent {
     this.loggingIn = false;
   }
 
-  private getOrgIdentifierFromState(state: string): string {
-    if (state === null || state === undefined) {
-      return null;
-    }
-
-    const stateSplit = state.split("_identifier=");
-    return stateSplit.length > 1 ? stateSplit[1] : null;
-  }
-
   private checkState(state: string, checkState: string): boolean {
     if (state === null || state === undefined) {
       return false;
@@ -283,5 +295,18 @@ export class SsoComponent {
     const stateSplit = state.split("_identifier=");
     const checkStateSplit = checkState.split("_identifier=");
     return stateSplit[0] === checkStateSplit[0];
+  }
+
+  private getValueFromState(state: string, propertyName: string, quoted = false): string | null {
+    const regex = new RegExp(
+      quoted ? `(?:_${propertyName}=')([^']*)` : `(?:_${propertyName}=)([^_]*)`
+    );
+    const results = regex.exec(state);
+
+    if (!results || results.length < 2) {
+      return null;
+    }
+
+    return results[1];
   }
 }

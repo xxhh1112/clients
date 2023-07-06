@@ -137,6 +137,7 @@ export class SsoComponent extends BaseSsoComponent {
     if (this.clientId === "browser") {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;
     }
+
     super.submit();
   }
 }
