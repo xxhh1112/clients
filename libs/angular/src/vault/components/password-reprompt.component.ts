@@ -1,10 +1,11 @@
 import { DialogRef } from "@angular/cdk/dialog";
-import { Directive } from "@angular/core";
+import { Directive, Optional } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { ModalRef } from "../../components/modal/modal.ref";
 
 /**
  * Used to verify the user's Master Password for the "Master Password Re-prompt" feature only.
@@ -19,11 +20,14 @@ export class PasswordRepromptComponent {
   });
 
   constructor(
-    private dialogRef: DialogRef,
-    private cryptoService: CryptoService,
-    private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService,
-    private formBuilder: FormBuilder
+    protected cryptoService: CryptoService,
+    protected platformUtilsService: PlatformUtilsService,
+    protected i18nService: I18nService,
+    protected formBuilder: FormBuilder,
+    //These are optional because they are not used differently in each client
+    //and should be removed from the base class once the clients use the CL.
+    @Optional() protected dialogRef: DialogRef,
+    @Optional() protected modalRef: ModalRef
   ) {}
 
   togglePassword() {
@@ -42,6 +46,6 @@ export class PasswordRepromptComponent {
       return;
     }
 
-    this.dialogRef.close(true);
+    this.modalRef.close(true);
   };
 }

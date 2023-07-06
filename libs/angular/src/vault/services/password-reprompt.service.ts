@@ -6,6 +6,7 @@ import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@
 
 import { DialogServiceAbstraction } from "../../services/dialog";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
+import { ModalService } from "../../services/modal.service";
 
 /**
  * Used to verify the user's Master Password for the "Master Password Re-prompt" feature only.
@@ -16,8 +17,9 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   protected component = PasswordRepromptComponent;
 
   constructor(
+    private modalService: ModalService,
     private keyConnectorService: KeyConnectorService,
-    private dialogService: DialogServiceAbstraction
+    protected dialogService: DialogServiceAbstraction
   ) {}
 
   protectedFields() {
@@ -29,12 +31,13 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
       return true;
     }
 
-    const dialog = this.dialogService.open<boolean>(this.component, {
-      ariaModal: true,
-    });
+    const ref = this.modalService.open(this.component, { allowMultipleModals: true });
 
-    const result = await lastValueFrom(dialog.closed);
+    if (ref == null) {
+      return false;
+    }
 
+    const result = await ref.onClosedPromise();
     return result === true;
   }
 
