@@ -8,14 +8,11 @@ import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/tools
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
-
-const BroadcasterSubscriptionId = "ExportComponent";
 
 @Component({
   selector: "app-export",
@@ -30,7 +27,6 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     policyService: PolicyService,
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
-    private broadcasterService: BroadcasterService,
     logService: LogService,
     fileDownloadService: FileDownloadService,
     dialogService: DialogServiceAbstraction
@@ -48,10 +44,6 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       fileDownloadService,
       dialogService
     );
-  }
-
-  ngOnDestroy() {
-    this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
   async warningDialog() {
