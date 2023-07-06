@@ -1,9 +1,9 @@
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType } from "@bitwarden/common/enums";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { BitwardenPasswordProtectedFileFormat } from "@bitwarden/exporter/vault-export/bitwarden-password-protected-types";
 
 import { ImportResult } from "../../models/import-result";
@@ -62,6 +62,10 @@ export class BitwardenPasswordProtectedImporter extends BitwardenJsonImporter im
     jdoc: BitwardenPasswordProtectedFileFormat,
     password: string
   ): Promise<boolean> {
+    if (this.isNullOrWhitespace(password)) {
+      return false;
+    }
+
     this.key = await this.cryptoService.makePinKey(
       password,
       jdoc.salt,

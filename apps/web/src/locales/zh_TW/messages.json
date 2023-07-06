@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "確認匯出密碼庫"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "此次匯出的密碼庫檔案為未加密格式。您不應將它存放或經由不安全的方式（例如電子郵件）傳送。用完後請立即將它刪除。"
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "將使用您帳戶的加密金鑰來加密匯出的資料，若您更新了帳戶的加密金鑰，請重新匯出，否則將無法解密匯出的檔案。"
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "匯出密碼庫"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "檔案格式"
@@ -2657,6 +2666,12 @@
   "failedLogin2fa": {
     "message": "嘗試登入失敗，兩步驟登入錯誤。"
   },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
   "exportedVault": {
     "message": "已匯出密碼庫"
   },
@@ -3765,7 +3780,7 @@
     "message": "您確定要永久刪除此項目嗎？"
   },
   "permanentlyDeletedItem": {
-    "message": "已永久刪除項目"
+    "message": "項目已永久刪除"
   },
   "permanentlyDeletedItems": {
     "message": "已永久刪除項目"
@@ -3798,10 +3813,10 @@
     "message": "還原項目"
   },
   "restoredItem": {
-    "message": "已還原項目"
+    "message": "項目已還原"
   },
   "restoredItems": {
-    "message": "已還原項目"
+    "message": "項目已還原"
   },
   "restoreItemConfirmation": {
     "message": "您確定要還原此項目嗎？"
@@ -4492,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "密碼提示不能與您的密碼相同。"
   },
-  "enrollPasswordReset": {
-    "message": "註冊密碼重設"
+  "enrollAccountRecovery": {
+    "message": "Enroll in account recovery"
   },
-  "enrolledPasswordReset": {
-    "message": "已註冊密碼重設"
+  "enrolledAccountRecovery": {
+    "message": "Enrolled in account recovery"
   },
-  "withdrawPasswordReset": {
-    "message": "放棄密碼重設"
+  "withdrawAccountRecovery": {
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "註冊成功！"
@@ -4507,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "撤銷成功！"
   },
-  "eventEnrollPasswordReset": {
-    "message": "使用者 $ID$ 註冊了密碼重設協助。",
+  "eventEnrollAccountRecovery": {
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "使用者 $ID$ 撤銷了密碼重設協助。",
+  "eventWithdrawAccountRecovery": {
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "註冊後將允許組織管理者變更您的主密碼"
   },
-  "resetPasswordPolicy": {
-    "message": "主密碼重設"
+  "accountRecoveryPolicy": {
+    "message": "Account recovery administration"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "允許管理者重設成員的主密碼。"
+  "accountRecoveryPolicyDescription": {
+    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
   },
   "resetPasswordPolicyWarning": {
     "message": "組織成員需要先自行註冊或被自動註冊後，管理者才能重設他們的主密碼。"
@@ -5854,7 +5869,7 @@
     "description": "A label for a type-to-filter input field to choose projects."
   },
   "searchProjects": {
-    "message": "搜尋項目",
+    "message": "搜尋專案",
     "description": "Label for the search bar used to search projects."
   },
   "project": {
@@ -6179,10 +6194,6 @@
     "message": "存取權杖已建立且已複製到剪貼簿",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Beta 版中的權限管理不可用。",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "撤銷存取權杖",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6295,7 +6306,7 @@
     "message": "New domain"
   },
   "noDomains": {
-    "message": "No domains"
+    "message": "沒有網域"
   },
   "noDomainsSubText": {
     "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
@@ -6552,6 +6563,18 @@
   "billingSyncHelp": {
     "message": "Billing Sync help"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "上傳授權證"
   },
@@ -6600,11 +6623,14 @@
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
@@ -6667,7 +6693,7 @@
     "message": "Import secrets"
   },
   "getStarted": {
-    "message": "Get started"
+    "message": "開始使用"
   },
   "complete": {
     "message": "$COMPLETED$/$TOTAL$ Complete",
@@ -6683,10 +6709,10 @@
     }
   },
   "restoreSecret": {
-    "message": "Restore secret"
+    "message": "還原機密"
   },
   "restoreSecrets": {
-    "message": "Restore secrets"
+    "message": "還原機密"
   },
   "restoreSecretPrompt": {
     "message": "Are you sure you want to restore this secret?"
@@ -6695,10 +6721,10 @@
     "message": "Are you sure you want to restore these secrets?"
   },
   "secretRestoredSuccessToast": {
-    "message": "Secret restored"
+    "message": "機密已還原"
   },
   "secretsRestoredSuccessToast": {
-    "message": "Secrets restored"
+    "message": "機密已還原"
   },
   "selectionIsRequired": {
     "message": "Selection is required."
@@ -6763,6 +6789,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6776,6 +6806,17 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
+  "region": {
+    "message": "區域"
+  },
+  "eu": {
+    "message": "歐盟",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "美國",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6785,21 +6826,108 @@
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
-    "message": "Update KDF settings"
+    "message": "更新 KDF 設定"
   },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "master password reset policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "account recovery administration policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
+  "memberDecryptionTdeDescriptionEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recover account"
+  },
+  "updatedTempPassword": {
+    "message": "User updated a password issued through account recovery."
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Enable access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   }
 }

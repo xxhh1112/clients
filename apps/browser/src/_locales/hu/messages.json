@@ -2221,7 +2221,21 @@
       }
     }
   },
+  "region": {
+    "message": "Régió"
+  },
   "opensInANewWindow": {
     "message": "Megnyitás új ablakban"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "A hozzáférés megtagadásra került. Nincs jogosultság az oldal megtekintésére."
   }
 }

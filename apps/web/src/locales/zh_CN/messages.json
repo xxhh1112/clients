@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "确认密码库导出"
   },
+  "confirmSecretsExport": {
+    "message": "确认机密导出"
+  },
   "exportWarningDesc": {
     "message": "导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。"
+  },
+  "exportSecretsWarningDesc": {
+    "message": "导出的机密数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。"
   },
   "encExportKeyWarningDesc": {
     "message": "此导出使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "导出密码库"
+  },
+  "exportSecrets": {
+    "message": "导出机密"
   },
   "fileFormat": {
     "message": "文件格式"
@@ -2029,7 +2038,7 @@
     "message": "取消订阅"
   },
   "subscriptionExpiration": {
-    "message": "订阅过期"
+    "message": "订阅过期时间"
   },
   "subscriptionCanceled": {
     "message": "您的订阅已取消。"
@@ -2111,7 +2120,7 @@
     "message": "添加付款方式"
   },
   "changePaymentMethod": {
-    "message": "更改支付方式"
+    "message": "更改付款方式"
   },
   "invoices": {
     "message": "账单"
@@ -2176,7 +2185,7 @@
     "message": "联系客户支持"
   },
   "updatedPaymentMethod": {
-    "message": "付款方式已更新"
+    "message": "已更新付款方式。"
   },
   "purchasePremium": {
     "message": "购买高级会员"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "登录失败，两步登录不正确。"
+  },
+  "incorrectPassword": {
+    "message": "密码错误"
+  },
+  "incorrectCode": {
+    "message": "验证码错误"
   },
   "exportedVault": {
     "message": "导出了密码库"
@@ -3144,7 +3159,7 @@
     "message": "管理员确认您的成员资格后，您将能访问此组织。到时我们将向您发送电子邮件通知。"
   },
   "inviteInitAcceptedDesc": {
-    "message": "您现在可以访问此组织。"
+    "message": "您现在可以访问这个组织了。"
   },
   "inviteAcceptFailed": {
     "message": "无法接受邀请。请向组织管理员请求发送新的邀请。"
@@ -3525,7 +3540,7 @@
     "message": "组织已停用"
   },
   "disabledOrganizationFilterError": {
-    "message": "无法访问已暂停组织中的项目。请联系您的组织所有者获取帮助。"
+    "message": "无法访问已停用组织中的项目。请联系您的组织所有者获取协助。"
   },
   "licenseIsExpired": {
     "message": "授权已过期"
@@ -4492,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "密码提示不能与密码相同。"
   },
-  "enrollPasswordReset": {
-    "message": "注册密码重置"
+  "enrollAccountRecovery": {
+    "message": "注册账户恢复"
   },
-  "enrolledPasswordReset": {
-    "message": "已注册密码重置"
+  "enrolledAccountRecovery": {
+    "message": "注册了账户恢复"
   },
-  "withdrawPasswordReset": {
-    "message": "撤销密码重置"
+  "withdrawAccountRecovery": {
+    "message": "撤销账户恢复"
   },
   "enrollPasswordResetSuccess": {
     "message": "注册成功！"
@@ -4507,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "撤销成功！"
   },
-  "eventEnrollPasswordReset": {
-    "message": "用户 $ID$ 注册了密码重置。",
+  "eventEnrollAccountRecovery": {
+    "message": "用户 $ID$ 注册了账户恢复。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "用户 $ID$ 撤销了密码重置。",
+  "eventWithdrawAccountRecovery": {
+    "message": "用户 $ID$ 撤销了账户恢复。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "注册后将允许组织管理员更改您的主密码"
   },
-  "resetPasswordPolicy": {
-    "message": "主密码重置"
+  "accountRecoveryPolicy": {
+    "message": "账户恢复管理"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "允许管理员重置成员的主密码。"
+  "accountRecoveryPolicyDescription": {
+    "message": "当主密码或受信任设备忘记或丢失时恢复成员账户。此恢复过程基于账户加密方式。"
   },
   "resetPasswordPolicyWarning": {
     "message": "组织中的成员自行注册或被自动注册后，管理员才能重置他们的主密码。"
@@ -5453,7 +5468,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountLoggedInAsName": {
-    "message": "账户: 以 $NAME$ 登录",
+    "message": "账户：登录为 $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -6156,11 +6171,11 @@
     "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "有效期至：",
+    "message": "过期时间：",
     "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "访问令牌未存储，无法获取",
+    "message": "访问令牌不会被存储并且以后无法获取",
     "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
@@ -6179,10 +6194,6 @@
     "message": "访问令牌已创建且已复制到剪贴板",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "权限管理在 Beat 版中不可用。",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "吊销访问令牌",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6198,7 +6209,7 @@
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "noAccessTokenSelected": {
-    "message": "未选择要撤销的访问令牌",
+    "message": "未选中任何要撤销的访问令牌",
     "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
@@ -6448,7 +6459,7 @@
     "message": "邀请成员"
   },
   "needsConfirmation": {
-    "message": "需确认"
+    "message": "需要确认"
   },
   "memberRole": {
     "message": "成员角色"
@@ -6552,6 +6563,18 @@
   "billingSyncHelp": {
     "message": "计费同步帮助"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "许可证付费功能帮助"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "订阅到期后，您有 60 天时间为您的组织应用更新后的许可证文件。宽限期结束于 $GRACE_PERIOD_END_DATE$。",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "上传许可证"
   },
@@ -6600,11 +6623,14 @@
   "secretsManagerBeta": {
     "message": "机密管理器 Beta 版"
   },
-  "secretsManagerBetaDesc": {
-    "message": "在 Beta 计划期间，启用用户对机密管理器的访问是免费的。"
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "此用户可以访问机密管理器 Beta 版"
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "重要："
@@ -6701,7 +6727,7 @@
     "message": "机密已恢复"
   },
   "selectionIsRequired": {
-    "message": "必须选择"
+    "message": "必须选择。"
   },
   "secretsManagerSubscriptionDesc": {
     "message": "在 Beta 计划期间，开启组织对机密管理器的访问是免费的。成员中的用户会被授予对 Beta 版的访问权限。"
@@ -6763,6 +6789,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "输入不能只包含空格。",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "取消"
   },
@@ -6770,36 +6800,134 @@
     "message": "免费组织不能使用此功能。请联系您的组织所有者寻求升级。"
   },
   "smProjectSecretsNoItemsNoAccess": {
-    "message": "请联系您的组织的管理员来管理此项目的秘密。",
+    "message": "请联系您的组织的管理员来管理此工程的机密。",
     "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
   },
   "enforceOnLoginDesc": {
     "message": "要求现有成员更改他们的密码"
   },
+  "region": {
+    "message": "区域"
+  },
+  "eu": {
+    "message": "欧盟",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "美国",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
-    "message": "您无权删除此项目",
+    "message": "您无权删除此工程",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
-    "message": "无法删除下列项目。是否继续？",
+    "message": "无法删除下列工程。是否继续？",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
     "message": "更新 KDF 设置"
   },
   "trustedDeviceEncryption": {
-    "message": "Trusted device encryption"
+    "message": "受信任的设备加密"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "主密码重置策略",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "account recovery administration policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
+  "memberDecryptionTdeDescriptionEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ 未找到",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "恢复账户"
+  },
+  "updatedTempPassword": {
+    "message": "用户更新了通过账户恢复发布的密码。"
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Enable access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "您组织的指纹短语",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "设备批准"
+  },
+  "deviceApprovalsDesc": {
+    "message": "在下面批准登录请求以允许请求的成员完成登录。未批准的请求将在 1 周后过期。请在批准前验证成员的信息。"
+  },
+  "deviceInfo": {
+    "message": "设备信息"
+  },
+  "time": {
+    "message": "时间"
+  },
+  "denyAllRequests": {
+    "message": "拒绝所有请求"
+  },
+  "denyRequest": {
+    "message": "拒绝请求"
+  },
+  "approveRequest": {
+    "message": "批准请求"
+  },
+  "noDeviceRequests": {
+    "message": "无设备请求"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "成员的设备批准请求将显示在这里"
+  },
+  "loginRequestDenied": {
+    "message": "登录请求被拒绝"
+  },
+  "allLoginRequestsDenied": {
+    "message": "所有登录请求被拒绝"
+  },
+  "loginRequestApproved": {
+    "message": "登录请求已批准"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "账户没有主密码"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "移除没有为其设置主密码的 $USER$ 可能会限制对他们的完整账户的的访问权限。 您确定要继续吗？",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "无主密码"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "移除没有为其设置主密码的成员可能会限制对他们的完整账户的的访问权限。"
   }
 }

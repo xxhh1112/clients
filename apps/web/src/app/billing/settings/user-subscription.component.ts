@@ -3,12 +3,13 @@ import { Router } from "@angular/router";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SubscriptionResponse } from "@bitwarden/common/billing/models/response/subscription.response";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 @Component({
   selector: "app-user-subscription",
@@ -22,6 +23,7 @@ export class UserSubscriptionComponent implements OnInit {
   showUpdateLicense = false;
   sub: SubscriptionResponse;
   selfHosted = false;
+  cloudWebVaultUrl: string;
 
   cancelPromise: Promise<any>;
   reinstatePromise: Promise<any>;
@@ -34,9 +36,11 @@ export class UserSubscriptionComponent implements OnInit {
     private router: Router,
     private logService: LogService,
     private fileDownloadService: FileDownloadService,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    private environmentService: EnvironmentService
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
+    this.cloudWebVaultUrl = this.environmentService.getCloudWebVaultUrl();
   }
 
   async ngOnInit() {

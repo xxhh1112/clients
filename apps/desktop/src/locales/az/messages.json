@@ -2251,5 +2251,22 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Tövsiyə edilən Tənzimləmələr Güncəlləməsi"
+  },
+  "region": {
+    "message": "Bölgə"
+  },
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABŞ",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Öz-özünə sahiblik edən"
+  },
+  "accessDenied": {
+    "message": "Müraciət rədd edildi. Bu səhifəyə baxmaq üçün icazəniz yoxdur."
   }
 }

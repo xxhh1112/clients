@@ -2221,7 +2221,21 @@
       }
     }
   },
+  "region": {
+    "message": "Región"
+  },
   "opensInANewWindow": {
     "message": "Abre en una nueva ventana"
+  },
+  "eu": {
+    "message": "Unión Europea",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "EE.UU.",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Acceso denegado. No tiene permiso para ver esta página."
   }
 }

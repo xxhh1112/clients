@@ -2251,5 +2251,22 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Оновлення рекомендованих налаштувань"
+  },
+  "region": {
+    "message": "Регіон"
+  },
+  "eu": {
+    "message": "ЄС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "Власне розміщення"
+  },
+  "accessDenied": {
+    "message": "Доступ заборонено. У вас немає дозволу на перегляд цієї сторінки."
   }
 }

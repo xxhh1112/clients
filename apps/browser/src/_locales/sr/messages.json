@@ -2221,7 +2221,21 @@
       }
     }
   },
+  "region": {
+    "message": "Регион"
+  },
   "opensInANewWindow": {
     "message": "Отвара се у новом прозору"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Одбијен приступ. Немате дозволу да видите ову страницу."
   }
 }

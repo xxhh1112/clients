@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
 
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { SelectItemView } from "@bitwarden/components";
 
 import {
@@ -39,10 +39,20 @@ export class ProjectServiceAccountsComponent implements OnInit, OnDestroy {
           read: policy.read,
           write: policy.write,
           icon: AccessSelectorComponent.serviceAccountIcon,
-          static: true,
+          static: false,
         }))
       )
     );
+
+  protected async handleUpdateAccessPolicy(policy: AccessSelectorRowView) {
+    try {
+      return await this.accessPolicyService.updateAccessPolicy(
+        AccessSelectorComponent.getBaseAccessPolicyView(policy)
+      );
+    } catch (e) {
+      this.validationService.showError(e);
+    }
+  }
 
   protected handleCreateAccessPolicies(selected: SelectItemView[]) {
     const projectAccessPoliciesView = new ProjectAccessPoliciesView();

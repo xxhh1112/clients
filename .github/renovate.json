@@ -29,13 +29,18 @@
       "matchUpdateTypes": ["minor", "patch"]
     },
     {
-      "packageNames": ["typescript"],
+      "matchPackageNames": ["typescript"],
       "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
     {
-      "packageNames": ["typescript"],
+      "matchPackageNames": ["typescript"],
       "matchUpdateTypes": "patch"
+    },
+    {
+      "groupName": "jest",
+      "matchPackageNames": ["@types/jest", "jest", "ts-jest", "jest-preset-angular"],
+      "matchUpdateTypes": "major"
     }
   ],
   "ignoreDeps": [

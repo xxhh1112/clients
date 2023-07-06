@@ -8,8 +8,6 @@ import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 import { SubscriptionRoutingModule } from "../app/billing/settings/subscription-routing.module";
 import { flagEnabled, Flags } from "../utils/flags";
 
-import { TrialInitiationComponent } from "./accounts/trial-initiation/trial-initiation.component";
-import { OrganizationModule } from "./admin-console/organizations/organization.module";
 import { AcceptFamilySponsorshipComponent } from "./admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
 import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
@@ -27,6 +25,7 @@ import { SetPasswordComponent } from "./auth/set-password.component";
 import { EmergencyAccessViewComponent } from "./auth/settings/emergency-access/emergency-access-view.component";
 import { EmergencyAccessComponent } from "./auth/settings/emergency-access/emergency-access.component";
 import { SsoComponent } from "./auth/sso.component";
+import { TrialInitiationComponent } from "./auth/trial-initiation/trial-initiation.component";
 import { TwoFactorComponent } from "./auth/two-factor.component";
 import { UpdatePasswordComponent } from "./auth/update-password.component";
 import { UpdateTempPasswordComponent } from "./auth/update-temp-password.component";
@@ -249,7 +248,8 @@ const routes: Routes = [
   },
   {
     path: "organizations",
-    loadChildren: () => OrganizationModule,
+    loadChildren: () =>
+      import("./admin-console/organizations/organization.module").then((m) => m.OrganizationModule),
   },
 ];
 

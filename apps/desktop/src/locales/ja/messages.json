@@ -2251,5 +2251,22 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "設定の更新を推奨"
+  },
+  "region": {
+    "message": "リージョン"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "米国",
+    "description": "United States"
+  },
+  "selfHosted": {
+    "message": "自己ホスト型"
+  },
+  "accessDenied": {
+    "message": "アクセスが拒否されました。このページを表示する権限がありません。"
   }
 }

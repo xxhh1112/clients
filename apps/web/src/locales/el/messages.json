@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Επιβεβαίωση εξαγωγής Vault"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "Αυτή η εξαγωγή κρυπτογραφεί τα δεδομένα σας χρησιμοποιώντας το κλειδί κρυπτογράφησης του λογαριασμού σας. Εάν ποτέ περιστρέψετε το κλειδί κρυπτογράφησης του λογαριασμού σας, θα πρέπει να κάνετε εξαγωγή ξανά, καθώς δεν θα μπορείτε να αποκρυπτογραφήσετε αυτό το αρχείο εξαγωγής."
@@ -979,6 +985,9 @@
   "exportVault": {
     "message": "Εξαγωγή Vault"
   },
+  "exportSecrets": {
+    "message": "Export secrets"
+  },
   "fileFormat": {
     "message": "Μορφή Αρχείου"
   },
@@ -986,19 +995,19 @@
     "message": "Αυτή η εξαγωγή αρχείου θα προστατεύεται με κωδικό και θα απαιτείται ο κωδικός του αρχείου για αποκρυπτογράφηση."
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Αυτός ο κωδικός πρόσβασης θα χρησιμοποιηθεί για την εξαγωγή και εισαγωγή αυτού του αρχείου"
   },
   "confirmMasterPassword": {
-    "message": "Confirm master password"
+    "message": "Επιβεβαίωση κύριου κωδικού πρόσβασης"
   },
   "confirmFormat": {
-    "message": "Confirm format"
+    "message": "Επιβεβαίωση μορφής"
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Κωδικός πρόσβασης αρχείου"
   },
   "confirmFilePassword": {
-    "message": "Confirm file password"
+    "message": "Επιβεβαίωση κωδικού πρόσβασης αρχείου"
   },
   "accountRestrictedOptionDescription": {
     "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
@@ -1007,10 +1016,10 @@
     "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Τύπος εξαγωγής"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Ο λογαριασμός περιορίστηκε"
   },
   "passwordProtected": {
     "message": "Προστατευμένο με κωδικό"
@@ -1397,7 +1406,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Two-step Login Policy"
+    "message": "Πολιτική Σύνδεσης Δύο βημάτων"
   },
   "twoStepLoginOrganizationDuoDesc": {
     "message": "To enforce Two-step Login through Duo, use the options below."
@@ -1848,7 +1857,7 @@
     "message": "Χρέωση"
   },
   "billingPlanLabel": {
-    "message": "Billing plan"
+    "message": "Σχέδιο τιμολόγησης"
   },
   "paymentType": {
     "message": "Τύπος πληρωμής"
@@ -2406,7 +2415,7 @@
     "message": "Ετησίως"
   },
   "annual": {
-    "message": "Annual"
+    "message": "Ετήσια"
   },
   "basePrice": {
     "message": "Βασική Τιμή"
@@ -2529,7 +2538,7 @@
     "message": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτή τη συλλογή;"
   },
   "editMember": {
-    "message": "Edit member"
+    "message": "Επεξεργασία μέλους"
   },
   "fieldOnTabRequiresAttention": {
     "message": "A field on the '$TAB$' tab requires your attention.",
@@ -2657,6 +2666,12 @@
   "failedLogin2fa": {
     "message": "Η προσπάθεια σύνδεσης απέτυχε λόγω λανθασμένης σύνδεσης δύο βημάτων."
   },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
   "exportedVault": {
     "message": "Εξαγωγή Vault."
   },
@@ -2703,7 +2718,7 @@
     }
   },
   "viewAllLoginOptions": {
-    "message": "View all log in options"
+    "message": "Δείτε όλες τις επιλογές σύνδεσης"
   },
   "viewedItemId": {
     "message": "Προβεβλημένο στοιχείο $ID$.",
@@ -3514,7 +3529,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Δημιουργήθηκε",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3664,7 +3679,7 @@
     "message": "Ορίστε ελάχιστες απαιτήσεις, για ισχύ του κύριου κωδικού."
   },
   "twoStepLoginPolicyTitle": {
-    "message": "Require two-step login"
+    "message": "Απαίτηση για σύνδεση δύο βημάτων"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Να απαιτείτε από τους χρήστες να ορίσουν τη σύνδεση σε δύο βήματα στους προσωπικούς τους λογαριασμούς."
@@ -4003,7 +4018,7 @@
     "message": "Απενεργοποιημένο"
   },
   "revoked": {
-    "message": "Revoked"
+    "message": "Ανακλήθηκαν"
   },
   "sendLink": {
     "message": "Αποστολή Συνδέσμου",
@@ -4307,13 +4322,13 @@
     "message": "Άδειες"
   },
   "permission": {
-    "message": "Permission"
+    "message": "Δικαιώματα"
   },
   "managerPermissions": {
-    "message": "Manager Permissions"
+    "message": "Δικαιώματα Manager"
   },
   "adminPermissions": {
-    "message": "Admin Permissions"
+    "message": "Δικαιώματα Διαχειριστή"
   },
   "accessEventLogs": {
     "message": "Αρχείο Καταγραφής Πρόσβασης"
@@ -4492,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "Η υπόδειξη κωδικού πρόσβασης, δεν μπορεί να είναι η ίδια με τον κωδικό πρόσβασης σας."
   },
-  "enrollPasswordReset": {
-    "message": "Επαναφορά κωδικού πρόσβασης"
+  "enrollAccountRecovery": {
+    "message": "Enroll in account recovery"
   },
-  "enrolledPasswordReset": {
-    "message": "Εγγεγραμμένος στην επαναφορά κωδικού πρόσβασης"
+  "enrolledAccountRecovery": {
+    "message": "Enrolled in account recovery"
   },
-  "withdrawPasswordReset": {
-    "message": "Επαναφορά κωδικού πρόσβασης"
+  "withdrawAccountRecovery": {
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "Επιτυχής εγγραφή!"
@@ -4507,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Επιτυχής απόσυρση!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Ο χρήστης $ID$ έχει εγγραφεί στη βοήθεια επαναφοράς κωδικού πρόσβασης.",
+  "eventEnrollAccountRecovery": {
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Ο χρήστης $ID$ αποσύρθηκε από τη βοήθεια επαναφοράς κωδικού πρόσβασης.",
+  "eventWithdrawAccountRecovery": {
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Η εγγραφή θα επιτρέψει στους διαχειριστές του οργανισμού να αλλάξουν τον κύριο κωδικό σας. Είστε σίγουροι ότι θέλετε να εγγραφείτε;"
   },
-  "resetPasswordPolicy": {
-    "message": "Επαναφορά Κύριου Κωδικού Πρόσβασης"
+  "accountRecoveryPolicy": {
+    "message": "Διαχείριση ανάκτησης λογαριασμού"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Επιτρέψτε στους διαχειριστές του οργανισμού να επαναφέρουν τον κύριο κωδικό πρόσβασης των χρηστών."
+  "accountRecoveryPolicyDescription": {
+    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
   },
   "resetPasswordPolicyWarning": {
     "message": "Οι χρήστες του οργανισμού θα πρέπει να αυτο-εγγραφούν ή να εγγραφούν αυτόματα πριν οι διαχειριστές μπορούν να επαναφέρουν τον κύριο κωδικό πρόσβασής τους."
@@ -4715,7 +4730,7 @@
     "message": "Πελάτες"
   },
   "client": {
-    "message": "Client",
+    "message": "Πελάτης",
     "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
@@ -4915,7 +4930,7 @@
     "message": "Μία ή περισσότερες οργανωτικές πολιτικές σας αποτρέπει από την εξαγωγή του προσωπικού vault."
   },
   "activateAutofill": {
-    "message": "Activate auto-fill"
+    "message": "Ενεργοποίηση αυτόματης συμπλήρωσης"
   },
   "activateAutofillPolicyDesc": {
     "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
@@ -4924,7 +4939,7 @@
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
   },
   "learnMoreAboutAutofill": {
-    "message": "Learn more about auto-fill"
+    "message": "Μάθετε περισσότερα για την αυτόματη συμπλήρωση"
   },
   "selectType": {
     "message": "Επιλογή Τύπου SSO"
@@ -6179,10 +6194,6 @@
     "message": "Access token created and copied to clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6552,6 +6563,18 @@
   "billingSyncHelp": {
     "message": "Billing Sync help"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Μεταφόρτωση άδειας"
   },
@@ -6600,11 +6623,14 @@
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
@@ -6763,6 +6789,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6775,6 +6805,17 @@
   },
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
@@ -6790,16 +6831,103 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "master password reset policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "account recovery administration policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
+  "memberDecryptionTdeDescriptionEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recover account"
+  },
+  "updatedTempPassword": {
+    "message": "User updated a password issued through account recovery."
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Enable access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   }
 }

@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Potrdite izvoz trezorja"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "Podatki bodo izvoženi v nešifrirani obliki. Izvožene datoteke ne shranjujte ali pošiljajte po nezavarovanih kanalih (kot n.pr. e-pošta). Datoteko izbrišite takoj, ko je ne boste več potrebovali."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "Ta izvoz šifrira vaše podatke z uporabo ključa za šifriranje. Če boste kdaj zamenjali šifrirni ključ svojega računa, boste morali izvoz narediti ponovno, saj pričujočega izvoza ne boste morali dešifrirati in uvoziti."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Izvoz trezorja"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "Format datoteke"
@@ -1111,7 +1120,7 @@
     }
   },
   "loggedOutWarning": {
-    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Po tem dejanju boste odjavljeni in se boste morali prijaviti ponovno. Prijave na drugih napravah bodo ostale aktivne še največ eno uro."
   },
   "emailChanged": {
     "message": "E-poštni naslov spremenjen"
@@ -1141,13 +1150,13 @@
     "message": "Nastavitve kodirnega ključa"
   },
   "kdfAlgorithm": {
-    "message": "KDF algoritem"
+    "message": "Algoritem KDF"
   },
   "kdfIterations": {
-    "message": "KDF iteracije"
+    "message": "Ponovitev KDF"
   },
   "kdfIterationsDesc": {
-    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker. We recommend a value of $VALUE$ or more.",
+    "message": "Višje število ponovitev KDF lahko pomaga pri zaščiti vašega glavnega gesla pred napadi z grobo silo. Priporočamo vsaj $VALUE$ ponovitev.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1156,7 +1165,7 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Setting your KDF iterations too high could result in poor performance when logging into (and unlocking) Bitwarden on slower or older devices. We recommend that you increase the value in increments of $INCREMENT$ and then test all of your devices.",
+    "message": "Če nastavite previsoko število ponovitev KDF, bo Bitwarden morda postal počasen pri prijavi (in odklepanju) na starejših in počasnejših napravah. Priporočamo, da to vrednost povečujete v korakih po $INCREMENT$ in vsakič preskusite vse naprave.",
     "placeholders": {
       "increment": {
         "content": "$1",
@@ -2089,7 +2098,7 @@
     "message": "Odstrani hrambo"
   },
   "subscriptionStorage": {
-    "message": "Your subscription has a total of $MAX_STORAGE$ GB of encrypted file storage. You are currently using $USED_STORAGE$.",
+    "message": "Vaša naročnina vam omogoča hrambo $MAX_STORAGE$ GB šifriranih podatkov. Trenutno uporabljate $USED_STORAGE$.",
     "placeholders": {
       "max_storage": {
         "content": "$1",
@@ -2152,7 +2161,7 @@
     }
   },
   "gbStorageAdd": {
-    "message": "GB of storage to add"
+    "message": "Povečaj hrambo za toliko GB:"
   },
   "gbStorageRemove": {
     "message": "GB of storage to remove"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "Login attempt failed with incorrect two-step login."
+  },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
   },
   "exportedVault": {
     "message": "Vault exported"
@@ -3171,7 +3186,7 @@
     "message": "Two-step login turned off on your account."
   },
   "learnMore": {
-    "message": "Learn more"
+    "message": "Več o tem"
   },
   "deleteRecoverDesc": {
     "message": "Enter your email address below to recover and delete your account."
@@ -3510,11 +3525,11 @@
     "message": "On browser refresh"
   },
   "dateUpdated": {
-    "message": "Updated",
+    "message": "Spremenjeno",
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Created",
+    "message": "Ustvarjeno",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -3621,7 +3636,7 @@
     "message": "Your API key has full access to the organization. It should be kept secret."
   },
   "userApiKeyDesc": {
-    "message": "Your API key can be used to authenticate in the Bitwarden CLI."
+    "message": "Svoj API-ključ lahko uoprabljate za prijavo pri uporabi ukazne vrstice (CLI)."
   },
   "userApiKeyWarning": {
     "message": "Your API key is an alternative authentication mechanism. It should be kept secret."
@@ -3655,7 +3670,7 @@
     "message": "Dolžina vsaj"
   },
   "clone": {
-    "message": "Clone"
+    "message": "Podvoji"
   },
   "masterPassPolicyTitle": {
     "message": "Zahteve za glavno geslo"
@@ -3930,10 +3945,10 @@
     "message": "Organization owners and admins are exempt from this policy's enforcement."
   },
   "sendTypeFile": {
-    "message": "File"
+    "message": "Datoteka"
   },
   "sendTypeText": {
-    "message": "Text"
+    "message": "Besedilo"
   },
   "createSend": {
     "message": "Nova pošiljka",
@@ -4070,7 +4085,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "There are no Sends to list.",
+    "message": "Ni pošiljk.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
@@ -4393,10 +4408,10 @@
     "message": "The text you want to Send."
   },
   "sendFileDesc": {
-    "message": "The file you want to Send."
+    "message": "Datoteka, ki jo želite poslati kot pošiljko."
   },
   "copySendLinkOnSave": {
-    "message": "Copy the link to share this Send to my clipboard upon save."
+    "message": "Ko shranim, skopiraj povezavo za deljenje te pošiljke v odložišče."
   },
   "sendLinkLabel": {
     "message": "Povezava pošiljke",
@@ -4411,14 +4426,14 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendAccessTaglineLearnMore": {
-    "message": "Learn more about",
+    "message": "Preberite več o:",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more about** Bitwarden Send or sign up to try it today.'"
   },
   "sendVaultCardProductDesc": {
     "message": "Share text or files directly with anyone."
   },
   "sendVaultCardLearnMore": {
-    "message": "Learn more",
+    "message": "Več o tem",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read '**Learn more**, see how it works, or try it now. '"
   },
   "sendVaultCardSee": {
@@ -4492,14 +4507,14 @@
   "hintEqualsPassword": {
     "message": "Your password hint cannot be the same as your password."
   },
-  "enrollPasswordReset": {
-    "message": "Enroll in password reset"
+  "enrollAccountRecovery": {
+    "message": "Enroll in account recovery"
   },
-  "enrolledPasswordReset": {
-    "message": "Enrolled in password reset"
+  "enrolledAccountRecovery": {
+    "message": "Enrolled in account recovery"
   },
-  "withdrawPasswordReset": {
-    "message": "Withdraw from password reset"
+  "withdrawAccountRecovery": {
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "Enrollment success!"
@@ -4507,8 +4522,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Withdrawal success!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "User $ID$ enrolled in password reset.",
+  "eventEnrollAccountRecovery": {
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4531,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "User $ID$ withdrew from password reset.",
+  "eventWithdrawAccountRecovery": {
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,11 +4591,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Enrollment will allow organization administrators to change your master password"
   },
-  "resetPasswordPolicy": {
-    "message": "Ponastavitev glavnega gesla"
+  "accountRecoveryPolicy": {
+    "message": "Account recovery administration"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Allow admins to reset master passwords for members."
+  "accountRecoveryPolicyDescription": {
+    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
   },
   "resetPasswordPolicyWarning": {
     "message": "Members in the organization will need to self-enroll or be auto-enrolled before administrators can reset their master password."
@@ -4924,7 +4939,7 @@
     "message": "Compromised or untrusted websites can exploit auto-fill on page load."
   },
   "learnMoreAboutAutofill": {
-    "message": "Learn more about auto-fill"
+    "message": "Več o samodejnem izpolnjevanju"
   },
   "selectType": {
     "message": "Select SSO type"
@@ -6179,10 +6194,6 @@
     "message": "Access token created and copied to clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6552,6 +6563,18 @@
   "billingSyncHelp": {
     "message": "Billing Sync help"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Upload license"
   },
@@ -6589,22 +6612,25 @@
     "message": "Group/User"
   },
   "lowKdfIterations": {
-    "message": "Low KDF Iterations"
+    "message": "Nizko število ponovitev KDF"
   },
   "updateLowKdfIterationsDesc": {
-    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
+    "message": "Popravite svoje nastavitve šifriranja, da bodo v skladu z novimi priporočili za varnost, in izboljšajte zaščito svojega računa."
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Po tem dejanju boste odjavljeni iz vseh aktivnih sej (na vseh napravah). Prijaviti se boste morali ponovno in zaključiti nastavitev dvostopenjske prijave. Priporočamo vam, da pred tem izvozite svoje podatke, da jih v tem procesu ne bi izgubili."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Pomembno:"
@@ -6763,6 +6789,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
   },
@@ -6776,6 +6806,17 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
+  "region": {
+    "message": "Regija"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6785,21 +6826,108 @@
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
-    "message": "Update KDF settings"
+    "message": "Spremeni nastavitve KDF"
   },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescStart": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "master password reset policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "account recovery administration policy",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
+  "memberDecryptionTdeDescriptionEnd": {
     "message": "with automatic enrollment will turn on when this option is used.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Recover account"
+  },
+  "updatedTempPassword": {
+    "message": "User updated a password issued through account recovery."
+  },
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "enableAccess": {
+    "message": "Enable access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   }
 }
