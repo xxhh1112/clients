@@ -1,0 +1,60 @@
+<nav aria-label="pagination">
+  <ul class="tw-flex tw-list-none">
+    <ng-template #ellipsis>
+      <li>...</li>
+    </ng-template>
+    <ng-template #optionTemplate let-range="range">
+      <li class="tw-m-2" *ngFor="let n of range | range">
+        <a
+          (click)="page = n"
+          [routerLink]=""
+          [queryParams]="getParams | memo : [queryParamId, n]"
+          [queryParamsHandling]="'merge'"
+          >{{ n }}</a
+        >
+      </li>
+    </ng-template>
+
+    <ng-container *ngIf="totalPages <= 7">
+      <ng-container
+        *ngTemplateOutlet="optionTemplate; context: { range: [1, totalPages] }"
+      ></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="totalPages > 7">
+      <li>
+        <a bitButton [buttonType]="'secondary'" (click)="decPage()" [disabled]="page === 1"
+          >Previous</a
+        >
+      </li>
+      <ng-container *ngTemplateOutlet="optionTemplate; context: { range: [1, 1] }"></ng-container>
+
+      <ng-container *ngIf="page <= 4">
+        <ng-container *ngTemplateOutlet="optionTemplate; context: { range: [2, 5] }"></ng-container>
+        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="page >= 5 && page <= totalPages - 5">
+        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="optionTemplate; context: { range: [page - 1, page + 1] }"
+        ></ng-container>
+        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="page >= totalPages - 4">
+        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="optionTemplate; context: { range: [totalPages - 4, totalPages - 1] }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container
+        *ngTemplateOutlet="optionTemplate; context: { range: [totalPages, totalPages] }"
+      ></ng-container>
+      <li>
+        <a bitButton (click)="incPage()" [disabled]="page === totalPages">Next</a>
+      </li>
+    </ng-container>
+  </ul>
+</nav>
