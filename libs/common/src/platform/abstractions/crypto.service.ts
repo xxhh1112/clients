@@ -337,6 +337,17 @@ export abstract class CryptoService {
   randomNumber: (min: number, max: number) => Promise<number>;
 
   /**
+   * Initialize all necessary crypto keys needed for a new account.
+   * Warning! This completely replaces any existing keys!
+   * @returns The user's newly created  public key, private key, and encrypted private key
+   */
+  initAccount: () => Promise<{
+    userKey: UserKey;
+    publicKey: string;
+    privateKey: EncString;
+  }>;
+
+  /**
    * @deprecated Left for migration purposes. Use decryptUserKeyWithPin instead.
    */
   decryptMasterKeyWithPin: (

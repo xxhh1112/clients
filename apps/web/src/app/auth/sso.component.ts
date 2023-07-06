@@ -38,10 +38,10 @@ export class SsoComponent extends BaseSsoComponent {
     environmentService: EnvironmentService,
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     logService: LogService,
-    configService: ConfigServiceAbstraction,
     private orgDomainApiService: OrgDomainApiServiceAbstraction,
     private loginService: LoginService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    configService: ConfigServiceAbstraction
   ) {
     super(
       authService,

@@ -691,6 +691,28 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   /**
+   * Initialize all necessary crypto keys needed for a new account.
+   * Warning! This completely replaces any existing keys!
+   */
+  async initAccount(): Promise<{
+    userKey: UserKey;
+    publicKey: string;
+    privateKey: EncString;
+  }> {
+    const randomBytes = await this.cryptoFunctionService.randomBytes(64);
+    const userKey = new SymmetricCryptoKey(randomBytes) as UserKey;
+    const [publicKey, privateKey] = await this.makeKeyPair(userKey);
+    await this.stateService.setUserKey(userKey);
+    await this.stateService.setEncryptedPrivateKey(privateKey.encryptedString);
+
+    return {
+      userKey,
+      publicKey,
+      privateKey,
+    };
+  }
+
+  /**
    * Regenerates any additional keys if needed. Useful to make sure
    * other keys stay in sync when the user key has been rotated.
    * @param key The user key

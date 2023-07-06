@@ -37,6 +37,7 @@ export class SsoComponent {
   protected successRoute = "lock";
   protected trustedDeviceEncRoute = "login-initiated";
   protected changePasswordRoute = "set-password";
+  protected tdeLogin = "login-initiated";
   protected forcePasswordResetRoute = "update-temp-password";
   protected clientId: string;
   protected redirectUri: string;
@@ -190,6 +191,13 @@ export class SsoComponent {
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
 
+      const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
+        FeatureFlag.TrustedDeviceEncryption
+      );
+
+      const accountDecryptionOptions: AccountDecryptionOptions =
+        await this.stateService.getAccountDecryptionOptions();
+
       if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
           await this.onSuccessfulLoginTwoFactorNavigate();
@@ -201,6 +209,15 @@ export class SsoComponent {
             },
           });
         }
+      } else if (
+        trustedDeviceEncryptionFeatureActive &&
+        accountDecryptionOptions.trustedDeviceOption !== undefined
+      ) {
+        this.router.navigate([this.trustedDeviceEncRoute], {
+          queryParams: {
+            identifier: orgIdFromState,
+          },
+        });
       } else if (response.resetMasterPassword) {
         // TODO: for TDE, we are going to deprecate using response.resetMasterPassword
         // and instead rely on accountDecryptionOptions to determine if the user needs to set a password
@@ -228,21 +245,7 @@ export class SsoComponent {
         if (this.onSuccessfulLoginNavigate != null) {
           await this.onSuccessfulLoginNavigate();
         } else {
-          const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
-            FeatureFlag.TrustedDeviceEncryption
-          );
-
-          const accountDecryptionOptions: AccountDecryptionOptions =
-            await this.stateService.getAccountDecryptionOptions();
-
-          if (
-            trustedDeviceEncryptionFeatureActive &&
-            accountDecryptionOptions.trustedDeviceOption !== undefined
-          ) {
-            this.router.navigate([this.trustedDeviceEncRoute]);
-          } else {
-            this.router.navigate([this.successRoute]);
-          }
+          this.router.navigate([this.successRoute]);
         }
       }
     } catch (e) {

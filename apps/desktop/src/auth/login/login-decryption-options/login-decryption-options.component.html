@@ -8,7 +8,13 @@
 
     <ng-container *ngIf="!loading">
       <h1 id="heading">{{ "logInInitiated" | i18n }}</h1>
-      <h6 id="subHeading" class="standard-bottom-margin">{{ "deviceApprovalRequired" | i18n }}</h6>
+      <h6
+        *ngIf="data.state == State.ExistingUserUntrustedDevice"
+        id="subHeading"
+        class="standard-bottom-margin"
+      >
+        {{ "deviceApprovalRequired" | i18n }}
+      </h6>
 
       <form id="rememberDeviceForm" class="standard-bottom-margin" [formGroup]="rememberDeviceForm">
         <div class="checkbox">
@@ -25,41 +31,34 @@
         <span id="rememberThisDeviceHintText">{{ "uncheckIfPublicDevice" | i18n }}</span>
       </form>
 
-      <div class="buttons with-rows">
-        <div class="buttons-row" *ngIf="showApproveFromOtherDeviceBtn">
-          <button
-            (click)="approveFromOtherDevice()"
-            type="button"
-            class="btn primary block"
-            [appA11yTitle]="'approveFromYourOtherDevice' | i18n"
-          >
+      <div *ngIf="data.state == State.ExistingUserUntrustedDevice" class="buttons with-rows">
+        <div class="buttons-row" *ngIf="data.showApproveFromOtherDeviceBtn">
+          <button (click)="approveFromOtherDevice()" type="button" class="btn primary block">
             {{ "approveFromYourOtherDevice" | i18n }}
           </button>
         </div>
-        <div class="buttons-row" *ngIf="showReqAdminApprovalBtn">
-          <button
-            (click)="requestAdminApproval()"
-            type="button"
-            class="btn block"
-            [appA11yTitle]="'requestAdminApproval' | i18n"
-          >
+        <div class="buttons-row" *ngIf="data.showReqAdminApprovalBtn">
+          <button (click)="requestAdminApproval()" type="button" class="btn block">
             {{ "requestAdminApproval" | i18n }}
           </button>
         </div>
-        <div class="buttons-row" *ngIf="showApproveWithMasterPasswordBtn">
-          <button
-            (click)="approveWithMasterPassword()"
-            type="button"
-            class="btn block"
-            [appA11yTitle]="'approveWithMasterPassword' | i18n"
-          >
+        <div class="buttons-row" *ngIf="data.showApproveWithMasterPasswordBtn">
+          <button (click)="approveWithMasterPassword()" type="button" class="btn block">
             {{ "approveWithMasterPassword" | i18n }}
           </button>
         </div>
       </div>
 
+      <div *ngIf="data.state == State.NewUser" class="buttons with-rows">
+        <div class="buttons-row">
+          <button (click)="createUser()" type="button" class="btn block">
+            {{ "continue" | i18n }}
+          </button>
+        </div>
+      </div>
+
       <div style="text-align: center">
-        <p class="no-margin">{{ "loggingInAs" | i18n }} {{ userEmail }}</p>
+        <p class="no-margin">{{ "loggingInAs" | i18n }} {{ data.userEmail }}</p>
         <a [routerLink]="[]" (click)="logOut()">{{ "notYou" | i18n }}</a>
       </div>
     </ng-container>
