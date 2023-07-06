@@ -69,7 +69,6 @@ const keys = {
 const partialKeys = {
   userAutoKey: "_user_auto",
   userBiometricKey: "_user_biometric",
-  userKey: "_user_key",
 
   autoKey: "_masterkey_auto",
   biometricKey: "_masterkey_biometric",
