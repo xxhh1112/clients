@@ -8,6 +8,8 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+// eslint-disable-next-line no-restricted-imports
+import { ReportsApiServiceAbstraction } from "@bitwarden/common/tools/reports/reports-api.service.abstraction";
 
 import { CipherReportComponent } from "./cipher-report.component";
 
@@ -24,7 +26,8 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
     modalService: ModalService,
     messagingService: MessagingService,
     private logService: LogService,
-    passwordRepromptService: PasswordRepromptService
+    passwordRepromptService: PasswordRepromptService,
+    private reportsApiService: ReportsApiServiceAbstraction
   ) {
     super(modalService, messagingService, true, passwordRepromptService);
   }
@@ -82,25 +85,12 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
     if (this.services.size > 0) {
       return;
     }
-    const response = await fetch(new Request("https://api.2fa.directory/v3/totp.json"));
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    const responseJson = await response.json();
-    for (const service of responseJson) {
-      const serviceData = service[1];
-      if (serviceData.domain == null) {
-        continue;
-      }
-      if (serviceData.documentation == null) {
-        continue;
-      }
-      if (serviceData["additional-domains"] != null) {
-        for (const additionalDomain of serviceData["additional-domains"]) {
-          this.services.set(additionalDomain, serviceData.documentation);
-        }
-      }
-      this.services.set(serviceData.domain, serviceData.documentation);
+
+    try {
+      const response = await this.reportsApiService.getInactiveTwoFactor();
+      this.services = response.services;
+    } catch (e) {
+      this.logService.error(e);
     }
   }
 }
