@@ -8,7 +8,7 @@ import {
   OnDestroy,
   TemplateRef,
 } from "@angular/core";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
 
 import { TableDataSource } from "./table-data-source";
 
@@ -28,9 +28,21 @@ export class TableComponent implements OnDestroy, AfterContentChecked {
   @Input() dataSource: TableDataSource<any>;
   @Input() layout: "auto" | "fixed" = "auto";
 
+  /**
+   * Table ID to pass to query params:
+   *
+   * `'my-table'` --> `?my-table-page-1`
+   */
+  @Input() paginated: string;
+
   @ContentChild(TableBodyDirective) templateVariable: TableBodyDirective;
 
-  protected rows: Observable<readonly any[]>;
+  protected pages$: Observable<any[][]>;
+  protected page$ = new BehaviorSubject(1);
+  private readonly _pageSize = 10;
+  private readonly _pageThreshold = 5;
+
+  protected rows$: Observable<readonly any[]>;
 
   private _initialized = false;
 
@@ -47,8 +59,11 @@ export class TableComponent implements OnDestroy, AfterContentChecked {
     if (!this._initialized && isDataSource(this.dataSource)) {
       this._initialized = true;
 
-      const dataStream = this.dataSource.connect();
-      this.rows = dataStream;
+      this.pages$ = this.dataSource.connect().pipe(paginate(this._pageSize, this._pageThreshold));
+
+      this.rows$ = combineLatest([this.pages$, this.page$]).pipe(
+        map(([pages, page]) => pages[page - 1])
+      );
     }
   }
 
@@ -58,3 +73,21 @@ export class TableComponent implements OnDestroy, AfterContentChecked {
     }
   }
 }
+
+const paginate = <T>(pageSize: number, pageThreshhold: number) => {
+  return map((data: T[]) => {
+    const pages: T[][] = [];
+    for (let i = 0; i < data.length; i = i + pageSize) {
+      const slice = data.slice(i, i + pageSize);
+      if (slice.length < pageThreshhold) {
+        // Append to the previous page
+        const idx = pages.length - 1;
+        pages[idx] = pages[idx].concat(slice);
+      } else {
+        // Add new page
+        pages.push(slice);
+      }
+    }
+    return pages;
+  });
+};

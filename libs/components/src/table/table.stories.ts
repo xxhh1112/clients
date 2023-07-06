@@ -1,4 +1,5 @@
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { RouterTestingModule } from "@angular/router/testing";
 import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { countries } from "../form/countries";
@@ -10,7 +11,7 @@ export default {
   title: "Component Library/Table",
   decorators: [
     moduleMetadata({
-      imports: [TableModule, ScrollingModule],
+      imports: [TableModule, ScrollingModule, RouterTestingModule],
     }),
   ],
   argTypes: {
@@ -118,6 +119,35 @@ export const Scrollable: Story = {
     template: `
       <cdk-virtual-scroll-viewport scrollWindow itemSize="47">
         <bit-table [dataSource]="dataSource">
+          <ng-container header>
+            <tr>
+              <th bitCell bitSortable="id" default>Id</th>
+              <th bitCell bitSortable="name">Name</th>
+              <th bitCell bitSortable="other" [fn]="sortFn">Other</th>
+            </tr>
+          </ng-container>
+          <ng-template body let-rows$>
+            <tr bitRow *cdkVirtualFor="let r of rows$">
+              <td bitCell>{{ r.id }}</td>
+              <td bitCell>{{ r.name }}</td>
+              <td bitCell>{{ r.other }}</td>
+            </tr>
+          </ng-template>
+        </bit-table>
+      </cdk-virtual-scroll-viewport>
+    `,
+  }),
+};
+
+export const paginated: Story = {
+  render: (args) => ({
+    props: {
+      dataSource: data2,
+      sortFn: (a: any, b: any) => a.id - b.id,
+    },
+    template: `
+      <cdk-virtual-scroll-viewport scrollWindow itemSize="47">
+        <bit-table [dataSource]="dataSource" paginated="myTable">
           <ng-container header>
             <tr>
               <th bitCell bitSortable="id" default>Id</th>
