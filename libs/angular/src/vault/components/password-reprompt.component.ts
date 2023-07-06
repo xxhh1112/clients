@@ -25,7 +25,7 @@ export class PasswordRepromptComponent {
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
     protected formBuilder: FormBuilder,
-    //These are optional because they are not used differently in each client
+    //These are optional because they are used differently in each client
     //and should be removed from the base class once the clients use the CL.
     @Optional() protected dialogRef: DialogRef,
     @Optional() protected modalRef: ModalRef
