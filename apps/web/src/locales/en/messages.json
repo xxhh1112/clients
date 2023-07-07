@@ -6840,7 +6840,7 @@
     "message": "Request admin approval"
   },
   "approveWithMasterPassword": {
-    "message": "Approve with master password" 
+    "message": "Approve with master password"
   },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
@@ -6929,5 +6929,26 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "approvedAuthRequest": {
+    "message": "Approved device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Denied device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Requested device approval."
   }
 }
