@@ -21,7 +21,6 @@ import { openUserVerificationPrompt } from "../../auth/shared/components/user-ve
   templateUrl: "export.component.html",
 })
 export class ExportComponent extends BaseExportComponent {
-  organizationId: string;
   encryptedExportType = EncryptedExportType;
   protected showFilePassword: boolean;
 

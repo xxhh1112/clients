@@ -21,6 +21,7 @@ export class ExportComponent implements OnInit, OnDestroy {
 
   formPromise: Promise<string>;
   private _disabledByPolicy = false;
+  protected organizationId: string = null;
 
   protected get disabledByPolicy(): boolean {
     return this._disabledByPolicy;
