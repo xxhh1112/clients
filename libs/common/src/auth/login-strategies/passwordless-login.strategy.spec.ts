@@ -94,7 +94,7 @@ describe("SsoLogInStrategy", () => {
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
     expect(cryptoService.setPasswordHash).toHaveBeenCalledWith(localPasswordHash);
-    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });

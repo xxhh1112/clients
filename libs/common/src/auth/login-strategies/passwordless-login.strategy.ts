@@ -85,7 +85,7 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
   }
 
   protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
-    await this.cryptoService.setUserKeyMasterKey(response.key);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
 
     const masterKey = await this.cryptoService.getMasterKey();
     if (masterKey) {
