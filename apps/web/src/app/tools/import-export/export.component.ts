@@ -5,6 +5,7 @@ import { firstValueFrom } from "rxjs";
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/tools/export/components/export.component";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EncryptedExportType } from "@bitwarden/common/enums";
@@ -34,7 +35,8 @@ export class ExportComponent extends BaseExportComponent {
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogServiceAbstraction,
+    organizationService: OrganizationService
   ) {
     super(
       i18nService,
@@ -46,7 +48,8 @@ export class ExportComponent extends BaseExportComponent {
       userVerificationService,
       formBuilder,
       fileDownloadService,
-      dialogService
+      dialogService,
+      organizationService
     );
   }
 

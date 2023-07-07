@@ -983,6 +983,12 @@
   "export": {
     "message": "Export"
   },
+  "exportFrom": {
+    "message": "Export from"
+  },
+  "exportFromHint": {
+    "message": "Only collections where you have \"can manage\" permissions will be exported"
+  },
   "exportVault": {
     "message": "Export vault"
   },

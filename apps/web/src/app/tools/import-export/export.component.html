@@ -16,6 +16,20 @@
   ></app-export-scope-callout>
 
   <bit-form-field>
+    <bit-label>{{ "exportFrom" | i18n }}</bit-label>
+    <bit-select formControlName="vaultSelector">
+      <bit-option [label]="'myVault' | i18n" value="myVault" icon="bwi-user" />
+      <bit-option
+        *ngFor="let o of organizations$ | async"
+        [value]="o.id"
+        [label]="o.name"
+        icon="bwi-business"
+      />
+    </bit-select>
+    <bit-hint *ngIf="organizationId">{{ "exportFromHint" | i18n }}</bit-hint>
+  </bit-form-field>
+
+  <bit-form-field>
     <bit-label>{{ "fileFormat" | i18n }}</bit-label>
     <bit-select formControlName="format">
       <bit-option *ngFor="let f of formatOptions" [value]="f.value" [label]="f.name" />
