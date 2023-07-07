@@ -23,6 +23,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   protected eventsUrl: string;
   private keyConnectorUrl: string;
   private scimUrl: string = null;
+  private cloudWebVaultUrl: string;
 
   readonly usUrls: Urls = {
     base: null,
@@ -84,6 +85,26 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       return this.baseUrl;
     }
     return "https://vault.bitwarden.com";
+  }
+
+  getCloudWebVaultUrl() {
+    if (this.cloudWebVaultUrl != null) {
+      return this.cloudWebVaultUrl;
+    }
+
+    return this.usUrls.webVault;
+  }
+
+  setCloudWebVaultUrl(region: Region) {
+    switch (region) {
+      case Region.EU:
+        this.cloudWebVaultUrl = this.euUrls.webVault;
+        break;
+      case Region.US:
+      default:
+        this.cloudWebVaultUrl = this.usUrls.webVault;
+        break;
+    }
   }
 
   getSendUrl() {
@@ -159,13 +180,12 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     const savedUrls = await this.stateService.getEnvironmentUrls();
     const envUrls = new EnvironmentUrls();
 
-    // fix environment urls for old users
-    if (savedUrls.base === "https://vault.bitwarden.com") {
+    // In release `2023.5.0`, we set the `base` property of the environment URLs to the US web vault URL when a user clicked the "US" region.
+    // This check will detect these cases and convert them to the proper region instead.
+    // We are detecting this by checking for the presence of the web vault URL in the `base` and the absence of the `notifications` property.
+    // This is because the `notifications` will not be `null` in the web vault, and we don't want to migrate the URLs in that case.
+    if (savedUrls.base === "https://vault.bitwarden.com" && savedUrls.notifications == null) {
       await this.setRegion(Region.US);
-      return;
-    }
-    if (savedUrls.base === "https://vault.bitwarden.eu") {
-      await this.setRegion(Region.EU);
       return;
     }
 
@@ -240,6 +260,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     return {
       base: this.baseUrl,
       webVault: this.webVaultUrl,
+      cloudWebVault: this.cloudWebVaultUrl,
       api: this.apiUrl,
       identity: this.identityUrl,
       icons: this.iconsUrl,
