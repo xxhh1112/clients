@@ -650,12 +650,7 @@
     </div>
   </div>
   <div class="footer">
-    <button
-      type="submit"
-      class="primary"
-      appA11yTitle="{{ 'save' | i18n }}"
-      [disabled]="$any(form).loading"
-    >
+    <button type="submit" class="primary" [disabled]="$any(form).loading">
       <i
         class="bwi bwi-save-changes bwi-lg bwi-fw"
         [hidden]="$any(form).loading"
@@ -685,7 +680,6 @@
         type="button"
         (click)="delete()"
         class="danger"
-        appA11yTitle="{{ 'delete' | i18n }}"
         *ngIf="editMode && !cloneMode"
         [disabled]="$any(deleteBtn).loading"
         [appApiAction]="deletePromise"

@@ -255,13 +255,7 @@
     </div>
   </div>
   <div class="footer">
-    <button
-      type="submit"
-      class="primary btn-submit"
-      appA11yTitle="{{ 'save' | i18n }}"
-      [disabled]="form.loading"
-      *ngIf="!disableSend"
-    >
+    <button type="submit" class="primary btn-submit" [disabled]="form.loading" *ngIf="!disableSend">
       <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
       <span><i class="bwi bwi-save-changes bwi-lg bwi-fw" aria-hidden="true"></i></span>
       {{ "save" | i18n }}
@@ -278,14 +272,7 @@
       >
         <i class="bwi bwi-clone bwi-lg bwi-fw" aria-hidden="true"></i>
       </button>
-      <button
-        #deleteBtn
-        type="button"
-        (click)="delete()"
-        class="danger"
-        appA11yTitle="{{ 'delete' | i18n }}"
-        *ngIf="editMode"
-      >
+      <button #deleteBtn type="button" (click)="delete()" class="danger" *ngIf="editMode">
         <i
           class="bwi bwi-trash bwi-lg bwi-fw"
           [hidden]="$any(deleteBtn).loading"

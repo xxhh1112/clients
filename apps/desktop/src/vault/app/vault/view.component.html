@@ -529,23 +529,11 @@
   </div>
 </div>
 <div class="footer" *ngIf="cipher">
-  <button
-    type="button"
-    class="primary"
-    (click)="edit()"
-    appA11yTitle="{{ 'edit' | i18n }}"
-    *ngIf="!cipher.isDeleted"
-  >
+  <button type="button" class="primary" (click)="edit()" *ngIf="!cipher.isDeleted">
     <i class="bwi bwi-pencil bwi-fw bwi-lg" aria-hidden="true"></i>
     <span class="sm-hide">{{ "edit" | i18n }}</span>
   </button>
-  <button
-    type="button"
-    class="primary"
-    (click)="restore()"
-    appA11yTitle="{{ 'restore' | i18n }}"
-    *ngIf="cipher.isDeleted"
-  >
+  <button type="button" class="primary" (click)="restore()" *ngIf="cipher.isDeleted">
     <i class="bwi bwi-undo bwi-fw bwi-lg" aria-hidden="true"></i>
     <span class="sm-hide">{{ "restore" | i18n }}</span>
   </button>
@@ -554,7 +542,6 @@
     class="primary"
     *ngIf="!cipher?.organizationId && !cipher.isDeleted"
     (click)="clone()"
-    appA11yTitle="{{ 'clone' | i18n }}"
   >
     <i class="bwi bwi-files bwi-fw bwi-lg" aria-hidden="true"></i>
     <span class="sm-hide">{{ "clone" | i18n }}</span>
