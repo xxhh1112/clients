@@ -23,6 +23,12 @@ export enum Region {
   SelfHosted = "Self-hosted",
 }
 
+export enum RegionDomain {
+  US = "bitwarden.com",
+  EU = "bitwarden.eu",
+  USQA = "bitwarden.pw",
+}
+
 export abstract class EnvironmentService {
   urls: Observable<void>;
   usUrls: Urls;
@@ -33,6 +39,19 @@ export abstract class EnvironmentService {
   hasBaseUrl: () => boolean;
   getNotificationsUrl: () => string;
   getWebVaultUrl: () => string;
+  /**
+   * Retrieves the URL of the cloud web vault app.
+   *
+   * @returns {string} The URL of the cloud web vault app.
+   * @remarks Use this method only in views exclusive to self-host instances.
+   */
+  getCloudWebVaultUrl: () => string;
+  /**
+   * Sets the URL of the cloud web vault app based on the region parameter.
+   *
+   * @param {Region} region - The region of the cloud web vault app.
+   */
+  setCloudWebVaultUrl: (region: Region) => void;
   getSendUrl: () => string;
   getIconsUrl: () => string;
   getApiUrl: () => string;
