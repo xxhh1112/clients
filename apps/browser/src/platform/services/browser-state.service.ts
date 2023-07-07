@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { StateMigrationService } from "@bitwarden/common/platform/abstractions/state-migration.service";
@@ -43,8 +43,7 @@ export class BrowserStateService
     logService: LogService,
     stateMigrationService: StateMigrationService,
     stateFactory: StateFactory<GlobalState, Account>,
-    useAccountCache = true,
-    accountCache: Observable<Record<string, Account>> = null
+    useAccountCache = true
   ) {
     super(
       storageService,
@@ -56,10 +55,19 @@ export class BrowserStateService
       useAccountCache
     );
 
-    // Hack to allow shared disk cache between contexts on browser
-    // TODO: Remove when services are consolidated to a single context
-    if (useAccountCache && accountCache) {
-      accountCache.subscribe(this.accountDiskCacheSubject);
+    // TODO: This is a hack to fix having a disk cache on both the popup and
+    // the background page that can get out of sync. We need to work out the
+    // best way to handle caching with multiple instances of the state service.
+    if (useAccountCache) {
+      chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === "local") {
+          for (const key of Object.keys(changes)) {
+            if (key !== "accountActivity" && this.accountDiskCache.value[key]) {
+              this.deleteDiskCache(key);
+            }
+          }
+        }
+      });
     }
   }
 
@@ -160,5 +168,18 @@ export class BrowserStateService
       account,
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
+  }
+
+  // Overriding the base class to prevent deleting the cache on save. We register a storage listener
+  // to delete the cache in the constructor above.
+  protected override async saveAccountToDisk(
+    account: Account,
+    options: StorageOptions
+  ): Promise<void> {
+    const storageLocation = options.useSecureStorage
+      ? this.secureStorageService
+      : this.storageService;
+
+    await storageLocation.save(`${options.userId}`, account, options);
   }
 }

@@ -93,8 +93,8 @@ describe("SsoLogInStrategy", () => {
     await passwordlessLoginStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setKeyHash).toHaveBeenCalledWith(localPasswordHash);
-    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setPasswordHash).toHaveBeenCalledWith(localPasswordHash);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });

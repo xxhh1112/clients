@@ -9,50 +9,50 @@ import {
   MasterKey,
   OrgKey,
   PinKey,
+  ProviderKey,
   SymmetricCryptoKey,
   UserKey,
 } from "../models/domain/symmetric-crypto-key";
 
 export abstract class CryptoService {
   /**
-   * Use for encryption/decryption of data in order to support legacy
-   * encryption models. It will return the user key if available,
-   * if not it will return the master key.
-   */
-  getKeyForUserEncryption: (key?: SymmetricCryptoKey) => Promise<SymmetricCryptoKey>;
-
-  /**
    * Sets the provided user key and stores
-   * any other necessary versions, such as biometrics
+   * any other necessary versions (such as auto, biometrics,
+   * or pin)
    * @param key The user key to set
    * @param userId The desired user
    */
   setUserKey: (key: UserKey) => Promise<void>;
   /**
    * Gets the user key from memory and sets it again,
-   * kicking off a refresh of any additional keys that are needed.
+   * kicking off a refresh of any additional keys
+   * (such as auto, biometrics, or pin)
    */
-  toggleKey: () => Promise<void>;
+  refreshAdditionalKeys: () => Promise<void>;
+
   /**
    * Retrieves the user key
-   * @param keySuffix The desired version of the user's key to retrieve
-   * from storage if it is not available in memory
    * @param userId The desired user
    * @returns The user key
    */
-  getUserKeyFromMemory: (userId?: string) => Promise<UserKey>;
+  getUserKey: (userId?: string) => Promise<UserKey>;
+  /**
+   * Use for encryption/decryption of data in order to support legacy
+   * encryption models. It will return the user key if available,
+   * if not it will return the master key.
+   * @param userId The desired user
+   */
+  getUserKeyWithLegacySupport: (userId?: string) => Promise<UserKey>;
   /**
    * Retrieves the user key from storage
    * @param keySuffix The desired version of the user's key to retrieve
    * @param userId The desired user
    * @returns The user key
    */
-  getUserKeyFromStorage: (
-    keySuffix: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
-    userId?: string
-  ) => Promise<UserKey>;
+  getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserKey>;
+
   /**
-   * @returns True if any version of the user key is available
+   * @returns True if the user key is available
    */
   hasUserKey: () => Promise<boolean>;
   /**
@@ -65,10 +65,7 @@ export abstract class CryptoService {
    * @param userId The desired user
    * @returns True if the provided version of the user key is stored
    */
-  hasUserKeyStored: (
-    keySuffix?: KeySuffixOptions.Auto | KeySuffixOptions.Biometric,
-    userId?: string
-  ) => Promise<boolean>;
+  hasUserKeyStored: (keySuffix: KeySuffixOptions, userId?: string) => Promise<boolean>;
   /**
    * Generates a new user key
    * @param masterKey The user's master key
@@ -93,7 +90,7 @@ export abstract class CryptoService {
    * @param userKeyMasterKey The master key encrypted user key to set
    * @param userId The desired user
    */
-  setUserKeyMasterKey: (UserKeyMasterKey: string, userId?: string) => Promise<void>;
+  setMasterKeyEncryptedUserKey: (UserKeyMasterKey: string, userId?: string) => Promise<void>;
   /**
    * Sets the user's master key
    * @param key The user's master key to set
@@ -158,28 +155,28 @@ export abstract class CryptoService {
    */
   hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
   /**
-   * Sets the user's key hash
-   * @param keyHash The user's key hash to set
+   * Sets the user's master password hash
+   * @param keyHash The user's master password hash to set
    */
-  setKeyHash: (keyHash: string) => Promise<void>;
+  setPasswordHash: (keyHash: string) => Promise<void>;
   /**
-   * @returns The user's key hash
+   * @returns The user's master password hash
    */
-  getKeyHash: () => Promise<string>;
+  getPasswordHash: () => Promise<string>;
   /**
-   * Clears the user's stored key hash
+   * Clears the user's stored master password hash
    * @param userId The desired user
    */
-  clearKeyHash: () => Promise<void>;
+  clearPasswordHash: () => Promise<void>;
   /**
-   * Compares the provided master password to the stored key hash and updates
-   * if the stored hash is outdated
+   * Compares the provided master password to the stored password hash and server password hash.
+   * Updates the stored hash if outdated.
    * @param masterPassword The user's master password
    * @param key The user's master key
    * @returns True if the provided master password matches either the stored
-   * key hash
+   * key hash or the server key hash
    */
-  compareAndUpdateKeyHash: (masterPassword: string, key: MasterKey) => Promise<boolean>;
+  compareAndUpdatePasswordHash: (masterPassword: string, masterKey: MasterKey) => Promise<boolean>;
   /**
    * Stores the encrypted organization keys and clears any decrypted
    * organization keys currently in memory
@@ -204,7 +201,7 @@ export abstract class CryptoService {
    * Uses the org key to derive a new symmetric key for encrypting data
    * @param orgKey The organization's symmetric key
    */
-  makeOrgDataEncKey: (orgKey: OrgKey) => Promise<[SymmetricCryptoKey, EncString]>;
+  makeDataEncKey: <T extends UserKey | OrgKey>(key: T) => Promise<[SymmetricCryptoKey, EncString]>;
   /**
    * Clears the user's stored organization keys
    * @param memoryOnly Clear only the in-memory keys
@@ -221,11 +218,11 @@ export abstract class CryptoService {
    * @param providerId The desired provider
    * @returns The provider's symmetric key
    */
-  getProviderKey: (providerId: string) => Promise<SymmetricCryptoKey>;
+  getProviderKey: (providerId: string) => Promise<ProviderKey>;
   /**
    * @returns A map of the provider Ids to their symmetric keys
    */
-  getProviderKeys: () => Promise<Map<string, SymmetricCryptoKey>>;
+  getProviderKeys: () => Promise<Map<string, ProviderKey>>;
   /**
    * @param memoryOnly Clear only the in-memory keys
    * @param userId The desired user
@@ -238,10 +235,10 @@ export abstract class CryptoService {
    */
   getPublicKey: () => Promise<ArrayBuffer>;
   /**
-   * Create's a new 64 byte key and encrypts it with the user's public key
+   * Creates a new 64 byte key and encrypts it with the user's public key
    * @returns The new encrypted share key and the decrypted key itself
    */
-  makeShareKey: () => Promise<[EncString, SymmetricCryptoKey]>;
+  makeOrgKey: <T extends OrgKey | ProviderKey>() => Promise<[EncString, T]>;
   /**
    * Sets the the user's encrypted private key in storage and
    * clears the decrypted private key from memory
@@ -284,15 +281,12 @@ export abstract class CryptoService {
    */
   makePinKey: (pin: string, salt: string, kdf: KdfType, kdfConfig: KdfConfig) => Promise<PinKey>;
   /**
-   * Clears the user's pin protected user key
+   * Clears the user's pin keys from storage
+   * Note: This will remove the stored pin and as a result,
+   * disable pin protection for the user
    * @param userId The desired user
    */
-  clearPinProtectedKey: (userId?: string) => Promise<void>;
-  /**
-   * Clears the user's old pin keys from storage
-   * @param userId The desired user
-   */
-  clearOldPinKeys: (userId?: string) => Promise<void>;
+  clearPinKeys: (userId?: string) => Promise<void>;
   /**
    * Decrypts the user key with their pin
    * @param pin The user's PIN
@@ -357,6 +351,14 @@ export abstract class CryptoService {
     kdfConfig: KdfConfig,
     protectedKeyCs?: EncString
   ) => Promise<MasterKey>;
+  /**
+   * Previously, the master key was used for any additional key like the biometrics or pin key.
+   * We have switched to using the user key for these purposes. This method is for clearing the state
+   * of the older keys on logout or post migration.
+   * @param keySuffix The desired type of key to clear
+   * @param userId The desired user
+   */
+  clearDeprecatedKeys: (keySuffix: KeySuffixOptions, userId?: string) => Promise<void>;
   /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.encrypt

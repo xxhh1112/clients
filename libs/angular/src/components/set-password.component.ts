@@ -132,7 +132,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
             const publicKey = Utils.fromB64ToArray(response.publicKey);
 
             // RSA Encrypt user key with organization public key
-            const userKey = await this.cryptoService.getUserKeyFromMemory();
+            const userKey = await this.cryptoService.getUserKey();
             const encryptedUserKey = await this.cryptoService.rsaEncrypt(
               userKey.key,
               publicKey.buffer
@@ -182,11 +182,11 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     await this.cryptoService.setUserKey(userKey[0]);
     await this.cryptoService.setPrivateKey(keyPair[1].encryptedString);
 
-    const localKeyHash = await this.cryptoService.hashPassword(
+    const localPasswordHash = await this.cryptoService.hashPassword(
       this.masterPassword,
       masterKey,
       HashPurpose.LocalAuthorization
     );
-    await this.cryptoService.setKeyHash(localKeyHash);
+    await this.cryptoService.setPasswordHash(localPasswordHash);
   }
 }

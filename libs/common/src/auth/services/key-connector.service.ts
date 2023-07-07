@@ -99,7 +99,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
 
     const userKey = await this.cryptoService.makeUserKey(masterKey);
     await this.cryptoService.setUserKey(userKey[0]);
-    await this.cryptoService.setUserKeyMasterKey(userKey[1].encryptedString);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(userKey[1].encryptedString);
 
     const [pubKey, privKey] = await this.cryptoService.makeKeyPair();
 

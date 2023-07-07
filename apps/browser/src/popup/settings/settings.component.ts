@@ -140,12 +140,12 @@ export class SettingsComponent implements OnInit {
     if (timeout === -2 && !showOnLocked) {
       timeout = -1;
     }
-    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
     const initialValues = {
       vaultTimeout: timeout,
       vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
-      pin: pinSet[0] || pinSet[1],
+      pin: pinStatus !== "DISABLED",
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       enableAutoBiometricsPrompt: !(await this.stateService.getDisableAutoBiometricsPrompt()),
     };
@@ -269,7 +269,6 @@ export class SettingsComponent implements OnInit {
 
       this.form.controls.pin.setValue(await ref.onClosedPromise());
     } else {
-      await this.cryptoService.clearPinProtectedKey();
       await this.vaultTimeoutSettingsService.clear();
     }
   }
@@ -324,7 +323,7 @@ export class SettingsComponent implements OnInit {
       });
 
       await this.stateService.setBiometricAwaitingAcceptance(true);
-      await this.cryptoService.toggleKey();
+      await this.cryptoService.refreshAdditionalKeys();
 
       await Promise.race([
         submitted.then(async (result) => {

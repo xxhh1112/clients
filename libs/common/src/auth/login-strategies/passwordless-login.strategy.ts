@@ -81,11 +81,11 @@ export class PasswordlessLogInStrategy extends LogInStrategy {
 
   protected override async setMasterKey(response: IdentityTokenResponse) {
     await this.cryptoService.setMasterKey(this.passwordlessCredentials.decKey);
-    await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
+    await this.cryptoService.setPasswordHash(this.passwordlessCredentials.localPasswordHash);
   }
 
   protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
-    await this.cryptoService.setUserKeyMasterKey(response.key);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
 
     const masterKey = await this.cryptoService.getMasterKey();
     if (masterKey) {

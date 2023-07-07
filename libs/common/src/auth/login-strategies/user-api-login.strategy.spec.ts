@@ -114,7 +114,7 @@ describe("UserApiLogInStrategy", () => {
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(cryptoService.setUserKeyMasterKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
   });
 

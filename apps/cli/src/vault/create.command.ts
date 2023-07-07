@@ -126,7 +126,7 @@ export class CreateCommand {
       return Response.error("Premium status is required to use this feature.");
     }
 
-    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    const userKey = await this.cryptoService.getUserKey();
     if (userKey == null) {
       return Response.error(
         "You must update your encryption key before you can use this feature. " +

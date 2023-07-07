@@ -70,13 +70,14 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     }
 
     if (await this.keyConnectorService.getUsesKeyConnector()) {
-      const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+      const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
       let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
       ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
-      const pinLock = (pinSet[0] && ephemeralPinSet != null) || pinSet[1];
+      const pinEnabled =
+        (pinStatus === "TRANSIENT" && ephemeralPinSet != null) || pinStatus === "PERSISTANT";
 
-      if (!pinLock && !(await this.vaultTimeoutSettingsService.isBiometricLockSet())) {
+      if (!pinEnabled && !(await this.vaultTimeoutSettingsService.isBiometricLockSet())) {
         await this.logOut(userId);
       }
     }

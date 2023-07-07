@@ -70,7 +70,6 @@ const keys = {
 const partialKeys = {
   userAutoKey: "_user_auto",
   userBiometricKey: "_user_biometric",
-  userKey: "_user_key",
 
   autoKey: "_masterkey_auto",
   biometricKey: "_masterkey_biometric",
@@ -96,8 +95,7 @@ export class StateService<
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  protected accountDiskCacheSubject = new BehaviorSubject<Record<string, TAccount>>({});
-  accountDiskCache$ = this.accountDiskCacheSubject.asObservable();
+  protected accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
 
   // default account serializer, must be overridden by child class
   protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
@@ -2829,7 +2827,7 @@ export class StateService<
     }
 
     if (this.useAccountCache) {
-      const cachedAccount = this.accountDiskCacheSubject.value[options.userId];
+      const cachedAccount = this.accountDiskCache.value[options.userId];
       if (cachedAccount != null) {
         return cachedAccount;
       }
@@ -3225,15 +3223,15 @@ export class StateService<
 
   private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {
     if (this.useAccountCache) {
-      this.accountDiskCacheSubject.value[key] = value;
-      this.accountDiskCacheSubject.next(this.accountDiskCacheSubject.value);
+      this.accountDiskCache.value[key] = value;
+      this.accountDiskCache.next(this.accountDiskCache.value);
     }
   }
 
-  private deleteDiskCache(key: string) {
+  protected deleteDiskCache(key: string) {
     if (this.useAccountCache) {
-      delete this.accountDiskCacheSubject.value[key];
-      this.accountDiskCacheSubject.next(this.accountDiskCacheSubject.value);
+      delete this.accountDiskCache.value[key];
+      this.accountDiskCache.next(this.accountDiskCache.value);
     }
   }
 }
