@@ -7,7 +7,6 @@ export class GlobalState {
   installedVersion?: string;
   locale?: string;
   organizationInvitation?: any;
-  emergencyAccessInvitation?: any;
   ssoCodeVerifier?: string;
   ssoOrganizationIdentifier?: string;
   ssoState?: string;
@@ -37,5 +36,5 @@ export class GlobalState {
   enableBrowserIntegrationFingerprint?: boolean;
   enableDuckDuckGoBrowserIntegration?: boolean;
   region?: string;
-  previousUrl: string;
+  previousUrl?: string;
 }

@@ -5,17 +5,15 @@ import { filter } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
-import { StateService } from "./state";
-
 @Injectable()
 export class RouterService {
   private currentUrl: string = undefined;
+  private previousUrl: string = undefined;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private stateService: StateService,
     i18nService: I18nService
   ) {
     this.currentUrl = this.router.url;
@@ -48,11 +46,11 @@ export class RouterService {
       });
   }
 
-  async getPreviousUrl() {
-    return await this.stateService.getPreviousUrl();
+  getPreviousUrl() {
+    return this.previousUrl;
   }
 
   setPreviousUrl(url: string) {
-    this.stateService.setPreviousUrl(url);
+    this.previousUrl = url;
   }
 }

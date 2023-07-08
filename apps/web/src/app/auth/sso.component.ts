@@ -19,6 +19,8 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
+import { RouterService } from "../core";
+
 @Component({
   selector: "app-sso",
   templateUrl: "sso.component.html",
@@ -39,7 +41,8 @@ export class SsoComponent extends BaseSsoComponent {
     logService: LogService,
     private orgDomainApiService: OrgDomainApiServiceAbstraction,
     private loginService: LoginService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private routerService: RouterService
   ) {
     super(
       authService,
@@ -61,20 +64,9 @@ export class SsoComponent extends BaseSsoComponent {
   async ngOnInit() {
     super.ngOnInit();
 
-    // if we have an emergency access invite, redirect to emergency access
-    const emergencyAccessInvite = await this.stateService.getEmergencyAccessInvitation();
-    if (emergencyAccessInvite != null) {
-      this.onSuccessfulLoginNavigate = async () => {
-        this.router.navigate(["/accept-emergency"], {
-          queryParams: {
-            id: emergencyAccessInvite.id,
-            name: emergencyAccessInvite.name,
-            email: emergencyAccessInvite.email,
-            token: emergencyAccessInvite.token,
-          },
-        });
-      };
-    }
+    this.onSuccessfulLoginNavigate = async () => {
+      this.router.navigateByUrl(await this.stateService.getPreviousUrl());
+    };
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -130,6 +122,7 @@ export class SsoComponent extends BaseSsoComponent {
   }
 
   async submit() {
+    await this.stateService.setPreviousUrl(this.routerService.getPreviousUrl());
     await this.stateService.setSsoOrganizationIdentifier(this.identifier);
     if (this.clientId === "browser") {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;

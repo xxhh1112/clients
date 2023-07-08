@@ -83,24 +83,11 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
   async goAfterLogIn() {
     this.loginService.clearValues();
-    const previousUrl = await this.routerService.getPreviousUrl();
+    const previousUrl = await this.stateService.getPreviousUrl();
     if (previousUrl) {
+      this.stateService.setPreviousUrl(null);
       this.router.navigateByUrl(previousUrl);
     } else {
-      // if we have an emergency access invite, redirect to emergency access
-      const emergencyAccessInvite = await this.stateService.getEmergencyAccessInvitation();
-      if (emergencyAccessInvite != null) {
-        this.router.navigate(["/accept-emergency"], {
-          queryParams: {
-            id: emergencyAccessInvite.id,
-            name: emergencyAccessInvite.name,
-            email: emergencyAccessInvite.email,
-            token: emergencyAccessInvite.token,
-          },
-        });
-        return;
-      }
-
       this.router.navigate([this.successRoute], {
         queryParams: {
           identifier: this.identifier,

@@ -308,8 +308,6 @@ export abstract class StateService<T extends Account = Account> {
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
-  getEmergencyAccessInvitation: (options?: StorageOptions) => Promise<any>;
-  setEmergencyAccessInvitation: (value: any, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated Do not call this directly, use OrganizationService
    */
@@ -395,6 +393,17 @@ export abstract class StateService<T extends Account = Account> {
     value: Record<string, Record<string, boolean>>,
     options?: StorageOptions
   ) => Promise<void>;
+  /**
+   * fetches string value of the URL stored here, usually only called after SSO flows.
+   * @param options Defines the storage options for the URL; Defaults to Local Storage.
+   * @returns route called prior to SSO routing to organizations configured IdP.
+   */
   getPreviousUrl: (options?: StorageOptions) => Promise<string>;
+  /**
+   * Store URL in local storage by default, but can be configured. Developed to handle
+   * SSO routing to organizations configured IdP.
+   * @param url URL of route
+   * @param options Defines the storage options for the URL; Defaults to Local Storage.
+   */
   setPreviousUrl: (url: string, options?: StorageOptions) => Promise<void>;
 }
