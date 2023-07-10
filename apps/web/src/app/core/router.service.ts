@@ -7,8 +7,8 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 
 @Injectable()
 export class RouterService {
-  private currentUrl: string = undefined;
   private previousUrl: string = undefined;
+  private currentUrl: string = undefined;
 
   constructor(
     private router: Router,

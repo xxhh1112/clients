@@ -177,7 +177,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       }
     }
 
-    const previousUrl = await this.routerService.getPreviousUrl();
+    const previousUrl = this.routerService.getPreviousUrl();
     if (previousUrl) {
       this.router.navigateByUrl(previousUrl);
     } else {

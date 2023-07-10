@@ -69,7 +69,7 @@ export class LockComponent extends BaseLockComponent {
   async ngOnInit() {
     await super.ngOnInit();
     this.onSuccessfulSubmit = async () => {
-      const previousUrl = await this.routerService.getPreviousUrl();
+      const previousUrl = this.routerService.getPreviousUrl();
       if (previousUrl && previousUrl !== "/" && previousUrl.indexOf("lock") === -1) {
         this.successRoute = previousUrl;
       }
