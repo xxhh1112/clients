@@ -155,29 +155,50 @@ export class SearchService implements SearchServiceAbstraction {
         lunr.tokenizer(query).forEach((token) => {
           const t = token.toString();
           q.term(t, { fields: ["name"], presence: lunr.Query.presence.REQUIRED, wildcard: soWild });
-          q.term(t, {
-            fields: ["subtitle"],
-            presence: lunr.Query.presence.REQUIRED,
-            wildcard: soWild,
-          });
-          q.term(t, {
-            fields: ["login.uris"],
-            presence: lunr.Query.presence.REQUIRED,
-            wildcard: soWild,
-          });
-          q.term(t, { presence: lunr.Query.presence.REQUIRED });
         });
       });
+      searchResults = searchResults.concat(
+        index.query((q) => {
+          lunr.tokenizer(query).forEach((token) => {
+            const t = token.toString();
+            q.term(t, {
+              fields: ["subtitle"],
+              presence: lunr.Query.presence.REQUIRED,
+              wildcard: soWild,
+            });
+          });
+        })
+      );
+      searchResults = searchResults.concat(
+        index.query((q) => {
+          lunr.tokenizer(query).forEach((token) => {
+            const t = token.toString();
+            q.term(t, {
+              fields: ["login.uris"],
+              presence: lunr.Query.presence.REQUIRED,
+              wildcard: soWild,
+            });
+          });
+        })
+      );
+      searchResults = searchResults.concat(
+        index.query((q) => {
+          lunr.tokenizer(query).forEach((token) => {
+            const t = token.toString();
+            q.term(t, { presence: lunr.Query.presence.REQUIRED });
+          });
+        })
+      );
     }
 
     if (searchResults != null) {
-      searchResults.forEach((r) => {
+      new Set(searchResults).forEach((r) => {
         if (ciphersMap.has(r.ref)) {
           results.push(ciphersMap.get(r.ref));
         }
       });
     }
-    return results;
+    return [...new Map(results.map((c) => [c.id, c])).values()]; // Unique results
   }
 
   searchCiphersBasic(ciphers: CipherView[], query: string, deleted = false) {
