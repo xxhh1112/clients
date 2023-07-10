@@ -8,11 +8,11 @@ on:
       environment:
         description: 'Environment'
         required: true
-        default: 'US-QA'
+        default: 'QA'
         type: choice
         options:
-          - US-QA
-          - EU-QA
+          - QA
+          - EUQA
       branch:
         description: "Branch name to deploy (examples: 'master', 'feature/sm')"
         required: true
