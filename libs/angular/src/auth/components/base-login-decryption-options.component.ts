@@ -251,9 +251,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   }
 
   async approveWithMasterPassword() {
-    await this.deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(
-      this.rememberDevice.value
-    );
+    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
     this.router.navigate(["/lock"]);
   }
 

@@ -50,34 +50,28 @@ describe("deviceTrustCryptoService", () => {
   });
 
   describe("User Trust Device Choice For Decryption", () => {
-    describe("getUserTrustDeviceChoiceForDecryption", () => {
+    describe("getShouldTrustDevice", () => {
       it("gets the user trust device choice for decryption from the state service", async () => {
-        const stateSvcGetUserTrustDeviceChoiceForDecryptionSpy = jest.spyOn(
-          stateService,
-          "getUserTrustDeviceChoiceForDecryption"
-        );
+        const stateSvcGetShouldTrustDeviceSpy = jest.spyOn(stateService, "getShouldTrustDevice");
 
         const expectedValue = true;
-        stateSvcGetUserTrustDeviceChoiceForDecryptionSpy.mockResolvedValue(expectedValue);
-        const result = await deviceTrustCryptoService.getUserTrustDeviceChoiceForDecryption();
+        stateSvcGetShouldTrustDeviceSpy.mockResolvedValue(expectedValue);
+        const result = await deviceTrustCryptoService.getShouldTrustDevice();
 
-        expect(stateSvcGetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledTimes(1);
+        expect(stateSvcGetShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
         expect(result).toEqual(expectedValue);
       });
     });
 
-    describe("setUserTrustDeviceChoiceForDecryption", () => {
+    describe("setShouldTrustDevice", () => {
       it("sets the user trust device choice for decryption in the state service", async () => {
-        const stateSvcSetUserTrustDeviceChoiceForDecryptionSpy = jest.spyOn(
-          stateService,
-          "setUserTrustDeviceChoiceForDecryption"
-        );
+        const stateSvcSetShouldTrustDeviceSpy = jest.spyOn(stateService, "setShouldTrustDevice");
 
         const newValue = true;
-        await deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(newValue);
+        await deviceTrustCryptoService.setShouldTrustDevice(newValue);
 
-        expect(stateSvcSetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledTimes(1);
-        expect(stateSvcSetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledWith(newValue);
+        expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
+        expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledWith(newValue);
       });
     });
   });

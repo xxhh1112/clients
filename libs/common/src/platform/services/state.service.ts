@@ -1319,7 +1319,7 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getUserTrustDeviceChoiceForDecryption(options?: StorageOptions): Promise<boolean> {
+  async getShouldTrustDevice(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
@@ -1331,10 +1331,7 @@ export class StateService<
     return account?.settings?.trustDeviceChoiceForDecryption ?? false;
   }
 
-  async setUserTrustDeviceChoiceForDecryption(
-    value: boolean,
-    options?: StorageOptions
-  ): Promise<void> {
+  async setShouldTrustDevice(value: boolean, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
     if (options?.userId == null) {
       return;

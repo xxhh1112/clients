@@ -27,12 +27,12 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
    * @description Retrieves the users choice to trust the device which can only happen after decryption
    * Note: this value should only be used once and then reset
    */
-  async getUserTrustDeviceChoiceForDecryption(): Promise<boolean> {
-    return await this.stateService.getUserTrustDeviceChoiceForDecryption();
+  async getShouldTrustDevice(): Promise<boolean> {
+    return await this.stateService.getShouldTrustDevice();
   }
 
-  async setUserTrustDeviceChoiceForDecryption(value: boolean): Promise<void> {
-    await this.stateService.setUserTrustDeviceChoiceForDecryption(value);
+  async setShouldTrustDevice(value: boolean): Promise<void> {
+    await this.stateService.setShouldTrustDevice(value);
   }
 
   async trustDevice(): Promise<DeviceResponse> {
