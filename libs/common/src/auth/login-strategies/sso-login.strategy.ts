@@ -100,7 +100,7 @@ export class SsoLogInStrategy extends LogInStrategy {
       // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
       // so might be worth moving this logic to a common place (base login strategy or a separate service?)
 
-      await this.cryptoService.setUserKeyMasterKey(tokenResponse.key);
+      await this.cryptoService.setMasterKeyEncryptedUserKey(tokenResponse.key);
 
       if (tokenResponse.keyConnectorUrl != null) {
         const masterKey = await this.cryptoService.getMasterKey();

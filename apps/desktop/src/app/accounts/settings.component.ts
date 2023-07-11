@@ -219,11 +219,11 @@ export class SettingsComponent implements OnInit {
     );
 
     // Load initial values
-    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
     const initialValues = {
       vaultTimeout: await this.vaultTimeoutSettingsService.getVaultTimeout(),
       vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
-      pin: pinSet[0] || pinSet[1],
+      pin: pinStatus !== "DISABLED",
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       autoPromptBiometrics: !(await this.stateService.getDisableAutoBiometricsPrompt()),
       requirePasswordOnStart:
@@ -374,7 +374,6 @@ export class SettingsComponent implements OnInit {
       this.form.controls.pin.setValue(await ref.onClosedPromise());
     }
     if (!this.form.value.pin) {
-      await this.cryptoService.clearPinProtectedKey();
       await this.vaultTimeoutSettingsService.clear();
     }
   }
@@ -388,7 +387,7 @@ export class SettingsComponent implements OnInit {
     if (!this.form.value.biometric || !this.supportsBiometric) {
       this.form.controls.biometric.setValue(false);
       await this.stateService.setBiometricUnlock(null);
-      await this.cryptoService.toggleKey();
+      await this.cryptoService.refreshAdditionalKeys();
       return;
     }
 
@@ -401,7 +400,7 @@ export class SettingsComponent implements OnInit {
       await this.stateService.setBiometricRequirePasswordOnStart(true);
       await this.stateService.setDismissedBiometricRequirePasswordOnStart();
     }
-    await this.cryptoService.toggleKey();
+    await this.cryptoService.refreshAdditionalKeys();
 
     // Validate the key is stored in case biometrics fail.
     const biometricSet = await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric);
@@ -435,7 +434,7 @@ export class SettingsComponent implements OnInit {
       await this.stateService.setBiometricEncryptionClientKeyHalf(null);
     }
     await this.stateService.setDismissedBiometricRequirePasswordOnStart();
-    await this.cryptoService.toggleKey();
+    await this.cryptoService.refreshAdditionalKeys();
   }
 
   async saveFavicons() {

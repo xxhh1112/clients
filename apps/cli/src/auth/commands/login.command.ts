@@ -568,7 +568,7 @@ export class LoginCommand {
     const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newMasterKey);
 
     // Grab user key
-    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    const userKey = await this.cryptoService.getUserKey();
     if (!userKey) {
       throw new Error("User key not found.");
     }

@@ -107,15 +107,6 @@ export class AccountKeys {
   userKeyMasterKey?: string;
   userKeyAuto?: string;
   userKeyBiometric?: string;
-  // deprecated keys
-  cryptoMasterKey?: SymmetricCryptoKey;
-  cryptoMasterKeyAuto?: string;
-  cryptoMasterKeyBiometric?: string;
-  cryptoSymmetricKey?: EncryptionPair<string, SymmetricCryptoKey> = new EncryptionPair<
-    string,
-    SymmetricCryptoKey
-  >();
-  // end deprecated keys
   deviceKey?: DeviceKey;
   organizationKeys?: EncryptionPair<
     { [orgId: string]: EncryptedOrganizationKeyData },
@@ -131,6 +122,18 @@ export class AccountKeys {
   privateKey?: EncryptionPair<string, ArrayBuffer> = new EncryptionPair<string, ArrayBuffer>();
   publicKey?: ArrayBuffer;
   apiKeyClientSecret?: string;
+
+  /** @deprecated July 2023, left for migration purposes*/
+  cryptoMasterKey?: SymmetricCryptoKey;
+  /** @deprecated July 2023, left for migration purposes*/
+  cryptoMasterKeyAuto?: string;
+  /** @deprecated July 2023, left for migration purposes*/
+  cryptoMasterKeyBiometric?: string;
+  /** @deprecated July 2023, left for migration purposes*/
+  cryptoSymmetricKey?: EncryptionPair<string, SymmetricCryptoKey> = new EncryptionPair<
+    string,
+    SymmetricCryptoKey
+  >();
 
   toJSON() {
     return Utils.merge(this, {
@@ -238,7 +241,6 @@ export class AccountSettings {
   userKeyPin?: EncryptedString;
   userKeyPinEphemeral?: EncryptedString;
   protectedPin?: string;
-  pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>(); // Deprecated
   settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
@@ -249,6 +251,9 @@ export class AccountSettings {
   region?: string;
   smOnboardingTasks?: Record<string, Record<string, boolean>>;
   trustDeviceChoiceForDecryption?: boolean;
+
+  /** @deprecated July 2023, left for migration purposes*/
+  pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>();
 
   static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {
     if (obj == null) {

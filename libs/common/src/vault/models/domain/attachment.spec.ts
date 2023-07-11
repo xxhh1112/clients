@@ -4,7 +4,11 @@ import { makeStaticByteArray, mockEnc, mockFromJson } from "../../../../spec";
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
 import { EncryptedString, EncString } from "../../../platform/models/domain/enc-string";
-import { OrgKey, SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import {
+  OrgKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../../../platform/models/domain/symmetric-crypto-key";
 import { ContainerService } from "../../../platform/services/container.service";
 import { AttachmentData } from "../../models/data/attachment.data";
 import { Attachment } from "../../models/domain/attachment";
@@ -105,7 +109,7 @@ describe("Attachment", () => {
 
         await attachment.decrypt(null, providedKey);
 
-        expect(cryptoService.getKeyForUserEncryption).not.toHaveBeenCalled();
+        expect(cryptoService.getUserKeyWithLegacySupport).not.toHaveBeenCalled();
         expect(encryptService.decryptToBytes).toHaveBeenCalledWith(attachment.key, providedKey);
       });
 
@@ -120,12 +124,12 @@ describe("Attachment", () => {
       });
 
       it("gets the user's decryption key if required", async () => {
-        const userKey = mock<SymmetricCryptoKey>();
-        cryptoService.getKeyForUserEncryption.mockResolvedValue(userKey);
+        const userKey = mock<UserKey>();
+        cryptoService.getUserKeyWithLegacySupport.mockResolvedValue(userKey);
 
         await attachment.decrypt(null, null);
 
-        expect(cryptoService.getKeyForUserEncryption).toHaveBeenCalled();
+        expect(cryptoService.getUserKeyWithLegacySupport).toHaveBeenCalled();
         expect(encryptService.decryptToBytes).toHaveBeenCalledWith(attachment.key, userKey);
       });
     });

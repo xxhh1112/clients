@@ -143,11 +143,11 @@ export class PasswordLogInStrategy extends LogInStrategy {
 
   protected override async setMasterKey(response: IdentityTokenResponse) {
     await this.cryptoService.setMasterKey(this.masterKey);
-    await this.cryptoService.setKeyHash(this.localHashedPassword);
+    await this.cryptoService.setPasswordHash(this.localHashedPassword);
   }
 
   protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
-    await this.cryptoService.setUserKeyMasterKey(response.key);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
 
     const masterKey = await this.cryptoService.getMasterKey();
     if (masterKey) {

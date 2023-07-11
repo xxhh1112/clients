@@ -63,7 +63,7 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
         throw new Error(this.i18nService.t("invalidVerificationCode"));
       }
     } else {
-      const passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
+      const passwordValid = await this.cryptoService.compareAndUpdatePasswordHash(
         verification.secret,
         null
       );

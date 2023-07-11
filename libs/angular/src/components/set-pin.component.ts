@@ -1,6 +1,7 @@
 import { Directive, OnInit } from "@angular/core";
 
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { KeySuffixOptions } from "@bitwarden/common/enums/key-suffix-options.enum";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -41,7 +42,7 @@ export class SetPinComponent implements OnInit {
       await this.stateService.getKdfType(),
       await this.stateService.getKdfConfig()
     );
-    const userKey = await this.cryptoService.getUserKeyFromMemory();
+    const userKey = await this.cryptoService.getUserKey();
     const pinProtectedKey = await this.cryptoService.encrypt(userKey.key, pinKey);
     const encPin = await this.cryptoService.encrypt(this.pin, userKey);
     await this.stateService.setProtectedPin(encPin.encryptedString);
@@ -50,7 +51,7 @@ export class SetPinComponent implements OnInit {
     } else {
       await this.stateService.setUserKeyPin(pinProtectedKey);
     }
-    await this.cryptoService.clearOldPinKeys();
+    await this.cryptoService.clearDeprecatedKeys(KeySuffixOptions.Pin);
 
     this.modalRef.close(true);
   }

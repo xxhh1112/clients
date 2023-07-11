@@ -1,4 +1,5 @@
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
+import { PinLockType } from "../../services/vaultTimeout/vaultTimeoutSettings.service";
 
 export abstract class VaultTimeoutSettingsService {
   setVaultTimeoutOptions: (
@@ -9,9 +10,9 @@ export abstract class VaultTimeoutSettingsService {
   getVaultTimeoutAction: (userId?: string) => Promise<VaultTimeoutAction>;
   /**
    * Has the user enabled unlock with Pin.
-   * @returns [Pin with MP on Restart enabled, Pin without MP on Restart enabled]
+   * @returns PinLockType
    */
-  isPinLockSet: () => Promise<[boolean, boolean]>;
+  isPinLockSet: () => Promise<PinLockType>;
   isBiometricLockSet: () => Promise<boolean>;
   clear: (userId?: string) => Promise<void>;
 }

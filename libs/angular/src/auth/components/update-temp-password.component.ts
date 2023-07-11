@@ -126,7 +126,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       );
 
       // Grab user key
-      const userKey = await this.cryptoService.getUserKeyFromMemory();
+      const userKey = await this.cryptoService.getUserKey();
 
       // Encrypt user key with new master key
       const newProtectedUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(
