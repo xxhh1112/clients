@@ -81,8 +81,8 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     return deviceResponse;
   }
 
-  async getDeviceKey(): Promise<DeviceKey> {
-    return await this.stateService.getDeviceKey();
+  async getDeviceKey(userId?: string): Promise<DeviceKey> {
+    return await this.stateService.getDeviceKey({ userId });
   }
 
   private async setDeviceKey(deviceKey: DeviceKey): Promise<void> {

@@ -5,6 +5,8 @@ import { SsoComponent } from "@bitwarden/angular/auth/components/sso.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -34,7 +36,9 @@ export class LinkSsoComponent extends SsoComponent implements AfterContentInit {
     stateService: StateService,
     environmentService: EnvironmentService,
     logService: LogService,
-    configService: ConfigServiceAbstraction
+    configService: ConfigServiceAbstraction,
+    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    appIdService: AppIdService
   ) {
     super(
       authService,
@@ -48,7 +52,9 @@ export class LinkSsoComponent extends SsoComponent implements AfterContentInit {
       environmentService,
       passwordGenerationService,
       logService,
-      configService
+      configService,
+      deviceTrustCryptoService,
+      appIdService
     );
 
     this.returnUri = "/settings/organizations";

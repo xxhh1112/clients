@@ -1,14 +1,16 @@
 import { Directive } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { SsoLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -19,6 +21,11 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+
+// interface ImpersonationData {
+//   deviceKey: string;
+//   deviceId: string;
+// }
 
 @Directive()
 export class SsoComponent {
@@ -56,7 +63,9 @@ export class SsoComponent {
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     protected logService: LogService,
-    protected configService: ConfigServiceAbstraction
+    protected configService: ConfigServiceAbstraction,
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected appIdService: AppIdService
   ) {}
 
   async ngOnInit() {
@@ -68,16 +77,7 @@ export class SsoComponent {
         const clientId = this.getValueFromState(qParams.state, "clientId");
 
         if (clientId != this.clientId) {
-          // response is intended for another client
-          // TODO: To we want to have a separate state for redirect to another client?
-          // Maybe show some help text? "Continue login in another client"
-          this.loggingIn = true;
-          const clientUri = this.getValueFromState(qParams.state, "clientUri", true);
-          this.platformUtilsService.launchUri(
-            `${clientUri}?code=${qParams.code}&state=${qParams.state}`,
-            { sameWindow: true }
-          );
-          return;
+          return this.forwardToClient(qParams);
         }
 
         await this.stateService.setSsoCodeVerifier(null);
@@ -282,6 +282,29 @@ export class SsoComponent {
       }
     }
     this.loggingIn = false;
+  }
+
+  private async forwardToClient(qParams: Params) {
+    // TODO: To we want to have a separate UI state for redirect to another client?
+    // Maybe show some help text? "Continue login in another client"
+    this.loggingIn = true;
+
+    const clientUri = this.getValueFromState(qParams.state, "clientUri", true);
+    const userId = this.getValueFromState(qParams.state, "userId");
+    const state =
+      userId == null
+        ? qParams.state
+        : await this.tryAddImpersonationDataToState(userId, qParams.state);
+
+    this.platformUtilsService.launchUri(`${clientUri}?code=${qParams.code}&state=${state}`, {
+      sameWindow: true,
+    });
+  }
+
+  private async tryAddImpersonationDataToState(userId: string, state: string): Promise<string> {
+    const deviceKey = await this.deviceTrustCryptoService.getDeviceKey(userId);
+    const deviceId = await this.appIdService.getAppId();
+    return state + `_deviceKey='${deviceKey.keyB64}'_deviceId=${deviceId}`;
   }
 
   private checkState(state: string, checkState: string): boolean {

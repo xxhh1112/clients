@@ -38,6 +38,12 @@ import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/doma
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
+export const QueryParams = {
+  orgIdentifier: "identifier",
+  impersonationDeviceKey: "impersonationDeviceKey",
+  impersonationDeviceId: "impersonationDeviceId",
+};
+
 enum State {
   NewUser,
   ExistingUserUntrustedDevice,

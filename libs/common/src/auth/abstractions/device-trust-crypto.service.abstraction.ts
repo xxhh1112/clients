@@ -10,7 +10,7 @@ export abstract class DeviceTrustCryptoServiceAbstraction {
   setUserTrustDeviceChoiceForDecryption: (value: boolean) => Promise<void>;
 
   trustDevice: () => Promise<DeviceResponse>;
-  getDeviceKey: () => Promise<DeviceKey>;
+  getDeviceKey: (userId?: string) => Promise<DeviceKey>;
   // TODO: update param types when available
   decryptUserKeyWithDeviceKey: (
     encryptedDevicePrivateKey: any,

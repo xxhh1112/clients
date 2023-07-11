@@ -7,9 +7,11 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain-api.service.abstraction";
 import { OrganizationDomainSsoDetailsResponse } from "@bitwarden/common/abstractions/organization-domain/responses/organization-domain-sso-details.response";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { HttpStatusCode } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -41,7 +43,9 @@ export class SsoComponent extends BaseSsoComponent {
     private orgDomainApiService: OrgDomainApiServiceAbstraction,
     private loginService: LoginService,
     private validationService: ValidationService,
-    configService: ConfigServiceAbstraction
+    configService: ConfigServiceAbstraction,
+    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    appIdService: AppIdService
   ) {
     super(
       authService,
@@ -55,7 +59,9 @@ export class SsoComponent extends BaseSsoComponent {
       environmentService,
       passwordGenerationService,
       logService,
-      configService
+      configService,
+      deviceTrustCryptoService,
+      appIdService
     );
     this.redirectUri = window.location.origin + "/sso-connector.html";
     this.clientId = "web";
@@ -138,6 +144,6 @@ export class SsoComponent extends BaseSsoComponent {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;
     }
 
-    super.submit();
+    (window as any).continue = () => super.submit();
   }
 }
