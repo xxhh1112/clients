@@ -1,9 +1,9 @@
+import { ApiService } from "../../abstractions/api.service";
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { DeviceType } from "../../enums";
 import { ListResponse } from "../../models/response/list.response";
 import { Utils } from "../../platform/misc/utils";
-import { ApiService } from "../api.service";
 
 import { TrustedDeviceKeysRequest } from "./requests/trusted-device-keys.request";
 

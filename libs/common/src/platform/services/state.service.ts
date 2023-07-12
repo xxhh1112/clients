@@ -1302,7 +1302,14 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    return account?.keys?.deviceKey as DeviceKey;
+    const existingDeviceKey = account?.keys?.deviceKey;
+
+    // Must manually instantiate the SymmetricCryptoKey class from the JSON object
+    if (existingDeviceKey != null) {
+      return SymmetricCryptoKey.fromJSON(existingDeviceKey) as DeviceKey;
+    } else {
+      return null;
+    }
   }
 
   async setDeviceKey(value: DeviceKey, options?: StorageOptions): Promise<void> {

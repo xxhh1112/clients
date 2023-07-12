@@ -9,9 +9,16 @@ import { MessagingService } from "../../platform/abstractions/messaging.service"
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
-import { Account, AccountProfile, AccountTokens } from "../../platform/models/domain/account";
+import {
+  Account,
+  AccountDecryptionOptions,
+  AccountKeys,
+  AccountProfile,
+  AccountTokens,
+} from "../../platform/models/domain/account";
 import { EncString } from "../../platform/models/domain/enc-string";
 import {
+  DeviceKey,
   MasterKey,
   SymmetricCryptoKey,
   UserKey,
@@ -34,6 +41,10 @@ import { IdentityCaptchaResponse } from "../models/response/identity-captcha.res
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
 import { MasterPasswordPolicyResponse } from "../models/response/master-password-policy.response";
+import {
+  IUserDecryptionOptionsServerResponse,
+  UserDecryptionOptionsResponse,
+} from "../models/response/user-decryption-options/user-decryption-options.response";
 
 import { PasswordLogInStrategy } from "./password-login.strategy";
 
@@ -51,6 +62,13 @@ const kdfIterations = 10000;
 const userId = Utils.newGuid();
 const masterPasswordHash = "MASTER_PASSWORD_HASH";
 const name = "NAME";
+const defaultUserDecryptionOptionsServerResponse: IUserDecryptionOptionsServerResponse = {
+  HasMasterPassword: true,
+};
+const userDecryptionOptions = new UserDecryptionOptionsResponse(
+  defaultUserDecryptionOptionsServerResponse
+);
+const acctDecryptionOptions = AccountDecryptionOptions.fromResponse(userDecryptionOptions);
 
 const decodedToken = {
   sub: userId,
@@ -64,7 +82,8 @@ const twoFactorToken = "TWO_FACTOR_TOKEN";
 const twoFactorRemember = true;
 
 export function identityTokenResponseFactory(
-  masterPasswordPolicyResponse: MasterPasswordPolicyResponse = null
+  masterPasswordPolicyResponse: MasterPasswordPolicyResponse = null,
+  userDecryptionOptions: IUserDecryptionOptionsServerResponse = null
 ) {
   return new IdentityTokenResponse({
     ForcePasswordReset: false,
@@ -79,9 +98,11 @@ export function identityTokenResponseFactory(
     scope: "api offline_access",
     token_type: "Bearer",
     MasterPasswordPolicy: masterPasswordPolicyResponse,
+    UserDecryptionOptions: userDecryptionOptions || defaultUserDecryptionOptionsServerResponse,
   });
 }
 
+// TODO: add tests for latest changes to base class for TDE
 describe("LogInStrategy", () => {
   let cryptoService: MockProxy<CryptoService>;
   let apiService: MockProxy<ApiService>;
@@ -149,8 +170,9 @@ describe("LogInStrategy", () => {
       ) as MasterKey;
     });
 
-    it("sets the local environment after a successful login", async () => {
-      apiService.postIdentityToken.mockResolvedValue(identityTokenResponseFactory());
+    it("sets the local environment after a successful login with master password", async () => {
+      const idTokenResponse = identityTokenResponseFactory();
+      apiService.postIdentityToken.mockResolvedValue(idTokenResponse);
 
       await passwordLogInStrategy.logIn(credentials);
 
@@ -174,9 +196,34 @@ describe("LogInStrategy", () => {
               refreshToken: refreshToken,
             },
           },
+          keys: new AccountKeys(),
+          decryptionOptions: acctDecryptionOptions,
         })
       );
       expect(messagingService.send).toHaveBeenCalledWith("loggedIn");
+    });
+
+    it("persists a device key for trusted device encryption when it exists on login", async () => {
+      // Arrange
+      const idTokenResponse = identityTokenResponseFactory();
+      apiService.postIdentityToken.mockResolvedValue(idTokenResponse);
+
+      const deviceKey = new SymmetricCryptoKey(
+        new Uint8Array(userKeyBytesLength).buffer as CsprngArray
+      ) as DeviceKey;
+
+      stateService.getDeviceKey.mockResolvedValue(deviceKey);
+
+      const accountKeys = new AccountKeys();
+      accountKeys.deviceKey = deviceKey;
+
+      // Act
+      await passwordLogInStrategy.logIn(credentials);
+
+      // Assert
+      expect(stateService.addAccount).toHaveBeenCalledWith(
+        expect.objectContaining({ keys: accountKeys })
+      );
     });
 
     it("builds AuthResult", async () => {
