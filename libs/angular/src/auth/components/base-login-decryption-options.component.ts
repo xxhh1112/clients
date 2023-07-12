@@ -102,6 +102,9 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       const accountDecryptionOptions: AccountDecryptionOptions =
         await this.stateService.getAccountDecryptionOptions();
 
+      // TODO: verify that this doesn't also pick up key connector users... can key connector users even get here?
+      // see sso-login.strategy - to determine if a user is new or not it just checks if there is a key on the token response..
+      // can we check if they have a user key or master key in crypto service? Would that be sufficient?
       if (
         !accountDecryptionOptions?.trustedDeviceOption?.hasAdminApproval &&
         !accountDecryptionOptions?.hasMasterPassword
@@ -251,9 +254,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   }
 
   async approveWithMasterPassword() {
-    await this.deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(
-      this.rememberDevice.value
-    );
+    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
     this.router.navigate(["/lock"]);
   }
 

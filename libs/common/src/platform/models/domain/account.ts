@@ -149,6 +149,7 @@ export class AccountKeys {
     return Object.assign(new AccountKeys(), {
       userKey: SymmetricCryptoKey.fromJSON(obj?.userKey),
       masterKey: SymmetricCryptoKey.fromJSON(obj?.masterKey),
+      deviceKey: SymmetricCryptoKey.fromJSON(obj?.deviceKey),
       cryptoMasterKey: SymmetricCryptoKey.fromJSON(obj?.cryptoMasterKey),
       cryptoSymmetricKey: EncryptionPair.fromJSON(
         obj?.cryptoSymmetricKey,

@@ -52,6 +52,7 @@ import {
   PasswordStrengthServiceInitOptions,
 } from "../../../tools/background/service_factories/password-strength-service.factory";
 
+import { deviceTrustCryptoServiceFactory } from "./device-trust-crypto-service.factory";
 import {
   keyConnectorServiceFactory,
   KeyConnectorServiceInitOptions,
@@ -101,7 +102,8 @@ export function authServiceFactory(
         await i18nServiceFactory(cache, opts),
         await encryptServiceFactory(cache, opts),
         await passwordStrengthServiceFactory(cache, opts),
-        await policyServiceFactory(cache, opts)
+        await policyServiceFactory(cache, opts),
+        await deviceTrustCryptoServiceFactory(cache, opts)
       )
   );
 }

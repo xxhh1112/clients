@@ -19,6 +19,7 @@ import { Utils } from "../../platform/misc/utils";
 import { MasterKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { PasswordStrengthServiceAbstraction } from "../../tools/password-strength";
 import { AuthService as AuthServiceAbstraction } from "../abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -103,7 +104,8 @@ export class AuthService implements AuthServiceAbstraction {
     protected i18nService: I18nService,
     protected encryptService: EncryptService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
-    protected policyService: PolicyService
+    protected policyService: PolicyService,
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {}
 
   async logIn(
@@ -149,7 +151,8 @@ export class AuthService implements AuthServiceAbstraction {
           this.logService,
           this.stateService,
           this.twoFactorService,
-          this.keyConnectorService
+          this.keyConnectorService,
+          this.deviceTrustCryptoService
         );
         break;
       case AuthenticationType.UserApi:

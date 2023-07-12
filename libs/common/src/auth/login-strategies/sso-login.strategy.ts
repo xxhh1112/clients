@@ -5,6 +5,7 @@ import { LogService } from "../../platform/abstractions/log.service";
 import { MessagingService } from "../../platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
+import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -34,7 +35,8 @@ export class SsoLogInStrategy extends LogInStrategy {
     logService: LogService,
     stateService: StateService,
     twoFactorService: TwoFactorService,
-    private keyConnectorService: KeyConnectorService
+    private keyConnectorService: KeyConnectorService,
+    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {
     super(
       cryptoService,
@@ -80,37 +82,66 @@ export class SsoLogInStrategy extends LogInStrategy {
   }
 
   protected override async setUserKey(tokenResponse: IdentityTokenResponse): Promise<void> {
-    const newSsoUser = tokenResponse.key == null;
-
-    if (!newSsoUser) {
-      // TODO: check if TDE feature flag enabled and if token response account decryption options has TDE
-      // and then if id token response has required device keys
-      // DevicePublicKey(UserKey)
-      // UserKey(DevicePublicKey)
-      // DeviceKey(DevicePrivateKey)
-
-      // Once we have device keys coming back on id token response we can use this code
-      // const userKey = await this.deviceCryptoService.decryptUserKeyWithDeviceKey(
-      //   encryptedDevicePrivateKey,
-      //   encryptedUserKey
-      // );
-      // await this.cryptoService.setUserKey(userKey);
-
-      // TODO: also admin approval request existence check should go here b/c that can give us a decrypted user key to set
-      // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
-      // so might be worth moving this logic to a common place (base login strategy or a separate service?)
-
-      await this.cryptoService.setMasterKeyEncryptedUserKey(tokenResponse.key);
-
-      if (tokenResponse.keyConnectorUrl != null) {
-        const masterKey = await this.cryptoService.getMasterKey();
-        if (!masterKey) {
-          throw new Error("Master key not found");
-        }
-        const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
-        await this.cryptoService.setUserKey(userKey);
-      }
+    // If new user, return b/c we can't set the user key yet
+    if (tokenResponse.key === null) {
+      return;
     }
+    // Existing user; proceed
+
+    // User now may or may not have a master password
+    // but set the master key encrypted user key if it exists regardless
+    await this.cryptoService.setMasterKeyEncryptedUserKey(tokenResponse.key);
+
+    // TODO: also admin approval request existence check should go here b/c that can give us a decrypted user key to set
+    // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
+    // so might be worth moving this logic to a common place (base login strategy or a separate service?)
+
+    const userDecryptionOptions = tokenResponse?.userDecryptionOptions;
+
+    // Note: TDE and key connector are mutually exclusive
+    if (userDecryptionOptions?.trustedDeviceOption) {
+      await this.trySetUserKeyWithDeviceKey(tokenResponse);
+    } else if (
+      // TODO: remove tokenResponse.keyConnectorUrl when it's deprecated
+      tokenResponse.keyConnectorUrl ||
+      userDecryptionOptions?.keyConnectorOption?.keyConnectorUrl
+    ) {
+      await this.trySetUserKeyWithMasterKey();
+    }
+  }
+
+  private async trySetUserKeyWithDeviceKey(tokenResponse: IdentityTokenResponse): Promise<void> {
+    const trustedDeviceOption = tokenResponse.userDecryptionOptions?.trustedDeviceOption;
+
+    const deviceKey = await this.deviceTrustCryptoService.getDeviceKey();
+    const encDevicePrivateKey = trustedDeviceOption?.encryptedPrivateKey;
+    const encUserKey = trustedDeviceOption?.encryptedUserKey;
+
+    if (!deviceKey || !encDevicePrivateKey || !encUserKey) {
+      return;
+    }
+
+    const userKey = await this.deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+      encDevicePrivateKey,
+      encUserKey,
+      deviceKey
+    );
+
+    if (userKey) {
+      await this.cryptoService.setUserKey(userKey);
+    }
+  }
+
+  private async trySetUserKeyWithMasterKey(): Promise<void> {
+    const masterKey = await this.cryptoService.getMasterKey();
+
+    if (!masterKey) {
+      throw new Error("Master key not found");
+    }
+
+    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+
+    await this.cryptoService.setUserKey(userKey);
   }
 
   protected override async setPrivateKey(tokenResponse: IdentityTokenResponse): Promise<void> {

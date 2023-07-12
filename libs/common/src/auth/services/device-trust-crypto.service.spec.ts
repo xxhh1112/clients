@@ -50,34 +50,28 @@ describe("deviceTrustCryptoService", () => {
   });
 
   describe("User Trust Device Choice For Decryption", () => {
-    describe("getUserTrustDeviceChoiceForDecryption", () => {
+    describe("getShouldTrustDevice", () => {
       it("gets the user trust device choice for decryption from the state service", async () => {
-        const stateSvcGetUserTrustDeviceChoiceForDecryptionSpy = jest.spyOn(
-          stateService,
-          "getUserTrustDeviceChoiceForDecryption"
-        );
+        const stateSvcGetShouldTrustDeviceSpy = jest.spyOn(stateService, "getShouldTrustDevice");
 
         const expectedValue = true;
-        stateSvcGetUserTrustDeviceChoiceForDecryptionSpy.mockResolvedValue(expectedValue);
-        const result = await deviceTrustCryptoService.getUserTrustDeviceChoiceForDecryption();
+        stateSvcGetShouldTrustDeviceSpy.mockResolvedValue(expectedValue);
+        const result = await deviceTrustCryptoService.getShouldTrustDevice();
 
-        expect(stateSvcGetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledTimes(1);
+        expect(stateSvcGetShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
         expect(result).toEqual(expectedValue);
       });
     });
 
-    describe("setUserTrustDeviceChoiceForDecryption", () => {
+    describe("setShouldTrustDevice", () => {
       it("sets the user trust device choice for decryption in the state service", async () => {
-        const stateSvcSetUserTrustDeviceChoiceForDecryptionSpy = jest.spyOn(
-          stateService,
-          "setUserTrustDeviceChoiceForDecryption"
-        );
+        const stateSvcSetShouldTrustDeviceSpy = jest.spyOn(stateService, "setShouldTrustDevice");
 
         const newValue = true;
-        await deviceTrustCryptoService.setUserTrustDeviceChoiceForDecryption(newValue);
+        await deviceTrustCryptoService.setShouldTrustDevice(newValue);
 
-        expect(stateSvcSetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledTimes(1);
-        expect(stateSvcSetUserTrustDeviceChoiceForDecryptionSpy).toHaveBeenCalledWith(newValue);
+        expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
+        expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledWith(newValue);
       });
     });
   });
@@ -268,6 +262,11 @@ describe("deviceTrustCryptoService", () => {
         expect(cryptoSvcGetUserKeySpy).toHaveBeenCalledTimes(1);
 
         expect(cryptoSvcRsaEncryptSpy).toHaveBeenCalledTimes(1);
+
+        // RsaEncrypt must be called w/ a user key array buffer of 64 bytes
+        const userKeyKey: ArrayBuffer = cryptoSvcRsaEncryptSpy.mock.calls[0][0];
+        expect(userKeyKey.byteLength).toBe(64);
+
         expect(encryptServiceEncryptSpy).toHaveBeenCalledTimes(2);
 
         expect(appIdServiceGetAppIdSpy).toHaveBeenCalledTimes(1);
@@ -352,6 +351,108 @@ describe("deviceTrustCryptoService", () => {
       );
     });
 
-    // TOOD Add tests for decryptUserKeyWithDeviceKey when types are available
+    describe("decryptUserKeyWithDeviceKey", () => {
+      let mockDeviceKey: DeviceKey;
+      let mockEncryptedDevicePrivateKey: EncString;
+      let mockEncryptedUserKey: EncString;
+      let mockUserKey: UserKey;
+
+      beforeEach(() => {
+        const mockDeviceKeyRandomBytes = new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray;
+        mockDeviceKey = new SymmetricCryptoKey(mockDeviceKeyRandomBytes) as DeviceKey;
+
+        const mockUserKeyRandomBytes = new Uint8Array(userKeyBytesLength).buffer as CsprngArray;
+        mockUserKey = new SymmetricCryptoKey(mockUserKeyRandomBytes) as UserKey;
+
+        mockEncryptedDevicePrivateKey = new EncString(
+          EncryptionType.AesCbc256_HmacSha256_B64,
+          "mockEncryptedDevicePrivateKey"
+        );
+
+        mockEncryptedUserKey = new EncString(
+          EncryptionType.AesCbc256_HmacSha256_B64,
+          "mockEncryptedUserKey"
+        );
+
+        jest.clearAllMocks();
+      });
+
+      it("returns null when device key isn't provided and isn't in state", async () => {
+        const getDeviceKeySpy = jest
+          .spyOn(deviceTrustCryptoService, "getDeviceKey")
+          .mockResolvedValue(null);
+
+        const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+          mockEncryptedDevicePrivateKey,
+          mockEncryptedUserKey
+        );
+
+        expect(result).toBeNull();
+
+        expect(getDeviceKeySpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("successfully returns the user key when provided keys (including device key) can decrypt it", async () => {
+        const decryptToBytesSpy = jest
+          .spyOn(encryptService, "decryptToBytes")
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+        const rsaDecryptSpy = jest
+          .spyOn(cryptoService, "rsaDecrypt")
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+
+        const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+          mockEncryptedDevicePrivateKey,
+          mockEncryptedUserKey,
+          mockDeviceKey
+        );
+
+        expect(result).toEqual(mockUserKey);
+        expect(decryptToBytesSpy).toHaveBeenCalledTimes(1);
+        expect(rsaDecryptSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("successfully returns the user key when a device key is not provided (retrieves device key from state)", async () => {
+        const getDeviceKeySpy = jest
+          .spyOn(deviceTrustCryptoService, "getDeviceKey")
+          .mockResolvedValue(mockDeviceKey);
+
+        const decryptToBytesSpy = jest
+          .spyOn(encryptService, "decryptToBytes")
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+        const rsaDecryptSpy = jest
+          .spyOn(cryptoService, "rsaDecrypt")
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+
+        // Call without providing a device key
+        const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+          mockEncryptedDevicePrivateKey,
+          mockEncryptedUserKey
+        );
+
+        expect(getDeviceKeySpy).toHaveBeenCalledTimes(1);
+
+        expect(result).toEqual(mockUserKey);
+        expect(decryptToBytesSpy).toHaveBeenCalledTimes(1);
+        expect(rsaDecryptSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("returns null and removes device key when the decryption fails", async () => {
+        const decryptToBytesSpy = jest
+          .spyOn(encryptService, "decryptToBytes")
+          .mockRejectedValue(new Error("Decryption error"));
+        const setDeviceKeySpy = jest.spyOn(deviceTrustCryptoService as any, "setDeviceKey");
+
+        const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+          mockEncryptedDevicePrivateKey,
+          mockEncryptedUserKey,
+          mockDeviceKey
+        );
+
+        expect(result).toBeNull();
+        expect(decryptToBytesSpy).toHaveBeenCalledTimes(1);
+        expect(setDeviceKeySpy).toHaveBeenCalledTimes(1);
+        expect(setDeviceKeySpy).toHaveBeenCalledWith(null);
+      });
+    });
   });
 });

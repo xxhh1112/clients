@@ -5,6 +5,7 @@ import { CryptoFunctionService } from "../../platform/abstractions/crypto-functi
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { StateService } from "../../platform/abstractions/state.service";
+import { EncString } from "../../platform/models/domain/enc-string";
 import {
   SymmetricCryptoKey,
   DeviceKey,
@@ -27,12 +28,12 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
    * @description Retrieves the users choice to trust the device which can only happen after decryption
    * Note: this value should only be used once and then reset
    */
-  async getUserTrustDeviceChoiceForDecryption(): Promise<boolean> {
-    return await this.stateService.getUserTrustDeviceChoiceForDecryption();
+  async getShouldTrustDevice(): Promise<boolean> {
+    return await this.stateService.getShouldTrustDevice();
   }
 
-  async setUserTrustDeviceChoiceForDecryption(value: boolean): Promise<void> {
-    await this.stateService.setUserTrustDeviceChoiceForDecryption(value);
+  async setShouldTrustDevice(value: boolean): Promise<void> {
+    await this.stateService.setShouldTrustDevice(value);
   }
 
   async trustDevice(): Promise<DeviceResponse> {
@@ -58,7 +59,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
       deviceKeyEncryptedDevicePrivateKey,
     ] = await Promise.all([
       // Encrypt user key with the DevicePublicKey
-      this.cryptoService.rsaEncrypt(userKey.encKey, devicePublicKey),
+      this.cryptoService.rsaEncrypt(userKey.key, devicePublicKey),
 
       // Encrypt devicePublicKey with user key
       this.encryptService.encrypt(devicePublicKey, userKey),
@@ -85,7 +86,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     return await this.stateService.getDeviceKey();
   }
 
-  private async setDeviceKey(deviceKey: DeviceKey): Promise<void> {
+  private async setDeviceKey(deviceKey: DeviceKey | null): Promise<void> {
     await this.stateService.setDeviceKey(deviceKey);
   }
 
@@ -97,28 +98,38 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     return deviceKey;
   }
 
-  // TODO: add proper types to parameters once we have them coming down from server
-  // TODO: add tests for this method
   async decryptUserKeyWithDeviceKey(
-    encryptedDevicePrivateKey: any,
-    encryptedUserKey: any
-  ): Promise<UserKey> {
-    // get device key
-    const existingDeviceKey = await this.getDeviceKey();
+    encryptedDevicePrivateKey: EncString,
+    encryptedUserKey: EncString,
+    deviceKey?: DeviceKey
+  ): Promise<UserKey | null> {
+    // If device key provided use it, otherwise try to retrieve from storage
+    deviceKey ||= await this.getDeviceKey();
 
-    if (!existingDeviceKey) {
-      // TODO: not sure what to do here
+    if (!deviceKey) {
       // User doesn't have a device key anymore so device is untrusted
-      return;
+      return null;
     }
 
-    // attempt to decrypt encryptedDevicePrivateKey with device key
-    const devicePrivateKey = await this.encryptService.decryptToBytes(
-      encryptedDevicePrivateKey,
-      existingDeviceKey
-    );
-    // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
-    const userKey = await this.cryptoService.rsaDecrypt(encryptedUserKey, devicePrivateKey);
-    return new SymmetricCryptoKey(userKey) as UserKey;
+    try {
+      // attempt to decrypt encryptedDevicePrivateKey with device key
+      const devicePrivateKey = await this.encryptService.decryptToBytes(
+        encryptedDevicePrivateKey,
+        deviceKey
+      );
+
+      // Attempt to decrypt encryptedUserDataKey with devicePrivateKey
+      const userKey = await this.cryptoService.rsaDecrypt(
+        encryptedUserKey.encryptedString,
+        devicePrivateKey
+      );
+
+      return new SymmetricCryptoKey(userKey) as UserKey;
+    } catch (e) {
+      // If either decryption effort fails, we want to remove the device key
+      await this.setDeviceKey(null);
+
+      return null;
+    }
   }
 }
