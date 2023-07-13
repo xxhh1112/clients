@@ -155,14 +155,11 @@ export class SecretsListComponent implements OnDestroy {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService
   ) {
-    SecretsListComponent.copyToClipboardAsync(Promise.resolve(id), platformUtilsService).then(
-      () => {
-        platformUtilsService.showToast(
-          "success",
-          null,
-          i18nService.t("valueCopied", i18nService.t("value"))
-        );
-      }
+    platformUtilsService.copyToClipboard(id);
+    platformUtilsService.showToast(
+      "success",
+      null,
+      i18nService.t("valueCopied", i18nService.t("uuid"))
     );
   }
 
