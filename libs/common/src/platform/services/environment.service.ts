@@ -236,6 +236,11 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     };
   }
 
+  /**
+   * Sets the in state and in the EnvironmentService, using the provided URLs for Region.SelfHosted.
+   * @param region The region to set.
+   * @param selfHostedUrls The environment URLs to set for a self-hosted region.
+   */
   async setRegion(region: Region, selfHostedUrls?: Urls): Promise<void> {
     region = region ?? Region.SelfHosted;
 
