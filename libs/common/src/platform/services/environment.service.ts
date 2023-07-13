@@ -176,7 +176,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   }
 
   async setUrlsFromStorage(): Promise<void> {
-    const region = await this.stateService.getRegion();
+    const savedRegion = await this.stateService.getRegion();
     const savedUrls = await this.stateService.getEnvironmentUrls();
 
     // In release `2023.5.0`, we set the `base` property of the environment URLs to the US web vault URL when a user clicked the "US" region.
@@ -188,29 +188,21 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       return;
     }
 
-    switch (region) {
-      case Region.EU:
-        await this.setRegion(Region.EU);
-        return;
-      case Region.US:
-        await this.setRegion(Region.US);
-        return;
-      case Region.SelfHosted:
-      case null:
-      default:
-        this.baseUrl = savedUrls.base;
-        this.webVaultUrl = savedUrls.webVault;
-        this.apiUrl = savedUrls.api;
-        this.identityUrl = savedUrls.identity;
-        this.iconsUrl = savedUrls.icons;
-        this.notificationsUrl = savedUrls.notifications;
-        this.eventsUrl = savedUrls.events;
-        this.keyConnectorUrl = savedUrls.keyConnector;
-        await this.setRegion(Region.SelfHosted);
-        // scimUrl is not saved to storage
-        this.urlsSubject.next();
-        break;
-    }
+    const region = Region[savedRegion as keyof typeof Region] ?? null;
+
+    const urls: Urls = {
+      base: savedUrls.base,
+      api: savedUrls.api,
+      identity: savedUrls.identity,
+      webVault: savedUrls.webVault,
+      icons: savedUrls.icons,
+      notifications: savedUrls.notifications,
+      events: savedUrls.events,
+      keyConnector: savedUrls.keyConnector,
+      // scimUrl is not stored
+    };
+
+    await this.setRegion(region, urls);
   }
 
   async setSelfHostedUrls(urls: Urls): Promise<Urls> {
@@ -245,6 +237,8 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   }
 
   async setRegion(region: Region, selfHostedUrls?: Urls): Promise<void> {
+    region = region ?? Region.SelfHosted;
+
     this.selectedRegion = region;
     await this.stateService.setRegion(region);
 
