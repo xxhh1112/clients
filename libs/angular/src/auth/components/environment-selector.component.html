@@ -1,21 +1,23 @@
-<label class="environment-selector-btn">
+<div class="environment-selector-btn">
   {{ "region" | i18n }}:
-  <a
+  <button
+    type="button"
     (click)="toggle(null)"
     cdkOverlayOrigin
     #trigger="cdkOverlayOrigin"
-    aria-haspopup="menu"
+    aria-haspopup="dialog"
     aria-controls="cdk-overlay-container"
     [ngSwitch]="selectedEnvironment"
   >
-    <label *ngSwitchCase="ServerEnvironmentType.US" class="text-primary">{{ "us" | i18n }}</label>
-    <label *ngSwitchCase="ServerEnvironmentType.EU" class="text-primary">{{ "eu" | i18n }}</label>
-    <label *ngSwitchCase="ServerEnvironmentType.SelfHosted" class="text-primary">{{
+    <span class="sr-only">{{ "region" | i18n }}:&nbsp;</span>
+    <span *ngSwitchCase="ServerEnvironmentType.US" class="text-primary">{{ "us" | i18n }}</span>
+    <span *ngSwitchCase="ServerEnvironmentType.EU" class="text-primary">{{ "eu" | i18n }}</span>
+    <span *ngSwitchCase="ServerEnvironmentType.SelfHosted" class="text-primary">{{
       "selfHosted" | i18n
-    }}</label>
+    }}</span>
     <i class="bwi bwi-fw bwi-sm bwi-angle-down" aria-hidden="true"></i>
-  </a>
-</label>
+  </button>
+</div>
 
 <ng-template
   cdkConnectedOverlay
@@ -24,13 +26,15 @@
   (detach)="close()"
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayPositions]="overlayPostition"
+  [cdkConnectedOverlayHasBackdrop]="true"
 >
-  <div class="box-content">
+  <div class="box-content" cdkTrapFocus cdkTrapFocusAutoCapture aria-role="dialog">
     <div class="environment-selector-dialog" [@transformPanel]="'open'" role="dialog">
       <button
         type="button"
         class="environment-selector-dialog-item"
         (click)="toggle(ServerEnvironmentType.US)"
+        [attr.aria-pressed]="selectedEnvironment === ServerEnvironmentType.US ? 'true' : 'false'"
       >
         <i
           class="bwi bwi-fw bwi-sm bwi-check"
@@ -48,6 +52,7 @@
         type="button"
         class="environment-selector-dialog-item"
         (click)="toggle(ServerEnvironmentType.EU)"
+        [attr.aria-pressed]="selectedEnvironment === ServerEnvironmentType.EU ? 'true' : 'false'"
         *ngIf="euServerFlagEnabled"
       >
         <i
@@ -66,6 +71,9 @@
         type="button"
         class="environment-selector-dialog-item"
         (click)="toggle(ServerEnvironmentType.SelfHosted)"
+        [attr.aria-pressed]="
+          selectedEnvironment === ServerEnvironmentType.SelfHosted ? 'true' : 'false'
+        "
       >
         <i
           class="bwi bwi-fw bwi-sm bwi-check"
@@ -85,3 +93,16 @@
     </div>
   </div>
 </ng-template>
+
+<!-- <button type="button" [cdkMenuTriggerFor]="menu" class="example-standalone-trigger">
+  Click me!
+</button>
+
+<ng-template #menu>
+  <div class="example-menu" cdkMenu>
+    <button type="button" class="example-menu-item" cdkMenuItem>Refresh</button>
+    <button type="button" class="example-menu-item" cdkMenuItem>Settings</button>
+    <button type="button" class="example-menu-item" cdkMenuItem>Help</button>
+    <button type="button" class="example-menu-item" cdkMenuItem>Sign out</button>
+  </div>
+</ng-template> -->

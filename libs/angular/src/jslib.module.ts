@@ -1,3 +1,4 @@
+import { CdkMenuModule } from "@angular/cdk/menu";
 import { CommonModule, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -42,6 +43,7 @@ import { IconComponent } from "./vault/components/icon.component";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    CdkMenuModule,
   ],
   declarations: [
     A11yInvalidDirective,
@@ -79,6 +81,7 @@ import { IconComponent } from "./vault/components/icon.component";
     ApiActionDirective,
     AutofocusDirective,
     BitwardenToastModule,
+    CdkMenuModule,
     BoxRowDirective,
     CalloutComponent,
     CreditCardNumberPipe,

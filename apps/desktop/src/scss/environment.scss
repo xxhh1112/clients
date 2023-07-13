@@ -20,7 +20,8 @@
     textarea,
     label,
     .box,
-    .modal-backdrop {
+    .modal-backdrop,
+    .cdk-overlay-backdrop {
       -webkit-app-region: no-drag;
     }
   }
