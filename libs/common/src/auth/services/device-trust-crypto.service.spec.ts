@@ -1,7 +1,10 @@
-import { mock, mockReset } from "jest-mock-extended";
+import { matches, mock, mockReset } from "jest-mock-extended";
 
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
+import { UpdateDevicesTrustRequest } from "../../abstractions/devices/requests/update-devices-trust.request";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
+import { ProtectedDeviceResponse } from "../../abstractions/devices/responses/protected-device.response";
+import { DeviceType } from "../../enums";
 import { EncryptionType } from "../../enums/encryption-type.enum";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
@@ -452,6 +455,111 @@ describe("deviceTrustCryptoService", () => {
         expect(decryptToBytesSpy).toHaveBeenCalledTimes(1);
         expect(setDeviceKeySpy).toHaveBeenCalledTimes(1);
         expect(setDeviceKeySpy).toHaveBeenCalledWith(null);
+      });
+    });
+    // TOOD Add tests for decryptUserKeyWithDeviceKey when types are available
+
+    describe("rotateDevicesTrust", () => {
+      let fakeNewUserKey: UserKey = null;
+
+      beforeEach(() => {
+        const fakeNewUserKeyData = new Uint8Array(new ArrayBuffer(64));
+        fakeNewUserKeyData.fill(1, 0, 1);
+        fakeNewUserKey = new SymmetricCryptoKey(fakeNewUserKeyData) as UserKey;
+      });
+
+      it("does an early exit, if they are not currently on a trusted device.", async () => {
+        stateService.getDeviceKey.mockResolvedValue(null);
+
+        await deviceTrustCryptoService.rotateDevicesTrust(fakeNewUserKey, "");
+
+        expect(devicesApiService.updateTrust).not.toBeCalled();
+      });
+
+      describe("is on a trusted device", () => {
+        beforeEach(() => {
+          stateService.getDeviceKey.mockResolvedValue(
+            new SymmetricCryptoKey(new ArrayBuffer(deviceKeyBytesLength)) as DeviceKey
+          );
+        });
+
+        it("retreives the current devices keys, updates them, and lets the server know", async () => {
+          const currentEncryptedPublicKey = "2.cHVibGlj|cHVibGlj|cHVibGlj";
+          const currentEncryptedUserKey = "4.dXNlcg==";
+
+          const fakeOldUserKeyData = new Uint8Array(new ArrayBuffer(64));
+          // Fill the first byte with something identifiable
+          fakeOldUserKeyData.fill(5, 0, 1);
+
+          // Mock the retrieval of a user key that differs from the new one passed into the method
+          stateService.getUserKey.mockResolvedValue(
+            new SymmetricCryptoKey(fakeOldUserKeyData) as UserKey
+          );
+
+          appIdService.getAppId.mockResolvedValue("test_device_identifier");
+
+          devicesApiService.getDeviceKeys.mockImplementation((deviceIdentifier, secretRequest) => {
+            if (
+              deviceIdentifier !== "test_device_identifier" ||
+              secretRequest.masterPasswordHash !== "my_password_hash"
+            ) {
+              return Promise.resolve(null);
+            }
+
+            return Promise.resolve(
+              new ProtectedDeviceResponse({
+                id: "",
+                creationDate: "",
+                identifier: "test_device_identifier",
+                name: "Firefox",
+                type: DeviceType.FirefoxBrowser,
+                encryptedPublicKey: currentEncryptedPublicKey,
+                encryptedUserKey: currentEncryptedUserKey,
+              })
+            );
+          });
+
+          // Mock the decryption of the public key with the old user key
+          encryptService.decryptToBytes.mockImplementationOnce((_encValue, privateKeyValue) => {
+            expect(privateKeyValue.key.byteLength).toBe(64);
+            expect(new Uint8Array(privateKeyValue.key)[0]).toBe(5);
+            const data = new Uint8Array(new ArrayBuffer(250));
+            data.fill(17, 0, 1);
+            return Promise.resolve(data.buffer);
+          });
+
+          // Mock the encryption of the new user key with the decrypted public key
+          cryptoService.rsaEncrypt.mockImplementationOnce((data, publicKey) => {
+            expect(data.byteLength).toBe(64); // New key should also be 64 bytes
+            expect(new Uint8Array(data)[0]).toBe(1); // New key should have the first byte be '1';
+
+            expect(new Uint8Array(publicKey)[0]).toBe(17);
+            return Promise.resolve(new EncString("4.ZW5jcnlwdGVkdXNlcg=="));
+          });
+
+          // Mock the reencryption of the device public key with the new user key
+          encryptService.encrypt.mockImplementationOnce((plainValue, key) => {
+            expect(plainValue).toBeInstanceOf(ArrayBuffer);
+            expect(new Uint8Array(plainValue as ArrayBuffer)[0]).toBe(17);
+
+            expect(new Uint8Array(key.key)[0]).toBe(1);
+            return Promise.resolve(
+              new EncString("2.ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj")
+            );
+          });
+
+          await deviceTrustCryptoService.rotateDevicesTrust(fakeNewUserKey, "my_password_hash");
+
+          expect(devicesApiService.updateTrust).toBeCalledWith(
+            matches((updateTrustModel: UpdateDevicesTrustRequest) => {
+              return (
+                updateTrustModel.currentDevice.encryptedPublicKey ===
+                  "2.ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj" &&
+                updateTrustModel.currentDevice.encryptedUserKey === "4.ZW5jcnlwdGVkdXNlcg=="
+              );
+            })
+          );
+        });
       });
     });
   });

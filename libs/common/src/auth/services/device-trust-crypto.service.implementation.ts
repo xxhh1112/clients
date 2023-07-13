@@ -1,4 +1,8 @@
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
+import {
+  DeviceKeysUpdateRequest,
+  UpdateDevicesTrustRequest,
+} from "../../abstractions/devices/requests/update-devices-trust.request";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
@@ -13,6 +17,7 @@ import {
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../../types/csprng";
 import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
+import { SecretVerificationRequest } from "../models/request/secret-verification.request";
 
 export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstraction {
   constructor(
@@ -80,6 +85,60 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     // store device key in local/secure storage if enc keys posted to server successfully
     await this.setDeviceKey(deviceKey);
     return deviceResponse;
+  }
+
+  async rotateDevicesTrust(newUserKey: UserKey, masterPasswordHash: string): Promise<void> {
+    const currentDeviceKey = await this.getDeviceKey();
+    if (currentDeviceKey == null) {
+      // If the current device doesn't have a device key available to it, then we can't
+      // rotate any trust at all, so early return.
+      return;
+    }
+
+    // At this point of rotating their keys, they should still have their old user key in state
+    const oldUserKey = await this.stateService.getUserKey();
+
+    const deviceIdentifier = await this.appIdService.getAppId();
+    const secretVerificationRequest = new SecretVerificationRequest();
+    secretVerificationRequest.masterPasswordHash = masterPasswordHash;
+
+    // Get the keys that are used in rotating a devices keys from the server
+    const currentDeviceKeys = await this.devicesApiService.getDeviceKeys(
+      deviceIdentifier,
+      secretVerificationRequest
+    );
+
+    // Decrypt the existing device public key with the old user key
+    const decryptedDevicePublicKey = await this.encryptService.decryptToBytes(
+      new EncString(currentDeviceKeys.encryptedPublicKey),
+      oldUserKey
+    );
+
+    // Encrypt the brand new user key with the now-decrypted public key for the device
+    const encryptedNewUserKey = await this.cryptoService.rsaEncrypt(
+      newUserKey.key,
+      decryptedDevicePublicKey
+    );
+
+    // Re-encrypt the device public key with the new user key
+    const encryptedDevicePublicKey = await this.encryptService.encrypt(
+      decryptedDevicePublicKey,
+      newUserKey
+    );
+
+    const currentDeviceUpdateRequest = new DeviceKeysUpdateRequest();
+    currentDeviceUpdateRequest.encryptedUserKey = encryptedNewUserKey.encryptedString;
+    currentDeviceUpdateRequest.encryptedPublicKey = encryptedDevicePublicKey.encryptedString;
+
+    // TODO: For device management, allow this method to take an array of device ids that can be looped over and individually rotated
+    // then it can be added to trustRequest.otherDevices.
+
+    const trustRequest = new UpdateDevicesTrustRequest();
+    trustRequest.masterPasswordHash = masterPasswordHash;
+    trustRequest.currentDevice = currentDeviceUpdateRequest;
+    trustRequest.otherDevices = [];
+
+    await this.devicesApiService.updateTrust(trustRequest);
   }
 
   async getDeviceKey(): Promise<DeviceKey> {

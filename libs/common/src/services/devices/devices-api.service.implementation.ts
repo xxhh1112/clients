@@ -1,6 +1,9 @@
 import { ApiService } from "../../abstractions/api.service";
 import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
+import { UpdateDevicesTrustRequest } from "../../abstractions/devices/requests/update-devices-trust.request";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
+import { ProtectedDeviceResponse } from "../../abstractions/devices/responses/protected-device.response";
+import { SecretVerificationRequest } from "../../auth/models/request/secret-verification.request";
 import { DeviceType } from "../../enums";
 import { ListResponse } from "../../models/response/list.response";
 import { Utils } from "../../platform/misc/utils";
@@ -79,5 +82,29 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
     );
 
     return new DeviceResponse(result);
+  }
+
+  async updateTrust(updateDevicesTrustRequestModel: UpdateDevicesTrustRequest): Promise<void> {
+    await this.apiService.send(
+      "POST",
+      "devices/update-trust",
+      updateDevicesTrustRequestModel,
+      true,
+      false
+    );
+  }
+
+  async getDeviceKeys(
+    deviceIdentifier: string,
+    secretVerificationRequest: SecretVerificationRequest
+  ): Promise<ProtectedDeviceResponse> {
+    const result = await this.apiService.send(
+      "POST",
+      `/devices/${deviceIdentifier}/retrieve-keys`,
+      secretVerificationRequest,
+      true,
+      true
+    );
+    return new ProtectedDeviceResponse(result);
   }
 }

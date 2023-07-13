@@ -11,6 +11,7 @@ import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/commo
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EmergencyAccessStatusType } from "@bitwarden/common/auth/enums/emergency-access-status-type";
@@ -69,7 +70,8 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
     dialogService: DialogServiceAbstraction,
-    private userVerificationService: UserVerificationService
+    private userVerificationService: UserVerificationService,
+    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
   ) {
     super(
       i18nService,
@@ -220,15 +222,15 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   private async updateKey(masterKey: MasterKey, masterPasswordHash: string) {
-    const userKey = await this.cryptoService.makeUserKey(masterKey);
+    const [newUserKey, newProtectedUserKey] = await this.cryptoService.makeUserKey(masterKey);
     const privateKey = await this.cryptoService.getPrivateKey();
     let encPrivateKey: EncString = null;
     if (privateKey != null) {
-      encPrivateKey = await this.cryptoService.encrypt(privateKey, userKey[0]);
+      encPrivateKey = await this.cryptoService.encrypt(privateKey, newUserKey);
     }
     const request = new UpdateKeyRequest();
     request.privateKey = encPrivateKey != null ? encPrivateKey.encryptedString : null;
-    request.key = userKey[1].encryptedString;
+    request.key = newProtectedUserKey.encryptedString;
     request.masterPasswordHash = masterPasswordHash;
 
     const folders = await firstValueFrom(this.folderService.folderViews$);
@@ -236,7 +238,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       if (folders[i].id == null) {
         continue;
       }
-      const folder = await this.folderService.encrypt(folders[i], userKey[0]);
+      const folder = await this.folderService.encrypt(folders[i], newUserKey);
       request.folders.push(new FolderWithIdRequest(folder));
     }
 
@@ -246,7 +248,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
         continue;
       }
 
-      const cipher = await this.cipherService.encrypt(ciphers[i], userKey[0]);
+      const cipher = await this.cipherService.encrypt(ciphers[i], newUserKey);
       request.ciphers.push(new CipherWithIdRequest(cipher));
     }
 
@@ -254,16 +256,18 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     await Promise.all(
       sends.map(async (send) => {
         const sendKey = await this.cryptoService.decryptToBytes(send.key, null);
-        send.key = (await this.cryptoService.encrypt(sendKey, userKey[0])) ?? send.key;
+        send.key = (await this.cryptoService.encrypt(sendKey, newUserKey)) ?? send.key;
         request.sends.push(new SendWithIdRequest(send));
       })
     );
 
+    await this.deviceTrustCryptoService.rotateDevicesTrust(newUserKey, masterPasswordHash);
+
     await this.apiService.postAccountKey(request);
 
-    await this.updateEmergencyAccesses(userKey[0]);
+    await this.updateEmergencyAccesses(newUserKey);
 
-    await this.updateAllResetPasswordKeys(userKey[0], masterPasswordHash);
+    await this.updateAllResetPasswordKeys(newUserKey, masterPasswordHash);
   }
 
   private async updateEmergencyAccesses(encKey: SymmetricCryptoKey) {
