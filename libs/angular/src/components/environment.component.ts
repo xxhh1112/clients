@@ -3,7 +3,8 @@ import { Directive, EventEmitter, Output } from "@angular/core";
 import {
   EnvironmentService,
   Region,
- Urls } from "@bitwarden/common/platform/abstractions/environment.service";
+  Urls,
+} from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
@@ -50,7 +51,7 @@ export class EnvironmentComponent {
       notifications: this.notificationsUrl,
     };
 
-    const resUrls = await this.environmentService.setUrls(urls);
+    const resUrls = await this.environmentService.setSelfHostedUrls(urls);
 
     // If the user has cleared all of their URLs, set the region back to US
     if (this.allUrlsAreEmpty(resUrls)) {

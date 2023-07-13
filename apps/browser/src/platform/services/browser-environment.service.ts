@@ -57,7 +57,7 @@ export class BrowserEnvironmentService extends EnvironmentService {
 
   async setUrlsToManagedEnvironment() {
     const env = await this.getManagedEnvironment();
-    await this.setUrls({
+    await this.setSelfHostedUrls({
       base: env.base,
       webVault: env.webVault,
       api: env.api,

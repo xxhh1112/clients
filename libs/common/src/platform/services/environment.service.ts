@@ -178,7 +178,6 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   async setUrlsFromStorage(): Promise<void> {
     const region = await this.stateService.getRegion();
     const savedUrls = await this.stateService.getEnvironmentUrls();
-    const envUrls = new EnvironmentUrls();
 
     // In release `2023.5.0`, we set the `base` property of the environment URLs to the US web vault URL when a user clicked the "US" region.
     // This check will detect these cases and convert them to the proper region instead.
@@ -199,13 +198,13 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       case Region.SelfHosted:
       case null:
       default:
-        this.baseUrl = envUrls.base = savedUrls.base;
+        this.baseUrl = savedUrls.base;
         this.webVaultUrl = savedUrls.webVault;
-        this.apiUrl = envUrls.api = savedUrls.api;
-        this.identityUrl = envUrls.identity = savedUrls.identity;
+        this.apiUrl = savedUrls.api;
+        this.identityUrl = savedUrls.identity;
         this.iconsUrl = savedUrls.icons;
         this.notificationsUrl = savedUrls.notifications;
-        this.eventsUrl = envUrls.events = savedUrls.events;
+        this.eventsUrl = savedUrls.events;
         this.keyConnectorUrl = savedUrls.keyConnector;
         await this.setRegion(Region.SelfHosted);
         // scimUrl is not saved to storage
@@ -214,7 +213,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     }
   }
 
-  async setUrls(urls: Urls): Promise<Urls> {
+  async setSelfHostedUrls(urls: Urls): Promise<Urls> {
     urls.base = this.formatUrl(urls.base);
     urls.webVault = this.formatUrl(urls.webVault);
     urls.api = this.formatUrl(urls.api);
@@ -282,9 +281,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     this.notificationsUrl = this.formatUrl(urls.notifications);
     this.eventsUrl = this.formatUrl(urls.events);
     this.keyConnectorUrl = this.formatUrl(urls.keyConnector);
-
-    // scimUrl cannot be cleared
-    this.scimUrl = this.formatUrl(urls.scim) ?? this.scimUrl;
+    this.scimUrl = this.formatUrl(urls.scim) ?? this.scimUrl; // scimUrl cannot be cleared
     this.urlsSubject.next();
   }
 
