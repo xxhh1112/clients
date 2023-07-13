@@ -3,7 +3,7 @@ import { Directive, EventEmitter, Output } from "@angular/core";
 import {
   EnvironmentService,
   Region,
-} from "@bitwarden/common/platform/abstractions/environment.service";
+ Urls } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
@@ -41,22 +41,29 @@ export class EnvironmentComponent {
   }
 
   async submit() {
-    const resUrls = await this.environmentService.setUrls({
+    const urls: Urls = {
       base: this.baseUrl,
       api: this.apiUrl,
       identity: this.identityUrl,
       webVault: this.webVaultUrl,
       icons: this.iconsUrl,
       notifications: this.notificationsUrl,
-    });
+    };
 
-    // re-set urls since service can change them, ex: prefixing https://
-    this.baseUrl = resUrls.base;
-    this.apiUrl = resUrls.api;
-    this.identityUrl = resUrls.identity;
-    this.webVaultUrl = resUrls.webVault;
-    this.iconsUrl = resUrls.icons;
-    this.notificationsUrl = resUrls.notifications;
+    const resUrls = await this.environmentService.setUrls(urls);
+
+    // If the user has cleared all of their URLs, set the region back to US
+    if (this.allUrlsAreEmpty(resUrls)) {
+      await this.environmentService.setRegion(Region.US);
+    } else {
+      // Re-set urls since service can change them, ex: prefixing https://
+      this.baseUrl = resUrls.base;
+      this.apiUrl = resUrls.api;
+      this.identityUrl = resUrls.identity;
+      this.webVaultUrl = resUrls.webVault;
+      this.iconsUrl = resUrls.icons;
+      this.notificationsUrl = resUrls.notifications;
+    }
 
     this.platformUtilsService.showToast("success", null, this.i18nService.t("environmentSaved"));
     this.saved();
@@ -69,5 +76,17 @@ export class EnvironmentComponent {
   protected saved() {
     this.onSaved.emit();
     this.modalService.closeAll();
+  }
+
+  private allUrlsAreEmpty(urls: Urls): boolean {
+    return (
+      urls.base == null &&
+      urls.webVault == null &&
+      urls.api == null &&
+      urls.identity == null &&
+      urls.icons == null &&
+      urls.notifications == null &&
+      urls.events == null
+    );
   }
 }

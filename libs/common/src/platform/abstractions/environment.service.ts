@@ -64,7 +64,6 @@ export abstract class EnvironmentService {
   setRegion: (region: Region) => Promise<void>;
   getUrls: () => Urls;
   isCloud: () => boolean;
-  isEmpty: () => boolean;
   /**
    * @remarks For desktop and browser use only.
    * For web, use PlatformUtilsService.isSelfHost()

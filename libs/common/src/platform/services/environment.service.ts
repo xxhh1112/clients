@@ -223,35 +223,9 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     urls.notifications = this.formatUrl(urls.notifications);
     urls.events = this.formatUrl(urls.events);
     urls.keyConnector = this.formatUrl(urls.keyConnector);
+    urls.scim = this.formatUrl(urls.scim) ?? this.scimUrl; // scimUrl cannot be cleared
 
-    // scimUrl cannot be cleared
-    urls.scim = this.formatUrl(urls.scim) ?? this.scimUrl;
-
-    await this.stateService.setEnvironmentUrls({
-      base: urls.base,
-      api: urls.api,
-      identity: urls.identity,
-      webVault: urls.webVault,
-      icons: urls.icons,
-      notifications: urls.notifications,
-      events: urls.events,
-      keyConnector: urls.keyConnector,
-      // scimUrl is not saved to storage
-    });
-
-    this.baseUrl = urls.base;
-    this.webVaultUrl = urls.webVault;
-    this.apiUrl = urls.api;
-    this.identityUrl = urls.identity;
-    this.iconsUrl = urls.icons;
-    this.notificationsUrl = urls.notifications;
-    this.eventsUrl = urls.events;
-    this.keyConnectorUrl = urls.keyConnector;
-    this.scimUrl = urls.scim;
-
-    await this.setRegion(Region.SelfHosted);
-
-    this.urlsSubject.next();
+    await this.setRegion(Region.SelfHosted, urls);
 
     return urls;
   }
@@ -271,29 +245,26 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     };
   }
 
-  isEmpty(): boolean {
-    return (
-      this.baseUrl == null &&
-      this.webVaultUrl == null &&
-      this.apiUrl == null &&
-      this.identityUrl == null &&
-      this.iconsUrl == null &&
-      this.notificationsUrl == null &&
-      this.eventsUrl == null
-    );
-  }
-
-  async setRegion(region: Region) {
+  async setRegion(region: Region, selfHostedUrls?: Urls): Promise<void> {
     this.selectedRegion = region;
     await this.stateService.setRegion(region);
+
     if (region === Region.SelfHosted) {
-      // If user saves a self-hosted region with empty fields, default to US
-      if (this.isEmpty()) {
-        await this.setRegion(Region.US);
-      }
+      await this.stateService.setEnvironmentUrls({
+        base: selfHostedUrls.base,
+        api: selfHostedUrls.api,
+        identity: selfHostedUrls.identity,
+        webVault: selfHostedUrls.webVault,
+        icons: selfHostedUrls.icons,
+        notifications: selfHostedUrls.notifications,
+        events: selfHostedUrls.events,
+        keyConnector: selfHostedUrls.keyConnector,
+        // scimUrl is not saved to storage
+      });
+      this.setUrlsInternal(selfHostedUrls);
     } else {
       // If we are setting the region to EU or US, clear the self-hosted URLs
-      this.stateService.setEnvironmentUrls(new EnvironmentUrls());
+      await this.stateService.setEnvironmentUrls(new EnvironmentUrls());
       if (region === Region.EU) {
         this.setUrlsInternal(this.euUrls);
       } else if (region === Region.US) {
