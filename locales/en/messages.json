@@ -6829,6 +6829,27 @@
   "updateKdfSettings": {
     "message": "Update KDF settings"
   },
+  "loginInitiated": {
+    "message": "Login initiated"
+  },
+  "deviceApprovalRequired": {
+    "message": "Device approval required. Select an approval option below:"
+  },
+  "rememberThisDevice": {
+    "message": "Remember this device"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Uncheck if using a public device"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approve from your other device"
+  },
+  "requestAdminApproval": {
+    "message": "Request admin approval"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approve with master password"
+  },
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
@@ -6930,6 +6951,27 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "approvedAuthRequest": {
+    "message": "Approved device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Denied device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Requested device approval."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
