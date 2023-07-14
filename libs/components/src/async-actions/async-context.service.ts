@@ -108,9 +108,9 @@ export class AsyncContextService {
     this._selfLoading$.next(value);
   }
 
-  run(tag: BitAsyncTag, handler: FunctionReturningAwaitable): void;
-  run(handler: FunctionReturningAwaitable): void;
-  run(
+  execute(tag: BitAsyncTag, handler: FunctionReturningAwaitable): void;
+  execute(handler: FunctionReturningAwaitable): void;
+  execute(
     tagOrHandler: BitAsyncTag | FunctionReturningAwaitable,
     handler?: FunctionReturningAwaitable
   ): void {

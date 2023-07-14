@@ -51,7 +51,7 @@ class InitialDataFetchExampleComponent implements OnInit {
   }
 
   refresh(event?: BitAsyncTaggedEvent) {
-    this.asyncContextService.run(event?.tag, this.load.bind(this));
+    this.asyncContextService.execute(event?.tag, this.load.bind(this));
   }
 
   protected async load() {

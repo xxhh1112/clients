@@ -42,7 +42,7 @@ export class BitAsyncClickDirective implements OnInit {
     }
 
     if (this.handler) {
-      this.asyncContext.run(this.tag, this.handler);
+      this.asyncContext.execute(this.tag, this.handler);
     }
 
     this.output.emit(new BitAsyncTaggedEvent($event, this.tag));
