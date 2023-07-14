@@ -27,11 +27,12 @@ export class AsyncContextService {
   private destroy$ = new Subject<void>();
 
   private _requestedAction$ = new Subject<BitAsyncAction>();
-  private _currentAction$ = new BehaviorSubject<BitAsyncAction | undefined>(undefined);
+  private _selfCurrentAction$ = new BehaviorSubject<BitAsyncAction | undefined>(undefined);
   private _selfLoading$ = new BehaviorSubject<boolean>(false);
   private _selfDisabled$ = new BehaviorSubject<boolean>(false);
 
-  readonly currentAction$ = this._currentAction$.asObservable();
+  // readonly currentAction$ = this._currentAction$.asObservable();
+  readonly currentAction$: Observable<BitAsyncAction | undefined>;
   readonly disabled$: Observable<boolean>;
   readonly loading$: Observable<boolean>;
 
@@ -41,6 +42,15 @@ export class AsyncContextService {
     @Optional() logService?: LogService
   ) {
     if (parentContext) {
+      this.currentAction$ = combineLatest({
+        parentCurrentAction: parentContext.currentAction$,
+        selfCurrentAction: this._selfCurrentAction$,
+      }).pipe(
+        map(
+          ({ parentCurrentAction, selfCurrentAction }) => parentCurrentAction || selfCurrentAction
+        )
+      );
+
       this.disabled$ = combineLatest({
         parentDisabled: parentContext.disabled$,
         selfDisabled: this._selfDisabled$,
@@ -51,6 +61,7 @@ export class AsyncContextService {
         selfLoading: this._selfLoading$,
       }).pipe(map(({ parentLoading, selfLoading }) => parentLoading || selfLoading));
     } else {
+      this.currentAction$ = this._selfCurrentAction$.asObservable();
       this.disabled$ = this._selfDisabled$.asObservable();
       this.loading$ = this._selfLoading$.asObservable();
     }
@@ -67,7 +78,7 @@ export class AsyncContextService {
         filter(({ disabled, loading }) => !disabled && !loading),
         switchMap(({ action }) => {
           this._selfLoading$.next(true);
-          this._currentAction$.next(action);
+          this._selfCurrentAction$.next(action);
 
           const awaitable = functionToObservable(action.handler);
           return awaitable.pipe(
@@ -83,11 +94,11 @@ export class AsyncContextService {
       .subscribe({
         next: () => {
           this._selfLoading$.next(false);
-          this._currentAction$.next(undefined);
+          this._selfCurrentAction$.next(undefined);
         },
         complete: () => {
           this._selfLoading$.next(false);
-          this._currentAction$.next(undefined);
+          this._selfCurrentAction$.next(undefined);
         },
       });
   }

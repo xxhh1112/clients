@@ -12,28 +12,7 @@ import { AsyncContextService } from "./async-context.service";
 import { BitAsyncClickDirective } from "./bit-async-click.directive";
 import { BitAsyncContextDirective } from "./bit-async-context.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
-
-@Component({
-  template: ` <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-mr-2">
-      Save
-    </button>
-    <button bitIconButton="bwi-trash" buttonType="danger" [bitAsyncClick]="trash"></button>`,
-  selector: "app-group",
-  providers: [AsyncContextService],
-})
-class GroupComponent {
-  action = async () => {
-    await new Promise<void>((resolve, reject) => {
-      setTimeout(resolve, 2000);
-    });
-  };
-
-  trash = async () => {
-    await new Promise<void>((resolve, reject) => {
-      setTimeout(resolve, 2000);
-    });
-  };
-}
+import { BitAsyncTaggedEvent } from "./bit-async-tag";
 
 @Component({
   template: `<h2 *ngIf="name" class="tw-text-main">Parent</h2>
@@ -62,7 +41,6 @@ export default {
         BitAsyncClickDirective,
         BitAsyncDisableDirective,
         BitAsyncContextDirective,
-        GroupComponent,
         ParentComponent,
       ],
       imports: [ButtonModule, IconButtonModule],
@@ -84,17 +62,19 @@ export default {
   ],
 } as Meta;
 
-type SimpleStory = StoryObj<GroupComponent>;
-// type StandaloneButtonStory = StoryObj<unknown>;
+type SimpleStory = StoryObj<unknown>;
+type WithExecutionStory = StoryObj<unknown>;
+
+const rootContext = new AsyncContextService();
 
 export const Simple: SimpleStory = {
-  render: (args) => ({
+  render: (args: object) => ({
     props: {
       action: action("bitAsyncClick"),
       ...args,
     },
     moduleMetadata: {
-      providers: [AsyncContextService], // Mock root-level context
+      providers: [{ provide: AsyncContextService, useValue: rootContext }], // Mock root-level context
     },
     template: `
       <button bitButton buttonType="primary" (bitAsyncClick)="action($event)">Button</button>
@@ -102,19 +82,28 @@ export const Simple: SimpleStory = {
   }),
 };
 
-// export const StandaloneButton: StandaloneButtonStory = {
-//   render: (args: object) => ({
-//     props: {
-//       action: () => new Promise<void>((resolve) => setTimeout(resolve, 2000)),
-//       ...args,
-//     },
-//     template: `<button bitButton buttonType="primary" bitAsyncContext [bitAsyncClick]="action">Standalone</button>`,
-//   }),
-//   parameters: {
-//     docs: {
-//       source: {
-//         code: `<button bitButton buttonType="primary" bitAsyncContext [bitAsyncClick]="action">Standalone</button>`,
-//       },
-//     },
-//   },
-// };
+export const WithExecution: WithExecutionStory = {
+  render: (args: object) => ({
+    props: {
+      action: (event: BitAsyncTaggedEvent) =>
+        rootContext.execute(
+          event.tag,
+          () => new Promise<void>((resolve) => setTimeout(resolve, 2000))
+        ),
+      ...args,
+    },
+    moduleMetadata: {
+      providers: [{ provide: AsyncContextService, useValue: rootContext }], // Mock root-level context
+    },
+    template: `
+      <!-- Simulate an event that passes through multiple async contexts -->
+      <ng-container bitAsyncContext>
+        <ng-container bitAsyncContext>
+          <button class="tw-ml-2" bitButton buttonType="primary" (bitAsyncClick)="action($event)">Primary</button>
+          <button class="tw-ml-2" bitButton buttonType="secondary" (bitAsyncClick)="action($event)">Secondary</button>
+          <button class="tw-ml-2" bitButton buttonType="danger" (bitAsyncClick)="action($event)">Delete</button>
+        </ng-container>
+      </ng-container>
+    `,
+  }),
+};
