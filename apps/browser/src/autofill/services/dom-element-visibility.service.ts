@@ -12,11 +12,9 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
    * @returns {Promise<boolean>}
    */
   async isFormFieldViewable(element: FormFieldElement): Promise<boolean> {
-    const elementObserverEntry = await this.getElementIntersectionObserverEntry(element);
-    const elementBoundingClientRect =
-      elementObserverEntry?.boundingClientRect || element.getBoundingClientRect();
+    const elementBoundingClientRect = element.getBoundingClientRect();
+
     if (
-      (elementObserverEntry && !elementObserverEntry.isIntersecting) ||
       this.isElementOutsideViewportBounds(element, elementBoundingClientRect) ||
       this.isElementHiddenByCss(element)
     ) {
@@ -196,53 +194,6 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
 
     return targetElementLabelsSet.has(closestParentLabel);
   }
-
-  /**
-   * Checks if the IntersectionObserver API is supported and if so, returns a promise that resolves
-   * to the IntersectionObserverEntry of the target element.
-   * @param {HTMLElement} element
-   * @returns {Promise<IntersectionObserverEntry | null>}
-   * @private
-   */
-  private async getElementIntersectionObserverEntry(
-    element: HTMLElement
-  ): Promise<IntersectionObserverEntry | null> {
-    if (
-      !("IntersectionObserver" in window) ||
-      !("IntersectionObserverEntry" in window) ||
-      !("intersectionRatio" in window.IntersectionObserverEntry.prototype) ||
-      !("isIntersecting" in window.IntersectionObserverEntry.prototype)
-    ) {
-      return null;
-    }
-
-    return new Promise((resolve) => {
-      const observer: IntersectionObserver = new IntersectionObserver(
-        (entries) => this.handleResolvingIntersectionObserverEntry(resolve, observer, entries),
-        {
-          root: element.ownerDocument.body,
-          threshold: 0.999, // Safari has a bug that doesn't recognize 1 as fully visible, and instead requires a value of 0.999.
-        }
-      );
-      observer.observe(element);
-    });
-  }
-
-  /**
-   * Handles resolving the IntersectionObserverEntry of the
-   * target element and disconnects the observer.
-   * @param {(value: (IntersectionObserverEntry | null)) => void} resolve
-   * @param {IntersectionObserver} observer
-   * @param {IntersectionObserverEntry[]} entries
-   */
-  private handleResolvingIntersectionObserverEntry = (
-    resolve: (value: IntersectionObserverEntry | null) => void,
-    observer: IntersectionObserver,
-    entries: IntersectionObserverEntry[]
-  ): void => {
-    resolve(entries[0]);
-    observer.disconnect();
-  };
 }
 
 export default DomElementVisibilityService;
