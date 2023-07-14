@@ -28,17 +28,18 @@ export class AsyncContextService {
 
   private _requestedAction$ = new Subject<BitAsyncAction>();
   private _selfCurrentAction$ = new BehaviorSubject<BitAsyncAction | undefined>(undefined);
+  private _selfCompletedAction$ = new Subject<void>();
   private _selfLoading$ = new BehaviorSubject<boolean>(false);
   private _selfDisabled$ = new BehaviorSubject<boolean>(false);
 
-  // readonly currentAction$ = this._currentAction$.asObservable();
   readonly currentAction$: Observable<BitAsyncAction | undefined>;
+  readonly selfCompletedAction$ = this._selfCompletedAction$.asObservable();
   readonly disabled$: Observable<boolean>;
   readonly loading$: Observable<boolean>;
 
   constructor(
     @Optional() @SkipSelf() parentContext?: AsyncContextService,
-    validationService?: ValidationService,
+    @Optional() validationService?: ValidationService,
     @Optional() logService?: LogService
   ) {
     if (parentContext) {
@@ -93,10 +94,12 @@ export class AsyncContextService {
       )
       .subscribe({
         next: () => {
+          this._selfCompletedAction$.next();
           this._selfLoading$.next(false);
           this._selfCurrentAction$.next(undefined);
         },
         complete: () => {
+          this._selfCompletedAction$.next();
           this._selfLoading$.next(false);
           this._selfCurrentAction$.next(undefined);
         },
