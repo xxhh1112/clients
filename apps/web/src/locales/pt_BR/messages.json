@@ -618,7 +618,7 @@
   "loginWithDevice": {
     "message": "Fazer login com dispositivo"
   },
-  "loginWithDeviceEnabledInfo": {
+  "loginWithDeviceEnabledNote": {
     "message": "Login com dispositivo deve ser habilitado nas configurações do aplicativo móvel do Bitwarden. Necessita de outra opção?"
   },
   "loginWithMasterPassword": {
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Confirmar Exportação de Cofre"
   },
+  "confirmSecretsExport": {
+    "message": "Confirmar exportação de segredos"
+  },
   "exportWarningDesc": {
     "message": "Esta exportação contém os dados do seu cofre em um formato não criptografado. Você não deve armazenar ou enviar o arquivo exportado por canais inseguros (como e-mail). Exclua o arquivo imediatamente após terminar de usá-lo."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Esta exportação contém seus dados de segredos em um formato não criptografado. Você não deve armazenar ou enviar o arquivo exportado por canais inseguros (como e-mail). Exclua imediatamente após terminar de usá-lo."
   },
   "encExportKeyWarningDesc": {
     "message": "Esta exportação criptografa seus dados usando a chave de criptografia da sua conta. Se você rotacionar a chave de criptografia da sua conta, você deve exportar novamente, já que você não será capaz de descriptografar este arquivo de exportação."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Exportar Cofre"
+  },
+  "exportSecrets": {
+    "message": "Exportar segredos"
   },
   "fileFormat": {
     "message": "Formato do Arquivo"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "A tentativa de login falhou com o login incorreto em duas etapas."
+  },
+  "incorrectPassword": {
+    "message": "Senha incorreta"
+  },
+  "incorrectCode": {
+    "message": "Código incorreto"
   },
   "exportedVault": {
     "message": "Cofre exportado."
@@ -6179,10 +6194,6 @@
     "message": "Token de acesso criado e copiado para a área de transferência",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "O gerenciamento de permissões não está disponível para versão beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revogar token de acesso",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6612,11 +6623,14 @@
   "secretsManagerBeta": {
     "message": "Gerenciador de Segredos Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Permitir o acesso do usuário ao Gerenciador de Segredos sem custos durante o programa Beta."
+  "secretsManager": {
+    "message": "Gerenciador de Segredos"
   },
-  "userAccessSecretsManager": {
-    "message": "Este usuário pode acessar o Gerenciador de Segredos Beta"
+  "secretsManagerAccessDescription": {
+    "message": "Ative o acesso do usuário ao Gerenciador Secretos."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "Este usuário pode acessar o gerente secreto"
   },
   "important": {
     "message": "Importante:"
@@ -6844,51 +6858,65 @@
   "updatedTempPassword": {
     "message": "User updated a password issued through account recovery."
   },
+  "activatedAccessToSecretsManager": {
+    "message": "Acesso ativado ao Gerenciador de Segredos",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Ativar acesso"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Conceda aos seguintes membros acesso ao Gerenciador de Segredos. A função concedida no Gerenciador de Senhas será aplicada ao Gerenciador de Segredos.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Ativar Gerenciador de Segredos"
+  },
   "yourOrganizationsFingerprint": {
-    "message": "Your organization's fingerprint phrase",
+    "message": "A frase biométrica da sua organização",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
   },
   "deviceApprovals": {
-    "message": "Device approvals"
+    "message": "Aprovações do dispositivo"
   },
   "deviceApprovalsDesc": {
-    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+    "message": "Aprovar as solicitações de login abaixo para permitir que o membro solicitante termine o login. Solicitações não aprovadas expiram após 1 semana. Verifique as informações do membro antes de aprovar."
   },
   "deviceInfo": {
-    "message": "Device info"
+    "message": "Informações do dispositivo"
   },
   "time": {
-    "message": "Time"
+    "message": "Horário"
   },
   "denyAllRequests": {
-    "message": "Deny all requests"
+    "message": "Negar todas as solicitações"
   },
   "denyRequest": {
-    "message": "Deny request"
+    "message": "Negar pedido"
   },
   "approveRequest": {
-    "message": "Approve request"
+    "message": "Aprovar solicitação"
   },
   "noDeviceRequests": {
-    "message": "No device requests"
+    "message": "Nenhum pedido de dispositivo"
   },
   "noDeviceRequestsDesc": {
-    "message": "Member device approval requests will appear here"
+    "message": "Os pedidos de aprovação de dispositivo de membro aparecerão aqui"
   },
   "loginRequestDenied": {
-    "message": "Login request denied"
+    "message": "Solicitação de login negada"
   },
   "allLoginRequestsDenied": {
-    "message": "All login requests denied"
+    "message": "Todas as solicitações de login negadas"
   },
   "loginRequestApproved": {
-    "message": "Login request approved"
+    "message": "Solicitação de login aprovada"
   },
   "removeOrgUserNoMasterPasswordTitle": {
     "message": "A conta não tem uma senha mestre"
   },
   "removeOrgUserNoMasterPasswordDesc": {
-    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "message": "Remover $USER$ sem definir uma senha mestra pode restringir o acesso deles à conta toda. Tem certeza de que deseja continuar?",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -6900,6 +6928,27 @@
     "message": "Nenhuma senha mestre"
   },
   "removeMembersWithoutMasterPasswordWarning": {
-    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+    "message": "Remover membros que não têm senhas mestres sem definir uma para eles pode restringir o acesso à sua conta completa."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Comece o seu período de teste gratuito de 7 dias do Bitwarden para $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Avançar"
+  },
+  "usFlag": {
+    "message": "Bandeira dos EUA"
+  },
+  "euFlag": {
+    "message": "Bandeira Europa"
+  },
+  "selectedRegionFlag": {
+    "message": "Sinalização de região selecionada"
   }
 }
