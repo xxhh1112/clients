@@ -11,7 +11,6 @@ import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/pa
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-// eslint-disable-next-line no-restricted-imports
 import { CipherReportComponent } from "./cipher-report.component";
 
 @Component({
