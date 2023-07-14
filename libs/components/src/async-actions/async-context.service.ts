@@ -32,7 +32,7 @@ export class AsyncContextService {
   readonly loading$: Observable<boolean>;
 
   constructor(
-    @Optional() @SkipSelf() parentContext: AsyncContextService,
+    @Optional() @SkipSelf() parentContext?: AsyncContextService,
     validationService?: ValidationService,
     @Optional() logService?: LogService
   ) {

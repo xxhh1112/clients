@@ -1,0 +1,26 @@
+import { Canvas, Meta, Source } from "@storybook/blocks";
+
+import * as DeferredExecutionStories from "./deferred-execution.stories.ts";
+
+<Meta of={DeferredExecutionStories} />
+
+# Deferred Execution
+
+Deferred execution is a method of moving the execution and definition of an async action to another
+part of the application. This is useful for when you want to define a button that triggers an async
+action in one place, but you want to define the handler in a different place. A common use case for
+this is CL components, where the UI is defined by the library, but the action is defined by the
+client.
+
+## Basic Example
+
+### Converting async action button to use deferred execution
+
+To convert a button from using the regular async action to using deferred execution, all you need to
+do is change the binding type from an `Input` to an `Output`. This will cause the button to not
+execute the action when it is clicked, but instead emit a tagged event that you can listen to and
+handle just like regular Angular `Output` events.
+
+<Canvas of={DeferredExecutionStories.Simple} />
+
+### Handling the deferred execution event
