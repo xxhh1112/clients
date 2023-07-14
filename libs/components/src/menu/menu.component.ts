@@ -12,7 +12,7 @@ import {
   OnInit,
   OnDestroy,
 } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { filter, map, Subject, takeUntil } from "rxjs";
 
 import { AsyncContextService } from "../async-actions/async-context.service";
 
@@ -40,8 +40,12 @@ export class MenuComponent implements AfterContentInit, OnInit, OnDestroy {
   constructor(private asyncContextService: AsyncContextService) {}
 
   ngOnInit(): void {
-    this.asyncContextService.selfCompletedAction$
-      .pipe(takeUntil(this.destroy$))
+    this.asyncContextService.completedAction$
+      .pipe(
+        filter(({ definedIn }) => definedIn === this.asyncContextService),
+        map(() => undefined),
+        takeUntil(this.destroy$)
+      )
       .subscribe(this.closed);
   }
 
