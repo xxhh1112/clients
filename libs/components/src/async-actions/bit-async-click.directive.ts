@@ -1,16 +1,20 @@
-import { Directive, HostListener, Input, OnInit } from "@angular/core";
+import { Directive, EventEmitter, HostListener, Input, OnInit, Output } from "@angular/core";
 import { combineLatest } from "rxjs";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 import { FunctionReturningAwaitable } from "../utils/function-to-observable";
 
 import { AsyncContextService } from "./async-context.service";
+import { BitAsyncTag, BitAsyncTaggedEvent } from "./bit-async-tag";
 
 @Directive({
-  selector: "[bitAsyncClick]",
+  selector: "[bitAsyncClick], (bitAsyncClick)",
 })
 export class BitAsyncClickDirective implements OnInit {
+  private tag = new BitAsyncTag();
+
   @Input("bitAsyncClick") protected handler: FunctionReturningAwaitable;
+  @Output("bitAsyncClick") protected output = new EventEmitter<BitAsyncTaggedEvent<MouseEvent>>();
 
   constructor(
     private asyncContext: AsyncContextService,
@@ -31,11 +35,16 @@ export class BitAsyncClickDirective implements OnInit {
     });
   }
 
-  @HostListener("click")
-  protected async onClick() {
-    if (!this.handler || this.buttonComponent.disabled) {
+  @HostListener("click", ["$event"])
+  protected async onClick($event: MouseEvent) {
+    if (this.buttonComponent.disabled) {
       return;
     }
-    this.asyncContext.run(this.handler);
+
+    if (this.handler) {
+      this.asyncContext.run(this.handler);
+    }
+
+    this.output.emit(new BitAsyncTaggedEvent($event, this.tag));
   }
 }

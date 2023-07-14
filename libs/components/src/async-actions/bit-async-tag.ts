@@ -1,12 +1,7 @@
-import { Opaque } from "type-fest";
-
-export type BitAsyncTag = Opaque<symbol, "BitAsyncTag">;
-
-export class BitAsyncTaggedEvent<Event> {
-  readonly tag = BitAsyncTag();
-  constructor(readonly event: Event) {}
+export class BitAsyncTag {
+  readonly symbol = Symbol();
 }
 
-export function BitAsyncTag(): BitAsyncTag {
-  return Symbol() as BitAsyncTag;
+export class BitAsyncTaggedEvent<Event> {
+  constructor(readonly value: Event, readonly tag: BitAsyncTag) {}
 }
