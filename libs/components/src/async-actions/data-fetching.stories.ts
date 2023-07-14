@@ -21,7 +21,7 @@ import { IconButtonModule } from "../icon-button";
 import { AsyncContextService } from "./async-context.service";
 import { BitAsyncClickDirective } from "./bit-async-click.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
-import { BitAsyncTaggedEvent } from "./bit-async-tag";
+import { BitAsyncEvent } from "./bit-async-event";
 
 @Component({
   template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
@@ -50,8 +50,8 @@ class InitialDataFetchExampleComponent implements OnInit {
     this.initialLoading = false;
   }
 
-  refresh(event?: BitAsyncTaggedEvent) {
-    this.asyncContextService.execute(event?.tag, this.load.bind(this));
+  refresh(event?: BitAsyncEvent) {
+    this.asyncContextService.execute(event, this.load.bind(this));
   }
 
   protected async load() {

@@ -18,6 +18,7 @@ import { ValidationService } from "@bitwarden/common/platform/abstractions/valid
 
 import { FunctionReturningAwaitable, functionToObservable } from "../utils/function-to-observable";
 
+import { BitAsyncEvent } from "./bit-async-event";
 import { BitAsyncTag } from "./bit-async-tag";
 
 export type BitAsyncAction = { handler: FunctionReturningAwaitable; tag?: BitAsyncTag };
@@ -122,10 +123,10 @@ export class AsyncContextService {
     this._selfLoading$.next(value);
   }
 
-  execute(tag: BitAsyncTag, handler: FunctionReturningAwaitable): void;
+  execute(tag: BitAsyncEvent, handler: FunctionReturningAwaitable): void;
   execute(handler: FunctionReturningAwaitable): void;
   execute(
-    tagOrHandler: BitAsyncTag | FunctionReturningAwaitable,
+    tagOrHandler: BitAsyncEvent | FunctionReturningAwaitable,
     handler?: FunctionReturningAwaitable
   ): void {
     if (typeof tagOrHandler === "function") {
@@ -133,6 +134,6 @@ export class AsyncContextService {
       return;
     }
 
-    this._requestedAction$.next({ handler, tag: tagOrHandler });
+    this._requestedAction$.next({ handler, tag: tagOrHandler.tag });
   }
 }

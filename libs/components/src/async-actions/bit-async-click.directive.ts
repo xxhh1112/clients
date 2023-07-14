@@ -15,7 +15,8 @@ import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 import { FunctionReturningAwaitable } from "../utils/function-to-observable";
 
 import { AsyncContextService } from "./async-context.service";
-import { BitAsyncTag, BitAsyncTaggedEvent } from "./bit-async-tag";
+import { BitAsyncEvent } from "./bit-async-event";
+import { BitAsyncTag } from "./bit-async-tag";
 
 const BIT_ASYNC_CLICK_CONFIG = "BIT_ASYNC_CLICK_CONFIG";
 export interface BitAsyncClickConfig {
@@ -32,7 +33,7 @@ export class BitAsyncClickDirective implements OnInit {
   private tag = new BitAsyncTag();
 
   @Input("bitAsyncClick") protected handler: FunctionReturningAwaitable;
-  @Output("bitAsyncClick") protected output = new EventEmitter<BitAsyncTaggedEvent<MouseEvent>>();
+  @Output("bitAsyncClick") protected output = new EventEmitter<BitAsyncEvent<MouseEvent>>();
 
   constructor(
     private asyncContext: AsyncContextService,
@@ -64,10 +65,11 @@ export class BitAsyncClickDirective implements OnInit {
       return;
     }
 
+    const asyncEvent = new BitAsyncEvent($event, this.tag, this.asyncContext);
     if (this.handler) {
-      this.asyncContext.execute(this.tag, this.handler);
+      this.asyncContext.execute(asyncEvent, this.handler);
     }
 
-    this.output.emit(new BitAsyncTaggedEvent($event, this.tag));
+    this.output.emit(new BitAsyncEvent($event, this.tag));
   }
 }

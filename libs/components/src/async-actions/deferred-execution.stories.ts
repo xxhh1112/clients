@@ -12,7 +12,7 @@ import { AsyncContextService } from "./async-context.service";
 import { BitAsyncClickDirective } from "./bit-async-click.directive";
 import { BitAsyncContextDirective } from "./bit-async-context.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
-import { BitAsyncTaggedEvent } from "./bit-async-tag";
+import { BitAsyncEvent } from "./bit-async-event";
 
 @Component({
   template: `<h2 *ngIf="name" class="tw-text-main">Parent</h2>
@@ -92,11 +92,8 @@ export const Simple: SimpleStory = {
 export const WithExecution: WithExecutionStory = {
   render: (args: object) => ({
     props: {
-      action: (event: BitAsyncTaggedEvent) =>
-        rootContext.execute(
-          event.tag,
-          () => new Promise<void>((resolve) => setTimeout(resolve, 2000))
-        ),
+      action: (event: BitAsyncEvent) =>
+        rootContext.execute(event, () => new Promise<void>((resolve) => setTimeout(resolve, 2000))),
       ...args,
     },
     moduleMetadata: {
