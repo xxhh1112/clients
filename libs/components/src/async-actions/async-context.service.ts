@@ -50,26 +50,10 @@ export class AsyncContextService {
     @Optional() logService?: LogService
   ) {
     if (parentContext) {
-      this.currentAction$ = combineLatest({
-        parentCurrentAction: parentContext.currentAction$,
-        selfCurrentAction: this._selfCurrentAction$,
-      }).pipe(
-        map(
-          ({ parentCurrentAction, selfCurrentAction }) => parentCurrentAction || selfCurrentAction
-        )
-      );
-
+      this.currentAction$ = merge(this._selfCurrentAction$, parentContext.currentAction$);
       this.completedAction$ = merge(this._selfCompletedAction$, parentContext.completedAction$);
-
-      this.disabled$ = combineLatest({
-        parentDisabled: parentContext.disabled$,
-        selfDisabled: this._selfDisabled$,
-      }).pipe(map(({ parentDisabled, selfDisabled }) => parentDisabled || selfDisabled));
-
-      this.loading$ = combineLatest({
-        parentLoading: parentContext.loading$,
-        selfLoading: this._selfLoading$,
-      }).pipe(map(({ parentLoading, selfLoading }) => parentLoading || selfLoading));
+      this.disabled$ = merge(this._selfDisabled$, parentContext.disabled$);
+      this.loading$ = merge(this._selfLoading$, parentContext.loading$);
     } else {
       this.currentAction$ = this._selfCurrentAction$.asObservable();
       this.completedAction$ = this._selfCompletedAction$.asObservable();
