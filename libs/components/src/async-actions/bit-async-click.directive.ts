@@ -46,7 +46,7 @@ export class BitAsyncClickDirective implements OnInit {
       loading: this.asyncContext.loading$,
       currentAction: this.asyncContext.currentAction$,
     }).subscribe(({ loading, currentAction }) => {
-      if (loading && currentAction?.tag === this.tag) {
+      if (loading && currentAction?.event.tag === this.tag) {
         this.buttonComponent.loading = loading;
       } else {
         this.buttonComponent.loading = false;
@@ -65,11 +65,11 @@ export class BitAsyncClickDirective implements OnInit {
       return;
     }
 
-    const asyncEvent = new BitAsyncEvent($event, this.tag, this.asyncContext);
+    const asyncEvent = new BitAsyncEvent(this.asyncContext, this.tag, $event);
     if (this.handler) {
       this.asyncContext.execute(asyncEvent, this.handler);
     }
 
-    this.output.emit(new BitAsyncEvent($event, this.tag));
+    this.output.emit(asyncEvent);
   }
 }

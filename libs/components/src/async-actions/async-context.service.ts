@@ -6,6 +6,7 @@ import {
   filter,
   first,
   map,
+  merge,
   Observable,
   of,
   Subject,
@@ -21,7 +22,12 @@ import { FunctionReturningAwaitable, functionToObservable } from "../utils/funct
 import { BitAsyncEvent } from "./bit-async-event";
 import { BitAsyncTag } from "./bit-async-tag";
 
-export type BitAsyncAction = { handler: FunctionReturningAwaitable; tag?: BitAsyncTag };
+export type BitAsyncAction = { handler: FunctionReturningAwaitable; event: BitAsyncEvent };
+export type BitAsyncCompletedAction = {
+  tag?: BitAsyncTag;
+  definedIn?: AsyncContextService;
+  executedIn: AsyncContextService;
+};
 
 @Injectable()
 export class AsyncContextService {
@@ -29,12 +35,12 @@ export class AsyncContextService {
 
   private _requestedAction$ = new Subject<BitAsyncAction>();
   private _selfCurrentAction$ = new BehaviorSubject<BitAsyncAction | undefined>(undefined);
-  private _selfCompletedAction$ = new Subject<void>();
+  private _selfCompletedAction$ = new Subject<BitAsyncCompletedAction>();
   private _selfLoading$ = new BehaviorSubject<boolean>(false);
   private _selfDisabled$ = new BehaviorSubject<boolean>(false);
 
   readonly currentAction$: Observable<BitAsyncAction | undefined>;
-  readonly selfCompletedAction$ = this._selfCompletedAction$.asObservable();
+  readonly completedAction$: Observable<BitAsyncCompletedAction>;
   readonly disabled$: Observable<boolean>;
   readonly loading$: Observable<boolean>;
 
@@ -53,6 +59,8 @@ export class AsyncContextService {
         )
       );
 
+      this.completedAction$ = merge(this._selfCompletedAction$, parentContext.completedAction$);
+
       this.disabled$ = combineLatest({
         parentDisabled: parentContext.disabled$,
         selfDisabled: this._selfDisabled$,
@@ -64,6 +72,7 @@ export class AsyncContextService {
       }).pipe(map(({ parentLoading, selfLoading }) => parentLoading || selfLoading));
     } else {
       this.currentAction$ = this._selfCurrentAction$.asObservable();
+      this.completedAction$ = this._selfCompletedAction$.asObservable();
       this.disabled$ = this._selfDisabled$.asObservable();
       this.loading$ = this._selfLoading$.asObservable();
     }
@@ -88,19 +97,27 @@ export class AsyncContextService {
               logService?.error(`Async action exception: ${err}`);
               validationService?.showError(err);
               return of(undefined);
+            }),
+            map((_) => {
+              return {
+                tag: action.event.tag,
+                definedIn: action.event.originalContext,
+                executedIn: this,
+              } as BitAsyncCompletedAction;
             })
           );
         }),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: () => {
-          this._selfCompletedAction$.next();
+        next: (completedAction) => {
+          this._selfCompletedAction$.next(completedAction);
           this._selfLoading$.next(false);
           this._selfCurrentAction$.next(undefined);
         },
+        // `complete` represents the service being destroyed
         complete: () => {
-          this._selfCompletedAction$.next();
+          // missing `selfCompletedAction.next` because if there was an action in progress, then it will never complete
           this._selfLoading$.next(false);
           this._selfCurrentAction$.next(undefined);
         },
@@ -123,17 +140,17 @@ export class AsyncContextService {
     this._selfLoading$.next(value);
   }
 
-  execute(tag: BitAsyncEvent, handler: FunctionReturningAwaitable): void;
+  execute(event: BitAsyncEvent, handler: FunctionReturningAwaitable): void;
   execute(handler: FunctionReturningAwaitable): void;
   execute(
-    tagOrHandler: BitAsyncEvent | FunctionReturningAwaitable,
+    eventOrHandler: BitAsyncEvent | FunctionReturningAwaitable,
     handler?: FunctionReturningAwaitable
   ): void {
-    if (typeof tagOrHandler === "function") {
-      this._requestedAction$.next({ handler: tagOrHandler });
+    if (typeof eventOrHandler === "function") {
+      this._requestedAction$.next({ handler: eventOrHandler, event: new BitAsyncEvent(this) });
       return;
     }
 
-    this._requestedAction$.next({ handler, tag: tagOrHandler.tag });
+    this._requestedAction$.next({ handler, event: eventOrHandler });
   }
 }
