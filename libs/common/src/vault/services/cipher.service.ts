@@ -930,6 +930,14 @@ export class CipherService implements CipherServiceAbstraction {
     await this.restore(restores);
   }
 
+  async setTemporaryCipher(cipher: CipherView) {
+    await this.stateService.setTemporaryCipher((await this.encrypt(cipher)).toCipherData());
+  }
+
+  async resetTemporaryCipher() {
+    await this.stateService.setTemporaryCipher(null);
+  }
+
   // Helpers
 
   private async shareAttachmentWithServer(

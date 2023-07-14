@@ -408,4 +408,7 @@ export abstract class StateService<T extends Account = Account> {
    * @param options Defines the storage options for the URL; Defaults to Local Storage.
    */
   setPreviousUrl: (url: string, options?: StorageOptions) => Promise<void>;
+
+  setTemporaryCipher: (value: CipherData, options?: StorageOptions) => Promise<void>;
+  getTemporaryCipher: (options?: StorageOptions) => Promise<CipherData>;
 }

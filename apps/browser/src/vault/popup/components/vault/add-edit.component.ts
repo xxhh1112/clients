@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -20,6 +20,7 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
@@ -30,11 +31,14 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
   templateUrl: "add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnDestroy {
   currentUris: string[];
   showAttachments = true;
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
+
+  protected recovered: boolean;
+  private onHideEventHandler: () => void;
 
   constructor(
     cipherService: CipherService,
@@ -141,9 +145,29 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (this.popupUtilsService.inTab(window)) {
       this.popupUtilsService.enableCloseTabWarning();
     }
+
+    // Save the cipher on pagehide to prevent data loss
+    this.onHideEventHandler = () => {
+      this.cipherService.setTemporaryCipher(this.cipher);
+    };
+
+    window.addEventListener("pagehide", this.onHideEventHandler);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("pagehide", this.onHideEventHandler);
   }
 
   async load() {
+    const tmpCipher = await this.stateService.getTemporaryCipher();
+    if (tmpCipher != null) {
+      const cipher = await new Cipher(tmpCipher).decrypt();
+      if (cipher.id == this.cipherId) {
+        this.recovered = true;
+        this.cipher = cipher;
+      }
+    }
+
     await super.load();
     this.showAutoFillOnPageLoadOptions =
       this.cipher.type === CipherType.Login &&
@@ -192,6 +216,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   }
 
   cancel() {
+    this.cipherService.resetTemporaryCipher();
     super.cancel();
 
     if (this.popupUtilsService.inTab(window)) {

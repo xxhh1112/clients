@@ -2243,5 +2243,8 @@
   },
   "display": {
     "message": "Display"
+  },
+  "recoveredItem": {
+    "message": "Unsaved item recovered, you can continue editing."
   }
 }

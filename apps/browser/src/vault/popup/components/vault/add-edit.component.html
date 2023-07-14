@@ -14,9 +14,14 @@
     </div>
   </header>
   <main tabindex="-1" *ngIf="cipher">
+    <app-callout type="info" *ngIf="recovered">
+      {{ "recoveredItem" | i18n }}
+    </app-callout>
+
     <app-callout type="info" *ngIf="allowOwnershipOptions() && !allowPersonal">
       {{ "personalOwnershipPolicyInEffect" | i18n }}
     </app-callout>
+
     <div class="box">
       <h2 class="box-header">
         {{ "itemInformation" | i18n }}

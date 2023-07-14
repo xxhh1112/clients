@@ -77,4 +77,7 @@ export abstract class CipherService {
   ) => Promise<any>;
   restoreWithServer: (id: string, asAdmin?: boolean) => Promise<any>;
   restoreManyWithServer: (ids: string[]) => Promise<any>;
+
+  setTemporaryCipher: (cipher: CipherView) => Promise<void>;
+  resetTemporaryCipher: () => Promise<void>;
 }

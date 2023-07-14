@@ -96,6 +96,7 @@ export class AccountData {
   eventCollection?: EventData[];
   organizations?: { [id: string]: OrganizationData };
   providers?: { [id: string]: ProviderData };
+  temporaryCipher: CipherData;
 }
 
 export class AccountKeys {
