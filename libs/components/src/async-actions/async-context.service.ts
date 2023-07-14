@@ -18,12 +18,16 @@ import { ValidationService } from "@bitwarden/common/platform/abstractions/valid
 
 import { FunctionReturningAwaitable, functionToObservable } from "../utils/function-to-observable";
 
+import { BitAsyncTag } from "./bit-async-tag";
+
+export type BitAsyncAction = { handler: FunctionReturningAwaitable; tag?: BitAsyncTag };
+
 @Injectable()
 export class AsyncContextService {
   private destroy$ = new Subject<void>();
 
-  private _requestedAction$ = new Subject<FunctionReturningAwaitable>();
-  private _currentAction$ = new BehaviorSubject<FunctionReturningAwaitable | undefined>(undefined);
+  private _requestedAction$ = new Subject<BitAsyncAction>();
+  private _currentAction$ = new BehaviorSubject<BitAsyncAction | undefined>(undefined);
   private _selfLoading$ = new BehaviorSubject<boolean>(false);
   private _selfDisabled$ = new BehaviorSubject<boolean>(false);
 
@@ -65,7 +69,7 @@ export class AsyncContextService {
           this._selfLoading$.next(true);
           this._currentAction$.next(action);
 
-          const awaitable = functionToObservable(action);
+          const awaitable = functionToObservable(action.handler);
           return awaitable.pipe(
             catchError((err: unknown) => {
               logService?.error(`Async action exception: ${err}`);
@@ -104,7 +108,17 @@ export class AsyncContextService {
     this._selfLoading$.next(value);
   }
 
-  run(action: FunctionReturningAwaitable) {
-    this._requestedAction$.next(action);
+  run(tag: BitAsyncTag, handler: FunctionReturningAwaitable): void;
+  run(handler: FunctionReturningAwaitable): void;
+  run(
+    tagOrHandler: BitAsyncTag | FunctionReturningAwaitable,
+    handler?: FunctionReturningAwaitable
+  ): void {
+    if (typeof tagOrHandler === "function") {
+      this._requestedAction$.next({ handler: tagOrHandler });
+      return;
+    }
+
+    this._requestedAction$.next({ handler, tag: tagOrHandler });
   }
 }
