@@ -16,7 +16,6 @@ import { DialogServiceAbstraction, SimpleDialogOptions } from "@bitwarden/angula
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 import { BrowserApi } from "../platform/browser/browser-api";
@@ -45,7 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private router: Router,
     private stateService: BrowserStateService,
-    private messagingService: MessagingService,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,

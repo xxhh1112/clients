@@ -1,9 +1,19 @@
-import { Injectable, NgModule } from "@angular/core";
-import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
+import { Location } from "@angular/common";
+import { Injectable, NgModule, inject } from "@angular/core";
+import {
+  ActivatedRouteSnapshot,
+  RouteReuseStrategy,
+  Router,
+  RouterModule,
+  Routes,
+  UrlSerializer,
+} from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
 import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
@@ -18,6 +28,7 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
+import { BrowserRouterService } from "../platform/popup/services/browser-router.service";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
@@ -49,7 +60,29 @@ import { TabsComponent } from "./tabs.component";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "home",
+    canActivate: [
+      async () => {
+        const routerService = inject(BrowserRouterService);
+        const authService = inject(AuthService);
+        const serializer = inject(UrlSerializer);
+        const location = inject(Location);
+        const router = inject(Router);
+
+        if (
+          routerService.hasPreviousUrl() &&
+          (await authService.getAuthStatus()) === AuthenticationStatus.Unlocked
+        ) {
+          // Insert home in history so that back button works
+          location.go("/home");
+
+          // Go to last location
+          return serializer.parse(await routerService.getPreviousUrl());
+        }
+
+        return router.createUrlTree(["/home"]);
+      },
+    ],
+    children: [],
     pathMatch: "full",
   },
   {
