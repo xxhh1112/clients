@@ -1,5 +1,3 @@
-import { mock } from "jest-mock-extended";
-
 import { FormFieldElement } from "../types";
 
 import DomElementVisibilityService from "./dom-element-visibility.service";
@@ -16,21 +14,6 @@ function createBoundingClientRectMock(customProperties: Partial<any> = {}): DOMR
     y: 0,
     toJSON: jest.fn(),
     ...customProperties,
-  };
-}
-
-function createIntersectObserverEntryMock(
-  customerProperties: Partial<IntersectionObserverEntry> = {}
-): IntersectionObserverEntry {
-  return {
-    target: mock<HTMLElement>(),
-    boundingClientRect: createBoundingClientRectMock({}),
-    intersectionRatio: 1,
-    isIntersecting: true,
-    intersectionRect: mock<DOMRectReadOnly>(),
-    rootBounds: mock<DOMRectReadOnly>(),
-    time: 0,
-    ...customerProperties,
   };
 }
 
@@ -51,41 +34,8 @@ describe("DomElementVisibilityService", function () {
   });
 
   describe("isFormFieldViewable", function () {
-    it("returns false if the form field has an intersection observer entry that is currently not intersecting", async function () {
-      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        isIntersecting: false,
-      });
-      jest
-        .spyOn(domElementVisibilityService as any, "getElementIntersectionObserverEntry")
-        .mockResolvedValueOnce(mockIntersectionObserverEntry);
-      jest.spyOn(usernameElement, "getBoundingClientRect");
-      jest.spyOn(domElementVisibilityService as any, "isElementOutsideViewportBounds");
-      jest.spyOn(domElementVisibilityService, "isElementHiddenByCss");
-      jest.spyOn(domElementVisibilityService as any, "formFieldIsNotHiddenBehindAnotherElement");
-
-      const isFormFieldViewable = await domElementVisibilityService.isFormFieldViewable(
-        usernameElement
-      );
-
-      expect(isFormFieldViewable).toEqual(false);
-      expect(
-        domElementVisibilityService["getElementIntersectionObserverEntry"]
-      ).toHaveBeenCalledWith(usernameElement);
-      expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
-      expect(domElementVisibilityService["isElementOutsideViewportBounds"]).not.toHaveBeenCalled();
-      expect(domElementVisibilityService["isElementHiddenByCss"]).not.toHaveBeenCalled();
-      expect(
-        domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"]
-      ).not.toHaveBeenCalled();
-    });
-
     it("returns false if the element is outside viewport bounds", async function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      jest
-        .spyOn(domElementVisibilityService as any, "getElementIntersectionObserverEntry")
-        .mockResolvedValueOnce(null);
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
         .spyOn(domElementVisibilityService as any, "isElementOutsideViewportBounds")
@@ -98,9 +48,6 @@ describe("DomElementVisibilityService", function () {
       );
 
       expect(isFormFieldViewable).toEqual(false);
-      expect(
-        domElementVisibilityService["getElementIntersectionObserverEntry"]
-      ).toHaveBeenCalledWith(usernameElement);
       expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
       expect(domElementVisibilityService["isElementOutsideViewportBounds"]).toHaveBeenCalledWith(
         usernameElement,
@@ -114,12 +61,6 @@ describe("DomElementVisibilityService", function () {
 
     it("returns false if the element is hidden by CSS", async function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
-      jest
-        .spyOn(domElementVisibilityService as any, "getElementIntersectionObserverEntry")
-        .mockResolvedValueOnce(mockIntersectionObserverEntry);
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
         .spyOn(domElementVisibilityService as any, "isElementOutsideViewportBounds")
@@ -132,13 +73,10 @@ describe("DomElementVisibilityService", function () {
       );
 
       expect(isFormFieldViewable).toEqual(false);
-      expect(
-        domElementVisibilityService["getElementIntersectionObserverEntry"]
-      ).toHaveBeenCalledWith(usernameElement);
-      expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
+      expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
       expect(domElementVisibilityService["isElementOutsideViewportBounds"]).toHaveBeenCalledWith(
         usernameElement,
-        mockIntersectionObserverEntry.boundingClientRect
+        usernameElement.getBoundingClientRect()
       );
       expect(domElementVisibilityService["isElementHiddenByCss"]).toHaveBeenCalledWith(
         usernameElement
@@ -150,12 +88,6 @@ describe("DomElementVisibilityService", function () {
 
     it("returns false if the element is hidden behind another element", async function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
-      jest
-        .spyOn(domElementVisibilityService as any, "getElementIntersectionObserverEntry")
-        .mockResolvedValueOnce(mockIntersectionObserverEntry);
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
         .spyOn(domElementVisibilityService as any, "isElementOutsideViewportBounds")
@@ -170,30 +102,21 @@ describe("DomElementVisibilityService", function () {
       );
 
       expect(isFormFieldViewable).toEqual(false);
-      expect(
-        domElementVisibilityService["getElementIntersectionObserverEntry"]
-      ).toHaveBeenCalledWith(usernameElement);
-      expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
+      expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
       expect(domElementVisibilityService["isElementOutsideViewportBounds"]).toHaveBeenCalledWith(
         usernameElement,
-        mockIntersectionObserverEntry.boundingClientRect
+        usernameElement.getBoundingClientRect()
       );
       expect(domElementVisibilityService["isElementHiddenByCss"]).toHaveBeenCalledWith(
         usernameElement
       );
       expect(
         domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"]
-      ).toHaveBeenCalledWith(usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ).toHaveBeenCalledWith(usernameElement, usernameElement.getBoundingClientRect());
     });
 
     it("returns true if the form field is viewable", async function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
-      jest
-        .spyOn(domElementVisibilityService as any, "getElementIntersectionObserverEntry")
-        .mockResolvedValueOnce(mockIntersectionObserverEntry);
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
         .spyOn(domElementVisibilityService as any, "isElementOutsideViewportBounds")
@@ -208,20 +131,17 @@ describe("DomElementVisibilityService", function () {
       );
 
       expect(isFormFieldViewable).toEqual(true);
-      expect(
-        domElementVisibilityService["getElementIntersectionObserverEntry"]
-      ).toHaveBeenCalledWith(usernameElement);
-      expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
+      expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
       expect(domElementVisibilityService["isElementOutsideViewportBounds"]).toHaveBeenCalledWith(
         usernameElement,
-        mockIntersectionObserverEntry.boundingClientRect
+        usernameElement.getBoundingClientRect()
       );
       expect(domElementVisibilityService["isElementHiddenByCss"]).toHaveBeenCalledWith(
         usernameElement
       );
       expect(
         domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"]
-      ).toHaveBeenCalledWith(usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ).toHaveBeenCalledWith(usernameElement, usernameElement.getBoundingClientRect());
     });
   });
 
@@ -346,94 +266,77 @@ describe("DomElementVisibilityService", function () {
 
     it("returns true if the passed element's size is not sufficient for visibility", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        boundingClientRect: createBoundingClientRectMock({
-          width: 9,
-          height: 9,
-        }),
+      const elementBoundingClientRect = createBoundingClientRectMock({
+        width: 9,
+        height: 9,
       });
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
     it("returns true if the passed element is overflowing the left viewport", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        boundingClientRect: createBoundingClientRectMock({
-          left: -1,
-        }),
+      const elementBoundingClientRect = createBoundingClientRectMock({
+        left: -1,
       });
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
     it("returns true if the passed element is overflowing the right viewport", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        boundingClientRect: createBoundingClientRectMock({
-          left: mockViewportWidth + 1,
-        }),
+      const elementBoundingClientRect = createBoundingClientRectMock({
+        left: mockViewportWidth + 1,
       });
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
     it("returns true if the passed element is overflowing the top viewport", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        boundingClientRect: createBoundingClientRectMock({
-          top: -1,
-        }),
+      const elementBoundingClientRect = createBoundingClientRectMock({
+        top: -1,
       });
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
     it("returns true if the passed element is overflowing the bottom viewport", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-        boundingClientRect: createBoundingClientRectMock({
-          top: mockViewportHeight + 1,
-        }),
+      const elementBoundingClientRect = createBoundingClientRectMock({
+        top: mockViewportHeight + 1,
       });
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
     it("returns false if the passed element is not outside of the viewport bounds", function () {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
+      const elementBoundingClientRect = createBoundingClientRectMock({});
 
       const isElementOutsideViewportBounds = domElementVisibilityService[
         "isElementOutsideViewportBounds"
-      ](usernameElement, mockIntersectionObserverEntry.boundingClientRect);
+      ](usernameElement, elementBoundingClientRect);
 
       expect(isElementOutsideViewportBounds).toEqual(false);
     });
@@ -497,74 +400,6 @@ describe("DomElementVisibilityService", function () {
         domElementVisibilityService["formFieldIsNotHiddenBehindAnotherElement"](usernameElement);
 
       expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(false);
-    });
-  });
-
-  describe("getElementIntersectionObserverEntry", function () {
-    it("returns null if the IntersectionObserver API is not present within the window", async function () {
-      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-
-      const getElementIntersectionObserverEntry = await domElementVisibilityService[
-        "getElementIntersectionObserverEntry"
-      ](usernameElement);
-
-      expect(getElementIntersectionObserverEntry).toEqual(null);
-    });
-
-    it("returns an promise with IntersectionObserverEntry of the passed element", function () {
-      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
-      window.IntersectionObserver = jest.fn(() => ({
-        root: null,
-        rootMargin: "0px",
-        thresholds: [],
-        disconnect: jest.fn(),
-        observe: jest.fn().mockResolvedValueOnce(mockIntersectionObserverEntry),
-        takeRecords: jest.fn(),
-        unobserve: jest.fn(),
-      }));
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      window.IntersectionObserverEntry = {
-        prototype: {
-          ...createIntersectObserverEntryMock({}),
-        },
-      };
-
-      const getElementIntersectionObserverEntryPromise =
-        domElementVisibilityService["getElementIntersectionObserverEntry"](usernameElement);
-
-      expect(getElementIntersectionObserverEntryPromise).toBeInstanceOf(Promise);
-    });
-  });
-
-  describe("handleResolvingIntersectionObserverEntry", function () {
-    it("calls the resolve callback with the first found entry and disconnects the observer", function () {
-      const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
-      const mockIntersectionObserverEntry = createIntersectObserverEntryMock({
-        target: usernameElement,
-      });
-      window.IntersectionObserver = jest.fn(() => ({
-        root: null,
-        rootMargin: "0px",
-        thresholds: [],
-        disconnect: jest.fn(),
-        observe: jest.fn(),
-        takeRecords: jest.fn(),
-        unobserve: jest.fn(),
-      }));
-      const observer = new IntersectionObserver(jest.fn(), {});
-      const resolve = jest.fn();
-      jest.spyOn(observer, "disconnect");
-
-      domElementVisibilityService["handleResolvingIntersectionObserverEntry"](resolve, observer, [
-        mockIntersectionObserverEntry,
-      ]);
-
-      expect(resolve).toHaveBeenCalledWith(mockIntersectionObserverEntry);
-      expect(observer.disconnect).toHaveBeenCalled();
     });
   });
 });
