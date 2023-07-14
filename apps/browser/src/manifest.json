@@ -16,6 +16,7 @@
   },
   "content_scripts": [
     {
+      "all_frames": true,
       "js": ["content/trigger-autofill-script-injection.js"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
