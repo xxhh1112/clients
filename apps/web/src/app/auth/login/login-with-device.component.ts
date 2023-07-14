@@ -16,7 +16,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
-import { StateService } from "../../core";
+import { RouterService, StateService } from "../../core";
 
 @Component({
   selector: "app-login-with-device",
@@ -41,7 +41,8 @@ export class LoginWithDeviceComponent
     anonymousHubService: AnonymousHubService,
     validationService: ValidationService,
     stateService: StateService,
-    loginService: LoginService
+    loginService: LoginService,
+    private routerService: RouterService
   ) {
     super(
       router,
@@ -60,5 +61,22 @@ export class LoginWithDeviceComponent
       stateService,
       loginService
     );
+    this.onSuccessfulLogin = this.goAfterLogIn;
+  }
+
+  async goAfterLogIn() {
+    this.loginService.clearValues();
+    let previousUrl = await this.stateService.getPreviousUrl();
+    if (previousUrl == "" || previousUrl == undefined || previousUrl == null) {
+      previousUrl = this.routerService.getPreviousUrl();
+    }
+    if (previousUrl) {
+      this.stateService.setPreviousUrl(null);
+      this.router.navigateByUrl(previousUrl);
+    } else {
+      this.router.navigate([this.successRoute], {
+        queryParams: {},
+      });
+    }
   }
 }
