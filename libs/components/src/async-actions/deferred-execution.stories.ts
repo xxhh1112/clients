@@ -80,6 +80,13 @@ export const Simple: SimpleStory = {
       <button bitButton buttonType="primary" (bitAsyncClick)="action($event)">Button</button>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<button bitButton buttonType="primary" (bitAsyncClick)="action($event)">Button</button>`,
+      },
+    },
+  },
 };
 
 export const WithExecution: WithExecutionStory = {
@@ -106,4 +113,19 @@ export const WithExecution: WithExecutionStory = {
       </ng-container>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `
+          <!-- Simulate an event that passes through multiple async contexts -->
+          <ng-container bitAsyncContext>
+            <ng-container bitAsyncContext>
+              <button class="tw-ml-2" bitButton buttonType="primary" (bitAsyncClick)="action($event)">Primary</button>
+              <button class="tw-ml-2" bitButton buttonType="secondary" (bitAsyncClick)="action($event)">Secondary</button>
+              <button class="tw-ml-2" bitButton buttonType="danger" (bitAsyncClick)="action($event)">Delete</button>
+            </ng-container>
+          </ng-container>`,
+      },
+    },
+  },
 };
