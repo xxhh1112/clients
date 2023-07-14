@@ -67,13 +67,6 @@ action will run here and effectively disable all other async actions in the clie
 
 ### Menu
 
-> **Warning:** Not implemented yet
-
-> **Dev comment**: Should this stretch to the parent context somehow? Dropdown menus don't have
-> backdrops so it would be weird if the user could start triggering actions on other parts of the
-> application that might be related? Maybe menus shouldn't automatically create contexts, and
-> instead leave this up to the developer?
-
 Dropdown menus are place where many buttons are grouped together, all acting within the same context
 (usually upon the same entity). When a button in a menu triggers a long running task, it is
 important that the other buttons in the menu are disabled to avoid confusion and accidental data
