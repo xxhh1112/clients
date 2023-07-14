@@ -90,6 +90,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   }
 
   async ngOnInit() {
+    this.stateService.setPreviousUrl(null);
+
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.premium != null) {
