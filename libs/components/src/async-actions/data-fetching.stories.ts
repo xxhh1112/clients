@@ -21,6 +21,7 @@ import { IconButtonModule } from "../icon-button";
 import { AsyncContextService } from "./async-context.service";
 import { BitAsyncClickDirective } from "./bit-async-click.directive";
 import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
+import { BitAsyncTaggedEvent } from "./bit-async-tag";
 
 @Component({
   template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
@@ -28,10 +29,10 @@ import { BitAsyncDisableDirective } from "./bit-async-disable.directive";
       <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-ml-2">
         Perform action
       </button>
-    </ng-container>
-    <button bitButton buttonType="secondary" [bitAsyncClick]="init" class="tw-ml-2">
-      Re-run initialization
-    </button>`,
+      <button bitButton buttonType="secondary" (bitAsyncClick)="refresh($event)" class="tw-ml-2">
+        Refresh
+      </button>
+    </ng-container>`,
   selector: "app-initial-data-fetch-example",
   providers: [AsyncContextService],
 })
@@ -43,15 +44,19 @@ class InitialDataFetchExampleComponent implements OnInit {
 
   constructor(private asyncContextService: AsyncContextService) {}
 
-  ngOnInit(): void {
-    this.asyncContextService.run(this.init);
+  async ngOnInit(): Promise<void> {
+    this.initialLoading = true;
+    await this.load();
+    this.initialLoading = false;
   }
 
-  init = async () => {
-    this.initialLoading = true;
+  refresh(event?: BitAsyncTaggedEvent) {
+    this.asyncContextService.run(event?.tag, this.load.bind(this));
+  }
+
+  protected async load() {
     this.fakeData = await firstValueFrom(this.fakeDataService.getData$());
-    this.initialLoading = false;
-  };
+  }
 
   action = async () => {
     await new Promise<void>((resolve, reject) => {
@@ -63,20 +68,20 @@ class InitialDataFetchExampleComponent implements OnInit {
 @Component({
   template: `<ng-container *ngIf="initialLoading">Loading...</ng-container>
     <ng-container *ngIf="!initialLoading">
-      Data: {{ data }}
       <button bitButton buttonType="primary" [bitAsyncClick]="action" class="tw-ml-2">
         Perform action
       </button>
-    </ng-container>
-    <button
-      bitButton
-      buttonType="secondary"
-      (click)="refresh()"
-      [loading]="refreshing"
-      class="tw-ml-2"
-    >
-      Refresh
-    </button>`,
+
+      <button
+        bitButton
+        buttonType="secondary"
+        (click)="refresh()"
+        [loading]="refreshing"
+        class="tw-ml-2"
+      >
+        Refresh
+      </button>
+    </ng-container>`,
   selector: "app-reactive-data-refresh-example",
   providers: [AsyncContextService],
 })
