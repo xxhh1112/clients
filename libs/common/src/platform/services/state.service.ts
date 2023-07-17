@@ -187,7 +187,7 @@ export class StateService<
   }
 
   async addAccount(account: TAccount) {
-    account = await this.setAccountEnvironmentUrls(account);
+    account = await this.setAccountEnvironment(account);
     await this.updateState(async (state) => {
       state.authenticatedAccounts.push(account.profile.userId);
       await this.storageService.save(keys.authenticatedAccounts, state.authenticatedAccounts);
@@ -2844,8 +2844,9 @@ export class StateService<
         await this.defaultOnDiskLocalOptions()
       )
     );
-    // EnvironmentUrls are set before authenticating and should override whatever is stored from any previous session
+    // EnvironmentUrls and region are set before authenticating and should override whatever is stored from any previous session
     const environmentUrls = account.settings.environmentUrls;
+    const region = account.settings.region;
     if (storedAccount?.settings != null) {
       account.settings = storedAccount.settings;
     } else if (await this.storageService.has(keys.tempAccountSettings)) {
@@ -2853,6 +2854,8 @@ export class StateService<
       await this.storageService.remove(keys.tempAccountSettings);
     }
     account.settings.environmentUrls = environmentUrls;
+    account.settings.region = region;
+
     if (
       account.settings.vaultTimeoutAction === VaultTimeoutAction.LogOut &&
       account.settings.vaultTimeout != null
@@ -2880,6 +2883,7 @@ export class StateService<
     );
     if (storedAccount?.settings != null) {
       storedAccount.settings.environmentUrls = account.settings.environmentUrls;
+      storedAccount.settings.region = account.settings.region;
       account.settings = storedAccount.settings;
     }
     await this.storageService.save(
@@ -2902,6 +2906,7 @@ export class StateService<
     );
     if (storedAccount?.settings != null) {
       storedAccount.settings.environmentUrls = account.settings.environmentUrls;
+      storedAccount.settings.region = account.settings.region;
       account.settings = storedAccount.settings;
     }
     await this.storageService.save(
@@ -3052,7 +3057,9 @@ export class StateService<
     return Object.assign(this.createAccount(), persistentAccountInformation);
   }
 
-  protected async setAccountEnvironmentUrls(account: TAccount): Promise<TAccount> {
+  // The environment urls and region are selected before login and are transferred here to an authenticated account
+  protected async setAccountEnvironment(account: TAccount): Promise<TAccount> {
+    account.settings.region = await this.getGlobalRegion();
     account.settings.environmentUrls = await this.getGlobalEnvironmentUrls();
     return account;
   }
@@ -3060,6 +3067,11 @@ export class StateService<
   protected async getGlobalEnvironmentUrls(options?: StorageOptions): Promise<EnvironmentUrls> {
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
     return (await this.getGlobals(options)).environmentUrls ?? new EnvironmentUrls();
+  }
+
+  protected async getGlobalRegion(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
+    return (await this.getGlobals(options)).region ?? null;
   }
 
   protected async clearDecryptedDataForActiveUser(): Promise<void> {

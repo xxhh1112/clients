@@ -2123,7 +2123,7 @@
     "message": "设备登录"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "必须在 Bitwarden 应用程序的设置中启用设备登录。需要其他选项吗？"
+    "message": "设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？"
   },
   "fingerprintPhraseHeader": {
     "message": "指纹短语"
@@ -2237,5 +2237,11 @@
   },
   "accessDenied": {
     "message": "访问被拒绝。您没有权限查看此页面。"
+  },
+  "general": {
+    "message": "常规"
+  },
+  "display": {
+    "message": "显示"
   }
 }
