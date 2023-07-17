@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Pieteikties ar ierīci"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos. Nepieciešama cita iespēja?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Ir jāuzstāda pieteikšanās ar ierīci Bitwarden tālruņa lietotnes iestatījumos. Nepieciešama cita iespēja?"
   },
   "loginWithMasterPassword": {
     "message": "Pieteikties ar galveno paroli"
@@ -792,10 +792,10 @@
     }
   },
   "enterVerificationCodeApp": {
-    "message": "Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes."
+    "message": "Ievadiet 6 ciparu verifikācijas kodu no savas autentifikācijas lietotnes."
   },
   "enterVerificationCodeEmail": {
-    "message": "Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz $EMAIL$.",
+    "message": "Ievadi 6 ciparu apstiprinājuma kodu, kas tika nosūtīts uz $EMAIL$!",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1495,7 +1495,7 @@
     "message": "Atslēga"
   },
   "twoStepAuthenticatorEnterCode": {
-    "message": "Jāievada lietotnes izveidotais 6 ciparu apstiprināšanas kods"
+    "message": "Ievadīt lietotnes izveidoto 6 ciparu apstiprināšanas kodu"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "Ja ir vajadzība pievienot citās ierīcēs, zemāk ir kvadrātkods (vai atslēga), kas ir izmantojams autentificētāja lietotnē."
@@ -1591,7 +1591,7 @@
     "message": "Ievadīt e-pasta adresi, uz kuru saņemt apstiprināšanas kodus"
   },
   "twoFactorEmailEnterCode": {
-    "message": "Jāievada e-pastā saņemtais 6 ciparu apstiprinājuma kods"
+    "message": "Ievadīt e-pastā saņemto 6 ciparu apstiprinājuma kodu"
   },
   "sendEmail": {
     "message": "Nosūtīt e-pastu"
@@ -5755,7 +5755,7 @@
     "message": "Piesakās kā"
   },
   "notYou": {
-    "message": "Tas neesi Tu?"
+    "message": "Tas neesat Jūs?"
   },
   "pickAnAvatarColor": {
     "message": "Izvēlēties iemiesojuma krāsu"
@@ -6624,13 +6624,13 @@
     "message": "Noslēpumu pārvaldnieks Beta"
   },
   "secretsManager": {
-    "message": "Noslēpumu pārvaldnieks"
+    "message": "Secrets Manager"
   },
-  "secretsManagerAccessDescription": {
-    "message": "Ieslēgt lietotāju piekļuvi Noslēpumu pārvaldniekam."
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Šis lietotājs var piekļūt Noslēpumu pārvaldniekam"
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Svarīgi:"
@@ -6858,19 +6858,19 @@
   "updatedTempPassword": {
     "message": "Lietotājs atjaunināja konta atkopšanas izsniegtu paroli."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "Ieslēgta piekļuve Noslēpumu pārvaldniekam",
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Ieslēgt piekļuvi"
+  "enableAccess": {
+    "message": "Enable access"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Nodrošināt zemāk uzskaitītajiem dalībniekiem piekļuvi Noslēpumu pārvaldniekam. Paroļu pārvaldniekā piešķirtā loma attiecas arī uz Noslēpumu pārvaldnieku.",
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Ieslēgt Noslēpumu pārvaldnieku"
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
   },
   "yourOrganizationsFingerprint": {
     "message": "Apvienības atpazīšanas vārdkopa",
@@ -6929,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Dalībnieku, kuriem nav galvenās paroles, noņemšana bez tās iestatīšanas var ierobežot piekļuvi to kontam."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Uzsāc savu 7 dienu bezmaksas Bitwarden izmēģinājumu $ORG$!",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Turpināt"
-  },
-  "usFlag": {
-    "message": "ASV karogs"
-  },
-  "euFlag": {
-    "message": "ES karogs"
-  },
-  "selectedRegionFlag": {
-    "message": "Atlasītā apgabala karogs"
   }
 }

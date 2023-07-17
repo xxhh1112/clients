@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Zaloguj się za pomocą urządzenia"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden. Potrzebujesz innej opcji?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji mobilnej Bitwarden. Potrzebujesz innej opcji?"
   },
   "loginWithMasterPassword": {
     "message": "Logowanie hasłem głównym"
@@ -6626,8 +6626,8 @@
   "secretsManager": {
     "message": "Menedżer sekretów"
   },
-  "secretsManagerAccessDescription": {
-    "message": "Activate user access to Secrets Manager."
+  "secretsManagerAccessDesc": {
+    "message": "Włącz dostęp użytkownikom do menedżera sekretów."
   },
   "userAccessSecretsManagerGA": {
     "message": "Ten użytkownik może uzyskać dostęp do menedżera sekretów"
@@ -6858,19 +6858,19 @@
   "updatedTempPassword": {
     "message": "Użytkownik zaktualizował hasło wydane poprzez odzyskiwanie konta."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "Activated access to Secrets Manager",
+  "enabledAccessToSecretsManager": {
+    "message": "Włączono dostęp do menedżera sekretów",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Activate access"
+  "enableAccess": {
+    "message": "Włącz dostęp"
   },
   "bulkEnableSecretsManagerDescription": {
     "message": "Udziel następującym członkom dostępu do menedżera sekretów. Rola przyznana w menedżerze haseł będzie miała zastosowanie do menedżera sekretów.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Activate Secrets Manager"
+  "enableSecretsManager": {
+    "message": "Włącz menedżer sekretów"
   },
   "yourOrganizationsFingerprint": {
     "message": "Unikalny identyfikator Twojej organizacji",
@@ -6929,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Usuwanie użytkowników, którzy nie mają hasła głównego bez ustawienia go, może ograniczyć dostęp do ich pełnych kont."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Rozpocznij 7-dniowy darmowy okres próbny Bitwarden dla $ORG$",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Dalej"
-  },
-  "usFlag": {
-    "message": "Flaga USA"
-  },
-  "euFlag": {
-    "message": "Flaga UE"
-  },
-  "selectedRegionFlag": {
-    "message": "Flaga wybranego regionu"
   }
 }

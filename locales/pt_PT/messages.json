@@ -128,7 +128,7 @@
     "message": "Sr."
   },
   "mrs": {
-    "message": "Sr.ª"
+    "message": "Sra."
   },
   "ms": {
     "message": "Menina"
@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Iniciar sessão com o dispositivo"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "O início de sessão com o dispositivo deve ser ativado nas definições da aplicação Bitwarden. Necessita de outra opção?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "O início de sessão com o dispositivo deve ser ativado nas definições da aplicação móvel do Bitwarden. Necessita de outra opção?"
   },
   "loginWithMasterPassword": {
     "message": "Iniciar sessão com a palavra-passe mestra"
@@ -5008,7 +5008,7 @@
     "message": "Assertion consumer service (ACS) URL"
   },
   "spNameIdFormat": {
-    "message": "Formato de identificador de nome"
+    "message": "Name ID format"
   },
   "spOutboundSigningAlgorithm": {
     "message": "Outbound signing algorithm"
@@ -5498,17 +5498,17 @@
     "message": "Tipo de nome de utilizador"
   },
   "plusAddressedEmail": {
-    "message": "E-mail com subendereço",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Utilize as capacidades de subendereçamento do seu fornecedor de e-mail."
+    "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "E-mail de captura geral"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
-    "message": "Utilize a caixa de entrada de captura geral configurada para o seu domínio."
+    "message": "Use your domain's configured catch-all inbox."
   },
   "random": {
     "message": "Aleatório",
@@ -6228,7 +6228,7 @@
     "message": "Atualizar"
   },
   "plusNMore": {
-    "message": "+ $QUANTITY$",
+    "message": "+ $QUANTITY$ more",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -6516,7 +6516,7 @@
     "message": "A exportar dados secretos da organização"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Apenas os dados do Gestor de Segredos associados a $ORGANIZATION$ serão exportados. Os itens de outros produtos ou de outras organizações não serão incluídos.",
+    "message": "Apenas os dados do Gestor de segredos associados a $ORGANIZATION$ serão exportados. Os itens de outros produtos ou de outras organizações não serão incluídos.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6621,16 +6621,16 @@
     "message": "Ao prosseguir, terminará todas as sessões ativas. Terá de iniciar sessão novamente e concluir a configuração da verificação de dois passos. Recomendamos que exporte o seu cofre antes de alterar as definições de encriptação para evitar a perda de dados."
   },
   "secretsManagerBeta": {
-    "message": "Gestor de Segredos Beta"
+    "message": "Gestor de segredos Beta"
   },
   "secretsManager": {
-    "message": "Gestor de Segredos"
+    "message": "Gestor de segredos"
   },
-  "secretsManagerAccessDescription": {
-    "message": "Ativar o acesso do utilizador ao Gestor de Segredos."
+  "secretsManagerAccessDesc": {
+    "message": "Ativar o acesso do utilizador ao Gestor de segredos."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Este utilizador pode aceder ao Gestor de Segredos"
+    "message": "Este utilizador pode aceder ao Gestor de segredos"
   },
   "important": {
     "message": "Importante:"
@@ -6687,7 +6687,7 @@
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "Gestor de Segredos CLI"
+    "message": "gestor de segredos CLI"
   },
   "importSecrets": {
     "message": "Importar segredos"
@@ -6730,10 +6730,10 @@
     "message": "É necessária uma seleção."
   },
   "secretsManagerSubscriptionDesc": {
-    "message": "Ativar o acesso da organização ao Gestor de Segredos sem custos durante o programa Beta. Os utilizadores podem ter acesso ao Beta em Membros."
+    "message": "Ativar o acesso da organização ao Gestor de segredos sem custos durante o programa Beta. Os utilizadores podem ter acesso ao Beta em Membros."
   },
   "secretsManagerEnable": {
-    "message": "Ativar o Gestor de Segredos Beta"
+    "message": "Ativar Gestor de segredos Beta"
   },
   "saPeopleWarningTitle": {
     "message": "Tokens de acesso ainda disponíveis"
@@ -6858,19 +6858,19 @@
   "updatedTempPassword": {
     "message": "O utilizador atualizou uma palavra-passe emitida através da recuperação de conta."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "Acesso ativado ao Gestor de Segredos",
+  "enabledAccessToSecretsManager": {
+    "message": "Acesso ativado ao Gestor de segredos",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Ativar acesso"
+  "enableAccess": {
+    "message": "Ativar o acesso"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Conceda aos seguintes membros acesso ao Gestor de Segredos. A função concedida no Gestor de Palavras-passe aplicar-se-á ao Gestor de Segredos.",
+    "message": "Conceda aos seguintes membros acesso ao Gestor de segredos. A função concedida no Gestor de palavras-passe aplicar-se-á ao Gestor de segredos.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Ativar o Gestor de Segredos"
+  "enableSecretsManager": {
+    "message": "Ativar o Gestor de segredos"
   },
   "yourOrganizationsFingerprint": {
     "message": "Frase de impressão digital da sua organização",
@@ -6929,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Remover membros que não tenham palavras-passe mestras sem lhes definir uma pode restringir o acesso à sua conta completa."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Comece o seu período de teste gratuito de 7 dias do Bitwarden para $ORG$",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Avançar"
-  },
-  "usFlag": {
-    "message": "Bandeira dos EUA"
-  },
-  "euFlag": {
-    "message": "Bandeira da UE"
-  },
-  "selectedRegionFlag": {
-    "message": "Bandeira da região selecionada"
   }
 }

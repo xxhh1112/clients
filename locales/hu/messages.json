@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Bejelentkezés eszközzel"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Az eszközzel történő bejelentkezést engedélyezni kell a Biwarden mobilalkalmazás beállításaiban. Másik opcióra van szükség?"
   },
   "loginWithMasterPassword": {
     "message": "Bejelentkezés mesterjelszóval"
@@ -2667,10 +2667,10 @@
     "message": "A bejelentkezés meghiúsult hibás kétlépcsős bejelentkezés miatt."
   },
   "incorrectPassword": {
-    "message": "Helytelen jelszó"
+    "message": "Incorrect password"
   },
   "incorrectCode": {
-    "message": "Helytelen kód"
+    "message": "Incorrect code"
   },
   "exportedVault": {
     "message": "A széf exportálásra került."
@@ -6626,8 +6626,8 @@
   "secretsManager": {
     "message": "Titkos kód kezelő"
   },
-  "secretsManagerAccessDescription": {
-    "message": "A felhasználói hozzáférés bekapcsolása a Titkos kód kezelőhöz."
+  "secretsManagerAccessDesc": {
+    "message": "A felhasználói hozzáférés engedélyezése a Titkos kód kezelőhöz."
   },
   "userAccessSecretsManagerGA": {
     "message": "Ez a felhasználó elérheti a Titkos kód kezelőt"
@@ -6858,59 +6858,59 @@
   "updatedTempPassword": {
     "message": "A felhasználó frissítette a fiók helyreállítás során kiadott jelszót."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "A hozzáférés engedélyezése a Titkos kód kezelőhöz",
+  "enabledAccessToSecretsManager": {
+    "message": "Hozzáférés engedélyezése a Titkós kód kezelőhöz",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Hozzáférés bekapcsolása"
+  "enableAccess": {
+    "message": "Hozzáférés engedélyezése"
   },
   "bulkEnableSecretsManagerDescription": {
     "message": "Hozzáférés kiosztása a következő tagoknak a Titkos kód kezelőhöz.. A Jelszókezelőben megadott szerepkör a Titkos kód kezelőre vonatkozik.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Titkos kód kezelő bekapcsolása"
+  "enableSecretsManager": {
+    "message": "Titkos kód kezelő engedélyezése"
   },
   "yourOrganizationsFingerprint": {
     "message": "A szervezet ujjnyomat kifejezése",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
   },
   "deviceApprovals": {
-    "message": "Eszköz jóváhagyása"
+    "message": "Device approvals"
   },
   "deviceApprovalsDesc": {
-    "message": "Az alábbiakban hagyja jóvá a bejelentkezési kérelmeket, hogy a kérelmező tag befejezhesse a bejelentkezést. A jóvá nem hagyott kérelmek 1 hét után lejárnak. A jóváhagyás előtt ellenőrizze a tag adatait."
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
   },
   "deviceInfo": {
-    "message": "Eszközadatok"
+    "message": "Device info"
   },
   "time": {
-    "message": "Idő"
+    "message": "Time"
   },
   "denyAllRequests": {
-    "message": "Összes kérés elutasítása"
+    "message": "Deny all requests"
   },
   "denyRequest": {
-    "message": "Kérés elutasítása"
+    "message": "Deny request"
   },
   "approveRequest": {
-    "message": "Kérelem megerősítése"
+    "message": "Approve request"
   },
   "noDeviceRequests": {
-    "message": "Nincs eszközkérelem"
+    "message": "No device requests"
   },
   "noDeviceRequestsDesc": {
-    "message": "A tagok eszköz-jóváhagyási kérelmei itt jelennek meg"
+    "message": "Member device approval requests will appear here"
   },
   "loginRequestDenied": {
-    "message": "Bejelentkezési kérelem elutasítva"
+    "message": "Login request denied"
   },
   "allLoginRequestsDenied": {
-    "message": "Minden bejelentkezési kérelem elutasítva"
+    "message": "All login requests denied"
   },
   "loginRequestApproved": {
-    "message": "Bejelentkezési kérelem jóváhagyva"
+    "message": "Login request approved"
   },
   "removeOrgUserNoMasterPasswordTitle": {
     "message": "A fióknak nincs mesterjelszava."
@@ -6929,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "A mesterjelszavakkal nem rendelkező tagok eltávolítása anélkül, hogy beállítanánk egyet, korlátozhatjuk a hozzáférést a teljes fiókhoz."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Következő"
-  },
-  "usFlag": {
-    "message": "USA zászló"
-  },
-  "euFlag": {
-    "message": "EU zászló"
-  },
-  "selectedRegionFlag": {
-    "message": "Kiválasztott régió zászló"
   }
 }
