@@ -190,7 +190,7 @@ class DomElementVisibilityService implements domElementVisibilityServiceInterfac
       return true;
     }
 
-    const closestParentLabel = elementAtCenterPoint.parentElement?.closest("label");
+    const closestParentLabel = elementAtCenterPoint?.parentElement?.closest("label");
 
     return targetElementLabelsSet.has(closestParentLabel);
   }
