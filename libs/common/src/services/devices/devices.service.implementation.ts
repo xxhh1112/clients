@@ -4,7 +4,6 @@ import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices
 import { DevicesServiceAbstraction } from "../../abstractions/devices/devices.service.abstraction";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { DeviceView } from "../../abstractions/devices/views/device.view";
-import { DeviceType } from "../../enums";
 import { ListResponse } from "../../models/response/list.response";
 
 /**
@@ -29,13 +28,6 @@ export class DevicesServiceImplementation implements DevicesServiceAbstraction {
         });
       })
     );
-  }
-
-  /**
-   * @description Returns whether the user has any devices of the specified types.
-   */
-  getDevicesExistenceByTypes$(deviceTypes: DeviceType[]): Observable<boolean> {
-    return defer(() => this.devicesApiService.getDevicesExistenceByTypes(deviceTypes));
   }
 
   /**
