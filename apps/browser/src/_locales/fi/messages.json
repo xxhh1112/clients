@@ -2123,7 +2123,7 @@
     "message": "Laitteella kirjautuminen"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-mobiilisovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
+    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-sovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
   },
   "fingerprintPhraseHeader": {
     "message": "Tunnistelauseke"
@@ -2234,5 +2234,14 @@
   "us": {
     "message": "US",
     "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Pääsy estetty. Sinulla ei ole oikeutta avata sivua."
+  },
+  "general": {
+    "message": "Yleiset"
+  },
+  "display": {
+    "message": "Ulkoasu"
   }
 }

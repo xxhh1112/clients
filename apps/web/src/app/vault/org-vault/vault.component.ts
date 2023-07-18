@@ -38,7 +38,6 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { EventType } from "@bitwarden/common/enums";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
@@ -53,23 +52,21 @@ import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/pa
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { Icons } from "@bitwarden/components";
 
-import {
-  CollectionAdminService,
-  CollectionAdminView,
-  GroupService,
-  GroupView,
-} from "../../admin-console/organizations/core";
-import { EntityEventsComponent } from "../../admin-console/organizations/manage/entity-events.component";
-import {
-  CollectionDialogResult,
-  CollectionDialogTabType,
-  openCollectionDialog,
-} from "../../admin-console/organizations/shared";
+import { GroupService, GroupView } from "../../admin-console/organizations/core";
+import { openEntityEventsDialog } from "../../admin-console/organizations/manage/entity-events.component";
 import { VaultFilterService } from "../../vault/individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/individual-vault/vault-filter/shared/models/vault-filter.model";
+import {
+  CollectionDialogAction,
+  CollectionDialogTabType,
+  openCollectionDialog,
+} from "../components/collection-dialog";
 import { VaultItemEvent } from "../components/vault-items/vault-item-event";
+import { CollectionAdminService } from "../core/collection-admin.service";
+import { CollectionAdminView } from "../core/views/collection-admin.view";
 import {
   BulkDeleteDialogResult,
   openBulkDeleteDialog,
@@ -112,8 +109,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   cipherAddEditModalRef: ViewContainerRef;
   @ViewChild("collectionsModal", { read: ViewContainerRef, static: true })
   collectionsModalRef: ViewContainerRef;
-  @ViewChild("eventsTemplate", { read: ViewContainerRef, static: true })
-  eventsModalRef: ViewContainerRef;
 
   trashCleanupWarning: string = null;
   activeFilter: VaultFilter = new VaultFilter();
@@ -871,7 +866,10 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+    if (
+      result.action === CollectionDialogAction.Saved ||
+      result.action === CollectionDialogAction.Deleted
+    ) {
       this.refresh();
     }
   }
@@ -882,18 +880,23 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+    if (
+      result.action === CollectionDialogAction.Saved ||
+      result.action === CollectionDialogAction.Deleted
+    ) {
       this.refresh();
     }
   }
 
   async viewEvents(cipher: CipherView) {
-    await this.modalService.openViewRef(EntityEventsComponent, this.eventsModalRef, (comp) => {
-      comp.name = cipher.name;
-      comp.organizationId = this.organization.id;
-      comp.entityId = cipher.id;
-      comp.showUser = true;
-      comp.entity = "cipher";
+    await openEntityEventsDialog(this.dialogService, {
+      data: {
+        name: cipher.name,
+        organizationId: this.organization.id,
+        entityId: cipher.id,
+        showUser: true,
+        entity: "cipher",
+      },
     });
   }
 

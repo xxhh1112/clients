@@ -2234,5 +2234,14 @@
   "us": {
     "message": "EUA",
     "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Accés denegat. No teniu permís per veure aquesta pàgina."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Mostra"
   }
 }

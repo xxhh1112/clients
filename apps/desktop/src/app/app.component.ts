@@ -10,6 +10,7 @@ import {
 } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { ipcRenderer } from "electron";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
@@ -22,7 +23,6 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
@@ -39,6 +39,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -221,7 +222,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.systemService.cancelProcessReload();
             break;
           case "reloadProcess":
-            (window.location as any).reload(true);
+            ipcRenderer.send("reload-process");
             break;
           case "syncStarted":
             break;

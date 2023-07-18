@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Bejelentkezés eszközzel"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Az eszközzel történő bejelentkezést engedélyezni kell a Biwarden mobilalkalmazás beállításaiban. Másik opcióra van szükség?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?"
   },
   "loginWithMasterPassword": {
     "message": "Bejelentkezés mesterjelszóval"
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Széf export megerősítése"
   },
+  "confirmSecretsExport": {
+    "message": "Titkos adatok exportálásának megerősítése"
+  },
   "exportWarningDesc": {
     "message": "Ez az exportálás titkosítás nélkül tartalmazza a széfadatokat.Nem célszerű az exportált fájlt nem biztonságos csatornákon tárolni és továbbküldeni (például emailben). A felhasználás után erősen ajánlott a törlés."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Ez az exportálás titkosítatlan formátumban tartalmazza a titkos adatokat. Ne tároljuk vagy ne küldjük el az exportált fájlt nem biztonságos csatornákon (például emailben). A használat befejezése után azonnal töröljük."
   },
   "encExportKeyWarningDesc": {
     "message": "Ez az exportálás titkosítja az adatokat a fiók titkosítási kulcsával. Ha valaha a diók forgatási kulcsa más lesz, akkor újra exportálni kell, mert nem lehet visszafejteni ezt az exportálási fájlt."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Széf exportálása"
+  },
+  "exportSecrets": {
+    "message": "Titkos adatok exportálása"
   },
   "fileFormat": {
     "message": "Fájlformátum"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "A bejelentkezés meghiúsult hibás kétlépcsős bejelentkezés miatt."
+  },
+  "incorrectPassword": {
+    "message": "Helytelen jelszó"
+  },
+  "incorrectCode": {
+    "message": "Helytelen kód"
   },
   "exportedVault": {
     "message": "A széf exportálásra került."
@@ -6179,10 +6194,6 @@
     "message": "Az elérési vezérjel létrejött és a vágólapra került.",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "A jofgosultság kezelő bétaként érhető el.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Elérési vezérjel visszavonása",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6612,11 +6623,14 @@
   "secretsManagerBeta": {
     "message": "Titkos kód kezelő béta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Engedélyezze a felhasználóknak a Titkos kód kezelő ingyenes elérését a Béta program alatt."
+  "secretsManager": {
+    "message": "Titkos kód kezelő"
   },
-  "userAccessSecretsManager": {
-    "message": "Ez a felhasználó hozzáférhet a Titkos kód kezelő béta verziójához."
+  "secretsManagerAccessDescription": {
+    "message": "A felhasználói hozzáférés bekapcsolása a Titkos kód kezelőhöz."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "Ez a felhasználó elérheti a Titkos kód kezelőt"
   },
   "important": {
     "message": "Fontos:"
@@ -6843,5 +6857,98 @@
   },
   "updatedTempPassword": {
     "message": "A felhasználó frissítette a fiók helyreállítás során kiadott jelszót."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "A hozzáférés engedélyezése a Titkos kód kezelőhöz",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Hozzáférés bekapcsolása"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Hozzáférés kiosztása a következő tagoknak a Titkos kód kezelőhöz.. A Jelszókezelőben megadott szerepkör a Titkos kód kezelőre vonatkozik.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Titkos kód kezelő bekapcsolása"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "A szervezet ujjnyomat kifejezése",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Eszköz jóváhagyása"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Az alábbiakban hagyja jóvá a bejelentkezési kérelmeket, hogy a kérelmező tag befejezhesse a bejelentkezést. A jóvá nem hagyott kérelmek 1 hét után lejárnak. A jóváhagyás előtt ellenőrizze a tag adatait."
+  },
+  "deviceInfo": {
+    "message": "Eszközadatok"
+  },
+  "time": {
+    "message": "Idő"
+  },
+  "denyAllRequests": {
+    "message": "Összes kérés elutasítása"
+  },
+  "denyRequest": {
+    "message": "Kérés elutasítása"
+  },
+  "approveRequest": {
+    "message": "Kérelem megerősítése"
+  },
+  "noDeviceRequests": {
+    "message": "Nincs eszközkérelem"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "A tagok eszköz-jóváhagyási kérelmei itt jelennek meg"
+  },
+  "loginRequestDenied": {
+    "message": "Bejelentkezési kérelem elutasítva"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Minden bejelentkezési kérelem elutasítva"
+  },
+  "loginRequestApproved": {
+    "message": "Bejelentkezési kérelem jóváhagyva"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "A fióknak nincs mesterjelszava."
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Ha eltávolítjuk $USER$ mesterjelszavát anélkül, hogy beállítanánk a mesterjelszót, korlátozhatjuk a hozzáférést a teljes fiókhoz. Biztosan folytatni akarjuk?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Nincs mesterjelszó."
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "A mesterjelszavakkal nem rendelkező tagok eltávolítása anélkül, hogy beállítanánk egyet, korlátozhatjuk a hozzáférést a teljes fiókhoz."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Következő"
+  },
+  "usFlag": {
+    "message": "USA zászló"
+  },
+  "euFlag": {
+    "message": "EU zászló"
+  },
+  "selectedRegionFlag": {
+    "message": "Kiválasztott régió zászló"
   }
 }

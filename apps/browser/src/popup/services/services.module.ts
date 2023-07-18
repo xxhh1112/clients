@@ -15,10 +15,8 @@ import { NotificationsService } from "@bitwarden/common/abstractions/notificatio
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import {
@@ -32,6 +30,7 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
@@ -71,6 +70,7 @@ import {
   SendService,
 } from "@bitwarden/common/tools/send/services/send.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CipherFileUploadService } from "@bitwarden/common/vault/abstractions/file-upload/cipher-file-upload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import {

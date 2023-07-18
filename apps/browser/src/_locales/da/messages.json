@@ -2234,5 +2234,14 @@
   "us": {
     "message": "USA",
     "description": "United States"
+  },
+  "accessDenied": {
+    "message": "Adgang nægtet. Nødvendig tilladelse til at se siden mangler."
+  },
+  "general": {
+    "message": "Generelt"
+  },
+  "display": {
+    "message": "Display"
   }
 }
