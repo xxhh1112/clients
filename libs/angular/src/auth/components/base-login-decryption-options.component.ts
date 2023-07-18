@@ -25,6 +25,7 @@ import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -86,7 +87,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected apiService: ApiService,
     protected i18nService: I18nService,
     protected validationService: ValidationService,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected platformUtilsService: PlatformUtilsService
   ) {}
 
   async ngOnInit() {
@@ -106,6 +108,11 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
         // We are dealing with a new account if:
         //  - User does not have admin approval (i.e. has not enrolled into admin reset)
         //  - AND does not have a master password
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("accountSuccessfullyCreated")
+        );
         this.loadNewUserData();
       } else {
         this.loadUntrustedDeviceData(accountDecryptionOptions);

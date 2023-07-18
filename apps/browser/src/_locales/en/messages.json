@@ -2249,7 +2249,7 @@
     "message": "Request admin approval"
   },
   "approveWithMasterPassword": {
-    "message": "Approve with master password" 
+    "message": "Approve with master password"
   },
   "eu": {
     "message": "EU",
@@ -2267,5 +2267,8 @@
   },
   "display": {
     "message": "Display"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
   }
 }

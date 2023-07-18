@@ -13,6 +13,7 @@ import { TokenService } from "@bitwarden/common/auth/abstractions/token.service"
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 
@@ -36,7 +37,8 @@ export class LoginDecryptionOptionsComponent extends BaseLoginDecryptionOptionsC
     protected apiService: ApiService,
     protected i18nService: I18nService,
     protected validationService: ValidationService,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected platformUtilsService: PlatformUtilsService
   ) {
     super(
       formBuilder,
@@ -53,7 +55,8 @@ export class LoginDecryptionOptionsComponent extends BaseLoginDecryptionOptionsC
       apiService,
       i18nService,
       validationService,
-      deviceTrustCryptoService
+      deviceTrustCryptoService,
+      platformUtilsService
     );
   }
 }
