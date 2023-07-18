@@ -12,7 +12,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   private readonly urlsSubject = new Subject<void>();
   urls: Observable<void> = this.urlsSubject.asObservable();
   selectedRegion?: Region;
-  initialized = true;
+  initialized = false;
 
   protected baseUrl: string;
   protected webVaultUrl: string;
@@ -33,7 +33,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     webVault: "https://vault.bitwarden.com",
     notifications: "https://notifications.bitwarden.com",
     events: "https://events.bitwarden.com",
-    scim: "https://scim.bitwarden.com/v2",
+    scim: "https://scim.bitwarden.com",
   };
 
   readonly euUrls: Urls = {
@@ -44,7 +44,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     webVault: "https://vault.bitwarden.eu",
     notifications: "https://notifications.bitwarden.eu",
     events: "https://events.bitwarden.eu",
-    scim: "https://scim.bitwarden.eu/v2",
+    scim: "https://scim.bitwarden.eu",
   };
 
   constructor(private stateService: StateService) {
@@ -286,6 +286,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   async setRegion(region: Region) {
     this.selectedRegion = region;
     await this.stateService.setRegion(region);
+
     if (region === Region.SelfHosted) {
       // If user saves a self-hosted region with empty fields, default to US
       if (this.isEmpty()) {
@@ -337,16 +338,5 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       "https://api.bitwarden.eu",
       "https://vault.bitwarden.eu/api",
     ].includes(this.getApiUrl());
-  }
-
-  isSelfHosted(): boolean {
-    return ![
-      "http://vault.bitwarden.com",
-      "https://vault.bitwarden.com",
-      "http://vault.bitwarden.eu",
-      "https://vault.bitwarden.eu",
-      "http://vault.qa.bitwarden.pw",
-      "https://vault.qa.bitwarden.pw",
-    ].includes(this.getWebVaultUrl());
   }
 }
