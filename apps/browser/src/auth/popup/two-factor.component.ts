@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { TwoFactorComponent as BaseTwoFactorComponent } from "@bitwarden/angular/auth/components/two-factor.component";
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
@@ -50,7 +51,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     appIdService: AppIdService,
     loginService: LoginService,
     configService: ConfigServiceAbstraction,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    @Inject(WINDOW) protected win: Window
   ) {
     super(
       authService,
@@ -58,7 +60,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       i18nService,
       apiService,
       platformUtilsService,
-      window,
+      win,
       environmentService,
       stateService,
       route,

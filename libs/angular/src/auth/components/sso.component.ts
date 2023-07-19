@@ -1,5 +1,5 @@
 import { Directive } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -7,6 +7,7 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { SsoLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
+import { TrustedDeviceUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
@@ -37,7 +38,6 @@ export class SsoComponent {
   protected successRoute = "lock";
   protected trustedDeviceEncRoute = "login-initiated";
   protected changePasswordRoute = "set-password";
-  protected tdeLogin = "login-initiated";
   protected forcePasswordResetRoute = "update-temp-password";
   protected clientId: string;
   protected redirectUri: string;
@@ -179,88 +179,169 @@ export class SsoComponent {
     return authorizeUrl;
   }
 
-  private async logIn(code: string, codeVerifier: string, orgIdFromState: string) {
+  private async logIn(code: string, codeVerifier: string, orgIdentifier: string) {
     this.loggingIn = true;
     try {
       const credentials = new SsoLogInCredentials(
         code,
         codeVerifier,
         this.redirectUri,
-        orgIdFromState
+        orgIdentifier
       );
       this.formPromise = this.authService.logIn(credentials);
-      const response = await this.formPromise;
+      const authResult = await this.formPromise;
 
-      const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
-        FeatureFlag.TrustedDeviceEncryption
-      );
-
-      const accountDecryptionOptions: AccountDecryptionOptions =
+      const acctDecryptionOpts: AccountDecryptionOptions =
         await this.stateService.getAccountDecryptionOptions();
 
-      if (response.requiresTwoFactor) {
-        if (this.onSuccessfulLoginTwoFactorNavigate != null) {
-          await this.onSuccessfulLoginTwoFactorNavigate();
-        } else {
-          this.router.navigate([this.twoFactorRoute], {
-            queryParams: {
-              identifier: orgIdFromState,
-              sso: "true",
-            },
-          });
-        }
-      } else if (
-        trustedDeviceEncryptionFeatureActive &&
-        accountDecryptionOptions.trustedDeviceOption !== undefined
-      ) {
-        this.router.navigate([this.trustedDeviceEncRoute], {
-          queryParams: {
-            identifier: orgIdFromState,
-          },
-        });
-      } else if (response.resetMasterPassword) {
-        // TODO: for TDE, we are going to deprecate using response.resetMasterPassword
-        // and instead rely on accountDecryptionOptions to determine if the user needs to set a password
-        // Users are allowed to not have a MP if TDE feature enabled + TDE configured. Otherwise, they must set a MP
-        // src: https://bitwarden.atlassian.net/browse/PM-2759?focusedCommentId=39438
-        if (this.onSuccessfulLoginChangePasswordNavigate != null) {
-          await this.onSuccessfulLoginChangePasswordNavigate();
-        } else {
-          this.router.navigate([this.changePasswordRoute], {
-            queryParams: {
-              identifier: orgIdFromState,
-            },
-          });
-        }
-      } else if (response.forcePasswordReset !== ForceResetPasswordReason.None) {
-        if (this.onSuccessfulLoginForceResetNavigate != null) {
-          await this.onSuccessfulLoginForceResetNavigate();
-        } else {
-          this.router.navigate([this.forcePasswordResetRoute]);
-        }
-      } else {
-        if (this.onSuccessfulLogin != null) {
-          await this.onSuccessfulLogin();
-        }
-        if (this.onSuccessfulLoginNavigate != null) {
-          await this.onSuccessfulLoginNavigate();
-        } else {
-          this.router.navigate([this.successRoute]);
-        }
+      if (authResult.requiresTwoFactor) {
+        return await this.handleTwoFactorRequired(orgIdentifier);
       }
-    } catch (e) {
-      this.logService.error(e);
 
-      // TODO: Key Connector Service should pass this error message to the logout callback instead of displaying here
-      if (e.message === "Key Connector error") {
-        this.platformUtilsService.showToast(
-          "error",
-          null,
-          this.i18nService.t("ssoKeyConnectorError")
+      const tdeEnabled = await this.isTrustedDeviceEncEnabled(
+        acctDecryptionOpts.trustedDeviceOption
+      );
+
+      if (tdeEnabled) {
+        return await this.handleTrustedDeviceEncryptionEnabled(
+          authResult,
+          orgIdentifier,
+          acctDecryptionOpts
         );
       }
+
+      // In the standard, non TDE case, a user must set password if they don't
+      // have one and they aren't using key connector.
+      // Note: TDE & Key connector are mutually exclusive org config options.
+      const requireSetPassword =
+        !acctDecryptionOpts.hasMasterPassword &&
+        acctDecryptionOpts.keyConnectorOption === undefined;
+
+      if (requireSetPassword) {
+        // Change implies going no password -> password in this case
+        return await this.handleChangePasswordRequired(orgIdentifier);
+      }
+
+      // Users can be forced to reset their password via an admin or org policy
+      // disallowing weak passwords
+      if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+        return await this.handleForcePasswordReset(orgIdentifier);
+      }
+
+      // Standard SSO login success case
+      return await this.handleSuccessfulLogin();
+    } catch (e) {
+      await this.handleLoginError(e);
+    } finally {
+      this.loggingIn = false;
     }
-    this.loggingIn = false;
+  }
+
+  private async isTrustedDeviceEncEnabled(
+    trustedDeviceOption: TrustedDeviceUserDecryptionOption
+  ): Promise<boolean> {
+    const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
+      FeatureFlag.TrustedDeviceEncryption
+    );
+
+    return trustedDeviceEncryptionFeatureActive && trustedDeviceOption !== undefined;
+  }
+
+  private async handleTwoFactorRequired(orgIdentifier: string) {
+    await this.navigateViaCallbackOrRoute(
+      this.onSuccessfulLoginTwoFactorNavigate,
+      [this.twoFactorRoute],
+      {
+        queryParams: {
+          identifier: orgIdentifier,
+          sso: "true",
+        },
+      }
+    );
+  }
+
+  private async handleTrustedDeviceEncryptionEnabled(
+    authResult: AuthResult,
+    orgIdentifier: string,
+    acctDecryptionOpts: AccountDecryptionOptions
+  ): Promise<void> {
+    // If user doesn't have a MP, but has reset password permission, they must set a MP
+    if (
+      !acctDecryptionOpts.hasMasterPassword &&
+      acctDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
+    ) {
+      // Change implies going no password -> password in this case
+      return await this.handleChangePasswordRequired(orgIdentifier);
+    }
+
+    if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+      return await this.handleForcePasswordReset(orgIdentifier);
+    }
+
+    // Navigate to TDE page (if user was on trusted device and TDE has decrypted
+    //  their user key, the lock guard will redirect them to the vault)
+    this.router.navigate([this.trustedDeviceEncRoute], {
+      queryParams: {
+        identifier: orgIdentifier,
+      },
+    });
+  }
+
+  private async handleChangePasswordRequired(orgIdentifier: string) {
+    await this.navigateViaCallbackOrRoute(
+      this.onSuccessfulLoginChangePasswordNavigate,
+      [this.changePasswordRoute],
+      {
+        queryParams: {
+          identifier: orgIdentifier,
+        },
+      }
+    );
+  }
+
+  private async handleForcePasswordReset(orgIdentifier: string) {
+    await this.navigateViaCallbackOrRoute(
+      this.onSuccessfulLoginForceResetNavigate,
+      [this.forcePasswordResetRoute],
+      {
+        queryParams: {
+          identifier: orgIdentifier,
+        },
+      }
+    );
+  }
+
+  private async handleSuccessfulLogin() {
+    if (this.onSuccessfulLogin != null) {
+      await this.onSuccessfulLogin();
+    }
+
+    await this.navigateViaCallbackOrRoute(this.onSuccessfulLoginNavigate, [this.successRoute]);
+  }
+
+  private async handleLoginError(e: any) {
+    this.logService.error(e);
+
+    // TODO: Key Connector Service should pass this error message to the logout callback instead of displaying here
+    if (e.message === "Key Connector error") {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("ssoKeyConnectorError")
+      );
+    }
+  }
+
+  private async navigateViaCallbackOrRoute(
+    callback: () => Promise<unknown>,
+    commands: unknown[],
+    extras?: NavigationExtras
+  ): Promise<void> {
+    if (callback) {
+      await callback();
+    } else {
+      await this.router.navigate(commands, extras);
+    }
   }
 
   private getOrgIdentifierFromState(state: string): string {
