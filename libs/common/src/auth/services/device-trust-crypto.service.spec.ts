@@ -457,18 +457,21 @@ describe("deviceTrustCryptoService", () => {
         expect(setDeviceKeySpy).toHaveBeenCalledWith(null);
       });
     });
-    // TOOD Add tests for decryptUserKeyWithDeviceKey when types are available
 
     describe("rotateDevicesTrust", () => {
       let fakeNewUserKey: UserKey = null;
 
+      const FakeNewUserKeyMarker = 1;
+      const FakeOldUserKeyMarker = 5;
+      const FakeDecryptedPublicKeyMarker = 17;
+
       beforeEach(() => {
         const fakeNewUserKeyData = new Uint8Array(new ArrayBuffer(64));
-        fakeNewUserKeyData.fill(1, 0, 1);
+        fakeNewUserKeyData.fill(FakeNewUserKeyMarker, 0, 1);
         fakeNewUserKey = new SymmetricCryptoKey(fakeNewUserKeyData) as UserKey;
       });
 
-      it("does an early exit, if they are not currently on a trusted device.", async () => {
+      it("does an early exit when the current device is not a trusted device", async () => {
         stateService.getDeviceKey.mockResolvedValue(null);
 
         await deviceTrustCryptoService.rotateDevicesTrust(fakeNewUserKey, "");
@@ -483,13 +486,13 @@ describe("deviceTrustCryptoService", () => {
           );
         });
 
-        it("retreives the current devices keys, updates them, and lets the server know", async () => {
-          const currentEncryptedPublicKey = "2.cHVibGlj|cHVibGlj|cHVibGlj";
-          const currentEncryptedUserKey = "4.dXNlcg==";
+        it("rotates current device keys and calls api service when the current device is trusted", async () => {
+          const currentEncryptedPublicKey = new EncString("2.cHVibGlj|cHVibGlj|cHVibGlj");
+          const currentEncryptedUserKey = new EncString("4.dXNlcg==");
 
           const fakeOldUserKeyData = new Uint8Array(new ArrayBuffer(64));
           // Fill the first byte with something identifiable
-          fakeOldUserKeyData.fill(5, 0, 1);
+          fakeOldUserKeyData.fill(FakeOldUserKeyMarker, 0, 1);
 
           // Mock the retrieval of a user key that differs from the new one passed into the method
           stateService.getUserKey.mockResolvedValue(
@@ -513,8 +516,8 @@ describe("deviceTrustCryptoService", () => {
                 identifier: "test_device_identifier",
                 name: "Firefox",
                 type: DeviceType.FirefoxBrowser,
-                encryptedPublicKey: currentEncryptedPublicKey,
-                encryptedUserKey: currentEncryptedUserKey,
+                encryptedPublicKey: currentEncryptedPublicKey.encryptedString,
+                encryptedUserKey: currentEncryptedUserKey.encryptedString,
               })
             );
           });
@@ -522,27 +525,27 @@ describe("deviceTrustCryptoService", () => {
           // Mock the decryption of the public key with the old user key
           encryptService.decryptToBytes.mockImplementationOnce((_encValue, privateKeyValue) => {
             expect(privateKeyValue.key.byteLength).toBe(64);
-            expect(new Uint8Array(privateKeyValue.key)[0]).toBe(5);
+            expect(new Uint8Array(privateKeyValue.key)[0]).toBe(FakeOldUserKeyMarker);
             const data = new Uint8Array(new ArrayBuffer(250));
-            data.fill(17, 0, 1);
+            data.fill(FakeDecryptedPublicKeyMarker, 0, 1);
             return Promise.resolve(data.buffer);
           });
 
           // Mock the encryption of the new user key with the decrypted public key
           cryptoService.rsaEncrypt.mockImplementationOnce((data, publicKey) => {
             expect(data.byteLength).toBe(64); // New key should also be 64 bytes
-            expect(new Uint8Array(data)[0]).toBe(1); // New key should have the first byte be '1';
+            expect(new Uint8Array(data)[0]).toBe(FakeNewUserKeyMarker); // New key should have the first byte be '1';
 
-            expect(new Uint8Array(publicKey)[0]).toBe(17);
+            expect(new Uint8Array(publicKey)[0]).toBe(FakeDecryptedPublicKeyMarker);
             return Promise.resolve(new EncString("4.ZW5jcnlwdGVkdXNlcg=="));
           });
 
           // Mock the reencryption of the device public key with the new user key
           encryptService.encrypt.mockImplementationOnce((plainValue, key) => {
             expect(plainValue).toBeInstanceOf(ArrayBuffer);
-            expect(new Uint8Array(plainValue as ArrayBuffer)[0]).toBe(17);
+            expect(new Uint8Array(plainValue as ArrayBuffer)[0]).toBe(FakeDecryptedPublicKeyMarker);
 
-            expect(new Uint8Array(key.key)[0]).toBe(1);
+            expect(new Uint8Array(key.key)[0]).toBe(FakeNewUserKeyMarker);
             return Promise.resolve(
               new EncString("2.ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj|ZW5jcnlwdGVkcHVibGlj")
             );

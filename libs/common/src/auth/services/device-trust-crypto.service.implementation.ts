@@ -110,7 +110,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
 
     // Decrypt the existing device public key with the old user key
     const decryptedDevicePublicKey = await this.encryptService.decryptToBytes(
-      new EncString(currentDeviceKeys.encryptedPublicKey),
+      currentDeviceKeys.encryptedPublicKey,
       oldUserKey
     );
 

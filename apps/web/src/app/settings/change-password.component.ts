@@ -222,15 +222,15 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   private async updateKey(masterKey: MasterKey, masterPasswordHash: string) {
-    const [newUserKey, newProtectedUserKey] = await this.cryptoService.makeUserKey(masterKey);
-    const privateKey = await this.cryptoService.getPrivateKey();
+    const [newUserKey, masterKeyEncUserKey] = await this.cryptoService.makeUserKey(masterKey);
+    const userPrivateKey = await this.cryptoService.getPrivateKey();
     let encPrivateKey: EncString = null;
-    if (privateKey != null) {
-      encPrivateKey = await this.cryptoService.encrypt(privateKey, newUserKey);
+    if (userPrivateKey != null) {
+      encPrivateKey = await this.cryptoService.encrypt(userPrivateKey, newUserKey);
     }
     const request = new UpdateKeyRequest();
     request.privateKey = encPrivateKey != null ? encPrivateKey.encryptedString : null;
-    request.key = newProtectedUserKey.encryptedString;
+    request.key = masterKeyEncUserKey.encryptedString;
     request.masterPasswordHash = masterPasswordHash;
 
     const folders = await firstValueFrom(this.folderService.folderViews$);
