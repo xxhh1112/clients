@@ -148,6 +148,7 @@ describe("SsoLogInStrategy", () => {
       HasMasterPassword: true,
       TrustedDeviceOption: {
         HasAdminApproval: true,
+        HasLoginApprovingDevice: true,
         EncryptedPrivateKey: mockEncDevicePrivateKey,
         EncryptedUserKey: mockEncUserKey,
       },

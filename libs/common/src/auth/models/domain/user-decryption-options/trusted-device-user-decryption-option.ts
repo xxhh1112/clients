@@ -1,3 +1,3 @@
 export class TrustedDeviceUserDecryptionOption {
-  constructor(public hasAdminApproval: boolean) {}
+  constructor(public hasAdminApproval: boolean, public hasLoginApprovingDevice: boolean) {}
 }

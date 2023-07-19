@@ -7,7 +7,6 @@ import {
   switchMap,
   Subject,
   catchError,
-  forkJoin,
   from,
   of,
   finalize,
@@ -22,15 +21,11 @@ import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-conso
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import {
-  DesktopDeviceTypes,
-  DeviceType,
-  MobileDeviceTypes,
-} from "@bitwarden/common/enums/device-type.enum";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -92,7 +87,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected apiService: ApiService,
     protected i18nService: I18nService,
     protected validationService: ValidationService,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected platformUtilsService: PlatformUtilsService
   ) {}
 
   async ngOnInit() {
@@ -112,6 +108,11 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
         // We are dealing with a new account if:
         //  - User does not have admin approval (i.e. has not enrolled into admin reset)
         //  - AND does not have a master password
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("accountSuccessfullyCreated")
+        );
         this.loadNewUserData();
       } else {
         this.loadUntrustedDeviceData(accountDecryptionOptions);
@@ -170,23 +171,6 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   loadUntrustedDeviceData(accountDecryptionOptions: AccountDecryptionOptions) {
     this.loading = true;
 
-    const mobileAndDesktopDeviceTypes: DeviceType[] = Array.from(MobileDeviceTypes).concat(
-      Array.from(DesktopDeviceTypes)
-    );
-
-    // Note: Each obs must handle error here and protect inner observable b/c we are using forkJoin below
-    // as per RxJs docs: if any given observable errors at some point, then
-    // forkJoin will error as well and immediately unsubscribe from the other observables.
-    const mobileOrDesktopDevicesExistence$ = this.devicesService
-      .getDevicesExistenceByTypes$(mobileAndDesktopDeviceTypes)
-      .pipe(
-        catchError((err: unknown) => {
-          this.validationService.showError(err);
-          return of(undefined);
-        }),
-        takeUntil(this.destroy$)
-      );
-
     const email$ = from(this.stateService.getEmail()).pipe(
       catchError((err: unknown) => {
         this.validationService.showError(err);
@@ -195,18 +179,16 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     );
 
-    forkJoin({
-      mobileOrDesktopDevicesExistence: mobileOrDesktopDevicesExistence$,
-      email: email$,
-    })
+    email$
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
           this.loading = false;
         })
       )
-      .subscribe(({ mobileOrDesktopDevicesExistence, email }) => {
-        const showApproveFromOtherDeviceBtn = mobileOrDesktopDevicesExistence || false;
+      .subscribe((email) => {
+        const showApproveFromOtherDeviceBtn =
+          accountDecryptionOptions?.trustedDeviceOption?.hasLoginApprovingDevice || false;
 
         const showReqAdminApprovalBtn =
           !!accountDecryptionOptions?.trustedDeviceOption?.hasAdminApproval || false;

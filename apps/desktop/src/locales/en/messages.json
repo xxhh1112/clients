@@ -2268,7 +2268,7 @@
     "message": "Request admin approval"
   },
   "approveWithMasterPassword": {
-    "message": "Approve with master password" 
+    "message": "Approve with master password"
   },
   "region": {
     "message": "Region"
@@ -2286,6 +2286,8 @@
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
   }
-  
 }

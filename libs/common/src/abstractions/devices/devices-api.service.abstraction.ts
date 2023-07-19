@@ -1,5 +1,4 @@
 import { SecretVerificationRequest } from "../../auth/models/request/secret-verification.request";
-import { DeviceType } from "../../enums";
 import { ListResponse } from "../../models/response/list.response";
 
 import { UpdateDevicesTrustRequest } from "./requests/update-devices-trust.request";
@@ -12,7 +11,6 @@ export abstract class DevicesApiServiceAbstraction {
   getDeviceByIdentifier: (deviceIdentifier: string) => Promise<DeviceResponse>;
 
   getDevices: () => Promise<ListResponse<DeviceResponse>>;
-  getDevicesExistenceByTypes: (deviceTypes: DeviceType[]) => Promise<boolean>;
 
   updateTrustedDeviceKeys: (
     deviceIdentifier: string,
