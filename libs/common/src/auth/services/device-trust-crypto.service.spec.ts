@@ -1,9 +1,6 @@
 import { matches, mock, mockReset } from "jest-mock-extended";
 
-import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
-import { UpdateDevicesTrustRequest } from "../../abstractions/devices/requests/update-devices-trust.request";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
-import { ProtectedDeviceResponse } from "../../abstractions/devices/responses/protected-device.response";
 import { DeviceType } from "../../enums";
 import { EncryptionType } from "../../enums/encryption-type.enum";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
@@ -18,6 +15,9 @@ import {
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CryptoService } from "../../platform/services/crypto.service";
 import { CsprngArray } from "../../types/csprng";
+import { DevicesApiServiceAbstraction } from "../abstractions/devices-api.service.abstraction";
+import { UpdateDevicesTrustRequest } from "../models/request/update-devices-trust.request";
+import { ProtectedDeviceResponse } from "../models/response/protected-device.response";
 
 import { DeviceTrustCryptoService } from "./device-trust-crypto.service.implementation";
 

@@ -1,9 +1,8 @@
-import { SecretVerificationRequest } from "../../auth/models/request/secret-verification.request";
+import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { ListResponse } from "../../models/response/list.response";
-
-import { UpdateDevicesTrustRequest } from "./requests/update-devices-trust.request";
-import { DeviceResponse } from "./responses/device.response";
-import { ProtectedDeviceResponse } from "./responses/protected-device.response";
+import { SecretVerificationRequest } from "../models/request/secret-verification.request";
+import { UpdateDevicesTrustRequest } from "../models/request/update-devices-trust.request";
+import { ProtectedDeviceResponse } from "../models/response/protected-device.response";
 
 export abstract class DevicesApiServiceAbstraction {
   getKnownDevice: (email: string, deviceIdentifier: string) => Promise<boolean>;

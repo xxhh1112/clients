@@ -1,4 +1,4 @@
-import { SecretVerificationRequest } from "../../../auth/models/request/secret-verification.request";
+import { SecretVerificationRequest } from "./secret-verification.request";
 
 export class UpdateDevicesTrustRequest extends SecretVerificationRequest {
   currentDevice: DeviceKeysUpdateRequest;

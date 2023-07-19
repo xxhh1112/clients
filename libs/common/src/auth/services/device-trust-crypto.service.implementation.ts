@@ -1,8 +1,3 @@
-import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
-import {
-  DeviceKeysUpdateRequest,
-  UpdateDevicesTrustRequest,
-} from "../../abstractions/devices/requests/update-devices-trust.request";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
@@ -17,7 +12,12 @@ import {
 } from "../../platform/models/domain/symmetric-crypto-key";
 import { CsprngArray } from "../../types/csprng";
 import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
+import { DevicesApiServiceAbstraction } from "../abstractions/devices-api.service.abstraction";
 import { SecretVerificationRequest } from "../models/request/secret-verification.request";
+import {
+  DeviceKeysUpdateRequest,
+  UpdateDevicesTrustRequest,
+} from "../models/request/update-devices-trust.request";
 
 export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstraction {
   constructor(
