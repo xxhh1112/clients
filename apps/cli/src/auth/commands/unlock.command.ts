@@ -45,14 +45,14 @@ export class UnlockCommand {
     const kdf = await this.stateService.getKdfType();
     const kdfConfig = await this.stateService.getKdfConfig();
     const masterKey = await this.cryptoService.makeMasterKey(password, email, kdf, kdfConfig);
-    const storedKeyHash = await this.cryptoService.getPasswordHash();
+    const storedKeyHash = await this.cryptoService.getMasterKeyHash();
 
     let passwordValid = false;
     if (masterKey != null) {
       if (storedKeyHash != null) {
-        passwordValid = await this.cryptoService.compareAndUpdatePasswordHash(password, masterKey);
+        passwordValid = await this.cryptoService.compareAndUpdateKeyHash(password, masterKey);
       } else {
-        const serverKeyHash = await this.cryptoService.hashPassword(
+        const serverKeyHash = await this.cryptoService.hashMasterKey(
           password,
           masterKey,
           HashPurpose.ServerAuthorization
@@ -62,12 +62,12 @@ export class UnlockCommand {
         try {
           await this.apiService.postAccountVerifyPassword(request);
           passwordValid = true;
-          const localKeyHash = await this.cryptoService.hashPassword(
+          const localKeyHash = await this.cryptoService.hashMasterKey(
             password,
             masterKey,
             HashPurpose.LocalAuthorization
           );
-          await this.cryptoService.setPasswordHash(localKeyHash);
+          await this.cryptoService.setMasterKeyHash(localKeyHash);
         } catch {
           // Ignore
         }
