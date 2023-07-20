@@ -1,5 +1,5 @@
-import { DevicesApiServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices-api.service.abstraction";
-import { DevicesApiServiceImplementation } from "@bitwarden/common/services/devices/devices-api.service.implementation";
+import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
+import { DevicesApiServiceImplementation } from "@bitwarden/common/auth/services/devices-api.service.implementation";
 
 import {
   ApiServiceInitOptions,

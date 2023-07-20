@@ -1,9 +1,9 @@
 import { Observable, defer, map } from "rxjs";
 
-import { DevicesApiServiceAbstraction } from "../../abstractions/devices/devices-api.service.abstraction";
 import { DevicesServiceAbstraction } from "../../abstractions/devices/devices.service.abstraction";
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { DeviceView } from "../../abstractions/devices/views/device.view";
+import { DevicesApiServiceAbstraction } from "../../auth/abstractions/devices-api.service.abstraction";
 import { ListResponse } from "../../models/response/list.response";
 
 /**
