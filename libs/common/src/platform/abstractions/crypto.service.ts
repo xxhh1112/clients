@@ -153,21 +153,21 @@ export abstract class CryptoService {
    * @param hashPurpose The iterations to use for the hash
    * @returns The user's master password hash
    */
-  hashPassword: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
+  hashMasterKey: (password: string, key: MasterKey, hashPurpose?: HashPurpose) => Promise<string>;
   /**
    * Sets the user's master password hash
    * @param keyHash The user's master password hash to set
    */
-  setPasswordHash: (keyHash: string) => Promise<void>;
+  setMasterKeyHash: (keyHash: string) => Promise<void>;
   /**
    * @returns The user's master password hash
    */
-  getPasswordHash: () => Promise<string>;
+  getMasterKeyHash: () => Promise<string>;
   /**
    * Clears the user's stored master password hash
    * @param userId The desired user
    */
-  clearPasswordHash: () => Promise<void>;
+  clearMasterKeyHash: () => Promise<void>;
   /**
    * Compares the provided master password to the stored password hash and server password hash.
    * Updates the stored hash if outdated.
@@ -176,7 +176,7 @@ export abstract class CryptoService {
    * @returns True if the provided master password matches either the stored
    * key hash or the server key hash
    */
-  compareAndUpdatePasswordHash: (masterPassword: string, masterKey: MasterKey) => Promise<boolean>;
+  compareAndUpdateKeyHash: (masterPassword: string, masterKey: MasterKey) => Promise<boolean>;
   /**
    * Stores the encrypted organization keys and clears any decrypted
    * organization keys currently in memory

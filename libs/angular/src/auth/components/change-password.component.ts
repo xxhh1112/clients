@@ -87,7 +87,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.kdf,
       this.kdfConfig
     );
-    const newMasterPasswordHash = await this.cryptoService.hashPassword(
+    const newMasterKeyHash = await this.cryptoService.hashMasterKey(
       this.masterPassword,
       newMasterKey
     );
@@ -100,7 +100,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       newProtectedUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey);
     }
 
-    await this.performSubmitActions(newMasterPasswordHash, newMasterKey, newProtectedUserKey);
+    await this.performSubmitActions(newMasterKeyHash, newMasterKey, newProtectedUserKey);
   }
 
   async setupSubmitActions(): Promise<boolean> {

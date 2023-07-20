@@ -185,7 +185,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             kdfType,
             new KdfConfig(kdfIterations, kdfMemory, kdfParallelism)
           );
-          const newPasswordHash = await this.cryptoService.hashPassword(
+          const newMasterKeyHash = await this.cryptoService.hashMasterKey(
             this.newPassword,
             newMasterKey
           );
@@ -199,7 +199,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           // Create request
           const request = new OrganizationUserResetPasswordRequest();
           request.key = newUserKey[1].encryptedString;
-          request.newMasterPasswordHash = newPasswordHash;
+          request.newMasterPasswordHash = newMasterKeyHash;
 
           // Change user's password
           return this.organizationUserService.putOrganizationUserResetPassword(

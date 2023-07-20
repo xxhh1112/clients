@@ -189,7 +189,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     newUserKey: [UserKey, EncString]
   ) {
     const request = new PasswordRequest();
-    request.masterPasswordHash = await this.cryptoService.hashPassword(
+    request.masterPasswordHash = await this.cryptoService.hashMasterKey(
       this.currentMasterPassword,
       null
     );

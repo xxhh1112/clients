@@ -247,36 +247,36 @@ export class LockComponent implements OnInit, OnDestroy {
       kdf,
       kdfConfig
     );
-    const storedPasswordHash = await this.cryptoService.getPasswordHash();
+    const storedPasswordHash = await this.cryptoService.getMasterKeyHash();
 
     let passwordValid = false;
 
     if (storedPasswordHash != null) {
       // Offline unlock possible
-      passwordValid = await this.cryptoService.compareAndUpdatePasswordHash(
+      passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
         this.masterPassword,
         masterKey
       );
     } else {
       // Online only
       const request = new SecretVerificationRequest();
-      const serverPasswordHash = await this.cryptoService.hashPassword(
+      const serverKeyHash = await this.cryptoService.hashMasterKey(
         this.masterPassword,
         masterKey,
         HashPurpose.ServerAuthorization
       );
-      request.masterPasswordHash = serverPasswordHash;
+      request.masterPasswordHash = serverKeyHash;
       try {
         this.formPromise = this.apiService.postAccountVerifyPassword(request);
         const response = await this.formPromise;
         this.enforcedMasterPasswordOptions = MasterPasswordPolicyOptions.fromResponse(response);
         passwordValid = true;
-        const localPasswordHash = await this.cryptoService.hashPassword(
+        const localKeyHash = await this.cryptoService.hashMasterKey(
           this.masterPassword,
           masterKey,
           HashPurpose.LocalAuthorization
         );
-        await this.cryptoService.setPasswordHash(localPasswordHash);
+        await this.cryptoService.setMasterKeyHash(localKeyHash);
       } catch (e) {
         this.logService.error(e);
       } finally {

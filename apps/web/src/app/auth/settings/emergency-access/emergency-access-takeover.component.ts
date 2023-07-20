@@ -115,15 +115,12 @@ export class EmergencyAccessTakeoverComponent
         takeoverResponse.kdfParallelism
       )
     );
-    const masterPasswordHash = await this.cryptoService.hashPassword(
-      this.masterPassword,
-      masterKey
-    );
+    const masterKeyHash = await this.cryptoService.hashMasterKey(this.masterPassword, masterKey);
 
     const encKey = await this.cryptoService.encryptUserKeyWithMasterKey(masterKey, oldUserKey);
 
     const request = new EmergencyAccessPasswordRequest();
-    request.newMasterPasswordHash = masterPasswordHash;
+    request.newMasterPasswordHash = masterKeyHash;
     request.key = encKey[1].encryptedString;
 
     this.apiService.postEmergencyAccessPassword(this.emergencyAccessId, request);

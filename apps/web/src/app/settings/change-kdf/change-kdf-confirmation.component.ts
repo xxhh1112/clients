@@ -75,7 +75,7 @@ export class ChangeKdfConfirmationComponent {
     request.kdfIterations = this.kdfConfig.iterations;
     request.kdfMemory = this.kdfConfig.memory;
     request.kdfParallelism = this.kdfConfig.parallelism;
-    request.masterPasswordHash = await this.cryptoService.hashPassword(masterPassword, null);
+    request.masterPasswordHash = await this.cryptoService.hashMasterKey(masterPassword, null);
     const email = await this.stateService.getEmail();
     const newMasterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
@@ -83,7 +83,7 @@ export class ChangeKdfConfirmationComponent {
       this.kdf,
       this.kdfConfig
     );
-    request.newMasterPasswordHash = await this.cryptoService.hashPassword(
+    request.newMasterPasswordHash = await this.cryptoService.hashMasterKey(
       masterPassword,
       newMasterKey
     );

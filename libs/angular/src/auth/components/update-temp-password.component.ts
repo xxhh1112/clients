@@ -120,7 +120,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
         this.kdf,
         this.kdfConfig
       );
-      const newPasswordHash = await this.cryptoService.hashPassword(
+      const newPasswordHash = await this.cryptoService.hashMasterKey(
         this.masterPassword,
         newMasterKey
       );

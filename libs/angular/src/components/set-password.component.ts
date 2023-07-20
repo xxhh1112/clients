@@ -182,11 +182,11 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     await this.cryptoService.setUserKey(userKey[0]);
     await this.cryptoService.setPrivateKey(keyPair[1].encryptedString);
 
-    const localPasswordHash = await this.cryptoService.hashPassword(
+    const localMasterKeyHash = await this.cryptoService.hashMasterKey(
       this.masterPassword,
       masterKey,
       HashPurpose.LocalAuthorization
     );
-    await this.cryptoService.setPasswordHash(localPasswordHash);
+    await this.cryptoService.setMasterKeyHash(localMasterKeyHash);
   }
 }
