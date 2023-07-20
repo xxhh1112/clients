@@ -157,21 +157,21 @@ export class LockComponent implements OnInit, OnDestroy {
       const kdf = await this.stateService.getKdfType();
       const kdfConfig = await this.stateService.getKdfConfig();
       let userKeyPin: EncString;
-      let oldPinProtected: EncString;
+      let oldPinKey: EncString;
       switch (this.pinStatus) {
         case "PERSISTANT": {
           userKeyPin = await this.stateService.getUserKeyPin();
-          const oldEncryptedKey = await this.stateService.getEncryptedPinProtected();
-          oldPinProtected = oldEncryptedKey ? new EncString(oldEncryptedKey) : undefined;
+          const oldEncryptedPinKey = await this.stateService.getEncryptedPinProtected();
+          oldPinKey = oldEncryptedPinKey ? new EncString(oldEncryptedPinKey) : undefined;
           break;
         }
         case "TRANSIENT": {
           userKeyPin = await this.stateService.getUserKeyPinEphemeral();
-          oldPinProtected = await this.stateService.getDecryptedPinProtected();
+          oldPinKey = await this.stateService.getDecryptedPinProtected();
           break;
         }
         case "DISABLED": {
-          return;
+          throw new Error("Pin is disabled");
         }
         default: {
           const _exhaustiveCheck: never = this.pinStatus;
@@ -180,8 +180,13 @@ export class LockComponent implements OnInit, OnDestroy {
       }
 
       let userKey: UserKey;
-      if (oldPinProtected) {
-        userKey = await this.decryptAndMigrateOldPinKey(true, kdf, kdfConfig, oldPinProtected);
+      if (oldPinKey) {
+        userKey = await this.decryptAndMigrateOldPinKey(
+          this.pinStatus === "TRANSIENT",
+          kdf,
+          kdfConfig,
+          oldPinKey
+        );
       } else {
         userKey = await this.cryptoService.decryptUserKeyWithPin(
           this.pin,
@@ -403,7 +408,7 @@ export class LockComponent implements OnInit, OnDestroy {
    * @param masterPasswordOnRestart True if Master Password on Restart is enabled
    * @param kdf User's KdfType
    * @param kdfConfig User's KdfConfig
-   * @param oldPinProtected The old Pin key from state (retrieved from different
+   * @param oldPinKey The old Pin key from state (retrieved from different
    * places depending on if Master Password on Restart was enabled)
    * @returns The user key
    */
@@ -411,7 +416,7 @@ export class LockComponent implements OnInit, OnDestroy {
     masterPasswordOnRestart: boolean,
     kdf: KdfType,
     kdfConfig: KdfConfig,
-    oldPinProtected?: EncString
+    oldPinKey: EncString
   ): Promise<UserKey> {
     // Decrypt
     const masterKey = await this.cryptoService.decryptMasterKeyWithPin(
@@ -419,7 +424,7 @@ export class LockComponent implements OnInit, OnDestroy {
       this.email,
       kdf,
       kdfConfig,
-      oldPinProtected
+      oldPinKey
     );
     const encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
     const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(

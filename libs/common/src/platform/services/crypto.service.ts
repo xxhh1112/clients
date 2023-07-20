@@ -169,7 +169,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     userKey?: UserKey
   ): Promise<[UserKey, EncString]> {
     userKey ||= await this.getUserKey();
-    return this.buildProtectedSymmetricKey(masterKey, userKey.key);
+    return await this.buildProtectedSymmetricKey(masterKey, userKey.key);
   }
 
   async decryptUserKeyWithMasterKey(
@@ -532,6 +532,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(userKey) as UserKey;
   }
 
+  // only for migration purposes
   async decryptMasterKeyWithPin(
     pin: string,
     salt: string,
