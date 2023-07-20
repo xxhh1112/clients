@@ -35,7 +35,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
 
   tokenRequest: PasswordTokenRequest;
 
-  private localHashedPassword: string;
+  private localMasterKeyHash: string;
   private masterKey: MasterKey;
 
   /**
@@ -97,16 +97,16 @@ export class PasswordLogInStrategy extends LogInStrategy {
     this.masterKey = await this.authService.makePreloginKey(masterPassword, email);
 
     // Hash the password early (before authentication) so we don't persist it in memory in plaintext
-    this.localHashedPassword = await this.cryptoService.hashPassword(
+    this.localMasterKeyHash = await this.cryptoService.hashMasterKey(
       masterPassword,
       this.masterKey,
       HashPurpose.LocalAuthorization
     );
-    const hashedPassword = await this.cryptoService.hashPassword(masterPassword, this.masterKey);
+    const masterKeyHash = await this.cryptoService.hashMasterKey(masterPassword, this.masterKey);
 
     this.tokenRequest = new PasswordTokenRequest(
       email,
-      hashedPassword,
+      masterKeyHash,
       captchaToken,
       await this.buildTwoFactor(twoFactor),
       await this.buildDeviceRequest()
@@ -143,7 +143,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
 
   protected override async setMasterKey(response: IdentityTokenResponse) {
     await this.cryptoService.setMasterKey(this.masterKey);
-    await this.cryptoService.setPasswordHash(this.localHashedPassword);
+    await this.cryptoService.setMasterKeyHash(this.localMasterKeyHash);
   }
 
   protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {

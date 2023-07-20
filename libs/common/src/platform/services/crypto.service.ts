@@ -169,7 +169,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     userKey?: UserKey
   ): Promise<[UserKey, EncString]> {
     userKey ||= await this.getUserKey();
-    return this.buildProtectedSymmetricKey(masterKey, userKey.key);
+    return await this.buildProtectedSymmetricKey(masterKey, userKey.key);
   }
 
   async decryptUserKeyWithMasterKey(
@@ -208,7 +208,11 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(decUserKey) as UserKey;
   }
 
-  async hashPassword(password: string, key: MasterKey, hashPurpose?: HashPurpose): Promise<string> {
+  async hashMasterKey(
+    password: string,
+    key: MasterKey,
+    hashPurpose?: HashPurpose
+  ): Promise<string> {
     key ||= await this.getMasterKey();
 
     if (password == null || key == null) {
@@ -220,25 +224,22 @@ export class CryptoService implements CryptoServiceAbstraction {
     return Utils.fromBufferToB64(hash);
   }
 
-  async setPasswordHash(keyHash: string): Promise<void> {
+  async setMasterKeyHash(keyHash: string): Promise<void> {
     await this.stateService.setKeyHash(keyHash);
   }
 
-  async getPasswordHash(): Promise<string> {
+  async getMasterKeyHash(): Promise<string> {
     return await this.stateService.getKeyHash();
   }
 
-  async clearPasswordHash(userId?: string): Promise<void> {
+  async clearMasterKeyHash(userId?: string): Promise<void> {
     return await this.stateService.setKeyHash(null, { userId: userId });
   }
 
-  async compareAndUpdatePasswordHash(
-    masterPassword: string,
-    masterKey: MasterKey
-  ): Promise<boolean> {
-    const storedPasswordHash = await this.getPasswordHash();
+  async compareAndUpdateKeyHash(masterPassword: string, masterKey: MasterKey): Promise<boolean> {
+    const storedPasswordHash = await this.getMasterKeyHash();
     if (masterPassword != null && storedPasswordHash != null) {
-      const localKeyHash = await this.hashPassword(
+      const localKeyHash = await this.hashMasterKey(
         masterPassword,
         masterKey,
         HashPurpose.LocalAuthorization
@@ -248,13 +249,13 @@ export class CryptoService implements CryptoServiceAbstraction {
       }
 
       // TODO: remove serverKeyHash check in 1-2 releases after everyone's keyHash has been updated
-      const serverKeyHash = await this.hashPassword(
+      const serverKeyHash = await this.hashMasterKey(
         masterPassword,
         masterKey,
         HashPurpose.ServerAuthorization
       );
       if (serverKeyHash != null && storedPasswordHash === serverKeyHash) {
-        await this.setPasswordHash(localKeyHash);
+        await this.setMasterKeyHash(localKeyHash);
         return true;
       }
     }
@@ -532,6 +533,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(userKey) as UserKey;
   }
 
+  // only for migration purposes
   async decryptMasterKeyWithPin(
     pin: string,
     salt: string,
@@ -564,7 +566,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   async clearKeys(userId?: string): Promise<any> {
     await this.clearUserKey(true, userId);
-    await this.clearPasswordHash(userId);
+    await this.clearMasterKeyHash(userId);
     await this.clearOrgKeys(false, userId);
     await this.clearProviderKeys(false, userId);
     await this.clearKeyPair(false, userId);

@@ -41,7 +41,7 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
     } else {
       request.masterPasswordHash = alreadyHashed
         ? verification.secret
-        : await this.cryptoService.hashPassword(verification.secret, null);
+        : await this.cryptoService.hashMasterKey(verification.secret, null);
     }
 
     return request;
@@ -63,7 +63,7 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
         throw new Error(this.i18nService.t("invalidVerificationCode"));
       }
     } else {
-      const passwordValid = await this.cryptoService.compareAndUpdatePasswordHash(
+      const passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
         verification.secret,
         null
       );

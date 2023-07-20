@@ -85,10 +85,10 @@ describe("PasswordLogInStrategy", () => {
 
     authService.makePreloginKey.mockResolvedValue(masterKey);
 
-    cryptoService.hashPassword
+    cryptoService.hashMasterKey
       .calledWith(masterPassword, expect.anything(), undefined)
       .mockResolvedValue(hashedPassword);
-    cryptoService.hashPassword
+    cryptoService.hashMasterKey
       .calledWith(masterPassword, expect.anything(), HashPurpose.LocalAuthorization)
       .mockResolvedValue(localHashedPassword);
 
@@ -142,7 +142,7 @@ describe("PasswordLogInStrategy", () => {
     await passwordLogInStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setPasswordHash).toHaveBeenCalledWith(localHashedPassword);
+    expect(cryptoService.setMasterKeyHash).toHaveBeenCalledWith(localHashedPassword);
     expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);

@@ -1,7 +1,8 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Inject, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { TwoFactorComponent as BaseTwoFactorComponent } from "@bitwarden/angular/auth/components/two-factor.component";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
@@ -45,7 +46,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
-    configService: ConfigServiceAbstraction
+    configService: ConfigServiceAbstraction,
+    @Inject(WINDOW) protected win: Window
   ) {
     super(
       authService,
@@ -53,7 +55,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       i18nService,
       apiService,
       platformUtilsService,
-      window,
+      win,
       environmentService,
       stateService,
       route,

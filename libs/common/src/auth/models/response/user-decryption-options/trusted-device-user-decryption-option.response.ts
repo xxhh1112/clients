@@ -4,6 +4,7 @@ import { EncString } from "../../../../platform/models/domain/enc-string";
 export interface ITrustedDeviceUserDecryptionOptionServerResponse {
   HasAdminApproval: boolean;
   HasLoginApprovingDevice: boolean;
+  HasManageResetPasswordPermission: boolean;
   EncryptedPrivateKey?: string;
   EncryptedUserKey?: string;
 }
@@ -11,6 +12,7 @@ export interface ITrustedDeviceUserDecryptionOptionServerResponse {
 export class TrustedDeviceUserDecryptionOptionResponse extends BaseResponse {
   hasAdminApproval: boolean;
   hasLoginApprovingDevice: boolean;
+  hasManageResetPasswordPermission: boolean;
   encryptedPrivateKey: EncString;
   encryptedUserKey: EncString;
 
@@ -19,6 +21,9 @@ export class TrustedDeviceUserDecryptionOptionResponse extends BaseResponse {
     this.hasAdminApproval = this.getResponseProperty("HasAdminApproval");
 
     this.hasLoginApprovingDevice = this.getResponseProperty("HasLoginApprovingDevice");
+    this.hasManageResetPasswordPermission = this.getResponseProperty(
+      "HasManageResetPasswordPermission"
+    );
 
     if (response.EncryptedPrivateKey) {
       this.encryptedPrivateKey = new EncString(this.getResponseProperty("EncryptedPrivateKey"));

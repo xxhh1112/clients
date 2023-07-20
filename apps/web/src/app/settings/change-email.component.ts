@@ -52,7 +52,10 @@ export class ChangeEmailComponent implements OnInit {
     if (!this.tokenSent) {
       const request = new EmailTokenRequest();
       request.newEmail = this.newEmail;
-      request.masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, null);
+      request.masterPasswordHash = await this.cryptoService.hashMasterKey(
+        this.masterPassword,
+        null
+      );
       try {
         this.formPromise = this.apiService.postEmailToken(request);
         await this.formPromise;
@@ -64,7 +67,10 @@ export class ChangeEmailComponent implements OnInit {
       const request = new EmailRequest();
       request.token = this.token;
       request.newEmail = this.newEmail;
-      request.masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, null);
+      request.masterPasswordHash = await this.cryptoService.hashMasterKey(
+        this.masterPassword,
+        null
+      );
       const kdf = await this.stateService.getKdfType();
       const kdfConfig = await this.stateService.getKdfConfig();
       const newMasterKey = await this.cryptoService.makeMasterKey(
@@ -73,7 +79,7 @@ export class ChangeEmailComponent implements OnInit {
         kdf,
         kdfConfig
       );
-      request.newMasterPasswordHash = await this.cryptoService.hashPassword(
+      request.newMasterPasswordHash = await this.cryptoService.hashMasterKey(
         this.masterPassword,
         newMasterKey
       );
