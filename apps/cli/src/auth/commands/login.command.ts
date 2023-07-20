@@ -411,7 +411,7 @@ export class LoginCommand {
       );
 
       const request = new PasswordRequest();
-      request.masterPasswordHash = await this.cryptoService.hashPassword(currentPassword, null);
+      request.masterPasswordHash = await this.cryptoService.hashMasterKey(currentPassword, null);
       request.masterPasswordHint = hint;
       request.newMasterPasswordHash = newPasswordHash;
       request.key = newUserKey[1].encryptedString;
@@ -565,7 +565,7 @@ export class LoginCommand {
       kdf,
       kdfConfig
     );
-    const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newMasterKey);
+    const newPasswordHash = await this.cryptoService.hashMasterKey(masterPassword, newMasterKey);
 
     // Grab user key
     const userKey = await this.cryptoService.getUserKey();
