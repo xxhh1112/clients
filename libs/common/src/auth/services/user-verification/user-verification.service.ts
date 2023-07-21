@@ -39,9 +39,18 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
     if (verification.type === VerificationType.OTP) {
       request.otp = verification.secret;
     } else {
+      let masterKey = await this.cryptoService.getMasterKey();
+      if (!masterKey && !alreadyHashed) {
+        masterKey = await this.cryptoService.makeMasterKey(
+          verification.secret,
+          await this.stateService.getEmail(),
+          await this.stateService.getKdfType(),
+          await this.stateService.getKdfConfig()
+        );
+      }
       request.masterPasswordHash = alreadyHashed
         ? verification.secret
-        : await this.cryptoService.hashMasterKey(verification.secret, null);
+        : await this.cryptoService.hashMasterKey(verification.secret, masterKey);
     }
 
     return request;
@@ -63,13 +72,23 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
         throw new Error(this.i18nService.t("invalidVerificationCode"));
       }
     } else {
+      let masterKey = await this.cryptoService.getMasterKey();
+      if (!masterKey) {
+        masterKey = await this.cryptoService.makeMasterKey(
+          verification.secret,
+          await this.stateService.getEmail(),
+          await this.stateService.getKdfType(),
+          await this.stateService.getKdfConfig()
+        );
+      }
       const passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
         verification.secret,
-        null
+        masterKey
       );
       if (!passwordValid) {
         throw new Error(this.i18nService.t("invalidMasterPassword"));
       }
+      this.cryptoService.setMasterKey(masterKey);
     }
     return true;
   }
@@ -79,7 +98,8 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
   }
 
   /**
-   * Check if user has master password or only uses passwordless technologies to log in
+   * Check if user has master password or can only use passwordless technologies to log in
+   * Note: This only checks the server, not the local state
    * @returns True if the user has a master password
    */
   async hasMasterPassword(): Promise<boolean> {
