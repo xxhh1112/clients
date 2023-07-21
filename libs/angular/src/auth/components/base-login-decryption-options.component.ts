@@ -16,10 +16,10 @@ import {
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { DevicesServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { PasswordResetEnrollmentServiceAbstraction } from "@bitwarden/common/auth/abstractions/password-reset-enrollment.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -28,10 +28,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
-import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 enum State {
   NewUser,
@@ -88,7 +85,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected i18nService: I18nService,
     protected validationService: ValidationService,
     protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    protected platformUtilsService: PlatformUtilsService
+    protected platformUtilsService: PlatformUtilsService,
+    protected passwordResetEnrollmentService: PasswordResetEnrollmentServiceAbstraction
   ) {}
 
   async ngOnInit() {
@@ -240,7 +238,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     this.router.navigate(["/lock"]);
   }
 
-  createUser = async () => {
+  async createUser() {
     if (this.data.state !== State.NewUser) {
       return;
     }
@@ -248,11 +246,11 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     // this.loading to support clients without async-actions-support
     this.loading = true;
     try {
-      const { userKey, publicKey, privateKey } = await this.cryptoService.initAccount();
+      const { publicKey, privateKey } = await this.cryptoService.initAccount();
       const keysRequest = new KeysRequest(publicKey, privateKey.encryptedString);
       await this.apiService.postAccountKeys(keysRequest);
 
-      await this.passwordResetEnroll(userKey, publicKey, privateKey);
+      await this.passwordResetEnrollmentService.enroll(this.data.organizationId);
 
       if (this.rememberDeviceForm.value.rememberDevice) {
         await this.deviceTrustCryptoService.trustDevice();
@@ -262,46 +260,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     } finally {
       this.loading = false;
     }
-  };
-
-  passwordResetEnroll = async (userKey: UserKey, publicKey: string, privateKey: EncString) => {
-    if (this.data.state !== State.NewUser) {
-      return;
-    }
-
-    // this.loading to support clients without async-actions-support
-    this.loading = true;
-    try {
-      const orgKeyResponse = await this.organizationApiService.getKeys(this.data.organizationId);
-      if (orgKeyResponse == null) {
-        throw new Error(this.i18nService.t("resetPasswordOrgKeysError"));
-      }
-
-      const orgPublicKey = Utils.fromB64ToArray(orgKeyResponse.publicKey);
-
-      // RSA Encrypt user's userKey.key with organization public key
-      const userId = await this.stateService.getUserId();
-      const encryptedKey = await this.cryptoService.rsaEncrypt(userKey.key, orgPublicKey.buffer);
-
-      const resetRequest = new OrganizationUserResetPasswordEnrollmentRequest();
-      resetRequest.resetPasswordKey = encryptedKey.encryptedString;
-
-      await this.organizationUserService.putOrganizationUserResetPasswordEnrollment(
-        this.data.organizationId,
-        userId,
-        resetRequest
-      );
-
-      // TODO: On browser this should close the window. But since we might extract
-      // this logic into a service I'm gonna leaves this as-is untill that
-      // refactor is done
-      await this.router.navigate(["/vault"]);
-    } catch (error) {
-      this.validationService.showError(error);
-    } finally {
-      this.loading = false;
-    }
-  };
+  }
 
   logOut() {
     this.loading = true; // to avoid an awkward delay in browser extension
