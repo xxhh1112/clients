@@ -311,7 +311,7 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     const encOrgKeyData = await this.stateService.getEncryptedOrganizationKeys();
     if (encOrgKeyData == null) {
-      return null;
+      return result;
     }
 
     let setKey = false;
