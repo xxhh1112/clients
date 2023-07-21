@@ -579,7 +579,16 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return { options };
   }
 
-  /** EXPERIMENTS **/
+  /**
+   *
+   *
+   * @private
+   * @return {
+   *     formElements: Node[];
+   *     formFieldElements: Node[];
+   *   }
+   * @memberof CollectAutofillContentService
+   */
   private queryAutofillFormAndFieldElements(): {
     formElements: Node[];
     formFieldElements: Node[];
@@ -603,6 +612,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return { formElements, formFieldElements };
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {Node} node
+   * @return boolean
+   * @memberof CollectAutofillContentService
+   */
   private isNodeFormFieldElement(node: Node): boolean {
     const nodeIsSpanElementWithAutofillAttribute =
       node instanceof HTMLSpanElement && node.hasAttribute("data-bwautofill");
@@ -621,6 +638,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return nodeIsSpanElementWithAutofillAttribute || nodeIsNonIgnoredFillableControlElement;
   }
 
+  /**
+   *
+   *
+   * @private
+   * @param {Node} node
+   * @return ShadowRoot | null
+   * @memberof CollectAutofillContentService
+   */
   private getShadowRoot(node: Node): ShadowRoot | null {
     if (!(node instanceof HTMLElement)) {
       return null;
@@ -641,6 +666,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return treeWalkerQueryResults;
   }
 
+  /**
+   *
+   *
+   * @param {Node} rootNode
+   * @param {Node[]} treeWalkerQueryResults
+   * @param {CallableFunction} filterCallback
+   * @memberof CollectAutofillContentService
+   */
   buildTreeWalkerNodesQueryResults(
     rootNode: Node,
     treeWalkerQueryResults: Node[],
