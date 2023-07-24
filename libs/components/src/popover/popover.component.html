@@ -1,10 +1,12 @@
 <!-- This button triggers the overlay and is it's origin -->
 <button
-  class="tw-border-none tw-bg-transparent tw-text-primary-500"
-  (click)="isOpen = !isOpen"
   type="button"
+  class="tw-border-none tw-bg-transparent tw-text-primary-500"
   cdkOverlayOrigin
   #trigger="cdkOverlayOrigin"
+  aria-haspopup="dialog"
+  aria-controls="cdk-overlay-container"
+  (click)="isOpen = !isOpen"
 >
   <i class="bwi bwi-question-circle"></i>
 </button>
@@ -16,14 +18,20 @@
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayHasBackdrop]="true"
   [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
-  (backdropClick)="isOpen = !isOpen"
+  (backdropClick)="isOpen = false"
 >
   <div
+    cdkTrapFocus
+    cdkTrapFocusAutoCapture
     class="tw-w-72 tw-rounded-md tw-border tw-border-solid tw-border-secondary-300 tw-bg-[white] tw-p-4"
+    role="dialog"
+    aria-modal="true"
   >
     <div class="tw-flex tw-justify-between tw-gap-4">
       <h3 class="tw-font-semibold">Header</h3>
-      <i class="bwi bwi-close hover:tw-cursor-pointer" (click)="isOpen = !isOpen"></i>
+      <button type="button" class="tw-border-none tw-bg-transparent" (click)="isOpen = false">
+        <i class="bwi bwi-close"></i>
+      </button>
     </div>
     <p class="tw-mb-0">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum incidunt aperiam ipsam?

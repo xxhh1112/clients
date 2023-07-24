@@ -1,3 +1,4 @@
+import { A11yModule } from "@angular/cdk/a11y";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
@@ -8,7 +9,7 @@ export default {
   component: PopoverComponent,
   decorators: [
     moduleMetadata({
-      imports: [OverlayModule],
+      imports: [A11yModule, OverlayModule],
     }),
   ],
 } as Meta;
