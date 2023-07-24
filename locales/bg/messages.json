@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Вписване с устройство"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "Вписването с устройство трябва да е включено в настройките на приложението на Битуорден. Друга настройка ли търсите?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Вписването с устройство трябва да е включено в настройките на мобилното приложение на Битуорден. Друга настройка ли търсите?"
   },
   "loginWithMasterPassword": {
     "message": "Вписване с главната парола"
@@ -4594,17 +4594,20 @@
   "accountRecoveryPolicy": {
     "message": "Управление на възстановяването на профили"
   },
-  "accountRecoveryPolicyDesc": {
-    "message": "Според метода на шифроване, регистрациите ще бъдат възстановени при забравяне на главна парола или загуба на доверено устройство."
+  "accountRecoveryPolicyDescription": {
+    "message": "Можете да възстановявате профилите на потребителите, когато загубят или забравят своята главна парола или доверено устройство. Процесът по възстановяване се основава на метод на шифроване на профила."
   },
-  "accountRecoveryPolicyWarning": {
-    "message": "Текущо регистрираните потребители използващи главни пароли ще трябва да се включат сами, преди администраторите да могат да възстановят регистрациите им. Автоматичното включване ще активира възстановяването на регистрациите за новите членове."
-  },
-  "accountRecoverySingleOrgRequirementDesc": {
-    "message": "The single organization Enterprise policy must be turned on before activating this policy."
+  "resetPasswordPolicyWarning": {
+    "message": "Потребителите в организацията ще трябва да се включат сами или да бъдат включени автоматично, преди администраторите да могат да сменят главните им пароли."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматично включване"
+  },
+  "resetPasswordPolicyAutoEnrollDescription": {
+    "message": "Всички потребители ще бъдат включени автоматично в смяната на пароли след като приемат поканите си."
+  },
+  "resetPasswordPolicyAutoEnrollWarning": {
+    "message": "Потребителите, които вече са част от организацията, няма да бъдат включени в смяната на паролите. Те ще трябва да се включат сами, преди администраторите да могат да сменят главните им пароли."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Автоматично включване на новите потребители"
@@ -5221,8 +5224,8 @@
     "message": "Включете",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpAnchor": {
-    "message": "политиката за изискване на еднократно удостоверяване",
+  "ssoPolicyHelpLink": {
+    "message": "еднократното удостоверяване",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -6621,13 +6624,13 @@
     "message": "Управление на тайни (Бета)"
   },
   "secretsManager": {
-    "message": "Управление на тайни"
+    "message": "Secrets Manager"
   },
-  "secretsManagerAccessDescription": {
-    "message": "Включване на достъпа на потребителите до Управлението на тайни."
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Този потребител има достъп до Управлението на тайни"
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Важно:"
@@ -6828,25 +6831,17 @@
   "trustedDeviceEncryption": {
     "message": "Шифроване чрез доверено устройство"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "След вписване, членовете ще дешифрират данните от трезорите си чрез ключ, който се съхранява на устройство. Политиката за",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "След вписване, членовете ще дешифрират данните от трезорите си чрез ключ, който се съхранява на устройство.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "единствена организация",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Политиката за управление на възстановяването на профили",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "и тази за ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "управление на възстановяването на регистрации",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionTdeDescriptionPartThree": {
+  "memberDecryptionTdeDescriptionEnd": {
     "message": "с автоматично включване ще бъде активирана при използването на тази настройка.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "Няма намерен $RESOURCE$",
@@ -6863,19 +6858,19 @@
   "updatedTempPassword": {
     "message": "Потребителят промени парола издадена чрез възстановяването на профили."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "Достъпът до Управлението на тайни е включен",
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Включване на достъпа"
+  "enableAccess": {
+    "message": "Enable access"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Дайте на следните членове достъп до Управлението на тайни. Ролята, която всеки от тях има в Управителя на пароли, ще се приложи и в Управлението на тайни.",
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Включване на Управлението на тайни"
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
   },
   "yourOrganizationsFingerprint": {
     "message": "Уникална фраза, идентифицираща организацията ви",
@@ -6934,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Ако премахвате членове без да настроите главни пароли за тях, те може да загубят пълния достъп до регистрациите си."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Започнете свой безплатен 7-дневен пробен период на Битуорден за $ORG$",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Next"
-  },
-  "usFlag": {
-    "message": "Знаме на САЩ"
-  },
-  "euFlag": {
-    "message": "Знаме на ЕС"
-  },
-  "selectedRegionFlag": {
-    "message": "Знаме на избрания регион"
   }
 }

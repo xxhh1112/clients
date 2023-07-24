@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Пријавите се са уређајем"
   },
-  "loginWithDeviceEnabledNote": {
-    "message": "Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације. Потребна је друга опција?"
+  "loginWithDeviceEnabledInfo": {
+    "message": "Пријава помоћу уређаја мора бити омогућена у подешавањима Bitwarden апликације. Потребна је друга опција?"
   },
   "loginWithMasterPassword": {
     "message": "Пријавите се са главном лозинком"
@@ -965,13 +965,13 @@
     "message": "Потврдите извоз сефа"
   },
   "confirmSecretsExport": {
-    "message": "Потврдите извоз тајни"
+    "message": "Confirm secrets export"
   },
   "exportWarningDesc": {
     "message": "Овај извоз садржи податке сефа у нешифрираном формату. Не бисте смели да сачувате или шаљете извезену датотеку преко несигурних канала (као што је имејл). Избришите датотеку одмах након што завршите са коришћењем."
   },
   "exportSecretsWarningDesc": {
-    "message": "Овај извоз садржи тајне податке у нешифрираном формату. Не бисте смели да сачувате или шаљете извезену датотеку преко несигурних канала (као што је имејл). Избришите датотеку одмах након што завршите са коришћењем."
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "Овај извоз шифрује податке користећи кључ за шифровање вашег налога. Ако икада промените кључ за шифровање свог налога, требало би да поново извезете, јер нећете моћи да дешифрујете овај извоз."
@@ -986,7 +986,7 @@
     "message": "Извоз сефа"
   },
   "exportSecrets": {
-    "message": "Извоз тајне"
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "Формат датотеке"
@@ -2667,10 +2667,10 @@
     "message": "Покушај пријаве није успео са нетачном пријавом у два корака."
   },
   "incorrectPassword": {
-    "message": "Погрешна лозинка"
+    "message": "Incorrect password"
   },
   "incorrectCode": {
-    "message": "Погрешан код"
+    "message": "Incorrect code"
   },
   "exportedVault": {
     "message": "Сеф извежен."
@@ -4594,17 +4594,20 @@
   "accountRecoveryPolicy": {
     "message": "Администрација опоравка налога"
   },
-  "accountRecoveryPolicyDesc": {
-    "message": "На основу методе шифровања, опоравите налоге када су главне лозинке или поуздани уређаји заборављени или изгубљени."
+  "accountRecoveryPolicyDescription": {
+    "message": "Опоравите налоге чланова када су главна лозинка или поуздани уређаји заборављени или изгубљени. Процеси опоравка су засновани на методи шифровања налога."
   },
-  "accountRecoveryPolicyWarning": {
-    "message": "Постојећи налози са главним лозинкама ће захтевати да се чланови сами пријаве пре него што администратори могу да опораве њихове налоге. Аутоматска регистрација ће укључити опоравак налога за нове чланове."
-  },
-  "accountRecoverySingleOrgRequirementDesc": {
-    "message": "Политика предузећа за јединствену организацију мора бити омогућена пре активирања ове политике."
+  "resetPasswordPolicyWarning": {
+    "message": "Корисници у организацији ће се морати само-уписати или се аутоматски уписати пре него што администратори могу да ресетују њихову главну лозинку."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Ауто уписивање"
+  },
+  "resetPasswordPolicyAutoEnrollDescription": {
+    "message": "Сви корисници ће се аутоматски уписати у ресетовање лозинке након што се прихвати њихов позив."
+  },
+  "resetPasswordPolicyAutoEnrollWarning": {
+    "message": "Корисници који су већ у организацији неће бити ретроактивно уписани у ресетовање лозинке. Мораће се само-уписати пре него што администратори могу да ресетују њихову главну лозинку."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Аутоматски упишите нове кориснике"
@@ -5221,8 +5224,8 @@
     "message": "Упалити",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpAnchor": {
-    "message": "захтева смернице за аутентификацију јединственог пријављивања",
+  "ssoPolicyHelpLink": {
+    "message": "политику SSO аутентификације",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -6057,7 +6060,7 @@
     "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
-    "message": "Унесите или изаберите пројекте или тајне",
+    "message": "Type or select projects or secrets",
     "description": "Instructions for selecting projects or secrets for a new service account"
   },
   "newSaTypeToFilter": {
@@ -6192,7 +6195,7 @@
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
   "revokeAccessToken": {
-    "message": "Опозови приступ токенима",
+    "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
   },
   "revokeAccessTokens": {
@@ -6621,13 +6624,13 @@
     "message": "Secrets Manager Beta"
   },
   "secretsManager": {
-    "message": "Менаџер тајни"
+    "message": "Secrets Manager"
   },
-  "secretsManagerAccessDescription": {
-    "message": "Activate user access to Secrets Manager."
+  "secretsManagerAccessDesc": {
+    "message": "Enable user access to Secrets Manager."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Овај корисник може приступити Менаџеру Тајни"
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Важно:"
@@ -6828,25 +6831,17 @@
   "trustedDeviceEncryption": {
     "message": "Шифровање поузданог уређаја"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
+  "memberDecryptionTdeDescriptionStart": {
     "message": "Када се аутентификују, чланови ће дешифровати податке из сефљ користећи кључ сачуван на њиховом уређају",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "јединствена организација",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "политика администрације за опоравак налога",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "полиса и ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "администрација опоравка налога",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionTdeDescriptionPartThree": {
-    "message": "полисе са аутоматским уписом ће се укључити када се користи ова опција.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "са аутоматским уписом ће се укључити када се користи ова опција.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ није нађено/а",
@@ -6863,19 +6858,19 @@
   "updatedTempPassword": {
     "message": "Корисник је ажурирао лозинку издату путем опоравка налога."
   },
-  "activatedAccessToSecretsManager": {
-    "message": "Активиран приступ Манаџеру тајни",
+  "enabledAccessToSecretsManager": {
+    "message": "Enabled access to Secrets Manager",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "activateAccess": {
-    "message": "Активирати приступ"
+  "enableAccess": {
+    "message": "Enable access"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Омогућите следећим члановима приступ Манаџеру Тајни. Улога додељена у Менаџеру лозинки односиће се на Менаџеру Тајни.",
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "activateSecretsManager": {
-    "message": "Активирати менаџер тајни"
+  "enableSecretsManager": {
+    "message": "Enable Secrets Manager"
   },
   "yourOrganizationsFingerprint": {
     "message": "Ваша Сигурносна Фраза организације",
@@ -6934,26 +6929,5 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Уклањање чланова који немају главну лозинку без постављања једне за њих може ограничити приступ њиховом пуном налогу."
-  },
-  "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Започните своју 7-дневну бесплатну пробну Bitwarden-а за $ORG$",
-    "placeholders": {
-      "org": {
-        "content": "$1",
-        "example": "Organization name"
-      }
-    }
-  },
-  "next": {
-    "message": "Следеће"
-  },
-  "usFlag": {
-    "message": "Америчка застава"
-  },
-  "euFlag": {
-    "message": "ЕУ застава"
-  },
-  "selectedRegionFlag": {
-    "message": "Одабрана застава"
   }
 }
