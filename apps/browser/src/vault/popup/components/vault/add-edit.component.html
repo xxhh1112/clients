@@ -21,6 +21,9 @@
       <h2 class="box-header">
         {{ "itemInformation" | i18n }}
       </h2>
+      <div class="box-footer" *ngIf="cipher.type === cipherType.Fido2Key">
+        {{ "passkeyEditInformation" | i18n }}
+      </div>
       <div class="box-content">
         <div class="box-content-row" *ngIf="!editMode" appBoxRow>
           <label for="type">{{ "type" | i18n }}</label>
@@ -129,6 +132,17 @@
               </button>
             </div>
           </div>
+
+          <!--Passkey-->
+          <div class="box" *ngIf="cipher.login.fido2Key && !cloneMode">
+            <div class="box-content">
+              <div class="box-content-row text-muted">
+                <span class="row-label">{{ "typePasskey" | i18n }}</span>
+                {{ "passkeyTwoStepLogin" | i18n }}
+              </div>
+            </div>
+          </div>
+
           <div class="box-content-row" appBoxRow>
             <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
             <input
@@ -459,6 +473,39 @@
               [(ngModel)]="cipher.identity.country"
               [readonly]="!cipher.edit && editMode"
             />
+          </div>
+        </div>
+        <!-- Fido2Key -->
+        <div *ngIf="cipher.type === cipherType.Fido2Key">
+          <div class="box-content-row" appBoxRow>
+            <label for="fido2KeyUsername">{{ "username" | i18n }}</label>
+            <input
+              id="fido2KeyUsername"
+              type="text"
+              name="Fido2Key.Username"
+              [(ngModel)]="cipher.fido2Key.userName"
+              appInputVerbatim
+              [readonly]="!cipher.edit && editMode"
+            />
+          </div>
+          <div class="box-content-row text-muted" appBoxRow>
+            <span class="row-label">{{ "typePasskey" | i18n }}</span>
+            {{ "dateCreated" | i18n }} {{ cipher.creationDate | date : "short" }}
+          </div>
+
+          <div class="box" *ngIf="cipher.fido2Key.canLaunch">
+            <div class="box-content">
+              <div class="box-content-row" appBoxRow>
+                <label for="fido2KeyApplication">{{ "application" | i18n }}</label>
+                <input
+                  class="text-muted"
+                  id="fido2KeyApplication"
+                  type="text"
+                  [value]="cipher.fido2Key.rpId"
+                  readonly
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -70,33 +70,34 @@ export class IconComponent implements OnInit {
 
         switch (cipher.type) {
           case CipherType.Login:
-            icon = "bwi-globe";
+          case CipherType.Fido2Key: {
+            icon = cipher.type === CipherType.Login ? "bwi-globe" : "bwi-passkey";
 
-            if (cipher.login.uri) {
-              let hostnameUri = cipher.login.uri;
-              let isWebsite = false;
+            let uri =
+              cipher.type === CipherType.Login ? cipher.login.uri : cipher.fido2Key.launchUri;
+            let isWebsite = false;
 
-              if (hostnameUri.indexOf("androidapp://") === 0) {
+            if (uri) {
+              if (uri.indexOf("androidapp://") === 0) {
                 icon = "bwi-android";
                 image = null;
-              } else if (hostnameUri.indexOf("iosapp://") === 0) {
+              } else if (uri.indexOf("iosapp://") === 0) {
                 icon = "bwi-apple";
                 image = null;
-              } else if (
-                imageEnabled &&
-                hostnameUri.indexOf("://") === -1 &&
-                hostnameUri.indexOf(".") > -1
-              ) {
-                hostnameUri = "http://" + hostnameUri;
+              } else if (imageEnabled && uri.indexOf("://") === -1 && uri.indexOf(".") > -1) {
+                uri = "http://" + uri;
                 isWebsite = true;
               } else if (imageEnabled) {
-                isWebsite = hostnameUri.indexOf("http") === 0 && hostnameUri.indexOf(".") > -1;
+                isWebsite = uri.indexOf("http") === 0 && uri.indexOf(".") > -1;
               }
 
               if (imageEnabled && isWebsite) {
                 try {
-                  image = iconsUrl + "/" + Utils.getHostname(hostnameUri) + "/icon.png";
-                  fallbackImage = "images/bwi-globe.png";
+                  image = iconsUrl + "/" + Utils.getHostname(uri) + "/icon.png";
+                  fallbackImage =
+                    cipher.type === CipherType.Login
+                      ? "images/bwi-globe.png"
+                      : "images/bwi-passkey";
                 } catch (e) {
                   // Ignore error since the fallback icon will be shown if image is null.
                 }
@@ -105,6 +106,7 @@ export class IconComponent implements OnInit {
               image = null;
             }
             break;
+          }
           case CipherType.SecureNote:
             icon = "bwi-sticky-note";
             break;
@@ -116,9 +118,6 @@ export class IconComponent implements OnInit {
             break;
           case CipherType.Identity:
             icon = "bwi-id-card";
-            break;
-          case CipherType.Fido2Key:
-            icon = "bwi-key"; // TODO: Verify if this icon should be classified as "Bitwarden Object"
             break;
           default:
             break;

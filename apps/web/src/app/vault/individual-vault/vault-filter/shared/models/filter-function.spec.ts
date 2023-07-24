@@ -211,6 +211,17 @@ describe("createFilter", () => {
       expect(result).toBe(true);
     });
   });
+
+  describe("given a cipher with Fido2Key type", () => {
+    it("should return true when filter is login", () => {
+      const cipher = createCipher({ type: CipherType.Fido2Key });
+      const filterFunction = createFilterFunction({ type: "login" });
+
+      const result = filterFunction(cipher);
+
+      expect(result).toBe(true);
+    });
+  });
 });
 
 function createCipher(options: Partial<CipherView> = {}) {

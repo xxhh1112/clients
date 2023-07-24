@@ -20,7 +20,7 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { Launchable } from "@bitwarden/common/vault/interfaces/launchable";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -131,7 +131,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
     }
   }
 
-  launch(uri: LoginUriView) {
+  launch(uri: Launchable) {
     if (!uri.canLaunch) {
       return;
     }

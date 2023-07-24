@@ -114,6 +114,16 @@
                 </button>
               </div>
             </div>
+            <!--Passkey-->
+            <div
+              class="box-content-row text-muted"
+              *ngIf="cipher.login.fido2Key && !cloneMode"
+              appBoxRow
+            >
+              <span class="row-label">{{ "typePasskey" | i18n }}</span>
+              {{ "passkeyTwoStepLogin" | i18n }}
+            </div>
+
             <div class="box-content-row" appBoxRow>
               <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
               <input
@@ -448,6 +458,24 @@
               />
             </div>
           </div>
+          <!-- Fido2Key -->
+          <div *ngIf="cipher.type === cipherType.Fido2Key">
+            <div class="box-content-row" appBoxRow>
+              <label for="fido2KeyUsername">{{ "username" | i18n }}</label>
+              <input
+                id="fido2KeyUsername"
+                type="text"
+                name="Fido2Key.Username"
+                [(ngModel)]="cipher.fido2Key.userName"
+                appInputVerbatim
+                [readonly]="!cipher.edit && editMode"
+              />
+            </div>
+            <div class="box-content-row text-muted" appBoxRow>
+              <span class="row-label">{{ "typePasskey" | i18n }}</span>
+              {{ "dateCreated" | i18n }} {{ cipher.creationDate | date : "short" }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="box" *ngIf="cipher.type === cipherType.Login">
@@ -526,6 +554,24 @@
             <i class="bwi bwi-plus-circle bwi-fw bwi-lg" aria-hidden="true"></i>
             {{ "newUri" | i18n }}
           </button>
+        </div>
+      </div>
+      <!-- Fido2Key Application -->
+      <div class="box" *ngIf="cipher.type === cipherType.Fido2Key && cipher.fido2Key.canLaunch">
+        <div class="box-content">
+          <div class="box-content-row" appBoxRow>
+            <label for="fido2KeyApplication">{{ "application" | i18n }}</label>
+            <input
+              class="text-muted"
+              id="fido2KeyApplication"
+              type="text"
+              [value]="cipher.fido2Key.rpId"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="box-footer">
+          {{ "passkeyEditInformation" | i18n }}
         </div>
       </div>
       <div class="box">

@@ -288,7 +288,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             this.editCipher(cipher);
           }),
       });
-      if (!cipher.organizationId) {
+      if (!cipher.organizationId && !cipher.fido2Key?.rpId) {
         menu.push({
           label: this.i18nService.t("clone"),
           click: () =>
@@ -356,6 +356,14 @@ export class VaultComponent implements OnInit, OnDestroy {
               this.copyValue(cipher, cipher.card.code, "securityCode", "Security Code");
               this.eventCollectionService.collect(EventType.Cipher_ClientCopiedCardCode, cipher.id);
             },
+          });
+        }
+        break;
+      case CipherType.Fido2Key:
+        if (cipher.fido2Key.canLaunch) {
+          menu.push({
+            label: this.i18nService.t("launch"),
+            click: () => this.platformUtilsService.launchUri(cipher.fido2Key.launchUri),
           });
         }
         break;
