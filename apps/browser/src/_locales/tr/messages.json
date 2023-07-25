@@ -2042,7 +2042,7 @@
     "description": "Part of a URL."
   },
   "apiAccessToken": {
-    "message": "API erişim anahtarı"
+    "message": "API erişim token'ı"
   },
   "apiKey": {
     "message": "API anahtarı"
@@ -2237,5 +2237,11 @@
   },
   "accessDenied": {
     "message": "Erişim engellendi. Bu sayfayı görüntüleme iznine sahip değilsiniz."
+  },
+  "general": {
+    "message": "Genel"
+  },
+  "display": {
+    "message": "Display"
   }
 }

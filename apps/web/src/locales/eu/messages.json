@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Hasi saioa gailuarekin"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Bitwarden mugikorreko aplikazioaren konfigurazioan, gailuarekin saioa hastea gaituta egon behar du. Beste aukerarik behar duzu?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "loginWithMasterPassword": {
     "message": "Hasi saioa pasahitz nagusiarekin"
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Baieztatu kutxa gotorra esportatzea"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "Esportazio honek kutxa gotorraren datuak zifratu gabeko formatuan biltzen ditu. Ez zenuke gorde edo kanal ez-seguruetaik (emaila, adibidez) bidali behar. Erabili eta berehala ezabatu."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "Esportazio honek zure datuak zifratzen ditu zure kontuaren zifratze-gakoa erabiliz. Inoiz zure kontuko zifratze-gakoa berrituz gero, berriro esportatu beharko duzu, ezin izango baituzu fitxategi hori deszifratu."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Esportatu kutxa gotorra"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "Fitxategiaren formatua"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "Sarbidea ukatuta bi urratseko saio hasiera okerragatik."
+  },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
   },
   "exportedVault": {
     "message": "Kutxa gotorra esportatua."
@@ -4579,20 +4594,17 @@
   "accountRecoveryPolicy": {
     "message": "Account recovery administration"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "accountRecoveryPolicyDesc": {
+    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Erakundeko erabiltzaileek izena eman behar dute administratzaileek beren pasahitz nagusia berrezarri ahal izateko."
+  "accountRecoveryPolicyWarning": {
+    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single organization Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Izen-emate automatikoa"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Erabiltzaile guztiek automatikoki izen-emango dute pasahitza berrezartzean, gonbidapena onartu ondoren, eta ez zaie utziko izen-ematetik ateratzen."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Dagoeneko erakundean dauden erabiltzaileak ez daude pasahitza berrezartzean izen-emanda. Administratzaileek izen-eman beharko dute pasahitz nagusia berrezarri ahal izateko."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Erabiltzaile berriak automatikoki izen-emateko eskatzea"
@@ -5209,8 +5221,8 @@
     "message": "Erabili",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "saio hasiera bakarreko autentifikazioaren politika",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -6179,10 +6191,6 @@
     "message": "Access token created and copied to clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6612,11 +6620,14 @@
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "secretsManagerAccessDescription": {
+    "message": "Activate user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
@@ -6817,17 +6828,25 @@
   "trustedDeviceEncryption": {
     "message": "Trusted device encryption"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "single organization",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "policy and ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "account recovery administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ not found",
@@ -6843,6 +6862,20 @@
   },
   "updatedTempPassword": {
     "message": "User updated a password issued through account recovery."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Activated access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Activate access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Activate Secrets Manager"
   },
   "yourOrganizationsFingerprint": {
     "message": "Your organization's fingerprint phrase",
@@ -6901,5 +6934,26 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Next"
+  },
+  "usFlag": {
+    "message": "US flag"
+  },
+  "euFlag": {
+    "message": "EU flag"
+  },
+  "selectedRegionFlag": {
+    "message": "Selected region flag"
   }
 }

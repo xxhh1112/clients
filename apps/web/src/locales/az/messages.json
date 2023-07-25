@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Cihazla giriş et"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Cihazla giriş etmə, Bitwarden mobil tətbiqinin tənzimləmələrində fəallaşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Cihazla giriş etmə, Bitwarden tətbiqinin tənzimləmələrində quraşdırılmalıdır. Başqa bir seçimə ehtiyacınız var?"
   },
   "loginWithMasterPassword": {
     "message": "Ana parolla giriş et"
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Anbarın ixracını təsdiqləyin"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "Bu xaricə köçürmə, anbar verilənlərinizi şifrələnməmiş formatda ehtiva. Xaricə köçürülən faylı, güvənli olmayan kanallar üzərində saxlamamalı və ya göndərməməlisiniz (e-poçt kimi). Bu faylı işiniz bitdikdən sonra dərhal silin."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "Bu ixrac faylı, hesabınızın şifrələmə açarını istifadə edərək verilənlərinizi şifrələyir. Hesabınızın şifrələmə açarını döndərsəniz, bu ixrac faylının şifrəsini aça bilməyəcəyiniz üçün yenidən ixrac etməli olacaqsınız."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Anbarı ixrac et"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "Fayl formatı"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "Yanlış iki mərhələli giriş ilə giriş etmə cəhdi uğursuz oldu."
+  },
+  "incorrectPassword": {
+    "message": "Yanlış parol"
+  },
+  "incorrectCode": {
+    "message": "Yanlış kod"
   },
   "exportedVault": {
     "message": "Anbar ixrac edildi."
@@ -4579,20 +4594,17 @@
   "accountRecoveryPolicy": {
     "message": "Hesab bərpa idarəsi"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Ana parol və ya güvənilən cihazlar unudulanda və ya itəndə üzv hesablarını bərpa edin. Bərpa prosesləri, hesab şifrələmə üsuluna əsaslanır."
+  "accountRecoveryPolicyDesc": {
+    "message": "Şifrələmə üsuluna əsasən, ana parollar və güvənilən cihazlar unudulduqda və ya itirildikdə hesabları bərpa edin."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Administratorların ana parolları sıfırlaya bilməsi üçün təşkilatdakı istifadəçilər öz-özünə və ya avtomatik olaraq qeydiyyatdan keçməlidir."
+  "accountRecoveryPolicyWarning": {
+    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single organization Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Avtomatik qeydiyyat"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Dəvətləri qəbul edən kimi bütün istifadəçilər avtomatik olaraq \"parol sıfırlama\"da qeydiyyata alınacaq."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Hal-hazırda təşkilatdakı istifadəçilər, \"parol sıfırlama\"da retroaktiv (geriyə yönələn) olaraq qeydiyyata alınmayacaq. Administratorlar ana parollarını sıfırlaya bilməsi üçün öz-özünə qeydiyyatdan keçməlidirilər."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Yeni istifadəçiləri avtomatik qeydiyyata al"
@@ -5209,8 +5221,8 @@
     "message": "Bütün üzvlərin SSO ilə",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "giriş etməsini məcburi etmək üçün",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -6179,10 +6191,6 @@
     "message": "Müraciət tokeni yaradıldı və lövhəyə kopyalandı",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Beta üçün icazələrin idarə edilməsi əlçatmazdır.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Müraciət tokenini ləğv et",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6612,11 +6620,14 @@
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Beta proqramı əsnasında \"Secrets Manager\"ə istifadəçi müraciətini ödənişsiz fəallaşdırın."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "Bu istifadəçi \"Secrets Manager Beta\"ya müraciət edə bilər"
+  "secretsManagerAccessDescription": {
+    "message": "\"Secrets Manager\"ə istifadəçi müraciətini aktivləşdir."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Vacib:"
@@ -6817,17 +6828,25 @@
   "trustedDeviceEncryption": {
     "message": "Güvənli cihaz şifrələməsi"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Kimlik təsdiqləndikdən sonra üzvlər, cihazlarından saxlanılan açarı istifadə edərək anbar verilənlərinin şifrələrini aça biləcək.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartOne": {
+    "message": "Kimlik təsdiqləndikdən sonra üzvlər, cihazlarından saxlanılan açarı istifadə edərək anbar verilənlərinin şifrələrini aça biləcək",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Hesab bərpa idarəsi siyasəti",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "tək təşkilat",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "Bu seçim istifadə edildikdə avto-qeydiyyat ilə işə salınacaq.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "siyasət və ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "hesab bərpa administrasiyası",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "bu seçim istifadə edildikdə avto-qeydiyyat ilə işə salınacaq.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ tapılmadı",
@@ -6844,45 +6863,59 @@
   "updatedTempPassword": {
     "message": "İstifadəçi, hesab bərpası vasitəsilə verilən bir parolu güncəllədi."
   },
+  "activatedAccessToSecretsManager": {
+    "message": "\"Secrets Manager\"ə müraciət aktivləşdirildi",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Müraciəti aktivləşdir"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "\"Secrets Manager\"i aktivləşdir"
+  },
   "yourOrganizationsFingerprint": {
     "message": "Təşkilatınızın barmaq izi ifadəsi",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
   },
   "deviceApprovals": {
-    "message": "Device approvals"
+    "message": "Cihaz təsdiqləri"
   },
   "deviceApprovalsDesc": {
     "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
   },
   "deviceInfo": {
-    "message": "Device info"
+    "message": "Cihaz məlumatı"
   },
   "time": {
-    "message": "Time"
+    "message": "Vaxt"
   },
   "denyAllRequests": {
-    "message": "Deny all requests"
+    "message": "Bütün tələbləri rədd et"
   },
   "denyRequest": {
-    "message": "Deny request"
+    "message": "Tələbi rədd et"
   },
   "approveRequest": {
-    "message": "Approve request"
+    "message": "Tələbi təsdiqlə"
   },
   "noDeviceRequests": {
-    "message": "No device requests"
+    "message": "Heç bir cihaz tələbi yoxdur"
   },
   "noDeviceRequestsDesc": {
-    "message": "Member device approval requests will appear here"
+    "message": "Üzv cihaz təsdiq tələbləri burada görünəcək"
   },
   "loginRequestDenied": {
-    "message": "Login request denied"
+    "message": "Giriş tələbi rədd edildi"
   },
   "allLoginRequestsDenied": {
-    "message": "All login requests denied"
+    "message": "Bütün giriş tələbləri rədd edildi"
   },
   "loginRequestApproved": {
-    "message": "Login request approved"
+    "message": "Giriş tələbi təsdiqləndi"
   },
   "removeOrgUserNoMasterPasswordTitle": {
     "message": "Hesabın ana parolu yoxdur"
@@ -6901,5 +6934,26 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Ana parolu olmayan üzvləri onlar üçün parol tənzimləmədən silmək, tam hesablarına müraciəti məhdudlaşdıra bilər."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Next"
+  },
+  "usFlag": {
+    "message": "US flag"
+  },
+  "euFlag": {
+    "message": "EU flag"
+  },
+  "selectedRegionFlag": {
+    "message": "Selected region flag"
   }
 }
