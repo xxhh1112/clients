@@ -79,6 +79,12 @@ const routes: Routes = [
     data: { state: "login-with-device" },
   },
   {
+    path: "admin-approval-requested",
+    component: LoginWithDeviceComponent,
+    canActivate: [],
+    data: { state: "login-with-device" },
+  },
+  {
     path: "lock",
     component: LockComponent,
     canActivate: [LockGuard],

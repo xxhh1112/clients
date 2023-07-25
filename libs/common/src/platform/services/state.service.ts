@@ -6,6 +6,7 @@ import { OrganizationData } from "../../admin-console/models/data/organization.d
 import { PolicyData } from "../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../admin-console/models/data/provider.data";
 import { Policy } from "../../admin-console/models/domain/policy";
+import { AdminAuthRequestStorable } from "../../auth/models/domain/admin-auth-req-storable";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
@@ -1322,6 +1323,37 @@ export class StateService<
     const account = await this.getAccount(options);
 
     account.keys.deviceKey = value.toJSON();
+
+    await this.saveAccount(account, options);
+  }
+
+  async getAdminAuthRequest(options?: StorageOptions): Promise<AdminAuthRequestStorable | null> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.adminAuthRequest
+      ? AdminAuthRequestStorable.fromJSON(account.adminAuthRequest)
+      : null;
+  }
+
+  async setAdminAuthRequest(
+    adminAuthRequest: AdminAuthRequestStorable,
+    options?: StorageOptions
+  ): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.adminAuthRequest = adminAuthRequest;
 
     await this.saveAccount(account, options);
   }
@@ -3112,11 +3144,12 @@ export class StateService<
     }
   }
 
-  // settings persist even on reset, and are not effected by this method
+  // settings persist even on reset, and are not affected by this method
   protected resetAccount(account: TAccount) {
     const persistentAccountInformation = {
       settings: account.settings,
       keys: { deviceKey: account.keys.deviceKey },
+      adminAuthRequest: account.adminAuthRequest,
     };
     return Object.assign(this.createAccount(), persistentAccountInformation);
   }

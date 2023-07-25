@@ -232,8 +232,6 @@ export class SsoComponent {
       return await this.handleSuccessfulLogin();
     } catch (e) {
       await this.handleLoginError(e);
-    } finally {
-      this.loggingIn = false;
     }
   }
 

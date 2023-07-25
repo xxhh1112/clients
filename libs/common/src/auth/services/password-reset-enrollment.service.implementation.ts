@@ -19,6 +19,16 @@ export class PasswordResetEnrollmentServiceImplementation
     protected i18nService: I18nService
   ) {}
 
+  async enrollIfRequired(organizationSsoIdentifier: string): Promise<void> {
+    const orgAutoEnrollStatusResponse = await this.organizationApiService.getAutoEnrollStatus(
+      organizationSsoIdentifier
+    );
+
+    if (!orgAutoEnrollStatusResponse.resetPasswordEnabled) {
+      await this.enroll(orgAutoEnrollStatusResponse.id, null, null);
+    }
+  }
+
   async enroll(organizationId: string): Promise<void>;
   async enroll(organizationId: string, userId: string, userKey: UserKey): Promise<void>;
   async enroll(organizationId: string, userId?: string, userKey?: UserKey): Promise<void> {

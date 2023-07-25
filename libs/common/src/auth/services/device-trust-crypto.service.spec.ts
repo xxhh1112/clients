@@ -1,11 +1,14 @@
-import { matches, mock, mockReset } from "jest-mock-extended";
+import { matches, mock } from "jest-mock-extended";
 
 import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { DeviceType } from "../../enums";
 import { EncryptionType } from "../../enums/encryption-type.enum";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
+import { I18nService } from "../../platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { EncString } from "../../platform/models/domain/enc-string";
 import {
@@ -13,14 +16,12 @@ import {
   DeviceKey,
   UserKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
-import { CryptoService } from "../../platform/services/crypto.service";
 import { CsprngArray } from "../../types/csprng";
 import { DevicesApiServiceAbstraction } from "../abstractions/devices-api.service.abstraction";
 import { UpdateDevicesTrustRequest } from "../models/request/update-devices-trust.request";
 import { ProtectedDeviceResponse } from "../models/response/protected-device.response";
 
 import { DeviceTrustCryptoService } from "./device-trust-crypto.service.implementation";
-
 describe("deviceTrustCryptoService", () => {
   let deviceTrustCryptoService: DeviceTrustCryptoService;
 
@@ -30,13 +31,11 @@ describe("deviceTrustCryptoService", () => {
   const stateService = mock<StateService>();
   const appIdService = mock<AppIdService>();
   const devicesApiService = mock<DevicesApiServiceAbstraction>();
+  const i18nService = mock<I18nService>();
+  const platformUtilsService = mock<PlatformUtilsService>();
 
   beforeEach(() => {
-    mockReset(cryptoFunctionService);
-    mockReset(encryptService);
-    mockReset(stateService);
-    mockReset(appIdService);
-    mockReset(devicesApiService);
+    jest.clearAllMocks();
 
     deviceTrustCryptoService = new DeviceTrustCryptoService(
       cryptoFunctionService,
@@ -44,7 +43,9 @@ describe("deviceTrustCryptoService", () => {
       encryptService,
       stateService,
       appIdService,
-      devicesApiService
+      devicesApiService,
+      i18nService,
+      platformUtilsService
     );
   });
 
@@ -76,6 +77,34 @@ describe("deviceTrustCryptoService", () => {
         expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
         expect(stateSvcSetShouldTrustDeviceSpy).toHaveBeenCalledWith(newValue);
       });
+    });
+  });
+
+  describe("trustDeviceIfRequired", () => {
+    it("should trust device and reset when getShouldTrustDevice returns true", async () => {
+      jest.spyOn(deviceTrustCryptoService, "getShouldTrustDevice").mockResolvedValue(true);
+      jest.spyOn(deviceTrustCryptoService, "trustDevice").mockResolvedValue({} as DeviceResponse);
+      jest.spyOn(deviceTrustCryptoService, "setShouldTrustDevice").mockResolvedValue();
+
+      await deviceTrustCryptoService.trustDeviceIfRequired();
+
+      expect(deviceTrustCryptoService.getShouldTrustDevice).toHaveBeenCalledTimes(1);
+      expect(deviceTrustCryptoService.trustDevice).toHaveBeenCalledTimes(1);
+      expect(deviceTrustCryptoService.setShouldTrustDevice).toHaveBeenCalledWith(false);
+    });
+
+    it("should not trust device nor reset when getShouldTrustDevice returns false", async () => {
+      const getShouldTrustDeviceSpy = jest
+        .spyOn(deviceTrustCryptoService, "getShouldTrustDevice")
+        .mockResolvedValue(false);
+      const trustDeviceSpy = jest.spyOn(deviceTrustCryptoService, "trustDevice");
+      const setShouldTrustDeviceSpy = jest.spyOn(deviceTrustCryptoService, "setShouldTrustDevice");
+
+      await deviceTrustCryptoService.trustDeviceIfRequired();
+
+      expect(getShouldTrustDeviceSpy).toHaveBeenCalledTimes(1);
+      expect(trustDeviceSpy).not.toHaveBeenCalled();
+      expect(setShouldTrustDeviceSpy).not.toHaveBeenCalled();
     });
   });
 

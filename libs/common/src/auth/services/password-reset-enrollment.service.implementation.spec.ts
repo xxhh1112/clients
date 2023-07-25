@@ -2,6 +2,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 
 import { OrganizationUserService } from "../../abstractions/organization-user/organization-user.service";
 import { OrganizationApiServiceAbstraction } from "../../admin-console/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationAutoEnrollStatusResponse } from "../../admin-console/models/response/organization-auto-enroll-status.response";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
@@ -29,6 +30,38 @@ describe("PasswordResetEnrollmentServiceImplementation", () => {
       organizationUserService,
       i18nService
     );
+  });
+
+  describe("enrollIfRequired", () => {
+    it("should not enroll when user is already enrolled in password reset", async () => {
+      const mockResponse = new OrganizationAutoEnrollStatusResponse({
+        ResetPasswordEnabled: true,
+        Id: "orgId",
+      });
+      organizationApiService.getAutoEnrollStatus.mockResolvedValue(mockResponse);
+
+      const enrollSpy = jest.spyOn(service, "enroll");
+      enrollSpy.mockResolvedValue();
+
+      await service.enrollIfRequired("ssoId");
+
+      expect(service.enroll).not.toHaveBeenCalled();
+    });
+
+    it("should enroll when user is not enrolled in password reset", async () => {
+      const mockResponse = new OrganizationAutoEnrollStatusResponse({
+        ResetPasswordEnabled: false,
+        Id: "orgId",
+      });
+      organizationApiService.getAutoEnrollStatus.mockResolvedValue(mockResponse);
+
+      const enrollSpy = jest.spyOn(service, "enroll");
+      enrollSpy.mockResolvedValue();
+
+      await service.enrollIfRequired("ssoId");
+
+      expect(service.enroll).toHaveBeenCalled();
+    });
   });
 
   describe("enroll", () => {

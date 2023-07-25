@@ -6,6 +6,7 @@ import { PolicyData } from "../../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { Policy } from "../../../admin-console/models/domain/policy";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
+import { AdminAuthRequestStorable } from "../../../auth/models/domain/admin-auth-req-storable";
 import { EnvironmentUrls } from "../../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../../auth/models/domain/force-reset-password-reason";
 import { KeyConnectorUserDecryptionOption } from "../../../auth/models/domain/user-decryption-options/key-connector-user-decryption-option";
@@ -369,6 +370,7 @@ export class Account {
   settings?: AccountSettings = new AccountSettings();
   tokens?: AccountTokens = new AccountTokens();
   decryptionOptions?: AccountDecryptionOptions = new AccountDecryptionOptions();
+  adminAuthRequest?: AdminAuthRequestStorable = null;
 
   constructor(init: Partial<Account>) {
     Object.assign(this, {
@@ -396,6 +398,9 @@ export class Account {
         ...new AccountDecryptionOptions(),
         ...init?.decryptionOptions,
       },
+      adminAuthRequest: init?.adminAuthRequest
+        ? new AdminAuthRequestStorable(init?.adminAuthRequest)
+        : null,
     });
   }
 
@@ -410,6 +415,7 @@ export class Account {
       settings: AccountSettings.fromJSON(json?.settings),
       tokens: AccountTokens.fromJSON(json?.tokens),
       decryptionOptions: AccountDecryptionOptions.fromJSON(json?.decryptionOptions),
+      adminAuthRequest: AdminAuthRequestStorable.fromJSON(json?.adminAuthRequest),
     });
   }
 }

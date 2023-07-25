@@ -5,6 +5,7 @@ import { OrganizationData } from "../../admin-console/models/data/organization.d
 import { PolicyData } from "../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../admin-console/models/data/provider.data";
 import { Policy } from "../../admin-console/models/domain/policy";
+import { AdminAuthRequestStorable } from "../../auth/models/domain/admin-auth-req-storable";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
@@ -262,6 +263,11 @@ export abstract class StateService<T extends Account = Account> {
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
   setDeviceKey: (value: DeviceKey, options?: StorageOptions) => Promise<void>;
+  getAdminAuthRequest: (options?: StorageOptions) => Promise<AdminAuthRequestStorable | null>;
+  setAdminAuthRequest: (
+    adminAuthRequest: AdminAuthRequestStorable,
+    options?: StorageOptions
+  ) => Promise<void>;
   getShouldTrustDevice: (options?: StorageOptions) => Promise<boolean | null>;
   setShouldTrustDevice: (value: boolean, options?: StorageOptions) => Promise<void>;
   getAccountDecryptionOptions: (

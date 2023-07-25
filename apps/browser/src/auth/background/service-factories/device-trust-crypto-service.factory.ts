@@ -27,6 +27,14 @@ import {
   factory,
 } from "../../../platform/background/service-factories/factory-options";
 import {
+  I18nServiceInitOptions,
+  i18nServiceFactory,
+} from "../../../platform/background/service-factories/i18n-service.factory";
+import {
+  PlatformUtilsServiceInitOptions,
+  platformUtilsServiceFactory,
+} from "../../../platform/background/service-factories/platform-utils-service.factory";
+import {
   StateServiceInitOptions,
   stateServiceFactory,
 } from "../../../platform/background/service-factories/state-service.factory";
@@ -39,7 +47,9 @@ export type DeviceTrustCryptoServiceInitOptions = DeviceTrustCryptoServiceFactor
   EncryptServiceInitOptions &
   StateServiceInitOptions &
   AppIdServiceInitOptions &
-  DevicesApiServiceInitOptions;
+  DevicesApiServiceInitOptions &
+  I18nServiceInitOptions &
+  PlatformUtilsServiceInitOptions;
 
 export function deviceTrustCryptoServiceFactory(
   cache: { deviceTrustCryptoService?: DeviceTrustCryptoServiceAbstraction } & CachedServices,
@@ -56,7 +66,9 @@ export function deviceTrustCryptoServiceFactory(
         await encryptServiceFactory(cache, opts),
         await stateServiceFactory(cache, opts),
         await appIdServiceFactory(cache, opts),
-        await devicesApiServiceFactory(cache, opts)
+        await devicesApiServiceFactory(cache, opts),
+        await i18nServiceFactory(cache, opts),
+        await platformUtilsServiceFactory(cache, opts)
       )
   );
 }

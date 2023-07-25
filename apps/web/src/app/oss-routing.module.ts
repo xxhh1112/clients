@@ -67,6 +67,11 @@ const routes: Routes = [
         component: LoginWithDeviceComponent,
         data: { titleId: "loginWithDevice" },
       },
+      {
+        path: "admin-approval-requested",
+        component: LoginWithDeviceComponent,
+        data: { titleId: "loginWithDevice" },
+      },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "login-initiated",

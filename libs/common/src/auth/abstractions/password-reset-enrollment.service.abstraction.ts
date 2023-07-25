@@ -1,6 +1,11 @@
 import { UserKey } from "../../platform/models/domain/symmetric-crypto-key";
 
 export abstract class PasswordResetEnrollmentServiceAbstraction {
+  /*
+   * Checks the user's enrollment status and enrolls them if required
+   */
+  abstract enrollIfRequired(organizationSsoIdentifier: string): Promise<void>;
+
   /**
    * Enroll current user in password reset
    * @param organizationId - Organization in which to enroll the user

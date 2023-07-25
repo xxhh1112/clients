@@ -40,6 +40,7 @@ import {
   AccountService as AccountServiceAbstraction,
   InternalAccountService,
 } from "@bitwarden/common/auth/abstractions/account.service";
+import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
@@ -52,6 +53,7 @@ import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/ab
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
+import { AuthRequestCryptoServiceImplementation } from "@bitwarden/common/auth/services/auth-request-crypto.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device-trust-crypto.service.implementation";
 import { DevicesApiServiceImplementation } from "@bitwarden/common/auth/services/devices-api.service.implementation";
@@ -250,6 +252,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         PasswordStrengthServiceAbstraction,
         PolicyServiceAbstraction,
         DeviceTrustCryptoServiceAbstraction,
+        AuthRequestCryptoServiceAbstraction,
       ],
     },
     {
@@ -708,7 +711,14 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         AppIdServiceAbstraction,
         DevicesApiServiceAbstraction,
+        I18nServiceAbstraction,
+        PlatformUtilsServiceAbstraction,
       ],
+    },
+    {
+      provide: AuthRequestCryptoServiceAbstraction,
+      useClass: AuthRequestCryptoServiceImplementation,
+      deps: [CryptoServiceAbstraction],
     },
   ],
 })

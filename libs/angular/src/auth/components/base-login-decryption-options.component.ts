@@ -206,31 +206,21 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       });
   }
 
-  approveFromOtherDevice() {
-    // TODO: plan is to re-use existing login-with-device component but rework it to have two flows
-    // (1) Standard flow for unauthN user based on AuthService status
-    // (2) New flow for authN user based on AuthService status b/c they have just authenticated w/ SSO
+  async approveFromOtherDevice() {
     if (this.data.state !== State.ExistingUserUntrustedDevice) {
       return;
     }
+
+    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
 
     this.loginService.setEmail(this.data.userEmail);
     this.router.navigate(["/login-with-device"]);
   }
 
-  requestAdminApproval() {
-    // this.router.navigate(["/admin-approval-requested"]); // new component that doesn't exist yet
-    // Idea: extract logic from the existing login-with-device component into a base-auth-request-component that
-    // the new admin-approval-requested component and the existing login-with-device component can extend
-    // TODO: how to do:
-    // add create admin approval request on new OrganizationAuthRequestsController on the server
-    // once https://github.com/bitwarden/server/pull/2993 is merged
-    // Client will create an AuthRequest of type AdminAuthRequest WITHOUT orgId and send it to the server
-    // Server will look up the org id(s) based on the user id and create the AdminAuthRequest(s)
-    // Note: must lookup if the user has an account recovery key (resetPasswordKey) set in the org
-    // (means they've opted into the Admin Acct Recovery feature)
-    // Per discussion with Micah, fire out requests to all admins in any orgs the user is a member of
-    // UNTIL the Admin Console team finishes their work to turn on Single Org policy when Admin Acct Recovery is enabled.
+  async requestAdminApproval() {
+    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
+    this.loginService.setEmail(this.data.userEmail);
+    this.router.navigate(["/admin-approval-requested"]);
   }
 
   async approveWithMasterPassword() {

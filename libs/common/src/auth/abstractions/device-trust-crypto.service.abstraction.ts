@@ -10,6 +10,8 @@ export abstract class DeviceTrustCryptoServiceAbstraction {
   getShouldTrustDevice: () => Promise<boolean>;
   setShouldTrustDevice: (value: boolean) => Promise<void>;
 
+  trustDeviceIfRequired: () => Promise<void>;
+
   trustDevice: () => Promise<DeviceResponse>;
   getDeviceKey: () => Promise<DeviceKey>;
   decryptUserKeyWithDeviceKey: (

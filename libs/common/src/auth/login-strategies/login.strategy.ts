@@ -117,6 +117,9 @@ export abstract class LogInStrategy {
       accountKeys.deviceKey = deviceKey;
     }
 
+    // If you don't persist existing admin auth requests on login, they will get deleted.
+    const adminAuthRequest = await this.stateService.getAdminAuthRequest({ userId });
+
     await this.stateService.addAccount(
       new Account({
         profile: {
@@ -143,6 +146,7 @@ export abstract class LogInStrategy {
         decryptionOptions: AccountDecryptionOptions.fromResponse(
           tokenResponse.userDecryptionOptions
         ),
+        adminAuthRequest: adminAuthRequest,
       })
     );
   }

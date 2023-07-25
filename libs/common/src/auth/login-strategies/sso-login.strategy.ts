@@ -1,10 +1,12 @@
 import { ApiService } from "../../abstractions/api.service";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { I18nService } from "../../platform/abstractions/i18n.service";
 import { LogService } from "../../platform/abstractions/log.service";
 import { MessagingService } from "../../platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
+import { AuthRequestCryptoServiceAbstraction } from "../abstractions/auth-request-crypto.service.abstraction";
 import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
@@ -36,7 +38,9 @@ export class SsoLogInStrategy extends LogInStrategy {
     stateService: StateService,
     twoFactorService: TwoFactorService,
     private keyConnectorService: KeyConnectorService,
-    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    private authReqCryptoService: AuthRequestCryptoServiceAbstraction,
+    private i18nService: I18nService
   ) {
     super(
       cryptoService,
@@ -70,6 +74,8 @@ export class SsoLogInStrategy extends LogInStrategy {
   }
 
   protected override async setMasterKey(tokenResponse: IdentityTokenResponse) {
+    // TODO: discuss how this is no longer true with TDE
+    // eventually we’ll need to support migration of existing TDE users to Key Connector
     const newSsoUser = tokenResponse.key == null;
 
     if (tokenResponse.keyConnectorUrl != null) {
@@ -81,32 +87,84 @@ export class SsoLogInStrategy extends LogInStrategy {
     }
   }
 
+  // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
+  // so might be worth moving this logic to a common place (base login strategy or a separate service?)
   protected override async setUserKey(tokenResponse: IdentityTokenResponse): Promise<void> {
-    // If new user, return b/c we can't set the user key yet
-    if (tokenResponse.key === null) {
-      return;
+    const masterKeyEncryptedUserKey = tokenResponse.key;
+
+    // Note: masterKeyEncryptedUserKey is undefined for SSO JIT provisioned users
+    // on account creation and subsequent logins (confirmed or unconfirmed)
+    // but that is fine for TDE so we cannot return if it is undefined
+
+    if (masterKeyEncryptedUserKey) {
+      // set the master key encrypted user key if it exists
+      await this.cryptoService.setMasterKeyEncryptedUserKey(masterKeyEncryptedUserKey);
     }
-    // Existing user; proceed
-
-    // User now may or may not have a master password
-    // but set the master key encrypted user key if it exists regardless
-    await this.cryptoService.setMasterKeyEncryptedUserKey(tokenResponse.key);
-
-    // TODO: also admin approval request existence check should go here b/c that can give us a decrypted user key to set
-    // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
-    // so might be worth moving this logic to a common place (base login strategy or a separate service?)
 
     const userDecryptionOptions = tokenResponse?.userDecryptionOptions;
 
     // Note: TDE and key connector are mutually exclusive
     if (userDecryptionOptions?.trustedDeviceOption) {
-      await this.trySetUserKeyWithDeviceKey(tokenResponse);
+      await this.trySetUserKeyWithApprovedAdminRequestIfExists();
+
+      const hasUserKey = await this.cryptoService.hasUserKey();
+
+      // Only try to set user key with device key if admin approval request was not successful
+      if (!hasUserKey) {
+        await this.trySetUserKeyWithDeviceKey(tokenResponse);
+      }
     } else if (
       // TODO: remove tokenResponse.keyConnectorUrl when it's deprecated
-      tokenResponse.keyConnectorUrl ||
-      userDecryptionOptions?.keyConnectorOption?.keyConnectorUrl
+      masterKeyEncryptedUserKey != null &&
+      (tokenResponse.keyConnectorUrl || userDecryptionOptions?.keyConnectorOption?.keyConnectorUrl)
     ) {
+      // Key connector enabled for user
       await this.trySetUserKeyWithMasterKey();
+    }
+
+    // Note: In the traditional SSO flow with MP without key connector, the lock component
+    // is responsible for deriving master key from MP entry and then decrypting the user key
+  }
+
+  private async trySetUserKeyWithApprovedAdminRequestIfExists(): Promise<void> {
+    // At this point a user could have an admin auth request that has been approved
+    const adminAuthReqStorable = await this.stateService.getAdminAuthRequest();
+
+    if (!adminAuthReqStorable) {
+      return;
+    }
+
+    // Call server to see if admin auth request has been approved
+    const adminAuthReqResponse = await this.apiService.getAuthRequest(adminAuthReqStorable.id);
+
+    if (adminAuthReqResponse?.requestApproved) {
+      // if masterPasswordHash has a value, we will always receive authReqResponse.key
+      // as authRequestPublicKey(masterKey) + authRequestPublicKey(masterPasswordHash)
+      if (adminAuthReqResponse.masterPasswordHash) {
+        await this.authReqCryptoService.setKeysAfterDecryptingSharedMasterKeyAndHash(
+          adminAuthReqResponse,
+          adminAuthReqStorable.privateKey
+        );
+      } else {
+        // if masterPasswordHash is null, we will always receive authReqResponse.key
+        // as authRequestPublicKey(userKey)
+        await this.authReqCryptoService.setUserKeyAfterDecryptingSharedUserKey(
+          adminAuthReqResponse,
+          adminAuthReqStorable.privateKey
+        );
+      }
+
+      if (await this.cryptoService.hasUserKey()) {
+        // Now that we have a decrypted user key in memory, we can check if we
+        // need to establish trust on the current device
+        await this.deviceTrustCryptoService.trustDeviceIfRequired();
+
+        // if we successfully decrypted the user key, we can delete the admin auth request out of state
+        // TODO: eventually we post and clean up DB as well once consumed on client
+        await this.stateService.setAdminAuthRequest(null);
+
+        this.platformUtilsService.showToast("success", null, this.i18nService.t("loginApproved"));
+      }
     }
   }
 

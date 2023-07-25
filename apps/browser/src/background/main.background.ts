@@ -15,6 +15,7 @@ import { InternalPolicyService as InternalPolicyServiceAbstraction } from "@bitw
 import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/provider.service";
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
+import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
@@ -23,6 +24,7 @@ import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { AuthRequestCryptoServiceImplementation } from "@bitwarden/common/auth/services/auth-request-crypto.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device-trust-crypto.service.implementation";
 import { DevicesApiServiceImplementation } from "@bitwarden/common/auth/services/devices-api.service.implementation";
@@ -201,6 +203,7 @@ export default class MainBackground {
   configApiService: ConfigApiServiceAbstraction;
   devicesApiService: DevicesApiServiceAbstraction;
   deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction;
+  authRequestCryptoService: AuthRequestCryptoServiceAbstraction;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -399,8 +402,12 @@ export default class MainBackground {
       this.encryptService,
       this.stateService,
       this.appIdService,
-      this.devicesApiService
+      this.devicesApiService,
+      this.i18nService,
+      this.platformUtilsService
     );
+
+    this.authRequestCryptoService = new AuthRequestCryptoServiceImplementation(this.cryptoService);
 
     this.authService = new AuthService(
       this.cryptoService,
@@ -418,7 +425,8 @@ export default class MainBackground {
       this.encryptService,
       this.passwordStrengthService,
       this.policyService,
-      this.deviceTrustCryptoService
+      this.deviceTrustCryptoService,
+      this.authRequestCryptoService
     );
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
