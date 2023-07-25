@@ -1321,7 +1321,7 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    account.keys.deviceKey = value;
+    account.keys.deviceKey = value.toJSON();
 
     await this.saveAccount(account, options);
   }
