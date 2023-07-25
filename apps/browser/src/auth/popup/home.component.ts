@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
@@ -20,6 +20,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroyed$: Subject<void> = new Subject();
 
   loginInitiated = false;
+  //use this to redirect somehwere else after login
+  redirectPath: string;
+  sessionId: string;
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
     rememberEmail: [false],
@@ -32,10 +35,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private i18nService: I18nService,
     private environmentService: EnvironmentService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    protected route: ActivatedRoute
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.route?.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
+      this.redirectPath = params?.redirectPath;
+      this.sessionId = params?.sessionId;
+    });
+
     let savedEmail = this.loginService.getEmail();
     const rememberEmail = this.loginService.getRememberEmail();
 
@@ -80,7 +89,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.loginService.setEmail(this.formGroup.value.email);
     this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
-    this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
+
+    this.router.navigate(["login"], {
+      queryParams: {
+        email: this.formGroup.value.email,
+        redirectPath: this.redirectPath,
+        sessionId: this.sessionId,
+      },
+    });
   }
 
   get selfHostedDomain() {

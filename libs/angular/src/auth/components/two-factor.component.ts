@@ -39,6 +39,8 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
   formPromise: Promise<any>;
   emailPromise: Promise<any>;
   identifier: string = null;
+  redirectPath: string;
+  sessionId: string;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
 
@@ -73,6 +75,15 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     this.route.queryParams.pipe(first()).subscribe((qParams) => {
       if (qParams.identifier != null) {
         this.identifier = qParams.identifier;
+      }
+
+      if (qParams.redirectPath != null) {
+        this.redirectPath = qParams.redirectPath;
+        this.successRoute = this.redirectPath;
+      }
+
+      if (qParams.sessionId != null) {
+        this.sessionId = qParams?.sessionId;
       }
     });
 
@@ -220,6 +231,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       this.router.navigate([this.successRoute], {
         queryParams: {
           identifier: this.identifier,
+          sessionId: this.sessionId,
         },
       });
     }

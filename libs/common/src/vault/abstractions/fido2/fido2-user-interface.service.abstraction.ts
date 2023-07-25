@@ -37,5 +37,6 @@ export abstract class Fido2UserInterfaceSession {
     abortController?: AbortController
   ) => Promise<void>;
   informCredentialNotFound: (abortController?: AbortController) => Promise<void>;
+  login: (userVerification: boolean) => Promise<{ userVerified: boolean }>;
   close: () => void;
 }

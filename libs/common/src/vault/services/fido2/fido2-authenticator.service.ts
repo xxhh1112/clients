@@ -3,6 +3,7 @@ import { CBOR } from "cbor-redux";
 import { LogService } from "../../../platform/abstractions/log.service";
 import { Utils } from "../../../platform/misc/utils";
 import { CipherService } from "../../abstractions/cipher.service";
+import { AuthService } from "../../../auth/abstractions/auth.service";
 import {
   Fido2AlgorithmIdentifier,
   Fido2AutenticatorError,
@@ -21,6 +22,7 @@ import { Fido2KeyView } from "../../models/view/fido2-key.view";
 
 import { joseToDer } from "./ecdsa-utils";
 import { Fido2Utils } from "./fido2-utils";
+import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 
 // AAGUID: 6e8248d5-b479-40db-a3d8-11116f7e8349
 export const AAGUID = new Uint8Array([
@@ -37,6 +39,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   constructor(
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService,
+    private authService: AuthService,
     private logService?: LogService
   ) {}
   async makeCredential(
@@ -220,6 +223,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     );
 
     try {
+      const authStatus = await this.authService.getAuthStatus();
+
+      if (authStatus === AuthenticationStatus.LoggedOut) {
+        const response = await userInterfaceSession.login(params.requireUserVerification);
+      }
+
       if (
         params.requireUserVerification != undefined &&
         typeof params.requireUserVerification !== "boolean"

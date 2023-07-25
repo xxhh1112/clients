@@ -1,5 +1,5 @@
 import { Directive, NgZone, OnDestroy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom, Subject } from "rxjs";
 import { concatMap, take, takeUntil } from "rxjs/operators";
 
@@ -41,6 +41,8 @@ export class LockComponent implements OnInit, OnDestroy {
   biometricLock: boolean;
   biometricText: string;
   hideInput: boolean;
+  redirectPath: string;
+  sessionId: string;
 
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
@@ -70,10 +72,21 @@ export class LockComponent implements OnInit, OnDestroy {
     protected policyApiService: PolicyApiServiceAbstraction,
     protected policyService: InternalPolicyService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogServiceAbstraction,
+    protected route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
+    this.route?.queryParams.subscribe((params) => {
+      this.redirectPath = params?.redirectPath;
+      this.sessionId = params?.sessionId;
+    });
+
+    //use redirectPath to redirect to a specific page after successful login
+    if (this.redirectPath) {
+      this.successRoute = this.redirectPath;
+    }
+
     this.stateService.activeAccount$
       .pipe(
         concatMap(async () => {
@@ -291,7 +304,11 @@ export class LockComponent implements OnInit, OnDestroy {
     if (this.onSuccessfulSubmit != null) {
       await this.onSuccessfulSubmit();
     } else if (this.router != null) {
-      this.router.navigate([this.successRoute]);
+      this.router.navigate([this.successRoute], {
+        queryParams: {
+          sessionId: this.sessionId,
+        },
+      });
     }
   }
 

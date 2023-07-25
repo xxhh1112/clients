@@ -39,6 +39,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   showLoginWithDevice: boolean;
   validatedEmail = false;
   paramEmailSet = false;
+  redirectPath: string;
+  sessionId: string;
 
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
@@ -83,10 +85,16 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     this.route?.queryParams.subscribe((params) => {
       if (params != null) {
         const queryParamsEmail = params["email"];
+        this.redirectPath = params?.["redirectPath"];
+        this.sessionId = params?.["sessionId"];
         if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
           this.formGroup.get("email").setValue(queryParamsEmail);
           this.loginService.setEmail(queryParamsEmail);
           this.paramEmailSet = true;
+        }
+        //use redirectPath to redirect to a specific page after successful login
+        if (this.redirectPath) {
+          this.successRoute = this.redirectPath;
         }
       }
     });
@@ -142,7 +150,12 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
           this.onSuccessfulLoginTwoFactorNavigate();
         } else {
-          this.router.navigate([this.twoFactorRoute]);
+          this.router.navigate([this.twoFactorRoute], {
+            queryParams: {
+              redirectPath: this.redirectPath,
+              sessionId: this.sessionId,
+            },
+          });
         }
       } else if (response.forcePasswordReset != ForceResetPasswordReason.None) {
         if (this.onSuccessfulLoginForceResetNavigate != null) {
