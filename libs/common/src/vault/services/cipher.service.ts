@@ -626,11 +626,22 @@ export class CipherService implements CipherServiceAbstraction {
     admin = false
   ): Promise<Cipher> {
     const key = await this.getKeyForCipherKeyDecryption(cipher);
+    const cipherKeyEncryptionEnabled = await this.getCipherKeyEncryptionEnabled();
 
     const cipherEncKey =
-      (await this.getCipherKeyEncryptionEnabled()) && cipher.key != null
+      cipherKeyEncryptionEnabled && cipher.key != null
         ? new SymmetricCryptoKey(await this.encryptService.decryptToBytes(cipher.key, key))
         : key;
+
+    //if cipher key encryption is disabled but the item has an individual key,
+    //then we rollback to using the user key as the main key of encryption of the item
+    //in order to keep item and it's attachments with the same encryption level
+    if (cipher.key != null && !cipherKeyEncryptionEnabled) {
+      const model = await cipher.decrypt(await this.getKeyForCipherKeyDecryption(cipher));
+      cipher = await this.encrypt(model);
+      await this.updateWithServer(cipher);
+    }
+
     const encFileName = await this.cryptoService.encrypt(filename, cipherEncKey);
 
     const dataEncKey = await this.cryptoService.makeEncKey(cipherEncKey);

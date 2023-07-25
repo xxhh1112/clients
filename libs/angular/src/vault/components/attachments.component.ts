@@ -296,20 +296,6 @@ export class AttachmentsComponent implements OnInit {
   }
 
   protected async saveCipherAttachment(file: File) {
-    //if cipher key encryption is disabled but the item has an individual key,
-    //then we rollback to using the user key as the main key of encryption of the item
-    //in order to keep item and it's attachments with the same encryption level
-    if (
-      this.cipherDomain.key != null &&
-      !(await this.cipherService.getCipherKeyEncryptionEnabled())
-    ) {
-      const model = await this.cipherDomain.decrypt(
-        await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain)
-      );
-      this.cipherDomain = await this.cipherService.encrypt(model);
-      await this.cipherService.updateWithServer(this.cipherDomain);
-    }
-
     return this.cipherService.saveAttachmentWithServer(this.cipherDomain, file);
   }
 
