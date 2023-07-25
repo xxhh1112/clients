@@ -94,6 +94,14 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "AbortResponse";
       fallbackRequested: boolean;
     }
+  | {
+      type: "LogInRequest";
+      userVerification: boolean;
+    }
+  | {
+      type: "LogInResponse";
+      userVerified: boolean;
+    }
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
@@ -270,6 +278,19 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
 
     await this.send(data);
     await this.receive("AbortResponse");
+  }
+
+  async login(userVerification: boolean): Promise<{ userVerified: boolean }> {
+    const data: BrowserFido2Message = {
+      type: "LogInRequest",
+      userVerification,
+      sessionId: this.sessionId,
+    };
+
+    await this.send(data);
+    const response = await this.receive("LogInResponse");
+
+    return { userVerified: response.userVerified };
   }
 
   async close() {
