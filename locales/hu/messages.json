@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Bejelentkezés eszközzel"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Az eszközzel történő bejelentkezést engedélyezni kell a Biwarden mobilalkalmazás beállításaiban. Másik opcióra van szükség?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?"
   },
   "loginWithMasterPassword": {
     "message": "Bejelentkezés mesterjelszóval"
@@ -2667,10 +2667,10 @@
     "message": "A bejelentkezés meghiúsult hibás kétlépcsős bejelentkezés miatt."
   },
   "incorrectPassword": {
-    "message": "Incorrect password"
+    "message": "Helytelen jelszó"
   },
   "incorrectCode": {
-    "message": "Incorrect code"
+    "message": "Helytelen kód"
   },
   "exportedVault": {
     "message": "A széf exportálásra került."
@@ -4594,20 +4594,17 @@
   "accountRecoveryPolicy": {
     "message": "Fiók-helyreállítási adminisztráció"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Tagsági fiókok helyreállítása, ha a mesterjelszó vagy a megbízható eszközök elfelejtésére vagy elvesztésére. A helyreállítási folyamatok a fióktitkosítási módszeren alapulnak."
+  "accountRecoveryPolicyDesc": {
+    "message": "A titkosítási módszer alapján állítsuk vissza a fiókokat, ha a mesterjelszavakat vagy a megbízható eszközöket elfelejtjük vagy elveszítjük."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "A szervezet felhasználóinak regisztrálniuk kell magukat vagy automatikus regisztrálás szükséges mielőtt az adminisztrátorok alaphelyzetbe állíthatják a mesterjelszavukat."
+  "accountRecoveryPolicyWarning": {
+    "message": "A mesterjelszóval rendelkező meglévő fiókokhoz a tagoknak önmagukban kell regisztrálniuk, mielőtt az adminisztrátorok visszaállíthatnák fiókjukat. Az automatikus regisztráció bekapcsolja az új tagok fiók-helyreállítását."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "A házirend aktiválása előtt be kell kapcsolni az önálló szervezet Vállalati házirendjét."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatikus regisztráció"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "A meghívó elfogadását követően minden felhasználó automatikusan regisztrálásra kerül a jelszó alaphelyzetbe állításnál."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "A szervezetben már szereplő felhasználók nem kerülnek visszamenőleg regisztrálva a jelszó alaphelyzetbe állításnál. Regisztráln kell magunkat, mielőtt az adminisztrátorok alaphelyzetbe állíthatják a mesterjelszavukat."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Új felhasználók automatikus regisztrálása"
@@ -5224,8 +5221,8 @@
     "message": "Használat:",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "önálló bejekentkezés hitelesítés szükséges",
+  "ssoPolicyHelpAnchor": {
+    "message": "egyszeri bejelentkezési hitelesítési házirendet igényel",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -6626,8 +6623,8 @@
   "secretsManager": {
     "message": "Titkos kód kezelő"
   },
-  "secretsManagerAccessDesc": {
-    "message": "A felhasználói hozzáférés engedélyezése a Titkos kód kezelőhöz."
+  "secretsManagerAccessDescription": {
+    "message": "A felhasználói hozzáférés bekapcsolása a Titkos kód kezelőhöz."
   },
   "userAccessSecretsManagerGA": {
     "message": "Ez a felhasználó elérheti a Titkos kód kezelőt"
@@ -6831,17 +6828,25 @@
   "trustedDeviceEncryption": {
     "message": "Megbízható eszköztitkosítás"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "A hitelesítés után a tagok az eszközükön tárolt kulccsal visszafejtik a tároló adatait. A",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "fiók helyreállítási adminisztrációs szabályzat",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "önálló szervezet",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "automatikus regisztrációval bekapcsol, ha ez az opció van használatban.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "rendszabály és ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "fiók-helyreállítási adminisztráció",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "automatikus regisztrációval rendelkező házirend bekapcsol, ha ezt az opció van használatban.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nem található.",
@@ -6858,59 +6863,59 @@
   "updatedTempPassword": {
     "message": "A felhasználó frissítette a fiók helyreállítás során kiadott jelszót."
   },
-  "enabledAccessToSecretsManager": {
-    "message": "Hozzáférés engedélyezése a Titkós kód kezelőhöz",
+  "activatedAccessToSecretsManager": {
+    "message": "A hozzáférés engedélyezése a Titkos kód kezelőhöz",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
-  "enableAccess": {
-    "message": "Hozzáférés engedélyezése"
+  "activateAccess": {
+    "message": "Hozzáférés bekapcsolása"
   },
   "bulkEnableSecretsManagerDescription": {
     "message": "Hozzáférés kiosztása a következő tagoknak a Titkos kód kezelőhöz.. A Jelszókezelőben megadott szerepkör a Titkos kód kezelőre vonatkozik.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
-  "enableSecretsManager": {
-    "message": "Titkos kód kezelő engedélyezése"
+  "activateSecretsManager": {
+    "message": "Titkos kód kezelő bekapcsolása"
   },
   "yourOrganizationsFingerprint": {
     "message": "A szervezet ujjnyomat kifejezése",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
   },
   "deviceApprovals": {
-    "message": "Device approvals"
+    "message": "Eszköz jóváhagyása"
   },
   "deviceApprovalsDesc": {
-    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+    "message": "Az alábbiakban hagyja jóvá a bejelentkezési kérelmeket, hogy a kérelmező tag befejezhesse a bejelentkezést. A jóvá nem hagyott kérelmek 1 hét után lejárnak. A jóváhagyás előtt ellenőrizze a tag adatait."
   },
   "deviceInfo": {
-    "message": "Device info"
+    "message": "Eszközadatok"
   },
   "time": {
-    "message": "Time"
+    "message": "Idő"
   },
   "denyAllRequests": {
-    "message": "Deny all requests"
+    "message": "Összes kérés elutasítása"
   },
   "denyRequest": {
-    "message": "Deny request"
+    "message": "Kérés elutasítása"
   },
   "approveRequest": {
-    "message": "Approve request"
+    "message": "Kérelem megerősítése"
   },
   "noDeviceRequests": {
-    "message": "No device requests"
+    "message": "Nincs eszközkérelem"
   },
   "noDeviceRequestsDesc": {
-    "message": "Member device approval requests will appear here"
+    "message": "A tagok eszköz-jóváhagyási kérelmei itt jelennek meg"
   },
   "loginRequestDenied": {
-    "message": "Login request denied"
+    "message": "Bejelentkezési kérelem elutasítva"
   },
   "allLoginRequestsDenied": {
-    "message": "All login requests denied"
+    "message": "Minden bejelentkezési kérelem elutasítva"
   },
   "loginRequestApproved": {
-    "message": "Login request approved"
+    "message": "Bejelentkezési kérelem jóváhagyva"
   },
   "removeOrgUserNoMasterPasswordTitle": {
     "message": "A fióknak nincs mesterjelszava."
@@ -6929,5 +6934,26 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "A mesterjelszavakkal nem rendelkező tagok eltávolítása anélkül, hogy beállítanánk egyet, korlátozhatjuk a hozzáférést a teljes fiókhoz."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Következő"
+  },
+  "usFlag": {
+    "message": "USA zászló"
+  },
+  "euFlag": {
+    "message": "EU zászló"
+  },
+  "selectedRegionFlag": {
+    "message": "Kiválasztott régió zászló"
   }
 }
