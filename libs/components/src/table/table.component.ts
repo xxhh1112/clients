@@ -30,7 +30,7 @@ export class TableComponent implements OnDestroy, AfterContentChecked {
 
   @ContentChild(TableBodyDirective) templateVariable: TableBodyDirective;
 
-  protected rows$: Observable<readonly any[]>;
+  protected rows: Observable<readonly any[]>;
 
   private _initialized = false;
 
@@ -46,7 +46,9 @@ export class TableComponent implements OnDestroy, AfterContentChecked {
   ngAfterContentChecked(): void {
     if (!this._initialized && isDataSource(this.dataSource)) {
       this._initialized = true;
-      this.rows$ = this.dataSource.connect();
+
+      const dataStream = this.dataSource.connect();
+      this.rows = dataStream;
     }
   }
 

@@ -1,5 +1,4 @@
 import { ScrollingModule } from "@angular/cdk/scrolling";
-import { RouterTestingModule } from "@angular/router/testing";
 import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { countries } from "../form/countries";
@@ -11,7 +10,7 @@ export default {
   title: "Component Library/Table",
   decorators: [
     moduleMetadata({
-      imports: [TableModule, ScrollingModule, RouterTestingModule],
+      imports: [TableModule, ScrollingModule],
     }),
   ],
   argTypes: {
