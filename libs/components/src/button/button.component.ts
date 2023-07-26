@@ -1,7 +1,12 @@
 import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Input, HostBinding, Component } from "@angular/core";
 
-import { ButtonLikeAbstraction, ButtonType } from "../shared/button-like.abstraction";
+// import { ButtonGroupings } from "../button-group/button-group.component";
+import {
+  ButtonGroupings,
+  ButtonLikeAbstraction,
+  ButtonType,
+} from "../shared/button-like.abstraction";
 
 const focusRing = [
   "focus-visible:tw-ring",
@@ -9,6 +14,14 @@ const focusRing = [
   "focus-visible:tw-ring-primary-700",
   "focus-visible:tw-z-10",
 ];
+
+const baseButtonGroupStyles = ["grouped", "focus-visible:tw-ring-inset", "tw-relative"];
+const buttonGroupStyles: Record<ButtonGroupings, string[]> = {
+  none: ["tw-rounded"],
+  first: [...baseButtonGroupStyles, "tw-rounded-l", "tw-rounded-r-none"],
+  last: [...baseButtonGroupStyles, "tw-rounded-r", "tw-rounded-l-none", "tw-ml-[-1px]"],
+  inner: [...baseButtonGroupStyles, "tw-rounded-none", "tw-ml-[-1px]"],
+};
 
 const buttonStyles: Record<ButtonType, string[]> = {
   primary: [
@@ -59,21 +72,21 @@ const buttonStyles: Record<ButtonType, string[]> = {
   providers: [{ provide: ButtonLikeAbstraction, useExisting: ButtonComponent }],
 })
 export class ButtonComponent implements ButtonLikeAbstraction {
-  @HostBinding("class") get classList() {
+  @HostBinding("class") get classList(): string[] {
     return [
       "tw-font-semibold",
       "tw-py-1.5",
       "tw-px-3",
-      "tw-rounded",
       "tw-transition",
       "tw-border",
       "tw-border-solid",
       "tw-text-center",
       "hover:tw-no-underline",
       "focus:tw-outline-none",
-    ]
-      .concat(this.block ? ["tw-w-full", "tw-block"] : ["tw-inline-block"])
-      .concat(buttonStyles[this.buttonType ?? "secondary"]);
+      this.block ? ["tw-w-full", "tw-block"] : ["tw-inline-block"],
+      buttonStyles[this.buttonType ?? "secondary"],
+      buttonGroupStyles[this.grouping ?? "none"],
+    ].flat();
   }
 
   @HostBinding("attr.disabled")
@@ -83,6 +96,8 @@ export class ButtonComponent implements ButtonLikeAbstraction {
   }
 
   @Input() buttonType: ButtonType;
+
+  @Input() grouping: ButtonGroupings = "none";
 
   private _block = false;
 

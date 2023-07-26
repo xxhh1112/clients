@@ -1,15 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
-import { BitPaginationComponent } from "../pagination/pagination.component";
-
 import { CellDirective } from "./cell.directive";
 import { RowDirective } from "./row.directive";
 import { SortableComponent } from "./sortable.component";
 import { TableBodyDirective, TableComponent } from "./table.component";
 
 @NgModule({
-  imports: [CommonModule, BitPaginationComponent],
+  imports: [CommonModule],
   declarations: [
     TableComponent,
     CellDirective,

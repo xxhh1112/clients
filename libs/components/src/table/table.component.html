@@ -10,10 +10,3 @@
     ></ng-container>
   </tbody>
 </table>
-<bit-pagination
-  *ngIf="paginated && dataSource"
-  (pageChange)="page$.next($event)"
-  [page]="page$ | async"
-  [totalPages]="(pages$ | async)?.length"
-  [queryParamId]="paginated"
-></bit-pagination>

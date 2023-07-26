@@ -1,13 +1,26 @@
-import { RouterTestingModule } from "@angular/router/testing";
-import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
+import { Component, importProvidersFrom } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { applicationConfig, Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { BitPaginationComponent } from "./pagination.component";
+
+@Component({
+  template: "",
+})
+class EmptyComponent {}
 
 export default {
   title: "Component Library/Pagination",
   decorators: [
     moduleMetadata({
-      imports: [BitPaginationComponent, RouterTestingModule],
+      imports: [BitPaginationComponent, RouterModule],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(
+          RouterModule.forRoot([{ path: "**", component: EmptyComponent }], { useHash: true })
+        ),
+      ],
     }),
   ],
   argTypes: {
@@ -28,11 +41,24 @@ export default {
 
 type Story = StoryObj;
 
-export const Default: Story = {
+export const Standalone: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <bit-pagination [totalPages]="totalPages" [(page)]="page"></bit-pagination>
+      <bit-pagination [totalPages]="totalPages"></bit-pagination>
+    `,
+  }),
+  args: {
+    totalPages: 10,
+    page: 1,
+  },
+};
+
+export const WithTable: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-pagination [totalPages]="totalPages"></bit-pagination>
     `,
   }),
   args: {

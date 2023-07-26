@@ -1,60 +1,92 @@
-<nav aria-label="pagination">
+<nav aria-label="pagination" *ngIf="page$ | async as page">
   <ul class="tw-flex tw-list-none">
-    <ng-template #ellipsis>
-      <li>...</li>
+    <ng-template #dots>
+      <button type="button" [disabled]="true" bitButton buttonType="secondary" grouping="inner">
+        ...
+      </button>
     </ng-template>
-    <ng-template #optionTemplate let-range="range">
-      <li class="tw-m-2" *ngFor="let n of range | range">
+
+    <ng-template #item let-n="n">
+      <li>
         <a
-          (click)="page = n"
-          [routerLink]=""
-          [queryParams]="getParams | memo : [queryParamId, n]"
+          [ngClass]="{ 'tw-z-20': page === n }"
+          bitButton
+          [buttonType]="getButtonType | memo : [n, page]"
+          routerLink=""
+          [queryParams]="getParams | memo : [queryParam, n]"
           [queryParamsHandling]="'merge'"
+          [grouping]="getGrouping | memo : [totalPages, n]"
           >{{ n }}</a
         >
       </li>
     </ng-template>
 
+    <ng-template #previous>
+      <li>
+        <button
+          type="button"
+          bitButton
+          routerLink=""
+          [buttonType]="'secondary'"
+          [queryParams]="getParams | memo : [queryParam, page - 1]"
+          [disabled]="page === 1"
+          [block]="true"
+          grouping="first"
+        >
+          Previous
+        </button>
+      </li>
+    </ng-template>
+
+    <ng-template #next>
+      <li>
+        <button
+          type="button"
+          bitButton
+          routerLink=""
+          [queryParams]="getParams | memo : [queryParam, page + 1]"
+          [disabled]="page === totalPages"
+          grouping="last"
+        >
+          Next
+        </button>
+      </li>
+    </ng-template>
+
     <ng-container *ngIf="totalPages <= 7">
-      <ng-container
-        *ngTemplateOutlet="optionTemplate; context: { range: [1, totalPages] }"
-      ></ng-container>
+      <ng-container *ngFor="let n of [1, totalPages] | range">
+        <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
+      </ng-container>
     </ng-container>
 
     <ng-container *ngIf="totalPages > 7">
-      <li>
-        <a bitButton [buttonType]="'secondary'" (click)="decPage()" [disabled]="page === 1"
-          >Previous</a
-        >
-      </li>
-      <ng-container *ngTemplateOutlet="optionTemplate; context: { range: [1, 1] }"></ng-container>
+      <ng-container *ngTemplateOutlet="previous"></ng-container>
+      <ng-container *ngTemplateOutlet="item; context: { n: 1 }"></ng-container>
 
       <ng-container *ngIf="page <= 4">
-        <ng-container *ngTemplateOutlet="optionTemplate; context: { range: [2, 5] }"></ng-container>
-        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+        <ng-container *ngFor="let n of [2, 5] | range">
+          <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
+        </ng-container>
+        <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
       <ng-container *ngIf="page >= 5 && page <= totalPages - 5">
-        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
-        <ng-container
-          *ngTemplateOutlet="optionTemplate; context: { range: [page - 1, page + 1] }"
-        ></ng-container>
-        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
+        <ng-container *ngTemplateOutlet="dots"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: page - 1 }"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: page }"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: page + 1 }"></ng-container>
+        <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="page >= totalPages - 4">
-        <ng-container *ngTemplateOutlet="ellipsis"></ng-container>
-        <ng-container
-          *ngTemplateOutlet="optionTemplate; context: { range: [totalPages - 4, totalPages - 1] }"
-        ></ng-container>
+      <ng-container *ngIf="page > 4 && page >= totalPages - 4">
+        <ng-container *ngTemplateOutlet="dots"></ng-container>
+        <ng-container *ngFor="let n of [totalPages - 4, totalPages - 1] | range">
+          <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
+        </ng-container>
       </ng-container>
 
-      <ng-container
-        *ngTemplateOutlet="optionTemplate; context: { range: [totalPages, totalPages] }"
-      ></ng-container>
-      <li>
-        <a bitButton (click)="incPage()" [disabled]="page === totalPages">Next</a>
-      </li>
+      <ng-container *ngTemplateOutlet="item; context: { n: totalPages }"></ng-container>
+      <ng-container *ngTemplateOutlet="next"></ng-container>
     </ng-container>
   </ul>
 </nav>
