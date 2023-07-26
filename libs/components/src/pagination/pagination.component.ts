@@ -1,6 +1,14 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
-import { map } from "rxjs";
+import { Subject, map, takeUntil } from "rxjs";
 
 import { MemoPipe } from "@bitwarden/angular/platform/pipes/memo.pipe";
 import { RangePipe } from "@bitwarden/angular/platform/pipes/range.pipe";
@@ -14,25 +22,36 @@ import { SharedModule } from "../shared";
   templateUrl: "pagination.component.html",
   imports: [SharedModule, RouterModule, ButtonModule, MemoPipe, RangePipe],
 })
-export class BitPaginationComponent implements OnDestroy {
+export class BitPaginationComponent implements OnInit, OnDestroy {
+  private _destroy$ = new Subject<void>();
+
   /** The query parameter key that conveys the current page, indexed by 1 */
   @Input() queryParam = "page";
 
   @Input() totalPages = 1;
 
+  @Output() pageChange = new EventEmitter<number>();
+
   protected currPage$ = this.route.queryParams.pipe(
-    map((params) => parseInt(params[this.queryParam]) || 1)
+    map((params) => clamp(parseInt(params[this.queryParam]) || 1, 1, this.totalPages))
   );
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private elementRef: ElementRef,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private elementRef: ElementRef
   ) {}
 
+  ngOnInit(): void {
+    this.currPage$.pipe(takeUntil(this._destroy$)).subscribe((page) => {
+      this.pageChange.emit(page);
+    });
+  }
+
   ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+
     this.router.navigate([], {
       queryParams: {
         [this.queryParam]: null,
@@ -76,3 +95,5 @@ export class BitPaginationComponent implements OnDestroy {
     }, 0);
   }
 }
+
+const clamp = (input: number, min: number, max: number) => Math.min(Math.max(input, min), max);

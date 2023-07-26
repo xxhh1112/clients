@@ -43,9 +43,13 @@ type Story = StoryObj;
 
 export const Default: Story = {
   render: (args) => ({
-    props: args,
+    props: {
+      ...args,
+      // eslint-disable-next-line no-console
+      handlePageChange: (page: number) => console.log("Page changed to:", page),
+    },
     template: `
-      <bit-pagination [totalPages]="totalPages"></bit-pagination>
+      <bit-pagination [totalPages]="totalPages" (pageChange)="handlePageChange($event)"></bit-pagination>
     `,
   }),
   args: {
