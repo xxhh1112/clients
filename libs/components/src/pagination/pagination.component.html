@@ -75,7 +75,7 @@
         <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="currPage >= 5 && currPage <= totalPages - 5">
+      <ng-container *ngIf="currPage >= 5 && currPage <= totalPages - 4">
         <ng-container *ngTemplateOutlet="dots"></ng-container>
         <ng-container *ngTemplateOutlet="item; context: { n: currPage - 1 }"></ng-container>
         <ng-container *ngTemplateOutlet="item; context: { n: currPage }"></ng-container>
@@ -83,7 +83,7 @@
         <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="currPage > 4 && currPage >= totalPages - 4">
+      <ng-container *ngIf="currPage > 4 && currPage > totalPages - 4">
         <ng-container *ngTemplateOutlet="dots"></ng-container>
         <ng-container *ngFor="let n of [totalPages - 4, totalPages - 1] | range">
           <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
