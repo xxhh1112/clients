@@ -41,20 +41,7 @@ export default {
 
 type Story = StoryObj;
 
-export const Standalone: Story = {
-  render: (args) => ({
-    props: args,
-    template: `
-      <bit-pagination [totalPages]="totalPages"></bit-pagination>
-    `,
-  }),
-  args: {
-    totalPages: 10,
-    page: 1,
-  },
-};
-
-export const WithTable: Story = {
+export const Default: Story = {
   render: (args) => ({
     props: args,
     template: `
