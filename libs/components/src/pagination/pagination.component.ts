@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
 import { map } from "rxjs";
 
@@ -18,12 +18,19 @@ export class BitPaginationComponent implements OnDestroy {
   /** The query parameter key that conveys the current page, indexed by 1 */
   @Input() queryParam = "page";
 
-  /** The total number of pages. */
   @Input() totalPages = 1;
 
-  page$ = this.route.queryParams.pipe(map((params) => parseInt(params[this.queryParam]) || 1));
+  protected currPage$ = this.route.queryParams.pipe(
+    map((params) => parseInt(params[this.queryParam]) || 1)
+  );
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private elementRef: ElementRef,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnDestroy(): void {
     this.router.navigate([], {
@@ -34,34 +41,38 @@ export class BitPaginationComponent implements OnDestroy {
     });
   }
 
-  protected getParams = (queryParamId: string, page: number): Params => {
+  protected getParams = (queryParamId: string, pageNum: number): Params => {
     return {
-      [queryParamId]: page,
+      [queryParamId]: pageNum,
     };
   };
 
-  protected getButtonType = (n: number, page: number) => {
-    if (n == page) {
-      return "primary";
-    }
-    return "secondary";
-  };
-
-  protected getGrouping(totalPages: number, n: number) {
+  protected getGrouping(totalPages: number, pageNum: number) {
     if (totalPages > 7) {
       return "inner";
     }
     if (totalPages === 1) {
       return "none";
     }
-    if (n === 1 && n !== totalPages) {
+    if (pageNum === 1 && pageNum !== totalPages) {
       return "first";
     }
-    if (n === totalPages) {
+    if (pageNum === totalPages) {
       return "last";
     }
     return "inner";
   }
-}
 
-// const clamp = (input: number, min: number, max: number) => Math.min(Math.max(input, min), max);
+  /**
+   * Maintain focus position after rerendering
+   */
+  protected focusCurrentOnClick() {
+    /**
+     * Timeout is necessary to focus the element after change detection has run.
+     */
+    setTimeout(() => {
+      const el = this.elementRef.nativeElement as HTMLElement;
+      el.querySelector<HTMLAnchorElement>('a[aria-current="true"]')?.focus();
+    }, 0);
+  }
+}

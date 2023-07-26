@@ -1,5 +1,5 @@
-<nav aria-label="pagination" *ngIf="page$ | async as page">
-  <ul class="tw-flex tw-list-none">
+<nav *ngIf="currPage$ | async as currPage">
+  <ul aria-label="table pages" class="tw-flex tw-list-none">
     <ng-template #dots>
       <button type="button" [disabled]="true" bitButton buttonType="secondary" grouping="inner">
         ...
@@ -9,13 +9,16 @@
     <ng-template #item let-n="n">
       <li>
         <a
-          [ngClass]="{ 'tw-z-20': page === n }"
+          [ngClass]="{ 'tw-z-20': n === currPage }"
           bitButton
-          [buttonType]="getButtonType | memo : [n, page]"
+          [buttonType]="n === currPage ? 'primary' : 'secondary'"
           routerLink=""
           [queryParams]="getParams | memo : [queryParam, n]"
           [queryParamsHandling]="'merge'"
           [grouping]="getGrouping | memo : [totalPages, n]"
+          [attr.aria-label]="(n === totalPages ? 'Last Page, Page ' : 'Go to Page ') + n"
+          [attr.aria-current]="n === currPage ? 'true' : 'false'"
+          (click)="focusCurrentOnClick()"
           >{{ n }}</a
         >
       </li>
@@ -26,12 +29,12 @@
         <button
           type="button"
           bitButton
-          routerLink=""
           [buttonType]="'secondary'"
-          [queryParams]="getParams | memo : [queryParam, page - 1]"
-          [disabled]="page === 1"
-          [block]="true"
+          routerLink=""
+          [queryParams]="getParams | memo : [queryParam, currPage - 1]"
+          [disabled]="currPage === 1"
           grouping="first"
+          [attr.aria-label]="'Previous Page, Page ' + (currPage - 1)"
         >
           Previous
         </button>
@@ -43,10 +46,12 @@
         <button
           type="button"
           bitButton
+          [buttonType]="'secondary'"
           routerLink=""
-          [queryParams]="getParams | memo : [queryParam, page + 1]"
-          [disabled]="page === totalPages"
+          [queryParams]="getParams | memo : [queryParam, currPage + 1]"
+          [disabled]="currPage === totalPages"
           grouping="last"
+          [attr.aria-label]="'Next Page, Page ' + (currPage + 1)"
         >
           Next
         </button>
@@ -63,22 +68,22 @@
       <ng-container *ngTemplateOutlet="previous"></ng-container>
       <ng-container *ngTemplateOutlet="item; context: { n: 1 }"></ng-container>
 
-      <ng-container *ngIf="page <= 4">
+      <ng-container *ngIf="currPage <= 4">
         <ng-container *ngFor="let n of [2, 5] | range">
           <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
         </ng-container>
         <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="page >= 5 && page <= totalPages - 5">
+      <ng-container *ngIf="currPage >= 5 && currPage <= totalPages - 5">
         <ng-container *ngTemplateOutlet="dots"></ng-container>
-        <ng-container *ngTemplateOutlet="item; context: { n: page - 1 }"></ng-container>
-        <ng-container *ngTemplateOutlet="item; context: { n: page }"></ng-container>
-        <ng-container *ngTemplateOutlet="item; context: { n: page + 1 }"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: currPage - 1 }"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: currPage }"></ng-container>
+        <ng-container *ngTemplateOutlet="item; context: { n: currPage + 1 }"></ng-container>
         <ng-container *ngTemplateOutlet="dots"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="page > 4 && page >= totalPages - 4">
+      <ng-container *ngIf="currPage > 4 && currPage >= totalPages - 4">
         <ng-container *ngTemplateOutlet="dots"></ng-container>
         <ng-container *ngFor="let n of [totalPages - 4, totalPages - 1] | range">
           <ng-container *ngTemplateOutlet="item; context: { n: n }"></ng-container>
