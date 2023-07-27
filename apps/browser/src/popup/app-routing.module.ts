@@ -75,7 +75,7 @@ const routes: Routes = [
   {
     path: "login-with-device",
     component: LoginWithDeviceComponent,
-    canActivate: [UnauthGuard],
+    canActivate: [],
     data: { state: "login-with-device" },
   },
   {
