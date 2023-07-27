@@ -41,6 +41,16 @@ const moduleRules = [
     type: "asset/resource",
   },
   {
+    test: /\.css$/,
+    use: [
+      {
+        loader: MiniCssExtractPlugin.loader,
+      },
+      "css-loader",
+      "postcss-loader",
+    ],
+  },
+  {
     test: /\.scss$/,
     use: [
       {
