@@ -154,7 +154,6 @@ import {
 } from "@bitwarden/exporter/vault-export";
 
 import { AuthGuard } from "../auth/guards/auth.guard";
-import { LockGuard } from "../auth/guards/lock.guard";
 import { UnauthGuard } from "../auth/guards/unauth.guard";
 import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "../platform/abstractions/form-validation-errors.service";
 import { BroadcasterService } from "../platform/services/broadcaster.service";
@@ -182,7 +181,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
   providers: [
     AuthGuard,
     UnauthGuard,
-    LockGuard,
     ModalService,
     { provide: WINDOW, useValue: window },
     {

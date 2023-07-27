@@ -2,11 +2,12 @@ import { Injectable, NgModule } from "@angular/core";
 import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
+import { redirectGuard } from "../../../../libs/angular/src/auth/guards/redirect.guard";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
@@ -52,8 +53,9 @@ import { TabsComponent } from "./tabs.component";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "home",
     pathMatch: "full",
+    children: [], // Children lets us have an empty component.
+    canActivate: [redirectGuard({ home: "/tabs/vault", login: "/login", lock: "/lock" })],
   },
   {
     path: "vault",
@@ -87,7 +89,7 @@ const routes: Routes = [
   {
     path: "lock",
     component: LockComponent,
-    canActivate: [LockGuard],
+    canActivate: [lockGuard()],
     data: { state: "lock" },
   },
   {
@@ -105,7 +107,7 @@ const routes: Routes = [
   {
     path: "login-initiated",
     component: LoginDecryptionOptionsComponent,
-    canActivate: [LockGuard, canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
+    canActivate: [lockGuard(), canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
   },
   {
     path: "sso",

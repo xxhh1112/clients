@@ -2,7 +2,8 @@ import { NgModule } from "@angular/core";
 import { Route, RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { redirectGuard } from "@bitwarden/angular/auth/guards/redirect.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
@@ -34,7 +35,6 @@ import { UpdatePasswordComponent } from "./auth/update-password.component";
 import { UpdateTempPasswordComponent } from "./auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "./auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "./auth/verify-recover-delete.component";
-import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
 import { ReportsModule } from "./reports";
@@ -59,7 +59,7 @@ const routes: Routes = [
         path: "",
         pathMatch: "full",
         children: [], // Children lets us have an empty component.
-        canActivate: [HomeGuard], // Redirects either to vault, login or lock page.
+        canActivate: [redirectGuard({ home: "/vault", login: "/login", lock: "/lock" })],
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {
@@ -76,7 +76,7 @@ const routes: Routes = [
       {
         path: "login-initiated",
         component: LoginDecryptionOptionsComponent,
-        canActivate: [LockGuard, canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
+        canActivate: [lockGuard(), canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
       },
       {
         path: "register",
@@ -109,7 +109,7 @@ const routes: Routes = [
       {
         path: "lock",
         component: LockComponent,
-        canActivate: [LockGuard],
+        canActivate: [lockGuard()],
       },
       { path: "verify-email", component: VerifyEmailTokenComponent },
       {

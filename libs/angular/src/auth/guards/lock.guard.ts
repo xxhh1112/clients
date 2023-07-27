@@ -1,25 +1,22 @@
-import { Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-@Injectable()
-export class LockGuard implements CanActivate {
-  protected homepage = "vault";
-  protected loginpage = "login";
-  constructor(private authService: AuthService, private router: Router) {}
+/**
+ * Only allow access to this route if the vault is locked.
+ * Otherwise redirect to root.
+ */
+export function lockGuard(): CanActivateFn {
+  return async () => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
 
-  async canActivate() {
-    const authStatus = await this.authService.getAuthStatus();
-
-    if (authStatus === AuthenticationStatus.Locked) {
-      return true;
+    const authStatus = await authService.getAuthStatus();
+    if (authStatus !== AuthenticationStatus.Locked) {
+      return router.createUrlTree(["/"]);
     }
-
-    const redirectUrl =
-      authStatus === AuthenticationStatus.LoggedOut ? this.loginpage : this.homepage;
-
-    return this.router.createUrlTree([redirectUrl]);
-  }
+    return true;
+  };
 }
