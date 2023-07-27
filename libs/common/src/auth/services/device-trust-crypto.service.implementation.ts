@@ -207,4 +207,9 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
       return null;
     }
   }
+
+  async supportsDeviceTrust(): Promise<boolean> {
+    const decryptionOptions = await this.stateService.getAccountDecryptionOptions();
+    return decryptionOptions?.trustedDeviceOption != null;
+  }
 }

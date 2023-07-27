@@ -2,18 +2,22 @@ import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 
 export interface RedirectRoutes {
-  home: string;
-  login: string;
-  lock: string;
+  loggedIn: string;
+  loggedOut: string;
+  locked: string;
+  notDecrypted: string;
 }
 
 const defaultRoutes: RedirectRoutes = {
-  home: "/vault",
-  login: "/login",
-  lock: "/lock",
+  loggedIn: "/vault",
+  loggedOut: "/login",
+  locked: "/lock",
+  notDecrypted: "/login-initiated",
 };
 
 /**
@@ -23,20 +27,28 @@ export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActiv
   const routes = { ...defaultRoutes, ...overrides };
   return async (route) => {
     const authService = inject(AuthService);
+    const cryptoService = inject(CryptoService);
+    const deviceTrustCryptoService = inject(DeviceTrustCryptoServiceAbstraction);
     const router = inject(Router);
 
     const authStatus = await authService.getAuthStatus();
 
     if (authStatus === AuthenticationStatus.LoggedOut) {
-      return router.createUrlTree([routes.login], { queryParams: route.queryParams });
+      return router.createUrlTree([routes.loggedOut], { queryParams: route.queryParams });
     }
 
     if (authStatus === AuthenticationStatus.Unlocked) {
-      return router.createUrlTree([routes.home], { queryParams: route.queryParams });
+      return router.createUrlTree([routes.loggedIn], { queryParams: route.queryParams });
+    }
+
+    const tdeEnabled = await deviceTrustCryptoService.supportsDeviceTrust();
+    const everHadUserKey = await cryptoService.getEverHadUserKey();
+    if (authStatus === AuthenticationStatus.Locked && tdeEnabled && !everHadUserKey) {
+      return router.createUrlTree([routes.notDecrypted], { queryParams: route.queryParams });
     }
 
     if (authStatus === AuthenticationStatus.Locked) {
-      return router.createUrlTree([routes.lock], { queryParams: route.queryParams });
+      return router.createUrlTree([routes.locked], { queryParams: route.queryParams });
     }
 
     return router.createUrlTree(["/"]);

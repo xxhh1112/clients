@@ -20,4 +20,6 @@ export abstract class DeviceTrustCryptoServiceAbstraction {
     deviceKey?: DeviceKey
   ) => Promise<UserKey | null>;
   rotateDevicesTrust: (newUserKey: UserKey, masterPasswordHash: string) => Promise<void>;
+
+  supportsDeviceTrust: () => Promise<boolean>;
 }

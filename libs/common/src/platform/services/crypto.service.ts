@@ -45,6 +45,9 @@ export class CryptoService implements CryptoServiceAbstraction {
   ) {}
 
   async setUserKey(key: UserKey, userId?: string): Promise<void> {
+    if (key != null) {
+      await this.stateService.setEverHadUserKey(true, { userId: userId });
+    }
     await this.stateService.setUserKey(key, { userId: userId });
     await this.storeAdditionalKeys(key, userId);
   }
@@ -52,6 +55,10 @@ export class CryptoService implements CryptoServiceAbstraction {
   async refreshAdditionalKeys(): Promise<void> {
     const key = await this.getUserKey();
     await this.setUserKey(key);
+  }
+
+  async getEverHadUserKey(userId?: string): Promise<boolean> {
+    return await this.stateService.getEverHadUserKey({ userId: userId });
   }
 
   async getUserKey(userId?: string): Promise<UserKey> {
@@ -710,7 +717,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     const randomBytes = await this.cryptoFunctionService.randomBytes(64);
     const userKey = new SymmetricCryptoKey(randomBytes) as UserKey;
     const [publicKey, privateKey] = await this.makeKeyPair(userKey);
-    await this.stateService.setUserKey(userKey);
+    await this.setUserKey(userKey);
     await this.stateService.setEncryptedPrivateKey(privateKey.encryptedString);
 
     return {

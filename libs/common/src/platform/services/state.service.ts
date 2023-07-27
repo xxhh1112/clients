@@ -1989,6 +1989,28 @@ export class StateService<
     );
   }
 
+  async getEverHadUserKey(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getAccount(
+          // REVIEW: Please think over if this is the best storage option
+          this.reconcileOptions(options, await this.defaultOnDiskOptions())
+        )
+      )?.profile?.everHadUserKey ?? false
+    );
+  }
+
+  async setEverHadUserKey(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.profile.everHadUserKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
   async getEverBeenUnlocked(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))

@@ -3,6 +3,7 @@ import { Route, RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
 import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { loginInitiatedGuard } from "@bitwarden/angular/auth/guards/login-initiated.guard";
 import { redirectGuard } from "@bitwarden/angular/auth/guards/redirect.guard";
 import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
@@ -59,7 +60,7 @@ const routes: Routes = [
         path: "",
         pathMatch: "full",
         children: [], // Children lets us have an empty component.
-        canActivate: [redirectGuard({ home: "/vault", login: "/login", lock: "/lock" })],
+        canActivate: [redirectGuard({ loggedIn: "/vault", loggedOut: "/login", locked: "/lock" })],
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {
@@ -76,7 +77,7 @@ const routes: Routes = [
       {
         path: "login-initiated",
         component: LoginDecryptionOptionsComponent,
-        canActivate: [lockGuard(), canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
+        canActivate: [loginInitiatedGuard(), canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
       },
       {
         path: "register",

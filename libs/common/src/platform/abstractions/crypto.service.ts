@@ -29,7 +29,12 @@ export abstract class CryptoService {
    * (such as auto, biometrics, or pin)
    */
   refreshAdditionalKeys: () => Promise<void>;
-
+  /**
+   * Check if the current sessions has ever had a user key, i.e. has ever been unlocked/decrypted.
+   * @param userId The desired user
+   * @returns True if the current session has ever had a user key
+   */
+  getEverHadUserKey: (userId?: string) => Promise<boolean>;
   /**
    * Retrieves the user key
    * @param userId The desired user
