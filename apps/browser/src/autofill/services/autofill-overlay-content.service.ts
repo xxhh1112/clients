@@ -15,28 +15,30 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   constructor() {
     window.addEventListener("scroll", () => {
-      this.overlayButtonElement?.remove();
-      this.overlayListElement?.remove();
+      this.removeOverlay();
     });
     window.addEventListener("resize", () => {
-      this.overlayButtonElement?.remove();
-      this.overlayListElement?.remove();
+      this.removeOverlay();
     });
-    document.body.addEventListener("scroll", () => {
-      this.overlayButtonElement?.remove();
-      this.overlayListElement?.remove();
+    document.body?.addEventListener("scroll", () => {
+      this.removeOverlay();
     });
 
     chrome.runtime.onMessage.addListener((message) => {
       if (message.command === "fillForm") {
         this.isFillingForm = true;
-        this.overlayButtonElement?.remove();
-        this.overlayListElement?.remove();
+        this.removeOverlay();
+      } else if (message.command === "removeOverlay") {
+        this.removeOverlay();
       }
     });
   }
 
   openAutofillOverlayList() {
+    if (!this.mostRecentlyFocusedFieldRects) {
+      return;
+    }
+
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
     }
@@ -67,7 +69,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     formFieldElement.addEventListener("focus", () => {
       this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
-      const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.2;
+      const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.3675;
       document.body.appendChild(this.overlayButtonElement);
       this.overlayButtonElement.style.width = `${
         this.mostRecentlyFocusedFieldRects.height - elementOffset
@@ -85,17 +87,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
         this.mostRecentlyFocusedFieldRects.height +
         elementOffset / 2
       }px`;
-    });
-    formFieldElement.addEventListener("blur", (details) => {
-      // TODO: Need to think about a better way of dismissing the overlay button
-      if (this.removalTimeout) {
-        clearTimeout(this.removalTimeout);
-      }
 
-      this.removalTimeout = setTimeout(() => {
-        this.overlayButtonElement?.remove();
-      }, 125);
+      chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
     });
+
+    formFieldElement.addEventListener("blur", (details) => {
+      chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
+    });
+  }
+
+  private removeOverlay() {
+    this.overlayButtonElement?.remove();
+    this.overlayListElement?.remove();
   }
 
   private isIgnoredField(autofillFieldData: AutofillField): boolean {

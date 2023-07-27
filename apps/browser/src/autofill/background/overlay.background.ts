@@ -7,6 +7,7 @@ class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
   private pageDetailsToAutoFill: any;
+  private overlaySenderInfo: chrome.runtime.MessageSender;
   private readonly extensionMessageHandlers: Record<string, any> = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgGetAutofillOverlayList: ({ sender }: { sender: chrome.runtime.MessageSender }) =>
@@ -20,6 +21,8 @@ class OverlayBackground {
     }) => this.autofillOverlayListItem(message, sender),
     collectPageDetailsResponse: ({ message }: { message: any }) =>
       this.collectPageDetailsResponse(message),
+    bgCheckOverlayFocused: () => this.checkOverlayFocused(),
+    bgCloseOverlay: () => this.removeOverlay(),
   };
 
   constructor(private cipherService: CipherService, private autofillService: AutofillService) {
@@ -53,16 +56,35 @@ class OverlayBackground {
   }
 
   private getAutofillOverlayList(sender: chrome.runtime.MessageSender) {
+    this.overlaySenderInfo = sender;
     chrome.tabs.sendMessage(
-      sender.tab.id,
+      this.overlaySenderInfo.tab.id,
       {
         command: "updateAutofillOverlayList",
         ciphers: this.currentContextualCiphers,
       },
       {
-        frameId: sender.frameId,
+        frameId: this.overlaySenderInfo.frameId,
       }
     );
+  }
+
+  private checkOverlayFocused() {
+    chrome.tabs.sendMessage(
+      this.overlaySenderInfo.tab.id,
+      {
+        command: "checkOverlayFocused",
+      },
+      {
+        frameId: this.overlaySenderInfo.frameId,
+      }
+    );
+  }
+
+  private removeOverlay() {
+    chrome.tabs.sendMessage(this.overlaySenderInfo.tab.id, {
+      command: "removeOverlay",
+    });
   }
 
   private async openAutofillOverlayList() {

@@ -11,7 +11,7 @@ body {
   min-height: 100vh;
   padding: 0;
   margin: 0;
-  background: $button-color-primary;
+  background: transparent;
   overflow: hidden;
 }
 autofill-overlay-button {
@@ -21,11 +21,11 @@ autofill-overlay-button {
 
 .overlay-button {
   display: block;
-  width: 92%;
+  width: 100%;
   padding: 0;
   margin: auto;
   border: none;
-  background: $button-color-primary;
+  background: transparent;
 
   svg {
     display: block;
