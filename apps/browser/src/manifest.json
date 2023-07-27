@@ -96,7 +96,7 @@
     "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",
-    "overlay/button.html",
+    "overlay/icon.html",
     "overlay/list.html"
   ],
   "applications": {

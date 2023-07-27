@@ -7,11 +7,9 @@ import { ElementWithOpId, FormFieldElement } from "../types";
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
-  private isFillingForm: boolean;
-  private overlayButtonElement: HTMLElement;
+  private overlayIconElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedFieldRects: DOMRect;
-  private removalTimeout: NodeJS.Timeout;
 
   constructor() {
     window.addEventListener("scroll", () => {
@@ -26,12 +24,32 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     chrome.runtime.onMessage.addListener((message) => {
       if (message.command === "fillForm") {
-        this.isFillingForm = true;
         this.removeOverlay();
       } else if (message.command === "removeOverlay") {
         this.removeOverlay();
       }
     });
+  }
+
+  showOverlayIcon() {
+    const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
+    this.overlayIconElement.style.width = `${
+      this.mostRecentlyFocusedFieldRects.height - elementOffset
+    }px`;
+    this.overlayIconElement.style.height = `${
+      this.mostRecentlyFocusedFieldRects.height - elementOffset
+    }px`;
+    this.overlayIconElement.style.top = `${
+      this.mostRecentlyFocusedFieldRects.top + window.scrollY + elementOffset / 2
+    }px`;
+    this.overlayIconElement.style.left = `${
+      this.mostRecentlyFocusedFieldRects.left +
+      window.scrollX +
+      this.mostRecentlyFocusedFieldRects.width -
+      this.mostRecentlyFocusedFieldRects.height +
+      elementOffset / 2
+    }px`;
+    document.body.appendChild(this.overlayIconElement);
   }
 
   openAutofillOverlayList() {
@@ -42,6 +60,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
     }
+
+    this.showOverlayIcon();
 
     document.body.appendChild(this.overlayListElement);
     this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
@@ -55,7 +75,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }px`;
   }
 
-  setupOverlayButtonListenerOnField(
+  setupOverlayIconListenerOnField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ) {
@@ -63,31 +83,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    if (!this.overlayButtonElement) {
-      this.createOverlayButtonElement();
+    if (!this.overlayIconElement) {
+      this.createOverlayIconElement();
     }
 
     formFieldElement.addEventListener("focus", () => {
       this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
-      const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.3675;
-      document.body.appendChild(this.overlayButtonElement);
-      this.overlayButtonElement.style.width = `${
-        this.mostRecentlyFocusedFieldRects.height - elementOffset
-      }px`;
-      this.overlayButtonElement.style.height = `${
-        this.mostRecentlyFocusedFieldRects.height - elementOffset
-      }px`;
-      this.overlayButtonElement.style.top = `${
-        this.mostRecentlyFocusedFieldRects.top + window.scrollY + elementOffset / 2
-      }px`;
-      this.overlayButtonElement.style.left = `${
-        this.mostRecentlyFocusedFieldRects.left +
-        window.scrollX +
-        this.mostRecentlyFocusedFieldRects.width -
-        this.mostRecentlyFocusedFieldRects.height +
-        elementOffset / 2
-      }px`;
-
       chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
     });
 
@@ -97,7 +98,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private removeOverlay() {
-    this.overlayButtonElement?.remove();
+    this.overlayIconElement?.remove();
     this.overlayListElement?.remove();
   }
 
@@ -139,9 +140,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     return false;
   }
 
-  private createOverlayButtonElement() {
+  private createOverlayIconElement() {
     window.customElements?.define(
-      "bitwarden-autofill-overlay-button",
+      "bitwarden-autofill-overlay-icon",
       class extends HTMLElement {
         constructor() {
           super();
@@ -154,7 +155,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
           iframe.style.padding = "0";
           iframe.style.width = "100%";
           iframe.style.height = "100%";
-          iframe.src = chrome.runtime.getURL("overlay/button.html");
+          iframe.src = chrome.runtime.getURL("overlay/icon.html");
           iframe.setAttribute("sandbox", "allow-scripts");
 
           shadow.appendChild(iframe);
@@ -162,12 +163,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       }
     );
 
-    this.overlayButtonElement = document.createElement("bitwarden-autofill-overlay-button");
-    this.overlayButtonElement.style.position = "fixed";
-    this.overlayButtonElement.style.display = "block";
-    this.overlayButtonElement.style.zIndex = "9999999999999999999999999";
-    this.overlayButtonElement.style.borderRadius = "4px";
-    this.overlayButtonElement.style.overflow = "hidden";
+    this.overlayIconElement = document.createElement("bitwarden-autofill-overlay-icon");
+    this.overlayIconElement.style.position = "fixed";
+    this.overlayIconElement.style.display = "block";
+    this.overlayIconElement.style.zIndex = "9999999999999999999999999";
+    this.overlayIconElement.style.borderRadius = "4px";
+    this.overlayIconElement.style.overflow = "hidden";
   }
 
   private createAutofillOverlayList() {

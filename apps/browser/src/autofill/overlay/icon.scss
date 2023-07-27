@@ -1,5 +1,3 @@
-$button-color-primary: #175ddc;
-
 * {
   box-sizing: border-box;
 }
@@ -14,12 +12,12 @@ body {
   background: transparent;
   overflow: hidden;
 }
-autofill-overlay-button {
+autofill-overlay-icon {
   width: 100%;
   height: auto;
 }
 
-.overlay-button {
+.overlay-icon {
   display: block;
   width: 100%;
   padding: 0;
