@@ -618,8 +618,8 @@
   "loginWithDevice": {
     "message": "Přihlásit se zařízením"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Přihlášení zařízením musí být nastaveno v mobilní aplikaci Bitwarden. Potřebujete další volby?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?"
   },
   "loginWithMasterPassword": {
     "message": "Přihlásit se pomocí hlavního hesla"
@@ -964,8 +964,14 @@
   "confirmVaultExport": {
     "message": "Potvrdit export trezoru"
   },
+  "confirmSecretsExport": {
+    "message": "Potvrdit export tajných klíčů"
+  },
   "exportWarningDesc": {
     "message": "Tento export obsahuje data Vašeho trezoru v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Tento export obsahuje data Vašich tajných klíčů v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití."
   },
   "encExportKeyWarningDesc": {
     "message": "Tento export zašifruje Vaše data pomocí šifrovacího klíče Vašeho účtu. Pokud někdy změníte šifrovací klíč Vašeho účtu, měli by jste vyexportovat data znovu, protože tento exportovaný soubor nebudete moci dešifrovat."
@@ -978,6 +984,9 @@
   },
   "exportVault": {
     "message": "Exportovat trezor"
+  },
+  "exportSecrets": {
+    "message": "Exportovat tajné klíče"
   },
   "fileFormat": {
     "message": "Formát souboru"
@@ -2656,6 +2665,12 @@
   },
   "failedLogin2fa": {
     "message": "Pokus o přihlášení selhal kvůli nesprávnému dvoufázovému přihlášení."
+  },
+  "incorrectPassword": {
+    "message": "Nesprávné heslo"
+  },
+  "incorrectCode": {
+    "message": "Nesprávný kód"
   },
   "exportedVault": {
     "message": "Trezor byl exportován"
@@ -4579,20 +4594,17 @@
   "accountRecoveryPolicy": {
     "message": "Správa obnovení účtu"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Obnovení členských účtů při zapomenutí hlavního hesla nebo ztrátě důvěryhodných zařízení. Procesy obnovení jsou založeny na metodě šifrování účtu."
+  "accountRecoveryPolicyDesc": {
+    "message": "Na základě metody šifrování můžete obnovit účty v případě zapomenutí nebo ztráty hlavních hesel nebo důvěryhodných zařízení."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Uživatelé v organizaci se budou muset sami zaregistrovat nebo být automaticky zaregistrovaní předtím, než budou moci administrátoři resetovat jejich hlavní heslo."
+  "accountRecoveryPolicyWarning": {
+    "message": "U stávajících účtů s hlavními hesly se budou muset členové sami přihlásit, aby mohli správci obnovit jejich účty. Automatická registrace zapne obnovení účtu pro nové členy."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "Před aktivací této zásady musí být povolena jednotná pravidla organizace."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrace"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Jakmile bude jejich pozvání přijato, všichni uživatelé budou automaticky zaregistrováni do resetování hesla."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Uživatelé, kteří jsou již v organizaci, nebudou zpětně zaregistrováni do obnovení hesla. Než budou moci správci obnovit hlavní heslo, budou se muset zaregistrovat sami."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Automaticky zaregistrovat nové uživatele"
@@ -5209,7 +5221,7 @@
     "message": "Použít",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "vyžadování zásad ověření jednotným přihlášením",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -6179,10 +6191,6 @@
     "message": "Přístupový token byl vytvořen a zkopírován do schránky",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Správa oprávnění není k dispozici pro beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Odvolat přístupový token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6612,11 +6620,14 @@
   "secretsManagerBeta": {
     "message": "Správce tajných klíčů v programu Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Povolí přístup uživatele ke správě tajných klíčů zdarma v rámci programu Beta."
+  "secretsManager": {
+    "message": "Správce tajných klíčů"
   },
-  "userAccessSecretsManager": {
-    "message": "Tento uživatel může přistupovat ke správci tajných klíčů v rámci programu Beta"
+  "secretsManagerAccessDescription": {
+    "message": "Aktivuje přístup uživatele ke správci tajných klíčů."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "Tento uživatel může přistupovat ke správci tajných klíčů"
   },
   "important": {
     "message": "Důležité:"
@@ -6817,17 +6828,25 @@
   "trustedDeviceEncryption": {
     "message": "Šifrování důvěryhodného zařízení"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Po ověření budou členové dešifrovat data v trezoru pomocí klíče uloženého na jejich zařízení. ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Pokud bude tato volba aktivována, ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "Při použití této možnosti ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "budou použity zásady obnovení účtu s automatickým zápisem.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "se zapne zásada jednotné organizace ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "a zásada správy obnovení účtu ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "s automatickým zápisem.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nebyl nalezen",
@@ -6843,6 +6862,20 @@
   },
   "updatedTempPassword": {
     "message": "Uživatel aktualizoval heslo vydané prostřednictvím obnovení účtu."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Aktivován přístup uživatele ke správci tajných klíčů",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Aktivovat přístup"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Udělte následujícím členům přístup ke správci tajných klíčů. Role udělená ve správci hesel se bude vztahovat na správce tajných klíčů.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Aktivovat správce tajných klíčů"
   },
   "yourOrganizationsFingerprint": {
     "message": "Fráze otisku prstu Vaší organizace",
@@ -6901,5 +6934,26 @@
   },
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Odebrání členů bez nastavení jejich hlavních hesel jim může omezit přístup k jejich celým účtům."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Začněte 7denní bezplatnou zkušební verzi Bitwardenu pro $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Další"
+  },
+  "usFlag": {
+    "message": "Americká vlajka"
+  },
+  "euFlag": {
+    "message": "Evropská vlajka"
+  },
+  "selectedRegionFlag": {
+    "message": "Vlajka zvoleného regionu"
   }
 }

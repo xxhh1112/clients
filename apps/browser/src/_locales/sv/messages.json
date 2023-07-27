@@ -952,7 +952,7 @@
     "message": "Server-URL"
   },
   "apiUrl": {
-    "message": "API server-URL"
+    "message": "API-server-URL"
   },
   "webVaultUrl": {
     "message": "Webbvalvsserver-URL"
@@ -2237,5 +2237,11 @@
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Display"
   }
 }

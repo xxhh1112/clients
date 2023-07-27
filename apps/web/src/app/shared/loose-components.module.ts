@@ -51,6 +51,7 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
+import { SecretsManagerBillingModule } from "../billing/organizations/secrets-manager/sm-billing.module";
 import { AddCreditComponent } from "../billing/settings/add-credit.component";
 import { AdjustPaymentComponent } from "../billing/settings/adjust-payment.component";
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
@@ -108,6 +109,7 @@ import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-
 import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
 import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-vault/collections.component";
 
+import { EnvironmentSelectorModule } from "./../components/environment-selector/environment-selector.module";
 import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
 import { SharedModule } from "./shared.module";
 
@@ -122,10 +124,13 @@ import { SharedModule } from "./shared.module";
     UserVerificationModule,
     ChangeKdfModule,
     DynamicAvatarComponent,
+    EnvironmentSelectorModule,
     AccountFingerprintComponent,
+
+    // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
+    SecretsManagerBillingModule,
   ],
   declarations: [
-    PremiumBadgeComponent,
     AcceptEmergencyComponent,
     AcceptFamilySponsorshipComponent,
     AcceptOrganizationComponent,
