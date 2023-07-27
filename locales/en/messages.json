@@ -1,4 +1,14 @@
 {
+  "pageTitle": {
+    "message": "$APP_NAME$ Web Vault",
+    "description": "The title of the website in the browser window.",
+    "placeholders": {
+      "app_name": {
+        "content": "$1",
+        "example": "Bitwarden"
+      }
+    }
+  },
   "whatTypeOfItem": {
     "message": "What type of item is this?"
   },
@@ -2635,12 +2645,6 @@
   "webVault": {
     "message": "Web vault"
   },
-  "bitWebVault": {
-    "message": "Bitwarden Web vault"
-  },
-  "bitSecretsManager": {
-    "message": "Bitwarden Secrets Manager"
-  },
   "loggedIn": {
     "message": "Logged in"
   },
@@ -4374,8 +4378,8 @@
   "manageUsers": {
     "message": "Manage users"
   },
-  "manageAccountRecovery": {
-    "message": "Manage account recovery"
+  "manageResetPassword": {
+    "message": "Manage password reset"
   },
   "disableRequiredError": {
     "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
@@ -7051,5 +7055,24 @@
   },
   "maxServiceAccountCost": {
     "message": "Max potential service account cost"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }
