@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
@@ -46,7 +47,8 @@ export class LoginWithDeviceComponent
     loginService: LoginService,
     syncService: SyncService,
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    authReqCryptoService: AuthRequestCryptoServiceAbstraction
+    authReqCryptoService: AuthRequestCryptoServiceAbstraction,
+    private location: Location
   ) {
     super(
       router,
@@ -70,5 +72,9 @@ export class LoginWithDeviceComponent
     super.onSuccessfulLogin = async () => {
       await syncService.fullSync(true);
     };
+  }
+
+  protected back() {
+    this.location.back();
   }
 }
