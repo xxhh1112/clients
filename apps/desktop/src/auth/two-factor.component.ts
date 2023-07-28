@@ -13,7 +13,6 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { TwoFactorOptionsComponent } from "./two-factor-options.component";
@@ -38,7 +37,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     syncService: SyncService,
     environmentService: EnvironmentService,
     private modalService: ModalService,
-    stateService: StateService,
     route: ActivatedRoute,
     logService: LogService,
     twoFactorService: TwoFactorService,
@@ -53,7 +51,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       platformUtilsService,
       window,
       environmentService,
-      stateService,
       route,
       logService,
       twoFactorService,
