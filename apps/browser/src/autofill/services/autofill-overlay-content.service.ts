@@ -7,11 +7,12 @@ import AutofillField from "../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
 import {
-  AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
   AutofillOverlayCustomElement,
+  AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
 } from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
+  private port: chrome.runtime.Port;
   private overlayIconElement: AutofillOverlayCustomElement;
   private overlayListElement: AutofillOverlayCustomElement;
   private mostRecentlyFocusedFieldRects: DOMRect;
@@ -171,8 +172,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayListElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-list");
-    this.overlayListElement.style.maxWidth = "300px";
-    this.overlayListElement.style.height = "150px";
+    this.overlayListElement.style.maxWidth = "215px";
+    this.overlayListElement.style.maxHeight = "154px";
+    this.overlayListElement.style.boxShadow = "0 4px 4px 0 #00000040";
+    this.overlayListElement.style.borderRadius = "4px";
+    this.overlayListElement.style.backgroundColor = "#fff";
   }
 
   private createOverlayCustomElement(elementName: string): AutofillOverlayCustomElement {

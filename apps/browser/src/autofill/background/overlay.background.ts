@@ -5,25 +5,20 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { AutofillService } from "../services/abstractions/autofill.service";
 
+import { OverlayBackgroundExtensionMessageHandlers } from "./abstractions/overlay.background";
+
 class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
   private pageDetailsToAutoFill: any;
   private overlaySenderInfo: chrome.runtime.MessageSender;
-  private currentAuthStatus: AuthenticationStatus;
-  private readonly extensionMessageHandlers: Record<string, any> = {
+  private userAuthStatus: AuthenticationStatus;
+  private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
-    bgGetAutofillOverlayList: ({ sender }: { sender: chrome.runtime.MessageSender }) =>
-      this.getAutofillOverlayList(sender),
-    bgAutofillOverlayListItem: ({
-      message,
-      sender,
-    }: {
-      message: any;
-      sender: chrome.runtime.MessageSender;
-    }) => this.autofillOverlayListItem(message, sender),
-    collectPageDetailsResponse: ({ message }: { message: any }) =>
-      this.collectPageDetailsResponse(message),
+    bgGetAutofillOverlayList: ({ sender }) => this.getAutofillOverlayList(sender),
+    bgAutofillOverlayListItem: ({ message, sender }) =>
+      this.autofillOverlayListItem(message, sender),
+    collectPageDetailsResponse: ({ message }) => this.collectPageDetailsResponse(message),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
     bgCloseOverlay: () => this.removeOverlay(),
   };
@@ -113,6 +108,10 @@ class OverlayBackground {
   }
 
   async updateCurrentContextualCiphers() {
+    if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
+      return;
+    }
+
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     this.ciphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
@@ -145,15 +144,11 @@ class OverlayBackground {
 
   private async getAuthStatus() {
     const authStatus = await this.authService.getAuthStatus();
-    if (authStatus === this.currentAuthStatus) {
-      return authStatus;
-    }
-
-    if (authStatus === AuthenticationStatus.Unlocked) {
+    if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
+      this.userAuthStatus = authStatus;
       await this.updateCurrentContextualCiphers();
     }
 
-    this.currentAuthStatus = authStatus;
     return authStatus;
   }
 

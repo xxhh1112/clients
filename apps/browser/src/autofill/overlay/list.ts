@@ -1,17 +1,18 @@
-import { getAuthStatusFromQueryParam } from "./overlay-utils";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
+import { getAuthStatusFromQueryParam } from "./utils";
 
 require("./list.scss");
 
 (function () {
   class AutofillOverlayList extends HTMLElement {
+    private readonly authStatus: AuthenticationStatus;
     private shadowDom: ShadowRoot;
-    private authStatus: number;
 
     constructor() {
       super();
 
       this.authStatus = getAuthStatusFromQueryParam();
-      this.shadowDom = this.attachShadow({ mode: "closed" });
 
       chrome.runtime.onMessage.addListener((message) => {
         if (message.command === "updateAutofillOverlayList") {
@@ -38,6 +39,11 @@ require("./list.scss");
         }
       });
 
+      this.initAutofillOverlayList();
+    }
+
+    initAutofillOverlayList() {
+      this.shadowDom = this.attachShadow({ mode: "closed" });
       chrome.runtime.sendMessage({
         command: "bgGetAutofillOverlayList",
       });

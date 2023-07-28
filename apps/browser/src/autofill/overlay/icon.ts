@@ -1,6 +1,6 @@
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { getAuthStatusFromQueryParam } from "./overlay-utils";
+import { getAuthStatusFromQueryParam } from "./utils";
 
 require("./icon.scss");
 
