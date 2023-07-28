@@ -28,14 +28,12 @@
     role="dialog"
     aria-modal="true"
   >
-    <div class="tw-flex tw-justify-between tw-gap-4">
-      <h3 class="tw-font-semibold">Header</h3>
+    <div class="tw-mb-2 tw-flex tw-items-center tw-justify-between tw-gap-4">
+      <h3 class="tw-mb-0 tw-font-semibold">{{ header }}</h3>
       <button type="button" class="tw-border-none tw-bg-transparent" (click)="isOpen = false">
         <i class="bwi bwi-close"></i>
       </button>
     </div>
-    <p class="tw-mb-0">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum incidunt aperiam ipsam?
-    </p>
+    <ng-content></ng-content>
   </div>
 </ng-template>

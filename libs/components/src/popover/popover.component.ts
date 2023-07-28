@@ -1,11 +1,13 @@
 import { ConnectedPosition } from "@angular/cdk/overlay";
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   selector: "bit-popover",
   templateUrl: "./popover.component.html",
 })
 export class PopoverComponent {
+  @Input() header = "";
+
   isOpen = false;
   overlayPositions: ConnectedPosition[] = [
     // Popover opens to right of trigger
