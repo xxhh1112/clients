@@ -1,6 +1,7 @@
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayListExtensionMessageHandlers } from "./abstractions/list";
+import { globeIcon, lockIcon } from "./utils/svg-icons";
 import { getAuthStatusFromQueryParam } from "./utils/utils";
 
 require("./list.scss");
@@ -23,24 +24,86 @@ require("./list.scss");
     }
 
     private initAutofillOverlayList() {
+      chrome.runtime.sendMessage({ command: "bgUpdateAutofillOverlayListSender" });
+
       this.shadowDom = this.attachShadow({ mode: "closed" });
-      chrome.runtime.sendMessage({
-        command: "bgGetAutofillOverlayList",
-      });
+      this.resetShadowDOM();
 
       window.addEventListener("blur", () => {
         chrome.runtime.sendMessage({
           command: "bgCloseOverlay",
         });
       });
+
+      if (this.authStatus === AuthenticationStatus.Unlocked) {
+        chrome.runtime.sendMessage({
+          command: "bgGetAutofillOverlayList",
+        });
+        return;
+      }
+
+      this.buildLockedOverlay();
+    }
+
+    private resetShadowDOM() {
+      this.shadowDom.innerHTML = "";
+      const styleSheetUrl = chrome.runtime.getURL("overlay/list.css");
+      const linkElement = document.createElement("link");
+      linkElement.setAttribute("rel", "stylesheet");
+      linkElement.setAttribute("href", styleSheetUrl);
+      this.shadowDom.appendChild(linkElement);
+    }
+
+    private buildLockedOverlay() {
+      this.resetShadowDOM();
+
+      const lockedOverlay = document.createElement("div");
+      lockedOverlay.className = "locked-overlay";
+      lockedOverlay.textContent = "Unlock your account to view matching logins";
+
+      const unlockButton = document.createElement("button");
+      unlockButton.className = "unlock-button";
+      unlockButton.innerHTML = `${lockIcon} Unlock account`;
+
+      unlockButton.addEventListener("click", () => {
+        chrome.runtime.sendMessage({
+          command: "bgOverlayUnlockVault",
+        });
+      });
+
+      this.shadowDom.appendChild(lockedOverlay);
+      this.shadowDom.appendChild(unlockButton);
     }
 
     private updateAutofillOverlayList(message: any) {
-      this.shadowDom.innerHTML = "";
+      this.resetShadowDOM();
+
       message.ciphers.forEach((cipher: any) => {
         const cipherElement = document.createElement("div");
         cipherElement.className = "cipher";
-        cipherElement.innerHTML = cipher.name;
+
+        const cipherIcon = document.createElement("div");
+        cipherIcon.innerHTML = globeIcon;
+        const globeIconElement = cipherIcon.querySelector("svg");
+        globeIconElement.classList.add("globe-icon");
+
+        const cipherDetailsContainer = document.createElement("div");
+        cipherDetailsContainer.className = "cipher-details-container";
+
+        const cipherNameElement = document.createElement("div");
+        cipherNameElement.className = "cipher-name";
+        cipherNameElement.textContent = cipher.name;
+
+        const cipherUserLoginElement = document.createElement("div");
+        cipherUserLoginElement.className = "cipher-user-login";
+        cipherUserLoginElement.textContent = cipher.login.username;
+
+        cipherDetailsContainer.appendChild(cipherNameElement);
+        cipherDetailsContainer.appendChild(cipherUserLoginElement);
+
+        cipherElement.appendChild(globeIconElement);
+        cipherElement.appendChild(cipherDetailsContainer);
+
         this.shadowDom.appendChild(cipherElement);
 
         cipherElement.addEventListener("click", () => {

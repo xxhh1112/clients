@@ -12,6 +12,8 @@ interface AutofillOverlayContentService {
     autofillFieldData: AutofillField
   ): void;
   openAutofillOverlayList(): void;
+  removeAutofillOverlay(): void;
+  removeAutofillOverlayIcon(): void;
   removeAutofillOverlayList(): void;
 }
 

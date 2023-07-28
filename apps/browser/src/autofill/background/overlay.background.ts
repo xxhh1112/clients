@@ -2,6 +2,7 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
+import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { AutofillService } from "../services/abstractions/autofill.service";
 
@@ -11,16 +12,19 @@ class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
   private pageDetailsToAutoFill: any;
-  private overlaySenderInfo: chrome.runtime.MessageSender;
+  private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
+    bgUpdateAutofillOverlayListSender: ({ sender }) => this.updateAutofillOverlayListSender(sender),
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgGetAutofillOverlayList: ({ sender }) => this.getAutofillOverlayList(sender),
     bgAutofillOverlayListItem: ({ message, sender }) =>
       this.autofillOverlayListItem(message, sender),
-    collectPageDetailsResponse: ({ message }) => this.collectPageDetailsResponse(message),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
     bgCloseOverlay: () => this.removeOverlay(),
+    bgOverlayUnlockVault: ({ sender }) => this.unlockVault(sender),
+    collectPageDetailsResponse: ({ message }) => this.collectPageDetailsResponse(message),
+    unlockCompleted: () => this.openAutofillOverlayList(),
   };
 
   constructor(
@@ -56,44 +60,50 @@ class OverlayBackground {
       allowTotpAutofill: true,
     });
   }
+  private updateAutofillOverlayListSender(sender: chrome.runtime.MessageSender) {
+    this.overlayListSenderInfo = sender;
+  }
 
   private getAutofillOverlayList(sender: chrome.runtime.MessageSender) {
-    this.overlaySenderInfo = sender;
+    if (!this.overlayListSenderInfo) {
+      return;
+    }
+
     chrome.tabs.sendMessage(
-      this.overlaySenderInfo.tab.id,
+      this.overlayListSenderInfo.tab.id,
       {
         command: "updateAutofillOverlayList",
         ciphers: this.currentContextualCiphers,
       },
       {
-        frameId: this.overlaySenderInfo.frameId,
+        frameId: this.overlayListSenderInfo.frameId,
       }
     );
   }
 
   private checkOverlayFocused() {
-    if (!this.overlaySenderInfo) {
+    if (!this.overlayListSenderInfo) {
       return;
     }
 
     chrome.tabs.sendMessage(
-      this.overlaySenderInfo.tab.id,
+      this.overlayListSenderInfo.tab.id,
       {
         command: "checkOverlayFocused",
       },
       {
-        frameId: this.overlaySenderInfo.frameId,
+        frameId: this.overlayListSenderInfo.frameId,
       }
     );
   }
 
   private removeOverlay() {
-    if (!this.overlaySenderInfo) {
+    if (!this.overlayListSenderInfo) {
       return;
     }
 
-    chrome.tabs.sendMessage(this.overlaySenderInfo.tab.id, {
-      command: "removeAutofillOverlayList",
+    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
+      command: "removeAutofillOverlay",
     });
   }
 
@@ -150,6 +160,23 @@ class OverlayBackground {
     }
 
     return authStatus;
+  }
+
+  private async unlockVault(sender: chrome.runtime.MessageSender) {
+    this.removeOverlay();
+    const retryMessage: LockedVaultPendingNotificationsItem = {
+      commandToRetry: {
+        msg: "bgOpenAutofillOverlayList",
+        sender: sender,
+      },
+      target: "overlay.background",
+    };
+    await BrowserApi.tabSendMessageData(
+      sender.tab,
+      "addToLockedVaultPendingNotifications",
+      retryMessage
+    );
+    await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin");
   }
 
   private setupExtensionMessageListeners() {

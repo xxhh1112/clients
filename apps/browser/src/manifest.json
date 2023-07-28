@@ -97,7 +97,8 @@
     "images/icon38.png",
     "images/icon38_locked.png",
     "overlay/icon.html",
-    "overlay/list.html"
+    "overlay/list.html",
+    "popup/fonts/*"
   ],
   "applications": {
     "gecko": {

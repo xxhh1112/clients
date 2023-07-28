@@ -7,21 +7,23 @@ import AutofillField from "../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
 import {
-  AutofillOverlayCustomElement,
   AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
+  AutofillOverlayCustomElement,
 } from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
   fieldCurrentlyFocused = false;
+  currentlyFilling = false;
   private overlayIconElement: AutofillOverlayCustomElement;
   private overlayListElement: AutofillOverlayCustomElement;
+  private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
   private mostRecentlyFocusedFieldRects: DOMRect;
   private authStatus: AuthenticationStatus;
 
   constructor() {
-    window.addEventListener("scroll", () => this.removeAutofillOverlayList);
-    window.addEventListener("resize", () => this.removeAutofillOverlayList);
-    document.body?.addEventListener("scroll", () => this.removeAutofillOverlayList);
+    window.addEventListener("scroll", () => this.removeAutofillOverlay);
+    window.addEventListener("resize", () => this.removeAutofillOverlay);
+    document.body?.addEventListener("scroll", () => this.removeAutofillOverlay);
   }
 
   showOverlayIcon() {
@@ -60,10 +62,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.overlayListElement.updateIframeSource(`overlay/list.html?authStatus=${authStatus}`);
     }
 
+    if (document.activeElement !== this.mostRecentlyFocusedField) {
+      this.mostRecentlyFocusedField.focus();
+    }
+
     this.showOverlayIcon();
 
     document.body.appendChild(this.overlayListElement);
     this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
+
+    // TODO: This is a VERY temporary measure to just show off work so far, it needs to be more robust in determining the height of the iframe. Most likely you'll need to add an observer to the list within the iframe and then send a message to the background to resize the iframe.
+    this.overlayListElement.style.height =
+      this.authStatus !== AuthenticationStatus.Unlocked ? "80px" : "150px";
     this.overlayListElement.style.top = `${
       this.mostRecentlyFocusedFieldRects.top +
       this.mostRecentlyFocusedFieldRects.height +
@@ -97,13 +107,26 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  removeAutofillOverlayList() {
+  removeAutofillOverlay() {
+    this.removeAutofillOverlayIcon();
+    this.removeAutofillOverlayList();
+  }
+
+  removeAutofillOverlayIcon() {
     this.overlayIconElement?.remove();
+  }
+
+  removeAutofillOverlayList() {
     this.overlayListElement?.remove();
   }
 
   private triggerFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    if (this.currentlyFilling) {
+      return;
+    }
+
     this.fieldCurrentlyFocused = true;
+    this.mostRecentlyFocusedField = formFieldElement;
     this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
     chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
   };
@@ -157,6 +180,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayIconElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-icon");
+    this.overlayIconElement.style.lineHeight = "0";
   }
 
   private createAutofillOverlayList() {
@@ -165,7 +189,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayListElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-list");
-    this.overlayListElement.style.maxWidth = "215px";
+    this.overlayListElement.style.lineHeight = "0";
+    this.overlayListElement.style.minWidth = "250px";
     this.overlayListElement.style.maxHeight = "154px";
     this.overlayListElement.style.boxShadow = "0 4px 4px 0 #00000040";
     this.overlayListElement.style.borderRadius = "4px";

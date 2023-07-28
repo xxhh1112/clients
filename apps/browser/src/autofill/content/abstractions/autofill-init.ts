@@ -17,7 +17,7 @@ type AutofillExtensionMessageHandlers = {
   collectPageDetailsImmediately: (message: { message: AutofillExtensionMessage }) => void;
   fillForm: (message: { message: AutofillExtensionMessage }) => void;
   openAutofillOverlayList: (message: { message: AutofillExtensionMessage }) => void;
-  removeAutofillOverlayList: () => void;
+  removeAutofillOverlay: () => void;
 };
 
 interface AutofillInit {

@@ -1,14 +1,118 @@
+/** IMPORTANT TODO: REMOVE this references to Google's CDN. We should NOT be using a third party CDN for our fonts. Find a way to host these locally */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf)
+    format("truetype");
+}
+
+$font-open-sans: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$color-blue: #175ddc;
+$color-light-gray: #ced4dc;
+$color-gray: #6c747c;
+$color-dark-gray: #212529;
+$color-white: #fff;
+
 * {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 10px;
+}
+
 body {
   width: 100%;
-  min-width: 100vw;
-  height: 100%;
-  min-height: 100vh;
   padding: 0;
   margin: 0;
-  background: #fff;
-  overflow: hidden;
+  background: $color-white;
+}
+
+.locked-overlay {
+  font-family: $font-open-sans;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  width: 100%;
+  padding: 1rem;
+  color: $color-dark-gray;
+}
+
+.unlock-button {
+  display: block;
+  width: 100%;
+  background: transparent;
+  font-family: $font-open-sans;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $color-blue;
+  text-align: center;
+  border: none;
+  border-top: 1px solid $color-light-gray;
+  padding: 1rem;
+  margin: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  svg {
+    position: relative;
+    top: 2px;
+    width: 1.6rem;
+    height: 1.7rem;
+    margin-right: 5px;
+  }
+
+  &:hover {
+    background: #f0f0f0;
+  }
+}
+
+.cipher {
+  padding: 1rem;
+  display: flex;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-light-gray;
+  }
+
+  &:hover {
+    background: #f0f0f0;
+  }
+
+  svg {
+    line-height: 0;
+    margin-right: 0.8rem;
+  }
+
+  .cipher-name,
+  .cipher-user-login {
+    display: block;
+    width: 100%;
+    line-height: 1.5;
+    font-family: $font-open-sans;
+    font-weight: 400;
+  }
+
+  .cipher-name {
+    font-size: 1.2rem;
+    color: $color-dark-gray;
+  }
+
+  .cipher-user-login {
+    font-size: 1rem;
+    color: $color-gray;
+  }
 }
