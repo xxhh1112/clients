@@ -75,9 +75,7 @@ export class LoginWithDeviceComponent
       this.stateService.setPreviousUrl(null);
       this.router.navigateByUrl(previousUrl);
     } else {
-      this.router.navigate([this.successRoute], {
-        queryParams: {},
-      });
+      this.router.navigate([this.successRoute]);
     }
   }
 }
