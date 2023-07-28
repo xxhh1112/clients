@@ -96,7 +96,7 @@ class AutofillInit implements AutofillInitInterface {
     // removed once the autofill overlay is refactored.
     setTimeout(() => {
       this.autofillOverlayContentService.currentlyFilling = false;
-    }, 1000);
+    }, 300);
   }
 
   private openAutofillOverlayList(authStatus?: AuthenticationStatus) {
@@ -105,11 +105,6 @@ class AutofillInit implements AutofillInitInterface {
 
   private removeAutofillOverlay() {
     if (this.autofillOverlayContentService.fieldCurrentlyFocused) {
-      return;
-    }
-
-    if (this.autofillOverlayContentService.currentlyFilling) {
-      this.autofillOverlayContentService.removeAutofillOverlayList();
       return;
     }
 

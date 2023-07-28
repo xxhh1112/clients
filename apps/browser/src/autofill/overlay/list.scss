@@ -93,8 +93,10 @@ body {
   }
 
   svg {
+    width: 3.2rem;
+    height: auto;
     line-height: 0;
-    margin-right: 0.8rem;
+    margin-right: 1rem;
   }
 
   .cipher-name,
@@ -107,12 +109,12 @@ body {
   }
 
   .cipher-name {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     color: $color-dark-gray;
   }
 
   .cipher-user-login {
-    font-size: 1rem;
+    font-size: 1.4rem;
     color: $color-gray;
   }
 }

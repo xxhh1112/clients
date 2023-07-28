@@ -23,7 +23,7 @@ require("./icon.scss");
     }
 
     private initAutofillOverlayIcon() {
-      this.iconElement = document.createElement("div");
+      this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
       this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
       this.iconElement.classList.add("overlay-icon");
 
@@ -31,6 +31,12 @@ require("./icon.scss");
       const linkElement = document.createElement("link");
       linkElement.setAttribute("rel", "stylesheet");
       linkElement.setAttribute("href", styleSheetUrl);
+
+      if (this.isVaultUnlocked()) {
+        this.iconElement.addEventListener("click", () => {
+          chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
+        });
+      }
 
       this.shadowDom = this.attachShadow({ mode: "closed" });
       this.shadowDom.appendChild(linkElement);

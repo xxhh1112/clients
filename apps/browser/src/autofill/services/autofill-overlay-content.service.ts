@@ -21,9 +21,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private authStatus: AuthenticationStatus;
 
   constructor() {
-    window.addEventListener("scroll", () => this.removeAutofillOverlay);
-    window.addEventListener("resize", () => this.removeAutofillOverlay);
-    document.body?.addEventListener("scroll", () => this.removeAutofillOverlay);
+    window.addEventListener("scroll", this.removeAutofillOverlay);
+    window.addEventListener("resize", this.removeAutofillOverlay);
+    document.body?.addEventListener("scroll", this.removeAutofillOverlay);
   }
 
   showOverlayIcon() {
@@ -73,7 +73,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     // TODO: This is a VERY temporary measure to just show off work so far, it needs to be more robust in determining the height of the iframe. Most likely you'll need to add an observer to the list within the iframe and then send a message to the background to resize the iframe.
     this.overlayListElement.style.height =
-      this.authStatus !== AuthenticationStatus.Unlocked ? "80px" : "150px";
+      this.authStatus !== AuthenticationStatus.Unlocked ? "80px" : "205px";
     this.overlayListElement.style.top = `${
       this.mostRecentlyFocusedFieldRects.top +
       this.mostRecentlyFocusedFieldRects.height +
@@ -107,10 +107,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  removeAutofillOverlay() {
+  removeAutofillOverlay = () => {
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
-  }
+  };
 
   removeAutofillOverlayIcon() {
     this.overlayIconElement?.remove();
@@ -128,6 +128,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.fieldCurrentlyFocused = true;
     this.mostRecentlyFocusedField = formFieldElement;
     this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+
+    if ((formFieldElement as HTMLInputElement).value) {
+      this.showOverlayIcon();
+      return;
+    }
+
     chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
   };
 
@@ -191,7 +197,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-list");
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
-    this.overlayListElement.style.maxHeight = "154px";
+    this.overlayListElement.style.maxHeight = "210px";
     this.overlayListElement.style.boxShadow = "0 4px 4px 0 #00000040";
     this.overlayListElement.style.borderRadius = "4px";
     this.overlayListElement.style.backgroundColor = "#fff";
