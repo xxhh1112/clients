@@ -90,7 +90,12 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   }
 
   async ngOnInit() {
-    this.stateService.setPreviousUrl(null);
+    /**
+     * Set GlobalState.PreviousUrl to NULL onInit() to handle situation where
+     * a previous SSO login was interrupted. Ensures the user is navigated
+     * to the correct location.
+     */
+    this.routerService.clearPersistedUrl();
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -179,7 +184,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       }
     }
 
-    const previousUrl = this.routerService.getPreviousUrl();
+    const previousUrl = await this.routerService.getPreviousUrl();
     if (previousUrl) {
       this.router.navigateByUrl(previousUrl);
     } else {

@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 @Injectable()
 export class RouterService {
@@ -14,6 +15,7 @@ export class RouterService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
+    private stateService: StateService,
     i18nService: I18nService
   ) {
     this.currentUrl = this.router.url;
@@ -46,11 +48,35 @@ export class RouterService {
       });
   }
 
-  getPreviousUrl() {
+  getPreviousUrl(): string {
     return this.previousUrl;
   }
 
-  setPreviousUrl(url: string) {
+  setPreviousUrl(url: string): void {
     this.previousUrl = url;
+  }
+
+  /**
+   * Save URL to Global State. This service should only be used when there is navigation that
+   * causes the App to be destroyed, ie: SSO routing to IdP.
+   * @param url URL being saved to the Global State
+   */
+  async persistPreviousUrl(): Promise<void> {
+    await this.stateService.setPreviousUrl(this.previousUrl);
+  }
+
+  /**
+   * Set GlobalState.PreviousUrl to null
+   */
+  async clearPersistedUrl(): Promise<void> {
+    await this.stateService.setPreviousUrl(null);
+  }
+
+  /**
+   * Fetch GlobalState.PreviousUrl
+   * @returns GlobalState.PreviousUrl
+   */
+  async getPersistedUrl(): Promise<string> {
+    return await this.stateService.getPreviousUrl();
   }
 }

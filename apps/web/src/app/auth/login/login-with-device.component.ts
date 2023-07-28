@@ -14,6 +14,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { RouterService, StateService } from "../../core";
@@ -66,8 +67,8 @@ export class LoginWithDeviceComponent
 
   async goAfterLogIn() {
     this.loginService.clearValues();
-    let previousUrl = await this.stateService.getPreviousUrl();
-    if (previousUrl == "" || previousUrl == undefined || previousUrl == null) {
+    let previousUrl = await this.routerService.getPersistedUrl();
+    if (Utils.isNullOrEmpty(previousUrl)) {
       previousUrl = this.routerService.getPreviousUrl();
     }
     if (previousUrl) {

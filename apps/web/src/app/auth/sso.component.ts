@@ -122,7 +122,7 @@ export class SsoComponent extends BaseSsoComponent {
   }
 
   async submit() {
-    await this.stateService.setPreviousUrl(this.routerService.getPreviousUrl());
+    await this.routerService.persistPreviousUrl();
     await this.stateService.setSsoOrganizationIdentifier(this.identifier);
     if (this.clientId === "browser") {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;
