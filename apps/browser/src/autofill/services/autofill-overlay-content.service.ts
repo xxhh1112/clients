@@ -100,7 +100,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.triggerFormFieldFocusEvent(formFieldElement)
     );
 
-    formFieldElement.addEventListener("blur", this.triggerFormFieldBlurEvent);
+    formFieldElement.addEventListener("blur", () =>
+      this.triggerFormFieldBlurEvent(formFieldElement)
+    );
 
     if (document.activeElement === formFieldElement) {
       this.triggerFormFieldFocusEvent(formFieldElement);
@@ -137,9 +139,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
   };
 
-  private triggerFormFieldBlurEvent = () => {
+  private triggerFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
     this.fieldCurrentlyFocused = false;
-    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
+    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" }, (response) => {
+      if (response) {
+        return;
+      }
+
+      this.removeAutofillOverlayIcon();
+    });
   };
 
   private isIgnoredField(autofillFieldData: AutofillField): boolean {

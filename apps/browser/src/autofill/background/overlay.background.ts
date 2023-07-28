@@ -83,18 +83,21 @@ class OverlayBackground {
 
   private checkOverlayFocused() {
     if (!this.overlayListSenderInfo) {
-      return;
+      return false;
     }
 
-    chrome.tabs.sendMessage(
-      this.overlayListSenderInfo.tab.id,
-      {
-        command: "checkOverlayFocused",
-      },
-      {
-        frameId: this.overlayListSenderInfo.frameId,
-      }
-    );
+    return new Promise((resolve) => {
+      chrome.tabs.sendMessage(
+        this.overlayListSenderInfo.tab.id,
+        {
+          command: "checkOverlayFocused",
+        },
+        {
+          frameId: this.overlayListSenderInfo.frameId,
+        },
+        (response) => resolve(response)
+      );
+    });
   }
 
   private removeOverlay() {

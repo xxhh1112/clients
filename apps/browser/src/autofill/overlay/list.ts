@@ -117,12 +117,13 @@ require("./list.scss");
 
     private checkOverlayFocused() {
       if (document.hasFocus()) {
-        return;
+        return true;
       }
 
       chrome.runtime.sendMessage({
         command: "bgCloseOverlay",
       });
+      return false;
     }
 
     private setupExtensionMessageListeners() {
