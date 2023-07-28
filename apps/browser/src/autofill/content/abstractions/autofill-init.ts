@@ -1,3 +1,5 @@
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
 import AutofillScript from "../../models/autofill-script";
 
 type AutofillExtensionMessage = {
@@ -6,6 +8,7 @@ type AutofillExtensionMessage = {
   sender?: string;
   fillScript?: AutofillScript;
   ciphers?: any;
+  authStatus?: AuthenticationStatus;
 };
 
 type AutofillExtensionMessageHandlers = {
@@ -13,7 +16,7 @@ type AutofillExtensionMessageHandlers = {
   collectPageDetails: (message: { message: AutofillExtensionMessage }) => void;
   collectPageDetailsImmediately: (message: { message: AutofillExtensionMessage }) => void;
   fillForm: (message: { message: AutofillExtensionMessage }) => void;
-  openAutofillOverlayList: () => void;
+  openAutofillOverlayList: (message: { message: AutofillExtensionMessage }) => void;
 };
 
 interface AutofillInit {

@@ -577,8 +577,11 @@ export default class MainBackground {
       this.folderService,
       this.stateService
     );
-    this.overlayBackground = new OverlayBackground(this.cipherService, this.autofillService);
-
+    this.overlayBackground = new OverlayBackground(
+      this.cipherService,
+      this.autofillService,
+      this.authService
+    );
     this.tabsBackground = new TabsBackground(
       this,
       this.notificationBackground,

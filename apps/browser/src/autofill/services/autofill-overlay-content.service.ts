@@ -1,15 +1,22 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
 import AutofillField from "../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
-import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
+import {
+  AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
+  AutofillOverlayCustomElement,
+} from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
-  private overlayIconElement: HTMLElement;
-  private overlayListElement: HTMLElement;
+  private overlayIconElement: AutofillOverlayCustomElement;
+  private overlayListElement: AutofillOverlayCustomElement;
   private mostRecentlyFocusedFieldRects: DOMRect;
+  private fieldCurrentlyFocused = false;
+  private authStatus: AuthenticationStatus;
 
   constructor() {
     window.addEventListener("scroll", () => {
@@ -26,7 +33,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       if (message.command === "fillForm") {
         this.removeOverlay();
       } else if (message.command === "removeOverlay") {
-        this.removeOverlay();
+        if (!this.fieldCurrentlyFocused) {
+          this.removeOverlay();
+        }
       }
     });
   }
@@ -52,13 +61,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     document.body.appendChild(this.overlayIconElement);
   }
 
-  openAutofillOverlayList() {
+  openAutofillOverlayList(authStatus?: AuthenticationStatus) {
     if (!this.mostRecentlyFocusedFieldRects) {
       return;
     }
 
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
+    }
+
+    if (this.authStatus !== authStatus) {
+      this.authStatus = authStatus;
+      this.overlayIconElement.updateIframeSource(`overlay/icon.html?authStatus=${authStatus}`);
+      this.overlayListElement.updateIframeSource(`overlay/list.html?authStatus=${authStatus}`);
     }
 
     this.showOverlayIcon();
@@ -88,11 +103,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     formFieldElement.addEventListener("focus", () => {
+      this.fieldCurrentlyFocused = true;
       this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
       chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
     });
 
     formFieldElement.addEventListener("blur", (details) => {
+      this.fieldCurrentlyFocused = false;
       chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
     });
   }
@@ -141,68 +158,62 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private createOverlayIconElement() {
-    window.customElements?.define(
-      "bitwarden-autofill-overlay-icon",
-      class extends HTMLElement {
-        constructor() {
-          super();
+    if (this.overlayIconElement) {
+      return;
+    }
 
-          const shadow = this.attachShadow({ mode: "closed" });
-          const iframe = document.createElement("iframe");
-          iframe.style.border = "none";
-          iframe.style.background = "transparent";
-          iframe.style.margin = "0";
-          iframe.style.padding = "0";
-          iframe.style.width = "100%";
-          iframe.style.height = "100%";
-          iframe.src = chrome.runtime.getURL("overlay/icon.html");
-          iframe.setAttribute("sandbox", "allow-scripts");
-
-          shadow.appendChild(iframe);
-        }
-      }
-    );
-
-    this.overlayIconElement = document.createElement("bitwarden-autofill-overlay-icon");
-    this.overlayIconElement.style.position = "fixed";
-    this.overlayIconElement.style.display = "block";
-    this.overlayIconElement.style.zIndex = "9999999999999999999999999";
-    this.overlayIconElement.style.borderRadius = "4px";
-    this.overlayIconElement.style.overflow = "hidden";
+    this.overlayIconElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-icon");
   }
 
   private createAutofillOverlayList() {
+    if (this.overlayListElement) {
+      return;
+    }
+
+    this.overlayListElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-list");
+    this.overlayListElement.style.maxWidth = "300px";
+    this.overlayListElement.style.height = "150px";
+  }
+
+  private createOverlayCustomElement(elementName: string): AutofillOverlayCustomElement {
     window.customElements?.define(
-      "bitwarden-autofill-overlay-list",
-      class extends HTMLElement {
+      elementName,
+      class extends HTMLElement implements AutofillOverlayCustomElement {
+        private shadow: ShadowRoot;
+        private iframe: HTMLIFrameElement;
+
         constructor() {
           super();
 
-          const shadow = this.attachShadow({ mode: "closed" });
-          const iframe = document.createElement("iframe");
-          iframe.style.border = "none";
-          iframe.style.background = "transparent";
-          iframe.style.margin = "0";
-          iframe.style.padding = "0";
-          iframe.style.width = "100%";
-          iframe.style.height = "100%";
-          iframe.src = chrome.runtime.getURL("overlay/list.html");
-          iframe.setAttribute("sandbox", "allow-scripts");
+          this.initOverlayCustomElement();
+        }
 
-          shadow.appendChild(iframe);
+        updateIframeSource(urlPath: string) {
+          this.iframe.src = chrome.runtime.getURL(urlPath);
+        }
+
+        private initOverlayCustomElement() {
+          this.iframe = document.createElement("iframe");
+          this.iframe.style.border = "none";
+          this.iframe.style.background = "transparent";
+          this.iframe.style.margin = "0";
+          this.iframe.style.padding = "0";
+          this.iframe.style.width = "100%";
+          this.iframe.style.height = "100%";
+          this.iframe.setAttribute("sandbox", "allow-scripts");
+
+          this.shadow = this.attachShadow({ mode: "closed" });
+          this.shadow.appendChild(this.iframe);
         }
       }
     );
+    const customElement = document.createElement(elementName) as AutofillOverlayCustomElement;
+    customElement.style.position = "fixed";
+    customElement.style.display = "block";
+    customElement.style.zIndex = "9999999999999999999999999";
+    customElement.style.overflow = "hidden";
 
-    if (!this.overlayListElement) {
-      this.overlayListElement = document.createElement("bitwarden-autofill-overlay-list");
-      this.overlayListElement.style.position = "fixed";
-      this.overlayListElement.style.display = "block";
-      this.overlayListElement.style.zIndex = "9999999999999999999999999";
-      this.overlayListElement.style.overflow = "hidden";
-      this.overlayListElement.style.maxWidth = "300px";
-      this.overlayListElement.style.height = "150px";
-    }
+    return customElement;
   }
 }
 

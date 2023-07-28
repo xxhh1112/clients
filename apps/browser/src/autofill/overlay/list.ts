@@ -37,6 +37,12 @@ require("./list.scss");
       chrome.runtime.sendMessage({
         command: "bgGetAutofillOverlayList",
       });
+
+      window.addEventListener("blur", () => {
+        chrome.runtime.sendMessage({
+          command: "bgCloseOverlay",
+        });
+      });
     }
   }
 

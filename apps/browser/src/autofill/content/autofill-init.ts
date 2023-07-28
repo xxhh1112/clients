@@ -1,3 +1,5 @@
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import AutofillOverlayContentService from "../services/autofill-overlay-content.service";
@@ -20,7 +22,7 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
-    openAutofillOverlayList: () => this.openAutofillOverlayList(),
+    openAutofillOverlayList: ({ message }) => this.openAutofillOverlayList(message.authStatus),
   };
 
   /**
@@ -88,8 +90,8 @@ class AutofillInit implements AutofillInitInterface {
     this.insertAutofillContentService.fillForm(fillScript);
   }
 
-  private openAutofillOverlayList() {
-    this.autofillOverlayContentService.openAutofillOverlayList();
+  private openAutofillOverlayList(authStatus?: AuthenticationStatus) {
+    this.autofillOverlayContentService.openAutofillOverlayList(authStatus);
   }
 
   /**

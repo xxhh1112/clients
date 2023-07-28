@@ -1,3 +1,5 @@
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
@@ -25,7 +27,11 @@ class OverlayBackground {
     bgCloseOverlay: () => this.removeOverlay(),
   };
 
-  constructor(private cipherService: CipherService, private autofillService: AutofillService) {
+  constructor(
+    private cipherService: CipherService,
+    private autofillService: AutofillService,
+    private authService: AuthService
+  ) {
     this.updateCurrentContextualCiphers();
     this.setupExtensionMessageListeners();
   }
@@ -92,11 +98,15 @@ class OverlayBackground {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     chrome.tabs.sendMessage(currentTab.id, {
       command: "openAutofillOverlayList",
-      ciphers: this.currentContextualCiphers,
+      authStatus: await this.authService.getAuthStatus(),
     });
   }
 
   async updateCurrentContextualCiphers() {
+    if ((await this.authService.getAuthStatus()) !== AuthenticationStatus.Unlocked) {
+      return;
+    }
+
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     this.ciphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
