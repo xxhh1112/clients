@@ -72,7 +72,7 @@ export class LoginWithDeviceComponent
       previousUrl = this.routerService.getPreviousUrl();
     }
     if (previousUrl) {
-      this.stateService.setPreviousUrl(null);
+      this.routerService.clearPersistedUrl();
       this.router.navigateByUrl(previousUrl);
     } else {
       this.router.navigate([this.successRoute]);

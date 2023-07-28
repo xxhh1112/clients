@@ -19,7 +19,6 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
@@ -53,7 +52,6 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     protected platformUtilsService: PlatformUtilsService,
     protected win: Window,
     protected environmentService: EnvironmentService,
-    protected stateService: StateService,
     protected route: ActivatedRoute,
     protected logService: LogService,
     protected twoFactorService: TwoFactorService,

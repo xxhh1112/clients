@@ -13,7 +13,6 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { RouterService } from "../core";
@@ -35,7 +34,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     i18nService: I18nService,
     apiService: ApiService,
     platformUtilsService: PlatformUtilsService,
-    stateService: StateService,
     environmentService: EnvironmentService,
     private modalService: ModalService,
     route: ActivatedRoute,
@@ -53,7 +51,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       platformUtilsService,
       window,
       environmentService,
-      stateService,
       route,
       logService,
       twoFactorService,
@@ -89,7 +86,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       previousUrl = this.routerService.getPreviousUrl();
     }
     if (previousUrl) {
-      this.stateService.setPreviousUrl(null);
+      this.routerService.clearPersistedUrl();
       this.router.navigateByUrl(previousUrl);
     } else {
       this.router.navigate([this.successRoute], {

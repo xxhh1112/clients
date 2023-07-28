@@ -62,7 +62,7 @@ export class LoginWithDeviceComponent
     platformUtilsService: PlatformUtilsService,
     private anonymousHubService: AnonymousHubService,
     private validationService: ValidationService,
-    protected stateService: StateService,
+    private stateService: StateService,
     protected loginService: LoginService
   ) {
     super(environmentService, i18nService, platformUtilsService);
