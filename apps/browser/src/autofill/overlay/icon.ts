@@ -1,10 +1,12 @@
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import { getAuthStatusFromQueryParam } from "./overlay-utils";
+
 require("./icon.scss");
 
 (function () {
   class AutofillOverlayIcon extends HTMLElement {
-    private authStatus: number;
+    private readonly authStatus: number;
     private shadowDom: ShadowRoot;
     private iconElement: HTMLElement;
     private logoSvg =
@@ -15,16 +17,8 @@ require("./icon.scss");
     constructor() {
       super();
 
-      this.setAuthStatus();
+      this.authStatus = getAuthStatusFromQueryParam();
       this.initAutofillOverlayIcon();
-    }
-
-    private setAuthStatus() {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const authStatus = urlParams.get("authStatus");
-
-      this.authStatus = authStatus ? parseInt(authStatus) : null;
     }
 
     private isVaultUnlocked(): boolean {

@@ -1,12 +1,16 @@
+import { getAuthStatusFromQueryParam } from "./overlay-utils";
+
 require("./list.scss");
 
 (function () {
   class AutofillOverlayList extends HTMLElement {
     private shadowDom: ShadowRoot;
+    private authStatus: number;
 
     constructor() {
       super();
 
+      this.authStatus = getAuthStatusFromQueryParam();
       this.shadowDom = this.attachShadow({ mode: "closed" });
 
       chrome.runtime.onMessage.addListener((message) => {

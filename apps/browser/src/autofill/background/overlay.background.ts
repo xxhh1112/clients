@@ -10,6 +10,7 @@ class OverlayBackground {
   private currentContextualCiphers: any[] = [];
   private pageDetailsToAutoFill: any;
   private overlaySenderInfo: chrome.runtime.MessageSender;
+  private currentAuthStatus: AuthenticationStatus;
   private readonly extensionMessageHandlers: Record<string, any> = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgGetAutofillOverlayList: ({ sender }: { sender: chrome.runtime.MessageSender }) =>
@@ -32,8 +33,8 @@ class OverlayBackground {
     private autofillService: AutofillService,
     private authService: AuthService
   ) {
-    this.updateCurrentContextualCiphers();
     this.setupExtensionMessageListeners();
+    this.getAuthStatus();
   }
 
   private collectPageDetailsResponse(message: any) {
@@ -76,6 +77,10 @@ class OverlayBackground {
   }
 
   private checkOverlayFocused() {
+    if (!this.overlaySenderInfo) {
+      return;
+    }
+
     chrome.tabs.sendMessage(
       this.overlaySenderInfo.tab.id,
       {
@@ -88,6 +93,10 @@ class OverlayBackground {
   }
 
   private removeOverlay() {
+    if (!this.overlaySenderInfo) {
+      return;
+    }
+
     chrome.tabs.sendMessage(this.overlaySenderInfo.tab.id, {
       command: "removeOverlay",
     });
@@ -96,17 +105,14 @@ class OverlayBackground {
   private async openAutofillOverlayList() {
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
+    const authStatus = await this.getAuthStatus();
     chrome.tabs.sendMessage(currentTab.id, {
       command: "openAutofillOverlayList",
-      authStatus: await this.authService.getAuthStatus(),
+      authStatus: authStatus,
     });
   }
 
   async updateCurrentContextualCiphers() {
-    if ((await this.authService.getAuthStatus()) !== AuthenticationStatus.Unlocked) {
-      return;
-    }
-
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     this.ciphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
@@ -135,6 +141,20 @@ class OverlayBackground {
         company: cipher.identity.company,
       },
     }));
+  }
+
+  private async getAuthStatus() {
+    const authStatus = await this.authService.getAuthStatus();
+    if (authStatus === this.currentAuthStatus) {
+      return authStatus;
+    }
+
+    if (authStatus === AuthenticationStatus.Unlocked) {
+      await this.updateCurrentContextualCiphers();
+    }
+
+    this.currentAuthStatus = authStatus;
+    return authStatus;
   }
 
   private setupExtensionMessageListeners() {
