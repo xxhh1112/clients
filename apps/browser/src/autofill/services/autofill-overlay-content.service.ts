@@ -12,33 +12,16 @@ import {
 } from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
-  private port: chrome.runtime.Port;
+  fieldCurrentlyFocused = false;
   private overlayIconElement: AutofillOverlayCustomElement;
   private overlayListElement: AutofillOverlayCustomElement;
   private mostRecentlyFocusedFieldRects: DOMRect;
-  private fieldCurrentlyFocused = false;
   private authStatus: AuthenticationStatus;
 
   constructor() {
-    window.addEventListener("scroll", () => {
-      this.removeOverlay();
-    });
-    window.addEventListener("resize", () => {
-      this.removeOverlay();
-    });
-    document.body?.addEventListener("scroll", () => {
-      this.removeOverlay();
-    });
-
-    chrome.runtime.onMessage.addListener((message) => {
-      if (message.command === "fillForm") {
-        this.removeOverlay();
-      } else if (message.command === "removeOverlay") {
-        if (!this.fieldCurrentlyFocused) {
-          this.removeOverlay();
-        }
-      }
-    });
+    window.addEventListener("scroll", () => this.removeAutofillOverlayList);
+    window.addEventListener("resize", () => this.removeAutofillOverlayList);
+    document.body?.addEventListener("scroll", () => this.removeAutofillOverlayList);
   }
 
   showOverlayIcon() {
@@ -103,22 +86,32 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.createOverlayIconElement();
     }
 
-    formFieldElement.addEventListener("focus", () => {
-      this.fieldCurrentlyFocused = true;
-      this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
-      chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
-    });
+    formFieldElement.addEventListener("focus", () =>
+      this.triggerFormFieldFocusEvent(formFieldElement)
+    );
 
-    formFieldElement.addEventListener("blur", (details) => {
-      this.fieldCurrentlyFocused = false;
-      chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
-    });
+    formFieldElement.addEventListener("blur", this.triggerFormFieldBlurEvent);
+
+    if (document.activeElement === formFieldElement) {
+      this.triggerFormFieldFocusEvent(formFieldElement);
+    }
   }
 
-  private removeOverlay() {
+  removeAutofillOverlayList() {
     this.overlayIconElement?.remove();
     this.overlayListElement?.remove();
   }
+
+  private triggerFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    this.fieldCurrentlyFocused = true;
+    this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+    chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
+  };
+
+  private triggerFormFieldBlurEvent = () => {
+    this.fieldCurrentlyFocused = false;
+    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
+  };
 
   private isIgnoredField(autofillFieldData: AutofillField): boolean {
     const ignoredFieldTypes = ["hidden", "textarea"];

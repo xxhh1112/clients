@@ -28,8 +28,8 @@ class OverlayBackground {
     private autofillService: AutofillService,
     private authService: AuthService
   ) {
-    this.setupExtensionMessageListeners();
     this.getAuthStatus();
+    this.setupExtensionMessageListeners();
   }
 
   private collectPageDetailsResponse(message: any) {
@@ -93,7 +93,7 @@ class OverlayBackground {
     }
 
     chrome.tabs.sendMessage(this.overlaySenderInfo.tab.id, {
-      command: "removeOverlay",
+      command: "removeAutofillOverlayList",
     });
   }
 

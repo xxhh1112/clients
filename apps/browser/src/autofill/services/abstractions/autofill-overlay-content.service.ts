@@ -6,11 +6,13 @@ interface AutofillOverlayCustomElement extends HTMLElement {
 }
 
 interface AutofillOverlayContentService {
+  fieldCurrentlyFocused: boolean;
   setupOverlayIconListenerOnField(
     autofillFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ): void;
   openAutofillOverlayList(): void;
+  removeAutofillOverlayList(): void;
 }
 
 export { AutofillOverlayCustomElement, AutofillOverlayContentService };

@@ -23,6 +23,7 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
     openAutofillOverlayList: ({ message }) => this.openAutofillOverlayList(message.authStatus),
+    removeAutofillOverlayList: () => this.removeAutofillOverlayList(),
   };
 
   /**
@@ -88,10 +89,19 @@ class AutofillInit implements AutofillInitInterface {
    */
   private fillForm(fillScript: AutofillScript) {
     this.insertAutofillContentService.fillForm(fillScript);
+    this.autofillOverlayContentService.removeAutofillOverlayList();
   }
 
   private openAutofillOverlayList(authStatus?: AuthenticationStatus) {
     this.autofillOverlayContentService.openAutofillOverlayList(authStatus);
+  }
+
+  private removeAutofillOverlayList() {
+    if (this.autofillOverlayContentService.fieldCurrentlyFocused) {
+      return;
+    }
+
+    this.autofillOverlayContentService.removeAutofillOverlayList();
   }
 
   /**
