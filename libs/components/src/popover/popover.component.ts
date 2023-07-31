@@ -13,18 +13,22 @@ export class PopoverComponent {
     // Popover opens to right of trigger
     {
       offsetX: 5,
+      offsetY: -36,
       originX: "end",
       originY: "center",
       overlayX: "start",
-      overlayY: "center",
+      overlayY: "top",
+      panelClass: "bit-popover-right",
     },
     // ... to left of trigger
     {
       offsetX: -5,
+      offsetY: -36,
       originX: "start",
       originY: "center",
       overlayX: "end",
-      overlayY: "center",
+      overlayY: "top",
+      panelClass: "bit-popover-left",
     },
     // ... above trigger
     {
@@ -33,6 +37,7 @@ export class PopoverComponent {
       originY: "top",
       overlayX: "center",
       overlayY: "bottom",
+      panelClass: "bit-popover-above",
     },
     // ... below trigger
     {
@@ -41,6 +46,7 @@ export class PopoverComponent {
       originY: "bottom",
       overlayX: "center",
       overlayY: "top",
+      panelClass: "bit-popover-below",
     },
   ];
 }
