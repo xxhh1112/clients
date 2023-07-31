@@ -18,7 +18,9 @@
   [cdkConnectedOverlayOpen]="isOpen"
   [cdkConnectedOverlayPositions]="overlayPositions"
   [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdr'"
+  [cdkConnectedOverlayPanelClass]="'tw-p-2'"
+  [cdkConnectedOverlayPush]="true"
   (backdropClick)="isOpen = false"
 >
   <div

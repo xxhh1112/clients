@@ -24,6 +24,7 @@ export const OpenRight: Story = {
         <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
         <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
           <li>Dolor sit amet consectetur</li>
+          <li>Esse labore veniam tempora</li>
           <li>Adipisicing elit. Ipsum <a href="#">iustolaborum</a></li>
         </ul>
       </bit-popover>
@@ -40,6 +41,7 @@ export const OpenLeft: Story = {
           <div>Lorem ipsum dolor sit <a href="#">adipisicing elit</a>.</div>
           <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
             <li>Dolor sit amet consectetur</li>
+            <li>Esse labore veniam tempora</li>
             <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
           </ul>
         </bit-popover>
