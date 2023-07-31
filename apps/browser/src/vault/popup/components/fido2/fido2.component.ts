@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -19,7 +19,6 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { Fido2KeyView } from "@bitwarden/common/vault/models/view/fido2-key.view";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
-import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
@@ -49,8 +48,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private cipherService: CipherService,
-    private passwordRepromptService: PasswordRepromptService,
-    private popupUtils: PopupUtilsService
+    private passwordRepromptService: PasswordRepromptService
   ) {}
 
   ngOnInit(): void {
@@ -63,19 +61,6 @@ export class Fido2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(([sessionId, message]) => {
         this.sessionId = sessionId;
-        if (message.type === "LogInRequest") {
-          //route to login
-          const url = chrome.extension.getURL(
-            `popup/index.html#/home?sessionId=${sessionId}&redirectPath=fido2&uilocation=popout`
-          );
-          // BrowserApi.createNewWindow(url);
-          BrowserApi.createNewTab(url);
-          // if (this.popupUtils.inPopup(window)) {
-          //   BrowserApi.closePopup(window);
-          // }
-          return;
-        }
-
         if (message.type === "NewSessionCreatedRequest" && message.sessionId !== sessionId) {
           return this.abort(false);
         }
@@ -196,7 +181,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     window.close();
   }
 
-  @HostListener("window:unload")
   unload(fallback = false) {
     this.send({
       sessionId: this.sessionId,

@@ -16,14 +16,15 @@
         A site is asking for authentication, please choose one of the following credentials to use:
         <div class="box list">
           <div class="box-content">
-            <app-cipher-row
+            <!-- <app-cipher-row
               *ngFor="let cipher of ciphers"
               [cipher]="cipher"
               (onSelected)="pick(cipher)"
-            ></app-cipher-row>
+            ></app-cipher-row> -->
           </div>
         </div>
       </ng-container>
+      <p>Here herer</p>
       <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
         A site wants to create the following passkey in your vault
         <div class="box list">
