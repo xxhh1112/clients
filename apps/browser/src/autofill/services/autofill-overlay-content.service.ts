@@ -141,13 +141,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private triggerFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
     this.fieldCurrentlyFocused = false;
-    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" }, (response) => {
-      if (response) {
-        return;
-      }
-
-      this.removeAutofillOverlayIcon();
-    });
+    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
   };
 
   private isIgnoredField(autofillFieldData: AutofillField): boolean {
