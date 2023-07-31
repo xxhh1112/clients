@@ -2,8 +2,6 @@ import { A11yModule } from "@angular/cdk/a11y";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
-import { ButtonModule } from "../button";
-
 import { PopoverComponent } from "./popover.component";
 
 export default {
@@ -11,9 +9,15 @@ export default {
   component: PopoverComponent,
   decorators: [
     moduleMetadata({
-      imports: [A11yModule, OverlayModule, ButtonModule],
+      imports: [A11yModule, OverlayModule],
     }),
   ],
+  parameters: {
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1717-15868",
+    },
+  },
 } as Meta;
 
 type Story = StoryObj<PopoverComponent>;
@@ -24,12 +28,11 @@ export const OpenRight: Story = {
     template: `
       <bit-popover [header]="'Example Header'">
         <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
-        <ul class="tw-mt-2 tw-pl-4">
+        <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
           <li>Dolor sit amet consectetur</li>
           <li>Esse labore veniam tempora</li>
           <li>Adipisicing elit. Ipsum <a href="#">iustolaborum</a></li>
         </ul>
-        <button type="button" bitButton buttonType="primary">Accept</button>
       </bit-popover>
       `,
   }),
@@ -42,12 +45,11 @@ export const OpenLeft: Story = {
       <div class="tw-flex tw-justify-end">
         <bit-popover [header]="'Example Header'">
           <div>Lorem ipsum dolor sit <a href="#">adipisicing elit</a>.</div>
-          <ul class="tw-mt-2 tw-pl-4">
+          <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
             <li>Dolor sit amet consectetur</li>
             <li>Esse labore veniam tempora</li>
             <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
           </ul>
-          <button type="button" bitButton buttonType="primary">Accept</button>
         </bit-popover>
       </div>
       `,
@@ -61,12 +63,11 @@ export const OpenBelow: Story = {
       <div class="tw-flex tw-justify-center">
         <bit-popover [header]="'Example Header'">
           <div>Lorem ipsum dolor sit <a href="#">adipisicing elit</a>.</div>
-          <ul class="tw-mt-2 tw-pl-4">
+          <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
             <li>Dolor sit amet consectetur</li>
             <li>Esse labore veniam tempora</li>
             <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
           </ul>
-          <button type="button" bitButton buttonType="primary">Accept</button>
         </bit-popover>
       </div>
       `,
