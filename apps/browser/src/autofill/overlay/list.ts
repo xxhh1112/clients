@@ -1,3 +1,4 @@
+import "@webcomponents/custom-elements";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayListExtensionMessageHandlers } from "./abstractions/list";

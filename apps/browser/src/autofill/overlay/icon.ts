@@ -1,3 +1,4 @@
+import "@webcomponents/custom-elements";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
