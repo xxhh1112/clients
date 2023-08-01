@@ -243,11 +243,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       //TODO: add here
       // await userInterfaceSession.ensureUnlockedVault();
 
-      // Notes: This flow allows us to open the lock screen if the user is logged out or locked. We await for a
-      // message that is triggered when the user unlocks the vault to identify when we should move forward.
-      // There is likely a better way to handle this workflow, but this gives us an idea for how the unlock flow
-      // could work. One thing to note, the `loggedIn` message doesn't seem to trigger effectively... not sure why
-      // but consider that we likely don't want to move forward with this flow, we can just ignore it for now.
+      // Notes: This flow allows us to open the lock screen if the user is logged out or locked before continuing with
+      // the fido2 request. We await for a  message that is triggered when the user unlocks the vault to identify when
+      // we should move forward.  There is likely a better way to handle this workflow, but this gives us an idea for
+      // how the unlock flow  could work. One thing to note, the `loggedIn` message doesn't seem to trigger
+      // effectively... not sure why but consider that we likely don't want to move forward with this flow, we can
+      // just ignore it for now.
       const authStatus = await this.authService.getAuthStatus();
       if (
         authStatus === AuthenticationStatus.Locked ||
