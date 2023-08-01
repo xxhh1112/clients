@@ -1,5 +1,7 @@
 import { CBOR } from "cbor-redux";
 
+import { PopupUtilsService } from "../../../../../../apps/browser/src/popup/services/popup-utils.service";
+import { AuthenticationStatus } from "../../../../../../libs/common/src/auth/enums/authentication-status";
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { LogService } from "../../../platform/abstractions/log.service";
 import { Utils } from "../../../platform/misc/utils";
@@ -35,12 +37,15 @@ const KeyUsages: KeyUsage[] = ["sign"];
  * https://www.w3.org/TR/webauthn-3/#sctn-authenticator-model
  */
 export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstraction {
+  popupUtilsService: PopupUtilsService;
   constructor(
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService,
     private authService: AuthService,
     private logService?: LogService
-  ) {}
+  ) {
+    this.popupUtilsService = new PopupUtilsService();
+  }
   async makeCredential(
     params: Fido2AuthenticatorMakeCredentialsParams,
     abortController?: AbortController
@@ -236,7 +241,33 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       let cipherOptions: CipherView[];
 
       //TODO: add here
-      await userInterfaceSession.ensureUnlockedVault();
+      // await userInterfaceSession.ensureUnlockedVault();
+
+      // Notes: This flow allows us to open the lock screen if the user is logged out or locked. We await for a
+      // message that is triggered when the user unlocks the vault to identify when we should move forward.
+      // There is likely a better way to handle this workflow, but this gives us an idea for how the unlock flow
+      // could work. One thing to note, the `loggedIn` message doesn't seem to trigger effectively... not sure why
+      // but consider that we likely don't want to move forward with this flow, we can just ignore it for now.
+      const authStatus = await this.authService.getAuthStatus();
+      if (
+        authStatus === AuthenticationStatus.Locked ||
+        authStatus === AuthenticationStatus.LoggedOut
+      ) {
+        await this.popupUtilsService.popOut(null, `popup/index.html?uilocation=popout#`, {
+          center: true,
+        });
+        await new Promise((resolve) => {
+          chrome.runtime.onMessage.addListener((message, sender) => {
+            if (message.command === "unlocked" || message.command === "loggedIn") {
+              if (sender.tab) {
+                chrome.tabs.remove(sender.tab.id);
+              }
+
+              resolve(true);
+            }
+          });
+        });
+      }
 
       // eslint-disable-next-line no-empty
       if (params.allowCredentialDescriptorList?.length > 0) {
