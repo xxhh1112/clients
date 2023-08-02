@@ -1,4 +1,5 @@
 import "@webcomponents/custom-elements";
+import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";

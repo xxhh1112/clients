@@ -6,16 +6,13 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 import AutofillField from "../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
-import {
-  AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
-  AutofillOverlayCustomElement,
-} from "./abstractions/autofill-overlay-content.service";
+import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
   fieldCurrentlyFocused = false;
   currentlyFilling = false;
-  private overlayIconElement: AutofillOverlayCustomElement;
-  private overlayListElement: AutofillOverlayCustomElement;
+  private overlayIconElement: HTMLElement;
+  private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
   private mostRecentlyFocusedFieldRects: DOMRect;
   private authStatus: AuthenticationStatus;
@@ -27,6 +24,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   showOverlayIcon() {
+    if (!this.overlayIconElement) {
+      this.createOverlayIconElement();
+    }
+
     const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
     this.overlayIconElement.style.width = `${
       this.mostRecentlyFocusedFieldRects.height - elementOffset
@@ -52,14 +53,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    if (!this.overlayListElement) {
-      this.createAutofillOverlayList();
-    }
-
     if (this.authStatus !== authStatus) {
       this.authStatus = authStatus;
-      this.overlayIconElement.updateIframeSource(`overlay/icon.html?authStatus=${authStatus}`);
-      this.overlayListElement.updateIframeSource(`overlay/list.html?authStatus=${authStatus}`);
+    }
+
+    if (!this.overlayListElement) {
+      this.createAutofillOverlayList();
     }
 
     if (document.activeElement !== this.mostRecentlyFocusedField) {
@@ -92,10 +91,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    if (!this.overlayIconElement) {
-      this.createOverlayIconElement();
-    }
-
     formFieldElement.addEventListener("focus", () =>
       this.triggerFormFieldFocusEvent(formFieldElement)
     );
@@ -110,6 +105,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   removeAutofillOverlay = () => {
+    return;
+
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
   };
@@ -187,7 +184,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    this.overlayIconElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-icon");
+    this.overlayIconElement = this.createOverlayCustomElement(
+      "bitwarden-autofill-overlay-icon",
+      `overlay/icon.html?authStatus=${this.authStatus}`
+    );
     this.overlayIconElement.style.lineHeight = "0";
   }
 
@@ -196,7 +196,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    this.overlayListElement = this.createOverlayCustomElement("bitwarden-autofill-overlay-list");
+    this.overlayListElement = this.createOverlayCustomElement(
+      "bitwarden-autofill-overlay-list",
+      `overlay/list.html?authStatus=${this.authStatus}`
+    );
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
     this.overlayListElement.style.maxHeight = "210px";
@@ -205,39 +208,29 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.backgroundColor = "#fff";
   }
 
-  private createOverlayCustomElement(elementName: string): AutofillOverlayCustomElement {
+  private createOverlayCustomElement(elementName: string, initFrameSource: string): HTMLElement {
     window.customElements?.define(
       elementName,
-      class extends HTMLElement implements AutofillOverlayCustomElement {
-        private shadow: ShadowRoot;
-        private iframe: HTMLIFrameElement;
-
+      class extends HTMLElement {
         constructor() {
           super();
 
-          this.initOverlayCustomElement();
-        }
+          const iframe = document.createElement("iframe");
+          iframe.src = chrome.runtime.getURL(initFrameSource);
+          iframe.style.border = "none";
+          iframe.style.background = "transparent";
+          iframe.style.margin = "0";
+          iframe.style.padding = "0";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          // iframe.setAttribute("sandbox", "allow-scripts");
 
-        updateIframeSource(urlPath: string) {
-          this.iframe.src = chrome.runtime.getURL(urlPath);
-        }
-
-        private initOverlayCustomElement() {
-          this.iframe = document.createElement("iframe");
-          this.iframe.style.border = "none";
-          this.iframe.style.background = "transparent";
-          this.iframe.style.margin = "0";
-          this.iframe.style.padding = "0";
-          this.iframe.style.width = "100%";
-          this.iframe.style.height = "100%";
-          this.iframe.setAttribute("sandbox", "allow-scripts");
-
-          this.shadow = this.attachShadow({ mode: "closed" });
-          this.shadow.appendChild(this.iframe);
+          const shadow = this.attachShadow({ mode: "closed" });
+          shadow.appendChild(iframe);
         }
       }
     );
-    const customElement = document.createElement(elementName) as AutofillOverlayCustomElement;
+    const customElement = document.createElement(elementName);
     customElement.style.position = "fixed";
     customElement.style.display = "block";
     customElement.style.zIndex = "9999999999999999999999999";

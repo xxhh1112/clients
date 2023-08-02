@@ -1,10 +1,6 @@
 import AutofillField from "../../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../../types";
 
-interface AutofillOverlayCustomElement extends HTMLElement {
-  updateIframeSource(urlPath: string): void;
-}
-
 interface AutofillOverlayContentService {
   fieldCurrentlyFocused: boolean;
   setupOverlayIconListenerOnField(
@@ -17,4 +13,4 @@ interface AutofillOverlayContentService {
   removeAutofillOverlayList(): void;
 }
 
-export { AutofillOverlayCustomElement, AutofillOverlayContentService };
+export { AutofillOverlayContentService };
