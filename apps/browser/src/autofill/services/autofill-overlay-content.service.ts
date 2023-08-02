@@ -4,6 +4,10 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import AutofillField from "../models/autofill-field";
+import {
+  AutofillOverlayIconIframe,
+  AutofillOverlayListIframe,
+} from "../overlay/utils/custom-iframe-elements";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
@@ -105,8 +109,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   removeAutofillOverlay = () => {
-    return;
-
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
   };
@@ -184,6 +186,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
+    window.customElements?.define("bitwarden-autofill-overlay-icon", AutofillOverlayIconIframe);
     this.overlayIconElement = this.createOverlayCustomElement(
       "bitwarden-autofill-overlay-icon",
       `overlay/icon.html?authStatus=${this.authStatus}`
@@ -196,6 +199,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
+    window.customElements?.define("bitwarden-autofill-overlay-list", AutofillOverlayListIframe);
     this.overlayListElement = this.createOverlayCustomElement(
       "bitwarden-autofill-overlay-list",
       `overlay/list.html?authStatus=${this.authStatus}`
@@ -209,27 +213,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private createOverlayCustomElement(elementName: string, initFrameSource: string): HTMLElement {
-    window.customElements?.define(
-      elementName,
-      class extends HTMLElement {
-        constructor() {
-          super();
-
-          const iframe = document.createElement("iframe");
-          iframe.src = chrome.runtime.getURL(initFrameSource);
-          iframe.style.border = "none";
-          iframe.style.background = "transparent";
-          iframe.style.margin = "0";
-          iframe.style.padding = "0";
-          iframe.style.width = "100%";
-          iframe.style.height = "100%";
-          // iframe.setAttribute("sandbox", "allow-scripts");
-
-          const shadow = this.attachShadow({ mode: "closed" });
-          shadow.appendChild(iframe);
-        }
-      }
-    );
     const customElement = document.createElement(elementName);
     customElement.style.position = "fixed";
     customElement.style.display = "block";
