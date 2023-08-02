@@ -7,7 +7,7 @@ import AutofillField from "../models/autofill-field";
 import {
   AutofillOverlayIconIframe,
   AutofillOverlayListIframe,
-} from "../overlay/utils/custom-iframe-elements";
+} from "../overlay/utils/custom-element-iframes";
 import { ElementWithOpId, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
