@@ -1,6 +1,6 @@
 /* eslint-disable no-var, no-console, no-prototype-builtins */
-// These eslint rules are disabled because the original JS was not written with them in mind and we don't want to fix
-// them all now
+// These eslint rules are disabled because the original JS was not written with them in mind
+// and we don't want to fix them all now
 
 /*
   1Password Extension
