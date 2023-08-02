@@ -4,13 +4,13 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import { OverlayListExtensionMessageHandlers } from "./abstractions/list";
 import { globeIcon, lockIcon } from "./utils/svg-icons";
-import { getAuthStatusFromQueryParam } from "./utils/utils";
+import { getAuthStatus } from "./utils/utils";
 
 require("./list.scss");
 
 (function () {
   class AutofillOverlayList extends HTMLElement {
-    private readonly authStatus: AuthenticationStatus;
+    private authStatus: AuthenticationStatus;
     private shadowDom: ShadowRoot;
     private extensionMessageHandlers: OverlayListExtensionMessageHandlers = {
       updateAutofillOverlayList: ({ message }) => this.updateAutofillOverlayList(message),
@@ -20,12 +20,11 @@ require("./list.scss");
     constructor() {
       super();
 
-      this.authStatus = getAuthStatusFromQueryParam();
       this.setupExtensionMessageListeners();
       this.initAutofillOverlayList();
     }
 
-    private initAutofillOverlayList() {
+    private async initAutofillOverlayList() {
       chrome.runtime.sendMessage({ command: "bgUpdateAutofillOverlayListSender" });
 
       this.shadowDom = this.attachShadow({ mode: "closed" });
@@ -36,6 +35,8 @@ require("./list.scss");
           command: "bgCloseOverlay",
         });
       });
+
+      this.authStatus = await getAuthStatus();
 
       if (this.authStatus === AuthenticationStatus.Unlocked) {
         chrome.runtime.sendMessage({

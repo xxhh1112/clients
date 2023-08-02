@@ -1,9 +1,11 @@
-function getAuthStatusFromQueryParam(): number {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const authStatus = urlParams.get("authStatus");
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-  return authStatus ? parseInt(authStatus) : null;
+function getAuthStatus(): Promise<AuthenticationStatus> {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ command: "bgCheckAuthStatus" }, (status: AuthenticationStatus) => {
+      resolve(status);
+    });
+  });
 }
 
-export { getAuthStatusFromQueryParam };
+export { getAuthStatus };

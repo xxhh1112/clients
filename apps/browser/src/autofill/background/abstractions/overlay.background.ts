@@ -1,3 +1,5 @@
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   bgUpdateAutofillOverlayListSender: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
@@ -12,6 +14,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
   }) => void;
   bgCheckOverlayFocused: () => void;
   bgOverlayUnlockVault: ({ sender }: { sender: chrome.runtime.MessageSender }) => Promise<void>;
+  bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
   collectPageDetailsResponse: ({ message }: { message: any }) => void;
   unlockCompleted: () => void;
 };

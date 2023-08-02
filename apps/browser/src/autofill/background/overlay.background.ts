@@ -23,6 +23,7 @@ class OverlayBackground {
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
     bgCloseOverlay: () => this.removeOverlay(),
     bgOverlayUnlockVault: ({ sender }) => this.unlockVault(sender),
+    bgCheckAuthStatus: async () => await this.getAuthStatus(),
     collectPageDetailsResponse: ({ message }) => this.collectPageDetailsResponse(message),
     unlockCompleted: () => this.openAutofillOverlayList(),
   };

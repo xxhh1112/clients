@@ -3,20 +3,19 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
-import { getAuthStatusFromQueryParam } from "./utils/utils";
+import { getAuthStatus } from "./utils/utils";
 
 require("./icon.scss");
 
 (function () {
   class AutofillOverlayIcon extends HTMLElement {
-    private readonly authStatus: number;
+    private authStatus: number;
     private shadowDom: ShadowRoot;
     private iconElement: HTMLElement;
 
     constructor() {
       super();
 
-      this.authStatus = getAuthStatusFromQueryParam();
       this.initAutofillOverlayIcon();
     }
 
@@ -24,7 +23,9 @@ require("./icon.scss");
       return this.authStatus === AuthenticationStatus.Unlocked;
     }
 
-    private initAutofillOverlayIcon() {
+    private async initAutofillOverlayIcon() {
+      this.authStatus = await getAuthStatus();
+
       this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
       this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
       this.iconElement.classList.add("overlay-icon");
