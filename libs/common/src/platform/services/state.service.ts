@@ -1313,7 +1313,7 @@ export class StateService<
     }
   }
 
-  async setDeviceKey(value: DeviceKey, options?: StorageOptions): Promise<void> {
+  async setDeviceKey(value: DeviceKey | null, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
@@ -1322,7 +1322,7 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    account.keys.deviceKey = value.toJSON();
+    account.keys.deviceKey = value?.toJSON() ?? null;
 
     await this.saveAccount(account, options);
   }

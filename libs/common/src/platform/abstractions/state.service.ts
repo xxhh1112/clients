@@ -262,7 +262,7 @@ export abstract class StateService<T extends Account = Account> {
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
-  setDeviceKey: (value: DeviceKey, options?: StorageOptions) => Promise<void>;
+  setDeviceKey: (value: DeviceKey | null, options?: StorageOptions) => Promise<void>;
   getAdminAuthRequest: (options?: StorageOptions) => Promise<AdminAuthRequestStorable | null>;
   setAdminAuthRequest: (
     adminAuthRequest: AdminAuthRequestStorable,
