@@ -2,50 +2,82 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import { OverlayIconPortMessageHandlers } from "./abstractions/icon";
+import AutofillOverlayPort from "./utils/port-identifiers.enum";
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
-import { getAuthStatus } from "./utils/utils";
 
 require("./icon.scss");
 
-(function () {
-  class AutofillOverlayIcon extends HTMLElement {
-    private authStatus: number;
-    private shadowDom: ShadowRoot;
-    private iconElement: HTMLElement;
+class AutofillOverlayIcon extends HTMLElement {
+  private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
+  private shadowDom: ShadowRoot;
+  private iconElement: HTMLElement;
+  private port: chrome.runtime.Port;
+  private readonly portMessageHandlers: OverlayIconPortMessageHandlers = {
+    initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
+    updateAuthStatus: ({ message }) => this.updateAuthStatus(message.authStatus),
+  };
 
-    constructor() {
-      super();
+  constructor() {
+    super();
 
-      this.initAutofillOverlayIcon();
-    }
-
-    private isVaultUnlocked(): boolean {
-      return this.authStatus === AuthenticationStatus.Unlocked;
-    }
-
-    private async initAutofillOverlayIcon() {
-      this.authStatus = await getAuthStatus();
-
-      this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
-      this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
-      this.iconElement.classList.add("overlay-icon");
-
-      const styleSheetUrl = chrome.runtime.getURL("overlay/icon.css");
-      const linkElement = document.createElement("link");
-      linkElement.setAttribute("rel", "stylesheet");
-      linkElement.setAttribute("href", styleSheetUrl);
-
-      if (this.isVaultUnlocked()) {
-        this.iconElement.addEventListener("click", () => {
-          chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
-        });
-      }
-
-      this.shadowDom = this.attachShadow({ mode: "closed" });
-      this.shadowDom.appendChild(linkElement);
-      this.shadowDom.appendChild(this.iconElement);
-    }
+    this.setupPortMessageListener();
   }
 
+  private updateAuthStatus(status?: AuthenticationStatus) {
+    if (!status) {
+      return;
+    }
+
+    this.authStatus = status;
+  }
+
+  private isVaultUnlocked(): boolean {
+    return this.authStatus === AuthenticationStatus.Unlocked;
+  }
+
+  private async initAutofillOverlayIcon(message: any = {}) {
+    this.updateAuthStatus(message.authStatus);
+
+    this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
+    this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
+    this.iconElement.classList.add("overlay-icon");
+
+    const styleSheetUrl = chrome.runtime.getURL("overlay/icon.css");
+    const linkElement = document.createElement("link");
+    linkElement.setAttribute("rel", "stylesheet");
+    linkElement.setAttribute("href", styleSheetUrl);
+
+    if (this.isVaultUnlocked()) {
+      this.iconElement.addEventListener("click", () => {
+        chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
+      });
+    }
+
+    this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.shadowDom.appendChild(linkElement);
+    this.shadowDom.appendChild(this.iconElement);
+  }
+
+  private setupPortMessageListener() {
+    this.port = chrome.runtime.connect({ name: AutofillOverlayPort.Icon });
+    this.port.onMessage.addListener(this.handlePortMessage);
+  }
+
+  private handlePortMessage = (message: any, port: chrome.runtime.Port) => {
+    if (port.name !== AutofillOverlayPort.Icon) {
+      return;
+    }
+
+    const handler = this.portMessageHandlers[message?.command];
+    if (!handler) {
+      return;
+    }
+
+    handler({ message, port });
+  };
+}
+
+(function () {
   window.customElements.define("autofill-overlay-icon", AutofillOverlayIcon);
 })();

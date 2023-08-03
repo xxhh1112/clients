@@ -4,6 +4,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
 
 import { OverlayBackgroundExtensionMessageHandlers } from "./abstractions/overlay.background";
@@ -13,7 +14,9 @@ class OverlayBackground {
   private currentContextualCiphers: any[] = [];
   private pageDetailsToAutoFill: any;
   private overlayListSenderInfo: chrome.runtime.MessageSender;
-  private userAuthStatus: AuthenticationStatus;
+  private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
+  private overlayIconPort: chrome.runtime.Port;
+  private overlayListPort: chrome.runtime.Port;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgUpdateAutofillOverlayListSender: ({ sender }) => this.updateAutofillOverlayListSender(sender),
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
@@ -159,11 +162,11 @@ class OverlayBackground {
   private async getAuthStatus() {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
-      this.userAuthStatus = authStatus;
       await this.updateCurrentContextualCiphers();
     }
 
-    return authStatus;
+    this.userAuthStatus = authStatus;
+    return this.userAuthStatus;
   }
 
   private async unlockVault(sender: chrome.runtime.MessageSender) {
@@ -185,6 +188,7 @@ class OverlayBackground {
 
   private setupExtensionMessageListeners() {
     chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
+    chrome.runtime.onConnect.addListener(this.handlePortOnConnect);
   }
 
   private handleExtensionMessage = (
@@ -205,6 +209,20 @@ class OverlayBackground {
 
     Promise.resolve(messageResponse).then((response) => sendResponse(response));
     return true;
+  };
+
+  private handlePortOnConnect = (port: chrome.runtime.Port) => {
+    if (port.name === AutofillOverlayPort.Icon) {
+      this.setupIconPort(port);
+    }
+  };
+
+  private setupIconPort = async (port: chrome.runtime.Port) => {
+    this.overlayIconPort = port;
+    this.overlayIconPort.postMessage({
+      command: "initAutofillOverlayIcon",
+      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+    });
   };
 }
 
