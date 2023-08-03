@@ -14,7 +14,13 @@ type OverlayBackgroundExtensionMessageHandlers = {
   bgCheckOverlayFocused: () => void;
   bgOverlayUnlockVault: ({ sender }: { sender: chrome.runtime.MessageSender }) => Promise<void>;
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
-  collectPageDetailsResponse: ({ message }: { message: any }) => void;
+  collectPageDetailsResponse: ({
+    message,
+    sender,
+  }: {
+    message: any;
+    sender: chrome.runtime.MessageSender;
+  }) => void;
   unlockCompleted: () => void;
 };
 

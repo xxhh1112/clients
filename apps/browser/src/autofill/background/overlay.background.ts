@@ -12,7 +12,7 @@ import { OverlayBackgroundExtensionMessageHandlers } from "./abstractions/overla
 class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
-  private pageDetailsToAutoFill: any;
+  private pageDetailsToAutoFill: any[] = [];
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayIconPort: chrome.runtime.Port;
@@ -26,7 +26,8 @@ class OverlayBackground {
     bgCloseOverlay: () => this.removeOverlay(),
     bgOverlayUnlockVault: ({ sender }) => this.unlockVault(sender),
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
-    collectPageDetailsResponse: ({ message }) => this.collectPageDetailsResponse(message),
+    collectPageDetailsResponse: ({ message, sender }) =>
+      this.collectPageDetailsResponse(message, sender),
     unlockCompleted: () => this.openAutofillOverlayList(),
   };
 
@@ -39,8 +40,17 @@ class OverlayBackground {
     this.setupExtensionMessageListeners();
   }
 
-  private collectPageDetailsResponse(message: any) {
-    this.pageDetailsToAutoFill = message.details;
+  private collectPageDetailsResponse(message: any, sender: chrome.runtime.MessageSender) {
+    const currentTab = this.pageDetailsToAutoFill[0]?.tab;
+    if (!currentTab || currentTab.id !== sender.tab.id) {
+      this.pageDetailsToAutoFill = [];
+    }
+
+    this.pageDetailsToAutoFill.push({
+      frameId: sender.frameId,
+      tab: sender.tab,
+      details: message.details,
+    });
   }
 
   private autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
@@ -52,13 +62,7 @@ class OverlayBackground {
     this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
-      pageDetails: [
-        {
-          frameId: 0, // sender.frameId,
-          tab: sender.tab,
-          details: this.pageDetailsToAutoFill,
-        },
-      ],
+      pageDetails: this.pageDetailsToAutoFill,
       fillNewPassword: true,
       allowTotpAutofill: true,
     });

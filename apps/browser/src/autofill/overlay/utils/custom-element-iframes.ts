@@ -2,6 +2,9 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
   constructor(iframePath: string) {
     super();
 
+    const isFirefox =
+      navigator.userAgent.indexOf(" Firefox/") !== -1 ||
+      navigator.userAgent.indexOf(" Gecko/") !== -1;
     const iframe = document.createElement("iframe");
     iframe.src = chrome.runtime.getURL(iframePath);
     iframe.style.border = "none";
@@ -10,7 +13,9 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
     iframe.style.padding = "0";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
-    // iframe.setAttribute("sandbox", "allow-scripts");
+    if (!isFirefox) {
+      iframe.setAttribute("sandbox", "allow-scripts");
+    }
 
     const shadow = this.attachShadow({ mode: "closed" });
     shadow.appendChild(iframe);
