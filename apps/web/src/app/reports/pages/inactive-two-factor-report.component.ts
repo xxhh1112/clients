@@ -69,7 +69,7 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
         }
       });
       await Promise.all(promises);
-      this.ciphers = inactive2faCiphers;
+      this.ciphers = inactive2faCiphers.filter((c) => c.edit);
       this.cipherDocs = docs;
     }
   }

@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -21,7 +20,6 @@ export class ReusedPasswordsReportComponent extends CipherReportComponent implem
     protected cipherService: CipherService,
     modalService: ModalService,
     messagingService: MessagingService,
-    stateService: StateService,
     passwordRepromptService: PasswordRepromptService
   ) {
     super(modalService, messagingService, true, passwordRepromptService);
@@ -53,12 +51,14 @@ export class ReusedPasswordsReportComponent extends CipherReportComponent implem
     });
     const reusedPasswordCiphers = ciphersWithPasswords.filter(
       (c) =>
-        this.passwordUseMap.has(c.login.password) && this.passwordUseMap.get(c.login.password) > 1
+        this.passwordUseMap.has(c.login.password) &&
+        this.passwordUseMap.get(c.login.password) > 1 &&
+        c.edit
     );
     this.ciphers = reusedPasswordCiphers;
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

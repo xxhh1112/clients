@@ -53,10 +53,10 @@ export class ExposedPasswordsReportComponent extends CipherReportComponent imple
       promises.push(promise);
     });
     await Promise.all(promises);
-    this.ciphers = exposedPasswordCiphers;
+    this.ciphers = exposedPasswordCiphers.filter((c) => c.edit);
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 
