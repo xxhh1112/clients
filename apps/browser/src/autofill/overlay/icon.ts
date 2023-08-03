@@ -15,12 +15,12 @@ class AutofillOverlayIcon extends HTMLElement {
   private port: chrome.runtime.Port;
   private readonly portMessageHandlers: OverlayIconPortMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
-    updateAuthStatus: ({ message }) => this.updateAuthStatus(message.authStatus),
   };
 
   constructor() {
     super();
 
+    this.shadowDom = this.attachShadow({ mode: "closed" });
     this.setupPortMessageListener();
   }
 
@@ -37,7 +37,7 @@ class AutofillOverlayIcon extends HTMLElement {
   }
 
   private async initAutofillOverlayIcon(message: any = {}) {
-    this.updateAuthStatus(message.authStatus);
+    this.authStatus = message.authStatus;
 
     this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
     this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
@@ -54,7 +54,6 @@ class AutofillOverlayIcon extends HTMLElement {
       });
     }
 
-    this.shadowDom = this.attachShadow({ mode: "closed" });
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
   }

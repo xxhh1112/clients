@@ -1,7 +1,7 @@
-type OverlayListExtensionMessageHandlers = {
+type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
-  updateAutofillOverlayList: (message: { message: any }) => void;
+  initAutofillOverlayList: ({ message }: { message: any }) => void;
   checkOverlayFocused: () => void;
 };
 
-export { OverlayListExtensionMessageHandlers };
+export { OverlayListPortMessageHandlers };

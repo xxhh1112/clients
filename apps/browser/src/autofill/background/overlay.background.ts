@@ -73,16 +73,20 @@ class OverlayBackground {
       return;
     }
 
-    chrome.tabs.sendMessage(
-      this.overlayListSenderInfo.tab.id,
-      {
-        command: "updateAutofillOverlayList",
-        ciphers: this.currentContextualCiphers,
-      },
-      {
-        frameId: this.overlayListSenderInfo.frameId,
-      }
-    );
+    // this.overlayListPort?.postMessage({
+    //   command: "updateAutofillOverlayList",
+    //   ciphers: this.currentContextualCiphers,
+    // });
+    // chrome.tabs.sendMessage(
+    //   this.overlayListSenderInfo.tab.id,
+    //   {
+    //     command: "updateAutofillOverlayList",
+    //     ciphers: this.currentContextualCiphers,
+    //   },
+    //   {
+    //     frameId: this.overlayListSenderInfo.frameId,
+    //   }
+    // );
   }
 
   private checkOverlayFocused() {
@@ -90,18 +94,22 @@ class OverlayBackground {
       return false;
     }
 
-    return new Promise((resolve) => {
-      chrome.tabs.sendMessage(
-        this.overlayListSenderInfo.tab.id,
-        {
-          command: "checkOverlayFocused",
-        },
-        {
-          frameId: this.overlayListSenderInfo.frameId,
-        },
-        (response) => resolve(response)
-      );
+    this.overlayListPort?.postMessage({
+      command: "checkOverlayFocused",
     });
+
+    // return new Promise((resolve) => {
+    //   chrome.tabs.sendMessage(
+    //     this.overlayListSenderInfo.tab.id,
+    //     {
+    //       command: "checkOverlayFocused",
+    //     },
+    //     {
+    //       frameId: this.overlayListSenderInfo.frameId,
+    //     },
+    //     (response) => resolve(response)
+    //   );
+    // });
   }
 
   private removeOverlay() {
@@ -162,6 +170,7 @@ class OverlayBackground {
   private async getAuthStatus() {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
+      this.userAuthStatus = authStatus;
       await this.updateCurrentContextualCiphers();
     }
 
@@ -213,15 +222,28 @@ class OverlayBackground {
 
   private handlePortOnConnect = (port: chrome.runtime.Port) => {
     if (port.name === AutofillOverlayPort.Icon) {
-      this.setupIconPort(port);
+      this.setupOverlayIconPort(port);
+    }
+
+    if (port.name === AutofillOverlayPort.List) {
+      this.setupOverlayListPort(port);
     }
   };
 
-  private setupIconPort = async (port: chrome.runtime.Port) => {
+  private setupOverlayIconPort = async (port: chrome.runtime.Port) => {
     this.overlayIconPort = port;
     this.overlayIconPort.postMessage({
       command: "initAutofillOverlayIcon",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+    });
+  };
+
+  private setupOverlayListPort = async (port: chrome.runtime.Port) => {
+    this.overlayListPort = port;
+    this.overlayListPort.postMessage({
+      command: "initAutofillOverlayList",
+      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      ciphers: this.currentContextualCiphers,
     });
   };
 }
