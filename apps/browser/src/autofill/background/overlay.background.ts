@@ -20,7 +20,6 @@ class OverlayBackground {
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgUpdateAutofillOverlayListSender: ({ sender }) => this.updateAutofillOverlayListSender(sender),
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
-    bgGetAutofillOverlayList: ({ sender }) => this.getAutofillOverlayList(sender),
     bgAutofillOverlayListItem: ({ message, sender }) =>
       this.autofillOverlayListItem(message, sender),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
@@ -68,27 +67,6 @@ class OverlayBackground {
     this.overlayListSenderInfo = sender;
   }
 
-  private getAutofillOverlayList(sender: chrome.runtime.MessageSender) {
-    if (!this.overlayListSenderInfo) {
-      return;
-    }
-
-    // this.overlayListPort?.postMessage({
-    //   command: "updateAutofillOverlayList",
-    //   ciphers: this.currentContextualCiphers,
-    // });
-    // chrome.tabs.sendMessage(
-    //   this.overlayListSenderInfo.tab.id,
-    //   {
-    //     command: "updateAutofillOverlayList",
-    //     ciphers: this.currentContextualCiphers,
-    //   },
-    //   {
-    //     frameId: this.overlayListSenderInfo.frameId,
-    //   }
-    // );
-  }
-
   private checkOverlayFocused() {
     if (!this.overlayListSenderInfo) {
       return false;
@@ -97,19 +75,6 @@ class OverlayBackground {
     this.overlayListPort?.postMessage({
       command: "checkOverlayFocused",
     });
-
-    // return new Promise((resolve) => {
-    //   chrome.tabs.sendMessage(
-    //     this.overlayListSenderInfo.tab.id,
-    //     {
-    //       command: "checkOverlayFocused",
-    //     },
-    //     {
-    //       frameId: this.overlayListSenderInfo.frameId,
-    //     },
-    //     (response) => resolve(response)
-    //   );
-    // });
   }
 
   private removeOverlay() {

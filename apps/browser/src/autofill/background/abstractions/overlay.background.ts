@@ -4,7 +4,6 @@ type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   bgUpdateAutofillOverlayListSender: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
   bgOpenAutofillOverlayList: () => void;
-  bgGetAutofillOverlayList: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
   bgAutofillOverlayListItem: ({
     message,
     sender,
