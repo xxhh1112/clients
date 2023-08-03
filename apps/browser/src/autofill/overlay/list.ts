@@ -28,9 +28,6 @@ class AutofillOverlayList extends HTMLElement {
     this.authStatus = message.authStatus;
     this.updateAutofillOverlayList(message);
 
-    // Not sure if this is needed
-    chrome.runtime.sendMessage({ command: "bgUpdateAutofillOverlayListSender" });
-
     this.resetShadowDOM();
 
     window.addEventListener("blur", () => {

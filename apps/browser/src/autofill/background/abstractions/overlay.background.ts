@@ -2,7 +2,6 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
-  bgUpdateAutofillOverlayListSender: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
   bgOpenAutofillOverlayList: () => void;
   bgAutofillOverlayListItem: ({
     message,
@@ -23,5 +22,8 @@ type OverlayBackgroundExtensionMessageHandlers = {
   }) => void;
   unlockCompleted: () => void;
 };
+type OverlayIconPortMessageHandlers = {
+  [key: string]: CallableFunction;
+};
 
-export { OverlayBackgroundExtensionMessageHandlers };
+export { OverlayBackgroundExtensionMessageHandlers, OverlayIconPortMessageHandlers };

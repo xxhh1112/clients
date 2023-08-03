@@ -24,14 +24,6 @@ class AutofillOverlayIcon extends HTMLElement {
     this.setupPortMessageListener();
   }
 
-  private updateAuthStatus(status?: AuthenticationStatus) {
-    if (!status) {
-      return;
-    }
-
-    this.authStatus = status;
-  }
-
   private isVaultUnlocked(): boolean {
     return this.authStatus === AuthenticationStatus.Unlocked;
   }
@@ -49,14 +41,20 @@ class AutofillOverlayIcon extends HTMLElement {
     linkElement.setAttribute("href", styleSheetUrl);
 
     if (this.isVaultUnlocked()) {
-      this.iconElement.addEventListener("click", () => {
-        chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
-      });
+      this.iconElement.addEventListener("click", this.handleIconClick);
     }
 
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
   }
+
+  private handleIconClick = () => {
+    if (!this.port) {
+      return;
+    }
+
+    this.port.postMessage({ command: "overlayIconClicked" });
+  };
 
   private setupPortMessageListener() {
     this.port = chrome.runtime.connect({ name: AutofillOverlayPort.Icon });

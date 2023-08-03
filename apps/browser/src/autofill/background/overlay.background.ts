@@ -7,7 +7,10 @@ import { BrowserApi } from "../../platform/browser/browser-api";
 import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
 
-import { OverlayBackgroundExtensionMessageHandlers } from "./abstractions/overlay.background";
+import {
+  OverlayBackgroundExtensionMessageHandlers,
+  OverlayIconPortMessageHandlers,
+} from "./abstractions/overlay.background";
 
 class OverlayBackground {
   private ciphers: any[] = [];
@@ -18,7 +21,6 @@ class OverlayBackground {
   private overlayIconPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
-    bgUpdateAutofillOverlayListSender: ({ sender }) => this.updateAutofillOverlayListSender(sender),
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgAutofillOverlayListItem: ({ message, sender }) =>
       this.autofillOverlayListItem(message, sender),
@@ -29,6 +31,9 @@ class OverlayBackground {
     collectPageDetailsResponse: ({ message, sender }) =>
       this.collectPageDetailsResponse(message, sender),
     unlockCompleted: () => this.openAutofillOverlayList(),
+  };
+  private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
+    overlayIconClicked: () => this.openAutofillOverlayList(),
   };
 
   constructor(
@@ -66,9 +71,6 @@ class OverlayBackground {
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
-  }
-  private updateAutofillOverlayListSender(sender: chrome.runtime.MessageSender) {
-    this.overlayListSenderInfo = sender;
   }
 
   private checkOverlayFocused() {
@@ -205,9 +207,27 @@ class OverlayBackground {
       command: "initAutofillOverlayIcon",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
     });
+    this.overlayIconPort.onMessage.addListener(this.handleOverlayIconPortMessage);
+  };
+
+  private handleOverlayIconPortMessage = (message: any, port: chrome.runtime.Port) => {
+    if (port.name !== AutofillOverlayPort.Icon) {
+      return;
+    }
+
+    const handler = this.overlayIconPortMessageHandlers[message?.command];
+    if (!handler) {
+      return;
+    }
+
+    handler({ message, port });
   };
 
   private setupOverlayListPort = async (port: chrome.runtime.Port) => {
+    if (port.sender) {
+      this.overlayListSenderInfo = port.sender;
+    }
+
     this.overlayListPort = port;
     this.overlayListPort.postMessage({
       command: "initAutofillOverlayList",
