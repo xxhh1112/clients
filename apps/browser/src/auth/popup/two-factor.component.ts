@@ -16,7 +16,6 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
@@ -41,7 +40,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     environmentService: EnvironmentService,
     private broadcasterService: BroadcasterService,
     private popupUtilsService: PopupUtilsService,
-    stateService: StateService,
     route: ActivatedRoute,
     private messagingService: MessagingService,
     logService: LogService,
@@ -58,7 +56,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       platformUtilsService,
       window,
       environmentService,
-      stateService,
       route,
       logService,
       twoFactorService,
