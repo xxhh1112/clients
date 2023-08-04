@@ -34,7 +34,7 @@ class AutofillOverlayIcon extends HTMLElement {
 
     window.addEventListener("blur", () => this.port.postMessage({ command: "overlayIconBlurred" }));
 
-    this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
+    this.iconElement = document.createElement("button");
     this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
     this.iconElement.classList.add("overlay-icon");
 

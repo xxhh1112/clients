@@ -11,6 +11,7 @@ import {
 import { ElementWithOpId, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
+import { AutoFillConstants } from "./autofill-constants";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
   fieldCurrentlyFocused = false;
@@ -169,7 +170,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private isIgnoredField(autofillFieldData: AutofillField): boolean {
-    const ignoredFieldTypes = new Set(["hidden", "textarea"]);
+    const ignoredFieldTypes = new Set(AutoFillConstants.ExcludedAutofillTypes);
 
     if (
       autofillFieldData.readonly ||
@@ -203,7 +204,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       }
     }
 
-    return false;
+    if (autofillFieldData.type === "password") {
+      return false;
+    }
+
+    // TODO: This is the current method we identify login autofill. This will need to change at some point as we want to be able to fill in other types of forms.
+    for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
+      if (searchedString.includes(usernameKeyword)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   private createOverlayIconElement() {
