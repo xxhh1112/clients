@@ -80,10 +80,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.createAutofillOverlayList();
     }
 
-    this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
     // TODO: This is a VERY temporary measure to just show off work so far, it needs to be more robust in determining the height of the iframe. Most likely you'll need to add an observer to the list within the iframe and then send a message to the background to resize the iframe.
     this.overlayListElement.style.height =
       this.authStatus !== AuthenticationStatus.Unlocked ? "80px" : "205px";
+    this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
     this.overlayListElement.style.top = `${
       this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height
     }px`;
