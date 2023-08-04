@@ -1,20 +1,6 @@
-/** IMPORTANT TODO: REMOVE this references to Google's CDN. We should NOT be using a third party CDN for our fonts. Find a way to host these locally */
-@font-face {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 400;
-  src: url(https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf) format("truetype");
-}
+@import "../../../../../libs/angular/src/scss/webfonts.css";
+@import "./variables";
 
-@font-face {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 700;
-  src: url(https://fonts.gstatic.com/s/opensans/v17/mem5YaGs126MiZpBA-UNirkOUuhs.ttf)
-    format("truetype");
-}
-
-$font-open-sans: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $color-blue: #175ddc;
 $color-light-gray: #ced4dc;
 $color-gray: #6c747c;
@@ -37,7 +23,7 @@ body {
 }
 
 .locked-overlay {
-  font-family: $font-open-sans;
+  font-family: $font-family-sans-serif;
   font-weight: 400;
   font-size: 1.2rem;
   line-height: 1.5;
@@ -50,7 +36,7 @@ body {
   display: block;
   width: 100%;
   background: transparent;
-  font-family: $font-open-sans;
+  font-family: $font-family-sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
   color: $color-blue;
@@ -104,7 +90,7 @@ body {
     display: block;
     width: 100%;
     line-height: 1.5;
-    font-family: $font-open-sans;
+    font-family: $font-family-sans-serif;
     font-weight: 400;
   }
 
