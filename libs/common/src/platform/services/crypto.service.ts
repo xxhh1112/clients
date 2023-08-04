@@ -151,6 +151,16 @@ export class CryptoService implements CryptoServiceAbstraction {
     return masterKey;
   }
 
+  async getOrDeriveMasterKey(password: string, userId?: string) {
+    let masterKey = await this.getMasterKey(userId);
+    return (masterKey ||= await this.makeMasterKey(
+      password,
+      await this.stateService.getEmail({ userId: userId }),
+      await this.stateService.getKdfType({ userId: userId }),
+      await this.stateService.getKdfConfig({ userId: userId })
+    ));
+  }
+
   async makeMasterKey(
     password: string,
     email: string,

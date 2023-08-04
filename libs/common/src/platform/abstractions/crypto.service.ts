@@ -102,6 +102,12 @@ export abstract class CryptoService {
    * @returns The user's master key
    */
   getMasterKey: (userId?: string) => Promise<MasterKey>;
+
+  /**
+   * @param password The user's master password that will be used to derive a master key if one isn't found
+   * @param userId The desired user
+   */
+  getOrDeriveMasterKey: (password: string, userId?: string) => Promise<MasterKey>;
   /**
    * Generates a master key from the provided password
    * @param password The user's master password

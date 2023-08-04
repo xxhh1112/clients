@@ -78,7 +78,10 @@ export class UpdateKeyComponent {
     const request = new UpdateKeyRequest();
     request.privateKey = encPrivateKey != null ? encPrivateKey.encryptedString : null;
     request.key = newUserKey[1].encryptedString;
-    request.masterPasswordHash = await this.cryptoService.hashMasterKey(this.masterPassword, null);
+    request.masterPasswordHash = await this.cryptoService.hashMasterKey(
+      this.masterPassword,
+      await this.cryptoService.getOrDeriveMasterKey(this.masterPassword)
+    );
 
     await this.syncService.fullSync(true);
 

@@ -110,9 +110,9 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   }
 
   async performSubmitActions(
-    masterPasswordHash: string,
-    masterKey: MasterKey,
-    userKey: [UserKey, EncString]
+    newMasterKeyHash: string,
+    newMasterKey: MasterKey,
+    newUserKey: [UserKey, EncString]
   ) {
     // Override in sub-class
   }

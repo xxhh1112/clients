@@ -95,19 +95,19 @@ export class UpdatePasswordComponent extends BaseChangePasswordComponent {
   }
 
   async performSubmitActions(
-    masterPasswordHash: string,
-    masterKey: MasterKey,
-    userKey: [UserKey, EncString]
+    newMasterKeyHash: string,
+    newMasterKey: MasterKey,
+    newUserKey: [UserKey, EncString]
   ) {
     try {
       // Create Request
       const request = new PasswordRequest();
       request.masterPasswordHash = await this.cryptoService.hashMasterKey(
         this.currentMasterPassword,
-        null
+        await this.cryptoService.getOrDeriveMasterKey(this.currentMasterPassword)
       );
-      request.newMasterPasswordHash = masterPasswordHash;
-      request.key = userKey[1].encryptedString;
+      request.newMasterPasswordHash = newMasterKeyHash;
+      request.key = newUserKey[1].encryptedString;
 
       // Update user's password
       this.apiService.postPassword(request);
