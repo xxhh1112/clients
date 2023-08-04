@@ -2,7 +2,9 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { redirectGuard } from "@bitwarden/angular/auth/guards/redirect.guard";
+import { tdeDecryptionRequiredGuard } from "@bitwarden/angular/auth/guards/tde-decryption-required.guard";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
@@ -24,11 +26,16 @@ import { VaultComponent } from "../vault/app/vault/vault.component";
 import { SendComponent } from "./tools/send/send.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/vault", pathMatch: "full" },
+  {
+    path: "",
+    pathMatch: "full",
+    children: [], // Children lets us have an empty component.
+    canActivate: [redirectGuard({ loggedIn: "/vault", loggedOut: "/login", locked: "/lock" })],
+  },
   {
     path: "lock",
     component: LockComponent,
-    canActivate: [LockGuard],
+    canActivate: [lockGuard()],
   },
   {
     path: "login",
@@ -47,7 +54,10 @@ const routes: Routes = [
   {
     path: "login-initiated",
     component: LoginDecryptionOptionsComponent,
-    canActivate: [LockGuard, canAccessFeature(FeatureFlag.TrustedDeviceEncryption)],
+    canActivate: [
+      tdeDecryptionRequiredGuard(),
+      canAccessFeature(FeatureFlag.TrustedDeviceEncryption),
+    ],
   },
   { path: "register", component: RegisterComponent },
   {

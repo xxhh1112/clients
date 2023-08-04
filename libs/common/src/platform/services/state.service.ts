@@ -2563,6 +2563,26 @@ export class StateService<
     );
   }
 
+  async getUserSsoOrganizationIdentifier(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.loginState?.ssoOrganizationIdentifier;
+  }
+
+  async setUserSsoOrganizationIdentifier(
+    value: string | null,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.loginState.ssoOrganizationIdentifier = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
   async getTheme(options?: StorageOptions): Promise<ThemeType> {
     return (
       await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))

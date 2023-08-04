@@ -2276,6 +2276,9 @@
   "region": {
     "message": "Region"
   },
+  "ssoIdentifierRequired": {
+    "message": "Organization SSO identifier is required."
+  },
   "eu": {
     "message": "EU",
     "description": "European Union"

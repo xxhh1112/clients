@@ -73,6 +73,7 @@ describe("SsoComponent", () => {
   let mockOnSuccessfulLoginTwoFactorNavigate: jest.Mock;
   let mockOnSuccessfulLoginChangePasswordNavigate: jest.Mock;
   let mockOnSuccessfulLoginForceResetNavigate: jest.Mock;
+  let mockOnSuccessfulLoginTdeNavigate: jest.Mock;
 
   let mockAcctDecryptionOpts: {
     noMasterPassword: AccountDecryptionOptions;
@@ -118,6 +119,7 @@ describe("SsoComponent", () => {
     mockOnSuccessfulLoginTwoFactorNavigate = jest.fn();
     mockOnSuccessfulLoginChangePasswordNavigate = jest.fn();
     mockOnSuccessfulLoginForceResetNavigate = jest.fn();
+    mockOnSuccessfulLoginTdeNavigate = jest.fn();
 
     mockAcctDecryptionOpts = {
       noMasterPassword: new AccountDecryptionOptions({
@@ -381,16 +383,29 @@ describe("SsoComponent", () => {
           mockAuthService.logIn.mockResolvedValue(authResult);
         });
 
-        it("navigates to the component's defined trusted device encryption route when login is successful", async () => {
+        it("navigates to the component's defined trusted device encryption route when login is successful and no callback is defined", async () => {
           await _component.logIn(code, codeVerifier, orgIdFromState);
 
           expect(mockAuthService.logIn).toHaveBeenCalledTimes(1);
           expect(mockRouter.navigate).toHaveBeenCalledTimes(1);
-          expect(mockRouter.navigate).toHaveBeenCalledWith([_component.trustedDeviceEncRoute], {
-            queryParams: {
-              identifier: orgIdFromState,
-            },
-          });
+          expect(mockRouter.navigate).toHaveBeenCalledWith(
+            [_component.trustedDeviceEncRoute],
+            undefined
+          );
+          expect(mockLogService.error).not.toHaveBeenCalled();
+        });
+
+        it("calls onSuccessfulLoginTdeNavigate instead of router.navigate when the callback is defined", async () => {
+          mockOnSuccessfulLoginTdeNavigate = jest.fn().mockResolvedValue(null);
+          component.onSuccessfulLoginTdeNavigate = mockOnSuccessfulLoginTdeNavigate;
+
+          await _component.logIn(code, codeVerifier, orgIdFromState);
+
+          expect(mockAuthService.logIn).toHaveBeenCalledTimes(1);
+
+          expect(mockOnSuccessfulLoginTdeNavigate).toHaveBeenCalledTimes(1);
+
+          expect(mockRouter.navigate).not.toHaveBeenCalled();
           expect(mockLogService.error).not.toHaveBeenCalled();
         });
       });

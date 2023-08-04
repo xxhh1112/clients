@@ -1,6 +1,5 @@
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
-import { LockGuard as BaseLockGuardService } from "@bitwarden/angular/auth/guards/lock.guard";
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/injection-tokens";
@@ -84,7 +83,7 @@ import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export"
 
 import { BrowserOrganizationService } from "../../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../../admin-console/services/browser-policy.service";
-import { LockGuardService, UnauthGuardService } from "../../auth/popup/services";
+import { UnauthGuardService } from "../../auth/popup/services";
 import { AutofillService } from "../../autofill/services/abstractions/autofill.service";
 import MainBackground from "../../background/main.background";
 import { Account } from "../../models/account";
@@ -144,7 +143,6 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [InitService],
       multi: true,
     },
-    { provide: BaseLockGuardService, useClass: LockGuardService },
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
     { provide: PopupUtilsService, useFactory: () => new PopupUtilsService(isPrivateMode) },
     {

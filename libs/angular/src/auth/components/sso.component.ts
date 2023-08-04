@@ -28,11 +28,12 @@ export class SsoComponent {
 
   formPromise: Promise<AuthResult>;
   initiateSsoFormPromise: Promise<SsoPreValidateResponse>;
-  onSuccessfulLogin: () => Promise<any>;
-  onSuccessfulLoginNavigate: () => Promise<any>;
-  onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
-  onSuccessfulLoginChangePasswordNavigate: () => Promise<any>;
-  onSuccessfulLoginForceResetNavigate: () => Promise<any>;
+  onSuccessfulLogin: () => Promise<unknown>;
+  onSuccessfulLoginNavigate: () => Promise<void>;
+  onSuccessfulLoginTwoFactorNavigate: () => Promise<void>;
+  onSuccessfulLoginChangePasswordNavigate: () => Promise<void>;
+  onSuccessfulLoginForceResetNavigate: () => Promise<void>;
+  onSuccessfulLoginTdeNavigate: () => Promise<void>;
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "lock";
@@ -73,11 +74,12 @@ export class SsoComponent {
           state != null &&
           this.checkState(state, qParams.state)
         ) {
-          await this.logIn(
-            qParams.code,
-            codeVerifier,
-            this.getOrgIdentifierFromState(qParams.state)
-          );
+          // We are not using a query param to pass org identifier around specifically
+          // for the browser SSO case when it needs it on extension open after SSO success
+          // on the TDE login decryption options component
+          const ssoOrganizationIdentifier = this.getOrgIdentifierFromState(qParams.state);
+          await this.logIn(qParams.code, codeVerifier, ssoOrganizationIdentifier);
+          await this.stateService.setUserSsoOrganizationIdentifier(ssoOrganizationIdentifier);
         }
       } else if (
         qParams.clientId != null &&
@@ -276,13 +278,12 @@ export class SsoComponent {
       return await this.handleForcePasswordReset(orgIdentifier);
     }
 
-    // Navigate to TDE page (if user was on trusted device and TDE has decrypted
-    //  their user key, the lock guard will redirect them to the vault)
-    this.router.navigate([this.trustedDeviceEncRoute], {
-      queryParams: {
-        identifier: orgIdentifier,
-      },
-    });
+    this.navigateViaCallbackOrRoute(
+      this.onSuccessfulLoginTdeNavigate,
+      // Navigate to TDE page (if user was on trusted device and TDE has decrypted
+      //  their user key, the login-initiated guard will redirect them to the vault)
+      [this.trustedDeviceEncRoute]
+    );
   }
 
   private async handleChangePasswordRequired(orgIdentifier: string) {

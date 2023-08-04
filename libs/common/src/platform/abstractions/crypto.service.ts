@@ -29,7 +29,6 @@ export abstract class CryptoService {
    * (such as auto, biometrics, or pin)
    */
   refreshAdditionalKeys: () => Promise<void>;
-
   /**
    * Retrieves the user key
    * @param userId The desired user

@@ -3,7 +3,6 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   firstValueFrom,
-  map,
   switchMap,
   Subject,
   catchError,
@@ -11,6 +10,8 @@ import {
   of,
   finalize,
   takeUntil,
+  defer,
+  throwError,
 } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -106,11 +107,9 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
         // We are dealing with a new account if:
         //  - User does not have admin approval (i.e. has not enrolled into admin reset)
         //  - AND does not have a master password
-        this.platformUtilsService.showToast(
-          "success",
-          null,
-          this.i18nService.t("accountSuccessfullyCreated")
-        );
+
+        // TODO: discuss how this doesn't make any sense to show here
+
         this.loadNewUserData();
       } else {
         this.loadUntrustedDeviceData(accountDecryptionOptions);
@@ -140,14 +139,19 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   }
 
   async loadNewUserData() {
-    const autoEnrollStatus$ = this.activatedRoute.queryParamMap.pipe(
-      map((params) => params.get("identifier")),
-      switchMap((identifier) => {
-        if (identifier == null) {
-          return of(null);
+    const autoEnrollStatus$ = defer(() =>
+      this.stateService.getUserSsoOrganizationIdentifier()
+    ).pipe(
+      switchMap((organizationIdentifier) => {
+        if (organizationIdentifier == undefined) {
+          return throwError(() => new Error(this.i18nService.t("ssoIdentifierRequired")));
         }
 
-        return from(this.organizationApiService.getAutoEnrollStatus(identifier));
+        return from(this.organizationApiService.getAutoEnrollStatus(organizationIdentifier));
+      }),
+      catchError((err: unknown) => {
+        this.validationService.showError(err);
+        return of(undefined);
       })
     );
 
@@ -225,7 +229,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
   async approveWithMasterPassword() {
     await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
-    this.router.navigate(["/lock"]);
+    this.router.navigate(["/lock"], { queryParams: { from: "login-initiated" } });
   }
 
   async createUser() {
@@ -239,6 +243,12 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       const { publicKey, privateKey } = await this.cryptoService.initAccount();
       const keysRequest = new KeysRequest(publicKey, privateKey.encryptedString);
       await this.apiService.postAccountKeys(keysRequest);
+
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("accountSuccessfullyCreated")
+      );
 
       await this.passwordResetEnrollmentService.enroll(this.data.organizationId);
 

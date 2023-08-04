@@ -720,7 +720,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     const randomBytes = await this.cryptoFunctionService.randomBytes(64);
     const userKey = new SymmetricCryptoKey(randomBytes) as UserKey;
     const [publicKey, privateKey] = await this.makeKeyPair(userKey);
-    await this.stateService.setUserKey(userKey);
+    await this.setUserKey(userKey);
     await this.stateService.setEncryptedPrivateKey(privateKey.encryptedString);
 
     return {

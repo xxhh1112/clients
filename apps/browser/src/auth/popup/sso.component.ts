@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { SsoComponent as BaseSsoComponent } from "@bitwarden/angular/auth/components/sso.component";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
@@ -37,7 +37,7 @@ export class SsoComponent extends BaseSsoComponent {
     environmentService: EnvironmentService,
     logService: LogService,
     configService: ConfigServiceAbstraction,
-    private vaultTimeoutService: VaultTimeoutService
+    @Inject(WINDOW) private win: Window
   ) {
     super(
       authService,
@@ -67,8 +67,11 @@ export class SsoComponent extends BaseSsoComponent {
         BrowserApi.reloadOpenWindows();
       }
 
-      const thisWindow = window.open("", "_self");
-      thisWindow.close();
+      this.win.close();
+    };
+
+    super.onSuccessfulLoginTdeNavigate = async () => {
+      this.win.close();
     };
   }
 }

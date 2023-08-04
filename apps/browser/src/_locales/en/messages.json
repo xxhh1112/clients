@@ -2254,6 +2254,9 @@
   "approveWithMasterPassword": {
     "message": "Approve with master password"
   },
+  "ssoIdentifierRequired": {
+    "message": "Organization SSO identifier is required."
+  },
   "eu": {
     "message": "EU",
     "description": "European Union"
