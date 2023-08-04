@@ -88,14 +88,14 @@ class AutofillInit implements AutofillInitInterface {
    * @private
    */
   private fillForm(fillScript: AutofillScript) {
-    this.autofillOverlayContentService.currentlyFilling = true;
+    this.autofillOverlayContentService.isCurrentlyFilling = true;
     this.insertAutofillContentService.fillForm(fillScript);
 
     // TODO - This is a hack to prevent the autofill overlay from
     // reappearing after the form has been filled. This should be
     // removed once the autofill overlay is refactored.
     setTimeout(() => {
-      this.autofillOverlayContentService.currentlyFilling = false;
+      this.autofillOverlayContentService.isCurrentlyFilling = false;
     }, 300);
   }
 
@@ -104,7 +104,7 @@ class AutofillInit implements AutofillInitInterface {
   }
 
   private removeAutofillOverlay() {
-    if (this.autofillOverlayContentService.fieldCurrentlyFocused) {
+    if (this.autofillOverlayContentService.isFieldCurrentlyFocused) {
       return;
     }
 

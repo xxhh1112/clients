@@ -2,7 +2,8 @@ import AutofillField from "../../models/autofill-field";
 import { ElementWithOpId, FormFieldElement } from "../../types";
 
 interface AutofillOverlayContentService {
-  fieldCurrentlyFocused: boolean;
+  isFieldCurrentlyFocused: boolean;
+  isCurrentlyFilling: boolean;
   setupOverlayIconListenerOnField(
     autofillFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField

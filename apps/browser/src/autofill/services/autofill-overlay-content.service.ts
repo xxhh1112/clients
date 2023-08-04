@@ -14,8 +14,8 @@ import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface
 import { AutoFillConstants } from "./autofill-constants";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
-  fieldCurrentlyFocused = false;
-  currentlyFilling = false;
+  isFieldCurrentlyFocused = false;
+  isCurrentlyFilling = false;
   private isOverlayIconVisible = false;
   private isOverlayListVisible = false;
   private overlayIconElement: HTMLElement;
@@ -38,15 +38,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.mostRecentlyFocusedField.focus();
     }
 
-    this.showOverlayIcon();
-    this.showOverlayList();
+    this.updateOverlayIconPosition();
+    this.updateOverlayListPosition();
   }
 
   private recentlyFocusedFieldIsCurrentlyFocused() {
     return document.activeElement === this.mostRecentlyFocusedField;
   }
 
-  private showOverlayIcon() {
+  private updateOverlayIconPosition() {
     if (!this.overlayIconElement) {
       this.createOverlayIconElement();
     }
@@ -75,7 +75,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  private showOverlayList() {
+  private updateOverlayListPosition() {
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
     }
@@ -142,27 +142,40 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     chrome.runtime.sendMessage({ command: "bgAutofillOverlayListClosed" });
   }
 
+  private toggleOverlayHidden(isHidden: boolean) {
+    const displayValue = isHidden ? "none" : "block";
+    this.overlayIconElement?.style.setProperty("display", displayValue);
+    this.overlayListElement?.style.setProperty("display", displayValue);
+
+    this.isOverlayIconVisible = !isHidden;
+    this.isOverlayListVisible = !isHidden;
+  }
+
   private triggerFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    if (this.currentlyFilling) {
+    if (this.isCurrentlyFilling) {
       return;
     }
 
-    this.fieldCurrentlyFocused = true;
+    this.isFieldCurrentlyFocused = true;
     this.clearUserInteractionEventTimeout();
-    this.mostRecentlyFocusedField = formFieldElement;
-    this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+    this.updateMostRecentlyFocusedField(formFieldElement);
 
     if ((formFieldElement as HTMLInputElement).value) {
       this.removeAutofillOverlayList();
-      this.showOverlayIcon();
+      this.updateOverlayIconPosition();
       return;
     }
 
     chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
   };
 
+  private updateMostRecentlyFocusedField(formFieldElement: ElementWithOpId<FormFieldElement>) {
+    this.mostRecentlyFocusedField = formFieldElement;
+    this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+  }
+
   private triggerFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    this.fieldCurrentlyFocused = false;
+    this.isFieldCurrentlyFocused = false;
     chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
   };
 
@@ -269,17 +282,22 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    this.removeAutofillOverlay();
-
+    this.toggleOverlayHidden(true);
     this.clearUserInteractionEventTimeout();
-    this.userInteractionEventTimeout = setTimeout(() => {
-      if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
-        return;
-      }
+    this.userInteractionEventTimeout = setTimeout(this.handleUserInteractionEventUpdates, 500);
+  };
 
-      this.triggerFormFieldFocusEvent(this.mostRecentlyFocusedField);
-      this.clearUserInteractionEventTimeout();
-    }, 500);
+  private handleUserInteractionEventUpdates = () => {
+    this.toggleOverlayHidden(false);
+    if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
+      this.removeAutofillOverlay();
+      return;
+    }
+
+    this.updateMostRecentlyFocusedField(this.mostRecentlyFocusedField);
+    this.updateOverlayIconPosition();
+    this.updateOverlayListPosition();
+    this.clearUserInteractionEventTimeout();
   };
 
   private clearUserInteractionEventTimeout() {
