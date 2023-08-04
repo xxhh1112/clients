@@ -267,7 +267,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     customElement.style.display = "block";
     customElement.style.zIndex = "9999999999999999999999999";
     customElement.style.overflow = "hidden";
-    customElement.style.transition = "opacity 100ms ease-in-out";
+    customElement.style.transition = "opacity 100ms ease-out";
     customElement.style.opacity = "0";
 
     return customElement;
