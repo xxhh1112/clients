@@ -23,28 +23,27 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
   private mostRecentlyFocusedFieldRects: DOMRect;
   private authStatus: AuthenticationStatus;
-
-  constructor() {
-    window.addEventListener("scroll", this.removeAutofillOverlay);
-    window.addEventListener("resize", this.removeAutofillOverlay);
-    document.body?.addEventListener("scroll", this.removeAutofillOverlay);
-  }
+  private userInteractionEventTimeout: NodeJS.Timeout;
 
   openAutofillOverlay(authStatus?: AuthenticationStatus) {
     if (!this.mostRecentlyFocusedFieldRects) {
       return;
     }
 
-    if (this.authStatus !== authStatus) {
+    if (authStatus && this.authStatus !== authStatus) {
       this.authStatus = authStatus;
     }
 
-    if (document.activeElement !== this.mostRecentlyFocusedField) {
+    if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.mostRecentlyFocusedField.focus();
     }
 
     this.showOverlayIcon();
     this.showOverlayList();
+  }
+
+  private recentlyFocusedFieldIsCurrentlyFocused() {
+    return document.activeElement === this.mostRecentlyFocusedField;
   }
 
   private showOverlayIcon() {
@@ -60,11 +59,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.mostRecentlyFocusedFieldRects.height - elementOffset
     }px`;
     this.overlayIconElement.style.top = `${
-      this.mostRecentlyFocusedFieldRects.top + window.scrollY + elementOffset / 2
+      this.mostRecentlyFocusedFieldRects.top + elementOffset / 2
     }px`;
     this.overlayIconElement.style.left = `${
       this.mostRecentlyFocusedFieldRects.left +
-      window.scrollX +
       this.mostRecentlyFocusedFieldRects.width -
       this.mostRecentlyFocusedFieldRects.height +
       elementOffset / 2
@@ -73,6 +71,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (!this.isOverlayIconVisible) {
       document.body.appendChild(this.overlayIconElement);
       this.isOverlayIconVisible = true;
+      this.setupUserInteractionEventListeners();
     }
   }
 
@@ -86,13 +85,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.height =
       this.authStatus !== AuthenticationStatus.Unlocked ? "80px" : "205px";
     this.overlayListElement.style.top = `${
-      this.mostRecentlyFocusedFieldRects.top +
-      this.mostRecentlyFocusedFieldRects.height +
-      window.scrollY
+      this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height
     }px`;
-    this.overlayListElement.style.left = `${
-      this.mostRecentlyFocusedFieldRects.left + window.scrollX
-    }px`;
+    this.overlayListElement.style.left = `${this.mostRecentlyFocusedFieldRects.left}px`;
 
     if (!this.isOverlayListVisible) {
       document.body.appendChild(this.overlayListElement);
@@ -134,6 +129,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayIconElement.remove();
     this.isOverlayIconVisible = false;
     chrome.runtime.sendMessage({ command: "bgAutofillOverlayIconClosed" });
+    this.removeUserInteractionEventListeners();
   }
 
   removeAutofillOverlayList() {
@@ -152,6 +148,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.fieldCurrentlyFocused = true;
+    this.clearUserInteractionEventTimeout();
     this.mostRecentlyFocusedField = formFieldElement;
     this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
 
@@ -253,6 +250,42 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     customElement.style.overflow = "hidden";
 
     return customElement;
+  }
+
+  private setupUserInteractionEventListeners() {
+    document.body?.addEventListener("scroll", this.handleUserInteractionEvent);
+    window.addEventListener("scroll", this.handleUserInteractionEvent);
+    window.addEventListener("resize", this.handleUserInteractionEvent);
+  }
+
+  private removeUserInteractionEventListeners() {
+    document.body?.removeEventListener("scroll", this.handleUserInteractionEvent);
+    window.removeEventListener("scroll", this.handleUserInteractionEvent);
+    window.removeEventListener("resize", this.handleUserInteractionEvent);
+  }
+
+  private handleUserInteractionEvent = (event: MouseEvent) => {
+    if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
+      return;
+    }
+
+    this.removeAutofillOverlay();
+
+    this.clearUserInteractionEventTimeout();
+    this.userInteractionEventTimeout = setTimeout(() => {
+      if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
+        return;
+      }
+
+      this.triggerFormFieldFocusEvent(this.mostRecentlyFocusedField);
+      this.clearUserInteractionEventTimeout();
+    }, 500);
+  };
+
+  private clearUserInteractionEventTimeout() {
+    if (this.userInteractionEventTimeout) {
+      clearTimeout(this.userInteractionEventTimeout);
+    }
   }
 }
 
