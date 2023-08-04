@@ -92,7 +92,7 @@ class OverlayBackground {
   }
 
   private checkOverlayIconFocused() {
-    if (this.overlayIconPort) {
+    if (!this.overlayIconPort) {
       return;
     }
 
