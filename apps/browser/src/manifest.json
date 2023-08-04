@@ -62,7 +62,7 @@
   "optional_permissions": ["nativeMessaging"],
   "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
   "sandbox": {
-    "pages": ["overlay/icon.html"],
+    "pages": ["overlay/icon.html", "overlay/list.html"],
     "content_security_policy": "sandbox allow-scripts; script-src 'self'"
   },
   "commands": {

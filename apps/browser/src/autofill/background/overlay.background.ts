@@ -23,10 +23,7 @@ class OverlayBackground {
   private overlayListPort: chrome.runtime.Port;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
-    bgAutofillOverlayListItem: ({ message, sender }) =>
-      this.autofillOverlayListItem(message, sender),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
-    bgOverlayUnlockVault: ({ sender }) => this.unlockVault(sender),
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
@@ -42,6 +39,9 @@ class OverlayBackground {
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
     closeAutofillOverlay: () => this.closeAutofillOverlay(),
     overlayListBlurred: () => this.checkOverlayIconFocused(),
+    unlockVault: ({ port }) => this.unlockVault(port.sender),
+    autofillSelectedListItem: ({ message, port }) =>
+      this.autofillOverlayListItem(message, port.sender),
   };
 
   constructor(
@@ -179,7 +179,11 @@ class OverlayBackground {
     return this.userAuthStatus;
   }
 
-  private async unlockVault(sender: chrome.runtime.MessageSender) {
+  private async unlockVault(sender?: chrome.runtime.MessageSender) {
+    if (!sender) {
+      return;
+    }
+
     this.closeAutofillOverlay();
     const retryMessage: LockedVaultPendingNotificationsItem = {
       commandToRetry: {

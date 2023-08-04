@@ -3,15 +3,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   bgOpenAutofillOverlayList: () => void;
-  bgAutofillOverlayListItem: ({
-    message,
-    sender,
-  }: {
-    message: any;
-    sender: chrome.runtime.MessageSender;
-  }) => void;
   bgCheckOverlayFocused: () => void;
-  bgOverlayUnlockVault: ({ sender }: { sender: chrome.runtime.MessageSender }) => Promise<void>;
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
   bgAutofillOverlayIconClosed: () => void;
   bgAutofillOverlayListClosed: () => void;
@@ -35,6 +27,14 @@ type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
   closeAutofillOverlay: () => void;
   overlayListBlurred: () => void;
+  unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
+  autofillSelectedListItem: ({
+    message,
+    port,
+  }: {
+    message: any;
+    port: chrome.runtime.Port;
+  }) => void;
 };
 
 export {

@@ -62,11 +62,9 @@ class AutofillOverlayList extends HTMLElement {
     unlockButton.className = "unlock-button";
     unlockButton.innerHTML = `${lockIcon} Unlock account`;
 
-    unlockButton.addEventListener("click", () => {
-      chrome.runtime.sendMessage({
-        command: "bgOverlayUnlockVault",
-      });
-    });
+    unlockButton.addEventListener("click", () =>
+      this.postMessageToParent({ command: "unlockVault" })
+    );
 
     this.shadowDom.appendChild(lockedOverlay);
     this.shadowDom.appendChild(unlockButton);
@@ -103,12 +101,9 @@ class AutofillOverlayList extends HTMLElement {
 
       this.shadowDom.appendChild(cipherElement);
 
-      cipherElement.addEventListener("click", () => {
-        chrome.runtime.sendMessage({
-          command: "bgAutofillOverlayListItem",
-          cipherId: cipher.id,
-        });
-      });
+      cipherElement.addEventListener("click", () =>
+        this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id })
+      );
     });
   }
 
