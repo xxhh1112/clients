@@ -24,6 +24,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mostRecentlyFocusedFieldRects: DOMRect;
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
+  private mutationObserver: MutationObserver;
+
+  constructor() {
+    this.setupMutationObserver();
+  }
 
   setupOverlayIconListenerOnField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
@@ -121,6 +126,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   removeAutofillOverlay = () => {
+    return;
+
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
   };
@@ -265,7 +272,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const customElement = document.createElement(elementName);
     customElement.style.position = "fixed";
     customElement.style.display = "block";
-    customElement.style.zIndex = "9999999999999999999999999";
+    customElement.style.zIndex = "2147483648";
     customElement.style.overflow = "hidden";
     customElement.style.transition = "opacity 100ms ease-out";
     customElement.style.opacity = "0";
@@ -313,6 +320,23 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       clearTimeout(this.userInteractionEventTimeout);
     }
   }
+
+  private setupMutationObserver() {
+    this.mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    this.mutationObserver.observe(document.body, { childList: true });
+  }
+
+  private handleMutationObserverUpdate = (mutations: MutationRecord[]) => {
+    if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
+      return;
+    }
+
+    if (document.body.lastChild !== this.overlayListElement) {
+      this.removeAutofillOverlay();
+      this.openAutofillOverlay();
+      return;
+    }
+  };
 }
 
 export default AutofillOverlayContentService;
