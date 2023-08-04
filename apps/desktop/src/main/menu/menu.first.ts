@@ -48,7 +48,7 @@ export class FirstMenu {
       label: this.localize(process.platform === "darwin" ? "preferences" : "settings"),
       click: () => this.sendMessage("openSettings"),
       accelerator: "CmdOrCtrl+,",
-      enabled: this._isLockable,
+      enabled: !this._isLocked,
     };
   }
 
