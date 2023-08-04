@@ -2,8 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { OverlayIconPortMessageHandlers } from "./abstractions/icon";
-import AutofillOverlayPort from "./utils/port-identifiers.enum";
+import { OverlayIconWindowMessageHandlers } from "./abstractions/icon";
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
 
 require("./icon.scss");
@@ -12,8 +11,8 @@ class AutofillOverlayIcon extends HTMLElement {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private shadowDom: ShadowRoot;
   private iconElement: HTMLElement;
-  private port: chrome.runtime.Port;
-  private readonly portMessageHandlers: OverlayIconPortMessageHandlers = {
+  private messageOrigin: string;
+  private readonly windowMessageHandlers: OverlayIconWindowMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
     checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
   };
@@ -22,7 +21,7 @@ class AutofillOverlayIcon extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
-    this.setupPortMessageListener();
+    this.setupWindowMessageListener();
   }
 
   private isVaultUnlocked(): boolean {
@@ -32,13 +31,15 @@ class AutofillOverlayIcon extends HTMLElement {
   private async initAutofillOverlayIcon(message: any = {}) {
     this.authStatus = message.authStatus;
 
-    window.addEventListener("blur", () => this.port.postMessage({ command: "overlayIconBlurred" }));
+    window.addEventListener("blur", () =>
+      this.postMessageToParent({ command: "overlayIconBlurred" })
+    );
 
     this.iconElement = document.createElement("button");
     this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
     this.iconElement.classList.add("overlay-icon");
 
-    const styleSheetUrl = chrome.runtime.getURL("overlay/icon.css");
+    const styleSheetUrl = message.styleSheetUrl;
     const linkElement = document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
@@ -50,11 +51,7 @@ class AutofillOverlayIcon extends HTMLElement {
   }
 
   private handleIconClick = () => {
-    if (!this.port) {
-      return;
-    }
-
-    this.port.postMessage({ command: "overlayIconClicked" });
+    this.postMessageToParent({ command: "overlayIconClicked" });
   };
 
   private checkOverlayIconFocused() {
@@ -62,25 +59,34 @@ class AutofillOverlayIcon extends HTMLElement {
       return;
     }
 
-    this.port.postMessage({ command: "closeAutofillOverlay" });
+    this.postMessageToParent({ command: "closeAutofillOverlay" });
   }
 
-  private setupPortMessageListener() {
-    this.port = chrome.runtime.connect({ name: AutofillOverlayPort.Icon });
-    this.port.onMessage.addListener(this.handlePortMessage);
-  }
-
-  private handlePortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.Icon) {
+  private postMessageToParent(message: any) {
+    if (!this.messageOrigin) {
       return;
     }
 
-    const handler = this.portMessageHandlers[message?.command];
+    window.parent.postMessage(message, this.messageOrigin);
+  }
+
+  private setupWindowMessageListener() {
+    window.addEventListener("message", this.handleWindowMessage);
+  }
+
+  private handleWindowMessage = (event: MessageEvent) => {
+    if (!this.messageOrigin) {
+      this.messageOrigin = event.origin;
+    }
+
+    const message = event?.data;
+    const command = message?.command;
+    const handler = this.windowMessageHandlers[command];
     if (!handler) {
       return;
     }
 
-    handler({ message, port });
+    handler({ message });
   };
 }
 

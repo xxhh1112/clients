@@ -236,6 +236,7 @@ class OverlayBackground {
     this.overlayIconPort.postMessage({
       command: "initAutofillOverlayIcon",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      styleSheetUrl: chrome.runtime.getURL("overlay/icon.css"),
     });
     this.overlayIconPort.onMessage.addListener(this.handleOverlayIconPortMessage);
   };
@@ -263,6 +264,7 @@ class OverlayBackground {
       command: "initAutofillOverlayList",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       ciphers: this.currentContextualCiphers,
+      styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
     });
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
   };

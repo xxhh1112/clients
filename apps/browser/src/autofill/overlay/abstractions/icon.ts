@@ -1,6 +1,6 @@
-type OverlayIconPortMessageHandlers = {
+type OverlayIconWindowMessageHandlers = {
   [key: string]: CallableFunction;
   initAutofillOverlayIcon: ({ message }: { message: any }) => void;
 };
 
-export { OverlayIconPortMessageHandlers };
+export { OverlayIconWindowMessageHandlers };

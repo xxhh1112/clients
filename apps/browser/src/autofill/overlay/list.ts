@@ -2,8 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { OverlayListPortMessageHandlers } from "./abstractions/list";
-import AutofillOverlayPort from "./utils/port-identifiers.enum";
+import { OverlayListWindowMessageHandlers } from "./abstractions/list";
 import { globeIcon, lockIcon } from "./utils/svg-icons";
 
 require("./list.scss");
@@ -11,8 +10,9 @@ require("./list.scss");
 class AutofillOverlayList extends HTMLElement {
   private authStatus: AuthenticationStatus;
   private shadowDom: ShadowRoot;
-  private port: chrome.runtime.Port;
-  private portMessageHandlers: OverlayListPortMessageHandlers = {
+  private styleSheetUrl: string;
+  private messageOrigin: string;
+  private windowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
   };
@@ -21,16 +21,19 @@ class AutofillOverlayList extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
-    this.setupPortMessageListener();
+    this.setupWindowMessageListener();
   }
 
   private async initAutofillOverlayList(message: any = {}) {
     this.authStatus = message.authStatus;
+    this.styleSheetUrl = message.styleSheetUrl;
     this.updateAutofillOverlayList(message);
 
     this.resetShadowDOM();
 
-    window.addEventListener("blur", () => this.port.postMessage({ command: "overlayListBlurred" }));
+    window.addEventListener("blur", () =>
+      this.postMessageToParent({ command: "overlayListBlurred" })
+    );
     if (this.authStatus === AuthenticationStatus.Unlocked) {
       this.updateAutofillOverlayList(message);
       return;
@@ -41,7 +44,7 @@ class AutofillOverlayList extends HTMLElement {
 
   private resetShadowDOM() {
     this.shadowDom.innerHTML = "";
-    const styleSheetUrl = chrome.runtime.getURL("overlay/list.css");
+    const styleSheetUrl = this.styleSheetUrl;
     const linkElement = document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
@@ -114,25 +117,34 @@ class AutofillOverlayList extends HTMLElement {
       return;
     }
 
-    this.port.postMessage({ command: "closeAutofillOverlay" });
+    this.postMessageToParent({ command: "closeAutofillOverlay" });
   }
 
-  private setupPortMessageListener() {
-    this.port = chrome.runtime.connect({ name: AutofillOverlayPort.List });
-    this.port.onMessage.addListener(this.handlePortMessage);
-  }
-
-  private handlePortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.List) {
+  private postMessageToParent(message: any) {
+    if (!this.messageOrigin) {
       return;
     }
 
-    const handler = this.portMessageHandlers[message?.command];
+    window.parent.postMessage(message, this.messageOrigin);
+  }
+
+  private setupWindowMessageListener() {
+    window.addEventListener("message", this.handleWindowMessage);
+  }
+
+  private handleWindowMessage = (event: MessageEvent) => {
+    if (!this.messageOrigin) {
+      this.messageOrigin = event.origin;
+    }
+
+    const message = event?.data;
+    const command = message?.command;
+    const handler = this.windowMessageHandlers[command];
     if (!handler) {
       return;
     }
 
-    handler({ message, port });
+    handler({ message });
   };
 }
 

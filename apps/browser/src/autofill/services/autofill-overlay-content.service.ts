@@ -25,6 +25,27 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
 
+  setupOverlayIconListenerOnField(
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+    autofillFieldData: AutofillField
+  ) {
+    if (this.isIgnoredField(autofillFieldData)) {
+      return;
+    }
+
+    formFieldElement.addEventListener("blur", () =>
+      this.triggerFormFieldBlurEvent(formFieldElement)
+    );
+
+    formFieldElement.addEventListener("focus", () =>
+      this.triggerFormFieldFocusEvent(formFieldElement)
+    );
+
+    if (document.activeElement === formFieldElement) {
+      this.triggerFormFieldFocusEvent(formFieldElement);
+    }
+  }
+
   openAutofillOverlay(authStatus?: AuthenticationStatus) {
     if (!this.mostRecentlyFocusedFieldRects) {
       return;
@@ -92,27 +113,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (!this.isOverlayListVisible) {
       document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
-    }
-  }
-
-  setupOverlayIconListenerOnField(
-    formFieldElement: ElementWithOpId<FormFieldElement>,
-    autofillFieldData: AutofillField
-  ) {
-    if (this.isIgnoredField(autofillFieldData)) {
-      return;
-    }
-
-    formFieldElement.addEventListener("blur", () =>
-      this.triggerFormFieldBlurEvent(formFieldElement)
-    );
-
-    formFieldElement.addEventListener("focus", () =>
-      this.triggerFormFieldFocusEvent(formFieldElement)
-    );
-
-    if (document.activeElement === formFieldElement) {
-      this.triggerFormFieldFocusEvent(formFieldElement);
     }
   }
 
