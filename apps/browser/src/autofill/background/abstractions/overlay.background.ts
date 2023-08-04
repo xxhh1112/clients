@@ -13,6 +13,8 @@ type OverlayBackgroundExtensionMessageHandlers = {
   bgCheckOverlayFocused: () => void;
   bgOverlayUnlockVault: ({ sender }: { sender: chrome.runtime.MessageSender }) => Promise<void>;
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
+  bgAutofillOverlayIconClosed: () => void;
+  bgAutofillOverlayListClosed: () => void;
   collectPageDetailsResponse: ({
     message,
     sender,
@@ -24,6 +26,19 @@ type OverlayBackgroundExtensionMessageHandlers = {
 };
 type OverlayIconPortMessageHandlers = {
   [key: string]: CallableFunction;
+  overlayIconClicked: () => void;
+  closeAutofillOverlay: () => void;
+  overlayIconBlurred: () => void;
 };
 
-export { OverlayBackgroundExtensionMessageHandlers, OverlayIconPortMessageHandlers };
+type OverlayListPortMessageHandlers = {
+  [key: string]: CallableFunction;
+  closeAutofillOverlay: () => void;
+  overlayListBlurred: () => void;
+};
+
+export {
+  OverlayBackgroundExtensionMessageHandlers,
+  OverlayIconPortMessageHandlers,
+  OverlayListPortMessageHandlers,
+};

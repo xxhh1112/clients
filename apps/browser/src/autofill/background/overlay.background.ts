@@ -10,6 +10,7 @@ import { AutofillService } from "../services/abstractions/autofill.service";
 import {
   OverlayBackgroundExtensionMessageHandlers,
   OverlayIconPortMessageHandlers,
+  OverlayListPortMessageHandlers,
 } from "./abstractions/overlay.background";
 
 class OverlayBackground {
@@ -25,15 +26,22 @@ class OverlayBackground {
     bgAutofillOverlayListItem: ({ message, sender }) =>
       this.autofillOverlayListItem(message, sender),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
-    bgCloseOverlay: () => this.removeOverlay(),
     bgOverlayUnlockVault: ({ sender }) => this.unlockVault(sender),
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
+    bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
+    bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     collectPageDetailsResponse: ({ message, sender }) =>
       this.collectPageDetailsResponse(message, sender),
     unlockCompleted: () => this.openAutofillOverlayList(),
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
     overlayIconClicked: () => this.openAutofillOverlayList(),
+    closeAutofillOverlay: () => this.closeAutofillOverlay(),
+    overlayIconBlurred: () => this.checkOverlayListFocused(),
+  };
+  private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
+    closeAutofillOverlay: () => this.closeAutofillOverlay(),
+    overlayListBlurred: () => this.checkOverlayIconFocused(),
   };
 
   constructor(
@@ -74,23 +82,45 @@ class OverlayBackground {
   }
 
   private checkOverlayFocused() {
-    if (!this.overlayListSenderInfo) {
-      return false;
+    if (this.overlayListPort) {
+      this.checkOverlayListFocused();
+
+      return;
     }
 
-    this.overlayListPort?.postMessage({
-      command: "checkOverlayFocused",
-    });
+    this.checkOverlayIconFocused();
   }
 
-  private removeOverlay() {
+  private checkOverlayIconFocused() {
+    if (this.overlayIconPort) {
+      return;
+    }
+
+    this.overlayIconPort.postMessage({ command: "checkOverlayIconFocused" });
+  }
+
+  private checkOverlayListFocused() {
+    if (!this.overlayListPort) {
+      return;
+    }
+
+    this.overlayListPort.postMessage({ command: "checkOverlayListFocused" });
+  }
+
+  private closeAutofillOverlay() {
     if (!this.overlayListSenderInfo) {
       return;
     }
 
-    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
-      command: "removeAutofillOverlay",
-    });
+    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, { command: "closeAutofillOverlay" });
+  }
+
+  private overlayIconClosed() {
+    this.overlayIconPort = null;
+  }
+
+  private overlayListClosed() {
+    this.overlayListPort = null;
   }
 
   private async openAutofillOverlayList() {
@@ -150,7 +180,7 @@ class OverlayBackground {
   }
 
   private async unlockVault(sender: chrome.runtime.MessageSender) {
-    this.removeOverlay();
+    this.closeAutofillOverlay();
     const retryMessage: LockedVaultPendingNotificationsItem = {
       commandToRetry: {
         msg: "bgOpenAutofillOverlayList",
@@ -234,6 +264,20 @@ class OverlayBackground {
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       ciphers: this.currentContextualCiphers,
     });
+    this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
+  };
+
+  private handleOverlayListPortMessage = (message: any, port: chrome.runtime.Port) => {
+    if (port.name !== AutofillOverlayPort.List) {
+      return;
+    }
+
+    const handler = this.overlayListPortMessageHandlers[message?.command];
+    if (!handler) {
+      return;
+    }
+
+    handler({ message, port });
   };
 }
 

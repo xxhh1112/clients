@@ -14,7 +14,7 @@ class AutofillOverlayList extends HTMLElement {
   private port: chrome.runtime.Port;
   private portMessageHandlers: OverlayListPortMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
-    checkOverlayFocused: () => this.checkOverlayFocused(),
+    checkOverlayListFocused: () => this.checkOverlayListFocused(),
   };
 
   constructor() {
@@ -30,12 +30,7 @@ class AutofillOverlayList extends HTMLElement {
 
     this.resetShadowDOM();
 
-    window.addEventListener("blur", () => {
-      chrome.runtime.sendMessage({
-        command: "bgCloseOverlay",
-      });
-    });
-
+    window.addEventListener("blur", () => this.port.postMessage({ command: "overlayListBlurred" }));
     if (this.authStatus === AuthenticationStatus.Unlocked) {
       this.updateAutofillOverlayList(message);
       return;
@@ -114,15 +109,12 @@ class AutofillOverlayList extends HTMLElement {
     });
   }
 
-  private checkOverlayFocused() {
+  private checkOverlayListFocused() {
     if (document.hasFocus()) {
-      return true;
+      return;
     }
 
-    chrome.runtime.sendMessage({
-      command: "bgCloseOverlay",
-    });
-    return false;
+    this.port.postMessage({ command: "closeAutofillOverlay" });
   }
 
   private setupPortMessageListener() {

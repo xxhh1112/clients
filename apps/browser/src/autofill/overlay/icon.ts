@@ -15,6 +15,7 @@ class AutofillOverlayIcon extends HTMLElement {
   private port: chrome.runtime.Port;
   private readonly portMessageHandlers: OverlayIconPortMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
+    checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
   };
 
   constructor() {
@@ -31,6 +32,8 @@ class AutofillOverlayIcon extends HTMLElement {
   private async initAutofillOverlayIcon(message: any = {}) {
     this.authStatus = message.authStatus;
 
+    window.addEventListener("blur", () => this.port.postMessage({ command: "overlayIconBlurred" }));
+
     this.iconElement = document.createElement(this.isVaultUnlocked() ? "button" : "div");
     this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
     this.iconElement.classList.add("overlay-icon");
@@ -40,9 +43,7 @@ class AutofillOverlayIcon extends HTMLElement {
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
 
-    if (this.isVaultUnlocked()) {
-      this.iconElement.addEventListener("click", this.handleIconClick);
-    }
+    this.iconElement.addEventListener("click", this.handleIconClick);
 
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
@@ -55,6 +56,14 @@ class AutofillOverlayIcon extends HTMLElement {
 
     this.port.postMessage({ command: "overlayIconClicked" });
   };
+
+  private checkOverlayIconFocused() {
+    if (document.hasFocus()) {
+      return;
+    }
+
+    this.port.postMessage({ command: "closeAutofillOverlay" });
+  }
 
   private setupPortMessageListener() {
     this.port = chrome.runtime.connect({ name: AutofillOverlayPort.Icon });
