@@ -332,8 +332,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (document.body.lastChild !== this.overlayListElement) {
-      this.removeAutofillOverlay();
-      this.openAutofillOverlay();
+      document.body.appendChild(this.overlayIconElement);
+      document.body.appendChild(this.overlayListElement);
       return;
     }
   };
