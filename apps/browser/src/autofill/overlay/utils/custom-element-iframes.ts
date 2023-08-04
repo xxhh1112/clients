@@ -1,3 +1,5 @@
+import { EventHandler } from "react";
+
 import AutofillOverlayPort from "./port-identifiers.enum";
 
 class AutofillOverlayCustomElementIframe extends HTMLElement {
@@ -7,6 +9,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
     const extensionUri = chrome.runtime.getURL("").slice(0, -1);
     const iframe: HTMLIFrameElement = document.createElement("iframe");
     const shadow: ShadowRoot = this.attachShadow({ mode: "closed" });
+    const handlersMemo: { [key: string]: EventHandler<any> } = {};
     appendIframeToShadowDom();
 
     function appendIframeToShadowDom() {
@@ -25,7 +28,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
     function setupPortMessageListener() {
       const port = chrome.runtime.connect({ name: portName });
       port.onMessage.addListener(handlePortMessage);
-      window.addEventListener("message", (event) => handleWindowMessage(event, port));
+      window.addEventListener("message", handleWindowMessage(port));
     }
 
     function handlePortMessage(message: any, port: chrome.runtime.Port) {
@@ -33,18 +36,24 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
         return;
       }
 
-      iframe.contentWindow.postMessage(message, "*");
+      iframe.contentWindow?.postMessage(message, "*");
     }
 
-    function handleWindowMessage(event: MessageEvent, port: chrome.runtime.Port) {
-      if (
-        event.source !== iframe.contentWindow ||
-        !isFromExtensionOrigin(event.origin.toString().toLowerCase())
-      ) {
-        return;
-      }
+    function handleWindowMessage(port: chrome.runtime.Port): EventHandler<any> {
+      const memoIndex = `${portName}MessageHandler`;
+      return (
+        handlersMemo[memoIndex] ||
+        (handlersMemo[memoIndex] = (event: MessageEvent) => {
+          if (
+            event.source !== iframe.contentWindow ||
+            !isFromExtensionOrigin(event.origin.toString().toLowerCase())
+          ) {
+            return;
+          }
 
-      port.postMessage(event.data);
+          port.postMessage(event.data);
+        })
+      );
     }
 
     function isFromExtensionOrigin(messageOrigin: string): boolean {

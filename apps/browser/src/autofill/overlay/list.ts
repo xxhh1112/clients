@@ -62,13 +62,15 @@ class AutofillOverlayList extends HTMLElement {
     unlockButton.className = "unlock-button";
     unlockButton.innerHTML = `${lockIcon} Unlock account`;
 
-    unlockButton.addEventListener("click", () =>
-      this.postMessageToParent({ command: "unlockVault" })
-    );
+    unlockButton.addEventListener("click", this.handleListClick);
 
     this.shadowDom.appendChild(lockedOverlay);
     this.shadowDom.appendChild(unlockButton);
   }
+
+  private handleListClick = () => {
+    this.postMessageToParent({ command: "unlockVault" });
+  };
 
   private updateAutofillOverlayList(message: any) {
     this.resetShadowDOM();

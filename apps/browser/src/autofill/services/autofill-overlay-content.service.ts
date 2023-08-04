@@ -94,6 +94,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.isOverlayIconVisible = true;
       this.setupUserInteractionEventListeners();
     }
+
+    setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
   }
 
   private updateOverlayListPosition() {
@@ -114,6 +116,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
     }
+
+    setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
   }
 
   removeAutofillOverlay = () => {
@@ -127,6 +131,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayIconElement.remove();
+    this.overlayIconElement.style.opacity = "0";
     this.isOverlayIconVisible = false;
     chrome.runtime.sendMessage({ command: "bgAutofillOverlayIconClosed" });
     this.removeUserInteractionEventListeners();
@@ -138,6 +143,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayListElement.remove();
+    this.overlayListElement.style.opacity = "0";
     this.isOverlayListVisible = false;
     chrome.runtime.sendMessage({ command: "bgAutofillOverlayListClosed" });
   }
@@ -261,6 +267,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     customElement.style.display = "block";
     customElement.style.zIndex = "9999999999999999999999999";
     customElement.style.overflow = "hidden";
+    customElement.style.transition = "opacity 100ms ease-in-out";
+    customElement.style.opacity = "0";
 
     return customElement;
   }
