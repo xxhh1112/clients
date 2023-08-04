@@ -11,7 +11,8 @@ export abstract class UserVerificationService {
   requestOTP: () => Promise<void>;
   /**
    * Check if user has master password or only uses passwordless technologies to log in
+   * @param userId The user id to check. If not provided, the current user is used
    * @returns True if the user has a master password
    */
-  hasMasterPassword: () => Promise<boolean>;
+  hasMasterPassword: (userId?: string) => Promise<boolean>;
 }

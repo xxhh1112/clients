@@ -17,8 +17,8 @@ import { OrganizationUserService } from "@bitwarden/common/abstractions/organiza
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import {
   InternalOrganizationService,
@@ -112,8 +112,8 @@ import { OrganizationUserServiceImplementation } from "@bitwarden/common/service
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
-import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
 import {
   PasswordGenerationService,
   PasswordGenerationServiceAbstraction,
@@ -449,6 +449,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         TokenServiceAbstraction,
         PolicyServiceAbstraction,
         StateServiceAbstraction,
+        UserVerificationServiceAbstraction,
       ],
     },
     {
@@ -462,7 +463,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         PlatformUtilsServiceAbstraction,
         MessagingServiceAbstraction,
         SearchServiceAbstraction,
-        KeyConnectorServiceAbstraction,
         StateServiceAbstraction,
         AuthServiceAbstraction,
         VaultTimeoutSettingsServiceAbstraction,

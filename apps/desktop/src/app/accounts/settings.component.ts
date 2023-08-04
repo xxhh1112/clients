@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
-import { concatMap, debounceTime, filter, map, takeUntil, tap } from "rxjs/operators";
+import { BehaviorSubject, firstValueFrom, Observable, Subject } from "rxjs";
+import { concatMap, debounceTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { DeviceType, ThemeType, KeySuffixOptions } from "@bitwarden/common/enums";
@@ -61,6 +61,7 @@ export class SettingsComponent implements OnInit {
 
   currentUserEmail: string;
 
+  availableVaultTimeoutActions$: Observable<VaultTimeoutAction[]>;
   vaultTimeoutPolicyCallout: Observable<{
     timeout: { hours: number; minutes: number };
     action: "lock" | "logOut";
@@ -97,6 +98,7 @@ export class SettingsComponent implements OnInit {
     locale: [null as string | null],
   });
 
+  private refreshTimeoutSettings$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -196,6 +198,10 @@ export class SettingsComponent implements OnInit {
     }
     this.currentUserEmail = await this.stateService.getEmail();
 
+    this.availableVaultTimeoutActions$ = this.refreshTimeoutSettings$.pipe(
+      switchMap(() => this.vaultTimeoutSettingsService.availableVaultTimeoutActions$())
+    );
+
     // Load timeout policy
     this.vaultTimeoutPolicyCallout = this.policyService.get$(PolicyType.MaximumVaultTimeout).pipe(
       filter((policy) => policy != null),
@@ -222,7 +228,9 @@ export class SettingsComponent implements OnInit {
     const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
     const initialValues = {
       vaultTimeout: await this.vaultTimeoutSettingsService.getVaultTimeout(),
-      vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
+      vaultTimeoutAction: await firstValueFrom(
+        this.vaultTimeoutSettingsService.vaultTimeoutAction$()
+      ),
       pin: pinStatus !== "DISABLED",
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       autoPromptBiometrics: !(await this.stateService.getDisableAutoBiometricsPrompt()),
@@ -264,6 +272,15 @@ export class SettingsComponent implements OnInit {
     this.autoPromptBiometricsText = await this.stateService.getNoAutoPromptBiometricsText();
     this.previousVaultTimeout = this.form.value.vaultTimeout;
 
+    this.refreshTimeoutSettings$
+      .pipe(
+        switchMap(() => this.vaultTimeoutSettingsService.vaultTimeoutAction$()),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((action) => {
+        this.form.controls.vaultTimeoutAction.setValue(action, { emitEvent: false });
+      });
+
     // Form events
     this.form.controls.vaultTimeout.valueChanges
       .pipe(
@@ -279,6 +296,26 @@ export class SettingsComponent implements OnInit {
       .pipe(
         concatMap(async (action) => {
           await this.saveVaultTimeoutAction(action);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.form.controls.pin.valueChanges
+      .pipe(
+        concatMap(async (value) => {
+          await this.updatePin(value);
+          this.refreshTimeoutSettings$.next();
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.form.controls.biometric.valueChanges
+      .pipe(
+        concatMap(async (enabled) => {
+          await this.updateBiometric(enabled);
+          this.refreshTimeoutSettings$.next();
         }),
         takeUntil(this.destroy$)
       )
@@ -362,30 +399,30 @@ export class SettingsComponent implements OnInit {
     );
   }
 
-  async updatePin() {
-    if (this.form.value.pin) {
+  async updatePin(value: boolean) {
+    if (value) {
       const ref = this.modalService.open(SetPinComponent, { allowMultipleModals: true });
 
       if (ref == null) {
-        this.form.controls.pin.setValue(false);
+        this.form.controls.pin.setValue(false, { emitEvent: false });
         return;
       }
 
-      this.form.controls.pin.setValue(await ref.onClosedPromise());
+      this.form.controls.pin.setValue(await ref.onClosedPromise(), { emitEvent: false });
     }
-    if (!this.form.value.pin) {
+    if (!value) {
       await this.vaultTimeoutSettingsService.clear();
     }
   }
 
-  async updateBiometric() {
+  async updateBiometric(enabled: boolean) {
     // NOTE: A bug in angular causes [ngModel] to not reflect the backing field value
     // causing the checkbox to remain checked even if authentication fails.
     // The bug should resolve itself once the angular issue is resolved.
     // See: https://github.com/angular/angular/issues/13063
 
-    if (!this.form.value.biometric || !this.supportsBiometric) {
-      this.form.controls.biometric.setValue(false);
+    if (!enabled || !this.supportsBiometric) {
+      this.form.controls.biometric.setValue(false, { emitEvent: false });
       await this.stateService.setBiometricUnlock(null);
       await this.cryptoService.refreshAdditionalKeys();
       return;
@@ -404,7 +441,7 @@ export class SettingsComponent implements OnInit {
 
     // Validate the key is stored in case biometrics fail.
     const biometricSet = await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric);
-    this.form.controls.biometric.setValue(biometricSet);
+    this.form.controls.biometric.setValue(biometricSet, { emitEvent: false });
     if (!biometricSet) {
       await this.stateService.setBiometricUnlock(null);
     }

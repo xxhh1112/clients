@@ -7,6 +7,7 @@ export class MenuUpdateRequest {
 export class MenuAccount {
   isAuthenticated: boolean;
   isLocked: boolean;
+  isLockable: boolean;
   userId: string;
   email: string;
 }

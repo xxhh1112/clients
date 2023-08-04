@@ -4,18 +4,18 @@ import { firstValueFrom, Subject } from "rxjs";
 import { concatMap, take, takeUntil } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { MasterPasswordPolicyResponse } from "@bitwarden/common/auth/models/response/master-password-policy.response";
 import { HashPurpose, KdfType, KeySuffixOptions } from "@bitwarden/common/enums";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -26,7 +26,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
-import { PinLockType } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
+import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
@@ -68,7 +68,6 @@ export class LockComponent implements OnInit, OnDestroy {
     protected stateService: StateService,
     protected apiService: ApiService,
     protected logService: LogService,
-    private keyConnectorService: KeyConnectorService,
     protected ngZone: NgZone,
     protected policyApiService: PolicyApiServiceAbstraction,
     protected policyService: InternalPolicyService,
@@ -356,15 +355,17 @@ export class LockComponent implements OnInit, OnDestroy {
         !this.platformUtilsService.supportsSecureStorage());
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();
-    const usesKeyConnector = await this.keyConnectorService.getUsesKeyConnector();
-    this.hideInput = usesKeyConnector && !this.pinEnabled;
+    this.hideInput = !this.pinEnabled;
 
     // TODO: might have to duplicate/extend this check a bit - should it use new AcctDecryptionOptions?
     // if the user has no MP hash via TDE and they get here without biometric / pin as well, they should logout as well.
 
-    // Users with key connector and without biometric or pin has no MP to unlock using
-    if (usesKeyConnector && !(this.biometricLock || this.pinEnabled)) {
-      await this.vaultTimeoutService.logOut();
+    const availableVaultTimeoutActions = await firstValueFrom(
+      this.vaultTimeoutSettingsService.availableVaultTimeoutActions$()
+    );
+    const supportsLock = availableVaultTimeoutActions.includes(VaultTimeoutAction.Lock);
+    if (!supportsLock) {
+      return await this.vaultTimeoutService.logOut();
     }
 
     const webVaultUrl = this.environmentService.getWebVaultUrl();

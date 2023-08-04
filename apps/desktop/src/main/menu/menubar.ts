@@ -62,6 +62,8 @@ export class Menubar {
       isLocked = updateRequest.accounts[updateRequest.activeUserId]?.isLocked ?? true;
     }
 
+    const isLockable = !isLocked && updateRequest?.accounts[updateRequest.activeUserId]?.isLockable;
+
     this.items = [
       new FileMenu(
         i18nService,
@@ -69,7 +71,8 @@ export class Menubar {
         updaterMain,
         windowMain.win,
         updateRequest?.accounts,
-        isLocked
+        isLocked,
+        isLockable
       ),
       new EditMenu(i18nService, messagingService, isLocked),
       new ViewMenu(i18nService, messagingService, isLocked),
@@ -91,7 +94,8 @@ export class Menubar {
             updaterMain,
             windowMain.win,
             updateRequest?.accounts,
-            isLocked
+            isLocked,
+            isLockable
           ),
         ],
         ...this.items,

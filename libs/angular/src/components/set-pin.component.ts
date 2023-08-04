@@ -1,6 +1,6 @@
 import { Directive, OnInit } from "@angular/core";
 
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { KeySuffixOptions } from "@bitwarden/common/enums/key-suffix-options.enum";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -18,13 +18,13 @@ export class SetPinComponent implements OnInit {
   constructor(
     private modalRef: ModalRef,
     private cryptoService: CryptoService,
-    private keyConnectorService: KeyConnectorService,
+    private userVerificationService: UserVerificationService,
     private stateService: StateService
   ) {}
 
   async ngOnInit() {
     this.showMasterPassOnRestart = this.masterPassOnRestart =
-      !(await this.keyConnectorService.getUsesKeyConnector());
+      await this.userVerificationService.hasMasterPassword();
   }
 
   toggleVisibility() {

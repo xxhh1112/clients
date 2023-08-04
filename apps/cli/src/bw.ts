@@ -44,8 +44,8 @@ import { OrganizationUserServiceImplementation } from "@bitwarden/common/service
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { TotpService } from "@bitwarden/common/services/totp.service";
-import { VaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vaultTimeout/vaultTimeoutSettings.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
 import {
   PasswordGenerationService,
   PasswordGenerationServiceAbstraction,
@@ -361,11 +361,19 @@ export class Main {
     const lockedCallback = async () =>
       await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
+    this.userVerificationService = new UserVerificationService(
+      this.stateService,
+      this.cryptoService,
+      this.i18nService,
+      this.userVerificationApiService
+    );
+
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
       this.cryptoService,
       this.tokenService,
       this.policyService,
-      this.stateService
+      this.stateService,
+      this.userVerificationService
     );
 
     this.vaultTimeoutService = new VaultTimeoutService(
@@ -376,7 +384,6 @@ export class Main {
       this.platformUtilsService,
       this.messagingService,
       this.searchService,
-      this.keyConnectorService,
       this.stateService,
       this.authService,
       this.vaultTimeoutSettingsService,
@@ -431,13 +438,6 @@ export class Main {
     this.sendProgram = new SendProgram(this);
 
     this.userVerificationApiService = new UserVerificationApiService(this.apiService);
-
-    this.userVerificationService = new UserVerificationService(
-      this.stateService,
-      this.cryptoService,
-      this.i18nService,
-      this.userVerificationApiService
-    );
   }
 
   async run() {

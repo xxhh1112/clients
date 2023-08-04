@@ -338,6 +338,9 @@
   "other": {
     "message": "Other"
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "Set up an unlock method to change your vault timeout action."
+  },
   "rateExtension": {
     "message": "Rate the extension"
   },
