@@ -269,7 +269,6 @@ const devServer =
                   https://notifications.bitwarden.com
                   https://cdn.bitwarden.net
                   https://api.pwnedpasswords.com
-                  https://api.2fa.directory/v3/totp.json
                   https://api.stripe.com
                   https://www.paypal.com
                   https://api.braintreegateway.com
