@@ -73,7 +73,7 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
   async updateTrust(updateDevicesTrustRequestModel: UpdateDevicesTrustRequest): Promise<void> {
     await this.apiService.send(
       "POST",
-      "devices/update-trust",
+      "/devices/update-trust",
       updateDevicesTrustRequestModel,
       true,
       false
