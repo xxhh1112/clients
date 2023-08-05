@@ -10,6 +10,7 @@ import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abs
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -50,7 +51,8 @@ export class LockComponent extends BaseLockComponent {
     passwordStrengthService: PasswordStrengthServiceAbstraction,
     private authService: AuthService,
     dialogService: DialogServiceAbstraction,
-    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    userVerificationService: UserVerificationService
   ) {
     super(
       router,
@@ -69,7 +71,8 @@ export class LockComponent extends BaseLockComponent {
       policyService,
       passwordStrengthService,
       dialogService,
-      deviceTrustCryptoService
+      deviceTrustCryptoService,
+      userVerificationService
     );
     this.successRoute = "/tabs/current";
     this.isInitialLockScreen = (window as any).previousPopupUrl == null;

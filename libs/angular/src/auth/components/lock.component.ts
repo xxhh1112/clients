@@ -10,6 +10,7 @@ import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abs
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
@@ -38,12 +39,12 @@ export class LockComponent implements OnInit, OnDestroy {
   showPassword = false;
   email: string;
   pinEnabled = false;
+  masterPasswordEnabled = false;
   webVaultHostname = "";
   formPromise: Promise<MasterPasswordPolicyResponse>;
   supportsBiometric: boolean;
   biometricLock: boolean;
   biometricText: string;
-  hideInput: boolean;
 
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
@@ -73,7 +74,8 @@ export class LockComponent implements OnInit, OnDestroy {
     protected policyService: InternalPolicyService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     protected dialogService: DialogServiceAbstraction,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction
+    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected userVerificationService: UserVerificationService
   ) {}
 
   async ngOnInit() {
@@ -343,10 +345,24 @@ export class LockComponent implements OnInit, OnDestroy {
   private async load() {
     this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
+    // The loading of the lock component works as follows:
+    //   1. First, is locking a valid timeout action?  If not, we will log the user out.
+    //   2. If locking IS a valid timeout action, we proceed to show the user the lock screen.
+    //      The user will be able to unlock as follows:
+    //        - If they have a PIN set, they will be presented with the PIN input
+    //        - If they have a master password and no PIN, they will be presented with the master password input
+    //        - If they have biometrics enabled, they will be presented with the biometric prompt
+    //   Note: The following scenario is currently NOT handled:
+    //     - The user has a master password and no PIN
+    //     - The user has logged in with Trusted Device Encryption
+    //     - The user is offline
+    //     - The user locks their vault
+    //   This will result in the user not being able to unlock their vault and having to log out.
     let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
     ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
     this.pinEnabled =
       (this.pinStatus === "TRANSIENT" && !!ephemeralPinSet) || this.pinStatus === "PERSISTANT";
+    this.masterPasswordEnabled = await this.userVerificationService.hasMasterPassword();
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometricLock =
@@ -355,7 +371,6 @@ export class LockComponent implements OnInit, OnDestroy {
         !this.platformUtilsService.supportsSecureStorage());
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();
-    this.hideInput = !this.pinEnabled;
 
     // TODO: might have to duplicate/extend this check a bit - should it use new AcctDecryptionOptions?
     // if the user has no MP hash via TDE and they get here without biometric / pin as well, they should logout as well.
