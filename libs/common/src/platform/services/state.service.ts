@@ -1353,7 +1353,7 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    account.adminAuthRequest = adminAuthRequest;
+    account.adminAuthRequest = adminAuthRequest?.toJSON();
 
     await this.saveAccount(account, options);
   }
