@@ -82,11 +82,16 @@ class OverlayBackground {
     if (!message.cipherId) {
       return;
     }
-    const cipher = this.ciphers.find((c) => c.id === message.cipherId);
 
+    const cipherIndex = this.ciphers.findIndex((c) => c.id === message.cipherId);
+    if (cipherIndex === -1) {
+      return;
+    }
+
+    this.currentContextualCiphers.unshift(this.currentContextualCiphers.splice(cipherIndex, 1)[0]);
     this.autofillService.doAutoFill({
       tab: sender.tab,
-      cipher: cipher,
+      cipher: this.ciphers[cipherIndex],
       pageDetails: this.pageDetailsToAutoFill.get(sender.tab.id),
       fillNewPassword: true,
       allowTotpAutofill: true,
@@ -157,7 +162,10 @@ class OverlayBackground {
 
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
-    this.ciphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
+    const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
+    this.ciphers = unsortedCiphers.sort((a, b) =>
+      this.cipherService.sortCiphersByLastUsedThenName(a, b)
+    );
 
     this.currentContextualCiphers = this.ciphers.map((cipher) => ({
       id: cipher.id,
@@ -207,11 +215,23 @@ class OverlayBackground {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
+      this.updateAutofillOverlayIconAuthStatus();
       await this.updateCurrentContextualCiphers();
     }
 
     this.userAuthStatus = authStatus;
     return this.userAuthStatus;
+  }
+
+  private updateAutofillOverlayIconAuthStatus() {
+    if (!this.overlayIconPort) {
+      return;
+    }
+
+    this.overlayIconPort.postMessage({
+      command: "updateAuthStatus",
+      authStatus: this.userAuthStatus,
+    });
   }
 
   private async unlockVault(sender?: chrome.runtime.MessageSender) {

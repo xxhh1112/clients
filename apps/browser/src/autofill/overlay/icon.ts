@@ -15,6 +15,7 @@ class AutofillOverlayIcon extends HTMLElement {
   private readonly windowMessageHandlers: OverlayIconWindowMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
     checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
+    updateAuthStatus: ({ message }) => this.updateAuthStatus(message),
   };
 
   constructor() {
@@ -48,6 +49,11 @@ class AutofillOverlayIcon extends HTMLElement {
 
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
+  }
+
+  private updateAuthStatus(message: any = {}) {
+    this.authStatus = message.authStatus;
+    this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
   }
 
   private handleIconClick = () => {
