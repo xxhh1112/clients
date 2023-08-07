@@ -10,8 +10,10 @@ require("./list.scss");
 class AutofillOverlayList extends HTMLElement {
   private authStatus: AuthenticationStatus;
   private shadowDom: ShadowRoot;
+  private overlayListContainer: HTMLDivElement;
   private styleSheetUrl: string;
   private messageOrigin: string;
+  private resizeObserver: ResizeObserver;
   private windowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
@@ -21,15 +23,15 @@ class AutofillOverlayList extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
     this.setupWindowMessageListener();
   }
 
   private async initAutofillOverlayList(message: any = {}) {
     this.authStatus = message.authStatus;
     this.styleSheetUrl = message.styleSheetUrl;
-    this.updateAutofillOverlayList(message);
 
-    this.resetShadowDOM();
+    this.initShadowDom();
 
     window.addEventListener("blur", () =>
       this.postMessageToParent({ command: "overlayListBlurred" })
@@ -42,17 +44,27 @@ class AutofillOverlayList extends HTMLElement {
     this.buildLockedOverlay();
   }
 
-  private resetShadowDOM() {
+  private initShadowDom() {
     this.shadowDom.innerHTML = "";
     const styleSheetUrl = this.styleSheetUrl;
     const linkElement = document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
+
+    this.overlayListContainer = document.createElement("div");
+    this.overlayListContainer.className = "overlay-list-container";
+    this.resizeObserver.observe(this.overlayListContainer);
+
     this.shadowDom.appendChild(linkElement);
+    this.shadowDom.appendChild(this.overlayListContainer);
+  }
+
+  private resetOverlayListContainer() {
+    this.overlayListContainer.innerHTML = "";
   }
 
   private buildLockedOverlay() {
-    this.resetShadowDOM();
+    this.resetOverlayListContainer();
 
     const lockedOverlay = document.createElement("div");
     lockedOverlay.className = "locked-overlay";
@@ -64,8 +76,8 @@ class AutofillOverlayList extends HTMLElement {
 
     unlockButton.addEventListener("click", this.handleListClick);
 
-    this.shadowDom.appendChild(lockedOverlay);
-    this.shadowDom.appendChild(unlockButton);
+    this.overlayListContainer.appendChild(lockedOverlay);
+    this.overlayListContainer.appendChild(unlockButton);
   }
 
   private handleListClick = () => {
@@ -73,7 +85,7 @@ class AutofillOverlayList extends HTMLElement {
   };
 
   private updateAutofillOverlayList(message: any) {
-    this.resetShadowDOM();
+    this.resetOverlayListContainer();
 
     message.ciphers.forEach((cipher: any) => {
       const cipherElement = document.createElement("div");
@@ -101,11 +113,11 @@ class AutofillOverlayList extends HTMLElement {
       cipherElement.appendChild(globeIconElement);
       cipherElement.appendChild(cipherDetailsContainer);
 
-      this.shadowDom.appendChild(cipherElement);
-
       cipherElement.addEventListener("click", () =>
         this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id })
       );
+
+      this.overlayListContainer.appendChild(cipherElement);
     });
   }
 
@@ -142,6 +154,18 @@ class AutofillOverlayList extends HTMLElement {
     }
 
     handler({ message });
+  };
+
+  private handleResizeObserver = (entries: ResizeObserverEntry[]) => {
+    for (const entry of entries) {
+      if (entry.target !== this.overlayListContainer) {
+        continue;
+      }
+
+      const { height } = entry.contentRect;
+      this.postMessageToParent({ command: "updateAutofillOverlayListHeight", height });
+      break;
+    }
   };
 }
 

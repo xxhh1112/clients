@@ -12,6 +12,7 @@ interface AutofillOverlayContentService {
   removeAutofillOverlay(): void;
   removeAutofillOverlayIcon(): void;
   removeAutofillOverlayList(): void;
+  updateAutofillOverlayListHeight(message: any): void;
 }
 
 export { AutofillOverlayContentService };

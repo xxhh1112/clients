@@ -24,6 +24,7 @@ class AutofillInit implements AutofillInitInterface {
     fillForm: ({ message }) => this.fillForm(message.fillScript),
     openAutofillOverlayList: ({ message }) => this.openAutofillOverlayList(message.authStatus),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
+    updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
   };
 
   /**
@@ -109,6 +110,10 @@ class AutofillInit implements AutofillInitInterface {
     }
 
     this.autofillOverlayContentService.removeAutofillOverlay();
+  }
+
+  private updateAutofillOverlayListHeight(message: any) {
+    this.autofillOverlayContentService.updateAutofillOverlayListHeight(message);
   }
 
   /**

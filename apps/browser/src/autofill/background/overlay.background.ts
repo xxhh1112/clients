@@ -42,6 +42,7 @@ class OverlayBackground {
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
+    updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
   };
 
   constructor(
@@ -166,6 +167,17 @@ class OverlayBackground {
         company: cipher.identity.company,
       },
     }));
+  }
+
+  private updateAutofillOverlayListHeight(message: any) {
+    if (!this.overlayListSenderInfo) {
+      return;
+    }
+
+    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
+      command: "updateAutofillOverlayListHeight",
+      height: message.height,
+    });
   }
 
   private async getAuthStatus() {

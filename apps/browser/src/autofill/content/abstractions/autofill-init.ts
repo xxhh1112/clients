@@ -18,6 +18,7 @@ type AutofillExtensionMessageHandlers = {
   fillForm: (message: { message: AutofillExtensionMessage }) => void;
   openAutofillOverlayList: (message: { message: AutofillExtensionMessage }) => void;
   closeAutofillOverlay: () => void;
+  updateAutofillOverlayListHeight: (message: { message: any }) => void;
 };
 
 interface AutofillInit {

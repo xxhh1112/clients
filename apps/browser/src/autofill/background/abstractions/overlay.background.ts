@@ -35,6 +35,7 @@ type OverlayListPortMessageHandlers = {
     message: any;
     port: chrome.runtime.Port;
   }) => void;
+  updateAutofillOverlayListHeight: ({ message }: { message: any }) => void;
 };
 
 export {
