@@ -46,11 +46,31 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent(formFieldElement));
-    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
+
+    // TODO: Need to find a way to have the handler for click and focus events onyl trigger once. Currently we don't really handle whether this is visible in an effective manner.
+    formFieldElement.addEventListener(
+      "click",
+      this.handleFormFieldUserInteractionEvent(formFieldElement)
+    );
+    formFieldElement.addEventListener(
+      "focus",
+      this.handleFormFieldUserInteractionEvent(formFieldElement)
+    );
+    formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
 
     if (document.activeElement === formFieldElement) {
-      this.triggerFormFieldFocusEvent(formFieldElement);
+      this.triggerFormFieldInteractionEvent(formFieldElement);
     }
+  }
+
+  updateAutofillOverlayListHeight(message: any) {
+    if (!this.overlayListElement) {
+      return;
+    }
+
+    const { height } = message;
+    this.overlayListElement.style.height = `${height}px`;
+    this.fadeInOverlayElements();
   }
 
   private handleFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
@@ -61,12 +81,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   };
 
-  private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`;
+  private handleFormFieldUserInteractionEvent = (
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-user-interaction-handler`;
     return (
       this.handlersMemo[memoIndex] ||
-      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldFocusEvent(formFieldElement))
+      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldInteractionEvent(formFieldElement))
     );
+  };
+
+  private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
+    // if the event is for an esc key
+    if (event.code === "Escape") {
+      this.removeAutofillOverlay();
+    }
   };
 
   openAutofillOverlay(authStatus?: AuthenticationStatus) {
@@ -86,20 +115,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.updateOverlayListPosition();
   }
 
-  updateAutofillOverlayListHeight(message: any) {
-    if (!this.overlayListElement) {
-      return;
-    }
-
-    const { height } = message;
-    this.overlayListElement.style.height = `${height}px`;
-  }
-
   private recentlyFocusedFieldIsCurrentlyFocused() {
     return document.activeElement === this.mostRecentlyFocusedField;
   }
 
-  private updateOverlayIconPosition() {
+  private updateOverlayIconPosition(isOpeningWithoutList = false) {
     if (!this.overlayIconElement) {
       this.createOverlayIconElement();
     }
@@ -127,7 +147,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.setupUserInteractionEventListeners();
     }
 
-    setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
+    if (isOpeningWithoutList) {
+      this.fadeInOverlayElements();
+    }
+  }
+
+  private fadeInOverlayElements() {
+    if (this.isOverlayIconVisible) {
+      setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
+    }
+
+    if (this.isOverlayListVisible) {
+      setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
+    }
   }
 
   private updateOverlayListPosition() {
@@ -135,7 +167,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.createAutofillOverlayList();
     }
 
-    // TODO: This is a VERY temporary measure to just show off work so far, it needs to be more robust in determining the height of the iframe. Most likely you'll need to add an observer to the list within the iframe and then send a message to the background to resize the iframe.
     this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
     this.overlayListElement.style.top = `${
       this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height
@@ -146,8 +177,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
     }
-
-    setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
   }
 
   removeAutofillOverlay = () => {
@@ -173,6 +202,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayListElement.remove();
+    this.overlayListElement.style.height = "0";
     this.overlayListElement.style.opacity = "0";
     this.isOverlayListVisible = false;
     chrome.runtime.sendMessage({ command: "bgAutofillOverlayListClosed" });
@@ -187,7 +217,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.isOverlayListVisible = !isHidden;
   }
 
-  private triggerFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+  private triggerFormFieldInteractionEvent = (
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) => {
     if (this.isCurrentlyFilling) {
       return;
     }
@@ -198,7 +230,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     if ((formFieldElement as HTMLInputElement).value) {
       this.removeAutofillOverlayList();
-      this.updateOverlayIconPosition();
+      this.updateOverlayIconPosition(true);
       return;
     }
 
