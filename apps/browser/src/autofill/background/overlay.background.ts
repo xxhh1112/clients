@@ -5,7 +5,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
-import { AutofillService } from "../services/abstractions/autofill.service";
+import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
 import {
   OverlayBackgroundExtensionMessageHandlers,
@@ -16,7 +16,7 @@ import {
 class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
-  private pageDetailsToAutoFill: any[] = [];
+  private pageDetailsToAutoFill: Map<number, PageDetail[]> = new Map();
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayIconPort: chrome.runtime.Port;
@@ -52,19 +52,30 @@ class OverlayBackground {
   ) {
     this.getAuthStatus();
     this.setupExtensionMessageListeners();
+
+    // TODO: Need to think of a more effective way to handle this. This is a temporary solution.
+    chrome.tabs.onRemoved.addListener((tabId) => this.removePageDetails(tabId));
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+      if (changeInfo.status !== "complete") {
+        this.removePageDetails(tabId);
+      }
+    });
   }
 
   private collectPageDetailsResponse(message: any, sender: chrome.runtime.MessageSender) {
-    const currentTab = this.pageDetailsToAutoFill[0]?.tab;
-    if (!currentTab || currentTab.id !== sender.tab.id) {
-      this.pageDetailsToAutoFill = [];
-    }
-
-    this.pageDetailsToAutoFill.push({
+    // TODO: Need to think of a more effective way to handle this. This is a temporary solution.
+    const pageDetails = this.pageDetailsToAutoFill.get(sender.tab.id) || [];
+    pageDetails.push({
       frameId: sender.frameId,
       tab: sender.tab,
       details: message.details,
     });
+
+    this.pageDetailsToAutoFill.set(sender.tab.id, pageDetails);
+  }
+
+  private removePageDetails(tabId: number) {
+    this.pageDetailsToAutoFill.delete(tabId);
   }
 
   private autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
@@ -76,7 +87,7 @@ class OverlayBackground {
     this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
-      pageDetails: this.pageDetailsToAutoFill,
+      pageDetails: this.pageDetailsToAutoFill.get(sender.tab.id),
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
@@ -167,6 +178,13 @@ class OverlayBackground {
         company: cipher.identity.company,
       },
     }));
+
+    if (this.overlayListPort) {
+      this.overlayListPort.postMessage({
+        command: "updateContextualCiphers",
+        ciphers: this.currentContextualCiphers,
+      });
+    }
   }
 
   private updateAutofillOverlayListHeight(message: any) {

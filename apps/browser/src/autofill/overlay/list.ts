@@ -17,6 +17,7 @@ class AutofillOverlayList extends HTMLElement {
   private windowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
+    updateContextualCiphers: ({ message }) => this.updateAutofillOverlayList(message),
   };
 
   constructor() {
