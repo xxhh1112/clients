@@ -14,7 +14,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: any;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  unlockCompleted: () => void;
+  unlockCompleted: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
 };
 type OverlayIconPortMessageHandlers = {
   [key: string]: CallableFunction;

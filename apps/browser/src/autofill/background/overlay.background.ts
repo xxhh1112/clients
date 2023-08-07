@@ -29,7 +29,7 @@ class OverlayBackground {
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     collectPageDetailsResponse: ({ message, sender }) =>
       this.collectPageDetailsResponse(message, sender),
-    unlockCompleted: () => this.openAutofillOverlayList(),
+    unlockCompleted: ({ sender }) => this.handleUnlockedCompleted(sender),
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
     overlayIconClicked: () => this.openAutofillOverlayList(),
@@ -145,6 +145,11 @@ class OverlayBackground {
     });
   }
 
+  private async handleUnlockedCompleted(sender: chrome.runtime.MessageSender) {
+    await BrowserApi.tabSendMessageData(sender.tab, "closeNotificationBar");
+    this.openAutofillOverlayList();
+  }
+
   async updateCurrentContextualCiphers() {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
       return;
@@ -217,7 +222,9 @@ class OverlayBackground {
     this.closeAutofillOverlay(sender);
     const retryMessage: LockedVaultPendingNotificationsItem = {
       commandToRetry: {
-        msg: "bgOpenAutofillOverlayList",
+        msg: {
+          command: "bgOpenAutofillOverlayList",
+        },
         sender: sender,
       },
       target: "overlay.background",
