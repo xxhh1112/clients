@@ -33,11 +33,11 @@ class OverlayBackground {
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
     overlayIconClicked: () => this.openAutofillOverlayList(),
-    closeAutofillOverlay: () => this.closeAutofillOverlay(),
+    closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
     overlayIconBlurred: () => this.checkOverlayListFocused(),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
-    closeAutofillOverlay: () => this.closeAutofillOverlay(),
+    closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
     overlayListBlurred: () => this.checkOverlayIconFocused(),
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
@@ -119,12 +119,12 @@ class OverlayBackground {
     this.overlayListPort.postMessage({ command: "checkOverlayListFocused" });
   }
 
-  private closeAutofillOverlay() {
-    if (!this.overlayListSenderInfo) {
+  private closeAutofillOverlay(sender: chrome.runtime.MessageSender) {
+    if (!sender) {
       return;
     }
 
-    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, { command: "closeAutofillOverlay" });
+    chrome.tabs.sendMessage(sender.tab.id, { command: "closeAutofillOverlay" });
   }
 
   private overlayIconClosed() {
@@ -214,7 +214,7 @@ class OverlayBackground {
       return;
     }
 
-    this.closeAutofillOverlay();
+    this.closeAutofillOverlay(sender);
     const retryMessage: LockedVaultPendingNotificationsItem = {
       commandToRetry: {
         msg: "bgOpenAutofillOverlayList",

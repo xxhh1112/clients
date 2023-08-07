@@ -22,7 +22,7 @@ body {
   background: $color-white;
 }
 
-.locked-overlay {
+.overlay-list-message {
   font-family: $font-family-sans-serif;
   font-weight: 400;
   font-size: 1.4rem;
@@ -30,10 +30,16 @@ body {
   width: 100%;
   padding: 0.8rem;
   color: $color-dark-gray;
+
+  &.no-items {
+    font-size: 1.6rem;
+  }
 }
 
-.unlock-button {
-  display: block;
+.overlay-list-button {
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
   width: 100%;
   background: transparent;
   font-family: $font-family-sans-serif;
@@ -48,16 +54,30 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 
+  &:hover {
+    background: #f0f0f0;
+  }
+
   svg {
     position: relative;
+    margin-left: 0.4rem;
+    margin-right: 0.8rem;
+  }
+}
+
+.unlock-button {
+  svg {
     top: 2px;
     width: 1.6rem;
     height: 1.7rem;
-    margin-right: 5px;
   }
+}
 
-  &:hover {
-    background: #f0f0f0;
+.add-new-item-button {
+  svg {
+    top: 2px;
+    width: 1.7rem;
+    height: 1.7rem;
   }
 }
 

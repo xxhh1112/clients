@@ -19,13 +19,13 @@ type OverlayBackgroundExtensionMessageHandlers = {
 type OverlayIconPortMessageHandlers = {
   [key: string]: CallableFunction;
   overlayIconClicked: () => void;
-  closeAutofillOverlay: () => void;
+  closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
   overlayIconBlurred: () => void;
 };
 
 type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
-  closeAutofillOverlay: () => void;
+  closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
   overlayListBlurred: () => void;
   unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
   autofillSelectedListItem: ({

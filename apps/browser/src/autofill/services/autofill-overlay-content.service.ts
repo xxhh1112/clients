@@ -270,6 +270,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const elementName = "bitwarden-autofill-overlay-list";
     window.customElements?.define(elementName, AutofillOverlayListIframe);
     this.overlayListElement = this.createOverlayCustomElement(elementName);
+    this.overlayListElement.style.height = "0";
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
     this.overlayListElement.style.maxHeight = "210px";
@@ -345,14 +346,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     // within the body. We at that point will enter an infinite loop of sorts where we keep moving our elements to the end
     // of the body, and the script keeps moving its element to the end of the body. Potentially, it might be better to
     // also check the z-index of the last element in the body and ensure that our elements are always above that.
+    // WARNING: It's really easy to trigger a infinite loop with this observer. Keep that in mind while updating this implementation.
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
       return;
     }
 
-    if (document.body.lastChild !== this.overlayListElement) {
-      document.body.appendChild(this.overlayIconElement);
-      document.body.appendChild(this.overlayListElement);
+    const lastChild = document.body.lastChild;
+    if (lastChild === this.overlayListElement || lastChild === this.overlayIconElement) {
       return;
+    }
+
+    if (this.overlayIconElement) {
+      document.body.appendChild(this.overlayIconElement);
+    }
+    if (this.overlayListElement) {
+      document.body.appendChild(this.overlayListElement);
     }
   };
 }

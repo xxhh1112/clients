@@ -3,7 +3,7 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayListWindowMessageHandlers } from "./abstractions/list";
-import { globeIcon, lockIcon } from "./utils/svg-icons";
+import { globeIcon, lockIcon, plusIcon } from "./utils/svg-icons";
 
 require("./list.scss");
 
@@ -68,26 +68,30 @@ class AutofillOverlayList extends HTMLElement {
     this.resetOverlayListContainer();
 
     const lockedOverlay = document.createElement("div");
-    lockedOverlay.className = "locked-overlay";
+    lockedOverlay.className = "locked-overlay overlay-list-message";
     lockedOverlay.textContent = "Unlock your account to view matching logins";
 
     const unlockButton = document.createElement("button");
-    unlockButton.className = "unlock-button";
+    unlockButton.className = "unlock-button overlay-list-button";
     unlockButton.innerHTML = `${lockIcon} Unlock account`;
 
-    unlockButton.addEventListener("click", this.handleListClick);
+    unlockButton.addEventListener("click", this.handleUnlockButtonClick);
 
     this.overlayListContainer.appendChild(lockedOverlay);
     this.overlayListContainer.appendChild(unlockButton);
   }
 
-  private handleListClick = () => {
+  private handleUnlockButtonClick = () => {
     this.postMessageToParent({ command: "unlockVault" });
   };
 
   private updateAutofillOverlayList(message: any) {
-    this.resetOverlayListContainer();
+    if (!message.ciphers || message.ciphers.length === 0) {
+      this.buildNoResultsOverlayList();
+      return;
+    }
 
+    this.resetOverlayListContainer();
     message.ciphers.forEach((cipher: any) => {
       const cipherElement = document.createElement("div");
       cipherElement.className = "cipher";
@@ -121,6 +125,27 @@ class AutofillOverlayList extends HTMLElement {
       this.overlayListContainer.appendChild(cipherElement);
     });
   }
+
+  private buildNoResultsOverlayList() {
+    this.resetOverlayListContainer();
+
+    const noItemsMessage = document.createElement("div");
+    noItemsMessage.className = "no-items overlay-list-message";
+    noItemsMessage.textContent = "No items to show";
+
+    const newItemButton = document.createElement("button");
+    newItemButton.className = "add-new-item-button overlay-list-button";
+    newItemButton.innerHTML = `${plusIcon} New item`;
+
+    newItemButton.addEventListener("click", this.handeNewItemButtonClick);
+
+    this.overlayListContainer.appendChild(noItemsMessage);
+    this.overlayListContainer.appendChild(newItemButton);
+  }
+
+  private handeNewItemButtonClick = () => {
+    this.postMessageToParent({ command: "addNewVaultItem" });
+  };
 
   private checkOverlayListFocused() {
     if (document.hasFocus()) {
