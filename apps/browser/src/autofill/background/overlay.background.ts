@@ -83,15 +83,15 @@ class OverlayBackground {
       return;
     }
 
-    const cipherIndex = this.ciphers.findIndex((c) => c.id === message.cipherId);
-    if (cipherIndex === -1) {
-      return;
-    }
+    const cipher = this.ciphers.find((c) => c.id === message.cipherId);
 
+    // TODO: There has to be a better, less costly way to do this...
+    const cipherIndex = this.currentContextualCiphers.findIndex((c) => c.id === message.cipherId);
     this.currentContextualCiphers.unshift(this.currentContextualCiphers.splice(cipherIndex, 1)[0]);
+
     this.autofillService.doAutoFill({
       tab: sender.tab,
-      cipher: this.ciphers[cipherIndex],
+      cipher: cipher,
       pageDetails: this.pageDetailsToAutoFill.get(sender.tab.id),
       fillNewPassword: true,
       allowTotpAutofill: true,

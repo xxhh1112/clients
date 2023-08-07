@@ -228,7 +228,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.clearUserInteractionEventTimeout();
     this.updateMostRecentlyFocusedField(formFieldElement);
 
-    if ((formFieldElement as HTMLInputElement).value) {
+    if (
+      this.authStatus === AuthenticationStatus.Unlocked &&
+      (formFieldElement as HTMLInputElement).value
+    ) {
       this.removeAutofillOverlayList();
       this.updateOverlayIconPosition(true);
       return;
@@ -331,7 +334,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     customElement.style.display = "block";
     customElement.style.zIndex = "2147483648";
     customElement.style.overflow = "hidden";
-    customElement.style.transition = "opacity 100ms ease-out";
+    customElement.style.transition = "opacity 125ms ease-out";
     customElement.style.opacity = "0";
 
     return customElement;

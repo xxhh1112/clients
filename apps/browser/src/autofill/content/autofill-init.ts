@@ -109,6 +109,11 @@ class AutofillInit implements AutofillInitInterface {
       return;
     }
 
+    if (this.autofillOverlayContentService.isCurrentlyFilling) {
+      this.autofillOverlayContentService.removeAutofillOverlayList();
+      return;
+    }
+
     this.autofillOverlayContentService.removeAutofillOverlay();
   }
 
