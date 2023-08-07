@@ -1,3 +1,4 @@
+import { NgZone } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { DeviceType } from "@bitwarden/common/enums";
@@ -212,9 +213,15 @@ export class BrowserApi {
     }
   }
 
-  static messageListener$() {
+  static messageListener$(zone?: NgZone) {
     return new Observable<unknown>((subscriber) => {
-      const handler = (message: unknown) => subscriber.next(message);
+      const handler = (message: unknown) => {
+        if (zone) {
+          zone.run(() => subscriber.next(message));
+        } else {
+          subscriber.next(message);
+        }
+      };
       chrome.runtime.onMessage.addListener(handler);
       return () => chrome.runtime.onMessage.removeListener(handler);
     });
