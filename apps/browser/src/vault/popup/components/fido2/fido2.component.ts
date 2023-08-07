@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -18,7 +18,6 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { Fido2KeyView } from "@bitwarden/common/vault/models/view/fido2-key.view";
 
-import { BrowserApi } from "../../../../platform/browser/browser-api";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
@@ -48,7 +47,8 @@ export class Fido2Component implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private cipherService: CipherService,
-    private passwordRepromptService: PasswordRepromptService
+    private passwordRepromptService: PasswordRepromptService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +57,16 @@ export class Fido2Component implements OnInit, OnDestroy {
       map((queryParamMap) => queryParamMap.get("sessionId"))
     );
 
-    combineLatest([sessionId$, BrowserApi.messageListener$() as Observable<BrowserFido2Message>])
+    // Duplicated from BrowserApi.MessageListener$, but adds ngZone.run to make sure
+    // Angular change detection knows when a new value is emitted. Otherwise it is outside the zone.
+    // TODO: refactor so that this is reusable in other components to help others avoid this trap!
+    const messageListener$ = new Observable<unknown>((subscriber) => {
+      const handler = (message: unknown) => this.ngZone.run(() => subscriber.next(message)); // <-- the magic is here
+      chrome.runtime.onMessage.addListener(handler);
+      return () => chrome.runtime.onMessage.removeListener(handler);
+    }) as Observable<BrowserFido2Message>;
+
+    combineLatest([sessionId$, messageListener$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([sessionId, message]) => {
         this.sessionId = sessionId;
@@ -75,6 +84,8 @@ export class Fido2Component implements OnInit, OnDestroy {
 
         this.message$.next(message);
       });
+
+    // setInterval(() => this.message$.next(null), 500);
 
     this.data$ = this.message$.pipe(
       filter((message) => message != undefined),
