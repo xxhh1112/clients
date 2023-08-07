@@ -120,7 +120,9 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
               name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
               email: await this.tokenService.getEmail(),
               avatarColor: await this.stateService.getAvatarColor(),
-              serverUrl: Utils.getHostname(this.environmentService.getWebVaultUrl()),
+              serverUrl: Utils.removeVaultfromHostname(
+                Utils.getHostname(this.environmentService.getWebVaultUrl())
+              ),
             };
           } catch {
             this.activeAccount = undefined;
@@ -176,7 +178,9 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
         userId: userId,
       });
 
-      baseAccounts[userId].settings.region = Utils.getHostname(serverConfig.environment.vault);
+      baseAccounts[userId].settings.region = Utils.removeVaultfromHostname(
+        Utils.getHostname(serverConfig.environment.vault)
+      );
       switcherAccounts[userId] = new SwitcherAccount(baseAccounts[userId]);
       switcherAccounts[userId].avatarColor = await this.stateService.getAvatarColor({
         userId: userId,

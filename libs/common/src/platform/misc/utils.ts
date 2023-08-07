@@ -263,6 +263,10 @@ export class Utils {
     return null;
   }
 
+  static removeVaultfromHostname(uriString: string): string {
+    return uriString.replace(/vault./g, "");
+  }
+
   static getHost(uriString: string): string {
     const url = Utils.getUrl(uriString);
     try {

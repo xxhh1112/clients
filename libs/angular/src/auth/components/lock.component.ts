@@ -316,9 +316,15 @@ export class LockComponent implements OnInit, OnDestroy {
     }
 
     const webVaultUrl = this.environmentService.getWebVaultUrl();
-    const vaultUrl =
-      webVaultUrl === "https://vault.bitwarden.com" ? "https://bitwarden.com" : webVaultUrl;
-    this.webVaultHostname = Utils.getHostname(vaultUrl);
+
+    switch (webVaultUrl) {
+      case "https://vault.bitwarden.com":
+      case "https://vault.bitwarden.eu":
+        this.webVaultHostname = Utils.removeVaultfromHostname(Utils.getHostname(webVaultUrl));
+        break;
+      default:
+        this.webVaultHostname = Utils.getHostname(webVaultUrl);
+    }
   }
 
   /**
