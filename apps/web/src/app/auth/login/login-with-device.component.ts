@@ -67,15 +67,7 @@ export class LoginWithDeviceComponent
 
   async goAfterLogIn() {
     this.loginService.clearValues();
-    let previousUrl = await this.routerService.getPersistedUrl();
-    if (Utils.isNullOrEmpty(previousUrl)) {
-      previousUrl = this.routerService.getPreviousUrl();
-    }
-    if (previousUrl) {
-      this.routerService.clearPersistedUrl();
-      this.router.navigateByUrl(previousUrl);
-    } else {
-      this.router.navigate([this.successRoute]);
-    }
+    const previousUrl = await this.routerService.getAndClearPersistedPreviousUrl();
+    this.router.navigateByUrl(Utils.isNullOrEmpty(previousUrl) ? this.successRoute : previousUrl);
   }
 }

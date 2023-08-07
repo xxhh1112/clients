@@ -91,9 +91,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
 
   async ngOnInit() {
     /**
-     * Set GlobalState.PreviousUrl to NULL onInit() to handle situation where
-     * a previous SSO login was interrupted. Ensures the user is navigated
-     * to the correct location.
+     * clear `persistedUrl` to handle flows when SSO login were interrupted.
+     * Ensures the user is navigated to the correct location.
      */
     this.routerService.clearPersistedUrl();
 

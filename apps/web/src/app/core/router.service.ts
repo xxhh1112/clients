@@ -5,6 +5,7 @@ import { filter } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Injectable()
 export class RouterService {
@@ -83,5 +84,20 @@ export class RouterService {
    */
   async getPersistedUrl(): Promise<string> {
     return await this.stateService.getPreviousUrl();
+  }
+
+  /**
+   * Fetch and clear persisted URL if present in state, otherwise return
+   * router `previousUrl`
+   */
+  async getAndClearPersistedPreviousUrl(): Promise<string> {
+    const persisted = await this.stateService.getPreviousUrl();
+
+    if (!Utils.isNullOrEmpty(persisted)) {
+      await this.clearPersistedUrl();
+      return persisted;
+    }
+
+    return this.getPreviousUrl();
   }
 }
