@@ -45,6 +45,7 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
       const inactive2faCiphers: CipherView[] = [];
       const promises: Promise<void>[] = [];
       const docs = new Map<string, string>();
+
       allCiphers.forEach((c) => {
         if (
           c.type !== CipherType.Login ||
@@ -74,7 +75,7 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
     }
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 
