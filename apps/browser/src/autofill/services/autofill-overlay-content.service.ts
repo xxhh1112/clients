@@ -1,6 +1,8 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 
+import { EventHandler } from "react";
+
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import AutofillField from "../models/autofill-field";
@@ -25,6 +27,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private mutationObserver: MutationObserver;
+  private handlersMemo: { [key: string]: EventHandler<any> } = {};
 
   constructor() {
     if (document.readyState === "loading") {
@@ -42,18 +45,29 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    formFieldElement.addEventListener("blur", () =>
-      this.triggerFormFieldBlurEvent(formFieldElement)
-    );
-
-    formFieldElement.addEventListener("focus", () =>
-      this.triggerFormFieldFocusEvent(formFieldElement)
-    );
+    formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent(formFieldElement));
+    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
 
     if (document.activeElement === formFieldElement) {
       this.triggerFormFieldFocusEvent(formFieldElement);
     }
   }
+
+  private handleFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-blur-handler`;
+    return (
+      this.handlersMemo[memoIndex] ||
+      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldBlurEvent(formFieldElement))
+    );
+  };
+
+  private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`;
+    return (
+      this.handlersMemo[memoIndex] ||
+      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldFocusEvent(formFieldElement))
+    );
+  };
 
   openAutofillOverlay(authStatus?: AuthenticationStatus) {
     if (!this.mostRecentlyFocusedFieldRects) {
@@ -273,7 +287,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.height = "0";
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
-    this.overlayListElement.style.maxHeight = "210px";
+    this.overlayListElement.style.maxHeight = "180px";
     this.overlayListElement.style.boxShadow = "0 4px 4px 0 #00000040";
     this.overlayListElement.style.borderRadius = "4px";
     this.overlayListElement.style.backgroundColor = "#fff";
