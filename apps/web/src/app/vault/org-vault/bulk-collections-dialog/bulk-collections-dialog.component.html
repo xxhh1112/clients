@@ -1,0 +1,21 @@
+<form [formGroup]="formGroup" [bitSubmit]="submit">
+  <bit-dialog [loading]="loading" dialogSize="large">
+    <span bitDialogTitle>
+      {{ "assignCollectionAccess" | i18n }}
+      <span class="tw-text-sm tw-normal-case tw-text-muted">
+        {{ numCollections }} {{ (numCollections == 1 ? "collection" : "collections") | i18n }}
+      </span>
+    </span>
+
+    <div bitDialogContent></div>
+
+    <ng-container bitDialogFooter>
+      <button type="submit" bitButton bitFormButton buttonType="primary">
+        {{ "save" | i18n }}
+      </button>
+      <button type="button" bitButton bitFormButton buttonType="secondary" bitDialogClose>
+        {{ "cancel" | i18n }}
+      </button>
+    </ng-container>
+  </bit-dialog>
+</form>

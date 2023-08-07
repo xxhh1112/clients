@@ -1301,7 +1301,7 @@
   },
   "selectImportFolder": {
     "message": "Select a folder"
-  },  
+  },
   "selectImportCollection": {
     "message": "Select a collection"
   },
@@ -1317,7 +1317,7 @@
   },
   "importUnassignedItemsError": {
     "message": "File contains unassigned items."
-  },  
+  },
   "selectFormat": {
     "message": "Select the format of the import file"
   },
@@ -7127,5 +7127,8 @@
   },
   "beta": {
     "message": "Beta"
+  },
+  "assignCollectionAccess": {
+    "message": "Assign collection access"
   }
 }
