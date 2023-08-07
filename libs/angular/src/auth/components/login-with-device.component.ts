@@ -444,15 +444,18 @@ export class LoginWithDeviceComponent
   }
 
   async setRememberEmailValues() {
-    // TODO: solve bug with getRememberEmail not persisting across SSO to here
     const rememberEmail = this.loginService.getRememberEmail();
-    const rememberedEmail = this.loginService.getEmail(); // this does persist across SSO
+    const rememberedEmail = this.loginService.getEmail();
     await this.stateService.setRememberedEmail(rememberEmail ? rememberedEmail : null);
     this.loginService.clearValues();
   }
 
   private async handleSuccessfulLoginNavigation() {
-    await this.setRememberEmailValues();
+    if (this.state === State.StandardAuthRequest) {
+      // Only need to set remembered email on standard login with auth req flow
+      await this.setRememberEmailValues();
+    }
+
     if (this.onSuccessfulLogin != null) {
       this.onSuccessfulLogin();
     }
