@@ -27,7 +27,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mutationObserver: MutationObserver;
 
   constructor() {
-    this.setupMutationObserver();
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
+    } else {
+      this.setupMutationObserver();
+    }
   }
 
   setupOverlayIconListenerOnField(
@@ -126,8 +130,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   removeAutofillOverlay = () => {
-    return;
-
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
   };
@@ -218,7 +220,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       autofillFieldData["label-tag"],
       autofillFieldData["label-top"],
     ]
-      .join("")
+      .filter((value) => !!value)
+      .join(",")
       .toLowerCase();
 
     for (const keyword of ignoreKeywords) {
@@ -321,12 +324,20 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  private setupMutationObserver() {
+  private setupMutationObserver = () => {
     this.mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
     this.mutationObserver.observe(document.body, { childList: true });
-  }
+  };
 
   private handleMutationObserverUpdate = (mutations: MutationRecord[]) => {
+    // TODO: This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
+    // In general, we need to think about this further and come up with a more robust solution.
+    // The code below basically attempts to ensure that our two elements are always the last two elements in the body.
+    // That, combined with the largest potential z-index value, should ensure that our elements are always on top.
+    // However, a potential issue comes if a script on a site is determined to ensure that IT'S element is the last
+    // within the body. We at that point will enter an infinite loop of sorts where we keep moving our elements to the end
+    // of the body, and the script keeps moving its element to the end of the body. Potentially, it might be better to
+    // also check the z-index of the last element in the body and ensure that our elements are always above that.
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
       return;
     }

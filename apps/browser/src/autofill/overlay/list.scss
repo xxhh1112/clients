@@ -25,10 +25,10 @@ body {
 .locked-overlay {
   font-family: $font-family-sans-serif;
   font-weight: 400;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   line-height: 1.5;
   width: 100%;
-  padding: 1rem;
+  padding: 0.8rem;
   color: $color-dark-gray;
 }
 
@@ -40,10 +40,10 @@ body {
   font-size: 1.6rem;
   font-weight: 700;
   color: $color-blue;
-  text-align: center;
+  text-align: left;
   border: none;
   border-top: 1px solid $color-light-gray;
-  padding: 1rem;
+  padding: 0.8rem;
   margin: 0;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;

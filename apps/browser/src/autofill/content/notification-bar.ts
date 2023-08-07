@@ -26,7 +26,13 @@ interface HTMLElementWithFormOpId extends HTMLElement {
  * and async scripts to finish loading.
  * https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event
  */
-document.addEventListener("DOMContentLoaded", (event) => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadNotificationBar);
+} else {
+  loadNotificationBar();
+}
+
+function loadNotificationBar() {
   // Do not show the notification bar on the Bitwarden vault
   // because they can add logins and change passwords there
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
@@ -994,4 +1000,4 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   // End Helper Functions
-});
+}
