@@ -22,7 +22,10 @@
       *ngIf="activeAccount.email != null"
       aria-hidden="true"
     ></app-avatar>
-    <span>{{ activeAccount.email }}</span>
+    <div class="active-account">
+      <div>{{ activeAccount.email }}</div>
+      <span>{{ activeAccount.server }}</span>
+    </div>
   </ng-container>
   <ng-template #noActiveAccount>
     <span>{{ "switchAccount" | i18n }}</span>

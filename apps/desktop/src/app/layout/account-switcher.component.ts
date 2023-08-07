@@ -7,6 +7,7 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -17,6 +18,7 @@ type ActiveAccount = {
   name: string;
   email: string;
   avatarColor: string;
+  server: string;
 };
 
 export class SwitcherAccount extends Account {
@@ -96,7 +98,8 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private messagingService: MessagingService,
     private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private environmentService: EnvironmentService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -116,6 +119,7 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
               name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
               email: await this.tokenService.getEmail(),
               avatarColor: await this.stateService.getAvatarColor(),
+              server: Utils.getHostname(this.environmentService.getWebVaultUrl()),
             };
           } catch {
             this.activeAccount = undefined;
