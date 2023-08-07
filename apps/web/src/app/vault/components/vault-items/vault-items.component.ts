@@ -177,4 +177,13 @@ export class VaultItemsComponent {
     );
     this.dataSource.data = items;
   }
+
+  protected bulkEditAccess() {
+    this.event({
+      type: "bulkEditAccess",
+      items: this.selection.selected
+        .filter((item) => item.collection !== undefined)
+        .map((item) => item.collection),
+    });
+  }
 }

@@ -35,6 +35,15 @@
               {{ "moveSelected" | i18n }}
             </button>
             <button
+              *ngIf="editableCollections"
+              type="button"
+              bitMenuItem
+              (click)="bulkEditAccess()"
+            >
+              <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+              {{ "access" | i18n }}
+            </button>
+            <button
               *ngIf="showBulkMove"
               type="button"
               bitMenuItem
