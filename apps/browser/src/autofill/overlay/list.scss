@@ -98,11 +98,18 @@ body {
     background: #f0f0f0;
   }
 
-  svg {
+  .cipher-icon {
     width: 3.2rem;
     height: auto;
     line-height: 0;
     margin-right: 1rem;
+    flex-shrink: 0;
+  }
+
+  .cipher-details-container {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .cipher-name,
@@ -112,6 +119,9 @@ body {
     line-height: 1.5;
     font-family: $font-family-sans-serif;
     font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .cipher-name {

@@ -99,7 +99,7 @@ class AutofillOverlayList extends HTMLElement {
       const cipherIcon = document.createElement("div");
       cipherIcon.innerHTML = globeIcon;
       const globeIconElement = cipherIcon.querySelector("svg");
-      globeIconElement.classList.add("globe-icon");
+      globeIconElement.classList.add("cipher-icon");
 
       const cipherDetailsContainer = document.createElement("div");
       cipherDetailsContainer.className = "cipher-details-container";
