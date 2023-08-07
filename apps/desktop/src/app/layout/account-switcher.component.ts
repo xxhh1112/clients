@@ -18,17 +18,19 @@ type ActiveAccount = {
   name: string;
   email: string;
   avatarColor: string;
-  server: string;
+  serverUrl: string;
 };
 
 export class SwitcherAccount extends Account {
-  get serverUrl() {
-    return this.removeWebProtocolFromString(
-      this.settings?.environmentUrls?.base ??
-        this.settings?.environmentUrls.api ??
-        "https://bitwarden.com"
-    );
-  }
+  serverUrl: string;
+
+  // get serverUrl() {
+  //   return this.removeWebProtocolFromString(
+  //     this.settings?.environmentUrls?.base ??
+  //       this.settings?.environmentUrls.api ??
+  //       "https://bitwarden.com"
+  //   );
+  // }
 
   avatarColor: string;
 
@@ -113,13 +115,14 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
           }
 
           this.accounts = await this.createSwitcherAccounts(accounts);
+
           try {
             this.activeAccount = {
               id: await this.tokenService.getUserId(),
               name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
               email: await this.tokenService.getEmail(),
               avatarColor: await this.stateService.getAvatarColor(),
-              server: Utils.getHostname(this.environmentService.getWebVaultUrl()),
+              serverUrl: Utils.getHostname(this.environmentService.getWebVaultUrl()),
             };
           } catch {
             this.activeAccount = undefined;
@@ -173,6 +176,12 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
       switcherAccounts[userId].avatarColor = await this.stateService.getAvatarColor({
         userId: userId,
       });
+
+      const serverConfig = await this.stateService.getServerConfig({
+        userId: userId,
+      });
+
+      switcherAccounts[userId].serverUrl = Utils.getHostname(serverConfig.environment.vault);
     }
     return switcherAccounts;
   }
