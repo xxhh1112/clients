@@ -85,8 +85,6 @@ export class Fido2Component implements OnInit, OnDestroy {
         this.message$.next(message);
       });
 
-    // setInterval(() => this.message$.next(null), 500);
-
     this.data$ = this.message$.pipe(
       filter((message) => message != undefined),
       concatMap(async (message) => {
