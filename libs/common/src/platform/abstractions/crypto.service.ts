@@ -28,6 +28,13 @@ export abstract class CryptoService {
    * kicking off a refresh of any additional keys
    * (such as auto, biometrics, or pin)
    */
+  /**
+   * Check if the current sessions has ever had a user key, i.e. has ever been unlocked/decrypted.
+   * This is key for differentiating between TDE locked and standard locked states.
+   * @param userId The desired user
+   * @returns True if the current session has ever had a user key
+   */
+  getEverHadUserKey: (userId?: string) => Promise<boolean>;
   refreshAdditionalKeys: () => Promise<void>;
   /**
    * Retrieves the user key

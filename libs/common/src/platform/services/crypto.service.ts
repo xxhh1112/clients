@@ -45,8 +45,15 @@ export class CryptoService implements CryptoServiceAbstraction {
   ) {}
 
   async setUserKey(key: UserKey, userId?: string): Promise<void> {
+    if (key != null) {
+      await this.stateService.setEverHadUserKey(true, { userId: userId });
+    }
     await this.stateService.setUserKey(key, { userId: userId });
     await this.storeAdditionalKeys(key, userId);
+  }
+
+  async getEverHadUserKey(userId?: string): Promise<boolean> {
+    return await this.stateService.getEverHadUserKey({ userId: userId });
   }
 
   async refreshAdditionalKeys(): Promise<void> {

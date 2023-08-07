@@ -24,9 +24,8 @@ export function tdeDecryptionRequiredGuard(): CanActivateFn {
 
     const authStatus = await authService.getAuthStatus();
     const tdeEnabled = await deviceTrustCryptoService.supportsDeviceTrust();
-    const userKey = await cryptoService.getUserKey();
-
-    if (authStatus !== AuthenticationStatus.Locked || !tdeEnabled || userKey) {
+    const everHadUserKey = await cryptoService.getEverHadUserKey();
+    if (authStatus !== AuthenticationStatus.Locked || !tdeEnabled || everHadUserKey) {
       return router.createUrlTree(["/"]);
     }
 

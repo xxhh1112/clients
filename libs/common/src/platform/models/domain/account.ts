@@ -190,6 +190,7 @@ export class AccountProfile {
   emailVerified?: boolean;
   entityId?: string;
   entityType?: string;
+  everHadUserKey?: boolean;
   everBeenUnlocked?: boolean;
   forcePasswordResetReason?: ForceResetPasswordReason;
   hasPremiumPersonally?: boolean;
