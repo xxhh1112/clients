@@ -6,7 +6,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
   constructor(iframePath: string, portName: string) {
     super();
 
-    const extensionUri = chrome.runtime.getURL("").slice(0, -1);
+    const extensionUri = chrome.runtime.getURL("").slice(0, -1).toLowerCase();
     const iframe: HTMLIFrameElement = document.createElement("iframe");
     const shadow: ShadowRoot = this.attachShadow({ mode: "closed" });
     const handlersMemo: { [key: string]: EventHandler<any> } = {};
@@ -60,14 +60,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
       // Chrome returns null for any sandboxed iframe sources.
       // Firefox references the extension URI as its origin.
       // Any other origin value is a security risk.
-      const extensionOrigins = [extensionUri, "null"];
-      for (const extensionOrigin of extensionOrigins) {
-        if (messageOrigin === extensionOrigin) {
-          return true;
-        }
-      }
-
-      return false;
+      return [extensionUri, "null"].includes(messageOrigin);
     }
   }
 }
