@@ -100,14 +100,6 @@ export type BrowserFido2Message = { sessionId: string } & (
       type: "AbortResponse";
       fallbackRequested: boolean;
     }
-  | {
-      type: "LogInRequest";
-      userVerification: boolean;
-    }
-  | {
-      type: "LogInResponse";
-      userVerified: boolean;
-    }
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
