@@ -23,6 +23,8 @@ export default class TabsBackground {
       }
 
       this.focusedWindowId = windowId;
+      await this.main.refreshBadge();
+      await this.main.refreshMenu();
       await this.overlayBackground.updateCurrentContextualCiphers();
       this.main.messagingService.send("windowChanged");
     });
