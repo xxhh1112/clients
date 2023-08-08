@@ -51,7 +51,6 @@ body {
   border-top: 1px solid $color-light-gray;
   padding: 0.8rem;
   margin: 0;
-  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
@@ -87,7 +86,6 @@ body {
   align-content: flex-start;
   align-items: center;
   justify-content: flex-start;
-  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 
   &:not(:last-child) {

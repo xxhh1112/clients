@@ -32,13 +32,12 @@ class OverlayBackground {
     unlockCompleted: ({ sender }) => this.handleUnlockedCompleted(sender),
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
-    overlayIconClicked: () => this.openAutofillOverlayList(),
+    overlayIconClicked: ({ port }) => this.handleOverlayIconClicked(port.sender),
     closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
     overlayIconBlurred: () => this.checkOverlayListFocused(),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
-    closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
-    overlayListBlurred: () => this.checkOverlayIconFocused(),
+    checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
@@ -232,6 +231,15 @@ class OverlayBackground {
       command: "updateAuthStatus",
       authStatus: this.userAuthStatus,
     });
+  }
+
+  private handleOverlayIconClicked(sender: chrome.runtime.MessageSender) {
+    if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
+      this.unlockVault(sender);
+      return;
+    }
+
+    this.openAutofillOverlayList();
   }
 
   private async unlockVault(sender?: chrome.runtime.MessageSender) {

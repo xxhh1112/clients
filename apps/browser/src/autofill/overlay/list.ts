@@ -34,9 +34,7 @@ class AutofillOverlayList extends HTMLElement {
 
     this.initShadowDom();
 
-    window.addEventListener("blur", () =>
-      this.postMessageToParent({ command: "overlayListBlurred" })
-    );
+    window.addEventListener("blur", this.handleWindowBlurEvent);
     if (this.authStatus === AuthenticationStatus.Unlocked) {
       this.updateAutofillOverlayList(message);
       return;
@@ -44,6 +42,10 @@ class AutofillOverlayList extends HTMLElement {
 
     this.buildLockedOverlay();
   }
+
+  private handleWindowBlurEvent = () => {
+    this.postMessageToParent({ command: "checkOverlayIconFocused" });
+  };
 
   private initShadowDom() {
     this.shadowDom.innerHTML = "";
@@ -152,7 +154,7 @@ class AutofillOverlayList extends HTMLElement {
       return;
     }
 
-    this.postMessageToParent({ command: "closeAutofillOverlay" });
+    this.postMessageToParent({ command: "checkOverlayIconFocused" });
   }
 
   private postMessageToParent(message: any) {

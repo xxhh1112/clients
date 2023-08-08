@@ -32,9 +32,7 @@ class AutofillOverlayIcon extends HTMLElement {
   private async initAutofillOverlayIcon(message: any = {}) {
     this.authStatus = message.authStatus;
 
-    window.addEventListener("blur", () =>
-      this.postMessageToParent({ command: "overlayIconBlurred" })
-    );
+    window.addEventListener("blur", this.handleWindowBlurEvent);
 
     this.iconElement = document.createElement("button");
     this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
@@ -50,6 +48,10 @@ class AutofillOverlayIcon extends HTMLElement {
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
   }
+
+  private handleWindowBlurEvent = () => {
+    this.postMessageToParent({ command: "overlayIconBlurred" });
+  };
 
   private updateAuthStatus(message: any = {}) {
     this.authStatus = message.authStatus;

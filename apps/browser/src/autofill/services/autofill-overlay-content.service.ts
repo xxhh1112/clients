@@ -226,13 +226,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.isFieldCurrentlyFocused = true;
     this.clearUserInteractionEventTimeout();
+    const initiallyFocusedField = this.mostRecentlyFocusedField;
     this.updateMostRecentlyFocusedField(formFieldElement);
 
     if (
       this.authStatus === AuthenticationStatus.Unlocked &&
       (formFieldElement as HTMLInputElement).value
     ) {
-      this.removeAutofillOverlayList();
+      if (initiallyFocusedField !== this.mostRecentlyFocusedField) {
+        this.removeAutofillOverlayList();
+      }
       this.updateOverlayIconPosition(true);
       return;
     }
