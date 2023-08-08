@@ -33,7 +33,6 @@ export abstract class Fido2UserInterfaceSession {
     abortController?: AbortController
   ) => Promise<{ cipherId: string; userVerified: boolean }>;
   ensureUnlockedVault: () => Promise<void>;
-  fullSync: () => Promise<void>;
   informExcludedCredential: (
     existingCipherIds: string[],
     abortController?: AbortController
