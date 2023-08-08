@@ -24,7 +24,6 @@ import {
   NewCredentialParams,
   PickCredentialParams,
 } from "@bitwarden/common/vault/abstractions/fido2/fido2-user-interface.service.abstraction";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { Popout, PopupUtilsService } from "../../popup/services/popup-utils.service";
@@ -112,11 +111,7 @@ export type BrowserFido2Message = { sessionId: string } & (
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  constructor(
-    private popupUtilsService: PopupUtilsService,
-    private authService: AuthService,
-    private syncService: SyncService
-  ) {}
+  constructor(private popupUtilsService: PopupUtilsService, private authService: AuthService) {}
 
   async newSession(
     fallbackSupported: boolean,
@@ -125,7 +120,6 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     return await BrowserFido2UserInterfaceSession.create(
       this.popupUtilsService,
       this.authService,
-      this.syncService,
       fallbackSupported,
       abortController
     );
@@ -136,14 +130,12 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   static async create(
     popupUtilsService: PopupUtilsService,
     authService: AuthService,
-    syncService: SyncService,
     fallbackSupported: boolean,
     abortController?: AbortController
   ): Promise<BrowserFido2UserInterfaceSession> {
     return new BrowserFido2UserInterfaceSession(
       popupUtilsService,
       authService,
-      syncService,
       fallbackSupported,
       abortController
     );
@@ -166,7 +158,6 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   private constructor(
     private readonly popupUtilsService: PopupUtilsService,
     private readonly authService: AuthService,
-    private readonly syncService: SyncService,
     private readonly fallbackSupported: boolean,
     readonly abortController = new AbortController(),
     readonly sessionId = Utils.newGuid()
@@ -300,11 +291,6 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
 
   async ensureUnlockedVault(): Promise<void> {
     await this.connect();
-    // await this.syncService.fullSync(false);
-  }
-
-  async fullSync(): Promise<void> {
-    await this.syncService.fullSync(false);
   }
 
   async informCredentialNotFound(): Promise<void> {

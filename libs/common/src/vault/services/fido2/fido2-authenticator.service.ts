@@ -1,6 +1,5 @@
 import { CBOR } from "cbor-redux";
 
-import { AuthService } from "../../../auth/abstractions/auth.service";
 import { LogService } from "../../../platform/abstractions/log.service";
 import { Utils } from "../../../platform/misc/utils";
 import { CipherService } from "../../abstractions/cipher.service";
@@ -38,7 +37,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   constructor(
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService,
-    private authService: AuthService,
     private logService?: LogService
   ) {}
   async makeCredential(
@@ -235,8 +233,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
       let cipherOptions: CipherView[];
 
-      //TODO: add here
-      await userInterfaceSession.ensureUnlockedVault();
+      //TODO: uncomment this when working on the login flow ticket
+      // await userInterfaceSession.ensureUnlockedVault();
 
       // eslint-disable-next-line no-empty
       if (params.allowCredentialDescriptorList?.length > 0) {
