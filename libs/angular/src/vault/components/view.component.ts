@@ -30,10 +30,10 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { Launchable } from "@bitwarden/common/vault/interfaces/launchable";
 import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
 import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
 
@@ -63,6 +63,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   fieldType = FieldType;
   checkPasswordPromise: Promise<number>;
   folder: FolderView;
+  cipherType = CipherType;
 
   private totpInterval: any;
   private previousCipherId: string;
@@ -155,6 +156,18 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async clone() {
+    if (this.cipher.login?.fido2Key) {
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "passkeyNotCopied" },
+        content: { key: "passkeyNotCopiedAlert" },
+        type: SimpleDialogType.INFO,
+      });
+
+      if (!confirmed) {
+        return false;
+      }
+    }
+
     if (await this.promptPassword()) {
       this.onCloneCipher.emit(this.cipher);
       return true;
@@ -304,7 +317,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     }
   }
 
-  launch(uri: LoginUriView, cipherId?: string) {
+  launch(uri: Launchable, cipherId?: string) {
     if (!uri.canLaunch) {
       return;
     }

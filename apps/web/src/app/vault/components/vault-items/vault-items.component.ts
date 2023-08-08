@@ -164,6 +164,14 @@ export class VaultItemsComponent {
     });
   }
 
+  protected canClone(vaultItem: VaultItem) {
+    return (
+      ((vaultItem.cipher.organizationId && this.cloneableOrganizationCiphers) ||
+        vaultItem.cipher.organizationId == null) &&
+      !vaultItem.cipher.fido2Key?.rpId
+    );
+  }
+
   private refreshItems() {
     const collections: VaultItem[] = this.collections.map((collection) => ({ collection }));
     const ciphers: VaultItem[] = this.ciphers.map((cipher) => ({ cipher }));

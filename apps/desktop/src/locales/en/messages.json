@@ -2268,5 +2268,26 @@
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "application": {
+    "message": "Application"
+  },
+  "passkeyEditInformation": {
+    "message": "You cannot edit passkey application because it would invalidate the passkey."
+  },
+  "duplicatePasskey": {
+    "message": "A passkey with this ID already exists in this organization."
+  },
+  "passkeyTwoStepLogin": {
+    "message": "Available for two-step login"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey will not be copied"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
   }
 }

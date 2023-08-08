@@ -100,3 +100,41 @@
     <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
   </button>
 </ng-container>
+<ng-container *ngIf="cipher.type === cipherType.Fido2Key">
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'launch' | i18n }}"
+    (click)="launchCipher()"
+    *ngIf="!showView"
+    [ngClass]="{ disabled: !cipher.fido2Key.canLaunch }"
+    [attr.disabled]="!cipher.fido2Key.canLaunch ? '' : null"
+  >
+    <i class="bwi bwi-lg bwi-share-square" aria-hidden="true"></i>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copyUsername' | i18n }}"
+    (click)="copy(cipher, cipher.fido2Key.userName, 'username', 'Username')"
+    [ngClass]="{ disabled: !cipher.fido2Key.userName }"
+    [attr.disabled]="!cipher.fido2Key.userName ? '' : null"
+  >
+    <i class="bwi bwi-lg bwi-user" aria-hidden="true"></i>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'loginPasskey' | i18n }}"
+    [ngClass]="{ disabled: true }"
+    disabled
+  >
+    <i class="bwi bwi-lg bwi-passkey" aria-hidden="true"></i>
+  </button>
+</ng-container>

@@ -16,7 +16,12 @@ export function createFilterFunction(filter: RoutedVaultFilterModel): FilterFunc
     if (filter.type === "identity" && cipher.type !== CipherType.Identity) {
       return false;
     }
-    if (filter.type === "login" && cipher.type !== CipherType.Login) {
+    // Login and Fido2Key are both login types
+    if (
+      filter.type === "login" &&
+      cipher.type !== CipherType.Login &&
+      cipher.type !== CipherType.Fido2Key
+    ) {
       return false;
     }
     if (filter.type === "note" && cipher.type !== CipherType.SecureNote) {

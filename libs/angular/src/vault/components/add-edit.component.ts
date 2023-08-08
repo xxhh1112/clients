@@ -320,9 +320,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
           : this.collections.filter((c) => (c as any).checked).map((c) => c.id);
     }
 
-    // Clear current Cipher Id to trigger "Add" cipher flow
+    // Clear current Cipher Id and Fido2Key if exists to trigger "Add" cipher flow
     if (this.cloneMode) {
       this.cipher.id = null;
+
+      if (this.cipher.type === CipherType.Login && this.cipher.login.fido2Key) {
+        this.cipher.login.fido2Key = null;
+      }
     }
 
     const cipher = await this.encryptCipher();

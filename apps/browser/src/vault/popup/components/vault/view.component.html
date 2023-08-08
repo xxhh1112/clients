@@ -201,6 +201,16 @@
             </span>
           </div>
         </div>
+
+        <!--Passkey-->
+        <div class="box" *ngIf="cipher.login.fido2Key">
+          <div class="box-content">
+            <div class="box-content-row text-muted">
+              <span class="row-label">{{ "typePasskey" | i18n }}</span>
+              {{ "passkeyTwoStepLogin" | i18n }}
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Card -->
       <div *ngIf="cipher.card">
@@ -417,23 +427,52 @@
       <!-- Fido2Key -->
       <div *ngIf="cipher.type == cipherType.Fido2Key">
         <div class="box-content-row">
-          <span class="row-label">{{ "keyType" | i18n }}</span>
-          {{ cipher.fido2Key.keyType }}
-        </div>
-
-        <div class="box-content-row">
-          <span class="row-label">{{ "keyCurve" | i18n }}</span>
-          {{ cipher.fido2Key.keyCurve }}
-        </div>
-
-        <div class="box-content-row">
-          <span class="row-label">{{ "rpName" | i18n }}</span>
-          {{ cipher.fido2Key.rpName }}
-        </div>
-
-        <div class="box-content-row">
           <span class="row-label">{{ "username" | i18n }}</span>
           {{ cipher.fido2Key.userName }}
+        </div>
+        <div class="box-content-row">
+          <span class="row-label">{{ "typePasskey" | i18n }}</span>
+          {{ "dateCreated" | i18n }} {{ cipher.creationDate | date : "short" }}
+        </div>
+
+        <div class="box" *ngIf="cipher.fido2Key.canLaunch">
+          <div class="box-content">
+            <div class="box-content-row box-content-row-flex">
+              <div class="row-main">
+                <label
+                  class="row-label draggable"
+                  draggable="true"
+                  (dragstart)="setTextDataOnDrag($event, cipher.fido2Key.launchUri)"
+                  >{{ "application" | i18n }}</label
+                >
+                <span title="{{ cipher.fido2Key.launchUri }}">
+                  <input type="text" [value]="cipher.fido2Key.rpId" readonly aria-readonly="true" />
+                </span>
+              </div>
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  class="row-btn"
+                  appStopClick
+                  (click)="launch(cipher.fido2Key)"
+                  attr.aria-label="{{ 'launch' | i18n }} {{ cipher.fido2Key.launchUri }}"
+                  [appA11yTitle]="'launch' | i18n"
+                >
+                  <i class="bwi bwi-lg bwi-share-square" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  class="row-btn"
+                  appStopClick
+                  attr.aria-label="{{ 'copyUri' | i18n }} {{ cipher.fido2Key.launchUri }}"
+                  [appA11yTitle]="'copyUri' | i18n"
+                  (click)="copy(cipher.fido2Key.launchUri, 'uri', 'URI')"
+                >
+                  <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

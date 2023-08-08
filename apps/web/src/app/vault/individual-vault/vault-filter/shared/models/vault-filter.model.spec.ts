@@ -42,6 +42,15 @@ describe("VaultFilter", () => {
       },
       null
     );
+    const loginCiphersFilter = new TreeNode<CipherTypeFilter>(
+      {
+        id: "login",
+        name: "login",
+        type: CipherType.Login,
+        icon: "bwi-globe",
+      },
+      null
+    );
     const trashFilter = new TreeNode<CipherTypeFilter>(
       {
         id: "trash",
@@ -272,6 +281,19 @@ describe("VaultFilter", () => {
         const cipher = createCipher({ organizationId: null });
         const filterFunction = createFilterFunction({
           selectedOrganizationNode: createOrganizationFilterNode({ id: "MyVault" }),
+        });
+
+        const result = filterFunction(cipher);
+
+        expect(result).toBe(true);
+      });
+    });
+
+    describe("given a cipher with Fido2Key type", () => {
+      it("should return true when filter is login", () => {
+        const cipher = createCipher({ type: CipherType.Fido2Key });
+        const filterFunction = createFilterFunction({
+          selectedCipherTypeNode: loginCiphersFilter,
         });
 
         const result = filterFunction(cipher);
