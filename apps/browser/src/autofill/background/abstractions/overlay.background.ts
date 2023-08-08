@@ -7,6 +7,13 @@ type OverlayBackgroundExtensionMessageHandlers = {
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
   bgAutofillOverlayIconClosed: () => void;
   bgAutofillOverlayListClosed: () => void;
+  bgAddNewVaultItem: ({
+    message,
+    sender,
+  }: {
+    message: any;
+    sender: chrome.runtime.MessageSender;
+  }) => void;
   collectPageDetailsResponse: ({
     message,
     sender,
@@ -35,6 +42,7 @@ type OverlayListPortMessageHandlers = {
     port: chrome.runtime.Port;
   }) => void;
   updateAutofillOverlayListHeight: ({ message }: { message: any }) => void;
+  addNewVaultItem: () => void;
 };
 
 export {

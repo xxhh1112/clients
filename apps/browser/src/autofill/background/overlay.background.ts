@@ -2,11 +2,18 @@ import { SettingsService } from "@bitwarden/common/abstractions/settings.service
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+// import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { WebsiteIconService } from "@bitwarden/common/services/website-icon.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+// import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+// import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+// import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+// import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserPopoutWindowService } from "../../platform/popup/abstractions/browser-popout-window.service";
 import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
@@ -31,6 +38,7 @@ class OverlayBackground {
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
+    bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
     collectPageDetailsResponse: ({ message, sender }) =>
       this.collectPageDetailsResponse(message, sender),
     unlockCompleted: ({ sender }) => this.handleUnlockedCompleted(sender),
@@ -46,6 +54,7 @@ class OverlayBackground {
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
+    addNewVaultItem: () => this.getNewVaultItemDetails(),
   };
 
   constructor(
@@ -53,7 +62,9 @@ class OverlayBackground {
     private autofillService: AutofillService,
     private authService: AuthService,
     private environmentService: EnvironmentService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private stateService: StateService,
+    private browserPopoutWindowService: BrowserPopoutWindowService
   ) {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
@@ -363,6 +374,43 @@ class OverlayBackground {
 
     handler({ message, port });
   };
+
+  // TODO: This is not an effective implementation. I'm not entirely sure how to populate or create a new cipher based on partiall submitted data.
+  private getNewVaultItemDetails() {
+    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
+      command: "addNewVaultItemFromOverlay",
+    });
+  }
+
+  private async addNewVaultItem(message: any, sender: chrome.runtime.MessageSender) {
+    // const uriView = new LoginUriView();
+    // uriView.uri = message.uri;
+    //
+    // const loginView = new LoginView();
+    // loginView.uris = [uriView];
+    // loginView.username = message.username;
+    // loginView.password = message.password;
+    //
+    // const cipherView = new CipherView();
+    // console.log(message, Utils.getHostname(message.uri));
+    // cipherView.name = (message.hostname || "").replace(/^www\./, "");
+    // cipherView.folderId = null;
+    // cipherView.type = CipherType.Login;
+    // cipherView.login = loginView;
+    //
+    // await this.stateService.setAddEditCipherInfo({
+    //   cipher: cipherView,
+    //   collectionIds: cipherView.collectionIds,
+    // });
+    //
+    // const cipher = await this.cipherService.encrypt(cipherView);
+    // await this.cipherService.createWithServer(cipher);
+    //
+    // console.log(cipherView);
+
+    // console.log(sender);
+    await this.browserPopoutWindowService.openAddEditCipherWindow(sender.tab.windowId);
+  }
 }
 
 export default OverlayBackground;

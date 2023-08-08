@@ -13,6 +13,7 @@ interface AutofillOverlayContentService {
   removeAutofillOverlayIcon(): void;
   removeAutofillOverlayList(): void;
   updateAutofillOverlayListHeight(message: any): void;
+  addNewVaultItem(): void;
 }
 
 export { AutofillOverlayContentService };

@@ -24,6 +24,21 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     await this.closeSingleActionPopout("loginPrompt");
   }
 
+  async openAddEditCipherWindow(senderWindowId: number, cipherId?: string) {
+    await this.closeAddEditCipherWindow();
+    await this.openPopoutWindow(
+      senderWindowId,
+      cipherId == null
+        ? "popup/index.html#/edit-cipher"
+        : `popup/index.html#/edit-cipher?cipherId=${cipherId}`,
+      "addEditCipher"
+    );
+  }
+
+  async closeAddEditCipherWindow() {
+    await this.closeSingleActionPopout("addEditCipher");
+  }
+
   private async openPopoutWindow(
     senderWindowId: number,
     popupWindowURL: string,

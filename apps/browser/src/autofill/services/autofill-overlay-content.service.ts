@@ -10,7 +10,7 @@ import {
   AutofillOverlayIconIframe,
   AutofillOverlayListIframe,
 } from "../overlay/utils/custom-element-iframes";
-import { ElementWithOpId, FormFieldElement } from "../types";
+import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
 import { AutoFillConstants } from "./autofill-constants";
@@ -18,6 +18,7 @@ import { AutoFillConstants } from "./autofill-constants";
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
+  userFilledFields: Record<string, FillableFormFieldElement> = {};
   private isOverlayIconVisible = false;
   private isOverlayListVisible = false;
   private overlayIconElement: HTMLElement;
@@ -57,6 +58,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.handleFormFieldUserInteractionEvent(formFieldElement)
     );
     formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
+
+    // TODO: POCing out the vault item creation. This needs to be reworked.
+    formFieldElement.addEventListener(
+      "input",
+      this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
+    );
 
     if (document.activeElement === formFieldElement) {
       this.triggerFormFieldInteractionEvent(formFieldElement);
@@ -433,6 +440,94 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.removeAutofillOverlay();
     this.openAutofillOverlay();
   };
+
+  // TODO: The following represents a first stab at creation of new vault items. It's not effective and needs to be entirely reworked.
+  addNewVaultItem() {
+    if (!this.isOverlayListVisible) {
+      return;
+    }
+
+    const login = {
+      username: this.userFilledFields["username"]?.value || "",
+      password: this.userFilledFields["password"]?.value || "",
+      uri: document.URL,
+      hostname: document.location.hostname,
+    };
+
+    chrome.runtime.sendMessage({
+      command: "bgAddNewVaultItem",
+      login,
+    });
+  }
+
+  // TODO: POCing out the vault item creation. This needs to be reworked.
+  private handleFormFieldInputEvent = (
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+    autofillFieldData: AutofillField
+  ) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-input-handler`;
+    return (
+      this.handlersMemo[memoIndex] ||
+      (this.handlersMemo[memoIndex] = () =>
+        this.storeModifiedFormElement(
+          formFieldElement as FillableFormFieldElement,
+          autofillFieldData
+        ))
+    );
+  };
+
+  // TODO: POCing out the vault item creation. This needs to be reworked.
+  private storeModifiedFormElement(
+    formFieldElement: FillableFormFieldElement,
+    autofillFieldData: AutofillField
+  ) {
+    if (!formFieldElement.value) {
+      return;
+    }
+
+    formFieldElement.removeEventListener(
+      "input",
+      this.handleFormFieldInputEvent(
+        formFieldElement as ElementWithOpId<FormFieldElement>,
+        autofillFieldData
+      )
+    );
+
+    if (formFieldElement.type === "password" && !this.userFilledFields.password) {
+      this.userFilledFields.password = formFieldElement;
+      return;
+    }
+
+    if (this.userFilledFields.username) {
+      return;
+    }
+
+    const searchedString = [
+      autofillFieldData.htmlID,
+      autofillFieldData.htmlName,
+      autofillFieldData.htmlClass,
+      autofillFieldData.type,
+      autofillFieldData.title,
+      autofillFieldData.placeholder,
+      autofillFieldData["label-data"],
+      autofillFieldData["label-aria"],
+      autofillFieldData["label-left"],
+      autofillFieldData["label-right"],
+      autofillFieldData["label-tag"],
+      autofillFieldData["label-top"],
+    ]
+      .filter((value) => !!value)
+      .join(",")
+      .toLowerCase();
+
+    // TODO: This is the current method we identify login autofill. This will need to change at some point as we want to be able to fill in other types of forms.
+    for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
+      if (searchedString.includes(usernameKeyword)) {
+        this.userFilledFields.username = formFieldElement;
+        return;
+      }
+    }
+  }
 }
 
 export default AutofillOverlayContentService;

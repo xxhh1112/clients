@@ -20,6 +20,7 @@ type AutofillExtensionMessageHandlers = {
   openAutofillOverlayList: (message: { message: AutofillExtensionMessage }) => void;
   closeAutofillOverlay: () => void;
   updateAutofillOverlayListHeight: (message: { message: any }) => void;
+  addNewVaultItemFromOverlay: () => void;
 };
 
 interface AutofillInit {

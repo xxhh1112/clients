@@ -26,6 +26,7 @@ class AutofillInit implements AutofillInitInterface {
       this.openAutofillOverlayList(message.authStatus, message.focusFieldElement),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
+    addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
   };
 
   /**
@@ -120,6 +121,10 @@ class AutofillInit implements AutofillInitInterface {
 
   private updateAutofillOverlayListHeight(message: any) {
     this.autofillOverlayContentService.updateAutofillOverlayListHeight(message);
+  }
+
+  private addNewVaultItemFromOverlay() {
+    this.autofillOverlayContentService.addNewVaultItem();
   }
 
   /**
