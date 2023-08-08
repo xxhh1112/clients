@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { SEND_KDF_ITERATIONS } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -45,7 +44,6 @@ export class AccessComponent implements OnInit {
   constructor(
     private i18nService: I18nService,
     private cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
     private route: ActivatedRoute,
     private cryptoService: CryptoService,
