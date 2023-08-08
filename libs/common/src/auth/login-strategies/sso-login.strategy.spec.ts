@@ -28,6 +28,9 @@ import { IUserDecryptionOptionsServerResponse } from "../models/response/user-de
 import { identityTokenResponseFactory } from "./login.strategy.spec";
 import { SsoLogInStrategy } from "./sso-login.strategy";
 
+// TODO: Add tests for new trySetUserKeyWithApprovedAdminRequestIfExists logic
+// https://bitwarden.atlassian.net/browse/PM-3339
+
 describe("SsoLogInStrategy", () => {
   let cryptoService: MockProxy<CryptoService>;
   let apiService: MockProxy<ApiService>;

@@ -1,4 +1,7 @@
 import { ApiService } from "../../abstractions/api.service";
+import { AuthRequestResponse } from "../../auth/models/response/auth-request.response";
+import { HttpStatusCode } from "../../enums";
+import { ErrorResponse } from "../../models/response/error.response";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
@@ -135,7 +138,19 @@ export class SsoLogInStrategy extends LogInStrategy {
     }
 
     // Call server to see if admin auth request has been approved
-    const adminAuthReqResponse = await this.apiService.getAuthRequest(adminAuthReqStorable.id);
+    let adminAuthReqResponse: AuthRequestResponse;
+
+    try {
+      adminAuthReqResponse = await this.apiService.getAuthRequest(adminAuthReqStorable.id);
+    } catch (error) {
+      if (error instanceof ErrorResponse && error.statusCode === HttpStatusCode.NotFound) {
+        // if we get a 404, it means the auth request has been deleted so clear it from storage
+        await this.stateService.setAdminAuthRequest(null);
+      }
+
+      // Always return on an error here as we don't want to block the user from logging in
+      return;
+    }
 
     if (adminAuthReqResponse?.requestApproved) {
       // if masterPasswordHash has a value, we will always receive authReqResponse.key
