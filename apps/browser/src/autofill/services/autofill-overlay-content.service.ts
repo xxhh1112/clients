@@ -333,14 +333,28 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private createOverlayCustomElement(elementName: string): HTMLElement {
     const customElement = document.createElement(elementName);
-    customElement.style.position = "fixed";
-    customElement.style.display = "block";
-    customElement.style.zIndex = "2147483648";
-    customElement.style.overflow = "hidden";
-    customElement.style.transition = "opacity 125ms ease-out";
     customElement.style.opacity = "0";
+    this.setDefaultOverlayStyles(customElement);
 
     return customElement;
+  }
+
+  private setDefaultOverlayStyles(customElement: HTMLElement) {
+    customElement.style.position = "fixed";
+    customElement.style.display = "block";
+    customElement.style.zIndex = "2147483647";
+    customElement.style.overflow = "hidden";
+    customElement.style.transition = "opacity 125ms ease-out";
+  }
+
+  private isCustomElementStylesModified(customElement: HTMLElement): boolean {
+    return (
+      customElement.style.position !== "fixed" ||
+      customElement.style.display !== "block" ||
+      customElement.style.zIndex !== "2147483647" ||
+      customElement.style.overflow !== "hidden" ||
+      customElement.style.transition !== "opacity 125ms ease-out"
+    );
   }
 
   private setupUserInteractionEventListeners() {
@@ -403,17 +417,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
+    if (
+      this.isCustomElementStylesModified(this.overlayIconElement) ||
+      this.isCustomElementStylesModified(this.overlayListElement)
+    ) {
+      this.setDefaultOverlayStyles(this.overlayIconElement);
+      this.setDefaultOverlayStyles(this.overlayListElement);
+    }
+
     const lastChild = document.body.lastChild;
     if (lastChild === this.overlayListElement || lastChild === this.overlayIconElement) {
       return;
     }
 
-    if (this.overlayIconElement) {
-      document.body.appendChild(this.overlayIconElement);
-    }
-    if (this.overlayListElement) {
-      document.body.appendChild(this.overlayListElement);
-    }
+    this.removeAutofillOverlay();
+    this.openAutofillOverlay();
   };
 }
 
