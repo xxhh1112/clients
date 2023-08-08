@@ -98,7 +98,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   };
 
-  openAutofillOverlay(authStatus?: AuthenticationStatus) {
+  openAutofillOverlay(authStatus?: AuthenticationStatus, focusFieldElement?: boolean) {
     if (!this.mostRecentlyFocusedFieldRects) {
       return;
     }
@@ -107,7 +107,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.authStatus = authStatus;
     }
 
-    if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
+    if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.mostRecentlyFocusedField.focus();
     }
 

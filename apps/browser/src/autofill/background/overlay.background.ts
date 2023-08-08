@@ -146,19 +146,20 @@ class OverlayBackground {
     this.overlayListPort = null;
   }
 
-  private async openAutofillOverlayList() {
+  private async openAutofillOverlayList(focusFieldElement = false) {
     // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     const authStatus = await this.getAuthStatus();
     chrome.tabs.sendMessage(currentTab.id, {
       command: "openAutofillOverlayList",
-      authStatus: authStatus,
+      authStatus,
+      focusFieldElement,
     });
   }
 
   private async handleUnlockedCompleted(sender: chrome.runtime.MessageSender) {
     await BrowserApi.tabSendMessageData(sender.tab, "closeNotificationBar");
-    this.openAutofillOverlayList();
+    this.openAutofillOverlayList(true);
   }
 
   async updateCurrentContextualCiphers() {
