@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
 
@@ -54,7 +55,8 @@ export class LoginWithDeviceComponent
     stateService: StateService,
     loginService: LoginService,
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    authReqCryptoService: AuthRequestCryptoServiceAbstraction
+    authReqCryptoService: AuthRequestCryptoServiceAbstraction,
+    private location: Location
   ) {
     super(
       router,
@@ -106,18 +108,7 @@ export class LoginWithDeviceComponent
     super.ngOnDestroy();
   }
 
-  goToLogin() {
-    switch (this.state) {
-      case this.StateEnum.StandardAuthRequest:
-        this.router.navigate(["/login"]);
-
-        break;
-      case this.StateEnum.AdminAuthRequest:
-        this.router.navigate(["/login-initiated"]);
-        break;
-
-      default:
-        break;
-    }
+  back() {
+    this.location.back();
   }
 }
