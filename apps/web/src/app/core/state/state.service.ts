@@ -114,14 +114,4 @@ export class StateService extends BaseStateService<GlobalState, Account> {
     options = this.reconcileOptions(options, await this.defaultInMemoryOptions());
     return await super.setLastSync(value, options);
   }
-
-  async getPreviousUrl(options?: StorageOptions): Promise<string> {
-    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
-    return await super.getPreviousUrl(options);
-  }
-
-  async setPreviousUrl(url: string, options?: StorageOptions): Promise<void> {
-    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
-    return await super.setPreviousUrl(url, options);
-  }
 }
