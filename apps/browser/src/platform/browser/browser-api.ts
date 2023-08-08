@@ -213,6 +213,7 @@ export class BrowserApi {
     }
   }
 
+  //Ngzone run is added to fix the issue on Fido2Component, where the message listener is not running in the angular zone
   static messageListener$(zone?: NgZone) {
     return new Observable<unknown>((subscriber) => {
       const handler = (message: unknown) => {
