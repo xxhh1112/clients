@@ -146,7 +146,14 @@
                   </label>
                 </div>
               </div>
-              <div class="form-group" *ngIf="supportsBiometric && this.form.value.biometric">
+              <div
+                class="form-group"
+                *ngIf="
+                  supportsBiometric &&
+                  this.form.value.biometric &&
+                  (userHasMasterPassword || (this.form.value.pin && userHasPinSet))
+                "
+              >
                 <div class="checkbox form-group-child">
                   <label for="requirePasswordOnStart">
                     <input

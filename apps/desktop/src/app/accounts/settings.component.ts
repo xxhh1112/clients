@@ -10,6 +10,7 @@ import { SettingsService } from "@bitwarden/common/abstractions/settings.service
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { DeviceType, ThemeType, KeySuffixOptions } from "@bitwarden/common/enums";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -22,7 +23,6 @@ import { flagEnabled } from "../../platform/flags";
 import { ElectronStateService } from "../../platform/services/electron-state.service.abstraction";
 import { isWindowsStore } from "../../utils";
 import { SetPinComponent } from "../components/set-pin.component";
-
 @Component({
   selector: "app-settings",
   templateUrl: "settings.component.html",
@@ -67,6 +67,9 @@ export class SettingsComponent implements OnInit {
     action: "lock" | "logOut";
   }>;
   previousVaultTimeout: number = null;
+
+  userHasMasterPassword: boolean;
+  userHasPinSet: boolean;
 
   form = this.formBuilder.group({
     // Security
@@ -113,7 +116,8 @@ export class SettingsComponent implements OnInit {
     private modalService: ModalService,
     private themingService: AbstractThemingService,
     private settingsService: SettingsService,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogServiceAbstraction,
+    private userVerificationService: UserVerificationServiceAbstraction
   ) {
     const isMac = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
 
@@ -191,6 +195,8 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userHasMasterPassword = await this.userVerificationService.hasMasterPassword();
+
     this.isWindows = (await this.platformUtilsService.getDevice()) === DeviceType.WindowsDesktop;
 
     if ((await this.stateService.getUserId()) == null) {
@@ -226,12 +232,14 @@ export class SettingsComponent implements OnInit {
 
     // Load initial values
     const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
+    this.userHasPinSet = pinStatus !== "DISABLED";
+
     const initialValues = {
       vaultTimeout: await this.vaultTimeoutSettingsService.getVaultTimeout(),
       vaultTimeoutAction: await firstValueFrom(
         this.vaultTimeoutSettingsService.vaultTimeoutAction$()
       ),
-      pin: pinStatus !== "DISABLED",
+      pin: this.userHasPinSet,
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       autoPromptBiometrics: !(await this.stateService.getDisableAutoBiometricsPrompt()),
       requirePasswordOnStart:
@@ -408,9 +416,17 @@ export class SettingsComponent implements OnInit {
         return;
       }
 
-      this.form.controls.pin.setValue(await ref.onClosedPromise(), { emitEvent: false });
+      this.userHasPinSet = await ref.onClosedPromise();
+      this.form.controls.pin.setValue(this.userHasPinSet, { emitEvent: false });
     }
     if (!value) {
+      // If user turned off PIN without having a MP and has biometric + require MP/PIN on restart enabled
+      if (this.form.value.requirePasswordOnStart && !this.userHasMasterPassword) {
+        // then must turn that off to prevent user from getting into bad state
+        this.form.controls.requirePasswordOnStart.setValue(false);
+        await this.updateRequirePasswordOnStart();
+      }
+
       await this.vaultTimeoutSettingsService.clear();
     }
   }
