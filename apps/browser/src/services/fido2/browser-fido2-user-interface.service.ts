@@ -357,34 +357,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     );
 
     const authStatus = await this.authService.getAuthStatus();
-    if (authStatus === AuthenticationStatus.LoggedOut) {
-      const queryParams = new URLSearchParams({
-        sessionId: this.sessionId,
-        redirectPath: "fido2",
-      }).toString();
-      this.popout = await this.popupUtilsService.popOut(
-        null,
-        `popup/index.html?uilocation=popout#/home?${queryParams}`,
-        { center: true }
-      );
-    } else if (authStatus === AuthenticationStatus.Locked) {
-      const queryParams = new URLSearchParams({
-        sessionId: this.sessionId,
-        redirectPath: "fido2",
-      }).toString();
-      this.popout = await this.popupUtilsService.popOut(
-        null,
-        `popup/index.html?uilocation=popout#/lock?${queryParams}`,
-        { center: true }
-      );
-    } else {
-      const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
-      this.popout = await this.popupUtilsService.popOut(
-        null,
-        `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-        { center: true }
-      );
-    }
+    this.popout = await this.generatePopOut(authStatus);
 
     if (this.popout.type === "window") {
       const popoutWindow = this.popout as { type: "window"; window: chrome.windows.Window };
@@ -411,5 +384,35 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     }
 
     await connectPromise;
+  }
+
+  private async generatePopOut(authStatus: AuthenticationStatus) {
+    let path: string;
+
+    switch (authStatus) {
+      case AuthenticationStatus.LoggedOut:
+        path = "home";
+        break;
+      case AuthenticationStatus.Locked:
+        path = "lock";
+        break;
+      default:
+        path = "fido2";
+    }
+
+    const queryParams = new URLSearchParams({ sessionId: this.sessionId });
+    if (
+      authStatus === AuthenticationStatus.LoggedOut ||
+      authStatus === AuthenticationStatus.Locked
+    ) {
+      queryParams.append("redirectPath", "fido2");
+    }
+
+    const queryString = queryParams.toString();
+    return this.popupUtilsService.popOut(
+      null,
+      `popup/index.html?uilocation=popout#/${path}?${queryString}`,
+      { center: true }
+    );
   }
 }
