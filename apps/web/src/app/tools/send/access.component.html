@@ -73,35 +73,7 @@
           <hr />
           <!-- Text -->
           <ng-container *ngIf="send.type === sendType.Text">
-            <app-callout *ngIf="send.text.hidden" type="tip">{{
-              "sendHiddenByDefault" | i18n
-            }}</app-callout>
-            <div class="form-group">
-              <textarea
-                id="text"
-                rows="8"
-                name="Text"
-                [ngModel]="sendText"
-                class="form-control"
-                readonly
-              ></textarea>
-            </div>
-            <button
-              class="btn btn-block btn-link"
-              type="button"
-              (click)="toggleText()"
-              *ngIf="send.text.hidden"
-            >
-              <i
-                class="bwi bwi-lg"
-                aria-hidden="true"
-                [ngClass]="{ 'bwi-eye': !showText, 'bwi-eye-slash': showText }"
-              ></i>
-              {{ "toggleVisibility" | i18n }}
-            </button>
-            <button class="btn btn-block btn-link" type="button" (click)="copyText()">
-              <i class="bwi bwi-copy" aria-hidden="true"></i> {{ "copyValue" | i18n }}
-            </button>
+            <app-send-access-text [send]="send"></app-send-access-text>
           </ng-container>
           <!-- File -->
           <ng-container *ngIf="send.type === sendType.File">

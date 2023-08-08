@@ -31,7 +31,6 @@ export class AccessComponent implements OnInit {
   passwordRequired = false;
   formPromise: Promise<SendAccessResponse>;
   password: string;
-  showText = false;
   unavailable = false;
   error = false;
   hideEmail = false;
@@ -50,13 +49,6 @@ export class AccessComponent implements OnInit {
     private fileDownloadService: FileDownloadService,
     private sendApiService: SendApiService
   ) {}
-
-  get sendText() {
-    if (this.send == null || this.send.text == null) {
-      return null;
-    }
-    return this.showText ? this.send.text.text : this.send.text.maskedText;
-  }
 
   get expirationDate() {
     if (this.send == null || this.send.expirationDate == null) {
@@ -135,10 +127,6 @@ export class AccessComponent implements OnInit {
     );
   }
 
-  toggleText() {
-    this.showText = !this.showText;
-  }
-
   async load() {
     this.unavailable = false;
     this.error = false;
@@ -166,7 +154,6 @@ export class AccessComponent implements OnInit {
       const sendAccess = new SendAccess(sendResponse);
       this.decKey = await this.cryptoService.makeSendKey(keyArray);
       this.send = await sendAccess.decrypt(this.decKey);
-      this.showText = this.send.text != null ? !this.send.text.hidden : true;
     } catch (e) {
       if (e instanceof ErrorResponse) {
         if (e.statusCode === 401) {
