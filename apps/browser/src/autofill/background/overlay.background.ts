@@ -1,5 +1,8 @@
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { WebsiteIconService } from "@bitwarden/common/services/website-icon.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
@@ -16,6 +19,7 @@ import {
 class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
+  private iconsServerUrl: string;
   private pageDetailsToAutoFill: Map<number, PageDetail[]> = new Map();
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
@@ -47,8 +51,11 @@ class OverlayBackground {
   constructor(
     private cipherService: CipherService,
     private autofillService: AutofillService,
-    private authService: AuthService
+    private authService: AuthService,
+    private environmentService: EnvironmentService,
+    private settingsService: SettingsService
   ) {
+    this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
     this.setupExtensionMessageListeners();
 
@@ -165,6 +172,7 @@ class OverlayBackground {
     this.ciphers = unsortedCiphers.sort((a, b) =>
       this.cipherService.sortCiphersByLastUsedThenName(a, b)
     );
+    const isFaviconDisabled = this.settingsService.getDisableFavicon();
 
     this.currentContextualCiphers = this.ciphers.map((cipher) => ({
       id: cipher.id,
@@ -172,6 +180,10 @@ class OverlayBackground {
       type: cipher.type,
       reprompt: cipher.reprompt,
       favorite: cipher.favorite,
+      // TODO: Consider a better way to approach this. Each login cipher type will have the same icon.
+      icon: !isFaviconDisabled
+        ? WebsiteIconService.buildCipherIconData(this.iconsServerUrl, cipher, isFaviconDisabled)
+        : null,
       login: {
         username: cipher.login.username,
       },

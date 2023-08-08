@@ -1,5 +1,7 @@
 @import "../../../../../libs/angular/src/scss/webfonts.css";
+@import "../../../../../libs/angular/src/scss/bwicons/styles/style.scss";
 @import "./variables";
+@import "../../../../../libs/angular/src/scss/icons.scss";
 
 $color-blue: #175ddc;
 $color-light-gray: #ced4dc;
@@ -97,11 +99,24 @@ body {
   }
 
   .cipher-icon {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
     width: 3.2rem;
-    height: auto;
+    height: 3.2rem;
+    background-size: 2.6rem;
     line-height: 0;
     margin-right: 1rem;
     flex-shrink: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    svg {
+      width: 100%;
+      height: auto;
+      flex-shrink: 0;
+    }
   }
 
   .cipher-details-container {
@@ -120,6 +135,7 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    cursor: default;
   }
 
   .cipher-name {

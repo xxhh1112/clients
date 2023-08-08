@@ -585,7 +585,9 @@ export default class MainBackground {
     this.overlayBackground = new OverlayBackground(
       this.cipherService,
       this.autofillService,
-      this.authService
+      this.authService,
+      this.environmentService,
+      this.settingsService
     );
     this.tabsBackground = new TabsBackground(
       this,

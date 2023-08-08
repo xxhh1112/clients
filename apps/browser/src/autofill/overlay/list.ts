@@ -98,10 +98,10 @@ class AutofillOverlayList extends HTMLElement {
       const cipherElement = document.createElement("div");
       cipherElement.className = "cipher";
 
-      const cipherIcon = document.createElement("div");
-      cipherIcon.innerHTML = globeIcon;
-      const globeIconElement = cipherIcon.querySelector("svg");
-      globeIconElement.classList.add("cipher-icon");
+      // const cipherIcon = document.createElement("div");
+      // cipherIcon.innerHTML = globeIcon;
+      // const globeIconElement = cipherIcon.querySelector("svg");
+      // globeIconElement.classList.add("cipher-icon");
 
       const cipherDetailsContainer = document.createElement("div");
       cipherDetailsContainer.className = "cipher-details-container";
@@ -117,7 +117,18 @@ class AutofillOverlayList extends HTMLElement {
       cipherDetailsContainer.appendChild(cipherNameElement);
       cipherDetailsContainer.appendChild(cipherUserLoginElement);
 
-      cipherElement.appendChild(globeIconElement);
+      // TODO: This is ugly, need to make it work better/cleaner
+      const cipherIcon = document.createElement("div");
+      if (cipher.icon?.image) {
+        cipherIcon.style.backgroundImage = "url(" + cipher.icon.image + ")";
+      } else if (cipher.icon?.icon) {
+        cipherIcon.className = cipher.icon.icon;
+      } else {
+        cipherIcon.innerHTML = globeIcon;
+      }
+      cipherIcon.classList.add("cipher-icon");
+
+      cipherElement.appendChild(cipherIcon);
       cipherElement.appendChild(cipherDetailsContainer);
 
       cipherElement.addEventListener("click", () =>
