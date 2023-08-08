@@ -14,7 +14,6 @@ import {
 
 import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -27,11 +26,13 @@ import { BitValidators } from "@bitwarden/components";
 import { GroupService, GroupView } from "../../../admin-console/organizations/core";
 import { PermissionMode } from "../../../admin-console/organizations/shared/components/access-selector/access-selector.component";
 import {
-  AccessItemView,
-  AccessItemValue,
   AccessItemType,
-  convertToSelectionView,
+  AccessItemValue,
+  AccessItemView,
   convertToPermission,
+  convertToSelectionView,
+  mapGroupToAccessItemView,
+  mapUserToAccessItemView,
 } from "../../../admin-console/organizations/shared/components/access-selector/access-selector.models";
 import { CollectionAdminService } from "../../core/collection-admin.service";
 import { CollectionAdminView } from "../../core/views/collection-admin.view";
@@ -283,32 +284,6 @@ function parseName(collection: CollectionView) {
   const parent = nameParts.length > 1 ? nameParts.slice(0, -1).join("/") : undefined;
 
   return { name, parent };
-}
-
-function mapGroupToAccessItemView(group: GroupView): AccessItemView {
-  return {
-    id: group.id,
-    type: AccessItemType.Group,
-    listName: group.name,
-    labelName: group.name,
-    accessAllItems: group.accessAll,
-    readonly: group.accessAll,
-  };
-}
-
-// TODO: Use view when user apis are migrated to a service
-function mapUserToAccessItemView(user: OrganizationUserUserDetailsResponse): AccessItemView {
-  return {
-    id: user.id,
-    type: AccessItemType.Member,
-    email: user.email,
-    role: user.type,
-    listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
-    labelName: user.name ?? user.email,
-    status: user.status,
-    accessAllItems: user.accessAll,
-    readonly: user.accessAll,
-  };
 }
 
 function mapToAccessSelections(collectionDetails: CollectionAdminView): AccessItemValue[] {

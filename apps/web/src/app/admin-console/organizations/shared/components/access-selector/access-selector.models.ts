@@ -1,10 +1,11 @@
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
 import {
   OrganizationUserStatusType,
   OrganizationUserType,
 } from "@bitwarden/common/admin-console/enums";
 import { SelectItemView } from "@bitwarden/components";
 
-import { CollectionAccessSelectionView } from "../../../core";
+import { CollectionAccessSelectionView, GroupView } from "../../../core";
 
 /**
  * Permission options that replace/correspond with manage, readOnly, and hidePassword server fields.
@@ -111,3 +112,29 @@ const readOnly = (perm: CollectionPermission) =>
 
 const hidePassword = (perm: CollectionPermission) =>
   [CollectionPermission.ViewExceptPass, CollectionPermission.EditExceptPass].includes(perm);
+
+export function mapGroupToAccessItemView(group: GroupView): AccessItemView {
+  return {
+    id: group.id,
+    type: AccessItemType.Group,
+    listName: group.name,
+    labelName: group.name,
+    accessAllItems: group.accessAll,
+    readonly: group.accessAll,
+  };
+}
+
+// TODO: Use view when user apis are migrated to a service
+export function mapUserToAccessItemView(user: OrganizationUserUserDetailsResponse): AccessItemView {
+  return {
+    id: user.id,
+    type: AccessItemType.Member,
+    email: user.email,
+    role: user.type,
+    listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
+    labelName: user.name ?? user.email,
+    status: user.status,
+    accessAllItems: user.accessAll,
+    readonly: user.accessAll,
+  };
+}
