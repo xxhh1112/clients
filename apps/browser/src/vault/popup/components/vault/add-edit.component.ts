@@ -156,9 +156,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inTab(window)) {
+    // TODO: Need to think a bit more about how this should be refined.
+    if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.disableCloseTabWarning();
-      this.messagingService.send("closeTab", { delay: 1000 });
+      this.messagingService.send("closeAddEditCipher", { delay: 1000 });
       return true;
     }
 
@@ -194,8 +195,9 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inTab(window)) {
-      this.messagingService.send("closeTab");
+    // TODO: Need to think a bit more about how this should be refined.
+    if (this.popupUtilsService.inPopout(window)) {
+      this.messagingService.send("closeAddEditCipher");
       return;
     }
 

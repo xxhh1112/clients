@@ -29,8 +29,8 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     await this.openPopoutWindow(
       senderWindowId,
       cipherId == null
-        ? "popup/index.html#/edit-cipher"
-        : `popup/index.html#/edit-cipher?cipherId=${cipherId}`,
+        ? "popup/index.html?uilocation=popout#/edit-cipher"
+        : `popup/index.html?uilocation=popout#/edit-cipher?cipherId=${cipherId}`,
       "addEditCipher"
     );
   }
@@ -41,11 +41,16 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
 
   private async openPopoutWindow(
     senderWindowId: number,
-    popupWindowURL: string,
+    popupWindowUrl: string,
     singleActionPopoutKey: string
   ) {
     const senderWindow = senderWindowId && (await BrowserApi.getWindow(senderWindowId));
-    const url = chrome.extension.getURL(popupWindowURL);
+    let url = chrome.extension.getURL(popupWindowUrl);
+    if (!url.includes("uilocation=popout")) {
+      const parsedUrl = new URL(url);
+      parsedUrl.searchParams.set("uilocation", "popout");
+      url = parsedUrl.toString();
+    }
     const offsetRight = 15;
     const offsetTop = 90;
     const popupWidth = this.defaultPopoutWindowOptions.width;
@@ -71,6 +76,7 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     if (!tabId) {
       return;
     }
+
     await BrowserApi.removeTab(tabId);
     this.singleActionPopoutTabIds[popoutKey] = null;
   }

@@ -588,8 +588,7 @@ export default class MainBackground {
       this.authService,
       this.environmentService,
       this.settingsService,
-      this.stateService,
-      this.browserPopoutWindowService
+      this.stateService
     );
     this.tabsBackground = new TabsBackground(
       this,

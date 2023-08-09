@@ -13,7 +13,6 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserPopoutWindowService } from "../../platform/popup/abstractions/browser-popout-window.service";
 import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
@@ -63,8 +62,7 @@ class OverlayBackground {
     private authService: AuthService,
     private environmentService: EnvironmentService,
     private settingsService: SettingsService,
-    private stateService: StateService,
-    private browserPopoutWindowService: BrowserPopoutWindowService
+    private stateService: StateService
   ) {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
@@ -375,7 +373,7 @@ class OverlayBackground {
     handler({ message, port });
   };
 
-  // TODO: This is not an effective implementation. I'm not entirely sure how to populate or create a new cipher based on partiall submitted data.
+  // TODO: Need to go through and refactor this implementation to be more robust.
   private getNewVaultItemDetails() {
     chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
       command: "addNewVaultItemFromOverlay",
@@ -406,10 +404,9 @@ class OverlayBackground {
       collectionIds: cipherView.collectionIds,
     });
 
-    await this.browserPopoutWindowService.openAddEditCipherWindow(
-      sender.tab.windowId,
-      cipherView.id
-    );
+    await BrowserApi.tabSendMessageData(sender.tab, "openAddEditCipher", {
+      cipherId: cipherView.id,
+    });
   }
 }
 

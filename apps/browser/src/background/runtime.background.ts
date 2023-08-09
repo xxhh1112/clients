@@ -111,18 +111,15 @@ export default class RuntimeBackground {
       case "bgReopenPromptForLogin":
         await this.browserPopoutWindowService.openLoginPrompt(sender.tab?.windowId);
         break;
-      case "openAddEditCipher": {
-        const addEditCipherUrl =
-          msg.data?.cipherId == null
-            ? "popup/index.html#/edit-cipher"
-            : "popup/index.html#/edit-cipher?cipherId=" + msg.data.cipherId;
-
-        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
+      case "openAddEditCipher":
+        await this.browserPopoutWindowService.openAddEditCipherWindow(
+          sender.tab.windowId,
+          msg.data.cipherId
+        );
         break;
-      }
-      case "closeTab":
+      case "closeAddEditCipher":
         setTimeout(() => {
-          BrowserApi.closeBitwardenExtensionTab();
+          this.browserPopoutWindowService.closeAddEditCipherWindow();
         }, msg.delay ?? 0);
         break;
       case "triggerAutofillScriptInjection":
