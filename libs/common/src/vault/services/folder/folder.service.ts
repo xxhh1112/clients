@@ -1,8 +1,9 @@
-import { concatMap } from "rxjs";
+import { concatMap, firstValueFrom } from "rxjs";
 
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { I18nService } from "../../../platform/abstractions/i18n.service";
 import { StateService } from "../../../platform/abstractions/state.service";
+import { BitSubject } from "../../../platform/misc/bit-subject";
 import { Utils } from "../../../platform/misc/utils";
 import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
@@ -13,8 +14,8 @@ import { Folder } from "../../../vault/models/domain/folder";
 import { FolderView } from "../../../vault/models/view/folder.view";
 
 export class FolderService implements InternalFolderServiceAbstraction {
-  protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
-  protected _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
+  protected _folders = new BitSubject<Folder[]>();
+  protected _folderViews = new BitSubject<FolderView[]>();
 
   get folders$() {
     return this._folders.asObservable();
@@ -63,7 +64,7 @@ export class FolderService implements InternalFolderServiceAbstraction {
   }
 
   async get(id: string): Promise<Folder> {
-    const folders = this._folders.getValue();
+    const folders = await firstValueFrom(this._folders.asObservable());
 
     return folders.find((folder) => folder.id === id);
   }
