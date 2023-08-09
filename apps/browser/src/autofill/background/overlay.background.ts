@@ -3,13 +3,13 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-// import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { WebsiteIconService } from "@bitwarden/common/services/website-icon.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-// import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-// import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-// import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
-// import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
@@ -383,33 +383,33 @@ class OverlayBackground {
   }
 
   private async addNewVaultItem(message: any, sender: chrome.runtime.MessageSender) {
-    // const uriView = new LoginUriView();
-    // uriView.uri = message.uri;
-    //
-    // const loginView = new LoginView();
-    // loginView.uris = [uriView];
-    // loginView.username = message.username;
-    // loginView.password = message.password;
-    //
-    // const cipherView = new CipherView();
-    // console.log(message, Utils.getHostname(message.uri));
-    // cipherView.name = (message.hostname || "").replace(/^www\./, "");
-    // cipherView.folderId = null;
-    // cipherView.type = CipherType.Login;
-    // cipherView.login = loginView;
-    //
-    // await this.stateService.setAddEditCipherInfo({
-    //   cipher: cipherView,
-    //   collectionIds: cipherView.collectionIds,
-    // });
-    //
-    // const cipher = await this.cipherService.encrypt(cipherView);
-    // await this.cipherService.createWithServer(cipher);
-    //
-    // console.log(cipherView);
+    // TODO: This is an exact implementation of AddLoginQueueMessage.toCipherView. Need to find a way to abstract this logic.
+    const uriView = new LoginUriView();
+    uriView.uri = message.login.uri;
 
-    // console.log(sender);
-    await this.browserPopoutWindowService.openAddEditCipherWindow(sender.tab.windowId);
+    const loginView = new LoginView();
+    loginView.uris = [uriView];
+    loginView.username = message.login.username || "";
+    loginView.password = message.login.password || "";
+
+    const cipherView = new CipherView();
+    cipherView.name = (Utils.getHostname(message.login.uri) || message.login.hostname).replace(
+      /^www\./,
+      ""
+    );
+    cipherView.folderId = null;
+    cipherView.type = CipherType.Login;
+    cipherView.login = loginView;
+
+    await this.stateService.setAddEditCipherInfo({
+      cipher: cipherView,
+      collectionIds: cipherView.collectionIds,
+    });
+
+    await this.browserPopoutWindowService.openAddEditCipherWindow(
+      sender.tab.windowId,
+      cipherView.id
+    );
   }
 }
 
