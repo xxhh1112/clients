@@ -45,7 +45,7 @@ describe("ForegroundBitSubject", () => {
     const thisNextSpy = jest.spyOn(subject, "next");
     (BrowserApi.messageListener as jest.Mock).mock.calls[0][1]({
       command: subject["fromBackgroundMessageName"],
-      data: "test",
+      data: JSON.stringify("test"),
     });
     expect(spy).toHaveBeenCalled();
     expect(thisNextSpy).not.toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe("ForegroundBitSubject", () => {
 
   it("should initialize from background", () => {
     BrowserApi.sendMessage = jest.fn((message, data, callback) => {
-      callback("expected");
+      callback(JSON.stringify("expected"));
     });
     subject.init("not expected").then((s) => {
       expect(s.value).toBe("expected");

@@ -10,12 +10,12 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
 
     BrowserApi.messageListener(
       this.fromForegroundMessageName,
-      (message: { command: string; data: DeepJsonify<T> }) => {
+      (message: { command: string; data: string }) => {
         if (message.command !== this.fromForegroundMessageName) {
           return;
         }
 
-        this.next(initializer(message.data));
+        this.next(this.initializeData(message.data));
       }
     );
 
@@ -23,12 +23,12 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
       if (message.command !== this.requestInitMessageName || !this._initialized) {
         return;
       }
-      return response(this.value);
+      return response(JSON.stringify(this.value));
     });
   }
 
   override next(value: T): void {
     super.next(value);
-    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: value });
+    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: JSON.stringify(value) });
   }
 }

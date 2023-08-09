@@ -20,4 +20,8 @@ export class BrowserBitSubject<T = never> extends BitSubject<T> {
   protected get requestInitMessageName(): string {
     return `${this.serviceObservableName}_request_init`;
   }
+
+  protected initializeData(json: string) {
+    return this.initializer(JSON.parse(json));
+  }
 }

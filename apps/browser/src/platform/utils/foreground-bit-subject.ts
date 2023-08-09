@@ -10,19 +10,19 @@ export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
 
     BrowserApi.messageListener(
       this.fromBackgroundMessageName,
-      (message: { command: string; data: DeepJsonify<T> }) => {
+      (message: { command: string; data: string }) => {
         if (message.command !== this.fromBackgroundMessageName) {
           return;
         }
 
-        super.next(initializer(message.data));
+        super.next(this.initializeData(message.data));
       }
     );
   }
 
   override next(value: T): void {
     // Do not next the subject, background does it first, then tells us to
-    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: value });
+    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: JSON.stringify(value) });
   }
 
   async init(fallbackInitialValue?: T): Promise<this> {
@@ -31,10 +31,10 @@ export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
       BrowserApi.sendMessage(this.requestInitMessageName, null, (response) => {
         if (response === undefined) {
           // did not receive a response
-          response = fallbackInitialValue;
+          response = JSON.stringify(fallbackInitialValue);
         }
 
-        super.next(this.initializer(response));
+        super.next(this.initializeData(response));
         resolve();
       });
     });
