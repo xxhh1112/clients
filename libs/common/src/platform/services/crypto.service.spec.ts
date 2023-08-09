@@ -69,7 +69,7 @@ describe("cryptoService", () => {
     it("sets the Auto key if the User Key if not set", async () => {
       const autoKeyB64 =
         "IT5cA1i5Hncd953pb00E58D2FqJX+fWTj4AvoI67qkGHSQPgulAqKv+LaKRAo9Bg0xzP9Nw00wk4TqjMmGSM+g==";
-      stateService.getUserKeyAuto.mockResolvedValue(autoKeyB64);
+      stateService.getUserKeyAutoUnlock.mockResolvedValue(autoKeyB64);
 
       const userKey = await cryptoService.getUserKey(mockUserId);
 
@@ -131,7 +131,7 @@ describe("cryptoService", () => {
 
         await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-        expect(stateService.setUserKeyAuto).toHaveBeenCalledWith(mockUserKey.keyB64, {
+        expect(stateService.setUserKeyAutoUnlock).toHaveBeenCalledWith(mockUserKey.keyB64, {
           userId: mockUserId,
         });
       });
@@ -141,7 +141,9 @@ describe("cryptoService", () => {
 
         await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-        expect(stateService.setUserKeyAuto).toHaveBeenCalledWith(null, { userId: mockUserId });
+        expect(stateService.setUserKeyAutoUnlock).toHaveBeenCalledWith(null, {
+          userId: mockUserId,
+        });
       });
 
       it("clears the old deprecated Auto key whenever a User Key is set", async () => {
@@ -172,7 +174,7 @@ describe("cryptoService", () => {
 
       it("sets a UserKeyPin if a ProtectedPin and UserKeyPin is set", async () => {
         stateService.getProtectedPin.mockResolvedValue(protectedPin);
-        stateService.getUserKeyPin.mockResolvedValue(
+        stateService.getPinKeyEncryptedUserKey.mockResolvedValue(
           new EncString(
             "2.OdGNE3L23GaDZGvu9h2Brw==|/OAcNnrYwu0rjiv8+RUr3Tc+Ef8fV035Tm1rbTxfEuC+2LZtiCAoIvHIZCrM/V1PWnb/pHO2gh9+Koks04YhX8K29ED4FzjeYP8+YQD/dWo=|+12xTcIK/UVRsOyawYudPMHb6+lCHeR2Peq1pQhPm0A="
           )
@@ -180,20 +182,23 @@ describe("cryptoService", () => {
 
         await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-        expect(stateService.setUserKeyPin).toHaveBeenCalledWith(expect.any(EncString), {
+        expect(stateService.setPinKeyEncryptedUserKey).toHaveBeenCalledWith(expect.any(EncString), {
           userId: mockUserId,
         });
       });
 
       it("sets a PinKeyEphemeral if a ProtectedPin is set, but a UserKeyPin is not set", async () => {
         stateService.getProtectedPin.mockResolvedValue(protectedPin);
-        stateService.getUserKeyPin.mockResolvedValue(null);
+        stateService.getPinKeyEncryptedUserKey.mockResolvedValue(null);
 
         await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-        expect(stateService.setUserKeyPinEphemeral).toHaveBeenCalledWith(expect.any(EncString), {
-          userId: mockUserId,
-        });
+        expect(stateService.setPinKeyEncryptedUserKeyEphemeral).toHaveBeenCalledWith(
+          expect.any(EncString),
+          {
+            userId: mockUserId,
+          }
+        );
       });
 
       it("clears the UserKeyPin and UserKeyPinEphemeral if the ProtectedPin is not set", async () => {
@@ -201,8 +206,10 @@ describe("cryptoService", () => {
 
         await cryptoService.setUserKey(mockUserKey, mockUserId);
 
-        expect(stateService.setUserKeyPin).toHaveBeenCalledWith(null, { userId: mockUserId });
-        expect(stateService.setUserKeyPinEphemeral).toHaveBeenCalledWith(null, {
+        expect(stateService.setPinKeyEncryptedUserKey).toHaveBeenCalledWith(null, {
+          userId: mockUserId,
+        });
+        expect(stateService.setPinKeyEncryptedUserKeyEphemeral).toHaveBeenCalledWith(null, {
           userId: mockUserId,
         });
       });

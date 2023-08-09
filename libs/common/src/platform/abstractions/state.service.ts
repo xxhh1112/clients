@@ -100,19 +100,19 @@ export abstract class StateService<T extends Account = Account> {
   /**
    * Gets the user key encrypted by the master key
    */
-  getUserKeyMasterKey: (options?: StorageOptions) => Promise<string>;
+  getMasterKeyEncryptedUserKey: (options?: StorageOptions) => Promise<string>;
   /**
    * Sets the user key encrypted by the master key
    */
-  setUserKeyMasterKey: (value: string, options?: StorageOptions) => Promise<void>;
+  setMasterKeyEncryptedUserKey: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's auto key
    */
-  getUserKeyAuto: (options?: StorageOptions) => Promise<string>;
+  getUserKeyAutoUnlock: (options?: StorageOptions) => Promise<string>;
   /**
    * Sets the user's auto key
    */
-  setUserKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
+  setUserKeyAutoUnlock: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's biometric key
    */
@@ -127,24 +127,24 @@ export abstract class StateService<T extends Account = Account> {
   setUserKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user key encrypted by the Pin key.
-   * Used when Master Password on Reset is disabled
+   * Used when Lock with MP on Restart is disabled
    */
-  getUserKeyPin: (options?: StorageOptions) => Promise<EncString>;
+  getPinKeyEncryptedUserKey: (options?: StorageOptions) => Promise<EncString>;
   /**
    * Sets the user key encrypted by the Pin key.
-   * Used when Master Password on Reset is disabled
+   * Used when Lock with MP on Restart is disabled
    */
-  setUserKeyPin: (value: EncString, options?: StorageOptions) => Promise<void>;
+  setPinKeyEncryptedUserKey: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the ephemeral version of the user key encrypted by the Pin key.
-   * Used when Master Password on Reset is enabled
+   * Used when Lock with MP on Restart is enabled
    */
-  getUserKeyPinEphemeral: (options?: StorageOptions) => Promise<EncString>;
+  getPinKeyEncryptedUserKeyEphemeral: (options?: StorageOptions) => Promise<EncString>;
   /**
    * Sets the ephemeral version of the user key encrypted by the Pin key.
-   * Used when Master Password on Reset is enabled
+   * Used when Lock with MP on Restart is enabled
    */
-  setUserKeyPinEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
+  setPinKeyEncryptedUserKeyEphemeral: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
    * @deprecated For migration purposes only, use getUserKeyMasterKey instead
    */

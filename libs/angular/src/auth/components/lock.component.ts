@@ -161,13 +161,13 @@ export class LockComponent implements OnInit, OnDestroy {
       let oldPinKey: EncString;
       switch (this.pinStatus) {
         case "PERSISTANT": {
-          userKeyPin = await this.stateService.getUserKeyPin();
+          userKeyPin = await this.stateService.getPinKeyEncryptedUserKey();
           const oldEncryptedPinKey = await this.stateService.getEncryptedPinProtected();
           oldPinKey = oldEncryptedPinKey ? new EncString(oldEncryptedPinKey) : undefined;
           break;
         }
         case "TRANSIENT": {
-          userKeyPin = await this.stateService.getUserKeyPinEphemeral();
+          userKeyPin = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
           oldPinKey = await this.stateService.getDecryptedPinProtected();
           break;
         }
@@ -358,7 +358,7 @@ export class LockComponent implements OnInit, OnDestroy {
     //     - The user is offline
     //     - The user locks their vault
     //   This will result in the user not being able to unlock their vault and having to log out.
-    let ephemeralPinSet = await this.stateService.getUserKeyPinEphemeral();
+    let ephemeralPinSet = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
     ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
     this.pinEnabled =
       (this.pinStatus === "TRANSIENT" && !!ephemeralPinSet) || this.pinStatus === "PERSISTANT";
@@ -447,10 +447,10 @@ export class LockComponent implements OnInit, OnDestroy {
     const pinProtectedKey = await this.cryptoService.encrypt(userKey.key, pinKey);
     if (masterPasswordOnRestart) {
       await this.stateService.setDecryptedPinProtected(null);
-      await this.stateService.setUserKeyPinEphemeral(pinProtectedKey);
+      await this.stateService.setPinKeyEncryptedUserKeyEphemeral(pinProtectedKey);
     } else {
       await this.stateService.setEncryptedPinProtected(null);
-      await this.stateService.setUserKeyPin(pinProtectedKey);
+      await this.stateService.setPinKeyEncryptedUserKey(pinProtectedKey);
       // We previously only set the protected pin if MP on Restart was enabled
       // now we set it regardless
       const encPin = await this.cryptoService.encrypt(this.pin, userKey);

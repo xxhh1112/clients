@@ -105,9 +105,7 @@ export class AccountData {
 export class AccountKeys {
   userKey?: UserKey;
   masterKey?: MasterKey;
-  userKeyMasterKey?: string;
-  userKeyAuto?: string;
-  userKeyBiometric?: string;
+  masterKeyEncryptedUserKey?: string;
   deviceKey?: ReturnType<SymmetricCryptoKey["toJSON"]>;
   organizationKeys?: EncryptionPair<
     { [orgId: string]: EncryptedOrganizationKeyData },
@@ -241,8 +239,8 @@ export class AccountSettings {
   passwordGenerationOptions?: any;
   usernameGenerationOptions?: any;
   generatorOptions?: any;
-  userKeyPin?: EncryptedString;
-  userKeyPinEphemeral?: EncryptedString;
+  pinKeyEncryptedUserKey?: EncryptedString;
+  pinKeyEncryptedUserKeyEphemeral?: EncryptedString;
   protectedPin?: string;
   settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
   vaultTimeout?: number;

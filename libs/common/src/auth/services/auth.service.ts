@@ -245,22 +245,31 @@ export class AuthService implements AuthServiceAbstraction {
   }
 
   async getAuthStatus(userId?: string): Promise<AuthenticationStatus> {
+    // If we don't have an access token or userId, we're logged out
     const isAuthenticated = await this.stateService.getIsAuthenticated({ userId: userId });
     if (!isAuthenticated) {
       return AuthenticationStatus.LoggedOut;
     }
 
-    // Keys aren't stored for a device that is locked or logged out
-    // Make sure we're logged in before checking this, otherwise we could mix up those states
-    const neverLock =
-      (await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Auto, userId)) &&
-      !(await this.stateService.getEverBeenUnlocked({ userId: userId }));
-    if (neverLock) {
-      // Get the key from storage and set it in memory
-      const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Auto, userId);
-      await this.cryptoService.setUserKey(userKey);
+    // If we don't have a user key in memory, we're locked
+    if (!(await this.cryptoService.hasUserKeyInMemory(userId))) {
+      // Check if the user has vault timeout set to never and verify that
+      // they've never unlocked their vault
+      const neverLock =
+        (await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Auto, userId)) &&
+        !(await this.stateService.getEverBeenUnlocked({ userId: userId }));
+
+      if (neverLock) {
+        // Attempt to get the key from storage and set it in memory
+        const userKey = await this.cryptoService.getUserKeyFromStorage(
+          KeySuffixOptions.Auto,
+          userId
+        );
+        await this.cryptoService.setUserKey(userKey, userId);
+      }
     }
 
+    // We do another check here in case setting the auto key failed
     const hasKeyInMemory = await this.cryptoService.hasUserKeyInMemory(userId);
     if (!hasKeyInMemory) {
       return AuthenticationStatus.Locked;

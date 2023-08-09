@@ -134,7 +134,7 @@ export class LockComponent extends BaseLockComponent {
     const userId = await this.stateService.getUserId();
     const val = await ipcRenderer.invoke("biometric", {
       action: BiometricStorageAction.EnabledForUser,
-      key: `${userId}_masterkey_biometric`,
+      key: `${userId}_user_biometric`,
       keySuffix: KeySuffixOptions.Biometric,
       userId: userId,
     } as BiometricMessage);

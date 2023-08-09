@@ -334,7 +334,7 @@ export class NativeMessagingBackground {
             } else if (message.keyB64) {
               // backwards compatibility
               let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
-              encUserKey ||= await this.stateService.getUserKeyMasterKey();
+              encUserKey ||= await this.stateService.getMasterKeyEncryptedUserKey();
               if (!encUserKey) {
                 throw new Error("No encrypted user key found");
               }

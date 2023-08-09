@@ -47,9 +47,9 @@ export class SetPinComponent implements OnInit {
     const encPin = await this.cryptoService.encrypt(this.pin, userKey);
     await this.stateService.setProtectedPin(encPin.encryptedString);
     if (this.masterPassOnRestart) {
-      await this.stateService.setUserKeyPinEphemeral(pinProtectedKey);
+      await this.stateService.setPinKeyEncryptedUserKeyEphemeral(pinProtectedKey);
     } else {
-      await this.stateService.setUserKeyPin(pinProtectedKey);
+      await this.stateService.setPinKeyEncryptedUserKey(pinProtectedKey);
     }
     await this.cryptoService.clearDeprecatedKeys(KeySuffixOptions.Pin);
 
