@@ -1,4 +1,4 @@
-import { BehaviorSubject, concatMap } from "rxjs";
+import { concatMap } from "rxjs";
 
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { I18nService } from "../../../platform/abstractions/i18n.service";
@@ -16,8 +16,12 @@ export class FolderService implements InternalFolderServiceAbstraction {
   protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
   protected _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
 
-  folders$ = this._folders.asObservable();
-  folderViews$ = this._folderViews.asObservable();
+  get folders$() {
+    return this._folders.asObservable();
+  }
+  get folderViews$() {
+    return this._folderViews.asObservable();
+  }
 
   constructor(
     private cryptoService: CryptoService,
