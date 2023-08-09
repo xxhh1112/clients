@@ -20,6 +20,10 @@ export class BitSubject<T = never> {
     return this._value;
   }
 
+  getValue(): T {
+    return this.value;
+  }
+
   asObservable() {
     return this._subject.asObservable();
   }
