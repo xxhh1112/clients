@@ -4,6 +4,7 @@ import { mock } from "jest-mock-extended";
 
 import { I18nPipe } from "@bitwarden/angular/platform/pipes/i18n.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -24,6 +25,10 @@ describe("InactiveTwoFactorReportComponent", () => {
         {
           provide: CipherService,
           useValue: mock<CipherService>(),
+        },
+        {
+          provide: OrganizationService,
+          useValue: mock<OrganizationService>(),
         },
         {
           provide: ModalService,

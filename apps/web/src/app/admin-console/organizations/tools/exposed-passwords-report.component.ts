@@ -26,11 +26,18 @@ export class ExposedPasswordsReportComponent extends BaseExposedPasswordsReportC
     auditService: AuditService,
     modalService: ModalService,
     messagingService: MessagingService,
-    private organizationService: OrganizationService,
+    organizationService: OrganizationService,
     private route: ActivatedRoute,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(cipherService, auditService, modalService, messagingService, passwordRepromptService);
+    super(
+      cipherService,
+      auditService,
+      organizationService,
+      modalService,
+      messagingService,
+      passwordRepromptService
+    );
   }
 
   async ngOnInit() {

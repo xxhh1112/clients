@@ -59,6 +59,15 @@
             <br />
             <small>{{ c.subTitle }}</small>
           </td>
+          <td>
+            <app-org-badge
+              [disabled]="disabled"
+              [organizationId]="c.organizationId"
+              [organizationName]="c.organizationId | orgNameFromId : organizations"
+              appStopProp
+            >
+            </app-org-badge>
+          </td>
         </tr>
       </tbody>
     </table>

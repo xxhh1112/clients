@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 
 import { SharedModule } from "../shared";
 import { OrganizationBadgeModule } from "../vault/individual-vault/organization-badge/organization-badge.module";
+import { PipesModule } from "../vault/individual-vault/pipes/pipes.module";
 
 import { BreachReportComponent } from "./pages/breach-report.component";
 import { ExposedPasswordsReportComponent } from "./pages/exposed-passwords-report.component";
@@ -22,6 +23,7 @@ import { ReportsSharedModule } from "./shared";
     ReportsSharedModule,
     ReportsRoutingModule,
     OrganizationBadgeModule,
+    PipesModule,
   ],
   declarations: [
     BreachReportComponent,
@@ -31,7 +33,6 @@ import { ReportsSharedModule } from "./shared";
     ReportsHomeComponent,
     ReusedPasswordsReportComponent,
     UnsecuredWebsitesReportComponent,
-    WeakPasswordsReportComponent,
     WeakPasswordsReportComponent,
   ],
 })

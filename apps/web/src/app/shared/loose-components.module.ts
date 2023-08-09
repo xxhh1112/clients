@@ -111,6 +111,8 @@ import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-va
 import { EnvironmentSelectorModule } from "./../components/environment-selector/environment-selector.module";
 import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
 import { SharedModule } from "./shared.module";
+import { OrganizationBadgeModule } from "../vault/individual-vault/organization-badge/organization-badge.module";
+import { PipesModule } from "../vault/individual-vault/pipes/pipes.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
@@ -125,9 +127,10 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EnvironmentSelectorModule,
     AccountFingerprintComponent,
-
     // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
     SecretsManagerBillingModule,
+    OrganizationBadgeModule,
+    PipesModule,
   ],
   declarations: [
     AcceptEmergencyComponent,

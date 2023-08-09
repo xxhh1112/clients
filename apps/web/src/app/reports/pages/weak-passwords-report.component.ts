@@ -1,6 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription, Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -15,9 +18,14 @@ import { CipherReportComponent } from "./cipher-report.component";
   selector: "app-weak-passwords-report",
   templateUrl: "weak-passwords-report.component.html",
 })
-export class WeakPasswordsReportComponent extends CipherReportComponent implements OnInit {
+export class WeakPasswordsReportComponent
+  extends CipherReportComponent
+  implements OnInit, OnDestroy
+{
   passwordStrengthMap = new Map<string, [string, BadgeTypes]>();
   disabled = true;
+  organizations: Organization[];
+  private destroy$ = new Subject<void>();
 
   private passwordStrengthCache = new Map<string, number>();
   weakPasswordCiphers: CipherView[] = [];
@@ -25,6 +33,7 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
   constructor(
     protected cipherService: CipherService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
+    protected organizationService: OrganizationService,
     modalService: ModalService,
     messagingService: MessagingService,
     passwordRepromptService: PasswordRepromptService
@@ -33,7 +42,21 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
   }
 
   async ngOnInit() {
+    this.subscribeToOrganizations();
     await super.load();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  subscribeToOrganizations(): Subscription {
+    return this.organizationService.organizations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((orgs) => {
+        this.organizations = orgs;
+      });
   }
 
   async setCiphers() {

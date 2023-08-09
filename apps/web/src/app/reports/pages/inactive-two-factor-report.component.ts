@@ -1,6 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription, Subject, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -15,12 +18,19 @@ import { CipherReportComponent } from "./cipher-report.component";
   selector: "app-inactive-two-factor-report",
   templateUrl: "inactive-two-factor-report.component.html",
 })
-export class InactiveTwoFactorReportComponent extends CipherReportComponent implements OnInit {
+export class InactiveTwoFactorReportComponent
+  extends CipherReportComponent
+  implements OnInit, OnDestroy
+{
   services = new Map<string, string>();
   cipherDocs = new Map<string, string>();
+  disabled = true;
+  organizations: Organization[];
+  private destroy$ = new Subject<void>();
 
   constructor(
     protected cipherService: CipherService,
+    protected organizationService: OrganizationService,
     modalService: ModalService,
     messagingService: MessagingService,
     private logService: LogService,
@@ -30,7 +40,21 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
   }
 
   async ngOnInit() {
+    this.subscribeToOrganizations();
     await super.load();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  subscribeToOrganizations(): Subscription {
+    return this.organizationService.organizations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((orgs) => {
+        this.organizations = orgs;
+      });
   }
 
   async setCiphers() {

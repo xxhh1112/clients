@@ -25,10 +25,16 @@ export class ReusedPasswordsReportComponent extends BaseReusedPasswordsReportCom
     modalService: ModalService,
     messagingService: MessagingService,
     private route: ActivatedRoute,
-    private organizationService: OrganizationService,
+    organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(cipherService, modalService, messagingService, passwordRepromptService);
+    super(
+      cipherService,
+      organizationService,
+      modalService,
+      messagingService,
+      passwordRepromptService
+    );
   }
 
   async ngOnInit() {

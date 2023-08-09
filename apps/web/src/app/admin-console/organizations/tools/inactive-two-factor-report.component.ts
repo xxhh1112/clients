@@ -25,9 +25,16 @@ export class InactiveTwoFactorReportComponent extends BaseInactiveTwoFactorRepor
     private route: ActivatedRoute,
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService
+    organizationService: OrganizationService
   ) {
-    super(cipherService, modalService, messagingService, logService, passwordRepromptService);
+    super(
+      cipherService,
+      organizationService,
+      modalService,
+      messagingService,
+      logService,
+      passwordRepromptService
+    );
   }
 
   async ngOnInit() {
