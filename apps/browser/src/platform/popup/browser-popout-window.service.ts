@@ -13,11 +13,7 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
 
   async openLoginPrompt(senderWindowId: number) {
     await this.closeLoginPrompt();
-    await this.openPopoutWindow(
-      senderWindowId,
-      "popup/index.html?uilocation=popout",
-      "loginPrompt"
-    );
+    await this.openPopoutWindow(senderWindowId, "popup/index.html", "loginPrompt");
   }
 
   async closeLoginPrompt() {
@@ -29,8 +25,8 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     await this.openPopoutWindow(
       senderWindowId,
       cipherId == null
-        ? "popup/index.html?uilocation=popout#/edit-cipher"
-        : `popup/index.html?uilocation=popout#/edit-cipher?cipherId=${cipherId}`,
+        ? "popup/index.html#/edit-cipher"
+        : `popup/index.html#/edit-cipher?cipherId=${cipherId}`,
       "addEditCipher"
     );
   }

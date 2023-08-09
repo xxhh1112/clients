@@ -159,6 +159,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     // TODO: Need to think a bit more about how this should be refined.
     if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.disableCloseTabWarning();
+
+      // TODO: Need to come back to this and add it to the messaging service.
+      chrome.runtime.sendMessage({ command: "addEditCipherSubmitted" });
+
       this.messagingService.send("closeAddEditCipher", { delay: 1000 });
       return true;
     }

@@ -41,6 +41,8 @@ class OverlayBackground {
     collectPageDetailsResponse: ({ message, sender }) =>
       this.collectPageDetailsResponse(message, sender),
     unlockCompleted: ({ sender }) => this.handleUnlockedCompleted(sender),
+    addEditCipherSubmitted: () => this.updateCurrentContextualCiphers(),
+    deletedCipher: () => this.updateCurrentContextualCiphers(),
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
     overlayIconClicked: ({ port }) => this.handleOverlayIconClicked(port.sender),
