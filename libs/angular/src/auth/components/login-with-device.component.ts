@@ -16,6 +16,7 @@ import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/f
 import { PasswordlessLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { PasswordlessCreateAuthRequest } from "@bitwarden/common/auth/models/request/passwordless-create-auth.request";
 import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
+import { HttpStatusCode } from "@bitwarden/common/enums/http-status-code.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -165,10 +166,18 @@ export class LoginWithDeviceComponent
   private async handleExistingAdminAuthRequest(adminAuthReqStorable: AdminAuthRequestStorable) {
     // Note: on login, the SSOLoginStrategy will also call to see an existing admin auth req
     // has been approved and handle it if so.
-    // Regardless, we always retrieve the auth request from the server verify and handle status changes here as well
-    const adminAuthReqResponse = await this.apiService.getAuthRequest(adminAuthReqStorable.id);
 
-    // Request doesn't exist
+    // Regardless, we always retrieve the auth request from the server verify and handle status changes here as well
+    let adminAuthReqResponse: AuthRequestResponse;
+    try {
+      adminAuthReqResponse = await this.apiService.getAuthRequest(adminAuthReqStorable.id);
+    } catch (error) {
+      if (error instanceof ErrorResponse && error.statusCode === HttpStatusCode.NotFound) {
+        return await this.handleExistingAdminAuthReqDeletedOrDenied();
+      }
+    }
+
+    // Request doesn't exist anymore
     if (!adminAuthReqResponse) {
       return await this.handleExistingAdminAuthReqDeletedOrDenied();
     }
