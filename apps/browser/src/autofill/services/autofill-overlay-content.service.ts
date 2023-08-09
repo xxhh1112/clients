@@ -28,6 +28,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private mutationObserver: MutationObserver;
+  private mutationObserverIterations = 0;
+  private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private handlersMemo: { [key: string]: EventHandler<any> } = {};
 
   constructor() {
@@ -48,7 +50,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent(formFieldElement));
 
-    // TODO: Need to find a way to have the handler for click and focus events onyl trigger once. Currently we don't really handle whether this is visible in an effective manner.
+    // TODO: CG - Need to find a way to have the handler for click and focus events only trigger once. Currently we duplicate execution, which isn't great. It doesn't seem to break anything, but it's not ideal.
     formFieldElement.addEventListener(
       "click",
       this.handleFormFieldUserInteractionEvent(formFieldElement)
@@ -59,7 +61,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
     formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
 
-    // TODO: POCing out the vault item creation. This needs to be reworked.
+    // TODO: CG - POC for storing elements on vault item creation. Need to figure a better way to do this overall.
     formFieldElement.addEventListener(
       "input",
       this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
@@ -272,24 +274,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     const ignoreKeywords = ["search", "captcha"];
-    const searchedString = [
-      autofillFieldData.htmlID,
-      autofillFieldData.htmlName,
-      autofillFieldData.htmlClass,
-      autofillFieldData.type,
-      autofillFieldData.title,
-      autofillFieldData.placeholder,
-      autofillFieldData["label-data"],
-      autofillFieldData["label-aria"],
-      autofillFieldData["label-left"],
-      autofillFieldData["label-right"],
-      autofillFieldData["label-tag"],
-      autofillFieldData["label-top"],
-    ]
-      .filter((value) => !!value)
-      .join(",")
-      .toLowerCase();
-
+    const searchedString = this.buildAutofillFieldDataKeywords(autofillFieldData);
     for (const keyword of ignoreKeywords) {
       if (searchedString.includes(keyword)) {
         return true;
@@ -300,7 +285,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return false;
     }
 
-    // TODO: This is the current method we identify login autofill. This will need to change at some point as we want to be able to fill in other types of forms.
+    // TODO: CG - This is the current method we used to identify login fields. This will need to change at some point as we want to be able to fill in other types of forms.
     for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
       if (searchedString.includes(usernameKeyword)) {
         return false;
@@ -409,10 +394,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private setupMutationObserver = () => {
     this.mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
     this.mutationObserver.observe(document.body, { childList: true });
+
+    // TODO: CG - Need to consider cases where an attached DOM element outside of the body is attempting to be rendered above our overlay elements. This might require a separate mutation observer instance.
+    // this.mutationObserver.observe(document.documentElement, { childList: true });
   };
 
   private handleMutationObserverUpdate = (mutations: MutationRecord[]) => {
-    // TODO: This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
+    // TODO: CG - This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
     // In general, we need to think about this further and come up with a more robust solution.
     // The code below basically attempts to ensure that our two elements are always the last two elements in the body.
     // That, combined with the largest potential z-index value, should ensure that our elements are always on top.
@@ -420,8 +408,25 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     // within the body. We at that point will enter an infinite loop of sorts where we keep moving our elements to the end
     // of the body, and the script keeps moving its element to the end of the body. Potentially, it might be better to
     // also check the z-index of the last element in the body and ensure that our elements are always above that.
+    //
     // WARNING: It's really easy to trigger a infinite loop with this observer. Keep that in mind while updating this implementation.
+    if (this.mutationObserverIterationsResetTimeout) {
+      clearTimeout(this.mutationObserverIterationsResetTimeout);
+    }
+
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
+      return;
+    }
+    this.mutationObserverIterations++;
+    this.mutationObserverIterationsResetTimeout = setTimeout(
+      () => (this.mutationObserverIterations = 0),
+      3000
+    );
+
+    if (this.mutationObserverIterations > 10) {
+      this.mutationObserverIterations = 0;
+      clearTimeout(this.mutationObserverIterationsResetTimeout);
+      this.removeAutofillOverlay();
       return;
     }
 
@@ -442,7 +447,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.openAutofillOverlay();
   };
 
-  // TODO: The following represents a first stab at creation of new vault items. It's not effective and needs to be entirely reworked.
+  // TODO: CG - The following represents a first stab at creation of new vault items. It's not effective and needs to be entirely reworked.
   addNewVaultItem() {
     if (!this.isOverlayListVisible) {
       return;
@@ -461,7 +466,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     });
   }
 
-  // TODO: POCing out the vault item creation. This needs to be reworked.
+  // TODO: CG - POCing out the vault item creation. This needs to be reworked.
   private handleFormFieldInputEvent = (
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
@@ -477,7 +482,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   };
 
-  // TODO: POCing out the vault item creation. This needs to be reworked.
+  // TODO: CG - POCing out the vault item creation. This needs to be reworked.
   private storeModifiedFormElement(
     formFieldElement: FillableFormFieldElement,
     autofillFieldData: AutofillField
@@ -503,7 +508,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    const searchedString = [
+    const searchedString = this.buildAutofillFieldDataKeywords(autofillFieldData);
+    for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
+      if (searchedString.includes(usernameKeyword)) {
+        this.userFilledFields.username = formFieldElement;
+        return;
+      }
+    }
+  }
+
+  private buildAutofillFieldDataKeywords(autofillFieldData: AutofillField) {
+    return [
       autofillFieldData.htmlID,
       autofillFieldData.htmlName,
       autofillFieldData.htmlClass,
@@ -520,14 +535,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       .filter((value) => !!value)
       .join(",")
       .toLowerCase();
-
-    // TODO: This is the current method we identify login autofill. This will need to change at some point as we want to be able to fill in other types of forms.
-    for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
-      if (searchedString.includes(usernameKeyword)) {
-        this.userFilledFields.username = formFieldElement;
-        return;
-      }
-    }
   }
 }
 

@@ -70,7 +70,7 @@ class OverlayBackground {
     this.getAuthStatus();
     this.setupExtensionMessageListeners();
 
-    // TODO: Need to think of a more effective way to handle this. This is a temporary solution.
+    // TODO: CG - Need to think of a more effective way to handle this. This is a temporary solution for updating and clearing page details as tab contexts change.
     chrome.tabs.onRemoved.addListener((tabId) => this.removePageDetails(tabId));
     chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
       if (changeInfo.status !== "complete") {
@@ -80,7 +80,7 @@ class OverlayBackground {
   }
 
   private collectPageDetailsResponse(message: any, sender: chrome.runtime.MessageSender) {
-    // TODO: Need to think of a more effective way to handle this. This is a temporary solution.
+    // TODO: CG - Need to think of a more effective way to handle this. This is a temporary solution.
     const pageDetails = this.pageDetailsToAutoFill.get(sender.tab.id) || [];
     pageDetails.push({
       frameId: sender.frameId,
@@ -102,7 +102,7 @@ class OverlayBackground {
 
     const cipher = this.ciphers.find((c) => c.id === message.cipherId);
 
-    // TODO: There has to be a better, less costly way to do this...
+    // TODO: CG - Probably need to think of a less costly way of doing this. We're iterating multiple times over the found ciphers to reorder the most recently clicked element.
     const cipherIndex = this.currentContextualCiphers.findIndex((c) => c.id === message.cipherId);
     this.currentContextualCiphers.unshift(this.currentContextualCiphers.splice(cipherIndex, 1)[0]);
 
@@ -158,7 +158,7 @@ class OverlayBackground {
   }
 
   private async openAutofillOverlayList(focusFieldElement = false) {
-    // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
+    // TODO: CG - Its possible that this isn't entirely effective, we need to consider and test how iframed forms react to this.
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     const authStatus = await this.getAuthStatus();
     chrome.tabs.sendMessage(currentTab.id, {
@@ -173,7 +173,7 @@ class OverlayBackground {
       return;
     }
 
-    // TODO: Likely this won't work effectively, we need to consider how to handle iframed forms
+    // TODO: CG - Its possible that this isn't entirely effective, we need to consider and test how iframed forms react to this.
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
     this.ciphers = unsortedCiphers.sort((a, b) =>
@@ -187,7 +187,7 @@ class OverlayBackground {
       type: cipher.type,
       reprompt: cipher.reprompt,
       favorite: cipher.favorite,
-      // TODO: Consider a better way to approach this. Each login cipher type will have the same icon.
+      // TODO: CG - Need to consider a better way to approach this. Each login cipher type will have the same icon so we don't need to re-build that value.
       icon: !isFaviconDisabled
         ? WebsiteIconService.buildCipherIconData(this.iconsServerUrl, cipher, isFaviconDisabled)
         : null,
@@ -370,7 +370,7 @@ class OverlayBackground {
     handler({ message, port });
   };
 
-  // TODO: Need to go through and refactor this implementation to be more robust.
+  // TODO: CG - Need to go through and refactor this implementation to be more robust.
   private getNewVaultItemDetails() {
     chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
       command: "addNewVaultItemFromOverlay",
@@ -378,7 +378,7 @@ class OverlayBackground {
   }
 
   private async addNewVaultItem(message: any, sender: chrome.runtime.MessageSender) {
-    // TODO: This is an exact implementation of AddLoginQueueMessage.toCipherView. Need to find a way to abstract this logic.
+    // TODO: CG - This is an exact implementation of AddLoginQueueMessage.toCipherView. Need to find a way to abstract this logic.
     const uriView = new LoginUriView();
     uriView.uri = message.login.uri;
 

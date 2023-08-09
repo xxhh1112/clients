@@ -156,11 +156,11 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    // TODO: Need to think a bit more about how this should be refined.
+    // TODO: CG - Need to think a bit more about how this should be refined. This change seems effective, but likely comes with caveats.
     if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.disableCloseTabWarning();
 
-      // TODO: Need to come back to this and add it to the messaging service.
+      // TODO: CG - Need to come back to this and add it to the messaging service.
       chrome.runtime.sendMessage({ command: "addEditCipherSubmitted" });
 
       this.messagingService.send("closeAddEditCipher", { delay: 1000 });
@@ -199,7 +199,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    // TODO: Need to think a bit more about how this should be refined.
+    // TODO: CG - Need to think a bit more about how this should be refined. This change seems effective, but likely comes with caveats.
     if (this.popupUtilsService.inPopout(window)) {
       this.messagingService.send("closeAddEditCipher");
       return;

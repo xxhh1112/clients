@@ -122,7 +122,7 @@ class AutofillOverlayList extends HTMLElement {
       cipherDetailsContainer.appendChild(cipherNameElement);
       cipherDetailsContainer.appendChild(cipherUserLoginElement);
 
-      // TODO: This is ugly, need to make it work better/cleaner
+      // TODO: CG - This is ugly, need to make it work better/cleaner
       const cipherIcon = document.createElement("div");
       if (cipher.icon?.image) {
         cipherIcon.style.backgroundImage = "url(" + cipher.icon.image + ")";

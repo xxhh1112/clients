@@ -94,9 +94,7 @@ class AutofillInit implements AutofillInitInterface {
     this.autofillOverlayContentService.isCurrentlyFilling = true;
     this.insertAutofillContentService.fillForm(fillScript);
 
-    // TODO - This is a hack to prevent the autofill overlay from
-    // reappearing after the form has been filled. This should be
-    // removed once the autofill overlay is refactored.
+    // TODO: CG - This ensures that we do not show the autofill overlay as we focus and fill pages. Need to consider if there is a better way to do this.
     setTimeout(() => {
       this.autofillOverlayContentService.isCurrentlyFilling = false;
     }, 300);
