@@ -42,19 +42,30 @@ describe("ForegroundBitSubject", () => {
 
   it("should call super.next when a message is received from background", () => {
     const spy = jest.spyOn(BitSubject.prototype, "next");
+    const thisNextSpy = jest.spyOn(subject, "next");
     (BrowserApi.messageListener as jest.Mock).mock.calls[0][1]({
       command: subject["fromBackgroundMessageName"],
       data: "test",
     });
     expect(spy).toHaveBeenCalled();
+    expect(thisNextSpy).not.toHaveBeenCalled();
   });
 
   it("should initialize from background", () => {
     BrowserApi.sendMessage = jest.fn((message, data, callback) => {
-      callback("test");
+      callback("expected");
     });
-    subject.init().then((s) => {
-      expect(s.value).toBe("test");
+    subject.init("not expected").then((s) => {
+      expect(s.value).toBe("expected");
+    });
+  });
+
+  it("should initialize from background with fallback value", () => {
+    BrowserApi.sendMessage = jest.fn((message, data, callback) => {
+      callback(undefined);
+    });
+    subject.init("expected").then((s) => {
+      expect(s.value).toBe("expected");
     });
   });
 });

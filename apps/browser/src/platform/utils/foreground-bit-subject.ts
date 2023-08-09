@@ -21,12 +21,19 @@ export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
   }
 
   override next(value: T): void {
-    BrowserApi.sendMessage(this.fromForegroundMessageName, value);
+    // Do not next the subject, background does it first, then tells us to
+    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: value });
   }
 
-  async init(): Promise<this> {
+  async init(fallbackInitialValue?: T): Promise<this> {
+    // Initialize from background without waiting for a new emit
     await new Promise<void>((resolve) => {
       BrowserApi.sendMessage(this.requestInitMessageName, null, (response) => {
+        if (response === undefined) {
+          // did not receive a response
+          response = fallbackInitialValue;
+        }
+
         super.next(this.initializer(response));
         resolve();
       });

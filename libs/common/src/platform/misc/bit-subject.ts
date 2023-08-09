@@ -1,9 +1,9 @@
 import { ReplaySubject } from "rxjs";
 
 export class BitSubject<T = never> {
-  protected _subject = new ReplaySubject<T>(1);
+  private _subject = new ReplaySubject<T>(1);
   private _value: T;
-  private _initialized = false;
+  protected _initialized = false;
 
   next(value: T): void {
     this._initialized = true;
@@ -18,10 +18,6 @@ export class BitSubject<T = never> {
     }
 
     return this._value;
-  }
-
-  getValue(): T {
-    return this.value;
   }
 
   asObservable() {

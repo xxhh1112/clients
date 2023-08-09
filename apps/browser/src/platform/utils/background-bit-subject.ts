@@ -20,7 +20,7 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
     );
 
     BrowserApi.messageListener(this.requestInitMessageName, (message, sender, response) => {
-      if (message.command !== this.requestInitMessageName) {
+      if (message.command !== this.requestInitMessageName || !this._initialized) {
         return;
       }
       return response(this.value);
@@ -29,6 +29,6 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
 
   override next(value: T): void {
     super.next(value);
-    BrowserApi.sendMessage(this.fromBackgroundMessageName, value);
+    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: value });
   }
 }

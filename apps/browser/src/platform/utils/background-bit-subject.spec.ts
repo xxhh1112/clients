@@ -46,6 +46,19 @@ describe("BackgroundBitSubject", () => {
     );
   });
 
+  it("should return undefined if initialization is requested before the value is set", () => {
+    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
+    (BrowserApi.messageListener as jest.Mock).mock.calls[1][1](
+      {
+        command: subject["requestInitMessageName"],
+      },
+      null,
+      (response: string) => {
+        expect(response).toBeUndefined();
+      }
+    );
+  });
+
   it("should send a message when next is called", () => {
     const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
     subject.next("test");
