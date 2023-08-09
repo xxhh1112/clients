@@ -15,12 +15,23 @@ export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
           return;
         }
 
-        this._subject.next(initializer(message.data));
+        super.next(initializer(message.data));
       }
     );
   }
 
   override next(value: T): void {
     BrowserApi.sendMessage(this.fromForegroundMessageName, value);
+  }
+
+  async init(): Promise<this> {
+    await new Promise<void>((resolve) => {
+      BrowserApi.sendMessage(this.requestInitMessageName, null, (response) => {
+        super.next(this.initializer(response));
+        resolve();
+      });
+    });
+
+    return this;
   }
 }
