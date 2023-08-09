@@ -35,7 +35,7 @@ export default {
   decorators: [
     componentWrapperDecorator(
       /**
-       * Applying a CSS transform prevents a `position: fixed` element from overflowing its container
+       * Applying a CSS transform makes a `position: fixed` element act like it is `position: relative`
        * https://github.com/storybookjs/storybook/issues/8011#issue-490251969
        */
       (story) => `<div class="tw-scale-100">${story}</div>`
