@@ -103,6 +103,8 @@ import { AddEditComponent } from "../vault/individual-vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/individual-vault/attachments.component";
 import { CollectionsComponent } from "../vault/individual-vault/collections.component";
 import { FolderAddEditComponent } from "../vault/individual-vault/folder-add-edit.component";
+import { OrganizationBadgeModule } from "../vault/individual-vault/organization-badge/organization-badge.module";
+import { PipesModule } from "../vault/individual-vault/pipes/pipes.module";
 import { ShareComponent } from "../vault/individual-vault/share.component";
 import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-edit.component";
 import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
@@ -111,8 +113,6 @@ import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-va
 import { EnvironmentSelectorModule } from "./../components/environment-selector/environment-selector.module";
 import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
 import { SharedModule } from "./shared.module";
-import { OrganizationBadgeModule } from "../vault/individual-vault/organization-badge/organization-badge.module";
-import { PipesModule } from "../vault/individual-vault/pipes/pipes.module";
 
 // Please do not add to this list of declarations - we should refactor these into modules when doing so makes sense until there are none left.
 // If you are building new functionality, please create or extend a feature module instead.
