@@ -49,7 +49,7 @@ export class InactiveTwoFactorReportComponent
     this.destroy$.complete();
   }
 
-  subscribeToOrganizations(): Subscription {
+  private subscribeToOrganizations(): Subscription {
     return this.organizationService.organizations$
       .pipe(takeUntil(this.destroy$))
       .subscribe((orgs) => {
@@ -99,7 +99,7 @@ export class InactiveTwoFactorReportComponent
     }
   }
 
-  getAllCiphers(): Promise<CipherView[]> {
+  protected getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

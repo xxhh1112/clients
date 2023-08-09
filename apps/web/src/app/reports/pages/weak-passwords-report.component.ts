@@ -51,7 +51,7 @@ export class WeakPasswordsReportComponent
     this.destroy$.complete();
   }
 
-  subscribeToOrganizations(): Subscription {
+  private subscribeToOrganizations(): Subscription {
     return this.organizationService.organizations$
       .pipe(takeUntil(this.destroy$))
       .subscribe((orgs) => {
@@ -121,7 +121,7 @@ export class WeakPasswordsReportComponent
     this.ciphers = this.weakPasswordCiphers;
   }
 
-  getAllCiphers(): Promise<CipherView[]> {
+  protected getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

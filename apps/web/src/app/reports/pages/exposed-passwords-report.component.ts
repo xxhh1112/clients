@@ -13,7 +13,6 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { CipherReportComponent } from "./cipher-report.component";
 
-
 @Component({
   selector: "app-exposed-passwords-report",
   templateUrl: "exposed-passwords-report.component.html",
@@ -48,7 +47,7 @@ export class ExposedPasswordsReportComponent
     this.destroy$.complete();
   }
 
-  subscribeToOrganizations(): Subscription {
+  private subscribeToOrganizations(): Subscription {
     return this.organizationService.organizations$
       .pipe(takeUntil(this.destroy$))
       .subscribe((orgs) => {
@@ -81,7 +80,7 @@ export class ExposedPasswordsReportComponent
     this.ciphers = exposedPasswordCiphers.filter((c) => c.edit);
   }
 
-  getAllCiphers(): Promise<CipherView[]> {
+  protected getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 
