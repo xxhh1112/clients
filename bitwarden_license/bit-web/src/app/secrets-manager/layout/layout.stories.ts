@@ -1,6 +1,12 @@
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, Story, applicationConfig, moduleMetadata } from "@storybook/angular";
+import {
+  Meta,
+  Story,
+  applicationConfig,
+  componentWrapperDecorator,
+  moduleMetadata,
+} from "@storybook/angular";
 import { BehaviorSubject } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -27,6 +33,13 @@ export default {
   title: "Web/Layout",
   component: LayoutComponent,
   decorators: [
+    componentWrapperDecorator(
+      /**
+       * Applying a CSS transform prevents a `position: fixed` element from overflowing its container
+       * https://github.com/storybookjs/storybook/issues/8011#issue-490251969
+       */
+      (story) => `<div class="tw-scale-100">${story}</div>`
+    ),
     moduleMetadata({
       imports: [RouterModule, LayoutModule, IconModule],
       declarations: [StoryContentComponent],
