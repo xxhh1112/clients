@@ -54,6 +54,7 @@ body {
   padding: 0.8rem;
   margin: 0;
   transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     background: #f0f0f0;
@@ -83,12 +84,13 @@ body {
 }
 
 .cipher {
-  padding: 1rem;
+  padding: 0.8rem;
   display: flex;
   align-content: flex-start;
   align-items: center;
   justify-content: flex-start;
   transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-light-gray;
@@ -135,7 +137,7 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    cursor: default;
+    cursor: pointer;
   }
 
   .cipher-name {

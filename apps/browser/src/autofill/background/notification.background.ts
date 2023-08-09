@@ -119,7 +119,7 @@ export default class NotificationBackground {
         }
         break;
       case "promptForLogin":
-        await this.unlockVault(sender.tab);
+        await this.unlockVault(msg, sender.tab);
         break;
       default:
         break;
@@ -320,7 +320,11 @@ export default class NotificationBackground {
     }
   }
 
-  private async unlockVault(tab: chrome.tabs.Tab) {
+  private async unlockVault(message: any, tab: chrome.tabs.Tab) {
+    if (message.data?.skipNotification) {
+      return;
+    }
+
     const currentAuthStatus = await this.authService.getAuthStatus();
     if (currentAuthStatus !== AuthenticationStatus.Locked || this.notificationQueue.length) {
       return;

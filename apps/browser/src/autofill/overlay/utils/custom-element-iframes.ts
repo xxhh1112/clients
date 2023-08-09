@@ -20,6 +20,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
       iframe.style.padding = "0";
       iframe.style.width = "100%";
       iframe.style.height = "100%";
+      iframe.setAttribute("sandbox", "allow-scripts");
       iframe.addEventListener("load", setupPortMessageListener);
 
       shadow.appendChild(iframe);

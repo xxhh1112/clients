@@ -112,10 +112,12 @@ class AutofillOverlayList extends HTMLElement {
       const cipherNameElement = document.createElement("div");
       cipherNameElement.className = "cipher-name";
       cipherNameElement.textContent = cipher.name;
+      cipherNameElement.setAttribute("title", cipher.name);
 
       const cipherUserLoginElement = document.createElement("div");
       cipherUserLoginElement.className = "cipher-user-login";
       cipherUserLoginElement.textContent = cipher.login.username;
+      cipherUserLoginElement.setAttribute("title", cipher.login.username);
 
       cipherDetailsContainer.appendChild(cipherNameElement);
       cipherDetailsContainer.appendChild(cipherUserLoginElement);

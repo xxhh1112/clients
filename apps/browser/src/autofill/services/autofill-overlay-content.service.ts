@@ -333,8 +333,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
     this.overlayListElement.style.maxHeight = "180px";
-    this.overlayListElement.style.boxShadow = "0 4px 4px 0 #00000040";
+    this.overlayListElement.style.boxShadow = "2px 4px 6px 0px rgba(0, 0, 0, 0.1)";
     this.overlayListElement.style.borderRadius = "4px";
+    this.overlayListElement.style.border = "1px solid rgb(206, 212, 220)";
     this.overlayListElement.style.backgroundColor = "#fff";
   }
 
