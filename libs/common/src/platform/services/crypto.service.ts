@@ -820,7 +820,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     userId?: string
   ): Promise<UserKey> {
     if (keySuffix === KeySuffixOptions.Auto) {
-      await this.migrateAutoKeyIfNeeded(userId);
       const userKey = await this.stateService.getUserKeyAutoUnlock({ userId: userId });
       if (userKey) {
         return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserKey;
@@ -941,7 +940,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
   }
 
-  private async migrateAutoKeyIfNeeded(userId?: string) {
+  async migrateAutoKeyIfNeeded(userId?: string) {
     const oldAutoKey = await this.stateService.getCryptoMasterKeyAuto({ userId: userId });
     if (oldAutoKey) {
       // decrypt

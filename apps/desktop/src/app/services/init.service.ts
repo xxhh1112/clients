@@ -48,7 +48,7 @@ export class InitService {
       // TODO: Remove this when implementing ticket PM-2637
       this.environmentService.initialized = true;
       this.syncService.fullSync(true);
-      (this.vaultTimeoutService as VaultTimeoutService).init(true);
+      await (this.vaultTimeoutService as VaultTimeoutService).init(true);
       const locale = await this.stateService.getLocale();
       await (this.i18nService as I18nService).init(locale);
       (this.eventUploadService as EventUploadService).init(true);

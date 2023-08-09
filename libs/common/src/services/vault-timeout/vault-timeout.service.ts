@@ -32,10 +32,11 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null
   ) {}
 
-  init(checkOnInterval: boolean) {
+  async init(checkOnInterval: boolean) {
     if (this.inited) {
       return;
     }
+    await this.migrateKeyForNeverLockIfNeeded();
 
     this.inited = true;
     if (checkOnInterval) {
@@ -136,5 +137,14 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     timeoutAction === VaultTimeoutAction.LogOut
       ? await this.logOut(userId)
       : await this.lock(userId);
+  }
+
+  private async migrateKeyForNeverLockIfNeeded(): Promise<void> {
+    const accounts = await firstValueFrom(this.stateService.accounts$);
+    for (const userId in accounts) {
+      if (userId != null) {
+        await this.cryptoService.migrateAutoKeyIfNeeded(userId);
+      }
+    }
   }
 }

@@ -48,7 +48,7 @@ export class InitService {
       this.environmentService.initialized = true;
 
       setTimeout(() => this.notificationsService.init(), 3000);
-      (this.vaultTimeoutService as VaultTimeoutService).init(true);
+      await (this.vaultTimeoutService as VaultTimeoutService).init(true);
       const locale = await this.stateService.getLocale();
       await (this.i18nService as I18nService).init(locale);
       (this.eventUploadService as EventUploadService).init(true);

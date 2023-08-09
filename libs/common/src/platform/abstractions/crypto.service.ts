@@ -318,6 +318,10 @@ export abstract class CryptoService {
     protectedKeyCs?: EncString
   ) => Promise<UserKey>;
   /**
+   * Replaces old master auto keys with new user auto keys
+   */
+  migrateAutoKeyIfNeeded: (userId?: string) => Promise<void>;
+  /**
    * @param keyMaterial The key material to derive the send key from
    * @returns A new send key
    */
