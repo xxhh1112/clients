@@ -1,4 +1,4 @@
-import { BehaviorSubject, concatMap } from "rxjs";
+import { concatMap } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
@@ -38,6 +38,7 @@ import {
   AbstractStorageService,
 } from "../abstractions/storage.service";
 import { StateFactory } from "../factories/state-factory";
+import { BitSubject } from "../misc/bit-subject";
 import { Utils } from "../misc/utils";
 import { ServerConfigData } from "../models/data/server-config.data";
 import {
@@ -74,19 +75,25 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
-  protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
-  accounts$ = this.accountsSubject.asObservable();
+  protected accountsSubject = new BitSubject<{ [userId: string]: TAccount }>();
+  get accounts$() {
+    return this.accountsSubject.asObservable();
+  }
 
-  protected activeAccountSubject = new BehaviorSubject<string | null>(null);
-  activeAccount$ = this.activeAccountSubject.asObservable();
+  protected activeAccountSubject = new BitSubject<string | null>();
+  get activeAccount$() {
+    return this.activeAccountSubject.asObservable();
+  }
 
-  protected activeAccountUnlockedSubject = new BehaviorSubject<boolean>(false);
-  activeAccountUnlocked$ = this.activeAccountUnlockedSubject.asObservable();
+  protected activeAccountUnlockedSubject = new BitSubject<boolean>();
+  get activeAccountUnlocked$() {
+    return this.activeAccountUnlockedSubject.asObservable();
+  }
 
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  protected accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
+  protected accountDiskCache = BitSubject.init<Record<string, TAccount>>({});
 
   // default account serializer, must be overridden by child class
   protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
@@ -102,11 +109,10 @@ export class StateService<
   ) {
     // If the account gets changed, verify the new account is unlocked
     this.activeAccountSubject
+      .asObservable()
       .pipe(
         concatMap(async (userId) => {
-          if (userId == null && this.activeAccountUnlockedSubject.getValue() == false) {
-            return;
-          } else if (userId == null) {
+          if (userId == null) {
             this.activeAccountUnlockedSubject.next(false);
           }
           // FIXME: This should be refactored into AuthService or a similar service,
@@ -532,11 +538,11 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    if (options.userId == this.activeAccountSubject.getValue()) {
+    if (options.userId == this.activeAccountSubject.value) {
       const nextValue = value != null;
 
       // Avoid emitting if we are already unlocked
-      if (this.activeAccountUnlockedSubject.getValue() != nextValue) {
+      if (this.activeAccountUnlockedSubject.value != nextValue) {
         this.activeAccountUnlockedSubject.next(nextValue);
       }
     }
