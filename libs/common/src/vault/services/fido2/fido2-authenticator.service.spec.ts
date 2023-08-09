@@ -15,6 +15,7 @@ import {
   Fido2UserInterfaceSession,
   NewCredentialParams,
 } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
+import { SyncService } from "../../abstractions/sync/sync.service.abstraction";
 import { CipherType } from "../../enums/cipher-type";
 import { Cipher } from "../../models/domain/cipher";
 import { CipherView } from "../../models/view/cipher.view";
@@ -30,6 +31,7 @@ describe("FidoAuthenticatorService", () => {
   let cipherService!: MockProxy<CipherService>;
   let userInterface!: MockProxy<Fido2UserInterfaceService>;
   let userInterfaceSession!: MockProxy<Fido2UserInterfaceSession>;
+  let syncService!: MockProxy<SyncService>;
   let authenticator!: Fido2AuthenticatorService;
 
   beforeEach(async () => {
@@ -37,7 +39,8 @@ describe("FidoAuthenticatorService", () => {
     userInterface = mock<Fido2UserInterfaceService>();
     userInterfaceSession = mock<Fido2UserInterfaceSession>();
     userInterface.newSession.mockResolvedValue(userInterfaceSession);
-    authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
+    syncService = mock<SyncService>();
+    authenticator = new Fido2AuthenticatorService(cipherService, userInterface, syncService);
   });
 
   describe("makeCredential", () => {

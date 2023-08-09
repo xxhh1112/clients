@@ -1,4 +1,4 @@
-import { NgZone } from "@angular/core";
+import type { NgZone } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { DeviceType } from "@bitwarden/common/enums";
@@ -213,7 +213,15 @@ export class BrowserApi {
     }
   }
 
-  //Ngzone run is added to fix the issue on Fido2Component, where the message listener is not running in the angular zone
+  /**
+   * Creates an observable that listens for messages. If an Angular zone is provided,
+   * ensures that the message processing runs within that zone, triggering change detection.
+   * This solution was devised to address an issue in the `Fido2Component`, where the
+   * original message listener operated outside the Angular zone.
+   *
+   * @param {NgZone} [zone] - An optional Angular zone to ensure UI updates and change
+   * detection are triggered. If omitted, operates outside the Angular zone.
+   */
   static messageListener$(zone?: NgZone) {
     return new Observable<unknown>((subscriber) => {
       const handler = (message: unknown) => {

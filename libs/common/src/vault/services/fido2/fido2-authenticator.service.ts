@@ -15,6 +15,7 @@ import {
   PublicKeyCredentialDescriptor,
 } from "../../abstractions/fido2/fido2-authenticator.service.abstraction";
 import { Fido2UserInterfaceService } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
+import { SyncService } from "../../abstractions/sync/sync.service.abstraction";
 import { CipherType } from "../../enums/cipher-type";
 import { CipherView } from "../../models/view/cipher.view";
 import { Fido2KeyView } from "../../models/view/fido2-key.view";
@@ -37,6 +38,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   constructor(
     private cipherService: CipherService,
     private userInterface: Fido2UserInterfaceService,
+    private syncService: SyncService,
     private logService?: LogService
   ) {}
   async makeCredential(
@@ -80,6 +82,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         );
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
+
+      //TODO: uncomment this when working on the login flow ticket
+      // await userInterfaceSession.ensureUnlockedVault();
 
       const existingCipherIds = await this.findExcludedCredentials(
         params.excludeCredentialDescriptorList
@@ -376,6 +381,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       return [];
     }
 
+    //ensure full sync has completed before getting the ciphers
+    if ((await this.syncService.getLastSync()) == null) {
+      await this.syncService.fullSync(false);
+    }
+
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
@@ -391,6 +401,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   }
 
   private async findCredentialsByRp(rpId: string): Promise<CipherView[]> {
+    //ensure full sync has completed before getting the ciphers
+    if ((await this.syncService.getLastSync()) == null) {
+      await this.syncService.fullSync(false);
+    }
+
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
