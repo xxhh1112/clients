@@ -4,6 +4,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import { OverlayIconWindowMessageHandlers } from "./abstractions/icon";
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
+import { buildSvgDomElement } from "./utils/utils";
 
 require("./icon.scss");
 
@@ -11,6 +12,8 @@ class AutofillOverlayIcon extends HTMLElement {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private shadowDom: ShadowRoot;
   private iconElement: HTMLElement;
+  private logoIconElement: HTMLElement;
+  private logoLockedIconElement: HTMLElement;
   private messageOrigin: string;
   private readonly windowMessageHandlers: OverlayIconWindowMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
@@ -22,6 +25,8 @@ class AutofillOverlayIcon extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.logoIconElement = buildSvgDomElement(logoIcon);
+    this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
     this.setupWindowMessageListener();
   }
 
@@ -35,18 +40,21 @@ class AutofillOverlayIcon extends HTMLElement {
     window.addEventListener("blur", this.handleWindowBlurEvent);
 
     this.iconElement = document.createElement("button");
-    this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
     this.iconElement.classList.add("overlay-icon");
+    this.iconElement.addEventListener("click", this.handleIconClick);
+    this.setIconElementSvg();
 
     const styleSheetUrl = message.styleSheetUrl;
     const linkElement = document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
 
-    this.iconElement.addEventListener("click", this.handleIconClick);
-
     this.shadowDom.appendChild(linkElement);
     this.shadowDom.appendChild(this.iconElement);
+  }
+
+  private getLogoIconElement(): HTMLElement {
+    return this.isVaultUnlocked() ? this.logoIconElement : this.logoLockedIconElement;
   }
 
   private handleWindowBlurEvent = () => {
@@ -55,7 +63,16 @@ class AutofillOverlayIcon extends HTMLElement {
 
   private updateAuthStatus(message: any = {}) {
     this.authStatus = message.authStatus;
-    this.iconElement.innerHTML = this.isVaultUnlocked() ? logoIcon : logoLockedIcon;
+    this.setIconElementSvg();
+  }
+
+  private setIconElementSvg() {
+    if (!this.iconElement) {
+      return;
+    }
+
+    this.iconElement.innerHTML = "";
+    this.iconElement.append(this.getLogoIconElement());
   }
 
   private handleIconClick = () => {

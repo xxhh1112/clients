@@ -4,6 +4,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import { OverlayListWindowMessageHandlers } from "./abstractions/list";
 import { globeIcon, lockIcon, plusIcon } from "./utils/svg-icons";
+import { buildSvgDomElement } from "./utils/utils";
 
 require("./list.scss");
 
@@ -11,6 +12,9 @@ class AutofillOverlayList extends HTMLElement {
   private authStatus: AuthenticationStatus;
   private shadowDom: ShadowRoot;
   private overlayListContainer: HTMLDivElement;
+  private globeIconElement: HTMLElement;
+  private plusIconElement: HTMLElement;
+  private lockIconElement: HTMLElement;
   private styleSheetUrl: string;
   private messageOrigin: string;
   private resizeObserver: ResizeObserver;
@@ -24,6 +28,9 @@ class AutofillOverlayList extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.globeIconElement = buildSvgDomElement(globeIcon);
+    this.plusIconElement = buildSvgDomElement(plusIcon);
+    this.lockIconElement = buildSvgDomElement(lockIcon);
     this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
     this.setupWindowMessageListener();
   }
@@ -75,7 +82,8 @@ class AutofillOverlayList extends HTMLElement {
 
     const unlockButton = document.createElement("button");
     unlockButton.className = "unlock-button overlay-list-button";
-    unlockButton.innerHTML = `${lockIcon} Unlock account`;
+    unlockButton.textContent = `Unlock account`;
+    unlockButton.prepend(this.lockIconElement);
 
     unlockButton.addEventListener("click", this.handleUnlockButtonClick);
 
@@ -98,11 +106,6 @@ class AutofillOverlayList extends HTMLElement {
       const cipherElement = document.createElement("div");
       cipherElement.className = "cipher";
 
-      // const cipherIcon = document.createElement("div");
-      // cipherIcon.innerHTML = globeIcon;
-      // const globeIconElement = cipherIcon.querySelector("svg");
-      // globeIconElement.classList.add("cipher-icon");
-
       const cipherDetailsContainer = document.createElement("div");
       cipherDetailsContainer.className = "cipher-details-container";
 
@@ -124,7 +127,7 @@ class AutofillOverlayList extends HTMLElement {
       } else if (cipher.icon?.icon) {
         cipherIcon.className = cipher.icon.icon;
       } else {
-        cipherIcon.innerHTML = globeIcon;
+        cipherIcon.append(this.globeIconElement);
       }
       cipherIcon.classList.add("cipher-icon");
 
@@ -148,7 +151,8 @@ class AutofillOverlayList extends HTMLElement {
 
     const newItemButton = document.createElement("button");
     newItemButton.className = "add-new-item-button overlay-list-button";
-    newItemButton.innerHTML = `${plusIcon} New item`;
+    newItemButton.textContent = `New item`;
+    newItemButton.prepend(this.plusIconElement);
 
     newItemButton.addEventListener("click", this.handeNewItemButtonClick);
 
