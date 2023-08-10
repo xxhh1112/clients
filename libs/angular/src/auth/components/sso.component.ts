@@ -28,11 +28,13 @@ export class SsoComponent {
 
   formPromise: Promise<AuthResult>;
   initiateSsoFormPromise: Promise<SsoPreValidateResponse>;
-  onSuccessfulLogin: () => Promise<unknown>;
+  onSuccessfulLogin: () => Promise<void>;
   onSuccessfulLoginNavigate: () => Promise<void>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<void>;
   onSuccessfulLoginChangePasswordNavigate: () => Promise<void>;
   onSuccessfulLoginForceResetNavigate: () => Promise<void>;
+
+  onSuccessfulLoginTde: () => Promise<void>;
   onSuccessfulLoginTdeNavigate: () => Promise<void>;
 
   protected twoFactorRoute = "2fa";
@@ -278,6 +280,11 @@ export class SsoComponent {
       return await this.handleForcePasswordReset(orgIdentifier);
     }
 
+    if (this.onSuccessfulLoginTde != null) {
+      // Don't await b/c causes hang on desktop & browser
+      this.onSuccessfulLoginTde();
+    }
+
     this.navigateViaCallbackOrRoute(
       this.onSuccessfulLoginTdeNavigate,
       // Navigate to TDE page (if user was on trusted device and TDE has decrypted
@@ -312,7 +319,8 @@ export class SsoComponent {
 
   private async handleSuccessfulLogin() {
     if (this.onSuccessfulLogin != null) {
-      await this.onSuccessfulLogin();
+      // Don't await b/c causes hang on desktop & browser
+      this.onSuccessfulLogin();
     }
 
     await this.navigateViaCallbackOrRoute(this.onSuccessfulLoginNavigate, [this.successRoute]);

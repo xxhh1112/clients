@@ -70,14 +70,18 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       loginService,
       configService
     );
-    super.onSuccessfulLogin = () => {
-      this.loginService.clearValues();
-      return syncService.fullSync(true);
+    super.onSuccessfulLogin = async () => {
+      syncService.fullSync(true);
+    };
+
+    super.onSuccessfulLoginTde = async () => {
+      syncService.fullSync(true);
     };
 
     super.onSuccessfulLoginTdeNavigate = async () => {
       this.win.close();
     };
+
     super.successRoute = "/tabs/vault";
     // FIXME: Chromium 110 has broken WebAuthn support in extensions via an iframe
     this.webAuthnNewTab = true;
@@ -126,11 +130,11 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.sso === "true") {
-        super.onSuccessfulLogin = () => {
+        super.onSuccessfulLogin = async () => {
           // This is not awaited so we don't pause the application while the sync is happening.
           // This call is executed by the service that lives in the background script so it will continue
           // the sync even if this tab closes.
-          const syncPromise = this.syncService.fullSync(true);
+          this.syncService.fullSync(true);
 
           // Force sidebars (FF && Opera) to reload while exempting current window
           // because we are just going to close the current window.
@@ -139,8 +143,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
           // We don't need this window anymore because the intent is for the user to be left
           // on the web vault screen which tells them to continue in the browser extension (sidebar or popup)
           BrowserApi.closeBitwardenExtensionTab();
-
-          return syncPromise;
         };
       }
     });

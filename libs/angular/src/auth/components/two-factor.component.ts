@@ -45,8 +45,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
   formPromise: Promise<any>;
   emailPromise: Promise<any>;
   orgIdentifier: string = null;
-  onSuccessfulLogin: () => Promise<unknown>;
+  onSuccessfulLogin: () => Promise<void>;
   onSuccessfulLoginNavigate: () => Promise<void>;
+
+  onSuccessfulLoginTde: () => Promise<void>;
   onSuccessfulLoginTdeNavigate: () => Promise<void>;
 
   protected loginRoute = "login";
@@ -218,12 +220,6 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       return;
     }
 
-    // Note: calling this here is different from the SSO component.
-    // The SsoComponent only executes this logic as part of the handleSuccessfulLogin logic.
-    // We should investigate later on if we can move this down into the handleSuccessfulLogin
-    // without negative side effects.
-    await this.handleOnSuccessfulLogin();
-
     this.loginService.clearValues();
 
     const acctDecryptionOpts: AccountDecryptionOptions =
@@ -255,15 +251,6 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     }
 
     return await this.handleSuccessfulLogin();
-  }
-
-  private async handleOnSuccessfulLogin() {
-    if (this.onSuccessfulLogin != null) {
-      this.loginService.clearValues();
-      // Note: awaiting this will currently cause a hang on desktop & browser as they will wait for a full sync to complete
-      // before nagivating to the success route.
-      this.onSuccessfulLogin();
-    }
   }
 
   private async isTrustedDeviceEncEnabled(
@@ -301,6 +288,12 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       return await this.handleForcePasswordReset(orgIdentifier);
     }
 
+    if (this.onSuccessfulLoginTde != null) {
+      // Note: awaiting this will currently cause a hang on desktop & browser as they will wait for a full sync to complete
+      // before navigating to the success route.
+      this.onSuccessfulLoginTde();
+    }
+
     this.navigateViaCallbackOrRoute(
       this.onSuccessfulLoginTdeNavigate,
       // Navigate to TDE page (if user was on trusted device and TDE has decrypted
@@ -326,6 +319,11 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
   }
 
   private async handleSuccessfulLogin() {
+    if (this.onSuccessfulLogin != null) {
+      // Note: awaiting this will currently cause a hang on desktop & browser as they will wait for a full sync to complete
+      // before navigating to the success route.
+      this.onSuccessfulLogin();
+    }
     await this.navigateViaCallbackOrRoute(this.onSuccessfulLoginNavigate, [this.successRoute]);
   }
 

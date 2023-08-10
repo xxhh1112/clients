@@ -65,9 +65,12 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       loginService,
       configService
     );
-    super.onSuccessfulLogin = () => {
-      this.loginService.clearValues();
-      return syncService.fullSync(true);
+    super.onSuccessfulLogin = async () => {
+      syncService.fullSync(true);
+    };
+
+    super.onSuccessfulLoginTde = async () => {
+      syncService.fullSync(true);
     };
   }
 
