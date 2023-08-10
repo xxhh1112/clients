@@ -404,6 +404,9 @@ export class AppComponent implements OnInit, OnDestroy {
               await this.openLoginApproval(message.notificationId);
             }
             break;
+          case "redrawMenu":
+            await this.updateAppMenu();
+            break;
         }
       });
     });

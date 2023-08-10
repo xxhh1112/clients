@@ -429,6 +429,7 @@ export class SettingsComponent implements OnInit {
 
       await this.vaultTimeoutSettingsService.clear();
     }
+    this.messagingService.send("redrawMenu");
   }
 
   async updateBiometric(enabled: boolean) {
@@ -437,29 +438,33 @@ export class SettingsComponent implements OnInit {
     // The bug should resolve itself once the angular issue is resolved.
     // See: https://github.com/angular/angular/issues/13063
 
-    if (!enabled || !this.supportsBiometric) {
-      this.form.controls.biometric.setValue(false, { emitEvent: false });
-      await this.stateService.setBiometricUnlock(null);
+    try {
+      if (!enabled || !this.supportsBiometric) {
+        this.form.controls.biometric.setValue(false, { emitEvent: false });
+        await this.stateService.setBiometricUnlock(null);
+        await this.cryptoService.refreshAdditionalKeys();
+        return;
+      }
+
+      await this.stateService.setBiometricUnlock(true);
+      if (this.isWindows) {
+        // Recommended settings for Windows Hello
+        this.form.controls.requirePasswordOnStart.setValue(true);
+        this.form.controls.autoPromptBiometrics.setValue(false);
+        await this.stateService.setDisableAutoBiometricsPrompt(true);
+        await this.stateService.setBiometricRequirePasswordOnStart(true);
+        await this.stateService.setDismissedBiometricRequirePasswordOnStart();
+      }
       await this.cryptoService.refreshAdditionalKeys();
-      return;
-    }
 
-    await this.stateService.setBiometricUnlock(true);
-    if (this.isWindows) {
-      // Recommended settings for Windows Hello
-      this.form.controls.requirePasswordOnStart.setValue(true);
-      this.form.controls.autoPromptBiometrics.setValue(false);
-      await this.stateService.setDisableAutoBiometricsPrompt(true);
-      await this.stateService.setBiometricRequirePasswordOnStart(true);
-      await this.stateService.setDismissedBiometricRequirePasswordOnStart();
-    }
-    await this.cryptoService.refreshAdditionalKeys();
-
-    // Validate the key is stored in case biometrics fail.
-    const biometricSet = await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric);
-    this.form.controls.biometric.setValue(biometricSet, { emitEvent: false });
-    if (!biometricSet) {
-      await this.stateService.setBiometricUnlock(null);
+      // Validate the key is stored in case biometrics fail.
+      const biometricSet = await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric);
+      this.form.controls.biometric.setValue(biometricSet, { emitEvent: false });
+      if (!biometricSet) {
+        await this.stateService.setBiometricUnlock(null);
+      }
+    } finally {
+      this.messagingService.send("redrawMenu");
     }
   }
 
