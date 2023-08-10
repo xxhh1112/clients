@@ -106,7 +106,7 @@ export class WeakPasswordsReportComponent
         this.passwordStrengthCache.set(cacheKey, result.score);
       }
       const score = this.passwordStrengthCache.get(cacheKey);
-      if (score != null && score <= 2 && c.edit) {
+      if (score != null && score <= 2) {
         this.passwordStrengthMap.set(c.id, this.scoreKey(score));
         this.weakPasswordCiphers.push(c);
       }
@@ -118,10 +118,10 @@ export class WeakPasswordsReportComponent
       );
     });
 
-    this.ciphers = this.weakPasswordCiphers;
+    this.ciphers = this.weakPasswordCiphers.filter((c) => c.edit);
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

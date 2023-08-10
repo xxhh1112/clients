@@ -99,7 +99,7 @@ export class InactiveTwoFactorReportComponent
     }
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

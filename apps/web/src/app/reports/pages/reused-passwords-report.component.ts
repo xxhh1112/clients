@@ -82,7 +82,7 @@ export class ReusedPasswordsReportComponent
     this.ciphers = reusedPasswordCiphers;
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

@@ -80,7 +80,7 @@ export class ExposedPasswordsReportComponent
     this.ciphers = exposedPasswordCiphers.filter((c) => c.edit);
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 

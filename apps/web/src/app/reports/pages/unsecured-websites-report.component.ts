@@ -63,7 +63,7 @@ export class UnsecuredWebsitesReportComponent
     this.ciphers = unsecuredCiphers.filter((c) => c.edit);
   }
 
-  protected getAllCiphers(): Promise<CipherView[]> {
+  getAllCiphers(): Promise<CipherView[]> {
     return this.cipherService.getAllDecrypted();
   }
 }
