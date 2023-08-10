@@ -149,7 +149,7 @@ export class NativeMessagingService {
             {
               command: "biometricUnlock",
               response: "unlocked",
-              keyB64: masterKey.keyB64,
+              keyB64: masterKey?.keyB64,
               userKeyB64: userKey.keyB64,
             },
             appId
