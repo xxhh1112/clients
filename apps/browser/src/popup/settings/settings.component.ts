@@ -5,6 +5,7 @@ import {
   BehaviorSubject,
   combineLatest,
   concatMap,
+  distinctUntilChanged,
   filter,
   firstValueFrom,
   map,
@@ -190,6 +191,7 @@ export class SettingsComponent implements OnInit {
 
     this.form.controls.biometric.valueChanges
       .pipe(
+        distinctUntilChanged(),
         concatMap(async (enabled) => {
           await this.updateBiometric(enabled);
           if (enabled) {
