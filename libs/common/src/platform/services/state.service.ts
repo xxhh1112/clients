@@ -1367,7 +1367,7 @@ export class StateService<
     await this.saveAccount(account, options);
   }
 
-  async getShouldTrustDevice(options?: StorageOptions): Promise<boolean> {
+  async getShouldTrustDevice(options?: StorageOptions): Promise<boolean | null> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
@@ -1376,7 +1376,7 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    return account?.settings?.trustDeviceChoiceForDecryption ?? false;
+    return account?.settings?.trustDeviceChoiceForDecryption ?? null;
   }
 
   async setShouldTrustDevice(value: boolean, options?: StorageOptions): Promise<void> {

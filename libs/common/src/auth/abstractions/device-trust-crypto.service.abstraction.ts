@@ -7,7 +7,7 @@ export abstract class DeviceTrustCryptoServiceAbstraction {
    * @description Retrieves the users choice to trust the device which can only happen after decryption
    * Note: this value should only be used once and then reset
    */
-  getShouldTrustDevice: () => Promise<boolean>;
+  getShouldTrustDevice: () => Promise<boolean | null>;
   setShouldTrustDevice: (value: boolean) => Promise<void>;
 
   trustDeviceIfRequired: () => Promise<void>;

@@ -93,11 +93,15 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.loading = true;
 
+    this.setupRememberDeviceValueChanges();
+
+    // Persist user choice from state if it exists
+    await this.setRememberDeviceDefaultValue();
+
     try {
       const accountDecryptionOptions: AccountDecryptionOptions =
         await this.stateService.getAccountDecryptionOptions();
 
-      // TODO: verify that this doesn't also pick up key connector users... can key connector users even get here?
       // see sso-login.strategy - to determine if a user is new or not it just checks if there is a key on the token response..
       // can we check if they have a user key or master key in crypto service? Would that be sufficient?
       if (
@@ -107,8 +111,6 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
         // We are dealing with a new account if:
         //  - User does not have admin approval (i.e. has not enrolled into admin reset)
         //  - AND does not have a master password
-
-        // TODO: discuss how this doesn't make any sense to show here
 
         this.loadNewUserData();
       } else {
@@ -136,6 +138,25 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.validationService.showError(err);
     }
+  }
+
+  private async setRememberDeviceDefaultValue() {
+    const rememberDeviceFromState = await this.deviceTrustCryptoService.getShouldTrustDevice();
+
+    const rememberDevice = rememberDeviceFromState ?? true;
+
+    this.rememberDevice.setValue(rememberDevice);
+  }
+
+  private setupRememberDeviceValueChanges() {
+    this.rememberDevice.valueChanges
+      .pipe(
+        switchMap((value) =>
+          defer(() => this.deviceTrustCryptoService.setShouldTrustDevice(value))
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   async loadNewUserData() {
@@ -215,20 +236,16 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
-
     this.loginService.setEmail(this.data.userEmail);
     this.router.navigate(["/login-with-device"]);
   }
 
   async requestAdminApproval() {
-    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
     this.loginService.setEmail(this.data.userEmail);
     this.router.navigate(["/admin-approval-requested"]);
   }
 
   async approveWithMasterPassword() {
-    await this.deviceTrustCryptoService.setShouldTrustDevice(this.rememberDevice.value);
     this.router.navigate(["/lock"], { queryParams: { from: "login-initiated" } });
   }
 
