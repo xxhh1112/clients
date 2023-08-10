@@ -46,6 +46,14 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
   }
 
   async trustDeviceIfRequired(): Promise<void> {
+    // This handles the case in which a user has selected to trust a device
+    // however, their org has turned off TDE after they've made their choice
+    // They should not see device trusted toast
+    const supportsDeviceTrust = await this.supportsDeviceTrust();
+    if (!supportsDeviceTrust) {
+      return;
+    }
+
     const shouldTrustDevice = await this.getShouldTrustDevice();
     if (shouldTrustDevice) {
       await this.trustDevice();
