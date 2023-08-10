@@ -57,6 +57,12 @@ export function canAccessAdmin(i18nService: I18nService) {
   );
 }
 
+export function canAccessImportExport(i18nService: I18nService) {
+  return map<Organization[], Organization[]>((orgs) =>
+    orgs.filter((org) => org.canAccessImportExport).sort(Utils.getSortFunction(i18nService, "name"))
+  );
+}
+
 /**
  * Returns `true` if a user is a member of an organization (rather than only being a ProviderUser)
  * @deprecated Use organizationService.memberOrganizations$ instead
@@ -86,6 +92,7 @@ export abstract class OrganizationService {
   hasOrganizations: () => boolean;
 }
 
-export abstract class InternalOrganizationService extends OrganizationService {
+export abstract class InternalOrganizationServiceAbstraction extends OrganizationService {
   replace: (organizations: { [id: string]: OrganizationData }) => Promise<void>;
+  upsert: (OrganizationData: OrganizationData | OrganizationData[]) => Promise<void>;
 }
