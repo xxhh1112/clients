@@ -5,4 +5,6 @@ export type LegacyMessage = {
   timestamp?: number;
 
   publicKey?: string;
+
+  browserVersion?: string;
 };

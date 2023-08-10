@@ -56,6 +56,16 @@ export class NativeMessagingService {
 
     // Request to setup secure encryption
     if ("command" in rawMessage && rawMessage.command === "setupEncryption") {
+      // check to see if there is a browser version in the message and prompt user to update extension
+      if (!rawMessage.browserVersion) {
+        await Swal.fire({
+          title: "Incompatible app versions",
+          text: "You must update your browser extension to biometrics.",
+          cancelButtonText: "Ok",
+        });
+        return;
+      }
+
       const remotePublicKey = Utils.fromB64ToArray(rawMessage.publicKey).buffer;
 
       // Validate the UserId to ensure we are logged into the same account.
@@ -138,7 +148,8 @@ export class NativeMessagingService {
 
         const userKey = await this.cryptoService.getUserKeyFromStorage(
           KeySuffixOptions.Biometric,
-          message.userId
+          message.userId,
+          message.browserVersion != null
         );
         const masterKey = await this.cryptoService.getMasterKey(message.userId);
 

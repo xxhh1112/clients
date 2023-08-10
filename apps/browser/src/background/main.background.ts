@@ -283,7 +283,10 @@ export default class MainBackground {
           const promise = this.nativeMessagingBackground.getResponse();
 
           try {
-            await this.nativeMessagingBackground.send({ command: "biometricUnlock" });
+            await this.nativeMessagingBackground.send({
+              command: "biometricUnlock",
+              browserVersion: await this.platformUtilsService.getApplicationVersion(),
+            });
           } catch (e) {
             return Promise.reject(e);
           }

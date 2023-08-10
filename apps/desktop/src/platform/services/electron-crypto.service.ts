@@ -53,15 +53,15 @@ export class ElectronCryptoService extends CryptoService {
     } else {
       await this.stateService.setUserKeyBiometric(null, { userId: userId });
     }
-    await this.clearDeprecatedKeys(KeySuffixOptions.Biometric, userId);
   }
 
   protected override async getKeyFromStorage(
     keySuffix: KeySuffixOptions,
-    userId?: string
+    userId?: string,
+    migrateUserKey?: boolean
   ): Promise<UserKey> {
     if (keySuffix === KeySuffixOptions.Biometric) {
-      await this.migrateBiometricKeyIfNeeded(userId);
+      await this.migrateBiometricKeyIfNeeded(migrateUserKey, userId);
       const userKey = await this.stateService.getUserKeyBiometric({ userId: userId });
       return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserKey;
     }
@@ -124,7 +124,7 @@ export class ElectronCryptoService extends CryptoService {
     super.clearDeprecatedKeys(keySuffix, userId);
   }
 
-  private async migrateBiometricKeyIfNeeded(userId?: string) {
+  private async migrateBiometricKeyIfNeeded(browserIsUpdated: boolean, userId?: string) {
     if (await this.stateService.hasCryptoMasterKeyBiometric({ userId })) {
       const oldBiometricKey = await this.stateService.getCryptoMasterKeyBiometric({ userId });
       // decrypt
@@ -137,7 +137,10 @@ export class ElectronCryptoService extends CryptoService {
       const userKey = await this.decryptUserKeyWithMasterKey(masterKey, new EncString(encUserKey));
       // migrate
       await this.storeBiometricKey(userKey, userId);
-      await this.stateService.setCryptoMasterKeyBiometric(null, { userId });
+      if (browserIsUpdated) {
+        // Remove old key as both browser and desktop are now updated.
+        await this.stateService.setCryptoMasterKeyBiometric(null, { userId });
+      }
     }
   }
 }

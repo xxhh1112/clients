@@ -32,6 +32,9 @@ type Message = {
 
   // Used for sharing secret
   publicKey?: string;
+
+  // Used to determine old key vs new key
+  browserVersion?: string;
 };
 
 type OuterMessage = {
@@ -405,6 +408,7 @@ export class NativeMessagingBackground {
       command: "setupEncryption",
       publicKey: Utils.fromBufferToB64(publicKey),
       userId: await this.stateService.getUserId(),
+      browserVersion: await this.platformUtilsService.getApplicationVersion(),
     });
 
     return new Promise((resolve, reject) => (this.secureSetupResolve = resolve));

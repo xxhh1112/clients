@@ -53,9 +53,14 @@ export abstract class CryptoService {
    * Retrieves the user key from storage
    * @param keySuffix The desired version of the user's key to retrieve
    * @param userId The desired user
+   * @param migrateUserKey If true, will migrate the user biometric key to the latest version
    * @returns The user key
    */
-  getUserKeyFromStorage: (keySuffix: KeySuffixOptions, userId?: string) => Promise<UserKey>;
+  getUserKeyFromStorage: (
+    keySuffix: KeySuffixOptions,
+    userId?: string,
+    migrateUserKey?: boolean
+  ) => Promise<UserKey>;
 
   /**
    * @returns True if the user key is available
