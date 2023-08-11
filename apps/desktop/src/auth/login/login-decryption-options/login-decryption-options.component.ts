@@ -10,6 +10,7 @@ export class LoginDecryptionOptionsComponent extends BaseLoginDecryptionOptionsC
   override async createUser(): Promise<void> {
     try {
       await super.createUser();
+      this.messagingService.send("redrawMenu");
       await this.router.navigate(["/vault"]);
     } catch (error) {
       this.validationService.showError(error);
