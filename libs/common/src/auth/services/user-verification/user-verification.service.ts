@@ -113,6 +113,13 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
     return !(await this.stateService.getUsesKeyConnector({ userId }));
   }
 
+  async hasMasterPasswordAndMasterKeyHash(userId?: string): Promise<boolean> {
+    return (
+      (await this.hasMasterPassword(userId)) &&
+      (await this.cryptoService.getMasterKeyHash()) != null
+    );
+  }
+
   private validateInput(verification: Verification) {
     if (verification?.secret == null || verification.secret === "") {
       if (verification.type === VerificationType.OTP) {

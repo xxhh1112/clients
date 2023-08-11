@@ -69,7 +69,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit, 
   ) {}
 
   async ngOnInit() {
-    this.hasMasterPassword = await this.userVerificationService.hasMasterPassword();
+    this.hasMasterPassword = await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
     this.processChanges(this.secret.value);
 
     this.secret.valueChanges
