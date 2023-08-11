@@ -150,10 +150,20 @@ class OverlayBackground {
   }
 
   private overlayIconClosed() {
+    if (!this.overlayIconPort) {
+      return;
+    }
+
+    this.overlayIconPort.disconnect();
     this.overlayIconPort = null;
   }
 
   private overlayListClosed() {
+    if (!this.overlayListPort) {
+      return;
+    }
+
+    this.overlayListPort.disconnect();
     this.overlayListPort = null;
   }
 
