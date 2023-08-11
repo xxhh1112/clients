@@ -25,6 +25,8 @@ import { BrowserStateService } from "../../platform/services/abstractions/browse
 export const ROOT_ID = "root";
 
 export const AUTOFILL_ID = "autofill";
+export const AUTOFILL_IDENTITY_ID = "autofill-identity";
+export const AUTOFILL_CARD_ID = "autofill-card";
 export const COPY_USERNAME_ID = "copy-username";
 export const COPY_PASSWORD_ID = "copy-password";
 export const COPY_VERIFICATIONCODE_ID = "copy-totp";
@@ -124,6 +126,18 @@ export class MainContextMenuHandler {
       });
 
       await create({
+        id: AUTOFILL_IDENTITY_ID,
+        parentId: ROOT_ID,
+        title: "Auto-fill identity",
+      });
+
+      await create({
+        id: AUTOFILL_CARD_ID,
+        parentId: ROOT_ID,
+        title: "Auto-fill card",
+      });
+
+      await create({
         id: COPY_USERNAME_ID,
         parentId: ROOT_ID,
         title: this.i18nService.t("copyUsername"),
@@ -195,10 +209,6 @@ export class MainContextMenuHandler {
   }
 
   async loadOptions(title: string, id: string, url: string, cipher?: CipherView | undefined) {
-    if (cipher != null && cipher.type !== CipherType.Login) {
-      return;
-    }
-
     try {
       const sanitizedTitle = MainContextMenuHandler.sanitizeContextMenuTitle(title);
 
@@ -213,20 +223,28 @@ export class MainContextMenuHandler {
         });
       };
 
-      if (cipher == null || !Utils.isNullOrEmpty(cipher.login.password)) {
+      if (cipher == null || !Utils.isNullOrEmpty(cipher.login?.password)) {
         await createChildItem(AUTOFILL_ID);
         if (cipher?.viewPassword ?? true) {
           await createChildItem(COPY_PASSWORD_ID);
         }
       }
 
-      if (cipher == null || !Utils.isNullOrEmpty(cipher.login.username)) {
+      if (cipher == null || !Utils.isNullOrEmpty(cipher.login?.username)) {
         await createChildItem(COPY_USERNAME_ID);
       }
 
       const canAccessPremium = await this.stateService.getCanAccessPremium();
-      if (canAccessPremium && (cipher == null || !Utils.isNullOrEmpty(cipher.login.totp))) {
+      if (canAccessPremium && (cipher == null || !Utils.isNullOrEmpty(cipher.login?.totp))) {
         await createChildItem(COPY_VERIFICATIONCODE_ID);
+      }
+
+      if (cipher == null || cipher?.type === CipherType.Card) {
+        await createChildItem(AUTOFILL_CARD_ID);
+      }
+
+      if (cipher == null || cipher.type === CipherType.Identity) {
+        await createChildItem(AUTOFILL_IDENTITY_ID);
       }
     } catch (error) {
       this.logService.warning(error.message);

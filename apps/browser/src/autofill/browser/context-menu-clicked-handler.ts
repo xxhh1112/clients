@@ -33,6 +33,8 @@ import { AutofillTabCommand } from "../commands/autofill-tab-command";
 
 import {
   AUTOFILL_ID,
+  AUTOFILL_IDENTITY_ID,
+  AUTOFILL_CARD_ID,
   COPY_IDENTIFIER_ID,
   COPY_PASSWORD_ID,
   COPY_USERNAME_ID,
@@ -214,6 +216,18 @@ export class ContextMenuClickedHandler {
           await this.autofillAction(tab, cipher);
         }
 
+        break;
+      case AUTOFILL_IDENTITY_ID:
+        if (tab == null) {
+          return;
+        }
+        await this.autofillAction(tab, cipher);
+        break;
+      case AUTOFILL_CARD_ID:
+        if (tab == null) {
+          return;
+        }
+        await this.autofillAction(tab, cipher);
         break;
       case COPY_USERNAME_ID:
         this.copyToClipboard({ text: cipher.login.username, tab: tab });
