@@ -1,34 +1,10 @@
-<!-- This button triggers the overlay and is it's origin -->
-<button
-  type="button"
-  class="tw-border-none tw-bg-transparent tw-text-primary-500"
-  cdkOverlayOrigin
-  #trigger="cdkOverlayOrigin"
-  aria-haspopup="dialog"
-  aria-controls="cdk-overlay-container"
-  (click)="isOpen = !isOpen"
->
-  <i class="bwi bwi-question-circle"></i>
-</button>
-
-<!-- This template displays the overlay content and is connected to the button -->
-<ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isOpen"
-  [cdkConnectedOverlayPositions]="overlayPositions"
-  [cdkConnectedOverlayHasBackdrop]="true"
-  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
-  [cdkConnectedOverlayPanelClass]="'tw-p-2'"
-  [cdkConnectedOverlayPush]="true"
-  (backdropClick)="isOpen = false"
->
+<ng-template>
   <div cdkTrapFocus cdkTrapFocusAutoCapture class="tw-relative" role="dialog" aria-modal="true">
     <div class="tw-overflow-hidden tw-rounded-md tw-border tw-border-solid tw-border-secondary-300">
       <div class="tw-relative tw-z-20 tw-w-72 tw-bg-background tw-p-4 tw-text-main">
         <div class="tw-mb-2 tw-flex tw-items-center tw-justify-between tw-gap-4">
-          <h3 class="tw-mb-0 tw-font-semibold">{{ header }}</h3>
-          <button type="button" class="tw-border-none tw-bg-transparent" (click)="isOpen = false">
+          <h3 class="tw-mb-0 tw-font-semibold">Example Header</h3>
+          <button type="button" class="tw-border-none tw-bg-transparent">
             <i class="bwi bwi-close"></i>
           </button>
         </div>
