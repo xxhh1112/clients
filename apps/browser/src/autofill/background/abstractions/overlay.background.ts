@@ -21,7 +21,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: any;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  unlockCompleted: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
+  unlockCompleted: () => void;
   addEditCipherSubmitted: () => void;
   deletedCipher: () => void;
 };

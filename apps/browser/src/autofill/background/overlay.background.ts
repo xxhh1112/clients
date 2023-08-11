@@ -24,8 +24,8 @@ import {
 
 class OverlayBackground {
   private ciphers: any[] = [];
-  private currentContextualCiphers: any[] = [];
-  private pageDetailsToAutoFill: Record<number, PageDetail[]> = {};
+  private currentTabCiphers: any[] = [];
+  private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayIconPort: chrome.runtime.Port;
@@ -38,11 +38,10 @@ class OverlayBackground {
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
-    collectPageDetailsResponse: ({ message, sender }) =>
-      this.collectPageDetailsResponse(message, sender),
-    unlockCompleted: ({ sender }) => this.openAutofillOverlayList(true),
-    addEditCipherSubmitted: () => this.updateCurrentContextualCiphers(),
-    deletedCipher: () => this.updateCurrentContextualCiphers(),
+    collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
+    unlockCompleted: () => this.openAutofillOverlayList(true),
+    addEditCipherSubmitted: () => this.updateCurrentTabCiphers(),
+    deletedCipher: () => this.updateCurrentTabCiphers(),
   };
   private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
     overlayIconClicked: ({ port }) => this.handleOverlayIconClicked(port.sender),
@@ -71,22 +70,22 @@ class OverlayBackground {
     this.setupExtensionMessageListeners();
   }
 
-  private collectPageDetailsResponse(message: any, sender: chrome.runtime.MessageSender) {
+  removePageDetails(tabId: number) {
+    delete this.pageDetailsForTab[tabId];
+  }
+
+  private storePageDetails(message: any, sender: chrome.runtime.MessageSender) {
     const pageDetails = {
       frameId: sender.frameId,
       tab: sender.tab,
       details: message.details,
     };
-    if (this.pageDetailsToAutoFill[sender.tab.id]) {
-      this.pageDetailsToAutoFill[sender.tab.id].push(pageDetails);
+    if (this.pageDetailsForTab[sender.tab.id]?.length) {
+      this.pageDetailsForTab[sender.tab.id].push(pageDetails);
       return;
     }
 
-    this.pageDetailsToAutoFill[sender.tab.id] = [pageDetails];
-  }
-
-  removePageDetails(tabId: number) {
-    delete this.pageDetailsToAutoFill[tabId];
+    this.pageDetailsForTab[sender.tab.id] = [pageDetails];
   }
 
   private autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
@@ -97,13 +96,13 @@ class OverlayBackground {
     const cipher = this.ciphers.find((c) => c.id === message.cipherId);
 
     // TODO: CG - Probably need to think of a less costly way of doing this. We're iterating multiple times over the found ciphers to reorder the most recently clicked element.
-    const cipherIndex = this.currentContextualCiphers.findIndex((c) => c.id === message.cipherId);
-    this.currentContextualCiphers.unshift(this.currentContextualCiphers.splice(cipherIndex, 1)[0]);
+    const cipherIndex = this.currentTabCiphers.findIndex((c) => c.id === message.cipherId);
+    this.currentTabCiphers.unshift(this.currentTabCiphers.splice(cipherIndex, 1)[0]);
 
     this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
-      pageDetails: this.pageDetailsToAutoFill[sender.tab.id],
+      pageDetails: this.pageDetailsForTab[sender.tab.id],
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
@@ -172,7 +171,7 @@ class OverlayBackground {
     });
   }
 
-  async updateCurrentContextualCiphers() {
+  async updateCurrentTabCiphers() {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
       return;
     }
@@ -185,7 +184,7 @@ class OverlayBackground {
     );
     const isFaviconDisabled = this.settingsService.getDisableFavicon();
 
-    this.currentContextualCiphers = this.ciphers.map((cipher) => ({
+    this.currentTabCiphers = this.ciphers.map((cipher) => ({
       id: cipher.id,
       name: cipher.name,
       type: cipher.type,
@@ -214,12 +213,10 @@ class OverlayBackground {
       },
     }));
 
-    if (this.overlayListPort) {
-      this.overlayListPort.postMessage({
-        command: "updateContextualCiphers",
-        ciphers: this.currentContextualCiphers,
-      });
-    }
+    this.overlayListPort?.postMessage({
+      command: "updateOverlayListCiphers",
+      ciphers: this.currentTabCiphers,
+    });
   }
 
   private updateAutofillOverlayListHeight(message: any) {
@@ -238,7 +235,7 @@ class OverlayBackground {
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
       this.updateAutofillOverlayIconAuthStatus();
-      await this.updateCurrentContextualCiphers();
+      await this.updateCurrentTabCiphers();
     }
 
     this.userAuthStatus = authStatus;
@@ -355,18 +352,19 @@ class OverlayBackground {
     this.overlayListPort.postMessage({
       command: "initAutofillOverlayList",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      ciphers: this.currentContextualCiphers,
+      ciphers: this.currentTabCiphers,
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
     });
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
   };
 
   private handleOverlayListPortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.List) {
+    const command = message?.command;
+    if (!command || port.name !== AutofillOverlayPort.List) {
       return;
     }
 
-    const handler = this.overlayListPortMessageHandlers[message?.command];
+    const handler = this.overlayListPortMessageHandlers[command];
     if (!handler) {
       return;
     }
