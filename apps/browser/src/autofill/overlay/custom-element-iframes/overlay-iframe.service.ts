@@ -6,6 +6,7 @@ class OverlayIframeService {
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
     this.iframe = document.createElement("iframe");
     this.extensionOriginsSet = new Set([
+      // Remove the trailing slash and normalize the extension url to lowercase
       chrome.runtime.getURL("").slice(0, -1).toLowerCase(),
       "null",
     ]);
@@ -38,18 +39,18 @@ class OverlayIframeService {
     }
 
     window.removeEventListener("message", this.handleWindowMessage);
-    port.onMessage.removeListener(this.handlePortMessage);
-    port.onDisconnect.removeListener(this.handlePortDisconnect);
-    port.disconnect();
-    port = null;
+    this.port.onMessage.removeListener(this.handlePortMessage);
+    this.port.onDisconnect.removeListener(this.handlePortDisconnect);
+    this.port.disconnect();
+    this.port = null;
   };
 
   private handlePortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== this.portName) {
+    if (port.name !== this.portName || !this.iframe.contentWindow) {
       return;
     }
 
-    this.iframe.contentWindow?.postMessage(message, "*");
+    this.iframe.contentWindow.postMessage(message, "*");
   };
 
   private handleWindowMessage = (event: MessageEvent) => {

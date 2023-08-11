@@ -17,59 +17,73 @@ export default class TabsBackground {
       return;
     }
 
-    chrome.windows.onFocusChanged.addListener(async (windowId: number) => {
-      if (windowId === null || windowId < 0) {
-        return;
-      }
-
-      this.focusedWindowId = windowId;
-      await this.main.refreshBadge();
-      await this.main.refreshMenu();
-      await this.overlayBackground.updateCurrentContextualCiphers();
-      this.main.messagingService.send("windowChanged");
-    });
-
-    chrome.tabs.onActivated.addListener(async (activeInfo: chrome.tabs.TabActiveInfo) => {
-      await this.main.refreshBadge();
-      await this.main.refreshMenu();
-      await this.overlayBackground.updateCurrentContextualCiphers();
-      this.main.messagingService.send("tabChanged");
-    });
-
-    chrome.tabs.onReplaced.addListener(async (addedTabId: number, removedTabId: number) => {
-      if (this.main.onReplacedRan) {
-        return;
-      }
-      this.main.onReplacedRan = true;
-
-      await this.notificationBackground.checkNotificationQueue();
-      await this.main.refreshBadge();
-      await this.main.refreshMenu();
-      await this.overlayBackground.updateCurrentContextualCiphers();
-      this.main.messagingService.send("tabChanged");
-    });
-
-    chrome.tabs.onUpdated.addListener(
-      async (tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
-        if (this.focusedWindowId > 0 && tab.windowId != this.focusedWindowId) {
-          return;
-        }
-
-        if (!tab.active) {
-          return;
-        }
-
-        if (this.main.onUpdatedRan) {
-          return;
-        }
-        this.main.onUpdatedRan = true;
-
-        await this.notificationBackground.checkNotificationQueue(tab);
-        await this.main.refreshBadge();
-        await this.main.refreshMenu();
-        await this.overlayBackground.updateCurrentContextualCiphers();
-        this.main.messagingService.send("tabChanged");
-      }
-    );
+    chrome.windows.onFocusChanged.addListener(this.handleWindowOnFocusChanged);
+    chrome.tabs.onActivated.addListener(this.handleTabOnActivated);
+    chrome.tabs.onReplaced.addListener(this.handleTabOnReplaced);
+    chrome.tabs.onUpdated.addListener(this.handleTabOnUpdated);
+    chrome.tabs.onRemoved.addListener(this.handleTabOnRemoved);
   }
+
+  private handleWindowOnFocusChanged = async (windowId: number) => {
+    if (!windowId) {
+      return;
+    }
+
+    this.focusedWindowId = windowId;
+    await this.updateCurrentTabData();
+    this.main.messagingService.send("windowChanged");
+  };
+
+  private handleTabOnActivated = async () => {
+    await this.updateCurrentTabData();
+    this.main.messagingService.send("tabChanged");
+  };
+
+  private handleTabOnReplaced = async () => {
+    if (this.main.onReplacedRan) {
+      return;
+    }
+    this.main.onReplacedRan = true;
+
+    await this.notificationBackground.checkNotificationQueue();
+    await this.updateCurrentTabData();
+    this.main.messagingService.send("tabChanged");
+  };
+
+  private handleTabOnUpdated = async (
+    tabId: number,
+    changeInfo: chrome.tabs.TabChangeInfo,
+    tab: chrome.tabs.Tab
+  ) => {
+    if (changeInfo.status !== "complete") {
+      this.overlayBackground.removePageDetails(tabId);
+    }
+
+    if (this.focusedWindowId && tab.windowId !== this.focusedWindowId) {
+      return;
+    }
+
+    if (!tab.active) {
+      return;
+    }
+
+    if (this.main.onUpdatedRan) {
+      return;
+    }
+    this.main.onUpdatedRan = true;
+
+    await this.notificationBackground.checkNotificationQueue(tab);
+    await this.updateCurrentTabData();
+    this.main.messagingService.send("tabChanged");
+  };
+
+  private handleTabOnRemoved = async (tabId: number) => {
+    this.overlayBackground.removePageDetails(tabId);
+  };
+
+  private updateCurrentTabData = async () => {
+    await this.main.refreshBadge();
+    await this.main.refreshMenu();
+    await this.overlayBackground.updateCurrentContextualCiphers();
+  };
 }

@@ -13,7 +13,7 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
-import AutofillOverlayPort from "../overlay/utils/port-identifiers.enum";
+import AutofillOverlayPort from "../overlay/utils/autofill-overlay.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
 import {
@@ -25,12 +25,12 @@ import {
 class OverlayBackground {
   private ciphers: any[] = [];
   private currentContextualCiphers: any[] = [];
-  private iconsServerUrl: string;
-  private pageDetailsToAutoFill: Map<number, PageDetail[]> = new Map();
+  private pageDetailsToAutoFill: Record<number, PageDetail[]> = {};
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayIconPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
+  private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
@@ -69,30 +69,24 @@ class OverlayBackground {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
     this.setupExtensionMessageListeners();
-
-    // TODO: CG - Need to think of a more effective way to handle this. This is a temporary solution for updating and clearing page details as tab contexts change.
-    chrome.tabs.onRemoved.addListener((tabId) => this.removePageDetails(tabId));
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-      if (changeInfo.status !== "complete") {
-        this.removePageDetails(tabId);
-      }
-    });
   }
 
   private collectPageDetailsResponse(message: any, sender: chrome.runtime.MessageSender) {
-    // TODO: CG - Need to think of a more effective way to handle this. This is a temporary solution.
-    const pageDetails = this.pageDetailsToAutoFill.get(sender.tab.id) || [];
-    pageDetails.push({
+    const pageDetails = {
       frameId: sender.frameId,
       tab: sender.tab,
       details: message.details,
-    });
+    };
+    if (this.pageDetailsToAutoFill[sender.tab.id]) {
+      this.pageDetailsToAutoFill[sender.tab.id].push(pageDetails);
+      return;
+    }
 
-    this.pageDetailsToAutoFill.set(sender.tab.id, pageDetails);
+    this.pageDetailsToAutoFill[sender.tab.id] = [pageDetails];
   }
 
-  private removePageDetails(tabId: number) {
-    this.pageDetailsToAutoFill.delete(tabId);
+  removePageDetails(tabId: number) {
+    delete this.pageDetailsToAutoFill[tabId];
   }
 
   private autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
@@ -109,7 +103,7 @@ class OverlayBackground {
     this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
-      pageDetails: this.pageDetailsToAutoFill.get(sender.tab.id),
+      pageDetails: this.pageDetailsToAutoFill[sender.tab.id],
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
