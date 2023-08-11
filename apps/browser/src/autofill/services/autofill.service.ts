@@ -302,6 +302,39 @@ export default class AutofillService implements AutofillServiceInterface {
     return totpCode;
   }
 
+  async doAutoFillNonLoginActiveTab(
+    pageDetails: PageDetail[],
+    cipherType: CipherType,
+    fromCommand: boolean
+  ): Promise<string> {
+    const tab = await this.getActiveTab();
+    if (!tab || !tab.url) {
+      return;
+    }
+
+    const ciphers = (
+      (await this.cipherService.getAllDecryptedForUrl(tab.url, [cipherType])) || []
+    ).filter(({ type }) => type === cipherType);
+    const cipher: CipherView = ciphers[0] || null;
+
+    if (cipher == null || cipher.reprompt !== CipherRepromptType.None) {
+      return null;
+    }
+
+    return await this.doAutoFill({
+      tab: tab,
+      cipher: cipher,
+      pageDetails: pageDetails,
+      skipLastUsed: !fromCommand,
+      skipUsernameOnlyFill: !fromCommand,
+      onlyEmptyFields: !fromCommand,
+      onlyVisibleFields: !fromCommand,
+      fillNewPassword: false,
+      allowUntrustedIframe: fromCommand,
+      allowTotpAutofill: false,
+    });
+  }
+
   /**
    * Autofill the active tab with the next login item from the cache
    * @param {PageDetail[]} pageDetails The data scraped from the page
