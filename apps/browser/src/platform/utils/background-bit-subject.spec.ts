@@ -27,7 +27,7 @@ describe("BackgroundBitSubject", () => {
     const spy = jest.spyOn(subject, "next");
     (BrowserApi.messageListener as jest.Mock).mock.calls[0][1]({
       command: subject["fromForegroundMessageName"],
-      data: JSON.stringify("test"),
+      data: "test",
     });
     expect(spy).toHaveBeenCalled();
   });
@@ -41,7 +41,7 @@ describe("BackgroundBitSubject", () => {
       },
       null,
       (response: string) => {
-        expect(response).toBe(JSON.stringify("test"));
+        expect(response).toBe("test");
       }
     );
   });

@@ -1,21 +1,19 @@
-import { DeepJsonify } from "@bitwarden/common/types/deep-jsonify";
-
 import { BrowserApi } from "../browser/browser-api";
 
 import { BrowserBitSubject } from "./browser-bit-subject";
 
 export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
-  constructor(serviceObservableName: string, initializer: (json: DeepJsonify<T>) => T) {
+  constructor(serviceObservableName: string, initializer: (obj: Required<T>) => T) {
     super(serviceObservableName, initializer);
 
     BrowserApi.messageListener(
       this.fromForegroundMessageName,
-      (message: { command: string; data: string }) => {
+      (message: { command: string; data: Required<T> }) => {
         if (message.command !== this.fromForegroundMessageName) {
           return;
         }
 
-        this.next(this.initializeData(message.data));
+        this.next(this.initializer(message.data));
       }
     );
 
@@ -23,12 +21,12 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
       if (message.command !== this.requestInitMessageName || !this._initialized) {
         return;
       }
-      return response(JSON.stringify(this.value));
+      return response(this.value);
     });
   }
 
   override next(value: T): void {
     super.next(value);
-    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: JSON.stringify(value) });
+    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: value });
   }
 }

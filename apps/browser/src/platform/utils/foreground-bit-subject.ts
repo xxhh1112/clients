@@ -1,28 +1,26 @@
-import { DeepJsonify } from "@bitwarden/common/types/deep-jsonify";
-
 import { BrowserApi } from "../browser/browser-api";
 
 import { BrowserBitSubject } from "./browser-bit-subject";
 
 export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
-  constructor(serviceObservableName: string, initializer: (json: DeepJsonify<T>) => T) {
+  constructor(serviceObservableName: string, initializer: (json: Required<T>) => T) {
     super(serviceObservableName, initializer);
 
     BrowserApi.messageListener(
       this.fromBackgroundMessageName,
-      (message: { command: string; data: string }) => {
+      (message: { command: string; data: Required<T> }) => {
         if (message.command !== this.fromBackgroundMessageName) {
           return;
         }
 
-        super.next(this.initializeData(message.data));
+        super.next(this.initializer(message.data));
       }
     );
   }
 
   override next(value: T): void {
     // Do not next the subject, background does it first, then tells us to
-    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: JSON.stringify(value) });
+    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: value });
   }
 
   async init(fallbackInitialValue?: T): Promise<this> {
@@ -31,10 +29,12 @@ export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
       BrowserApi.sendMessage(this.requestInitMessageName, null, (response) => {
         if (response === undefined) {
           // did not receive a response
-          response = JSON.stringify(fallbackInitialValue);
+          response = fallbackInitialValue;
         }
 
-        super.next(this.initializeData(response));
+        if (response !== undefined) {
+          super.next(this.initializer(response));
+        }
         resolve();
       });
     });

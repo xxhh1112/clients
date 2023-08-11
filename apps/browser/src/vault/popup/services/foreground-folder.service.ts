@@ -1,4 +1,4 @@
-import { arrayDeserializer } from "@bitwarden/common/platform/misc/deserializers";
+import { arrayInitialize, assignPrototype } from "@bitwarden/common/platform/misc/initializers";
 import { Folder } from "@bitwarden/common/vault/models/domain/folder";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
@@ -8,11 +8,11 @@ import { ForegroundBitSubject } from "../../../platform/utils/foreground-bit-sub
 export class ForegroundFolderService extends FolderService {
   protected _folders = new ForegroundBitSubject<Folder[]>(
     "folderService_folders",
-    arrayDeserializer<Folder>(Folder.fromJSON)
+    arrayInitialize(Folder.fromKeyValuePair)
   );
   protected _folderViews = new ForegroundBitSubject<FolderView[]>(
     "folderService_folderViews",
-    arrayDeserializer<FolderView>(FolderView.fromJSON)
+    arrayInitialize(assignPrototype(FolderView))
   );
 
   async init(): Promise<ForegroundFolderService> {

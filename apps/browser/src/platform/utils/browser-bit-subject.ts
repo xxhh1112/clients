@@ -1,10 +1,9 @@
 import { BitSubject } from "@bitwarden/common/platform/misc/bit-subject";
-import { DeepJsonify } from "@bitwarden/common/types/deep-jsonify";
 
 export class BrowserBitSubject<T = never> extends BitSubject<T> {
   constructor(
     private serviceObservableName: string,
-    protected initializer: (json: DeepJsonify<T>) => T
+    protected initializer: (obj: Required<T>) => T
   ) {
     super();
   }
@@ -19,9 +18,5 @@ export class BrowserBitSubject<T = never> extends BitSubject<T> {
 
   protected get requestInitMessageName(): string {
     return `${this.serviceObservableName}_request_init`;
-  }
-
-  protected initializeData(json: string) {
-    return this.initializer(JSON.parse(json));
   }
 }
