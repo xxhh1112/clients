@@ -121,6 +121,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     { perm: CollectionPermission.ViewExceptPass, labelId: "canViewExceptPass" },
     { perm: CollectionPermission.Edit, labelId: "canEdit" },
     { perm: CollectionPermission.EditExceptPass, labelId: "canEditExceptPass" },
+    { perm: CollectionPermission.Manage, labelId: "canManage" },
   ];
   protected initialPermission = CollectionPermission.View;
 

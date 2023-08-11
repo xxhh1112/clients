@@ -142,7 +142,12 @@ export class EntityUsersComponent implements OnInit {
           .filter((u) => (u as any).checked && !u.accessAll)
           .map(
             (u) =>
-              new SelectionReadOnlyRequest(u.id, !!(u as any).readOnly, !!(u as any).hidePasswords)
+              new SelectionReadOnlyRequest(
+                u.id,
+                !!(u as any).readOnly,
+                !!(u as any).hidePasswords,
+                !!(u as any).manage
+              )
           );
         this.formPromise = this.apiService.putCollectionUsers(
           this.organizationId,

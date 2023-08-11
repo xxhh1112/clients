@@ -298,6 +298,7 @@ function createCollectionView(i: number): CollectionAdminView {
         id: group.id,
         hidePasswords: false,
         readOnly: false,
+        manage: false,
       }),
     ];
   }

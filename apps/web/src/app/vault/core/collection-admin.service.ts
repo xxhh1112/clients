@@ -105,10 +105,12 @@ export class CollectionAdminService {
     collection.externalId = model.externalId;
     collection.name = (await this.cryptoService.encrypt(model.name, key)).encryptedString;
     collection.groups = model.groups.map(
-      (group) => new SelectionReadOnlyRequest(group.id, group.readOnly, group.hidePasswords)
+      (group) =>
+        new SelectionReadOnlyRequest(group.id, group.readOnly, group.hidePasswords, group.manage)
     );
     collection.users = model.users.map(
-      (user) => new SelectionReadOnlyRequest(user.id, user.readOnly, user.hidePasswords)
+      (user) =>
+        new SelectionReadOnlyRequest(user.id, user.readOnly, user.hidePasswords, user.manage)
     );
     return collection;
   }
