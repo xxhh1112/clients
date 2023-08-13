@@ -51,7 +51,7 @@ describe("cryptoService", () => {
     let stateSvcGetUserKey: jest.SpyInstance;
 
     beforeEach(() => {
-      const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
+      const mockRandomBytes = new Uint8Array(64) as CsprngArray;
       mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
 
       stateSvcGetUserKey = jest.spyOn(stateService, "getUserKey");
@@ -87,9 +87,9 @@ describe("cryptoService", () => {
     let stateSvcGetMasterKey: jest.SpyInstance;
 
     beforeEach(() => {
-      const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
+      const mockRandomBytes = new Uint8Array(64) as CsprngArray;
       mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
-      mockMasterKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as MasterKey;
+      mockMasterKey = new SymmetricCryptoKey(new Uint8Array(64) as CsprngArray) as MasterKey;
 
       stateSvcGetUserKey = jest.spyOn(stateService, "getUserKey");
       stateSvcGetMasterKey = jest.spyOn(stateService, "getMasterKey");
@@ -121,7 +121,7 @@ describe("cryptoService", () => {
     let mockUserKey: UserKey;
 
     beforeEach(() => {
-      const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
+      const mockRandomBytes = new Uint8Array(64) as CsprngArray;
       mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
     });
 
@@ -163,9 +163,7 @@ describe("cryptoService", () => {
 
       beforeEach(() => {
         cryptoSvcMakePinKey = jest.spyOn(cryptoService, "makePinKey");
-        cryptoSvcMakePinKey.mockResolvedValue(
-          new SymmetricCryptoKey(new Uint8Array(64).buffer) as PinKey
-        );
+        cryptoSvcMakePinKey.mockResolvedValue(new SymmetricCryptoKey(new Uint8Array(64)) as PinKey);
         encPin = new EncString(
           "2.jcow2vTUePO+CCyokcIfVw==|DTBNlJ5yVsV2Bsk3UU3H6Q==|YvFBff5gxWqM+UsFB6BKimKxhC32AtjF3IStpU1Ijwg="
         );
