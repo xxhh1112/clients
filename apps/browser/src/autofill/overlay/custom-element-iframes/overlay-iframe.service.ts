@@ -20,7 +20,9 @@ class OverlayIframeService {
     this.iframe.style.padding = "0";
     this.iframe.style.width = "100%";
     this.iframe.style.height = "100%";
+    this.iframe.style.colorScheme = "normal";
     this.iframe.setAttribute("sandbox", "allow-scripts");
+    this.iframe.setAttribute("allowtransparency", "true");
     this.iframe.addEventListener("load", this.setupPortMessageListener);
 
     this.shadow.appendChild(this.iframe);

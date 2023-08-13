@@ -24,7 +24,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private overlayIconElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
-  private mostRecentlyFocusedFieldRects: DOMRect;
+  private mostRecentlyFocusedFieldRects: DOMRect | null;
+  private mostRecentlyFocusedFieldStyles: CSSStyleDeclaration;
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private mutationObserver: MutationObserver;
@@ -49,16 +50,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent(formFieldElement));
-
-    // TODO: CG - Need to find a way to have the handler for click and focus events only trigger once. Currently we duplicate execution, which isn't great. It doesn't seem to break anything, but it's not ideal.
-    formFieldElement.addEventListener(
-      "click",
-      this.handleFormFieldUserInteractionEvent(formFieldElement)
-    );
-    formFieldElement.addEventListener(
-      "focus",
-      this.handleFormFieldUserInteractionEvent(formFieldElement)
-    );
+    formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
+    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
     formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
 
     // TODO: CG - POC for storing elements on vault item creation. Need to figure a better way to do this overall.
@@ -90,10 +83,22 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   };
 
-  private handleFormFieldUserInteractionEvent = (
-    formFieldElement: ElementWithOpId<FormFieldElement>
-  ) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-user-interaction-handler`;
+  private handleFormFieldClickEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-click-handler`;
+    return (
+      this.handlersMemo[memoIndex] ||
+      (this.handlersMemo[memoIndex] = () => {
+        if (this.isOverlayIconVisible || this.isOverlayListVisible) {
+          return;
+        }
+
+        this.triggerFormFieldInteractionEvent(formFieldElement);
+      })
+    );
+  };
+
+  private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`;
     return (
       this.handlersMemo[memoIndex] ||
       (this.handlersMemo[memoIndex] = () => this.triggerFormFieldInteractionEvent(formFieldElement))
@@ -133,22 +138,30 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.createOverlayIconElement();
     }
 
+    if (!this.mostRecentlyFocusedFieldRects) {
+      return;
+    }
+
     const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
-    this.overlayIconElement.style.width = `${
-      this.mostRecentlyFocusedFieldRects.height - elementOffset
-    }px`;
-    this.overlayIconElement.style.height = `${
-      this.mostRecentlyFocusedFieldRects.height - elementOffset
-    }px`;
-    this.overlayIconElement.style.top = `${
-      this.mostRecentlyFocusedFieldRects.top + elementOffset / 2
-    }px`;
-    this.overlayIconElement.style.left = `${
+    let fieldIconOffset = elementOffset / 2;
+    const fieldPaddingRight = parseInt(this.mostRecentlyFocusedFieldStyles.paddingRight, 10);
+    if (fieldPaddingRight > 18) {
+      fieldIconOffset = fieldPaddingRight - elementOffset + 4;
+    }
+
+    const elementWidth = this.mostRecentlyFocusedFieldRects.height - elementOffset;
+    const elementHeight = this.mostRecentlyFocusedFieldRects.height - elementOffset;
+    const elementTopPosition = this.mostRecentlyFocusedFieldRects.top + elementOffset / 2;
+    const elementLeftPosition =
       this.mostRecentlyFocusedFieldRects.left +
       this.mostRecentlyFocusedFieldRects.width -
-      this.mostRecentlyFocusedFieldRects.height +
-      elementOffset / 2
-    }px`;
+      this.mostRecentlyFocusedFieldRects.height -
+      fieldIconOffset;
+
+    this.overlayIconElement.style.width = `${elementWidth}px`;
+    this.overlayIconElement.style.height = `${elementHeight}px`;
+    this.overlayIconElement.style.top = `${elementTopPosition}px`;
+    this.overlayIconElement.style.left = `${elementLeftPosition}px`;
 
     if (!this.isOverlayIconVisible) {
       document.body.appendChild(this.overlayIconElement);
@@ -159,6 +172,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (isOpeningWithoutList) {
       this.fadeInOverlayElements();
     }
+
+    // const elementsFromPoint = document.elementsFromPoint(
+    //   elementLeftPosition + elementWidth / 2,
+    //   elementTopPosition + elementHeight / 2
+    // );
   }
 
   private fadeInOverlayElements() {
@@ -174,6 +192,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private updateOverlayListPosition() {
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
+    }
+
+    if (!this.mostRecentlyFocusedFieldRects) {
+      return;
     }
 
     this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
@@ -226,7 +248,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.isOverlayListVisible = !isHidden;
   }
 
-  private triggerFormFieldInteractionEvent = (
+  private triggerFormFieldInteractionEvent = async (
     formFieldElement: ElementWithOpId<FormFieldElement>
   ) => {
     if (this.isCurrentlyFilling) {
@@ -236,7 +258,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.isFieldCurrentlyFocused = true;
     this.clearUserInteractionEventTimeout();
     const initiallyFocusedField = this.mostRecentlyFocusedField;
-    this.updateMostRecentlyFocusedField(formFieldElement);
+    await this.updateMostRecentlyFocusedField(formFieldElement);
 
     if (
       this.authStatus === AuthenticationStatus.Unlocked &&
@@ -252,9 +274,53 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
   };
 
-  private updateMostRecentlyFocusedField(formFieldElement: ElementWithOpId<FormFieldElement>) {
+  private async updateMostRecentlyFocusedField(
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) {
     this.mostRecentlyFocusedField = formFieldElement;
+    await this.updateMostRecentlyFocusedFieldRects(formFieldElement);
+    this.mostRecentlyFocusedFieldStyles = window.getComputedStyle(formFieldElement);
+  }
+
+  private async updateMostRecentlyFocusedFieldRects(
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) {
+    this.mostRecentlyFocusedFieldRects = await this.getBoundingClientRectFromIntersectionObserver(
+      formFieldElement
+    );
+    if (this.mostRecentlyFocusedFieldRects) {
+      return;
+    }
+
     this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+  }
+
+  private async getBoundingClientRectFromIntersectionObserver(
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ): Promise<DOMRectReadOnly | null> {
+    if (!("IntersectionObserver" in window) && !("IntersectionObserverEntry" in window)) {
+      return null;
+    }
+
+    return new Promise((resolve) => {
+      const intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          let fieldBoundingClientRects = entries[0]?.boundingClientRect;
+          if (!fieldBoundingClientRects?.width || !fieldBoundingClientRects.height) {
+            fieldBoundingClientRects = null;
+          }
+
+          intersectionObserver.disconnect();
+          resolve(fieldBoundingClientRects);
+        },
+        {
+          root: document.body,
+          rootMargin: "0px",
+          threshold: 0.9999,
+        }
+      );
+      intersectionObserver.observe(formFieldElement);
+    });
   }
 
   private triggerFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
@@ -372,14 +438,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.userInteractionEventTimeout = setTimeout(this.handleUserInteractionEventUpdates, 500);
   };
 
-  private handleUserInteractionEventUpdates = () => {
-    this.toggleOverlayHidden(false);
+  private handleUserInteractionEventUpdates = async () => {
     if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
+      this.toggleOverlayHidden(false);
       this.removeAutofillOverlay();
       return;
     }
 
-    this.updateMostRecentlyFocusedField(this.mostRecentlyFocusedField);
+    await this.updateMostRecentlyFocusedField(this.mostRecentlyFocusedField);
+    this.toggleOverlayHidden(false);
     this.updateOverlayIconPosition();
     this.updateOverlayListPosition();
     this.clearUserInteractionEventTimeout();
@@ -525,6 +592,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       autofillFieldData.type,
       autofillFieldData.title,
       autofillFieldData.placeholder,
+      autofillFieldData.autoCompleteType,
       autofillFieldData["label-data"],
       autofillFieldData["label-aria"],
       autofillFieldData["label-left"],
