@@ -10,6 +10,7 @@ import {
   AutofillOverlayIconIframe,
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
+import { AutofillOverlayCustomElement } from "../overlay/utils/autofill-overlay.enum";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
@@ -31,14 +32,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mutationObserver: MutationObserver;
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
-  private handlersMemo: { [key: string]: EventHandler<any> } = {};
+  private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
+  private eventHandlersMemo: { [key: string]: EventHandler<any> } = {};
 
   constructor() {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
-    } else {
-      this.setupMutationObserver();
-    }
+    this.initMutationObserver();
   }
 
   setupOverlayIconListenerOnField(
@@ -49,68 +47,29 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent(formFieldElement));
-    formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
-    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
+    formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent);
     formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
-
-    // TODO: CG - POC for storing elements on vault item creation. Need to figure a better way to do this overall.
     formFieldElement.addEventListener(
       "input",
       this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
     );
+    formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
+    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
 
     if (document.activeElement === formFieldElement) {
-      this.triggerFormFieldInteractionEvent(formFieldElement);
+      this.triggerFormFieldFocusedAction(formFieldElement);
     }
   }
 
   updateAutofillOverlayListHeight(message: any) {
-    if (!this.overlayListElement) {
+    const updatedHeight = message?.height;
+    if (!this.overlayListElement || !updatedHeight) {
       return;
     }
 
-    const { height } = message;
-    this.overlayListElement.style.height = `${height}px`;
+    this.overlayListElement.style.height = `${updatedHeight}px`;
     this.fadeInOverlayElements();
   }
-
-  private handleFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-blur-handler`;
-    return (
-      this.handlersMemo[memoIndex] ||
-      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldBlurEvent(formFieldElement))
-    );
-  };
-
-  private handleFormFieldClickEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-click-handler`;
-    return (
-      this.handlersMemo[memoIndex] ||
-      (this.handlersMemo[memoIndex] = () => {
-        if (this.isOverlayIconVisible || this.isOverlayListVisible) {
-          return;
-        }
-
-        this.triggerFormFieldInteractionEvent(formFieldElement);
-      })
-    );
-  };
-
-  private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`;
-    return (
-      this.handlersMemo[memoIndex] ||
-      (this.handlersMemo[memoIndex] = () => this.triggerFormFieldInteractionEvent(formFieldElement))
-    );
-  };
-
-  private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
-    // if the event is for an esc key
-    if (event.code === "Escape") {
-      this.removeAutofillOverlay();
-    }
-  };
 
   openAutofillOverlay(authStatus?: AuthenticationStatus, focusFieldElement?: boolean) {
     if (!this.mostRecentlyFocusedFieldRects) {
@@ -129,6 +88,115 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.updateOverlayListPosition();
   }
 
+  removeAutofillOverlay = () => {
+    this.removeAutofillOverlayIcon();
+    this.removeAutofillOverlayList();
+  };
+
+  removeAutofillOverlayIcon() {
+    if (!this.overlayIconElement) {
+      return;
+    }
+
+    this.overlayIconElement.remove();
+    this.overlayIconElement.style.opacity = "0";
+    this.isOverlayIconVisible = false;
+    chrome.runtime.sendMessage({ command: "bgAutofillOverlayIconClosed" });
+    this.removeUserInteractionEventListeners();
+  }
+
+  removeAutofillOverlayList() {
+    if (!this.overlayListElement) {
+      return;
+    }
+
+    this.overlayListElement.remove();
+    this.overlayListElement.style.height = "0";
+    this.overlayListElement.style.opacity = "0";
+    this.isOverlayListVisible = false;
+    chrome.runtime.sendMessage({ command: "bgAutofillOverlayListClosed" });
+  }
+
+  private useEventHandlersMemo = (callback: EventHandler<any>, memoIndex: string) => {
+    return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = callback);
+  };
+
+  private handleFormFieldBlurEvent = () => {
+    this.isFieldCurrentlyFocused = false;
+    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
+  };
+
+  private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
+    // if the event is for an esc key
+    if (event.code === "Escape") {
+      this.removeAutofillOverlay();
+    }
+  };
+
+  private handleFormFieldInputEvent = (
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+    autofillFieldData: AutofillField
+  ) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.storeModifiedFormElement(
+          formFieldElement as FillableFormFieldElement,
+          autofillFieldData
+        ),
+      `${formFieldElement.opid}-${formFieldElement.id}-input-handler`
+    );
+  };
+
+  private handleFormFieldClickEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    return this.useEventHandlersMemo(
+      () => this.triggerFormFieldClickedAction(formFieldElement),
+      `${formFieldElement.opid}-${formFieldElement.id}-click-handler`
+    );
+  };
+
+  private triggerFormFieldClickedAction = async (
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) => {
+    if (this.isOverlayIconVisible || this.isOverlayListVisible) {
+      return;
+    }
+
+    await this.triggerFormFieldFocusedAction(formFieldElement);
+  };
+
+  private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
+    return this.useEventHandlersMemo(
+      () => this.triggerFormFieldFocusedAction(formFieldElement),
+      `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`
+    );
+  };
+
+  private triggerFormFieldFocusedAction = async (
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) => {
+    if (this.isCurrentlyFilling) {
+      return;
+    }
+
+    this.isFieldCurrentlyFocused = true;
+    this.clearUserInteractionEventTimeout();
+    const initiallyFocusedField = this.mostRecentlyFocusedField;
+    await this.updateMostRecentlyFocusedField(formFieldElement);
+
+    if (
+      this.authStatus === AuthenticationStatus.Unlocked &&
+      (formFieldElement as HTMLInputElement).value
+    ) {
+      if (initiallyFocusedField !== this.mostRecentlyFocusedField) {
+        this.removeAutofillOverlayList();
+      }
+      this.updateOverlayIconPosition(true);
+      return;
+    }
+
+    chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
+  };
+
   private recentlyFocusedFieldIsCurrentlyFocused() {
     return document.activeElement === this.mostRecentlyFocusedField;
   }
@@ -143,20 +211,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
-    let fieldIconOffset = elementOffset / 2;
-    const fieldPaddingRight = parseInt(this.mostRecentlyFocusedFieldStyles.paddingRight, 10);
-    if (fieldPaddingRight > 18) {
-      fieldIconOffset = fieldPaddingRight - elementOffset + 4;
-    }
-
     const elementWidth = this.mostRecentlyFocusedFieldRects.height - elementOffset;
     const elementHeight = this.mostRecentlyFocusedFieldRects.height - elementOffset;
     const elementTopPosition = this.mostRecentlyFocusedFieldRects.top + elementOffset / 2;
-    const elementLeftPosition =
-      this.mostRecentlyFocusedFieldRects.left +
-      this.mostRecentlyFocusedFieldRects.width -
-      this.mostRecentlyFocusedFieldRects.height -
-      fieldIconOffset;
+    const elementLeftPosition = this.getOverlayIconLeftPosition(elementOffset);
 
     this.overlayIconElement.style.width = `${elementWidth}px`;
     this.overlayIconElement.style.height = `${elementHeight}px`;
@@ -177,6 +235,26 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     //   elementLeftPosition + elementWidth / 2,
     //   elementTopPosition + elementHeight / 2
     // );
+  }
+
+  private getOverlayIconLeftPosition(elementOffset: number) {
+    const fieldPaddingRight = parseInt(this.mostRecentlyFocusedFieldStyles.paddingRight, 10);
+    const fieldPaddingLeft = parseInt(this.mostRecentlyFocusedFieldStyles.paddingLeft, 10);
+    if (fieldPaddingRight > fieldPaddingLeft) {
+      return (
+        this.mostRecentlyFocusedFieldRects.left +
+        this.mostRecentlyFocusedFieldRects.width -
+        this.mostRecentlyFocusedFieldRects.height -
+        (fieldPaddingRight - elementOffset + 2)
+      );
+    }
+
+    return (
+      this.mostRecentlyFocusedFieldRects.left +
+      this.mostRecentlyFocusedFieldRects.width -
+      this.mostRecentlyFocusedFieldRects.height +
+      elementOffset / 2
+    );
   }
 
   private fadeInOverlayElements() {
@@ -210,35 +288,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  removeAutofillOverlay = () => {
-    this.removeAutofillOverlayIcon();
-    this.removeAutofillOverlayList();
-  };
-
-  removeAutofillOverlayIcon() {
-    if (!this.overlayIconElement) {
-      return;
-    }
-
-    this.overlayIconElement.remove();
-    this.overlayIconElement.style.opacity = "0";
-    this.isOverlayIconVisible = false;
-    chrome.runtime.sendMessage({ command: "bgAutofillOverlayIconClosed" });
-    this.removeUserInteractionEventListeners();
-  }
-
-  removeAutofillOverlayList() {
-    if (!this.overlayListElement) {
-      return;
-    }
-
-    this.overlayListElement.remove();
-    this.overlayListElement.style.height = "0";
-    this.overlayListElement.style.opacity = "0";
-    this.isOverlayListVisible = false;
-    chrome.runtime.sendMessage({ command: "bgAutofillOverlayListClosed" });
-  }
-
   private toggleOverlayHidden(isHidden: boolean) {
     const displayValue = isHidden ? "none" : "block";
     this.overlayIconElement?.style.setProperty("display", displayValue);
@@ -247,32 +296,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.isOverlayIconVisible = !isHidden;
     this.isOverlayListVisible = !isHidden;
   }
-
-  private triggerFormFieldInteractionEvent = async (
-    formFieldElement: ElementWithOpId<FormFieldElement>
-  ) => {
-    if (this.isCurrentlyFilling) {
-      return;
-    }
-
-    this.isFieldCurrentlyFocused = true;
-    this.clearUserInteractionEventTimeout();
-    const initiallyFocusedField = this.mostRecentlyFocusedField;
-    await this.updateMostRecentlyFocusedField(formFieldElement);
-
-    if (
-      this.authStatus === AuthenticationStatus.Unlocked &&
-      (formFieldElement as HTMLInputElement).value
-    ) {
-      if (initiallyFocusedField !== this.mostRecentlyFocusedField) {
-        this.removeAutofillOverlayList();
-      }
-      this.updateOverlayIconPosition(true);
-      return;
-    }
-
-    chrome.runtime.sendMessage({ command: "bgOpenAutofillOverlayList" });
-  };
 
   private async updateMostRecentlyFocusedField(
     formFieldElement: ElementWithOpId<FormFieldElement>
@@ -323,42 +346,23 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     });
   }
 
-  private triggerFormFieldBlurEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
-    this.isFieldCurrentlyFocused = false;
-    chrome.runtime.sendMessage({ command: "bgCheckOverlayFocused" });
-  };
-
   private isIgnoredField(autofillFieldData: AutofillField): boolean {
     const ignoredFieldTypes = new Set(AutoFillConstants.ExcludedAutofillTypes);
-
     if (
       autofillFieldData.readonly ||
       autofillFieldData.disabled ||
-      ignoredFieldTypes.has(autofillFieldData.type)
+      ignoredFieldTypes.has(autofillFieldData.type) ||
+      this.keywordsFoundInFieldData(autofillFieldData, ["search", "captcha"])
     ) {
       return true;
     }
 
-    const ignoreKeywords = ["search", "captcha"];
-    const searchedString = this.buildAutofillFieldDataKeywords(autofillFieldData);
-    for (const keyword of ignoreKeywords) {
-      if (searchedString.includes(keyword)) {
-        return true;
-      }
-    }
-
-    if (autofillFieldData.type === "password") {
-      return false;
-    }
-
     // TODO: CG - This is the current method we used to identify login fields. This will need to change at some point as we want to be able to fill in other types of forms.
-    for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
-      if (searchedString.includes(usernameKeyword)) {
-        return false;
-      }
-    }
+    const isLoginCipherField =
+      autofillFieldData.type === "password" ||
+      this.keywordsFoundInFieldData(autofillFieldData, AutoFillConstants.UsernameFieldNames);
 
-    return true;
+    return !isLoginCipherField;
   }
 
   private createOverlayIconElement() {
@@ -366,9 +370,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    const elementName = "bitwarden-autofill-overlay-icon";
-    window.customElements?.define(elementName, AutofillOverlayIconIframe);
-    this.overlayIconElement = this.createOverlayCustomElement(elementName);
+    window.customElements?.define(
+      AutofillOverlayCustomElement.BitwardenIcon,
+      AutofillOverlayIconIframe
+    );
+    this.overlayIconElement = this.createOverlayCustomElement(
+      AutofillOverlayCustomElement.BitwardenIcon
+    );
     this.overlayIconElement.style.lineHeight = "0";
   }
 
@@ -377,9 +385,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    const elementName = "bitwarden-autofill-overlay-list";
-    window.customElements?.define(elementName, AutofillOverlayListIframe);
-    this.overlayListElement = this.createOverlayCustomElement(elementName);
+    window.customElements?.define(
+      AutofillOverlayCustomElement.BitwardenList,
+      AutofillOverlayListIframe
+    );
+    this.overlayListElement = this.createOverlayCustomElement(
+      AutofillOverlayCustomElement.BitwardenList
+    );
     this.overlayListElement.style.height = "0";
     this.overlayListElement.style.lineHeight = "0";
     this.overlayListElement.style.minWidth = "250px";
@@ -428,7 +440,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     window.removeEventListener("resize", this.handleUserInteractionEvent);
   }
 
-  private handleUserInteractionEvent = (event: MouseEvent) => {
+  private handleUserInteractionEvent = () => {
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
       return;
     }
@@ -457,6 +469,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       clearTimeout(this.userInteractionEventTimeout);
     }
   }
+
+  private initMutationObserver = () => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
+      return;
+    }
+
+    this.setupMutationObserver();
+  };
 
   private setupMutationObserver = () => {
     this.mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
@@ -534,22 +555,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   // TODO: CG - POCing out the vault item creation. This needs to be reworked.
-  private handleFormFieldInputEvent = (
-    formFieldElement: ElementWithOpId<FormFieldElement>,
-    autofillFieldData: AutofillField
-  ) => {
-    const memoIndex = `${formFieldElement.opid}-${formFieldElement.id}-input-handler`;
-    return (
-      this.handlersMemo[memoIndex] ||
-      (this.handlersMemo[memoIndex] = () =>
-        this.storeModifiedFormElement(
-          formFieldElement as FillableFormFieldElement,
-          autofillFieldData
-        ))
-    );
-  };
-
-  // TODO: CG - POCing out the vault item creation. This needs to be reworked.
   private storeModifiedFormElement(
     formFieldElement: FillableFormFieldElement,
     autofillFieldData: AutofillField
@@ -575,7 +580,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    const searchedString = this.buildAutofillFieldDataKeywords(autofillFieldData);
+    const searchedString = this.getAutofillFieldDataKeywords(autofillFieldData);
     for (const usernameKeyword of AutoFillConstants.UsernameFieldNames) {
       if (searchedString.includes(usernameKeyword)) {
         this.userFilledFields.username = formFieldElement;
@@ -584,8 +589,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  private buildAutofillFieldDataKeywords(autofillFieldData: AutofillField) {
-    return [
+  private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {
+    const searchedString = this.getAutofillFieldDataKeywords(autofillFieldData);
+    return keywords.some((keyword) => searchedString.includes(keyword));
+  }
+
+  private getAutofillFieldDataKeywords(autofillFieldData: AutofillField) {
+    if (this.autofillFieldKeywordsMap.has(autofillFieldData)) {
+      return this.autofillFieldKeywordsMap.get(autofillFieldData);
+    }
+
+    const keywordValues = [
       autofillFieldData.htmlID,
       autofillFieldData.htmlName,
       autofillFieldData.htmlClass,
@@ -600,9 +614,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       autofillFieldData["label-tag"],
       autofillFieldData["label-top"],
     ]
-      .filter((value) => !!value)
       .join(",")
       .toLowerCase();
+    this.autofillFieldKeywordsMap.set(autofillFieldData, keywordValues);
+
+    return keywordValues;
   }
 }
 

@@ -13,7 +13,7 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
-import AutofillOverlayPort from "../overlay/utils/autofill-overlay.enum";
+import { AutofillOverlayPort } from "../overlay/utils/autofill-overlay.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
 import {

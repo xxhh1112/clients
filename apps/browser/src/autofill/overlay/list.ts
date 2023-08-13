@@ -3,6 +3,7 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayListWindowMessageHandlers } from "./abstractions/list";
+import { AutofillOverlayCustomElement } from "./utils/autofill-overlay.enum";
 import { globeIcon, lockIcon, plusIcon } from "./utils/svg-icons";
 import { buildSvgDomElement } from "./utils/utils";
 
@@ -215,5 +216,5 @@ class AutofillOverlayList extends HTMLElement {
 }
 
 (function () {
-  window.customElements.define("autofill-overlay-list", AutofillOverlayList);
+  window.customElements.define(AutofillOverlayCustomElement.List, AutofillOverlayList);
 })();
