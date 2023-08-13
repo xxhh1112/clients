@@ -63,6 +63,8 @@ export class Menubar {
     }
 
     const isLockable = !isLocked && updateRequest?.accounts[updateRequest.activeUserId]?.isLockable;
+    const hasMasterPassword =
+      updateRequest?.accounts[updateRequest.activeUserId]?.hasMasterPassword ?? false;
 
     this.items = [
       new FileMenu(
@@ -76,7 +78,14 @@ export class Menubar {
       ),
       new EditMenu(i18nService, messagingService, isLocked),
       new ViewMenu(i18nService, messagingService, isLocked),
-      new AccountMenu(i18nService, messagingService, webVaultUrl, windowMain.win, isLocked),
+      new AccountMenu(
+        i18nService,
+        messagingService,
+        webVaultUrl,
+        windowMain.win,
+        isLocked,
+        hasMasterPassword
+      ),
       new WindowMenu(i18nService, messagingService, windowMain),
       new HelpMenu(
         i18nService,

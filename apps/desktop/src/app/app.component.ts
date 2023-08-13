@@ -495,7 +495,6 @@ export class AppComponent implements OnInit, OnDestroy {
       updateRequest = {
         accounts: null,
         activeUserId: null,
-        hideChangeMasterPassword: true,
       };
     } else {
       const accounts: { [userId: string]: MenuAccount } = {};
@@ -515,13 +514,13 @@ export class AppComponent implements OnInit, OnDestroy {
             isLockable: availableTimeoutActions.includes(VaultTimeoutAction.Lock),
             email: stateAccounts[i].profile.email,
             userId: stateAccounts[i].profile.userId,
+            hasMasterPassword: await this.userVerificationService.hasMasterPassword(userId),
           };
         }
       }
       updateRequest = {
         accounts: accounts,
         activeUserId: await this.stateService.getUserId(),
-        hideChangeMasterPassword: !(await this.userVerificationService.hasMasterPassword()),
       };
     }
 
