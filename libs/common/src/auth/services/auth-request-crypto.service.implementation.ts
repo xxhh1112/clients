@@ -13,7 +13,7 @@ export class AuthRequestCryptoServiceImplementation implements AuthRequestCrypto
 
   async setUserKeyAfterDecryptingSharedUserKey(
     authReqResponse: AuthRequestResponse,
-    authReqPrivateKey: ArrayBuffer
+    authReqPrivateKey: Uint8Array
   ) {
     const userKey = await this.decryptPubKeyEncryptedUserKey(
       authReqResponse.key,
@@ -24,7 +24,7 @@ export class AuthRequestCryptoServiceImplementation implements AuthRequestCrypto
 
   async setKeysAfterDecryptingSharedMasterKeyAndHash(
     authReqResponse: AuthRequestResponse,
-    authReqPrivateKey: ArrayBuffer
+    authReqPrivateKey: Uint8Array
   ) {
     const { masterKey, masterKeyHash } = await this.decryptPubKeyEncryptedMasterKeyAndHash(
       authReqResponse.key,
@@ -45,20 +45,20 @@ export class AuthRequestCryptoServiceImplementation implements AuthRequestCrypto
   // Decryption helpers
   async decryptPubKeyEncryptedUserKey(
     pubKeyEncryptedUserKey: string,
-    privateKey: ArrayBuffer
+    privateKey: Uint8Array
   ): Promise<UserKey> {
-    const decryptedUserKeyArrayBuffer = await this.cryptoService.rsaDecrypt(
+    const decryptedUserKeyBytes = await this.cryptoService.rsaDecrypt(
       pubKeyEncryptedUserKey,
       privateKey
     );
 
-    return new SymmetricCryptoKey(decryptedUserKeyArrayBuffer) as UserKey;
+    return new SymmetricCryptoKey(decryptedUserKeyBytes) as UserKey;
   }
 
   async decryptPubKeyEncryptedMasterKeyAndHash(
     pubKeyEncryptedMasterKey: string,
     pubKeyEncryptedMasterKeyHash: string,
-    privateKey: ArrayBuffer
+    privateKey: Uint8Array
   ): Promise<{ masterKey: MasterKey; masterKeyHash: string }> {
     const decryptedMasterKeyArrayBuffer = await this.cryptoService.rsaDecrypt(
       pubKeyEncryptedMasterKey,

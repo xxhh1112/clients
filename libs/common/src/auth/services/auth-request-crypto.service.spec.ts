@@ -15,7 +15,7 @@ import { AuthRequestCryptoServiceImplementation } from "./auth-request-crypto.se
 describe("AuthRequestCryptoService", () => {
   let authReqCryptoService: AuthRequestCryptoServiceAbstraction;
   const cryptoService = mock<CryptoService>();
-  let mockPrivateKey: ArrayBuffer;
+  let mockPrivateKey: Uint8Array;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,7 +23,7 @@ describe("AuthRequestCryptoService", () => {
 
     authReqCryptoService = new AuthRequestCryptoServiceImplementation(cryptoService);
 
-    mockPrivateKey = new ArrayBuffer(64);
+    mockPrivateKey = new Uint8Array(64);
   });
 
   it("instantiates", () => {
@@ -106,12 +106,10 @@ describe("AuthRequestCryptoService", () => {
     it("returns a decrypted user key when given valid public key encrypted user key and an auth req private key", async () => {
       // Arrange
       const mockPubKeyEncryptedUserKey = "pubKeyEncryptedUserKey";
-      const mockDecryptedUserKeyArrayBuffer = new ArrayBuffer(64);
-      const mockDecryptedUserKey = new SymmetricCryptoKey(
-        mockDecryptedUserKeyArrayBuffer
-      ) as UserKey;
+      const mockDecryptedUserKeyBytes = new Uint8Array(64);
+      const mockDecryptedUserKey = new SymmetricCryptoKey(mockDecryptedUserKeyBytes) as UserKey;
 
-      cryptoService.rsaDecrypt.mockResolvedValueOnce(mockDecryptedUserKeyArrayBuffer);
+      cryptoService.rsaDecrypt.mockResolvedValueOnce(mockDecryptedUserKeyBytes);
 
       // Act
       const result = await authReqCryptoService.decryptPubKeyEncryptedUserKey(
@@ -131,18 +129,16 @@ describe("AuthRequestCryptoService", () => {
       const mockPubKeyEncryptedMasterKey = "pubKeyEncryptedMasterKey";
       const mockPubKeyEncryptedMasterKeyHash = "pubKeyEncryptedMasterKeyHash";
 
-      const mockDecryptedMasterKeyArrayBuffer = new ArrayBuffer(64);
+      const mockDecryptedMasterKeyBytes = new Uint8Array(64);
       const mockDecryptedMasterKey = new SymmetricCryptoKey(
-        mockDecryptedMasterKeyArrayBuffer
+        mockDecryptedMasterKeyBytes
       ) as MasterKey;
-      const mockDecryptedMasterKeyHashArrayBuffer = new ArrayBuffer(64);
-      const mockDecryptedMasterKeyHash = Utils.fromBufferToUtf8(
-        mockDecryptedMasterKeyHashArrayBuffer
-      );
+      const mockDecryptedMasterKeyHashBytes = new Uint8Array(64);
+      const mockDecryptedMasterKeyHash = Utils.fromBufferToUtf8(mockDecryptedMasterKeyHashBytes);
 
       cryptoService.rsaDecrypt
-        .mockResolvedValueOnce(mockDecryptedMasterKeyArrayBuffer)
-        .mockResolvedValueOnce(mockDecryptedMasterKeyHashArrayBuffer);
+        .mockResolvedValueOnce(mockDecryptedMasterKeyBytes)
+        .mockResolvedValueOnce(mockDecryptedMasterKeyHashBytes);
 
       // Act
       const result = await authReqCryptoService.decryptPubKeyEncryptedMasterKeyAndHash(

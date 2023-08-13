@@ -8,7 +8,7 @@ import { Utils } from "../../../platform/misc/utils";
 // so we can get rid of the any type passed into fromJSON and coming out of ToJSON
 export class AdminAuthRequestStorable {
   id: string;
-  privateKey: ArrayBuffer;
+  privateKey: Uint8Array;
 
   constructor(init?: Partial<AdminAuthRequestStorable>) {
     if (init) {
@@ -30,7 +30,7 @@ export class AdminAuthRequestStorable {
 
     let privateKeyBuffer = null;
     if (obj.privateKey) {
-      privateKeyBuffer = Utils.fromByteStringToArray(obj.privateKey)?.buffer;
+      privateKeyBuffer = Utils.fromByteStringToArray(obj.privateKey);
     }
 
     return new AdminAuthRequestStorable({

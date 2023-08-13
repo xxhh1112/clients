@@ -64,8 +64,8 @@ export class NativeMessagingBackground {
   private port: browser.runtime.Port | chrome.runtime.Port;
 
   private resolver: any = null;
-  private privateKey: ArrayBuffer = null;
-  private publicKey: ArrayBuffer = null;
+  private privateKey: Uint8Array = null;
+  private publicKey: Uint8Array = null;
   private secureSetupResolve: any = null;
   private sharedSecret: SymmetricCryptoKey;
   private appId: string;
@@ -134,7 +134,7 @@ export class NativeMessagingBackground {
 
             const encrypted = Utils.fromB64ToArray(message.sharedSecret);
             const decrypted = await this.cryptoFunctionService.rsaDecrypt(
-              encrypted.buffer,
+              encrypted,
               this.privateKey,
               EncryptionAlgorithm
             );
@@ -328,7 +328,7 @@ export class NativeMessagingBackground {
           try {
             if (message.userKeyB64) {
               const userKey = new SymmetricCryptoKey(
-                Utils.fromB64ToArray(message.userKeyB64).buffer
+                Utils.fromB64ToArray(message.userKeyB64)
               ) as UserKey;
               await this.cryptoService.setUserKey(userKey);
             } else if (message.keyB64) {
@@ -339,7 +339,7 @@ export class NativeMessagingBackground {
                 throw new Error("No encrypted user key found");
               }
               const masterKey = new SymmetricCryptoKey(
-                Utils.fromB64ToArray(message.keyB64).buffer
+                Utils.fromB64ToArray(message.keyB64)
               ) as MasterKey;
               const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
                 masterKey,

@@ -59,7 +59,7 @@ export class EnrollMasterPasswordReset {
 
         // RSA Encrypt user's encKey.key with organization public key
         const userKey = await this.cryptoService.getUserKey();
-        const encryptedKey = await this.cryptoService.rsaEncrypt(userKey.key, publicKey.buffer);
+        const encryptedKey = await this.cryptoService.rsaEncrypt(userKey.key, publicKey);
         keyString = encryptedKey.encryptedString;
         toastStringRef = "enrollPasswordResetSuccess";
 

@@ -9,7 +9,7 @@ describe("AccountKeys", () => {
   describe("toJSON", () => {
     it("should serialize itself", () => {
       const keys = new AccountKeys();
-      const buffer = makeStaticByteArray(64).buffer;
+      const buffer = makeStaticByteArray(64);
       keys.publicKey = buffer;
 
       const bufferSpy = jest.spyOn(Utils, "fromBufferToByteString");
@@ -19,7 +19,7 @@ describe("AccountKeys", () => {
 
     it("should serialize public key as a string", () => {
       const keys = new AccountKeys();
-      keys.publicKey = Utils.fromByteStringToArray("hello").buffer;
+      keys.publicKey = Utils.fromByteStringToArray("hello");
       const json = JSON.stringify(keys);
       expect(json).toContain('"publicKey":"hello"');
     });
@@ -47,7 +47,7 @@ describe("AccountKeys", () => {
       const keys = AccountKeys.fromJSON({
         publicKey: "hello",
       });
-      expect(keys.publicKey).toEqual(Utils.fromByteStringToArray("hello").buffer);
+      expect(keys.publicKey).toEqual(Utils.fromByteStringToArray("hello"));
     });
 
     it("should deserialize cryptoMasterKey", () => {

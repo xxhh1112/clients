@@ -118,7 +118,7 @@ describe("deviceTrustCryptoService", () => {
 
       beforeEach(() => {
         existingDeviceKey = new SymmetricCryptoKey(
-          new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray
+          new Uint8Array(deviceKeyBytesLength) as CsprngArray
         ) as DeviceKey;
 
         stateSvcGetDeviceKeySpy = jest.spyOn(stateService, "getDeviceKey");
@@ -152,7 +152,7 @@ describe("deviceTrustCryptoService", () => {
         const stateSvcSetDeviceKeySpy = jest.spyOn(stateService, "setDeviceKey");
 
         const deviceKey = new SymmetricCryptoKey(
-          new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray
+          new Uint8Array(deviceKeyBytesLength) as CsprngArray
         ) as DeviceKey;
 
         // TypeScript will allow calling private methods if the object is of type 'any'
@@ -166,7 +166,7 @@ describe("deviceTrustCryptoService", () => {
 
     describe("makeDeviceKey", () => {
       it("creates a new non-null 64 byte device key, securely stores it, and returns it", async () => {
-        const mockRandomBytes = new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray;
+        const mockRandomBytes = new Uint8Array(deviceKeyBytesLength) as CsprngArray;
 
         const cryptoFuncSvcRandomBytesSpy = jest
           .spyOn(cryptoFunctionService, "randomBytes")
@@ -192,9 +192,9 @@ describe("deviceTrustCryptoService", () => {
       let mockUserKey: UserKey;
 
       const deviceRsaKeyLength = 2048;
-      let mockDeviceRsaKeyPair: [ArrayBuffer, ArrayBuffer];
-      let mockDevicePrivateKey: ArrayBuffer;
-      let mockDevicePublicKey: ArrayBuffer;
+      let mockDeviceRsaKeyPair: [Uint8Array, Uint8Array];
+      let mockDevicePrivateKey: Uint8Array;
+      let mockDevicePublicKey: Uint8Array;
       let mockDevicePublicKeyEncryptedUserKey: EncString;
       let mockUserKeyEncryptedDevicePublicKey: EncString;
       let mockDeviceKeyEncryptedDevicePrivateKey: EncString;
@@ -220,15 +220,15 @@ describe("deviceTrustCryptoService", () => {
       beforeEach(() => {
         // Setup all spies and default return values for the happy path
 
-        mockDeviceKeyRandomBytes = new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray;
+        mockDeviceKeyRandomBytes = new Uint8Array(deviceKeyBytesLength) as CsprngArray;
         mockDeviceKey = new SymmetricCryptoKey(mockDeviceKeyRandomBytes) as DeviceKey;
 
-        mockUserKeyRandomBytes = new Uint8Array(userKeyBytesLength).buffer as CsprngArray;
+        mockUserKeyRandomBytes = new Uint8Array(userKeyBytesLength) as CsprngArray;
         mockUserKey = new SymmetricCryptoKey(mockUserKeyRandomBytes) as UserKey;
 
         mockDeviceRsaKeyPair = [
-          new ArrayBuffer(deviceRsaKeyLength),
-          new ArrayBuffer(deviceRsaKeyLength),
+          new Uint8Array(deviceRsaKeyLength),
+          new Uint8Array(deviceRsaKeyLength),
         ];
 
         mockDevicePublicKey = mockDeviceRsaKeyPair[0];
@@ -296,7 +296,7 @@ describe("deviceTrustCryptoService", () => {
         expect(cryptoSvcRsaEncryptSpy).toHaveBeenCalledTimes(1);
 
         // RsaEncrypt must be called w/ a user key array buffer of 64 bytes
-        const userKeyKey: ArrayBuffer = cryptoSvcRsaEncryptSpy.mock.calls[0][0];
+        const userKeyKey: Uint8Array = cryptoSvcRsaEncryptSpy.mock.calls[0][0];
         expect(userKeyKey.byteLength).toBe(64);
 
         expect(encryptServiceEncryptSpy).toHaveBeenCalledTimes(2);
@@ -390,10 +390,10 @@ describe("deviceTrustCryptoService", () => {
       let mockUserKey: UserKey;
 
       beforeEach(() => {
-        const mockDeviceKeyRandomBytes = new Uint8Array(deviceKeyBytesLength).buffer as CsprngArray;
+        const mockDeviceKeyRandomBytes = new Uint8Array(deviceKeyBytesLength) as CsprngArray;
         mockDeviceKey = new SymmetricCryptoKey(mockDeviceKeyRandomBytes) as DeviceKey;
 
-        const mockUserKeyRandomBytes = new Uint8Array(userKeyBytesLength).buffer as CsprngArray;
+        const mockUserKeyRandomBytes = new Uint8Array(userKeyBytesLength) as CsprngArray;
         mockUserKey = new SymmetricCryptoKey(mockUserKeyRandomBytes) as UserKey;
 
         mockEncryptedDevicePrivateKey = new EncString(
@@ -427,10 +427,10 @@ describe("deviceTrustCryptoService", () => {
       it("successfully returns the user key when provided keys (including device key) can decrypt it", async () => {
         const decryptToBytesSpy = jest
           .spyOn(encryptService, "decryptToBytes")
-          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength));
         const rsaDecryptSpy = jest
           .spyOn(cryptoService, "rsaDecrypt")
-          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength));
 
         const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
           mockEncryptedDevicePrivateKey,
@@ -450,10 +450,10 @@ describe("deviceTrustCryptoService", () => {
 
         const decryptToBytesSpy = jest
           .spyOn(encryptService, "decryptToBytes")
-          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength));
         const rsaDecryptSpy = jest
           .spyOn(cryptoService, "rsaDecrypt")
-          .mockResolvedValue(new Uint8Array(userKeyBytesLength).buffer);
+          .mockResolvedValue(new Uint8Array(userKeyBytesLength));
 
         // Call without providing a device key
         const result = await deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
@@ -495,7 +495,7 @@ describe("deviceTrustCryptoService", () => {
       const FakeDecryptedPublicKeyMarker = 17;
 
       beforeEach(() => {
-        const fakeNewUserKeyData = new Uint8Array(new ArrayBuffer(64));
+        const fakeNewUserKeyData = new Uint8Array(64);
         fakeNewUserKeyData.fill(FakeNewUserKeyMarker, 0, 1);
         fakeNewUserKey = new SymmetricCryptoKey(fakeNewUserKeyData) as UserKey;
       });
@@ -511,7 +511,7 @@ describe("deviceTrustCryptoService", () => {
       describe("is on a trusted device", () => {
         beforeEach(() => {
           stateService.getDeviceKey.mockResolvedValue(
-            new SymmetricCryptoKey(new ArrayBuffer(deviceKeyBytesLength)) as DeviceKey
+            new SymmetricCryptoKey(new Uint8Array(deviceKeyBytesLength)) as DeviceKey
           );
         });
 
@@ -519,7 +519,7 @@ describe("deviceTrustCryptoService", () => {
           const currentEncryptedPublicKey = new EncString("2.cHVibGlj|cHVibGlj|cHVibGlj");
           const currentEncryptedUserKey = new EncString("4.dXNlcg==");
 
-          const fakeOldUserKeyData = new Uint8Array(new ArrayBuffer(64));
+          const fakeOldUserKeyData = new Uint8Array(new Uint8Array(64));
           // Fill the first byte with something identifiable
           fakeOldUserKeyData.fill(FakeOldUserKeyMarker, 0, 1);
 
@@ -555,9 +555,9 @@ describe("deviceTrustCryptoService", () => {
           encryptService.decryptToBytes.mockImplementationOnce((_encValue, privateKeyValue) => {
             expect(privateKeyValue.key.byteLength).toBe(64);
             expect(new Uint8Array(privateKeyValue.key)[0]).toBe(FakeOldUserKeyMarker);
-            const data = new Uint8Array(new ArrayBuffer(250));
+            const data = new Uint8Array(250);
             data.fill(FakeDecryptedPublicKeyMarker, 0, 1);
-            return Promise.resolve(data.buffer);
+            return Promise.resolve(data);
           });
 
           // Mock the encryption of the new user key with the decrypted public key
@@ -571,8 +571,8 @@ describe("deviceTrustCryptoService", () => {
 
           // Mock the reencryption of the device public key with the new user key
           encryptService.encrypt.mockImplementationOnce((plainValue, key) => {
-            expect(plainValue).toBeInstanceOf(ArrayBuffer);
-            expect(new Uint8Array(plainValue as ArrayBuffer)[0]).toBe(FakeDecryptedPublicKeyMarker);
+            expect(plainValue).toBeInstanceOf(Uint8Array);
+            expect(new Uint8Array(plainValue as Uint8Array)[0]).toBe(FakeDecryptedPublicKeyMarker);
 
             expect(new Uint8Array(key.key)[0]).toBe(FakeNewUserKeyMarker);
             return Promise.resolve(

@@ -2230,8 +2230,8 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "Opens in a new window"
@@ -2261,9 +2261,11 @@
     "message": "EU",
     "description": "European Union"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."

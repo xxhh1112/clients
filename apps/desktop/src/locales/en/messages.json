@@ -2283,9 +2283,14 @@
     "message": "EU",
     "description": "European Union"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Self-hosted"

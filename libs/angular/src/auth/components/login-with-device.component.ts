@@ -65,7 +65,7 @@ export class LoginWithDeviceComponent
   protected forcePasswordResetRoute = "update-temp-password";
   private resendTimeout = 12000;
 
-  private authRequestKeyPair: { publicKey: ArrayBuffer; privateKey: ArrayBuffer };
+  private authRequestKeyPair: { publicKey: Uint8Array; privateKey: Uint8Array };
 
   // TODO: in future, go to child components and remove child constructors and let deps fall through to the super class
   constructor(

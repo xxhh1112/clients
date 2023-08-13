@@ -48,7 +48,7 @@ describe("electronCryptoService", () => {
     let mockUserKey: UserKey;
 
     beforeEach(() => {
-      const mockRandomBytes = new Uint8Array(64).buffer as CsprngArray;
+      const mockRandomBytes = new Uint8Array(64) as CsprngArray;
       mockUserKey = new SymmetricCryptoKey(mockRandomBytes) as UserKey;
     });
 

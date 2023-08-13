@@ -24,7 +24,7 @@ export class BrowserCryptoService extends CryptoService {
       // this will check for an auto key, but that is acceptable
       const userKey = await this.getUserKey();
       if (userKey) {
-        return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey.keyB64).buffer) as UserKey;
+        return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey.keyB64)) as UserKey;
       }
     }
 

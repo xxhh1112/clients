@@ -63,7 +63,7 @@ export class ElectronCryptoService extends CryptoService {
     if (keySuffix === KeySuffixOptions.Biometric) {
       await this.migrateBiometricKeyIfNeeded(userId);
       const userKey = await this.stateService.getUserKeyBiometric({ userId: userId });
-      return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey).buffer) as UserKey;
+      return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey)) as UserKey;
     }
     return await super.getKeyFromStorage(keySuffix, userId);
   }

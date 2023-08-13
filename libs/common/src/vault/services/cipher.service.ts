@@ -523,9 +523,12 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setNeverDomains(domains);
   }
 
-  async createWithServer(cipher: Cipher): Promise<any> {
+  async createWithServer(cipher: Cipher, orgAdmin?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (cipher.collectionIds != null) {
+    if (orgAdmin) {
+      const request = new CipherCreateRequest(cipher);
+      response = await this.apiService.postCipherAdmin(request);
+    } else if (cipher.collectionIds != null) {
       const request = new CipherCreateRequest(cipher);
       response = await this.apiService.postCipherCreate(request);
     } else {
@@ -538,9 +541,12 @@ export class CipherService implements CipherServiceAbstraction {
     await this.upsert(data);
   }
 
-  async updateWithServer(cipher: Cipher): Promise<any> {
+  async updateWithServer(cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (cipher.edit) {
+    if (orgAdmin && isNotClone) {
+      const request = new CipherRequest(cipher);
+      response = await this.apiService.putCipherAdmin(cipher.id, request);
+    } else if (cipher.edit) {
       const request = new CipherRequest(cipher);
       response = await this.apiService.putCipher(cipher.id, request);
     } else {
@@ -634,7 +640,7 @@ export class CipherService implements CipherServiceAbstraction {
   async saveAttachmentRawWithServer(
     cipher: Cipher,
     filename: string,
-    data: ArrayBuffer,
+    data: Uint8Array,
     admin = false
   ): Promise<Cipher> {
     let encKey: UserKey | OrgKey;
@@ -747,10 +753,11 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async deleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    const request = new CipherBulkDeleteRequest(ids);
     if (asAdmin) {
-      await this.apiService.deleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+      await this.apiService.deleteManyCiphersAdmin(request);
     } else {
-      await this.apiService.deleteManyCiphers(new CipherBulkDeleteRequest(ids));
+      await this.apiService.deleteManyCiphers(request);
     }
     await this.delete(ids);
   }
@@ -886,10 +893,11 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async softDeleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    const request = new CipherBulkDeleteRequest(ids);
     if (asAdmin) {
-      await this.apiService.putDeleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+      await this.apiService.putDeleteManyCiphersAdmin(request);
     } else {
-      await this.apiService.putDeleteManyCiphers(new CipherBulkDeleteRequest(ids));
+      await this.apiService.putDeleteManyCiphers(request);
     }
 
     await this.softDelete(ids);
@@ -922,14 +930,30 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async restoreWithServer(id: string, asAdmin = false): Promise<any> {
-    const response = asAdmin
-      ? await this.apiService.putRestoreCipherAdmin(id)
-      : await this.apiService.putRestoreCipher(id);
+    let response;
+    if (asAdmin) {
+      response = await this.apiService.putRestoreCipherAdmin(id);
+    } else {
+      response = await this.apiService.putRestoreCipher(id);
+    }
+
     await this.restore({ id: id, revisionDate: response.revisionDate });
   }
 
-  async restoreManyWithServer(ids: string[]): Promise<any> {
-    const response = await this.apiService.putRestoreManyCiphers(new CipherBulkRestoreRequest(ids));
+  async restoreManyWithServer(
+    ids: string[],
+    organizationId: string = null,
+    asAdmin = false
+  ): Promise<void> {
+    let response;
+    if (asAdmin) {
+      const request = new CipherBulkRestoreRequest(ids, organizationId);
+      response = await this.apiService.putRestoreManyCiphersAdmin(request);
+    } else {
+      const request = new CipherBulkRestoreRequest(ids);
+      response = await this.apiService.putRestoreManyCiphers(request);
+    }
+
     const restores: { id: string; revisionDate: string }[] = [];
     for (const cipher of response.data) {
       restores.push({ id: cipher.id, revisionDate: cipher.revisionDate });
@@ -961,7 +985,7 @@ export class CipherService implements CipherServiceAbstraction {
     const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
 
     const encFileName = await this.encryptService.encrypt(attachmentView.fileName, encKey);
-    const encData = await this.encryptService.encryptToBytes(decBuf, dataEncKey[0]);
+    const encData = await this.encryptService.encryptToBytes(new Uint8Array(decBuf), dataEncKey[0]);
 
     const fd = new FormData();
     try {

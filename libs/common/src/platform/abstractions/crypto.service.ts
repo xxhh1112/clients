@@ -245,7 +245,7 @@ export abstract class CryptoService {
    * from the private key and stores it in memory
    * @returns The user's public key
    */
-  getPublicKey: () => Promise<ArrayBuffer>;
+  getPublicKey: () => Promise<Uint8Array>;
   /**
    * Creates a new organization key and encrypts it with the user's public key.
    * This method can also return Provider keys for creating new Provider users.
@@ -264,14 +264,14 @@ export abstract class CryptoService {
    * from storage and stores it in memory
    * @returns The user's private key
    */
-  getPrivateKey: () => Promise<ArrayBuffer>;
+  getPrivateKey: () => Promise<Uint8Array>;
   /**
    * Generates a fingerprint phrase for the user based on their public key
    * @param fingerprintMaterial Fingerprint material
    * @param publicKey The user's public key
    * @returns The user's fingerprint phrase
    */
-  getFingerprint: (fingerprintMaterial: string, publicKey?: ArrayBuffer) => Promise<string[]>;
+  getFingerprint: (fingerprintMaterial: string, publicKey?: Uint8Array) => Promise<string[]>;
   /**
    * Generates a new keypair
    * @param key A key to encrypt the private key with. If not provided,
@@ -325,7 +325,7 @@ export abstract class CryptoService {
    * @param keyMaterial The key material to derive the send key from
    * @returns A new send key
    */
-  makeSendKey: (keyMaterial: ArrayBuffer) => Promise<SymmetricCryptoKey>;
+  makeSendKey: (keyMaterial: Uint8Array) => Promise<SymmetricCryptoKey>;
   /**
    * Clears all of the user's keys from storage
    * @param userId The user's Id
@@ -337,14 +337,14 @@ export abstract class CryptoService {
    * @param publicKey The public key to use for encryption, if not provided, the user's public key will be used
    * @returns The encrypted data
    */
-  rsaEncrypt: (data: ArrayBuffer, publicKey?: ArrayBuffer) => Promise<EncString>;
+  rsaEncrypt: (data: Uint8Array, publicKey?: Uint8Array) => Promise<EncString>;
   /**
    * Decrypts a value using RSA.
    * @param encValue The encrypted value to decrypt
    * @param privateKeyValue The private key to use for decryption
    * @returns The decrypted value
    */
-  rsaDecrypt: (encValue: string, privateKeyValue?: ArrayBuffer) => Promise<ArrayBuffer>;
+  rsaDecrypt: (encValue: string, privateKeyValue?: Uint8Array) => Promise<Uint8Array>;
   randomNumber: (min: number, max: number) => Promise<number>;
 
   /**
@@ -380,17 +380,17 @@ export abstract class CryptoService {
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.encrypt
    */
-  encrypt: (plainValue: string | ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncString>;
+  encrypt: (plainValue: string | Uint8Array, key?: SymmetricCryptoKey) => Promise<EncString>;
   /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.encryptToBytes
    */
-  encryptToBytes: (plainValue: ArrayBuffer, key?: SymmetricCryptoKey) => Promise<EncArrayBuffer>;
+  encryptToBytes: (plainValue: Uint8Array, key?: SymmetricCryptoKey) => Promise<EncArrayBuffer>;
   /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.decryptToBytes
    */
-  decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<ArrayBuffer>;
+  decryptToBytes: (encString: EncString, key?: SymmetricCryptoKey) => Promise<Uint8Array>;
   /**
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.decryptToUtf8
@@ -400,5 +400,5 @@ export abstract class CryptoService {
    * @deprecated July 25 2022: Get the key you need from CryptoService (getKeyForUserEncryption or getOrgKey)
    * and then call encryptService.decryptToBytes
    */
-  decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<ArrayBuffer>;
+  decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<Uint8Array>;
 }
