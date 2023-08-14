@@ -1,7 +1,14 @@
 <nav *ngIf="currPage$ | async as currPage">
   <ul aria-label="table pages" class="tw-flex tw-list-none">
     <ng-template #dots>
-      <button type="button" [disabled]="true" bitButton buttonType="secondary" grouping="inner">
+      <button
+        class="tw-min-w-[3em]"
+        type="button"
+        [disabled]="true"
+        bitButton
+        buttonType="secondary"
+        grouping="inner"
+      >
         ...
       </button>
     </ng-template>
@@ -9,6 +16,7 @@
     <ng-template #item let-n="n">
       <li>
         <a
+          class="tw-min-w-[3em]"
           [ngClass]="{ 'tw-z-20': n === currPage }"
           bitButton
           [buttonType]="n === currPage ? 'primary' : 'secondary'"
