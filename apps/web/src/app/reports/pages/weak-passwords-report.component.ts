@@ -5,6 +5,7 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -114,7 +115,7 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
   }
 
   private isUserNameNotEmpty(c: CipherView): boolean {
-    return c.login.username != null && c.login.username.trim() !== "";
+    return !Utils.isNullOrWhitespace(c.login.username);
   }
 
   private getCacheKey(c: CipherView): string {
