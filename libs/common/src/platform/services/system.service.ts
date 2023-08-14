@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { firstValueFrom } from "rxjs";
 
 import { AuthService } from "../../auth/abstractions/auth.service";
@@ -21,6 +22,7 @@ export class SystemService implements SystemServiceAbstraction {
   ) {}
 
   async startProcessReload(authService: AuthService): Promise<void> {
+    console.warn("startProcessReload");
     const accounts = await firstValueFrom(this.stateService.accounts$);
     if (accounts != null) {
       const keys = Object.keys(accounts);
