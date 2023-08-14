@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription, Subject, takeUntil } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -18,14 +18,10 @@ import { CipherReportComponent } from "./cipher-report.component";
   selector: "app-weak-passwords-report",
   templateUrl: "weak-passwords-report.component.html",
 })
-export class WeakPasswordsReportComponent
-  extends CipherReportComponent
-  implements OnInit, OnDestroy
-{
+export class WeakPasswordsReportComponent extends CipherReportComponent implements OnInit {
   passwordStrengthMap = new Map<string, [string, BadgeTypes]>();
   disabled = true;
-  organizations: Organization[];
-  private destroy$ = new Subject<void>();
+  organizations$: Observable<Organization[]>;
 
   private passwordStrengthCache = new Map<string, number>();
   weakPasswordCiphers: CipherView[] = [];
@@ -42,21 +38,8 @@ export class WeakPasswordsReportComponent
   }
 
   async ngOnInit() {
-    this.subscribeToOrganizations();
+    this.organizations$ = this.organizationService.organizations$;
     await super.load();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private subscribeToOrganizations(): Subscription {
-    return this.organizationService.organizations$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((orgs) => {
-        this.organizations = orgs;
-      });
   }
 
   async setCiphers() {

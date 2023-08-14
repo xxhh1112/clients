@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription, Subject, takeUntil } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -17,14 +17,10 @@ import { CipherReportComponent } from "./cipher-report.component";
   selector: "app-exposed-passwords-report",
   templateUrl: "exposed-passwords-report.component.html",
 })
-export class ExposedPasswordsReportComponent
-  extends CipherReportComponent
-  implements OnInit, OnDestroy
-{
+export class ExposedPasswordsReportComponent extends CipherReportComponent implements OnInit {
   exposedPasswordMap = new Map<string, number>();
   disabled = true;
-  private destroy$ = new Subject<void>();
-  organizations: Organization[];
+  organizations$: Observable<Organization[]>;
 
   constructor(
     protected cipherService: CipherService,
@@ -38,21 +34,8 @@ export class ExposedPasswordsReportComponent
   }
 
   async ngOnInit() {
-    this.subscribeToOrganizations();
+    this.organizations$ = this.organizationService.organizations$;
     await super.load();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private subscribeToOrganizations(): Subscription {
-    return this.organizationService.organizations$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((orgs) => {
-        this.organizations = orgs;
-      });
   }
 
   async setCiphers() {
