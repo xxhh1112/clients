@@ -28,7 +28,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mostRecentlyFocusedFieldStyles: CSSStyleDeclaration;
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
-  private mutationObserver: MutationObserver;
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
@@ -442,6 +441,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenIcon
     );
     this.overlayIconElement.style.lineHeight = "0";
+
+    const mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    mutationObserver.observe(this.overlayIconElement, { attributes: true });
   }
 
   private createAutofillOverlayList() {
@@ -464,6 +466,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.borderRadius = "4px";
     this.overlayListElement.style.border = "1px solid rgb(206, 212, 220)";
     this.overlayListElement.style.backgroundColor = "#fff";
+
+    const mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    mutationObserver.observe(this.overlayListElement, { attributes: true });
   }
 
   private createOverlayCustomElement(elementName: string): HTMLElement {
@@ -543,14 +548,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private setupMutationObserver = () => {
-    this.mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
-    this.mutationObserver.observe(document.body, { childList: true });
+    const bodyMutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    bodyMutationObserver.observe(document.body, { childList: true });
 
-    // TODO: CG - Need to consider cases where an attached DOM element outside of the body is attempting to be rendered above our overlay elements. This might require a separate mutation observer instance.
-    // this.mutationObserver.observe(document.documentElement, { childList: true });
+    const documentElementMutationObserver = new MutationObserver(
+      this.handleDocumentElementMutationObserverUpdate
+    );
+    documentElementMutationObserver.observe(document.documentElement, { childList: true });
   };
 
-  private handleMutationObserverUpdate = (mutations: MutationRecord[]) => {
+  private handleMutationObserverUpdate = () => {
     // TODO: CG - This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
     // In general, we need to think about this further and come up with a more robust solution.
     // The code below basically attempts to ensure that our two elements are always the last two elements in the body.
@@ -571,10 +578,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.mutationObserverIterations++;
     this.mutationObserverIterationsResetTimeout = setTimeout(
       () => (this.mutationObserverIterations = 0),
-      3000
+      2000
     );
 
-    if (this.mutationObserverIterations > 10) {
+    if (this.mutationObserverIterations > 200) {
       this.mutationObserverIterations = 0;
       clearTimeout(this.mutationObserverIterationsResetTimeout);
       this.removeAutofillOverlay();
@@ -590,12 +597,35 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     const lastChild = document.body.lastChild;
-    if (lastChild === this.overlayListElement || lastChild === this.overlayIconElement) {
+    if (
+      lastChild === this.overlayListElement ||
+      (lastChild === this.overlayIconElement && !this.isOverlayListVisible)
+    ) {
       return;
     }
 
     this.removeAutofillOverlay();
     this.openAutofillOverlay();
+  };
+
+  private handleDocumentElementMutationObserverUpdate = (mutationRecords: MutationRecord[]) => {
+    // TODO - Think about this decision. This is a heavy handed approach to solve the question of "What if someone attempts to overlay our element using an element within the `<html>` tag?"
+    // There might be better ways to handle this, and given that we are directly modifying the DOM for a third party website, this isn't entirely desirable to do.
+
+    const ignoredElements = new Set([document.body, document.head]);
+    for (const record of mutationRecords) {
+      if (record.type !== "childList" || record.addedNodes.length === 0) {
+        continue;
+      }
+
+      for (const node of record.addedNodes) {
+        if (ignoredElements.has(node as HTMLElement)) {
+          continue;
+        }
+
+        document.body.appendChild(node);
+      }
+    }
   };
 }
 
