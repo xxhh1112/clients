@@ -185,7 +185,7 @@ export class CipherContextMenuHandler {
       cipher == null ||
       cipher.type !== CipherType.Login ||
       (cipher.reprompt !== CipherRepromptType.None &&
-        (await this.userVerificationService.hasMasterPassword()))
+        (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash()))
     ) {
       return;
     }

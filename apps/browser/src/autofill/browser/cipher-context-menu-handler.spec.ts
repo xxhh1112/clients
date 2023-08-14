@@ -118,8 +118,8 @@ describe("CipherContextMenuHandler", () => {
     it("adds ciphers with master password reprompt if the user does not have a master password", async () => {
       authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Unlocked);
 
-      // User does not have a master password (key connector user or TDE user)
-      userVerificationService.hasMasterPassword.mockResolvedValue(false);
+      // User does not have a master password, or has one but hasn't logged in with it (key connector user or TDE user)
+      userVerificationService.hasMasterPasswordAndMasterKeyHash.mockResolvedValue(false);
 
       mainContextMenuHandler.init.mockResolvedValue(true);
 
