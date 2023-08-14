@@ -89,7 +89,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayIconElement.style.opacity = "0";
     this.isOverlayIconVisible = false;
     sendExtensionMessage("bgAutofillOverlayIconClosed");
-    this.removeUserInteractionEventListeners();
+    this.removeOverlayRepositionEventListeners();
   }
 
   removeAutofillOverlayList() {
@@ -283,16 +283,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const elementHeight = this.mostRecentlyFocusedFieldRects.height - elementOffset;
     const elementTopPosition = this.mostRecentlyFocusedFieldRects.top + elementOffset / 2;
     const elementLeftPosition = this.getOverlayIconLeftPosition(elementOffset);
-
-    this.overlayIconElement.style.width = `${elementHeight}px`;
-    this.overlayIconElement.style.height = `${elementHeight}px`;
-    this.overlayIconElement.style.top = `${elementTopPosition}px`;
-    this.overlayIconElement.style.left = `${elementLeftPosition}px`;
+    this.updateElementStyles(this.overlayIconElement, {
+      height: `${elementHeight}px`,
+      width: `${elementHeight}px`,
+      top: `${elementTopPosition}px`,
+      left: `${elementLeftPosition}px`,
+    });
 
     if (!this.isOverlayIconVisible) {
       document.body.appendChild(this.overlayIconElement);
       this.isOverlayIconVisible = true;
-      this.setupUserInteractionEventListeners();
+      this.setOverlayRepositionEventListeners();
     }
 
     if (isOpeningWithoutList) {
@@ -320,16 +321,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   }
 
-  private fadeInOverlayElements() {
-    if (this.isOverlayIconVisible) {
-      setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
-    }
-
-    if (this.isOverlayListVisible) {
-      setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
-    }
-  }
-
   private updateOverlayListPosition() {
     if (!this.overlayListElement) {
       this.createAutofillOverlayList();
@@ -339,15 +330,26 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    this.overlayListElement.style.width = `${this.mostRecentlyFocusedFieldRects.width}px`;
-    this.overlayListElement.style.top = `${
-      this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height
-    }px`;
-    this.overlayListElement.style.left = `${this.mostRecentlyFocusedFieldRects.left}px`;
+    this.updateElementStyles(this.overlayListElement, {
+      width: `${this.mostRecentlyFocusedFieldRects.width}px`,
+      top:
+        this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height + `px`,
+      left: `${this.mostRecentlyFocusedFieldRects.left}px`,
+    });
 
     if (!this.isOverlayListVisible) {
       document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
+    }
+  }
+
+  private fadeInOverlayElements() {
+    if (this.isOverlayIconVisible) {
+      setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
+    }
+
+    if (this.isOverlayListVisible) {
+      setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
     }
   }
 
@@ -458,14 +460,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement = this.createOverlayCustomElement(
       AutofillOverlayCustomElement.BitwardenList
     );
-    this.overlayListElement.style.height = "0";
-    this.overlayListElement.style.lineHeight = "0";
-    this.overlayListElement.style.minWidth = "250px";
-    this.overlayListElement.style.maxHeight = "180px";
-    this.overlayListElement.style.boxShadow = "2px 4px 6px 0px rgba(0, 0, 0, 0.1)";
-    this.overlayListElement.style.borderRadius = "4px";
-    this.overlayListElement.style.border = "1px solid rgb(206, 212, 220)";
-    this.overlayListElement.style.backgroundColor = "#fff";
+
+    this.updateElementStyles(this.overlayListElement, {
+      height: "0",
+      lineHeight: "0",
+      minWidth: "250px",
+      maxHeight: "180px",
+      boxShadow: "2px 4px 6px 0px rgba(0, 0, 0, 0.1)",
+      borderRadius: "4px",
+      border: "1px solid rgb(206, 212, 220)",
+      backgroundColor: "#fff",
+    });
 
     const mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
     mutationObserver.observe(this.overlayListElement, { attributes: true });
@@ -480,11 +485,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private setDefaultOverlayStyles(customElement: HTMLElement) {
-    customElement.style.position = "fixed";
-    customElement.style.display = "block";
-    customElement.style.zIndex = "2147483647";
-    customElement.style.overflow = "hidden";
-    customElement.style.transition = "opacity 125ms ease-out";
+    this.updateElementStyles(customElement, {
+      position: "fixed",
+      display: "block",
+      zIndex: "2147483647",
+      overflow: "hidden",
+      transition: "opacity 125ms ease-out",
+    });
   }
 
   private isCustomElementStylesModified(customElement: HTMLElement): boolean {
@@ -497,29 +504,33 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   }
 
-  private setupUserInteractionEventListeners() {
-    document.body?.addEventListener("scroll", this.handleUserInteractionEvent);
-    window.addEventListener("scroll", this.handleUserInteractionEvent);
-    window.addEventListener("resize", this.handleUserInteractionEvent);
+  private updateElementStyles(customElement: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
+    Object.assign(customElement.style, styles);
   }
 
-  private removeUserInteractionEventListeners() {
-    document.body?.removeEventListener("scroll", this.handleUserInteractionEvent);
-    window.removeEventListener("scroll", this.handleUserInteractionEvent);
-    window.removeEventListener("resize", this.handleUserInteractionEvent);
+  private setOverlayRepositionEventListeners() {
+    document.body?.addEventListener("scroll", this.handleOverlayRepositionEvent);
+    window.addEventListener("scroll", this.handleOverlayRepositionEvent);
+    window.addEventListener("resize", this.handleOverlayRepositionEvent);
   }
 
-  private handleUserInteractionEvent = () => {
+  private removeOverlayRepositionEventListeners() {
+    document.body?.removeEventListener("scroll", this.handleOverlayRepositionEvent);
+    window.removeEventListener("scroll", this.handleOverlayRepositionEvent);
+    window.removeEventListener("resize", this.handleOverlayRepositionEvent);
+  }
+
+  private handleOverlayRepositionEvent = () => {
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
       return;
     }
 
     this.toggleOverlayHidden(true);
     this.clearUserInteractionEventTimeout();
-    this.userInteractionEventTimeout = setTimeout(this.handleUserInteractionEventUpdates, 500);
+    this.userInteractionEventTimeout = setTimeout(this.triggerOverlayRepositionUpdates, 500);
   };
 
-  private handleUserInteractionEventUpdates = async () => {
+  private triggerOverlayRepositionUpdates = async () => {
     if (!this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.toggleOverlayHidden(false);
       this.removeAutofillOverlay();
