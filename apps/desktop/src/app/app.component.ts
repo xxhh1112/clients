@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   Component,
   NgZone,
@@ -169,6 +170,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ///
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(async () => {
+        console.log("app.comp: broadcasterService.subscribe - message: ", message);
         switch (message.command) {
           case "loggedIn":
           case "unlocked":
@@ -182,6 +184,9 @@ export class AppComponent implements OnInit, OnDestroy {
             this.notificationsService.updateConnection();
             this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
+
+            console.warn("app.comp: loggedOut - startProcessReload");
+            // THIS WAS THE ONE THAT WAS RUNNING
             await this.systemService.startProcessReload(this.authService);
             break;
           case "authBlocked":
@@ -217,15 +222,20 @@ export class AppComponent implements OnInit, OnDestroy {
             this.notificationsService.updateConnection();
             await this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
+
+            console.warn("app.comp: locked - startProcessReload");
+
             await this.systemService.startProcessReload(this.authService);
             break;
           case "startProcessReload":
+            console.warn("app.comp: startProcessReload");
             this.systemService.startProcessReload(this.authService);
             break;
           case "cancelProcessReload":
             this.systemService.cancelProcessReload();
             break;
           case "reloadProcess":
+            console.log("app.comp: reloadProcess");
             ipcRenderer.send("reload-process");
             break;
           case "syncStarted":
@@ -529,22 +539,96 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private async logOut(expired: boolean, userId?: string) {
-    const userBeingLoggedOut = await this.stateService.getUserId({ userId: userId });
-    await Promise.all([
-      this.eventUploadService.uploadEvents(userBeingLoggedOut),
-      this.syncService.setLastSync(new Date(0), userBeingLoggedOut),
-      this.cryptoService.clearKeys(userBeingLoggedOut),
-      this.settingsService.clear(userBeingLoggedOut),
-      this.cipherService.clear(userBeingLoggedOut),
-      this.folderService.clear(userBeingLoggedOut),
-      this.collectionService.clear(userBeingLoggedOut),
-      this.passwordGenerationService.clear(userBeingLoggedOut),
-      this.vaultTimeoutSettingsService.clear(userBeingLoggedOut),
-      this.policyService.clear(userBeingLoggedOut),
-      this.keyConnectorService.clear(),
-    ]);
+    console.warn("logOut");
+    const stack = new Error().stack;
+    console.info(stack);
 
-    if (userBeingLoggedOut === this.activeUserId) {
+    const userBeingLoggedOut = await this.stateService.getUserId({ userId: userId });
+
+    console.log("userBeingLoggedOut: ", userBeingLoggedOut);
+    console.log("this.activeUserId: ", this.activeUserId);
+
+    await this.eventUploadService.uploadEvents(userBeingLoggedOut);
+    console.log("EventUploadService: Events uploaded for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.syncService.setLastSync(new Date(0), userBeingLoggedOut);
+    console.log("SyncService: Last sync set for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.cryptoService.clearKeys(userBeingLoggedOut);
+    console.log("CryptoService: Keys cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.settingsService.clear(userBeingLoggedOut);
+    console.log("SettingsService: Settings cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.cipherService.clear(userBeingLoggedOut);
+    console.log("CipherService: Cipher cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.folderService.clear(userBeingLoggedOut);
+    console.log("FolderService: Folder cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.collectionService.clear(userBeingLoggedOut);
+    console.log("CollectionService: Collection cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.passwordGenerationService.clear(userBeingLoggedOut);
+    console.log(
+      "PasswordGenerationService: Password generation settings cleared for userBeingLoggedOut."
+    );
+
+    await this.stateService.logAccount();
+
+    await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
+    console.log("VaultTimeoutSettingsService: Timeout settings cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.policyService.clear(userBeingLoggedOut);
+    console.log("PolicyService: Policy cleared for userBeingLoggedOut.");
+
+    await this.stateService.logAccount();
+
+    await this.keyConnectorService.clear();
+    console.log("KeyConnectorService: Key connector cleared.");
+
+    await this.stateService.logAccount();
+
+    const preLogoutActiveUserId = this.activeUserId;
+
+    console.log("preLogoutActiveUserId: ", preLogoutActiveUserId);
+    await this.stateService.clean({ userId: userBeingLoggedOut });
+
+    console.log("state service clean ran");
+
+    if (this.activeUserId == null) {
+      console.log("go to login");
+      this.router.navigate(["login"]);
+    } else if (preLogoutActiveUserId !== this.activeUserId) {
+      console.log("switch account");
+      this.messagingService.send("switchAccount");
+    }
+
+    await this.updateAppMenu();
+    console.log("update app menu");
+
+    console.log("userBeingLoggedOut: ", userBeingLoggedOut);
+    console.log("this.activeUserId: ", this.activeUserId);
+    console.log("preLogoutActiveUserId: ", preLogoutActiveUserId);
+
+    if (userBeingLoggedOut === preLogoutActiveUserId) {
+      console.log("userBeingLoggedOut === this.activeUserId");
       this.searchService.clearIndex();
       this.authService.logOut(async () => {
         if (expired) {
@@ -556,17 +640,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
     }
-
-    const preLogoutActiveUserId = this.activeUserId;
-    await this.stateService.clean({ userId: userBeingLoggedOut });
-
-    if (this.activeUserId == null) {
-      this.router.navigate(["login"]);
-    } else if (preLogoutActiveUserId !== this.activeUserId) {
-      this.messagingService.send("switchAccount");
-    }
-
-    await this.updateAppMenu();
   }
 
   private async recordActivity() {
