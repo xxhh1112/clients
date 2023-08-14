@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BehaviorSubject, concatMap } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
@@ -224,6 +225,9 @@ export class StateService<
     await this.removeAccountFromDisk(options?.userId);
     this.removeAccountFromMemory(options?.userId);
     await this.pushAccounts();
+    console.log(
+      "StateSvc.clean end ---------------------------------------------------------------------"
+    );
   }
 
   async getAccessToken(options?: StorageOptions): Promise<string> {
@@ -2016,6 +2020,24 @@ export class StateService<
     );
   }
 
+  async logAccount(options?: StorageOptions): Promise<void> {
+    console.group("StateSvc.logAccount");
+
+    const inMemoryAccount = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+
+    console.log("inMemoryAccount: ", inMemoryAccount);
+
+    const onDiskAccount = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+
+    console.log("onDiskAccount: ", onDiskAccount);
+
+    console.groupEnd();
+  }
+
   async getEverBeenUnlocked(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
@@ -2949,6 +2971,8 @@ export class StateService<
   }
 
   protected async saveAccountToDisk(account: TAccount, options: StorageOptions): Promise<void> {
+    // if we can't lock the account, don't save it to disk
+
     const storageLocation = options.useSecureStorage
       ? this.secureStorageService
       : this.storageService;
@@ -3065,6 +3089,9 @@ export class StateService<
   //
 
   protected async pushAccounts(): Promise<void> {
+    // const stack = new Error().stack;
+    // console.info("pushAccounts stack: ", stack);
+
     await this.pruneInMemoryAccounts();
     await this.state().then((state) => {
       if (state.accounts == null || Object.keys(state.accounts).length < 1) {
@@ -3172,6 +3199,8 @@ export class StateService<
   }
 
   protected async removeAccountFromMemory(userId: string = null): Promise<void> {
+    console.warn("removeAccountFromMemory; userId: ", userId);
+
     await this.updateState(async (state) => {
       userId = userId ?? state.activeUserId;
       delete state.accounts[userId];
@@ -3186,6 +3215,7 @@ export class StateService<
     // We preserve settings for logged out accounts, but we don't want to consider them when thinking about active account state
     for (const userId in (await this.state())?.accounts) {
       if (!(await this.getIsAuthenticated({ userId: userId }))) {
+        console.log("pruning in memory accounts - removeAccountFromMemory");
         await this.removeAccountFromMemory(userId);
       }
     }
@@ -3276,6 +3306,12 @@ export class StateService<
   private async getTimeoutBasedStorageOptions(options?: StorageOptions): Promise<StorageOptions> {
     const timeoutAction = await this.getVaultTimeoutAction({ userId: options?.userId });
     const timeout = await this.getVaultTimeout({ userId: options?.userId });
+
+    // Solution idea:
+    // Update this to avoid persisting authN status to disk when user cannot lock vault
+    // Must migrate existing userVerificationService and vaultTimeoutSettingsService logic down into
+    // state service to have simple canAccountLock method which can be used here.
+
     const defaultOptions =
       timeoutAction === VaultTimeoutAction.LogOut && timeout != null
         ? await this.defaultInMemoryOptions()

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Observable } from "rxjs";
 
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
@@ -45,6 +46,7 @@ export abstract class StateService<T extends Account = Account> {
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
+  logAccount: (options?: StorageOptions) => Promise<void>;
   clean: (options?: StorageOptions) => Promise<void>;
   init: () => Promise<void>;
 
