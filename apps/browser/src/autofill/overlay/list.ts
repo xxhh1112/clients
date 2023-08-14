@@ -103,46 +103,84 @@ class AutofillOverlayList extends HTMLElement {
     }
 
     this.resetOverlayListContainer();
-    message.ciphers.forEach((cipher: any) => {
-      const cipherElement = document.createElement("div");
-      cipherElement.className = "cipher";
 
-      const cipherDetailsContainer = document.createElement("div");
-      cipherDetailsContainer.className = "cipher-details-container";
+    const ciphersList = document.createElement("ul");
+    ciphersList.className = "ciphers-list";
 
-      const cipherNameElement = document.createElement("div");
-      cipherNameElement.className = "cipher-name";
-      cipherNameElement.textContent = cipher.name;
-      cipherNameElement.setAttribute("title", cipher.name);
+    message.ciphers.forEach((cipher: any) =>
+      ciphersList.appendChild(this.buildCipherListItemElement(cipher))
+    );
 
-      const cipherUserLoginElement = document.createElement("div");
-      cipherUserLoginElement.className = "cipher-user-login";
-      cipherUserLoginElement.textContent = cipher.login.username;
-      cipherUserLoginElement.setAttribute("title", cipher.login.username);
+    this.overlayListContainer.appendChild(ciphersList);
+  }
 
-      cipherDetailsContainer.appendChild(cipherNameElement);
-      cipherDetailsContainer.appendChild(cipherUserLoginElement);
+  private buildCipherListItemElement(cipher: any) {
+    const cipherDetailsElement = this.buildCipherDetailsElement(cipher);
+    const cipherIcon = this.buildCipherIconElement(cipher);
+    const handleCipherClickEvent = () =>
+      this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
 
-      // TODO: CG - This is ugly, need to make it work better/cleaner
-      const cipherIcon = document.createElement("div");
-      if (cipher.icon?.image) {
-        cipherIcon.style.backgroundImage = "url(" + cipher.icon.image + ")";
-      } else if (cipher.icon?.icon) {
-        cipherIcon.className = cipher.icon.icon;
-      } else {
-        cipherIcon.append(this.globeIconElement);
+    const cipherListItemElement = document.createElement("li");
+    cipherListItemElement.className = "cipher";
+    cipherListItemElement.addEventListener("click", handleCipherClickEvent);
+    cipherListItemElement.appendChild(cipherIcon);
+    cipherListItemElement.appendChild(cipherDetailsElement);
+
+    return cipherListItemElement;
+  }
+
+  private buildCipherIconElement(cipher: any) {
+    const cipherIcon = document.createElement("div");
+    cipherIcon.classList.add("cipher-icon");
+    cipherIcon.setAttribute("aria-hidden", "true");
+
+    if (cipher.icon?.image) {
+      try {
+        const url = new URL(cipher.icon.image);
+        cipherIcon.style.backgroundImage = `url(${url.href})`;
+        return cipherIcon;
+      } catch {
+        // Silently default to the globe icon element if the image URL is invalid
       }
-      cipherIcon.classList.add("cipher-icon");
+    }
 
-      cipherElement.appendChild(cipherIcon);
-      cipherElement.appendChild(cipherDetailsContainer);
+    if (cipher.icon?.icon) {
+      cipherIcon.className = `cipher-icon ${cipher.icon.icon}`;
+      return cipherIcon;
+    }
 
-      cipherElement.addEventListener("click", () =>
-        this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id })
-      );
+    cipherIcon.append(this.globeIconElement);
+    return cipherIcon;
+  }
 
-      this.overlayListContainer.appendChild(cipherElement);
-    });
+  private buildCipherDetailsElement(cipher: any) {
+    const cipherNameElement = this.buildCipherNameElement(cipher);
+    const cipherUserLoginElement = this.buildCipherUserLoginElement(cipher);
+
+    const cipherDetailsElement = document.createElement("div");
+    cipherDetailsElement.className = "cipher-details";
+    cipherDetailsElement.appendChild(cipherNameElement);
+    cipherDetailsElement.appendChild(cipherUserLoginElement);
+
+    return cipherDetailsElement;
+  }
+
+  private buildCipherNameElement(cipher: any) {
+    const cipherNameElement = document.createElement("div");
+    cipherNameElement.className = "cipher-name";
+    cipherNameElement.textContent = cipher.name;
+    cipherNameElement.setAttribute("title", cipher.name);
+
+    return cipherNameElement;
+  }
+
+  private buildCipherUserLoginElement(cipher: any) {
+    const cipherUserLoginElement = document.createElement("div");
+    cipherUserLoginElement.className = "cipher-user-login";
+    cipherUserLoginElement.textContent = cipher.login.username;
+    cipherUserLoginElement.setAttribute("title", cipher.login.username);
+
+    return cipherUserLoginElement;
   }
 
   private buildNoResultsOverlayList() {

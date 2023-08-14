@@ -83,6 +83,11 @@ body {
   }
 }
 
+.ciphers-list {
+  padding: 0;
+  margin: 0;
+}
+
 .cipher {
   padding: 0.8rem;
   display: flex;
@@ -91,6 +96,7 @@ body {
   justify-content: flex-start;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;
+  list-style: none;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-light-gray;
@@ -121,7 +127,7 @@ body {
     }
   }
 
-  .cipher-details-container {
+  .cipher-details {
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;

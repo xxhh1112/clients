@@ -1,8 +1,6 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 
-import { EventHandler } from "react";
-
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import AutofillField from "../models/autofill-field";
@@ -34,7 +32,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
-  private eventHandlersMemo: { [key: string]: EventHandler<any> } = {};
+  private eventHandlersMemo: { [key: string]: EventListener } = {};
 
   constructor() {
     this.initMutationObserver();
@@ -132,8 +130,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgAddNewVaultItem", { login });
   }
 
-  private useEventHandlersMemo = (callback: EventHandler<any>, memoIndex: string) => {
-    return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = callback);
+  private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
+    return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = eventHandler);
   };
 
   private handleFormFieldBlurEvent = () => {
@@ -283,12 +281,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
-    const elementWidth = this.mostRecentlyFocusedFieldRects.height - elementOffset;
     const elementHeight = this.mostRecentlyFocusedFieldRects.height - elementOffset;
     const elementTopPosition = this.mostRecentlyFocusedFieldRects.top + elementOffset / 2;
     const elementLeftPosition = this.getOverlayIconLeftPosition(elementOffset);
 
-    this.overlayIconElement.style.width = `${elementWidth}px`;
+    this.overlayIconElement.style.width = `${elementHeight}px`;
     this.overlayIconElement.style.height = `${elementHeight}px`;
     this.overlayIconElement.style.top = `${elementTopPosition}px`;
     this.overlayIconElement.style.left = `${elementLeftPosition}px`;
@@ -302,11 +299,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (isOpeningWithoutList) {
       this.fadeInOverlayElements();
     }
-
-    // const elementsFromPoint = document.elementsFromPoint(
-    //   elementLeftPosition + elementWidth / 2,
-    //   elementTopPosition + elementHeight / 2
-    // );
   }
 
   private getOverlayIconLeftPosition(elementOffset: number) {

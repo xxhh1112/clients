@@ -6,8 +6,7 @@ class OverlayIframeService {
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
     this.iframe = document.createElement("iframe");
     this.extensionOriginsSet = new Set([
-      // Remove the trailing slash and normalize the extension url to lowercase
-      chrome.runtime.getURL("").slice(0, -1).toLowerCase(),
+      chrome.runtime.getURL("").slice(0, -1).toLowerCase(), // Remove the trailing slash and normalize the extension url to lowercase
       "null",
     ]);
   }
