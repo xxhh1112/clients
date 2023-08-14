@@ -57,3 +57,19 @@ export const Default: Story = {
     page: 1,
   },
 };
+
+export const Single: Story = {
+  ...Default,
+  args: {
+    totalPages: 1,
+    page: 1,
+  },
+};
+
+export const WithoutPrevNext: Story = {
+  ...Default,
+  args: {
+    totalPages: 7,
+    page: 1,
+  },
+};
