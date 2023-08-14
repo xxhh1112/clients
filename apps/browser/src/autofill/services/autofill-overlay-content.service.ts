@@ -5,13 +5,13 @@ import { EventHandler } from "react";
 
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { BrowserApi } from "../../platform/browser/browser-api";
 import AutofillField from "../models/autofill-field";
 import {
   AutofillOverlayIconIframe,
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
 import { AutofillOverlayCustomElement } from "../overlay/utils/autofill-overlay.enum";
+import { sendExtensionMessage } from "../overlay/utils/utils";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
@@ -91,7 +91,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayIconElement.remove();
     this.overlayIconElement.style.opacity = "0";
     this.isOverlayIconVisible = false;
-    BrowserApi.sendMessage("bgAutofillOverlayIconClosed");
+    sendExtensionMessage("bgAutofillOverlayIconClosed");
     this.removeUserInteractionEventListeners();
   }
 
@@ -104,7 +104,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayListElement.style.height = "0";
     this.overlayListElement.style.opacity = "0";
     this.isOverlayListVisible = false;
-    BrowserApi.sendMessage("bgAutofillOverlayListClosed");
+    sendExtensionMessage("bgAutofillOverlayListClosed");
   }
 
   updateAutofillOverlayListHeight(message: any) {
@@ -129,7 +129,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       hostname: document.location.hostname,
     };
 
-    BrowserApi.sendMessage("bgAddNewVaultItem", { login });
+    sendExtensionMessage("bgAddNewVaultItem", { login });
   }
 
   private useEventHandlersMemo = (callback: EventHandler<any>, memoIndex: string) => {
@@ -138,7 +138,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private handleFormFieldBlurEvent = () => {
     this.isFieldCurrentlyFocused = false;
-    BrowserApi.sendMessage("bgCheckOverlayFocused");
+    sendExtensionMessage("bgCheckOverlayFocused");
   };
 
   private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
@@ -192,15 +192,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   };
 
-  private triggerFormFieldClickedAction = async (
-    formFieldElement: ElementWithOpId<FormFieldElement>
-  ) => {
+  private async triggerFormFieldClickedAction(formFieldElement: ElementWithOpId<FormFieldElement>) {
     if (this.isOverlayIconVisible || this.isOverlayListVisible) {
       return;
     }
 
     await this.triggerFormFieldFocusedAction(formFieldElement);
-  };
+  }
 
   private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
     return this.useEventHandlersMemo(
@@ -209,9 +207,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
   };
 
-  private triggerFormFieldFocusedAction = async (
-    formFieldElement: ElementWithOpId<FormFieldElement>
-  ) => {
+  private async triggerFormFieldFocusedAction(formFieldElement: ElementWithOpId<FormFieldElement>) {
     if (this.isCurrentlyFilling) {
       return;
     }
@@ -222,18 +218,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     await this.updateMostRecentlyFocusedField(formFieldElement);
 
     if (
-      this.authStatus === AuthenticationStatus.Unlocked &&
-      (formFieldElement as HTMLInputElement).value
+      this.authStatus !== AuthenticationStatus.Unlocked ||
+      !(formFieldElement as HTMLInputElement).value
     ) {
-      if (initiallyFocusedField !== this.mostRecentlyFocusedField) {
-        this.removeAutofillOverlayList();
-      }
-      this.updateOverlayIconPosition(true);
+      sendExtensionMessage("bgOpenAutofillOverlayList");
       return;
     }
 
-    BrowserApi.sendMessage("bgOpenAutofillOverlayList");
-  };
+    if (initiallyFocusedField !== this.mostRecentlyFocusedField) {
+      this.removeAutofillOverlayList();
+    }
+
+    this.updateOverlayIconPosition(true);
+  }
 
   private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {
     const searchedString = this.getAutofillFieldDataKeywords(autofillFieldData);

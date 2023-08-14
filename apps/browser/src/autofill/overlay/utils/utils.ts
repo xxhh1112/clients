@@ -4,4 +4,8 @@ function buildSvgDomElement(svgString: string): HTMLElement {
   return svgDom.documentElement;
 }
 
-export { buildSvgDomElement };
+function sendExtensionMessage(command: string, options: any = {}) {
+  chrome.runtime.sendMessage(Object.assign({ command }, options));
+}
+
+export { buildSvgDomElement, sendExtensionMessage };
