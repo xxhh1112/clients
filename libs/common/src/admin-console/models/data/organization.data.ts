@@ -49,6 +49,7 @@ export class OrganizationData {
   familySponsorshipValidUntil?: Date;
   familySponsorshipToDelete?: boolean;
   accessSecretsManager: boolean;
+  limitCollectionCdOwnerAdmin: boolean;
 
   constructor(
     response: ProfileOrganizationResponse,
@@ -100,6 +101,7 @@ export class OrganizationData {
     this.familySponsorshipValidUntil = response.familySponsorshipValidUntil;
     this.familySponsorshipToDelete = response.familySponsorshipToDelete;
     this.accessSecretsManager = response.accessSecretsManager;
+    this.limitCollectionCdOwnerAdmin = response.limitCollectionCdOwnerAdmin;
 
     this.isMember = options.isMember;
     this.isProviderUser = options.isProviderUser;

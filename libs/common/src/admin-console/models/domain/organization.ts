@@ -64,6 +64,10 @@ export class Organization {
   familySponsorshipValidUntil?: Date;
   familySponsorshipToDelete?: boolean;
   accessSecretsManager: boolean;
+  /**
+   * Refers to the ability for an organization to limit collection creation and deletion to owners and admins only
+   */
+  limitCollectionCdOwnerAdmin: boolean;
 
   constructor(obj?: OrganizationData) {
     if (obj == null) {
@@ -115,6 +119,7 @@ export class Organization {
     this.familySponsorshipValidUntil = obj.familySponsorshipValidUntil;
     this.familySponsorshipToDelete = obj.familySponsorshipToDelete;
     this.accessSecretsManager = obj.accessSecretsManager;
+    this.limitCollectionCdOwnerAdmin = obj.limitCollectionCdOwnerAdmin;
   }
 
   get canAccess() {

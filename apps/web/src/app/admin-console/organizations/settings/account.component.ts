@@ -1,18 +1,18 @@
 import { Component, ViewChild, ViewContainerRef } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { combineLatest, lastValueFrom, Subject, switchMap, takeUntil, from } from "rxjs";
+import { combineLatest, lastValueFrom, Subject, switchMap, takeUntil, from, of } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { OrganizationCollectionManagementUpdateRequest } from "@bitwarden/common/admin-console/models/request/organization-collection-management-update.request";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "@bitwarden/common/admin-console/models/request/organization-update.request";
 import { OrganizationResponse } from "@bitwarden/common/admin-console/models/response/organization.response";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
@@ -38,7 +38,6 @@ export class AccountComponent {
   loading = true;
   canUseApi = false;
   org: OrganizationResponse;
-  formPromise: Promise<OrganizationResponse>;
   taxFormPromise: Promise<unknown>;
 
   // FormGroup validators taken from server Organization domain object
@@ -60,6 +59,10 @@ export class AccountComponent {
     ),
   });
 
+  protected collectionManagementFormGroup = this.formBuilder.group({
+    limitCollectionCdOwnerAdmin: [false],
+  });
+
   protected organizationId: string;
   protected publicKeyBuffer: Uint8Array;
 
@@ -71,7 +74,6 @@ export class AccountComponent {
     private route: ActivatedRoute,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
-    private logService: LogService,
     private router: Router,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
@@ -82,16 +84,16 @@ export class AccountComponent {
   async ngOnInit() {
     this.selfHosted = this.platformUtilsService.isSelfHost();
 
-    this.route.parent.parent.params
+    this.route.params
       .pipe(
-        switchMap((params) => {
+        switchMap((params) => this.organizationService.get$(params.organizationId)),
+        switchMap((organization) => {
           return combineLatest([
-            // Organization domain
-            this.organizationService.get$(params.organizationId),
+            of(organization),
             // OrganizationResponse for form population
-            from(this.organizationApiService.get(params.organizationId)),
+            from(this.organizationApiService.get(organization.id)),
             // Organization Public Key
-            from(this.organizationApiService.getKeys(params.organizationId)),
+            from(this.organizationApiService.getKeys(organization.id)),
           ]);
         }),
         takeUntil(this.destroy$)
@@ -101,6 +103,16 @@ export class AccountComponent {
         this.organizationId = organization.id;
         this.canEditSubscription = organization.canEditSubscription;
         this.canUseApi = organization.useApi;
+
+        // Update disabled states - reactive forms prefers not using disabled attribute
+        if (!this.selfHosted) {
+          this.formGroup.get("orgName").enable();
+        }
+
+        if (!this.selfHosted || this.canEditSubscription) {
+          this.formGroup.get("billingEmail").enable();
+          this.formGroup.get("businessName").enable();
+        }
 
         // Org Response
         this.org = orgResponse;
@@ -114,16 +126,9 @@ export class AccountComponent {
           billingEmail: this.org.billingEmail,
           businessName: this.org.businessName,
         });
-
-        // Update disabled states - reactive forms prefers not using disabled attribute
-        if (!this.selfHosted) {
-          this.formGroup.get("orgName").enable();
-        }
-
-        if (!this.selfHosted || this.canEditSubscription) {
-          this.formGroup.get("billingEmail").enable();
-          this.formGroup.get("businessName").enable();
-        }
+        this.collectionManagementFormGroup.patchValue({
+          limitCollectionCdOwnerAdmin: this.org.limitCollectionCdOwnerAdmin,
+        });
 
         this.loading = false;
       });
@@ -153,9 +158,23 @@ export class AccountComponent {
       request.keys = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
     }
 
-    this.formPromise = this.organizationApiService.save(this.organizationId, request);
-    await this.formPromise;
+    await this.organizationApiService.save(this.organizationId, request);
+
     this.platformUtilsService.showToast("success", null, this.i18nService.t("organizationUpdated"));
+  };
+
+  submitCollectionManagement = async () => {
+    const request = new OrganizationCollectionManagementUpdateRequest();
+    request.limitCreateDeleteOwnerAdmin =
+      this.collectionManagementFormGroup.value.limitCollectionCdOwnerAdmin;
+
+    await this.organizationApiService.updateCollectionManagement(this.organizationId, request);
+
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("collectionManagementUpdated")
+    );
   };
 
   async deleteOrganization() {

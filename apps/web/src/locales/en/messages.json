@@ -7073,6 +7073,18 @@
       }
     }
   },
+  "collectionManagement": {
+    "message": "Collection management"
+  },
+  "collectionManagementDesc": {
+    "message": "Manage the collection behavior for the organization"
+  },
+  "limitCollectionCdOwnerAdminDesc": {
+    "message": "Limit collection creation and deletion to owners and admins"
+  },
+  "collectionManagementUpdated": {
+    "message": "Collection management behavior saved"
+  },
   "passwordManagerPlanPrice": {
     "message": "Password Manager plan price"
   },
