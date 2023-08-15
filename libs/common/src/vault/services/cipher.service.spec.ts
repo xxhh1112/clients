@@ -97,7 +97,7 @@ describe("Cipher Service", () => {
   const i18nService = mock<I18nService>();
   const searchService = mock<SearchService>();
   const encryptService = mock<EncryptService>();
-const configApiServic = mock<ConfigApiServiceAbstraction>;
+  const configApiService = mock<ConfigApiServiceAbstraction>();
 
   let cipherService: CipherService;
   let cipherObj: Cipher;
