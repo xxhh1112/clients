@@ -4,12 +4,11 @@ import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { combineLatest, Subject, takeUntil } from "rxjs";
 
 import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";
@@ -17,7 +16,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { UserVerificationModule } from "../../../../shared/components/user-verification";
+import { UserVerificationModule } from "../../../../auth/shared/components/user-verification";
 import { SharedModule } from "../../../../shared/shared.module";
 
 class CountBasedLocalizationKey {
@@ -36,10 +35,13 @@ class CountBasedLocalizationKey {
 
 class OrganizationContentSummaryItem {
   count: number;
+
   get localizationKey(): string {
     return this.localizationKeyOptions.getKey(this.count);
   }
+
   private localizationKeyOptions: CountBasedLocalizationKey;
+
   constructor(count: number, localizationKeyOptions: CountBasedLocalizationKey) {
     this.count = count;
     this.localizationKeyOptions = localizationKeyOptions;
@@ -88,7 +90,6 @@ export class DeleteOrganizationDialogComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private userVerificationService: UserVerificationService,
-    private logService: LogService,
     private cipherService: CipherService,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
@@ -116,20 +117,16 @@ export class DeleteOrganizationDialogComponent implements OnInit, OnDestroy {
   }
 
   protected submit = async () => {
-    try {
-      this.formPromise = this.userVerificationService
-        .buildRequest(this.formGroup.value.secret)
-        .then((request) => this.organizationApiService.delete(this.organization.id, request));
-      await this.formPromise;
-      this.platformUtilsService.showToast(
-        "success",
-        this.i18nService.t("organizationDeleted"),
-        this.i18nService.t("organizationDeletedDesc")
-      );
-      this.dialogRef.close(DeleteOrganizationDialogResult.Deleted);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    await this.userVerificationService
+      .buildRequest(this.formGroup.value.secret)
+      .then((request) => this.organizationApiService.delete(this.organization.id, request));
+
+    this.platformUtilsService.showToast(
+      "success",
+      this.i18nService.t("organizationDeleted"),
+      this.i18nService.t("organizationDeletedDesc")
+    );
+    this.dialogRef.close(DeleteOrganizationDialogResult.Deleted);
   };
 
   private buildOrganizationContentSummary(ciphers: CipherView[]): OrganizationContentSummary {

@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ 網頁版密碼庫",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "這是什麼類型的項目？"
   },
@@ -618,8 +608,8 @@
   "loginWithDevice": {
     "message": "使用裝置登入"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "裝置登入必須在 Bitwarden 行動應用程式的設定中啟用。需要其他選項嗎？"
+  "loginWithDeviceEnabledNote": {
+    "message": "必須先在 Bitwarden 應用程式設定中開啟後，才可以使用裝置登入。要改用其他選項嗎？"
   },
   "loginWithMasterPassword": {
     "message": "使用主密碼登入"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "發生了未預期的錯誤。"
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "電子郵件地址"
   },
   "yourVaultIsLocked": {
     "message": "密碼庫已鎖定。請驗證主密碼以繼續。"
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "解鎖"
@@ -958,14 +954,23 @@
   "copyVerificationCode": {
     "message": "複製驗證碼"
   },
+  "copyUuid": {
+    "message": "Copy UUID"
+  },
   "warning": {
     "message": "警告"
   },
   "confirmVaultExport": {
     "message": "確認匯出密碼庫"
   },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
+  },
   "exportWarningDesc": {
     "message": "此次匯出的密碼庫檔案為未加密格式。您不應將它存放或經由不安全的方式（例如電子郵件）傳送。用完後請立即將它刪除。"
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
     "message": "將使用您帳戶的加密金鑰來加密匯出的資料，若您更新了帳戶的加密金鑰，請重新匯出，否則將無法解密匯出的檔案。"
@@ -978,6 +983,9 @@
   },
   "exportVault": {
     "message": "匯出密碼庫"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "檔案格式"
@@ -1284,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "解密匯出的檔案時發生錯誤，您的加密金鑰與匯出資料時使用的金鑰不同。"
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "選擇匯入檔案的格式"
@@ -2589,13 +2622,13 @@
     "message": "管理員"
   },
   "adminDesc": {
-    "message": "管理員可以存取和管理組織内的所有項目、集合和使用者。"
+    "message": "管理組織成員存取權限、所有集合、成員、報表與安全性設定"
   },
   "user": {
     "message": "使用者"
   },
   "userDesc": {
-    "message": "具有組織内已指派集合的存取權限的一般使用者。"
+    "message": "存取受指派的集合，並新增項目到集合中"
   },
   "manager": {
     "message": "管理員"
@@ -2636,6 +2669,12 @@
   "webVault": {
     "message": "網頁版密碼庫"
   },
+  "bitWebVault": {
+    "message": "Bitwarden Web vault"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
   "loggedIn": {
     "message": "已登入"
   },
@@ -2657,6 +2696,12 @@
   "failedLogin2fa": {
     "message": "嘗試登入失敗，兩步驟登入錯誤。"
   },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
   "exportedVault": {
     "message": "已匯出密碼庫"
   },
@@ -2664,7 +2709,7 @@
     "message": "已匯出組織密碼庫。"
   },
   "editedOrgSettings": {
-    "message": "組織設定已儲存"
+    "message": "組織設定已儲存。"
   },
   "createdItemId": {
     "message": "已建立項目 $ID$。",
@@ -3308,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "為您的訂閲設定席位限制。達到此限制後，您將無法邀請新的成員。"
   },
+  "limitSmSubscriptionDesc": {
+    "message": "為您的 Secrets Manger 訂閲設定席位限制。達到此限制後，就無法邀請新成員。"
+  },
   "maxSeatLimit": {
     "message": "席位限制（選用）",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3576,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "此項目包含需要修正的舊檔案附件。"
   },
-  "attachmentFixDesc": {
-    "message": "這是一個需要修正的舊檔案附件。點選此處以深入了解。"
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "修正",
@@ -4360,8 +4408,8 @@
   "manageUsers": {
     "message": "管理使用者"
   },
-  "manageResetPassword": {
-    "message": "管理密碼重設"
+  "manageAccountRecovery": {
+    "message": "Manage account recovery"
   },
   "disableRequiredError": {
     "message": "您必須先手動停用 $POLICYNAME$ 原則，然後才能停用此原則。",
@@ -4579,20 +4627,17 @@
   "accountRecoveryPolicy": {
     "message": "Account recovery administration"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "accountRecoveryPolicyDesc": {
+    "message": "依照加密方式，當忘記主密碼或遺失受信任的裝置時，可救回帳號。"
   },
-  "resetPasswordPolicyWarning": {
-    "message": "組織成員需要先自行註冊或被自動註冊後，管理者才能重設他們的主密碼。"
+  "accountRecoveryPolicyWarning": {
+    "message": "現有主密碼的帳號，需要使用者自行加入後，管理員才可發起帳號救援。將為新使用者開啟自動加入。"
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "必須先開啟「單一組織」企業原則，才能開啟此原則。"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自動註冊"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "所有接受邀請的成員，將會被自動註冊密碼重設，並且不允許撤銷。"
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "已經在組織中的成員將不會被註冊密碼重設。他們需要先自行註冊後管理者才能重設他們的主密碼。"
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "為新成員啟用自動註冊"
@@ -4693,8 +4738,8 @@
   "error": {
     "message": "錯誤"
   },
-  "resetPasswordManageUsers": {
-    "message": "必須啟用管理密碼重設權限後才能啟用管理使用者權限"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "提供者設定"
@@ -5209,7 +5254,7 @@
     "message": "使用",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "要求單一登入驗證原則",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -5418,8 +5463,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "只會匯出與 $ORGANIZATION$ 關聯的組織密碼庫。個人密碼庫和其他組織的項目不包含在內。",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6179,10 +6224,6 @@
     "message": "存取權杖已建立且已複製到剪貼簿",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Beta 版中的權限管理不可用。",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "撤銷存取權杖",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6609,14 +6650,17 @@
   "changeKdfLoggedOutWarning": {
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
+  "secretsManager": {
+    "message": "Secrets Manager"
+  },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  "secretsManagerAccessDescription": {
+    "message": "Activate user access to Secrets Manager."
   },
-  "userAccessSecretsManager": {
-    "message": "This user can access the Secrets Manager Beta"
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Important:"
@@ -6792,16 +6836,11 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
-  "region": {
-    "message": "區域"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "歐盟",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "美國",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
@@ -6814,20 +6853,28 @@
   "updateKdfSettings": {
     "message": "更新 KDF 設定"
   },
-  "trustedDeviceEncryption": {
-    "message": "Trusted device encryption"
+  "trustedDevices": {
+    "message": "Trusted devices"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartOne": {
+    "message": "通過驗證以後，成員將使用儲存在裝置的金鑰來解密密碼庫資料。開啟此選項後，將開啟",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "單一組織",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "原則，以及自動加入",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "帳號救援管理",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "原則。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ not found",
@@ -6843,5 +6890,227 @@
   },
   "updatedTempPassword": {
     "message": "User updated a password issued through account recovery."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Activated access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Activate access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Activate Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Next"
+  },
+  "usFlag": {
+    "message": "US flag"
+  },
+  "euFlag": {
+    "message": "EU flag"
+  },
+  "selectedRegionFlag": {
+    "message": "Selected region flag"
+  },
+  "sendsNoItemsTitle": {
+    "message": "No active Sends",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Use Send to securely share encrypted information with anyone.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Invite Users"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager for $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "提供工程與 DevOps 團隊一套在軟體開發生命週期中，管理秘密資訊的功能。"
+  },
+  "free2PersonOrganization": {
+    "message": "2 人組織免費版"
+  },
+  "unlimitedSecrets": {
+    "message": "無限秘密資訊"
+  },
+  "unlimitedProjects": {
+    "message": "無限專案"
+  },
+  "projectsIncluded": {
+    "message": "包含 $COUNT$ 個專案",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "包含 $COUNT$ 組服務帳號",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "每新增一組服務帳號，每月收費 $COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "新增 Secrets Manager"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "將 Secrets Manager 加入您的升級方案，來記錄維持存取於先前方案中保存的秘密資訊。"
+  },
+  "additionalServiceAccounts": {
+    "message": "新增服務帳號"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "密碼管理器方案價格"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Secrets Manager 方案價格"
+  },
+  "passwordManager": {
+    "message": "密碼管理器"
+  },
+  "freeOrganization": {
+    "message": "免費組織"
+  },
+  "limitServiceAccounts": {
+    "message": "限制服務帳號數量（選填）"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "為您的服務帳號數量設定限制。達到此限制後，就無法再新增服務帳號資訊。"
+  },
+  "serviceAccountLimit": {
+    "message": "服務帳號數量限制（選填）"
+  },
+  "maxServiceAccountCost": {
+    "message": "可能的最大服務帳號成本"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }

@@ -42,7 +42,10 @@ export class InitService {
 
       const urls = process.env.URLS as Urls;
       urls.base ??= this.win.location.origin;
-      this.environmentService.setUrls(urls);
+      await this.environmentService.setUrls(urls);
+      // Workaround to ignore stateService.activeAccount until process.env.URLS are set
+      // TODO: Remove this when implementing ticket PM-2637
+      this.environmentService.initialized = true;
 
       setTimeout(() => this.notificationsService.init(), 3000);
       (this.vaultTimeoutService as VaultTimeoutService).init(true);

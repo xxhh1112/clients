@@ -7,11 +7,9 @@ import { NotificationsService as NotificationsServiceAbstraction } from "@bitwar
 import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
-import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification-api.service.abstraction";
-import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { InternalOrganizationService as InternalOrganizationServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { InternalOrganizationServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService as InternalPolicyServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/provider.service";
@@ -21,6 +19,8 @@ import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/ab
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification-api.service.abstraction";
+import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
@@ -120,6 +120,7 @@ import { Account } from "../models/account";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { flagEnabled } from "../platform/flags";
 import { UpdateBadge } from "../platform/listeners/update-badge";
+import BrowserPopoutWindowService from "../platform/popup/browser-popout-window.service";
 import { BrowserStateService as StateServiceAbstraction } from "../platform/services/abstractions/browser-state.service";
 import { BrowserCryptoService } from "../platform/services/browser-crypto.service";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
@@ -207,6 +208,7 @@ export default class MainBackground {
   configService: ConfigServiceAbstraction;
   configApiService: ConfigApiServiceAbstraction;
   popupUtilsService: PopupUtilsService;
+  browserPopoutWindowService: BrowserPopoutWindowService;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -394,7 +396,7 @@ export default class MainBackground {
       // AuthService should send the messages to the background not popup.
       send = (subscriber: string, arg: any = {}) => {
         const message = Object.assign({}, { command: subscriber }, arg);
-        that.runtimeBackground.processMessage(message, that as any);
+        that.runtimeBackground.processMessage(message, that as any, null);
       };
     })();
     this.authService = new AuthService(
@@ -526,6 +528,7 @@ export default class MainBackground {
       this.authService,
       this.environmentService
     );
+    this.browserPopoutWindowService = new BrowserPopoutWindowService();
 
     this.popupUtilsService = new PopupUtilsService(this.isPrivateMode);
     this.fido2UserInterfaceService = new BrowserFido2UserInterfaceService(this.popupUtilsService);
@@ -570,7 +573,8 @@ export default class MainBackground {
       this.environmentService,
       this.messagingService,
       this.logService,
-      this.configService
+      this.configService,
+      this.browserPopoutWindowService
     );
     this.nativeMessagingBackground = new NativeMessagingBackground(
       this.cryptoService,
@@ -597,7 +601,8 @@ export default class MainBackground {
       this.authService,
       this.policyService,
       this.folderService,
-      this.stateService
+      this.stateService,
+      this.environmentService
     );
 
     this.tabsBackground = new TabsBackground(this, this.notificationBackground);
@@ -703,6 +708,9 @@ export default class MainBackground {
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
+        // Workaround to ignore stateService.activeAccount until URLs are set
+        // TODO: Remove this when implementing ticket PM-2637
+        this.environmentService.initialized = true;
         if (!this.isPrivateMode) {
           await this.refreshBadge();
         }

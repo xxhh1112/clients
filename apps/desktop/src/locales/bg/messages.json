@@ -2252,18 +2252,19 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Препоръчителна промяна на настройките"
   },
-  "region": {
-    "message": "Регион"
+  "loggingInOn": {
+    "message": "Вписване в"
   },
-  "eu": {
-    "message": "ЕС",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "САЩ",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Собствен хостинг"
+  },
+  "accessDenied": {
+    "message": "Достъпът е отказан. Нямате право за преглед на тази страница."
   }
 }

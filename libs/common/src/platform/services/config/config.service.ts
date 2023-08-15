@@ -44,6 +44,7 @@ export class ConfigService implements ConfigServiceAbstraction {
           return serverConfig;
         }
         await this.stateService.setServerConfig(data);
+        this.environmentService.setCloudWebVaultUrl(data.environment?.cloudRegion);
       }
     } catch {
       return null;
@@ -60,6 +61,11 @@ export class ConfigService implements ConfigServiceAbstraction {
 
   async getFeatureFlagNumber(key: FeatureFlag, defaultValue = 0): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
+  }
+
+  async getCloudRegion(defaultValue = "US"): Promise<string> {
+    const serverConfig = await this.buildServerConfig();
+    return serverConfig.environment?.cloudRegion ?? defaultValue;
   }
 
   private async getFeatureFlag<T>(key: FeatureFlag, defaultValue: T): Promise<T> {

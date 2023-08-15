@@ -60,7 +60,7 @@ import { openEntityEventsDialog } from "../../admin-console/organizations/manage
 import { VaultFilterService } from "../../vault/individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/individual-vault/vault-filter/shared/models/vault-filter.model";
 import {
-  CollectionDialogResult,
+  CollectionDialogAction,
   CollectionDialogTabType,
   openCollectionDialog,
 } from "../components/collection-dialog";
@@ -517,6 +517,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async editCipherAttachments(cipher: CipherView) {
+    if (cipher?.reprompt !== 0 && !(await this.passwordRepromptService.showPasswordPrompt())) {
+      this.go({ cipherId: null, itemId: null });
+      return;
+    }
+
     if (this.organization.maxStorageGb == null || this.organization.maxStorageGb === 0) {
       this.messagingService.send("upgradeOrganization", { organizationId: cipher.organizationId });
       return;
@@ -595,11 +600,16 @@ export class VaultComponent implements OnInit, OnDestroy {
     additionalComponentParameters?: (comp: AddEditComponent) => void
   ) {
     const cipher = await this.cipherService.get(cipherId);
-    if (cipher != null && cipher.reprompt != 0) {
-      if (!(await this.passwordRepromptService.showPasswordPrompt())) {
-        this.go({ cipherId: null, itemId: null });
-        return;
-      }
+    // if cipher exists (cipher is null when new) and MP reprompt
+    // is on for this cipher, then show password reprompt
+    if (
+      cipher &&
+      cipher.reprompt !== 0 &&
+      !(await this.passwordRepromptService.showPasswordPrompt())
+    ) {
+      // didn't pass password prompt, so don't open add / edit modal
+      this.go({ cipherId: null, itemId: null });
+      return;
     }
 
     const defaultComponentParameters = (comp: AddEditComponent) => {
@@ -695,7 +705,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
 
     const dialog = openBulkRestoreDialog(this.dialogService, {
-      data: { cipherIds: selectedCipherIds },
+      data: { cipherIds: selectedCipherIds, organization: this.organization },
     });
 
     const result = await lastValueFrom(dialog.closed);
@@ -866,7 +876,10 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+    if (
+      result.action === CollectionDialogAction.Saved ||
+      result.action === CollectionDialogAction.Deleted
+    ) {
       this.refresh();
     }
   }
@@ -877,7 +890,10 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+    if (
+      result.action === CollectionDialogAction.Saved ||
+      result.action === CollectionDialogAction.Deleted
+    ) {
       this.refresh();
     }
   }

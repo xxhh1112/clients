@@ -2252,18 +2252,19 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "به‌روز رسانی تنظیمات توصیه شده"
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
-    "message": "Self-hosted"
+    "message": "خود میزبان"
+  },
+  "accessDenied": {
+    "message": "دسترسی رد شد. شما اجازه مشاهده این صفحه را ندارید."
   }
 }

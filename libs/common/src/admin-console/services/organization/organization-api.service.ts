@@ -4,9 +4,11 @@ import { OrganizationSsoRequest } from "../../../auth/models/request/organizatio
 import { SecretVerificationRequest } from "../../../auth/models/request/secret-verification.request";
 import { ApiKeyResponse } from "../../../auth/models/response/api-key.response";
 import { OrganizationSsoResponse } from "../../../auth/models/response/organization-sso.response";
+import { OrganizationSmSubscriptionUpdateRequest } from "../../../billing/models/request/organization-sm-subscription-update.request";
 import { OrganizationSubscriptionUpdateRequest } from "../../../billing/models/request/organization-subscription-update.request";
 import { OrganizationTaxInfoUpdateRequest } from "../../../billing/models/request/organization-tax-info-update.request";
 import { PaymentRequest } from "../../../billing/models/request/payment.request";
+import { SecretsManagerSubscribeRequest } from "../../../billing/models/request/sm-subscribe.request";
 import { BillingResponse } from "../../../billing/models/response/billing.response";
 import { OrganizationSubscriptionResponse } from "../../../billing/models/response/organization-subscription.response";
 import { PaymentResponse } from "../../../billing/models/response/payment.response";
@@ -19,7 +21,6 @@ import { ListResponse } from "../../../models/response/list.response";
 import { SyncService } from "../../../vault/abstractions/sync/sync.service.abstraction";
 import { OrganizationApiServiceAbstraction } from "../../abstractions/organization/organization-api.service.abstraction";
 import { OrganizationApiKeyType } from "../../enums";
-import { OrganizationEnrollSecretsManagerRequest } from "../../models/request/organization/organization-enroll-secrets-manager.request";
 import { OrganizationCreateRequest } from "../../models/request/organization-create.request";
 import { OrganizationKeysRequest } from "../../models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "../../models/request/organization-update.request";
@@ -28,6 +29,7 @@ import { OrganizationApiKeyInformationResponse } from "../../models/response/org
 import { OrganizationAutoEnrollStatusResponse } from "../../models/response/organization-auto-enroll-status.response";
 import { OrganizationKeysResponse } from "../../models/response/organization-keys.response";
 import { OrganizationResponse } from "../../models/response/organization.response";
+import { ProfileOrganizationResponse } from "../../models/response/profile-organization.response";
 
 export class OrganizationApiService implements OrganizationApiServiceAbstraction {
   constructor(private apiService: ApiService, private syncService: SyncService) {}
@@ -120,13 +122,26 @@ export class OrganizationApiService implements OrganizationApiServiceAbstraction
     return new PaymentResponse(r);
   }
 
-  async updateSubscription(
+  async updatePasswordManagerSeats(
     id: string,
     request: OrganizationSubscriptionUpdateRequest
   ): Promise<void> {
     return this.apiService.send(
       "POST",
       "/organizations/" + id + "/subscription",
+      request,
+      true,
+      false
+    );
+  }
+
+  async updateSecretsManagerSubscription(
+    id: string,
+    request: OrganizationSmSubscriptionUpdateRequest
+  ): Promise<void> {
+    return this.apiService.send(
+      "POST",
+      "/organizations/" + id + "/sm-subscription",
       request,
       true,
       false
@@ -294,13 +309,17 @@ export class OrganizationApiService implements OrganizationApiServiceAbstraction
     );
   }
 
-  async updateEnrollSecretsManager(id: string, request: OrganizationEnrollSecretsManagerRequest) {
-    await this.apiService.send(
+  async subscribeToSecretsManager(
+    id: string,
+    request: SecretsManagerSubscribeRequest
+  ): Promise<ProfileOrganizationResponse> {
+    const r = await this.apiService.send(
       "POST",
-      "/organizations/" + id + "/enroll-secrets-manager",
+      "/organizations/" + id + "/subscribe-secrets-manager",
       request,
       true,
       true
     );
+    return new ProfileOrganizationResponse(r);
   }
 }

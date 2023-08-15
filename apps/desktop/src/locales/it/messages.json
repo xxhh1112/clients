@@ -2252,18 +2252,19 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Aggiornamento delle impostazioni consigliato"
   },
-  "region": {
-    "message": "Regione"
+  "loggingInOn": {
+    "message": "Accedendo su"
   },
-  "eu": {
-    "message": "UE",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Self-hosted"
+  },
+  "accessDenied": {
+    "message": "Accesso negato. Non hai i permessi necessari per visualizzare questa pagina."
   }
 }
