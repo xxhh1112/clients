@@ -24,7 +24,9 @@ import {
 } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
+import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
@@ -249,6 +251,20 @@ function getBgService<T>(service: keyof MainBackground) {
         return cryptoService;
       },
       deps: [EncryptService],
+    },
+    {
+      provide: AuthRequestCryptoServiceAbstraction,
+      useFactory: () => {
+        return getBgService<AuthRequestCryptoServiceAbstraction>("authRequestCryptoService")();
+      },
+      deps: [],
+    },
+    {
+      provide: DeviceTrustCryptoServiceAbstraction,
+      useFactory: () => {
+        return getBgService<DeviceTrustCryptoServiceAbstraction>("deviceTrustCryptoService")();
+      },
+      deps: [],
     },
     {
       provide: EventUploadService,
