@@ -1515,12 +1515,6 @@
   "permanentlyDeletedItem": {
     "message": "Item permanently deleted"
   },
-  "restoreItem": {
-    "message": "Restore item"
-  },
-  "restoreItemConfirmation": {
-    "message": "Are you sure you want to restore this item?"
-  },
   "restoredItem": {
     "message": "Item restored"
   },
