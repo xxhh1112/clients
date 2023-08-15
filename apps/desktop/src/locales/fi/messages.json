@@ -567,7 +567,7 @@
     "message": "Kohteen tiedot"
   },
   "noItemsInList": {
-    "message": "Ei näytettäviä kohteita."
+    "message": "Näytettäviä kohteita ei ole."
   },
   "sendVerificationCode": {
     "message": "Lähetä todennuskoodi sähköpostiisi"
@@ -962,7 +962,7 @@
     "message": "Käynnistä automaattisesti kirjauduttaessa"
   },
   "openAtLoginDesc": {
-    "message": "Käynnistä Bitwardenin työpöytäsovellus automaattisesti kirjautumisen yhteydessä."
+    "message": "Käynnistä Bitwarden-sovellus automaattisesti kirjautumisen yhteydessä."
   },
   "alwaysShowDock": {
     "message": "Näytä aina Dockissa"
@@ -1393,7 +1393,7 @@
     "message": "Avaa Windows Hellolla"
   },
   "additionalWindowsHelloSettings": {
-    "message": "Windows Hello -lisäasetukset"
+    "message": "Windows Hello -lisäasetukset."
   },
   "windowsHelloConsentMessage": {
     "message": "Vahvista Bitwarden."
@@ -1624,7 +1624,7 @@
     "message": "Vaadi selainintegraation vahvistus"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Käytä ylimääräistä tietoturvakerrosta ja edellytä työpöytäsovelluksen ja selainlaajennuksen liitoksen todennus tunnistelausekkeella. Tämä vaatii aina yhteyden muodostuessa vahvistuksen käyttäjältä."
+    "message": "Paranna tietoturvaa vaatimalla työpöytäsovelluksen ja selainlaajennuksen kytköksen todennus tunnistelausekkeella. Tämä vaatii aina yhteyden muodostuessa vahvistuksen käyttäjältä."
   },
   "approve": {
     "message": "Salli"
@@ -2125,7 +2125,7 @@
     "message": "Tunnistelauseke"
   },
   "needAnotherOption": {
-    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-mobiilisovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
+    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-sovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
   },
   "viewAllLoginOptions": {
     "message": "Näytä kaikki kirjautumisvaihtoehdot"
@@ -2252,18 +2252,19 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Suositeltava asetusmuutos"
   },
-  "region": {
-    "message": "Alue"
+  "loggingInOn": {
+    "message": "Kirjaudutaan sijaintiin"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Itse ylläpidetty"
+  },
+  "accessDenied": {
+    "message": "Pääsy estetty. Sinulla ei ole oikeutta avata sivua."
   }
 }

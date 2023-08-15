@@ -464,7 +464,7 @@
     "message": "Neveljavna koda za preverjanje"
   },
   "valueCopied": {
-    "message": "$VALUE$ kopirano",
+    "message": "$VALUE$ kopirana",
     "description": "Value has been copied to the clipboard.",
     "placeholders": {
       "value": {
@@ -629,6 +629,12 @@
   },
   "notificationChangeSave": {
     "message": "Da, posodobi zdaj"
+  },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
   },
   "enableContextMenuItem": {
     "message": "Prikaži možnosti kontekstnega menuja"
@@ -1042,11 +1048,11 @@
     "message": "Logična vrednost"
   },
   "cfTypeLinked": {
-    "message": "Linked",
+    "message": "Povezano polje",
     "description": "This describes a field that is 'linked' (tied) to another field."
   },
   "linkedValue": {
-    "message": "Linked value",
+    "message": "Povezana vrednost",
     "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
@@ -1762,18 +1768,18 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisableDesc": {
-    "message": "Onemogoči to pošiljko, da nihče ne more dostopati do nje",
+    "message": "Onemogoči to pošiljko, da nihče ne more dostopati do nje.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendShareDesc": {
-    "message": "Kopiraj povezavo te pošiljke v odložišče po shranjevanju",
+    "message": "Kopiraj povezavo te pošiljke v odložišče, ko shranim.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
     "message": "Besedilo, ki ga želite poslati"
   },
   "sendHideText": {
-    "message": "Privzeto skrij besedilo te pošiljke",
+    "message": "Privzeto skrij besedilo te pošiljke.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
@@ -2221,18 +2227,25 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "Odpre se v novem oknu"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Display"
   }
 }

@@ -2252,18 +2252,19 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Önerilen Ayarlar Güncellemesi"
   },
-  "region": {
-    "message": "Bölge"
+  "loggingInOn": {
+    "message": "Giriş yapılan konum"
   },
-  "eu": {
-    "message": "AB",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "ABD",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Barındırılan"
+  },
+  "accessDenied": {
+    "message": "Erişim engellendi. Bu sayfayı görüntüleme iznine sahip değilsiniz."
   }
 }

@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ webes széf",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Milyen típusú elem ez?"
   },
@@ -618,8 +608,8 @@
   "loginWithDevice": {
     "message": "Bejelentkezés eszközzel"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Az eszközzel történő bejelentkezést engedélyezni kell a Biwarden mobilalkalmazás beállításaiban. Másik opcióra van szükség?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Az eszközzel történő bejelentkezést be kell állítani a Bitwarden alkalmazás beállításaiban. Más opcióra van szükség?"
   },
   "loginWithMasterPassword": {
     "message": "Bejelentkezés mesterjelszóval"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Váratlan hiba történt."
   },
+  "expirationDateError": {
+    "message": "Válasszunk jövőbeni lejárati dátumot."
+  },
   "emailAddress": {
     "message": "Email cím"
   },
   "yourVaultIsLocked": {
     "message": "A széf zárolásra került. A folytatáshoz meg kell adni a mesterjelszót."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Feloldás"
@@ -958,14 +954,23 @@
   "copyVerificationCode": {
     "message": "Copy Verification Code"
   },
+  "copyUuid": {
+    "message": "UUID másolása"
+  },
   "warning": {
     "message": "Figyelmeztetés"
   },
   "confirmVaultExport": {
     "message": "Széf export megerősítése"
   },
+  "confirmSecretsExport": {
+    "message": "Titkos adatok exportálásának megerősítése"
+  },
   "exportWarningDesc": {
     "message": "Ez az exportálás titkosítás nélkül tartalmazza a széfadatokat.Nem célszerű az exportált fájlt nem biztonságos csatornákon tárolni és továbbküldeni (például emailben). A felhasználás után erősen ajánlott a törlés."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Ez az exportálás titkosítatlan formátumban tartalmazza a titkos adatokat. Ne tároljuk vagy ne küldjük el az exportált fájlt nem biztonságos csatornákon (például emailben). A használat befejezése után azonnal töröljük."
   },
   "encExportKeyWarningDesc": {
     "message": "Ez az exportálás titkosítja az adatokat a fiók titkosítási kulcsával. Ha valaha a diók forgatási kulcsa más lesz, akkor újra exportálni kell, mert nem lehet visszafejteni ezt az exportálási fájlt."
@@ -978,6 +983,9 @@
   },
   "exportVault": {
     "message": "Széf exportálása"
+  },
+  "exportSecrets": {
+    "message": "Titkos adatok exportálása"
   },
   "fileFormat": {
     "message": "Fájlformátum"
@@ -1284,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Hiba történt az exportált fájl visszafejtése során. A titkosítási kulcs nem egyezik meg az adatok exportálásához használt titkosítási kulccsal."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Válasszuk ki az import fájl formátumát."
@@ -2636,6 +2669,12 @@
   "webVault": {
     "message": "Webes széf"
   },
+  "bitWebVault": {
+    "message": "Bitwarden webes széf"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden titkos kód kezelő"
+  },
   "loggedIn": {
     "message": "Megtörtént a bejelentkezés."
   },
@@ -2656,6 +2695,12 @@
   },
   "failedLogin2fa": {
     "message": "A bejelentkezés meghiúsult hibás kétlépcsős bejelentkezés miatt."
+  },
+  "incorrectPassword": {
+    "message": "Helytelen jelszó"
+  },
+  "incorrectCode": {
+    "message": "Helytelen kód"
   },
   "exportedVault": {
     "message": "A széf exportálásra került."
@@ -3308,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Állítsunk be helykorlátot az előfizetéshez. Ha elérjük ezt a korlátot, nem tudunk új felhasználókat meghívni."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Állítsunk be egy korlátot a Secrets Manger előfizetéshez. Ha elérjük ezt a korlátot, nem tudunk új tagokat meghívni."
+  },
   "maxSeatLimit": {
     "message": "Maximális helykorlát (opcionális)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3576,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Ennek az elemnek régi fájl mellékletei vannak, amelyeket javítani kell."
   },
-  "attachmentFixDesc": {
-    "message": "Ez egy régi melléklet, amelyet javítani kell. Kattintás több információért."
+  "attachmentFixDescription": {
+    "message": "Ez a melléklet elavult titkosítást használ. Válasszuk a  'Javítás' lehetőséget a melléklet letöltéséhez, ismételt titkosításához és újbóli feltöltéséhez."
   },
   "fix": {
     "message": "Javítás",
@@ -4360,8 +4408,8 @@
   "manageUsers": {
     "message": "Felhasználók kezelése"
   },
-  "manageResetPassword": {
-    "message": "Jelszó alaphelyzet kezelés"
+  "manageAccountRecovery": {
+    "message": "Fiók helyreállítás lezelése"
   },
   "disableRequiredError": {
     "message": "A szabály letiltása előtt manuálisan le kell tiltani $POLICYNAME$ házirendet.",
@@ -4579,20 +4627,17 @@
   "accountRecoveryPolicy": {
     "message": "Fiók-helyreállítási adminisztráció"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Tagsági fiókok helyreállítása, ha a mesterjelszó vagy a megbízható eszközök elfelejtésére vagy elvesztésére. A helyreállítási folyamatok a fióktitkosítási módszeren alapulnak."
+  "accountRecoveryPolicyDesc": {
+    "message": "A titkosítási módszer alapján állítsuk vissza a fiókokat, ha a mesterjelszavakat vagy a megbízható eszközöket elfelejtjük vagy elveszítjük."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "A szervezet felhasználóinak regisztrálniuk kell magukat vagy automatikus regisztrálás szükséges mielőtt az adminisztrátorok alaphelyzetbe állíthatják a mesterjelszavukat."
+  "accountRecoveryPolicyWarning": {
+    "message": "A mesterjelszóval rendelkező meglévő fiókokhoz a tagoknak önmagukban kell regisztrálniuk, mielőtt az adminisztrátorok visszaállíthatnák fiókjukat. Az automatikus regisztráció bekapcsolja az új tagok fiók-helyreállítását."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "A házirend aktiválása előtt be kell kapcsolni az önálló szervezet Vállalati házirendjét."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatikus regisztráció"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "A meghívó elfogadását követően minden felhasználó automatikusan regisztrálásra kerül a jelszó alaphelyzetbe állításnál."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "A szervezetben már szereplő felhasználók nem kerülnek visszamenőleg regisztrálva a jelszó alaphelyzetbe állításnál. Regisztráln kell magunkat, mielőtt az adminisztrátorok alaphelyzetbe állíthatják a mesterjelszavukat."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Új felhasználók automatikus regisztrálása"
@@ -4693,7 +4738,7 @@
   "error": {
     "message": "Hiba"
   },
-  "resetPasswordManageUsers": {
+  "accountRecoveryManageUsers": {
     "message": "A felhasználók kezelését engedélyezni kell a Jelszó visszaállításának kezelése jogosultsággal is."
   },
   "setupProvider": {
@@ -5209,8 +5254,8 @@
     "message": "Használat:",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "önálló bejekentkezés hitelesítés szükséges",
+  "ssoPolicyHelpAnchor": {
+    "message": "egyszeri bejelentkezési hitelesítési házirendet igényel",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -5418,7 +5463,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Csak$ORGANIZATION$ névvel társított szervezeti széf elemek kerülnek exportálásra. Ebbe nem kerülnek be a személyes és más szervezeti széf elemek.",
     "placeholders": {
       "organization": {
@@ -6179,10 +6224,6 @@
     "message": "Az elérési vezérjel létrejött és a vágólapra került.",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "A jofgosultság kezelő bétaként érhető el.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Elérési vezérjel visszavonása",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6609,14 +6650,17 @@
   "changeKdfLoggedOutWarning": {
     "message": "A folytatással minden aktív munkamenetből kijelentkezik. Újra be kell jelentkeznie, és ki kell töltenie a kétlépcsős bejelentkezési beállításokat. Az adatvesztés elkerülése érdekében javasoljuk, hogy a titkosítási beállítások módosítása előtt exportálja a széfet."
   },
+  "secretsManager": {
+    "message": "Titkos kód kezelő"
+  },
   "secretsManagerBeta": {
     "message": "Titkos kód kezelő béta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Engedélyezze a felhasználóknak a Titkos kód kezelő ingyenes elérését a Béta program alatt."
+  "secretsManagerAccessDescription": {
+    "message": "A felhasználói hozzáférés bekapcsolása a Titkos kód kezelőhöz."
   },
-  "userAccessSecretsManager": {
-    "message": "Ez a felhasználó hozzáférhet a Titkos kód kezelő béta verziójához."
+  "userAccessSecretsManagerGA": {
+    "message": "Ez a felhasználó elérheti a Titkos kód kezelőt"
   },
   "important": {
     "message": "Fontos:"
@@ -6792,16 +6836,11 @@
   "enforceOnLoginDesc": {
     "message": "A meglévő tagoknak meg kell változtatniuk jelszavaikat."
   },
-  "region": {
-    "message": "Régió"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Nincs jogosulltság ezen projekt törléséhez.",
@@ -6814,20 +6853,28 @@
   "updateKdfSettings": {
     "message": "KDF beállítások frissítése"
   },
-  "trustedDeviceEncryption": {
-    "message": "Megbízható eszköztitkosítás"
+  "trustedDevices": {
+    "message": "Megbízható eszközök"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "A hitelesítés után a tagok az eszközükön tárolt kulccsal visszafejtik a tároló adatait. A",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "fiók helyreállítási adminisztrációs szabályzat",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "önálló szervezet",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "automatikus regisztrációval bekapcsol, ha ez az opció van használatban.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "rendszabály és ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "fiók-helyreállítási adminisztráció",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "automatikus regisztrációval rendelkező házirend bekapcsol, ha ezt az opció van használatban.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nem található.",
@@ -6843,5 +6890,227 @@
   },
   "updatedTempPassword": {
     "message": "A felhasználó frissítette a fiók helyreállítás során kiadott jelszót."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "A hozzáférés engedélyezése a Titkos kód kezelőhöz",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Hozzáférés bekapcsolása"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Hozzáférés kiosztása a következő tagoknak a Titkos kód kezelőhöz.. A Jelszókezelőben megadott szerepkör a Titkos kód kezelőre vonatkozik.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Titkos kód kezelő bekapcsolása"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "A szervezet ujjnyomat kifejezése",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Eszköz jóváhagyása"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Az alábbiakban hagyja jóvá a bejelentkezési kérelmeket, hogy a kérelmező tag befejezhesse a bejelentkezést. A jóvá nem hagyott kérelmek 1 hét után lejárnak. A jóváhagyás előtt ellenőrizze a tag adatait."
+  },
+  "deviceInfo": {
+    "message": "Eszközadatok"
+  },
+  "time": {
+    "message": "Idő"
+  },
+  "denyAllRequests": {
+    "message": "Összes kérés elutasítása"
+  },
+  "denyRequest": {
+    "message": "Kérés elutasítása"
+  },
+  "approveRequest": {
+    "message": "Kérelem megerősítése"
+  },
+  "noDeviceRequests": {
+    "message": "Nincs eszközkérelem"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "A tagok eszköz-jóváhagyási kérelmei itt jelennek meg"
+  },
+  "loginRequestDenied": {
+    "message": "Bejelentkezési kérelem elutasítva"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Minden bejelentkezési kérelem elutasítva"
+  },
+  "loginRequestApproved": {
+    "message": "Bejelentkezési kérelem jóváhagyva"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "A fióknak nincs mesterjelszava."
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Ha eltávolítjuk $USER$ mesterjelszavát anélkül, hogy beállítanánk a mesterjelszót, korlátozhatjuk a hozzáférést a teljes fiókhoz. Biztosan folytatni akarjuk?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Nincs mesterjelszó."
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "A mesterjelszavakkal nem rendelkező tagok eltávolítása anélkül, hogy beállítanánk egyet, korlátozhatjuk a hozzáférést a teljes fiókhoz."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Következő"
+  },
+  "usFlag": {
+    "message": "USA zászló"
+  },
+  "euFlag": {
+    "message": "EU zászló"
+  },
+  "selectedRegionFlag": {
+    "message": "Kiválasztott régió zászló"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Nincsenek natív Send elemek.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "A Send használatával biztonságosan megoszthatjuk a titkosított információkat bárkivel.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Felhasználók meghívása"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager $PLAN$ csomaghoz",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "A mérnökök és a DevOps csapatok számára a titkos kódok kezeléséhez a szoftverfejlesztés teljes életciklusa során."
+  },
+  "free2PersonOrganization": {
+    "message": "Díjmentes 2 személyes szervezetek"
+  },
+  "unlimitedSecrets": {
+    "message": "Korlátlan titkos kód"
+  },
+  "unlimitedProjects": {
+    "message": "Korlátlan projekt"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ projekt belefoglalva",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ szolgáltatás fiók belefoglalva",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ havonta kiegészítő szolgáltatás fiókokhoz",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Titkos kódkezelő hozzáadása"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Titkkos kód kezelő hozzáadása a felminősített csomaghoz, hogy az előző csomaggal létrehozott titkos kódok megtartásához."
+  },
+  "additionalServiceAccounts": {
+    "message": "Kiegészítő szolgáltatás fiókok"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Jelszókezelő csomag ár"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Titkos kód kezelő csomag ár"
+  },
+  "passwordManager": {
+    "message": "Jelszókezelő"
+  },
+  "freeOrganization": {
+    "message": "Díjmentes szervezet"
+  },
+  "limitServiceAccounts": {
+    "message": "Szolgálttaás fiókok korlátozása (opcionális)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Állítsunk be korlátot a szolgáltatás fiókokhoz. Ha elérjük ezt a korlátot, nem tudunk új szolgáltatási fiókokat létrehozni."
+  },
+  "serviceAccountLimit": {
+    "message": "Szolgáltatás fiók korlát (opcionális)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Maximális lehetséges szolgáltatás fiókköltség"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }

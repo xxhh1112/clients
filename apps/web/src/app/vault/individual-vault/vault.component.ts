@@ -38,7 +38,6 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { DEFAULT_PBKDF2_ITERATIONS, EventType, KdfType } from "@bitwarden/common/enums";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
@@ -55,11 +54,14 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { Icons } from "@bitwarden/components";
 
 import { UpdateKeyComponent } from "../../settings/update-key.component";
+import { CollectionDialogAction, openCollectionDialog } from "../components/collection-dialog";
 import { VaultItemEvent } from "../components/vault-items/vault-item-event";
 import { getNestedCollectionTree } from "../utils/collection-utils";
 
@@ -82,7 +84,7 @@ import {
   openBulkShareDialog,
 } from "./bulk-action-dialogs/bulk-share-dialog/bulk-share-dialog.component";
 import { CollectionsComponent } from "./collections.component";
-import { FolderAddEditComponent } from "./folder-add-edit.component";
+import { FolderAddEditDialogResult, openFolderAddEditDialog } from "./folder-add-edit.component";
 import { ShareComponent } from "./share.component";
 import { VaultFilterComponent } from "./vault-filter/components/vault-filter.component";
 import { VaultFilterService } from "./vault-filter/services/abstractions/vault-filter.service";
@@ -141,6 +143,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected collections: CollectionView[];
   protected isEmpty: boolean;
   protected selectedCollection: TreeNode<CollectionView> | undefined;
+  protected canCreateCollections = false;
   protected currentSearchText$: Observable<string>;
 
   private searchText$ = new Subject<string>();
@@ -235,12 +238,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     const canAccessPremium$ = Utils.asyncToObservable(() =>
       this.stateService.getCanAccessPremium()
     ).pipe(shareReplay({ refCount: true, bufferSize: 1 }));
-    const allCollections$ = Utils.asyncToObservable(() =>
-      this.collectionService.getAllDecrypted()
-    ).pipe(shareReplay({ refCount: true, bufferSize: 1 }));
+    const allCollections$ = Utils.asyncToObservable(() => this.collectionService.getAllDecrypted());
     const nestedCollections$ = allCollections$.pipe(
-      map((collections) => getNestedCollectionTree(collections)),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      map((collections) => getNestedCollectionTree(collections))
     );
 
     this.searchText$
@@ -385,6 +385,10 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.collections = collections;
           this.selectedCollection = selectedCollection;
 
+          this.canCreateCollections = allOrganizations?.some(
+            (o) => o.canCreateNewCollections && !o.isProviderUser
+          );
+
           this.showBulkMove =
             filter.type !== "trash" &&
             (filter.organizationId === undefined || filter.organizationId === Unassigned);
@@ -468,40 +472,25 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   addFolder = async (): Promise<void> => {
-    const [modal] = await this.modalService.openViewRef(
-      FolderAddEditComponent,
-      this.folderAddEditModalRef,
-      (comp) => {
-        comp.folderId = null;
-        comp.onSavedFolder.pipe(takeUntil(this.destroy$)).subscribe(() => {
-          modal.close();
-        });
-      }
-    );
+    openFolderAddEditDialog(this.dialogService);
   };
 
   editFolder = async (folder: FolderFilter): Promise<void> => {
-    const [modal] = await this.modalService.openViewRef(
-      FolderAddEditComponent,
-      this.folderAddEditModalRef,
-      (comp) => {
-        comp.folderId = folder.id;
-        comp.onSavedFolder.pipe(takeUntil(this.destroy$)).subscribe(() => {
-          modal.close();
-        });
-        comp.onDeletedFolder.pipe(takeUntil(this.destroy$)).subscribe(() => {
-          // Navigate away if we deleted the colletion we were viewing
-          if (this.filter.folderId === folder.id) {
-            this.router.navigate([], {
-              queryParams: { folderId: null },
-              queryParamsHandling: "merge",
-              replaceUrl: true,
-            });
-          }
-          modal.close();
-        });
-      }
-    );
+    const dialog = openFolderAddEditDialog(this.dialogService, {
+      data: {
+        folderId: folder.id,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+
+    if (result === FolderAddEditDialogResult.Deleted) {
+      this.router.navigate([], {
+        queryParams: { folderId: null },
+        queryParamsHandling: "merge",
+        replaceUrl: true,
+      });
+    }
   };
 
   filterSearchText(searchText: string) {
@@ -509,6 +498,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async editCipherAttachments(cipher: CipherView) {
+    if (cipher?.reprompt !== 0 && !(await this.passwordRepromptService.showPasswordPrompt())) {
+      this.go({ cipherId: null, itemId: null });
+      return;
+    }
+
     const canAccessPremium = await this.stateService.getCanAccessPremium();
     if (cipher.organizationId == null && !canAccessPremium) {
       this.messagingService.send("premiumRequired");
@@ -550,6 +544,10 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async shareCipher(cipher: CipherView) {
+    if (cipher?.reprompt !== 0 && !(await this.passwordRepromptService.showPasswordPrompt())) {
+      this.go({ cipherId: null, itemId: null });
+      return;
+    }
     const [modal] = await this.modalService.openViewRef(
       ShareComponent,
       this.shareModalRef,
@@ -606,11 +604,16 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async editCipherId(id: string) {
     const cipher = await this.cipherService.get(id);
-    if (cipher != null && cipher.reprompt != 0) {
-      if (!(await this.passwordRepromptService.showPasswordPrompt())) {
-        this.go({ cipherId: null, itemId: null });
-        return;
-      }
+    // if cipher exists (cipher is null when new) and MP reprompt
+    // is on for this cipher, then show password reprompt
+    if (
+      cipher &&
+      cipher.reprompt !== 0 &&
+      !(await this.passwordRepromptService.showPasswordPrompt())
+    ) {
+      // didn't pass password prompt, so don't open add / edit modal
+      this.go({ cipherId: null, itemId: null });
+      return;
     }
 
     const [modal, childComponent] = await this.modalService.openViewRef(
@@ -638,6 +641,32 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     return childComponent;
+  }
+
+  async addCollection() {
+    const dialog = openCollectionDialog(this.dialogService, {
+      data: {
+        organizationId: this.allOrganizations
+          .filter((o) => o.canCreateNewCollections)
+          .sort(Utils.getSortFunction(this.i18nService, "name"))[0].id,
+        parentCollectionId: this.filter.collectionId,
+        showOrgSelector: true,
+        collectionIds: this.allCollections.map((c) => c.id),
+      },
+    });
+    const result = await lastValueFrom(dialog.closed);
+    if (result.action === CollectionDialogAction.Saved) {
+      if (result.collection) {
+        // Update CollectionService with the new collection
+        const c = new CollectionData(result.collection as CollectionDetailsResponse);
+        await this.collectionService.upsert(c);
+      }
+      this.refresh();
+    } else if (result.action === CollectionDialogAction.Deleted) {
+      // TODO: Remove collection from collectionService when collection
+      // deletion is implemented in the individual vault in AC-1347
+      this.refresh();
+    }
   }
 
   async cloneCipher(cipher: CipherView) {
@@ -869,17 +898,9 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async isLowKdfIteration() {
-    const showLowKdfEnabled = await this.configService.getFeatureFlagBool(
-      FeatureFlag.DisplayLowKdfIterationWarningFlag
-    );
-
-    if (showLowKdfEnabled) {
-      const kdfType = await this.stateService.getKdfType();
-      const kdfOptions = await this.stateService.getKdfConfig();
-      return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
-    }
-
-    return showLowKdfEnabled;
+    const kdfType = await this.stateService.getKdfType();
+    const kdfOptions = await this.stateService.getKdfConfig();
+    return kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < DEFAULT_PBKDF2_ITERATIONS;
   }
 
   protected async repromptCipher(ciphers: CipherView[]) {

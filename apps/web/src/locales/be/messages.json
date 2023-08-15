@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "Вэб-сховішча $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Які гэта элемент запісу?"
   },
@@ -618,8 +608,8 @@
   "loginWithDevice": {
     "message": "Увайсці з прыладай"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Неабходна ўключыць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Неабходны іншы варыянт?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Неабходна наладзіць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Патрабуецца іншы варыянт?"
   },
   "loginWithMasterPassword": {
     "message": "Увайсці з асноўным паролем"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Адбылася нечаканая памылка."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Адрас электроннай пошты"
   },
   "yourVaultIsLocked": {
     "message": "Ваша сховішча заблакіравана. Увядзіце асноўны пароль для працягу."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Разблакіраваць"
@@ -958,14 +954,23 @@
   "copyVerificationCode": {
     "message": "Скапіяваць праверачны код"
   },
+  "copyUuid": {
+    "message": "Copy UUID"
+  },
   "warning": {
     "message": "Папярэджанне"
   },
   "confirmVaultExport": {
     "message": "Пацвердзіць экспартаванне сховішча"
   },
+  "confirmSecretsExport": {
+    "message": "Пацвердзіць экспартаванне сакрэтаў"
+  },
   "exportWarningDesc": {
     "message": "Пры экспартаванні файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць або адпраўляць па неабароненых каналах (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Пры экспартаванні файл утрымлівае даныя вашых сакрэтаў у незашыфраваным фармаце. Іх не варта захоўваць або адпраўляць па неабароненых каналах (напрыклад, па электроннай пошце). Выдаліце іх адразу пасля выкарыстання."
   },
   "encExportKeyWarningDesc": {
     "message": "Пры экспартаванні даныя шыфруюцца з дапамогай ключа шыфравання ўліковага запісу. Калі вы калі-небудзь зменіце ключ шыфравання ўліковага запісу, вам неабходна будзе экспартаваць даныя паўторна, паколькі вы не зможаце расшыфраваць гэты файл экспартавання."
@@ -978,6 +983,9 @@
   },
   "exportVault": {
     "message": "Экспартаваць сховішча"
+  },
+  "exportSecrets": {
+    "message": "Экспартаванне сакрэтаў"
   },
   "fileFormat": {
     "message": "Фармат файла"
@@ -1284,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Памылка дэшыфроўкі экспартаванага файла. Ваш ключ шыфравання не супадае з ключом шыфравання, які выкарыстоўваецца для экспартавання даных."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Выберыце фармат файла імпартавання"
@@ -2636,6 +2669,12 @@
   "webVault": {
     "message": "Вэб-сховішча"
   },
+  "bitWebVault": {
+    "message": "Вэб-сховішча Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "Менеджар сакрэтаў Bitwarden"
+  },
   "loggedIn": {
     "message": "Вы ўвайшлі."
   },
@@ -2656,6 +2695,12 @@
   },
   "failedLogin2fa": {
     "message": "Не атрымалася выканаць уваход з-за няправільнага двухэтапнага ўваходу."
+  },
+  "incorrectPassword": {
+    "message": "Няправільны пароль"
+  },
+  "incorrectCode": {
+    "message": "Няправільны код"
   },
   "exportedVault": {
     "message": "Сховішча экспартавана."
@@ -3308,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Прызначыць абмежаванне месцаў для вашай падпіскі. Пасля дасягнення гэтага абмежавання, вы не зможаце запрашаць новых карыстальнікаў."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Прызначыць абмежаванне месцаў для вашай падпіскі менеджара сакрэтаў. Пасля дасягнення гэтага абмежавання, вы не зможаце запрашаць новых удзельнікаў."
+  },
   "maxSeatLimit": {
     "message": "Максімальная колькасць месцаў (неабавязкова)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3576,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Гэты элемент мае старыя далучаныя файлы, якія неабходна выправіць."
   },
-  "attachmentFixDesc": {
-    "message": "Гэта стары далучаны файл, які неабходна выправіць. Націсніце, каб даведацца больш."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Выправіць",
@@ -4360,8 +4408,8 @@
   "manageUsers": {
     "message": "Кіраванне карыстальнікамі"
   },
-  "manageResetPassword": {
-    "message": "Кіраванне скіданнем пароля"
+  "manageAccountRecovery": {
+    "message": "Кіраванне аднаўленнем уліковага запісу"
   },
   "disableRequiredError": {
     "message": "Перад адключэннем гэтай палітыкі, вам спачатку неабходна ўручную адключыць палітыку $POLICYNAME$.",
@@ -4579,20 +4627,17 @@
   "accountRecoveryPolicy": {
     "message": "Адміністраванне аднаўлення ўліковага запісу"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Аднаўленне ўліковага запісу ўдзельніка, калі асноўны пароль забыты або давераная прылада страчана. Працэс аднаўлення заснаваны на метадзе шыфравання ўліковага запісу."
+  "accountRecoveryPolicyDesc": {
+    "message": "На аснове метаду шыфравання вы можаце аднавіць уліковыя запісы, калі асноўныя паролі або давераныя прылады забыты або страчаны."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Карыстальнікі арганізацыі павінны зарэгістравацца самастойна або быць зарэгістраванымі аўтаматычна, каб адміністратары маглі скінуць іх асноўны пароль."
+  "accountRecoveryPolicyWarning": {
+    "message": "Існуючыя ўліковыя запісы з асноўнымі паролямі будуць патрабаваць ад дзельнікаў самастойнай рэгістрацыі перад тым, як адміністратары змогуць аднавіць іх уліковыя запісы. Аўтаматычная рэгістрацыя ўключыць аднаўленне ўліковых запісаў для новых удзельнікаў."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "Перад актывацыяй гэтай палітыкі неабходна ўключыць палітыку адзінага ўваходу (SSO) прадпрыемства."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Аўтаматычная рэгістрацыя"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Усе карыстальнікі будуць аўтаматычна зарэгістраваны на скіданне пароля, пасля таго як іх запрашэнне будзе прынята і ім не будзе дазволена адмовіцца ад яго выканання."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Карыстальнікі, якія ўжо ўваходзяць у арганізацыю не змогуць зарэгістравацца на скіданне пароля папярэднім чыслом. Яны павінны будуць самастойна зарэгістравацца, перад тым як адміністратары змогуць скінуць іх асноўны пароль."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Аўтаматычна рэгістраваць новых карыстальнікаў"
@@ -4693,8 +4738,8 @@
   "error": {
     "message": "Памылка"
   },
-  "resetPasswordManageUsers": {
-    "message": "Для кіравання карыстальнікамі неабходна даць дазвол на кіраванне скідання пароля"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Налады пастаўшчыка"
@@ -5209,7 +5254,7 @@
     "message": "Выкарыстоўваць",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "абавязковую палітыку аўтэнтыфікацыі адзінага ўваходу (SSO)",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -5418,8 +5463,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Будуць экспартаваны толькі запісы сховішча арганізацыі, якія звязаны з $ORGANIZATION$. Элементы асабістага сховішча і элементы з іншых арганізацый не будуць уключаны.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6179,10 +6224,6 @@
     "message": "Доступ да токена створаны і скапіяваны ў буфер абмену",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Кіраванне дазволамі недаступна для бэта-версіі.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Адклікаць токен доступу",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6609,14 +6650,17 @@
   "changeKdfLoggedOutWarning": {
     "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
   },
+  "secretsManager": {
+    "message": "Менеджар сакрэтаў"
+  },
   "secretsManagerBeta": {
     "message": "Менеджар сакрэтаў (бэта-версія)"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Дазвольце карыстальнікам доступ да Менеджара сакрэтаў падчас праграмы бэта-тэсціравання."
+  "secretsManagerAccessDescription": {
+    "message": "Актываваць доступ карыстальнікаў да менеджара сакрэтаў."
   },
-  "userAccessSecretsManager": {
-    "message": "Гэты карыстальнік можа атрымаць доступ да Менеджара сакрэтаў у рэжыме бэта-тэсціравання"
+  "userAccessSecretsManagerGA": {
+    "message": "Гэты карыстальнік можа атрымаць доступ да менеджара сакрэтаў"
   },
   "important": {
     "message": "Важна:"
@@ -6792,16 +6836,11 @@
   "enforceOnLoginDesc": {
     "message": "Патрабаваць ад існуючых удзельнікаў змены пароляў"
   },
-  "region": {
-    "message": "Рэгіён"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "ЕС",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "ЗША",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас няма правоў для выдалення гэтага праекта",
@@ -6814,20 +6853,28 @@
   "updateKdfSettings": {
     "message": "Абнавіце налады KDF"
   },
-  "trustedDeviceEncryption": {
-    "message": "Шыфраванне даверанай прылады"
+  "trustedDevices": {
+    "message": "Trusted devices"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Пасля аўтэнтыфікацыі ўдзельнікі расшыфроўваюць даныя сховішча з выкарыстаннем ключа, якія захоўваецца на іх прыладах",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartOne": {
+    "message": "Пасля аўтэнтыфікацыі ўдзельнікі расшыфроўваюць даныя сховішча з выкарыстаннем ключа, які захоўваецца на іх прыладах",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Палітыка адміністравання аднаўлення ўліковых запісаў",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "адзіная арганізацыя",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "з аўтаматычнай рэгістрацыяй уключаецца пры выкарыстанні гэтага параметра.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "палітыка і ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "адміністраванне аднаўлення ўліковага запісу",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "палітыка з аўтаматычнай рэгістрацыяй уключаецца пры выкарыстанні гэтага параметра.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ не знойдзены",
@@ -6843,5 +6890,227 @@
   },
   "updatedTempPassword": {
     "message": "Карыстальнік абнавіў пароль пры аднаўленні ўліковага запісу."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Доступ карыстальнікаў да менеджара сакрэтаў актываваны",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Актываваць доступ"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Забяспечце доступ наступным удзельнікам да менеджара сакрэтаў. Роля, якая забяспечана ў менеджары пароляў будзе ўжывацца і да менеджара сакрэтаў.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Актываваць менеджар сакрэтаў"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Фраза адбітку пальца вашай арганізацыі",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Зацвярджэнне прылады"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Зацвердзіце запыт уваходу ніжэй, каб дазволіць удзельнікам завяршыць уваход. Тэрмін дзеяння не зацверджаных уваходаў міне праз 1 тыдзень. Праверце звесткі ўдзельнікаў перад тым, як зацвярджаць іх."
+  },
+  "deviceInfo": {
+    "message": "Звесткі аб прыладзе"
+  },
+  "time": {
+    "message": "Час"
+  },
+  "denyAllRequests": {
+    "message": "Адхіліць усе запыты"
+  },
+  "denyRequest": {
+    "message": "Адхіліць запыты"
+  },
+  "approveRequest": {
+    "message": "Ухваліць запыт"
+  },
+  "noDeviceRequests": {
+    "message": "Няма запытаў ад прылады"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Тут будуць адлюстроўвацца запыты на ўхваленне прылады ўдзельніка"
+  },
+  "loginRequestDenied": {
+    "message": "Запыт на ўваход адхілены"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Усе запыты на ўваход адхілены"
+  },
+  "loginRequestApproved": {
+    "message": "Запыт на ўваход ухвалены"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Уліковы запіс не мае асноўнага пароля"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Выдаленне $USER$ без прызначэння галоўнага пароля можа стаць прычынай абмежавання доступу да яго ўліковага запісу. Вы ўпэўнены, што хочаце працягнуць?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Без асноўнага пароля"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Выдаленне ўдзельнікаў у якіх адсутнічае асноўны пароль і для якіх ён не быў прызначаны папярэдне можа стаць прычынай абмежавання доступу да іх уліковага запісу."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Пачніце 7-дзённую бясплатную пробную версію для $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Далей"
+  },
+  "usFlag": {
+    "message": "Сцяг ЗША"
+  },
+  "euFlag": {
+    "message": "Сцяг ЕС"
+  },
+  "selectedRegionFlag": {
+    "message": "Сцяг выбранага рэгіёна"
+  },
+  "sendsNoItemsTitle": {
+    "message": "No active Sends",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Use Send to securely share encrypted information with anyone.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Запрасіць карыстальнікаў"
+  },
+  "secretsManagerForPlan": {
+    "message": "Менеджар сакрэтаў для $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Для інжынераў і каманд DevOps, каб кіраваць сакрэтамі на працягу ўсяго цыкла распрацоўкі праграмнага забеспячэння."
+  },
+  "free2PersonOrganization": {
+    "message": "Бясплатна для арганізацый з двума асобамі"
+  },
+  "unlimitedSecrets": {
+    "message": "Неабмежаваная колькасць сакрэтаў"
+  },
+  "unlimitedProjects": {
+    "message": "Неабмежаваная колькасць праектаў"
+  },
+  "projectsIncluded": {
+    "message": "Уключана праектаў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "Уключаных сэрвісных уліковых запісаў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ у месяц для дадатковых сэрвісных уліковых запісаў",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Дадаць менеджар сакрэтаў"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Дадаць менеджар сакрэтаў у ваш абноўлены тарыфны план, каб падтрымліваць доступ да любых сакрэтаў, якія былі створаны з дапамогай вашых папярэдніх тарыфных планаў."
+  },
+  "additionalServiceAccounts": {
+    "message": "Дадатковыя сэрвісныя ўліковыя запісы"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Кошт тарыфнага плана менеджар пароляў"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Кошт тарыфнага плана менеджар сакрэтаў"
+  },
+  "passwordManager": {
+    "message": "Мэнэджар пароляў"
+  },
+  "freeOrganization": {
+    "message": "Бясплатная арганізацыя"
+  },
+  "limitServiceAccounts": {
+    "message": "Абмежаванне сэрвісных уліковых запісаў (неабавязкова)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Прызначыць абмежаванне для вашых сэрвісных уліковых запісаў. Пасля дасягнення абмежавання, вы не зможаце ствараць новыя сэрвісныя ўліковыя запісы."
+  },
+  "serviceAccountLimit": {
+    "message": "Абмежаванне сэрвісных уліковых запісаў (неабавязкова)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Максімальны патэнцыйны кошт сэрвісных уліковых запісаў"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }

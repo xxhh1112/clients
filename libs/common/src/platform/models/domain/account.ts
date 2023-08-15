@@ -119,8 +119,8 @@ export class AccountKeys {
     any,
     Record<string, SymmetricCryptoKey>
   >();
-  privateKey?: EncryptionPair<string, ArrayBuffer> = new EncryptionPair<string, ArrayBuffer>();
-  publicKey?: ArrayBuffer;
+  privateKey?: EncryptionPair<string, Uint8Array> = new EncryptionPair<string, Uint8Array>();
+  publicKey?: Uint8Array;
   apiKeyClientSecret?: string;
 
   toJSON() {
@@ -142,11 +142,10 @@ export class AccountKeys {
       ),
       organizationKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.organizationKeys),
       providerKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.providerKeys),
-      privateKey: EncryptionPair.fromJSON<string, ArrayBuffer>(
-        obj?.privateKey,
-        (decObj: string) => Utils.fromByteStringToArray(decObj).buffer
+      privateKey: EncryptionPair.fromJSON<string, Uint8Array>(obj?.privateKey, (decObj: string) =>
+        Utils.fromByteStringToArray(decObj)
       ),
-      publicKey: Utils.fromByteStringToArray(obj?.publicKey)?.buffer,
+      publicKey: Utils.fromByteStringToArray(obj?.publicKey),
     });
   }
 
@@ -233,6 +232,7 @@ export class AccountSettings {
   approveLoginRequests?: boolean;
   avatarColor?: string;
   activateAutoFillOnPageLoadFromPolicy?: boolean;
+  region?: string;
   smOnboardingTasks?: Record<string, Record<string, boolean>>;
 
   static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {

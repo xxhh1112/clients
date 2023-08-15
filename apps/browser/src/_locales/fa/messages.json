@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "به‌روزرسانی"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "نمایش گزینه‌های منوی زمینه"
   },
@@ -2221,18 +2227,25 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "در پنجره جدید باز می‌شود"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "دسترسی رد شد. شما اجازه مشاهده این صفحه را ندارید."
+  },
+  "general": {
+    "message": "عمومی"
+  },
+  "display": {
+    "message": "نمایش"
   }
 }
