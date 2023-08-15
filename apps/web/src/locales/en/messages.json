@@ -7055,5 +7055,41 @@
   },
   "maxServiceAccountCost": {
     "message": "Max potential service account cost"
+  },
+  "goToPage": {
+    "message": "Go to page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "lastPage": {
+    "message": "Last page, Page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "previousPage": {
+    "message": "Previous page, Page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "nextPage": {
+    "message": "Next page, Page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
   }
 }

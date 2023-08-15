@@ -2,6 +2,10 @@ import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { applicationConfig, Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+
+import { I18nMockService } from "../utils/i18n-mock.service";
+
 import { BitPaginationComponent } from "./pagination.component";
 
 @Component({
@@ -14,6 +18,19 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [BitPaginationComponent, RouterModule],
+      providers: [
+        {
+          provide: I18nService,
+          useFactory: () => {
+            return new I18nMockService({
+              goToPage: (page) => `Go to page ${page}`,
+              lastPage: (page) => `Last page, Page ${page}`,
+              previousPage: (page) => `Previous page, Page ${page}`,
+              nextPage: (page) => `Next page, Page ${page}`,
+            });
+          },
+        },
+      ],
     }),
     applicationConfig({
       providers: [

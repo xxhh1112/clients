@@ -24,7 +24,7 @@
           [queryParams]="getParams | memo : [queryParam, n]"
           [queryParamsHandling]="'merge'"
           [grouping]="getGrouping | memo : [totalPages, n]"
-          [attr.aria-label]="(n === totalPages ? 'Last Page, Page ' : 'Go to Page ') + n"
+          [attr.aria-label]="(n === totalPages ? 'lastPage' : 'goToPage') | i18n : n"
           [attr.aria-current]="n === currPage ? 'true' : 'false'"
           (click)="focusCurrentOnClick()"
           >{{ n }}</a
@@ -42,7 +42,7 @@
           [queryParams]="getParams | memo : [queryParam, currPage - 1]"
           [disabled]="currPage === 1"
           grouping="first"
-          [attr.aria-label]="'Previous Page, Page ' + (currPage - 1)"
+          [attr.aria-label]="'previousPage' | i18n : $any(currPage - 1)"
         >
           Previous
         </button>
@@ -59,7 +59,7 @@
           [queryParams]="getParams | memo : [queryParam, currPage + 1]"
           [disabled]="currPage === totalPages"
           grouping="last"
-          [attr.aria-label]="'Next Page, Page ' + (currPage + 1)"
+          [attr.aria-label]="'nextPage' | i18n : $any(currPage + 1)"
         >
           Next
         </button>
