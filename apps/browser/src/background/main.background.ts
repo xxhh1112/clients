@@ -396,7 +396,7 @@ export default class MainBackground {
       // AuthService should send the messages to the background not popup.
       send = (subscriber: string, arg: any = {}) => {
         const message = Object.assign({}, { command: subscriber }, arg);
-        that.runtimeBackground.processMessage(message, that as any, null);
+        that.runtimeBackground.processMessage(message, that as any);
       };
     })();
     this.authService = new AuthService(
