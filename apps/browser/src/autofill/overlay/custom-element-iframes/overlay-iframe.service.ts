@@ -67,6 +67,11 @@ class OverlayIframeService {
       return;
     }
 
+    if (message.command === "updateOverlayHidden") {
+      this.updateElementStyles(this.iframe, { display: message.display });
+      return;
+    }
+
     this.iframe.contentWindow.postMessage(message, "*");
   };
 

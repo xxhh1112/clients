@@ -41,6 +41,7 @@ class OverlayBackground {
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
     bgUpdateAutofillOverlayIconPosition: () => this.updateAutofillOverlayIconPosition(),
     bgUpdateAutofillOverlayListPosition: () => this.updateAutofillOverlayListPosition(),
+    bgUpdateOverlayHidden: ({ message }) => this.updateAutofillOverlayHidden(message),
     bgUpdateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
@@ -171,6 +172,26 @@ class OverlayBackground {
     });
   }
 
+  private updateAutofillOverlayHidden(message: any) {
+    if (!message.display) {
+      return;
+    }
+
+    if (this.overlayIconPort) {
+      this.overlayIconPort.postMessage({
+        command: "updateOverlayHidden",
+        display: message.display,
+      });
+    }
+
+    if (this.overlayListPort) {
+      this.overlayListPort.postMessage({
+        command: "updateOverlayHidden",
+        display: message.display,
+      });
+    }
+  }
+
   private updateFocusedFieldData(message: any) {
     this.focusedFieldData = message.focusedFieldData;
   }
@@ -247,6 +268,10 @@ class OverlayBackground {
 
     // TODO: CG - Its possible that this isn't entirely effective, we need to consider and test how iframed forms react to this.
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
+    if (!currentTab?.url) {
+      return;
+    }
+
     const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
     this.ciphers = unsortedCiphers.sort((a, b) =>
       this.cipherService.sortCiphersByLastUsedThenName(a, b)

@@ -309,8 +309,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private toggleOverlayHidden(isHidden: boolean) {
     const displayValue = isHidden ? "none" : "block";
-    this.updateElementStyles(this.overlayIconElement, { display: displayValue });
-    this.updateElementStyles(this.overlayListElement, { display: displayValue });
+    sendExtensionMessage("bgUpdateOverlayHidden", { display: displayValue });
 
     this.isOverlayIconVisible = !isHidden;
     this.isOverlayListVisible = !isHidden;
@@ -432,20 +431,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     return customElement;
   }
 
-  private updateElementStyles(customElement: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
-    if (!customElement) {
-      return;
-    }
-
-    for (const styleProperty in styles) {
-      customElement.style.setProperty(
-        this.convertToKebabCase(styleProperty),
-        styles[styleProperty],
-        "important"
-      );
-    }
-  }
-
   private convertToKebabCase(styleProperty: string): string {
     return styleProperty.replace(/([a-z])([A-Z])/g, "$1-$2");
   }
@@ -480,8 +465,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     await this.updateMostRecentlyFocusedField(this.mostRecentlyFocusedField);
-    this.toggleOverlayHidden(false);
     this.updateOverlayElementsPosition();
+    this.toggleOverlayHidden(false);
     this.clearUserInteractionEventTimeout();
   };
 
