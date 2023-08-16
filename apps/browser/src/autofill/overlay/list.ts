@@ -42,7 +42,7 @@ class AutofillOverlayList extends HTMLElement {
 
     this.initShadowDom();
 
-    window.addEventListener("blur", this.handleWindowBlurEvent);
+    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
     if (this.authStatus === AuthenticationStatus.Unlocked) {
       this.updateAutofillOverlayList(message);
       return;
@@ -58,11 +58,11 @@ class AutofillOverlayList extends HTMLElement {
   private initShadowDom() {
     this.shadowDom.innerHTML = "";
     const styleSheetUrl = this.styleSheetUrl;
-    const linkElement = document.createElement("link");
+    const linkElement = globalThis.document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
 
-    this.overlayListContainer = document.createElement("div");
+    this.overlayListContainer = globalThis.document.createElement("div");
     this.overlayListContainer.className = "overlay-list-container";
     this.resizeObserver.observe(this.overlayListContainer);
 
@@ -77,11 +77,11 @@ class AutofillOverlayList extends HTMLElement {
   private buildLockedOverlay() {
     this.resetOverlayListContainer();
 
-    const lockedOverlay = document.createElement("div");
+    const lockedOverlay = globalThis.document.createElement("div");
     lockedOverlay.className = "locked-overlay overlay-list-message";
     lockedOverlay.textContent = "Unlock your account to view matching logins";
 
-    const unlockButton = document.createElement("button");
+    const unlockButton = globalThis.document.createElement("button");
     unlockButton.className = "unlock-button overlay-list-button";
     unlockButton.textContent = `Unlock account`;
     unlockButton.prepend(this.lockIconElement);
@@ -104,7 +104,7 @@ class AutofillOverlayList extends HTMLElement {
 
     this.resetOverlayListContainer();
 
-    const ciphersList = document.createElement("ul");
+    const ciphersList = globalThis.document.createElement("ul");
     ciphersList.className = "ciphers-list";
 
     message.ciphers.forEach((cipher: any) =>
@@ -120,7 +120,7 @@ class AutofillOverlayList extends HTMLElement {
     const handleCipherClickEvent = () =>
       this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
 
-    const cipherListItemElement = document.createElement("li");
+    const cipherListItemElement = globalThis.document.createElement("li");
     cipherListItemElement.className = "cipher";
     cipherListItemElement.addEventListener("click", handleCipherClickEvent);
     cipherListItemElement.appendChild(cipherIcon);
@@ -130,7 +130,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherIconElement(cipher: any) {
-    const cipherIcon = document.createElement("div");
+    const cipherIcon = globalThis.document.createElement("div");
     cipherIcon.classList.add("cipher-icon");
     cipherIcon.setAttribute("aria-hidden", "true");
 
@@ -157,7 +157,7 @@ class AutofillOverlayList extends HTMLElement {
     const cipherNameElement = this.buildCipherNameElement(cipher);
     const cipherUserLoginElement = this.buildCipherUserLoginElement(cipher);
 
-    const cipherDetailsElement = document.createElement("div");
+    const cipherDetailsElement = globalThis.document.createElement("div");
     cipherDetailsElement.className = "cipher-details";
     cipherDetailsElement.appendChild(cipherNameElement);
     cipherDetailsElement.appendChild(cipherUserLoginElement);
@@ -166,7 +166,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherNameElement(cipher: any) {
-    const cipherNameElement = document.createElement("div");
+    const cipherNameElement = globalThis.document.createElement("div");
     cipherNameElement.className = "cipher-name";
     cipherNameElement.textContent = cipher.name;
     cipherNameElement.setAttribute("title", cipher.name);
@@ -175,7 +175,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherUserLoginElement(cipher: any) {
-    const cipherUserLoginElement = document.createElement("div");
+    const cipherUserLoginElement = globalThis.document.createElement("div");
     cipherUserLoginElement.className = "cipher-user-login";
     cipherUserLoginElement.textContent = cipher.login.username;
     cipherUserLoginElement.setAttribute("title", cipher.login.username);
@@ -186,11 +186,11 @@ class AutofillOverlayList extends HTMLElement {
   private buildNoResultsOverlayList() {
     this.resetOverlayListContainer();
 
-    const noItemsMessage = document.createElement("div");
+    const noItemsMessage = globalThis.document.createElement("div");
     noItemsMessage.className = "no-items overlay-list-message";
     noItemsMessage.textContent = "No items to show";
 
-    const newItemButton = document.createElement("button");
+    const newItemButton = globalThis.document.createElement("button");
     newItemButton.className = "add-new-item-button overlay-list-button";
     newItemButton.textContent = `New item`;
     newItemButton.prepend(this.plusIconElement);
@@ -206,7 +206,7 @@ class AutofillOverlayList extends HTMLElement {
   };
 
   private checkOverlayListFocused() {
-    if (document.hasFocus()) {
+    if (globalThis.document.hasFocus()) {
       return;
     }
 
@@ -218,11 +218,11 @@ class AutofillOverlayList extends HTMLElement {
       return;
     }
 
-    window.parent.postMessage(message, this.messageOrigin);
+    globalThis.parent.postMessage(message, this.messageOrigin);
   }
 
   private setupWindowMessageListener() {
-    window.addEventListener("message", this.handleWindowMessage);
+    globalThis.addEventListener("message", this.handleWindowMessage);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {
@@ -254,5 +254,5 @@ class AutofillOverlayList extends HTMLElement {
 }
 
 (function () {
-  window.customElements.define(AutofillOverlayCustomElement.List, AutofillOverlayList);
+  globalThis.customElements.define(AutofillOverlayCustomElement.List, AutofillOverlayList);
 })();

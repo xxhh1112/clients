@@ -38,15 +38,15 @@ class AutofillOverlayIcon extends HTMLElement {
   private async initAutofillOverlayIcon(message: any = {}) {
     this.authStatus = message.authStatus;
 
-    window.addEventListener("blur", this.handleWindowBlurEvent);
+    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
 
-    this.iconElement = document.createElement("button");
+    this.iconElement = globalThis.document.createElement("button");
     this.iconElement.classList.add("overlay-icon");
     this.iconElement.addEventListener("click", this.handleIconClick);
     this.setIconElementSvg();
 
     const styleSheetUrl = message.styleSheetUrl;
-    const linkElement = document.createElement("link");
+    const linkElement = globalThis.document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
 
@@ -81,7 +81,7 @@ class AutofillOverlayIcon extends HTMLElement {
   };
 
   private checkOverlayIconFocused() {
-    if (document.hasFocus()) {
+    if (globalThis.document.hasFocus()) {
       return;
     }
 
@@ -93,11 +93,11 @@ class AutofillOverlayIcon extends HTMLElement {
       return;
     }
 
-    window.parent.postMessage(message, this.messageOrigin);
+    globalThis.parent.postMessage(message, this.messageOrigin);
   }
 
   private setupWindowMessageListener() {
-    window.addEventListener("message", this.handleWindowMessage);
+    globalThis.addEventListener("message", this.handleWindowMessage);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {
@@ -117,5 +117,5 @@ class AutofillOverlayIcon extends HTMLElement {
 }
 
 (function () {
-  window.customElements.define(AutofillOverlayCustomElement.Icon, AutofillOverlayIcon);
+  globalThis.customElements.define(AutofillOverlayCustomElement.Icon, AutofillOverlayIcon);
 })();

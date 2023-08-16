@@ -52,7 +52,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
     formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
 
-    if (document.activeElement === formFieldElement) {
+    if (globalThis.document.activeElement === formFieldElement) {
       this.triggerFormFieldFocusedAction(formFieldElement);
     }
   }
@@ -114,8 +114,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const login = {
       username: this.userFilledFields["username"]?.value || "",
       password: this.userFilledFields["password"]?.value || "",
-      uri: document.URL,
-      hostname: document.location.hostname,
+      uri: globalThis.document.URL,
+      hostname: globalThis.document.location.hostname,
     };
 
     sendExtensionMessage("bgAddNewVaultItem", { login });
@@ -254,7 +254,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private recentlyFocusedFieldIsCurrentlyFocused() {
-    return document.activeElement === this.mostRecentlyFocusedField;
+    return globalThis.document.activeElement === this.mostRecentlyFocusedField;
   }
 
   private updateOverlayElementsPosition() {
@@ -272,7 +272,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (!this.isOverlayIconVisible) {
-      document.body.appendChild(this.overlayIconElement);
+      globalThis.document.body.appendChild(this.overlayIconElement);
       this.isOverlayIconVisible = true;
       this.setOverlayRepositionEventListeners();
     }
@@ -289,7 +289,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (!this.isOverlayListVisible) {
-      document.body.appendChild(this.overlayListElement);
+      globalThis.document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
     }
 
@@ -308,7 +308,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     formFieldElement: ElementWithOpId<FormFieldElement>
   ) {
     this.mostRecentlyFocusedField = formFieldElement;
-    const { paddingRight, paddingLeft } = window.getComputedStyle(formFieldElement);
+    const { paddingRight, paddingLeft } = globalThis.getComputedStyle(formFieldElement);
     const { width, height, top, left } = await this.getMostRecentlyFocusedFieldRects(
       formFieldElement
     );
@@ -352,7 +352,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
           resolve(fieldBoundingClientRects);
         },
         {
-          root: document.body,
+          root: globalThis.document.body,
           rootMargin: "0px",
           threshold: 0.9999,
         }
@@ -385,7 +385,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    window.customElements?.define(
+    globalThis.customElements?.define(
       AutofillOverlayCustomElement.BitwardenIcon,
       AutofillOverlayIconIframe
     );
@@ -402,7 +402,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    window.customElements?.define(
+    globalThis.customElements?.define(
       AutofillOverlayCustomElement.BitwardenList,
       AutofillOverlayListIframe
     );
@@ -415,21 +415,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private createOverlayCustomElement(elementName: string): HTMLElement {
-    const customElement = document.createElement(elementName);
+    const customElement = globalThis.document.createElement(elementName);
 
     return customElement;
   }
 
   private setOverlayRepositionEventListeners() {
-    document.body?.addEventListener("scroll", this.handleOverlayRepositionEvent);
-    window.addEventListener("scroll", this.handleOverlayRepositionEvent);
-    window.addEventListener("resize", this.handleOverlayRepositionEvent);
+    globalThis.document.body?.addEventListener("scroll", this.handleOverlayRepositionEvent);
+    globalThis.addEventListener("scroll", this.handleOverlayRepositionEvent);
+    globalThis.addEventListener("resize", this.handleOverlayRepositionEvent);
   }
 
   private removeOverlayRepositionEventListeners() {
-    document.body?.removeEventListener("scroll", this.handleOverlayRepositionEvent);
-    window.removeEventListener("scroll", this.handleOverlayRepositionEvent);
-    window.removeEventListener("resize", this.handleOverlayRepositionEvent);
+    globalThis.document.body?.removeEventListener("scroll", this.handleOverlayRepositionEvent);
+    globalThis.removeEventListener("scroll", this.handleOverlayRepositionEvent);
+    globalThis.removeEventListener("resize", this.handleOverlayRepositionEvent);
   }
 
   private handleOverlayRepositionEvent = () => {
@@ -462,8 +462,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private initMutationObserver = () => {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
+    if (globalThis.document.readyState === "loading") {
+      globalThis.document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
       return;
     }
 
@@ -472,12 +472,14 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private setupMutationObserver = () => {
     const bodyMutationObserver = new MutationObserver(this.handleBodyElementMutationObserverUpdate);
-    bodyMutationObserver.observe(document.body, { childList: true });
+    bodyMutationObserver.observe(globalThis.document.body, { childList: true });
 
     const documentElementMutationObserver = new MutationObserver(
       this.handleDocumentElementMutationObserverUpdate
     );
-    documentElementMutationObserver.observe(document.documentElement, { childList: true });
+    documentElementMutationObserver.observe(globalThis.document.documentElement, {
+      childList: true,
+    });
   };
 
   private handleOverlayElementMutationObserverUpdate = (mutationRecord: MutationRecord[]) => {
@@ -525,7 +527,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    const lastChild = document.body.lastChild;
+    const lastChild = globalThis.document.body.lastChild;
     if (
       lastChild === this.overlayListElement ||
       (lastChild === this.overlayIconElement && !this.isOverlayListVisible)
@@ -541,7 +543,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     // TODO - Think about this decision. This is a heavy handed approach to solve the question of "What if someone attempts to overlay our element using an element within the `<html>` tag?"
     // There might be better ways to handle this, and given that we are directly modifying the DOM for a third party website, this isn't entirely desirable to do.
 
-    const ignoredElements = new Set([document.body, document.head]);
+    const ignoredElements = new Set([globalThis.document.body, globalThis.document.head]);
     for (const record of mutationRecords) {
       if (record.type !== "childList" || record.addedNodes.length === 0) {
         continue;
@@ -552,7 +554,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
           continue;
         }
 
-        document.body.appendChild(node);
+        globalThis.document.body.appendChild(node);
       }
     }
   };
