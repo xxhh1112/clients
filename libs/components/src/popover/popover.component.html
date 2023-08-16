@@ -4,7 +4,7 @@
       <div class="tw-relative tw-z-20 tw-w-72 tw-bg-background tw-p-4 tw-text-main">
         <div class="tw-mb-2 tw-flex tw-items-center tw-justify-between tw-gap-4">
           <h3 class="tw-mb-0 tw-font-semibold">{{ header }}</h3>
-          <button type="button" class="tw-border-none tw-bg-transparent">
+          <button type="button" class="tw-border-none tw-bg-transparent" (click)="closed.emit()">
             <i class="bwi bwi-close"></i>
           </button>
         </div>

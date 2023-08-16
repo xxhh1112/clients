@@ -6,8 +6,10 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnDestroy,
   ViewContainerRef,
 } from "@angular/core";
+import { Observable, Subscription, mergeWith } from "rxjs";
 
 import { popoverPositions } from "./popover-positions";
 import { PopoverComponent } from "./popover.component";
@@ -15,7 +17,7 @@ import { PopoverComponent } from "./popover.component";
 @Directive({
   selector: "[bitPopoverTriggerFor]",
 })
-export class PopoverTriggerForDirective {
+export class PopoverTriggerForDirective implements OnDestroy {
   @HostBinding("attr.aria-expanded")
   isOpen = false;
 
@@ -25,8 +27,8 @@ export class PopoverTriggerForDirective {
   private overlayRef: OverlayRef;
   private defaultPopoverConfig: OverlayConfig = {
     panelClass: "bit-popover-panel",
-    // hasBackdrop: true,
-    // backdropClass: "cdk-overlay-transparent-backdrop",
+    hasBackdrop: true,
+    backdropClass: "cdk-overlay-transparent-backdrop",
     scrollStrategy: this.overlay.scrollStrategies.reposition(),
     positionStrategy: this.overlay
       .position()
@@ -36,6 +38,7 @@ export class PopoverTriggerForDirective {
       .withFlexibleDimensions(false)
       .withPush(true),
   };
+  private closedEventsSub: Subscription;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
@@ -48,12 +51,28 @@ export class PopoverTriggerForDirective {
     this.isOpen ? this.destroyPopover() : this.openPopover();
   }
 
+  ngOnDestroy() {
+    this.disposeAll();
+  }
+
   private openPopover() {
     this.isOpen = true;
     this.overlayRef = this.overlay.create(this.defaultPopoverConfig);
 
     const templatePortal = new TemplatePortal(this.popover.templateRef, this.viewContainerRef);
     this.overlayRef.attach(templatePortal);
+
+    this.closedEventsSub = this.getClosedEvents().subscribe(() => {
+      this.destroyPopover();
+    });
+  }
+
+  private getClosedEvents(): Observable<any> {
+    const detachments = this.overlayRef.detachments();
+    const backdrop = this.overlayRef.backdropClick();
+    const popoverClosed = this.popover.closed;
+
+    return detachments.pipe(mergeWith(backdrop, popoverClosed));
   }
 
   private destroyPopover() {
@@ -62,6 +81,11 @@ export class PopoverTriggerForDirective {
     }
 
     this.isOpen = false;
-    this.overlayRef.dispose();
+    this.disposeAll();
+  }
+
+  private disposeAll() {
+    this.closedEventsSub?.unsubscribe();
+    this.overlayRef?.dispose();
   }
 }

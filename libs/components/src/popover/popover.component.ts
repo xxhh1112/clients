@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from "@angular/core";
 
 @Component({
   selector: "bit-popover",
@@ -8,4 +8,5 @@ import { Component, Input, TemplateRef, ViewChild } from "@angular/core";
 export class PopoverComponent {
   @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
   @Input() header = "";
+  @Output() closed = new EventEmitter();
 }
