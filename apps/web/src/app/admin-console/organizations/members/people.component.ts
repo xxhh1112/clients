@@ -7,6 +7,7 @@ import {
   from,
   lastValueFrom,
   map,
+  Observable,
   shareReplay,
   Subject,
   switchMap,
@@ -15,22 +16,21 @@ import {
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
+import {
+  DialogServiceAbstraction,
+  SimpleDialogCloseType,
+  SimpleDialogOptions,
+  SimpleDialogType,
+} from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationUserConfirmRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import {
   OrganizationUserBulkResponse,
   OrganizationUserUserDetailsResponse,
 } from "@bitwarden/common/abstractions/organization-user/responses";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction as PolicyApiService } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
@@ -40,27 +40,30 @@ import {
   OrganizationUserType,
   PolicyType,
 } from "@bitwarden/common/admin-console/enums";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
-import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
 import { ProductType } from "@bitwarden/common/enums";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import {
-  DialogService,
-  SimpleDialogCloseType,
-  SimpleDialogOptions,
-  SimpleDialogType,
-} from "@bitwarden/components";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 
-import { EntityEventsComponent } from "../../../admin-console/organizations/manage/entity-events.component";
+import { flagEnabled } from "../../../../utils/flags";
+import { openEntityEventsDialog } from "../../../admin-console/organizations/manage/entity-events.component";
 import { BasePeopleComponent } from "../../../common/base.people.component";
 import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
 
 import { BulkConfirmComponent } from "./components/bulk/bulk-confirm.component";
+import { BulkEnableSecretsManagerDialogComponent } from "./components/bulk/bulk-enable-sm-dialog.component";
 import { BulkRemoveComponent } from "./components/bulk/bulk-remove.component";
 import { BulkRestoreRevokeComponent } from "./components/bulk/bulk-restore-revoke.component";
 import { BulkStatusComponent } from "./components/bulk/bulk-status.component";
@@ -81,8 +84,6 @@ export class PeopleComponent
 {
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
-  @ViewChild("eventsTemplate", { read: ViewContainerRef, static: true })
-  eventsModalRef: ViewContainerRef;
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
   confirmModalRef: ViewContainerRef;
   @ViewChild("resetPasswordTemplate", { read: ViewContainerRef, static: true })
@@ -102,6 +103,7 @@ export class PeopleComponent
   status: OrganizationUserStatusType = null;
   orgResetPasswordPolicyEnabled = false;
 
+  protected canUseSecretsManager$: Observable<boolean>;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -123,7 +125,7 @@ export class PeopleComponent
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
-    private dialogService: DialogService,
+    dialogService: DialogServiceAbstraction,
     private router: Router,
     private groupService: GroupService,
     private collectionService: CollectionService
@@ -139,7 +141,8 @@ export class PeopleComponent
       logService,
       searchPipe,
       userNamePipe,
-      stateService
+      stateService,
+      dialogService
     );
   }
 
@@ -147,6 +150,10 @@ export class PeopleComponent
     const organization$ = this.route.params.pipe(
       map((params) => this.organizationService.get(params.organizationId)),
       shareReplay({ refCount: true, bufferSize: 1 })
+    );
+
+    this.canUseSecretsManager$ = organization$.pipe(
+      map((org) => org.useSecretsManager && flagEnabled("secretsManager"))
     );
 
     const policies$ = organization$.pipe(
@@ -181,7 +188,7 @@ export class PeopleComponent
             if (response != null) {
               this.organization.hasPublicAndPrivateKeys =
                 response.publicKey != null && response.privateKey != null;
-              await this.syncService.fullSync(true); // Replace oganizations with new data
+              await this.syncService.fullSync(true); // Replace organizations with new data
             } else {
               throw new Error(this.i18nService.t("resetPasswordOrgKeysError"));
             }
@@ -295,7 +302,7 @@ export class PeopleComponent
 
   async confirmUser(user: OrganizationUserView, publicKey: Uint8Array): Promise<void> {
     const orgKey = await this.cryptoService.getOrgKey(this.organization.id);
-    const key = await this.cryptoService.rsaEncrypt(orgKey.key, publicKey.buffer);
+    const key = await this.cryptoService.rsaEncrypt(orgKey.key, publicKey);
     const request = new OrganizationUserConfirmRequest();
     request.key = key.encryptedString;
     await this.organizationUserService.postOrganizationUserConfirm(
@@ -362,7 +369,7 @@ export class PeopleComponent
       orgUpgradeSimpleDialogOpts.cancelButtonText = null; // hide secondary btn
     }
 
-    const simpleDialog = this.dialogService.openSimpleDialog(orgUpgradeSimpleDialogOpts);
+    const simpleDialog = this.dialogService.openSimpleDialogRef(orgUpgradeSimpleDialogOpts);
 
     firstValueFrom(simpleDialog.closed).then((result: SimpleDialogCloseType | undefined) => {
       if (!result) {
@@ -397,6 +404,7 @@ export class PeopleComponent
         name: this.userNamePipe.transform(user),
         organizationId: this.organization.id,
         organizationUserId: user != null ? user.id : null,
+        allOrganizationUserEmails: this.allUsers?.map((user) => user.email) ?? [],
         usesKeyConnector: user?.usesKeyConnector,
         initialTab: initialTab,
       },
@@ -511,13 +519,35 @@ export class PeopleComponent
     await this.load();
   }
 
+  async bulkEnableSM() {
+    const users = this.getCheckedUsers();
+    if (users.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("noSelectedUsersApplicable")
+      );
+      return;
+    }
+
+    const dialogRef = BulkEnableSecretsManagerDialogComponent.open(this.dialogService, {
+      orgId: this.organization.id,
+      users,
+    });
+
+    await lastValueFrom(dialogRef.closed);
+    this.selectAll(false);
+  }
+
   async events(user: OrganizationUserView) {
-    await this.modalService.openViewRef(EntityEventsComponent, this.eventsModalRef, (comp) => {
-      comp.name = this.userNamePipe.transform(user);
-      comp.organizationId = this.organization.id;
-      comp.entityId = user.id;
-      comp.showUser = false;
-      comp.entity = "user";
+    await openEntityEventsDialog(this.dialogService, {
+      data: {
+        name: this.userNamePipe.transform(user),
+        organizationId: this.organization.id,
+        entityId: user.id,
+        showUser: false,
+        entity: "user",
+      },
     });
   }
 
@@ -541,17 +571,47 @@ export class PeopleComponent
   }
 
   protected async removeUserConfirmationDialog(user: OrganizationUserView) {
-    const warningMessage = user.usesKeyConnector
-      ? this.i18nService.t("removeUserConfirmationKeyConnector")
-      : this.i18nService.t("removeOrgUserConfirmation");
+    const content = user.usesKeyConnector
+      ? "removeUserConfirmationKeyConnector"
+      : "removeOrgUserConfirmation";
 
-    return this.platformUtilsService.showDialog(
-      warningMessage,
-      this.i18nService.t("removeUserIdAccess", this.userNamePipe.transform(user)),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: {
+        key: "removeUserIdAccess",
+        placeholders: [this.userNamePipe.transform(user)],
+      },
+      content: { key: content },
+      type: SimpleDialogType.WARNING,
+    });
+
+    if (!confirmed) {
+      return false;
+    }
+
+    if (user.status > OrganizationUserStatusType.Invited && user.hasMasterPassword === false) {
+      return await this.noMasterPasswordConfirmationDialog(user);
+    }
+
+    return true;
+  }
+
+  protected async revokeUserConfirmationDialog(user: OrganizationUserView) {
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "revokeAccess", placeholders: [this.userNamePipe.transform(user)] },
+      content: this.revokeWarningMessage(),
+      acceptButtonText: { key: "revokeAccess" },
+      type: SimpleDialogType.WARNING,
+    });
+
+    if (!confirmed) {
+      return false;
+    }
+
+    if (user.status > OrganizationUserStatusType.Invited && user.hasMasterPassword === false) {
+      return await this.noMasterPasswordConfirmationDialog(user);
+    }
+
+    return true;
   }
 
   private async showBulkStatus(
@@ -605,5 +665,18 @@ export class PeopleComponent
       close = true;
       modal.close();
     }
+  }
+
+  private async noMasterPasswordConfirmationDialog(user: OrganizationUserView) {
+    return this.dialogService.openSimpleDialog({
+      title: {
+        key: "removeOrgUserNoMasterPasswordTitle",
+      },
+      content: {
+        key: "removeOrgUserNoMasterPasswordDesc",
+        placeholders: [this.userNamePipe.transform(user)],
+      },
+      type: SimpleDialogType.WARNING,
+    });
   }
 }

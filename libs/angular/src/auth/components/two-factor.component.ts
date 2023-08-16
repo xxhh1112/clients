@@ -4,12 +4,6 @@ import * as DuoWebSDK from "duo_web_sdk";
 import { first } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -20,6 +14,12 @@ import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/ide
 import { TwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/two-factor-email.request";
 import { TwoFactorProviders } from "@bitwarden/common/auth/services/two-factor.service";
 import { WebAuthnIFrame } from "@bitwarden/common/auth/webauthn-iframe";
+import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
@@ -197,13 +197,13 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       this.captchaToken
     );
     const response: AuthResult = await this.formPromise;
-    const disableFavicon = await this.stateService.getDisableFavicon();
-    await this.stateService.setDisableFavicon(!!disableFavicon);
     if (this.handleCaptchaRequired(response)) {
       return;
     }
     if (this.onSuccessfulLogin != null) {
       this.loginService.clearValues();
+      // Note: awaiting this will currently cause a hang on desktop & browser as they will wait for a full sync to complete
+      // before nagivating to the success route.
       this.onSuccessfulLogin();
     }
     if (response.resetMasterPassword) {
@@ -214,7 +214,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     }
     if (this.onSuccessfulLoginNavigate != null) {
       this.loginService.clearValues();
-      this.onSuccessfulLoginNavigate();
+      await this.onSuccessfulLoginNavigate();
     } else {
       this.loginService.clearValues();
       this.router.navigate([this.successRoute], {
@@ -234,10 +234,20 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       return;
     }
 
+    if (this.authService.email == null) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("sessionTimeout")
+      );
+      return;
+    }
+
     try {
       const request = new TwoFactorEmailRequest();
       request.email = this.authService.email;
       request.masterPasswordHash = this.authService.masterPasswordHash;
+      request.ssoEmail2FaSessionToken = this.authService.ssoEmail2FaSessionToken;
       request.deviceIdentifier = await this.appIdService.getAppId();
       request.authRequestAccessCode = this.authService.accessCode;
       request.authRequestId = this.authService.authRequestId;

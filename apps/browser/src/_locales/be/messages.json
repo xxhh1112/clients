@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Абнавіць"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "Паказваць параметры кантэкстнага меню"
   },
@@ -1461,8 +1467,35 @@
   "autoFillSuccess": {
     "message": "Аўтазапоўнены элемент"
   },
+  "insecurePageWarning": {
+    "message": "Папярэджанне: гэта старонка HTTP не абаронена. Любая інфармацыя, якую вы адпраўляеце тэарэтычна можа перахоплена і зменена любым карыстальнікам. Гэты лагін першапачаткова захаваны на абароненай старонцы (HTTPS)."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Вы ўсё яшчэ хочаце запоўніць гэты лагін?"
+  },
+  "autofillIframeWarning": {
+    "message": "Форма размешчана на іншым дамене, які адрозніваецца ад URI вашага захаванага лагіна. Націсніце \"Добра\", каб усё роўна запоўніць або \"Скасаваць\" для спынення."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Каб больш не атрымліваць гэта папярэджанне, захавайце гэты URI, $HOSTNAME$ у свае элементы ўваходу Bitwarden для гэтага сайта.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Прызначыць асноўны пароль"
+  },
+  "currentMasterPass": {
+    "message": "Бягучы асноўны пароль"
+  },
+  "newMasterPass": {
+    "message": "Новы асноўны пароль"
+  },
+  "confirmNewMasterPass": {
+    "message": "Пацвердзіць новы асноўны пароль"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Адна або больш палітык арганізацыі патрабуе, каб ваш асноўны пароль адпавядаў наступным патрабаванням:"
@@ -1844,6 +1877,9 @@
   "updateMasterPasswordWarning": {
     "message": "Ваш асноўны пароль нядаўна быў зменены адміністратарам арганізацыі. Для таго, каб атрымаць доступ да вашага сховішча, вы павінны абнавіць яго зараз. Гэта прывядзе да завяршэння бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Аўтаматычная рэгістрацыя"
   },
@@ -1872,6 +1908,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча складае гадзін: $HOURS$; хвілін: $MINUTES$. Для часу чакання вашага сховішча прызначана дзеянне $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Палітыкай вашай арганізацыі прызначана дзеянне $ACTION$ для часу чакання вашага сховішча.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2164,5 +2226,26 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "opensInANewWindow": {
+    "message": "Адкрываць у новым акне"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Доступ забаронены. У вас не дастаткова правоў для прагляду гэтай старонкі."
+  },
+  "general": {
+    "message": "Асноўныя"
+  },
+  "display": {
+    "message": "Адлюстраванне"
   }
 }

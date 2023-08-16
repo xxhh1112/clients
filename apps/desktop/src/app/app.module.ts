@@ -1,8 +1,9 @@
 import "zone.js";
 
 // Register the locales for the application
-import "./locales";
+import "../platform/app/locales";
 
+import { DialogModule } from "@angular/cdk/dialog";
 import { NgModule } from "@angular/core";
 
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
@@ -56,7 +57,7 @@ import { EffluxDatesComponent as SendEffluxDatesComponent } from "./tools/send/e
 import { SendComponent } from "./tools/send/send.component";
 
 @NgModule({
-  imports: [SharedModule, AppRoutingModule, VaultFilterModule, LoginModule],
+  imports: [SharedModule, DialogModule, AppRoutingModule, VaultFilterModule, LoginModule],
   declarations: [
     AccessibilityCookieComponent,
     AccountSwitcherComponent,

@@ -2,16 +2,16 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EventType } from "@bitwarden/common/enums";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
 import { ExportComponent } from "../../../../tools/import-export/export.component";
@@ -34,7 +34,7 @@ export class OrganizationExportComponent extends ExportComponent {
     userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
-    modalService: ModalService
+    dialogService: DialogServiceAbstraction
   ) {
     super(
       cryptoService,
@@ -47,8 +47,12 @@ export class OrganizationExportComponent extends ExportComponent {
       userVerificationService,
       formBuilder,
       fileDownloadService,
-      modalService
+      dialogService
     );
+  }
+
+  protected get disabledByPolicy(): boolean {
+    return false;
   }
 
   async ngOnInit() {
@@ -57,10 +61,6 @@ export class OrganizationExportComponent extends ExportComponent {
       this.organizationId = params.organizationId;
     });
     await super.ngOnInit();
-  }
-
-  async checkExportDisabled() {
-    return;
   }
 
   getExportData() {

@@ -15,7 +15,7 @@ import {
   OrganizationUserBulkPublicKeyResponse,
   OrganizationUserBulkResponse,
   OrganizationUserDetailsResponse,
-  OrganizationUserResetPasswordDetailsReponse,
+  OrganizationUserResetPasswordDetailsResponse,
   OrganizationUserUserDetailsResponse,
 } from "./responses";
 
@@ -65,7 +65,7 @@ export abstract class OrganizationUserService {
   abstract getOrganizationUserResetPasswordDetails(
     organizationId: string,
     id: string
-  ): Promise<OrganizationUserResetPasswordDetailsReponse>;
+  ): Promise<OrganizationUserResetPasswordDetailsResponse>;
 
   /**
    * Create new organization user invite(s) for the specified organization
@@ -199,6 +199,17 @@ export abstract class OrganizationUserService {
     organizationId: string,
     id: string,
     request: OrganizationUserResetPasswordRequest
+  ): Promise<void>;
+
+  /**
+   * Enable Secrets Manager for many users
+   * @param organizationId - Identifier for the organization the user belongs to
+   * @param ids - List of organization user identifiers to enable
+   * @return List of user ids, including both those that were successfully enabled and those that had an error
+   */
+  abstract putOrganizationUserBulkEnableSecretsManager(
+    organizationId: string,
+    ids: string[]
   ): Promise<void>;
 
   /**

@@ -20,7 +20,8 @@
         "plugin:import/recommended",
         "plugin:import/typescript",
         "prettier",
-        "plugin:rxjs/recommended"
+        "plugin:rxjs/recommended",
+        "plugin:storybook/recommended"
       ],
       "settings": {
         "import/parsers": {
@@ -90,22 +91,21 @@
           "error",
           {
             "zones": [
-              // Do not allow angular/node code to be imported into common
               {
+                // avoid specific frameworks or large dependencies in common
                 "target": "./libs/common/**/*",
-                "from": "./libs/angular/**/*"
-              },
-              {
-                "target": "./libs/common/**/*",
-                "from": "./libs/node/**/*"
-              },
-              {
-                "target": "./libs/common/**/*",
-                "from": "./libs/importer/**/*"
-              },
-              {
-                "target": "./libs/common/**/*",
-                "from": "./libs/exporter/**/*"
+                "from": [
+                  // Angular
+                  "./libs/angular/**/*",
+                  "./node_modules/@angular*/**/*",
+
+                  // Node
+                  "./libs/node/**/*",
+
+                  // Import/export
+                  "./libs/importer/**/*",
+                  "./libs/exporter/**/*"
+                ]
               }
             ]
           }
@@ -136,6 +136,18 @@
       }
     },
     {
+      "files": ["libs/angular/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/angular/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["libs/auth/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/auth/*", "src/**/*"] }]
+      }
+    },
+    {
       "files": ["libs/common/src/**/*.ts"],
       "rules": {
         "no-restricted-imports": ["error", { "patterns": ["@bitwarden/common/*", "src/**/*"] }]
@@ -148,15 +160,9 @@
       }
     },
     {
-      "files": ["libs/angular/src/**/*.ts"],
+      "files": ["libs/exporter/src/**/*.ts"],
       "rules": {
-        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/angular/*", "src/**/*"] }]
-      }
-    },
-    {
-      "files": ["libs/node/src/**/*.ts"],
-      "rules": {
-        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/node/*", "src/**/*"] }]
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/exporter/*", "src/**/*"] }]
       }
     },
     {
@@ -166,9 +172,9 @@
       }
     },
     {
-      "files": ["libs/exporter/src/**/*.ts"],
+      "files": ["libs/node/src/**/*.ts"],
       "rules": {
-        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/exporter/*", "src/**/*"] }]
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/node/*", "src/**/*"] }]
       }
     }
   ]

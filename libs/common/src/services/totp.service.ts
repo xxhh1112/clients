@@ -1,7 +1,7 @@
-import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
-import { LogService } from "../abstractions/log.service";
 import { TotpService as TotpServiceAbstraction } from "../abstractions/totp.service";
-import { Utils } from "../misc/utils";
+import { CryptoFunctionService } from "../platform/abstractions/crypto-function.service";
+import { LogService } from "../platform/abstractions/log.service";
+import { Utils } from "../platform/misc/utils";
 
 const B32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 const SteamChars = "23456789BCDFGHJKMNPQRTVWXY";
@@ -162,7 +162,7 @@ export class TotpService implements TotpServiceAbstraction {
     timeBytes: Uint8Array,
     alg: "sha1" | "sha256" | "sha512"
   ) {
-    const signature = await this.cryptoFunctionService.hmac(timeBytes.buffer, keyBytes.buffer, alg);
+    const signature = await this.cryptoFunctionService.hmac(timeBytes, keyBytes, alg);
     return new Uint8Array(signature);
   }
 }

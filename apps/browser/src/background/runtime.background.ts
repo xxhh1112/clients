@@ -1,14 +1,16 @@
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
-import { SystemService } from "@bitwarden/common/abstractions/system.service";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
-import { BrowserApi } from "../browser/browserApi";
-import { BrowserEnvironmentService } from "../services/browser-environment.service";
-import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
+import { BrowserApi } from "../platform/browser/browser-api";
+import { BrowserPopoutWindowService } from "../platform/popup/abstractions/browser-popout-window.service";
+import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
+import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
 
 import MainBackground from "./main.background";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
@@ -28,7 +30,9 @@ export default class RuntimeBackground {
     private systemService: SystemService,
     private environmentService: BrowserEnvironmentService,
     private messagingService: MessagingService,
-    private logService: LogService
+    private logService: LogService,
+    private configService: ConfigServiceAbstraction,
+    private browserPopoutWindowService: BrowserPopoutWindowService
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -57,6 +61,8 @@ export default class RuntimeBackground {
   }
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
+    const cipherId = msg.data?.cipherId;
+
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -64,7 +70,7 @@ export default class RuntimeBackground {
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
           item = this.lockedVaultPendingNotifications.pop();
-          BrowserApi.closeBitwardenExtensionTab();
+          await this.browserPopoutWindowService.closeUnlockPrompt();
         }
 
         await this.main.refreshBadge();
@@ -73,6 +79,8 @@ export default class RuntimeBackground {
         this.systemService.cancelProcessReload();
 
         if (item) {
+          await BrowserApi.focusWindow(item.commandToRetry.sender.tab.windowId);
+          await BrowserApi.focusTab(item.commandToRetry.sender.tab.id);
           await BrowserApi.tabSendMessageData(
             item.commandToRetry.sender.tab,
             "unlockCompleted",
@@ -94,30 +102,38 @@ export default class RuntimeBackground {
             await this.main.refreshMenu();
           }, 2000);
           this.main.avatarUpdateService.loadColorFromState();
+          this.configService.fetchServerConfig();
         }
         break;
       case "openPopup":
         await this.main.openPopup();
         break;
       case "promptForLogin":
-        BrowserApi.openBitwardenExtensionTab("popup/index.html", true, sender.tab);
+      case "bgReopenPromptForLogin":
+        await this.browserPopoutWindowService.openUnlockPrompt(sender.tab?.windowId);
+        break;
+      case "passwordReprompt":
+        if (cipherId) {
+          await this.browserPopoutWindowService.openPasswordRepromptPrompt(sender.tab?.windowId, {
+            cipherId: cipherId,
+            senderTabId: sender.tab.id,
+            action: msg.data?.action,
+          });
+        }
         break;
       case "openAddEditCipher": {
         const addEditCipherUrl =
-          msg.data?.cipherId == null
+          cipherId == null
             ? "popup/index.html#/edit-cipher"
-            : "popup/index.html#/edit-cipher?cipherId=" + msg.data.cipherId;
+            : "popup/index.html#/edit-cipher?cipherId=" + cipherId;
 
-        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true, sender.tab);
+        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
         break;
       }
       case "closeTab":
         setTimeout(() => {
           BrowserApi.closeBitwardenExtensionTab();
         }, msg.delay ?? 0);
-        break;
-      case "showDialogResolve":
-        this.platformUtilsService.resolveDialogPromise(msg.dialogId, msg.confirmed);
         break;
       case "bgCollectPageDetails":
         await this.main.collectPageDetailsForContentScript(sender.tab, msg.sender, sender.frameId);
@@ -201,10 +217,10 @@ export default class RuntimeBackground {
         break;
       case "emailVerificationRequired":
         this.messagingService.send("showDialog", {
-          dialogId: "emailVerificationRequired",
-          title: this.i18nService.t("emailVerificationRequired"),
-          text: this.i18nService.t("emailVerificationRequiredDesc"),
-          confirmText: this.i18nService.t("ok"),
+          title: { key: "emailVerificationRequired" },
+          content: { key: "emailVerificationRequiredDesc" },
+          acceptButtonText: { key: "ok" },
+          cancelButtonText: null,
           type: "info",
         });
         break;
@@ -222,6 +238,7 @@ export default class RuntimeBackground {
       cipher: this.main.loginToAutoFill,
       pageDetails: this.pageDetailsToAutoFill,
       fillNewPassword: true,
+      allowTotpAutofill: true,
     });
 
     if (totpCode != null) {

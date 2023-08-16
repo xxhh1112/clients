@@ -1,13 +1,14 @@
 import { ApiService } from "../../../abstractions/api.service";
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { StateService } from "../../../abstractions/state.service";
-import { EFFLongWordList } from "../../../misc/wordlist";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { EFFLongWordList } from "../../../platform/misc/wordlist";
 
 import {
   AnonAddyForwarder,
   DuckDuckGoForwarder,
   FastmailForwarder,
   FirefoxRelayForwarder,
+  ForwardEmailForwarder,
   Forwarder,
   ForwarderOptions,
   SimpleLoginForwarder,
@@ -23,6 +24,7 @@ const DefaultOptions = {
   forwardedService: "",
   forwardedAnonAddyDomain: "anonaddy.me",
   forwardedAnonAddyBaseUrl: "https://app.anonaddy.com",
+  forwardedForwardEmailDomain: "hideaddress.net",
 };
 
 export class UsernameGenerationService implements UsernameGenerationServiceAbstraction {
@@ -139,6 +141,10 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     } else if (o.forwardedService === "duckduckgo") {
       forwarder = new DuckDuckGoForwarder();
       forwarderOptions.apiKey = o.forwardedDuckDuckGoToken;
+    } else if (o.forwardedService === "forwardemail") {
+      forwarder = new ForwardEmailForwarder();
+      forwarderOptions.apiKey = o.forwardedForwardEmailApiToken;
+      forwarderOptions.forwardemail.domain = o.forwardedForwardEmailDomain;
     }
 
     if (forwarder == null) {

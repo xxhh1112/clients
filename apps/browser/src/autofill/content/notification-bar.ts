@@ -3,6 +3,7 @@ import ChangePasswordRuntimeMessage from "../../background/models/changePassword
 import AutofillField from "../models/autofill-field";
 import { WatchedForm } from "../models/watched-form";
 import { FormData } from "../services/abstractions/autofill.service";
+import { UserSettings } from "../types";
 
 interface HTMLElementWithFormOpId extends HTMLElement {
   formOpId: string;
@@ -26,10 +27,64 @@ interface HTMLElementWithFormOpId extends HTMLElement {
  * and async scripts to finish loading.
  * https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event
  */
-document.addEventListener("DOMContentLoaded", (event) => {
-  // Do not show the notification bar on the Bitwarden vault
-  // because they can add logins and change passwords there
-  if (window.location.hostname.endsWith("vault.bitwarden.com")) {
+document.addEventListener("DOMContentLoaded", async (event) => {
+  // These are preferences for whether to show the notification bar based on the user's settings
+  // and they are set in the Settings > Options page in the browser extension.
+  let disabledAddLoginNotification = false;
+  let disabledChangedPasswordNotification = false;
+  let showNotificationBar = true;
+
+  // Look up the active user id from storage
+  const activeUserIdKey = "activeUserId";
+  let activeUserId: string;
+  await chrome.storage.local.get(activeUserIdKey, (obj: any) => {
+    if (obj == null || obj[activeUserIdKey] == null) {
+      return;
+    }
+    activeUserId = obj[activeUserIdKey];
+  });
+
+  // Look up the user's settings from storage
+  await chrome.storage.local.get(activeUserId, (obj: any) => {
+    if (obj?.[activeUserId] == null) {
+      return;
+    }
+
+    const userSettings: UserSettings = obj[activeUserId].settings;
+
+    // Do not show the notification bar on the Bitwarden vault
+    // because they can add logins and change passwords there
+    if (window.location.origin === userSettings.serverConfig.environment.vault) {
+      showNotificationBar = false;
+
+      return;
+    }
+
+    // NeverDomains is a dictionary of domains that the user has chosen to never
+    // show the notification bar on (for login detail collection or password change).
+    // It is managed in the Settings > Excluded Domains page in the browser extension.
+    // Example: '{"bitwarden.com":null}'
+    const excludedDomainsDict = userSettings.neverDomains;
+
+    if (
+      excludedDomainsDict != null &&
+      // eslint-disable-next-line
+      excludedDomainsDict.hasOwnProperty(window.location.hostname)
+    ) {
+      return;
+    }
+
+    // Set local disabled preferences
+    disabledAddLoginNotification = userSettings.disableAddLoginNotification;
+    disabledChangedPasswordNotification = userSettings.disableChangedPasswordNotification;
+
+    if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
+      // If the user has not disabled both notifications, then handle the initial page change (null -> actual page)
+      handlePageChange();
+    }
+  });
+
+  if (!showNotificationBar) {
     return;
   }
 
@@ -77,54 +132,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ]);
   const changePasswordButtonContainsNames = new Set(["pass", "change", "contras", "senha"]);
 
-  // These are preferences for whether to show the notification bar based on the user's settings
-  // and they are set in the Settings > Options page in the browser extension.
-  let disabledAddLoginNotification = false;
-  let disabledChangedPasswordNotification = false;
-
-  // Look up the active user id from storage
-  const activeUserIdKey = "activeUserId";
-  let activeUserId: string;
-  chrome.storage.local.get(activeUserIdKey, (obj: any) => {
-    if (obj == null || obj[activeUserIdKey] == null) {
-      return;
-    }
-    activeUserId = obj[activeUserIdKey];
-  });
-
-  // Look up the user's settings from storage
-  chrome.storage.local.get(activeUserId, (obj: any) => {
-    if (obj?.[activeUserId] == null) {
-      return;
-    }
-
-    const userSettings = obj[activeUserId].settings;
-
-    // NeverDomains is a dictionary of domains that the user has chosen to never
-    // show the notification bar on (for login detail collection or password change).
-    // It is managed in the Settings > Excluded Domains page in the browser extension.
-    // Example: '{"bitwarden.com":null}'
-    const excludedDomainsDict = userSettings.neverDomains;
-
-    if (
-      excludedDomainsDict != null &&
-      // eslint-disable-next-line
-      excludedDomainsDict.hasOwnProperty(window.location.hostname)
-    ) {
-      return;
-    }
-
-    // Set local disabled preferences
-    disabledAddLoginNotification = userSettings.disableAddLoginNotification;
-    disabledChangedPasswordNotification = userSettings.disableChangedPasswordNotification;
-
-    if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
-      // If the user has not disabled both notifications, then handle the initial page change (null -> actual page)
-      handlePageChange();
-    }
-  });
-
-  //#region Message Processing
+  // Message Processing
 
   // Listen for messages from the background script
   // Note: onMessage events are fired when a message is sent from either an extension process
@@ -182,7 +190,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return true;
     }
   }
-  //#endregion Message Processing
+  // End Message Processing
 
   /**
    * Observe the DOM for changes and collect page details if forms are added to the page
@@ -367,9 +375,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   }
 
-  //#endregion Page Detail Collection Methods
+  // End Page Detail Collection Methods
 
-  // #region Form Detection and Submission Handling
+  // Form Detection and Submission Handling
 
   /**
    * Iterates through the given array of forms and adds an event listener to each form.
@@ -825,15 +833,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }, 500);
   }
 
-  //#endregion Form Detection and Submission Handling
+  // End Form Detection and Submission Handling
 
-  //#region Notification Bar Functions (open, close, height adjustment, etc.)
+  // Notification Bar Functions (open, close, height adjustment, etc.)
   function closeExistingAndOpenBar(type: string, typeData: any) {
     const barQueryParams = {
       type,
       isVaultLocked: typeData.isVaultLocked,
       theme: typeData.theme,
       removeIndividualVault: typeData.removeIndividualVault,
+      webVaultURL: typeData.webVaultURL,
     };
     const barQueryString = new URLSearchParams(barQueryParams).toString();
     const barPage = "notification/bar.html?" + barQueryString;
@@ -924,9 +933,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
       el.style.height = heightStyle;
     }
   }
-  //#endregion Notification Bar Functions (open, close, height adjustment, etc.)
+  // End Notification Bar Functions (open, close, height adjustment, etc.)
 
-  //#region Helper Functions
+  // Helper Functions
   function sendPlatformMessage(msg: any) {
     chrome.runtime.sendMessage(msg);
   }
@@ -992,5 +1001,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return theEl === document;
   }
 
-  //#endregion Helper Functions
+  // End Helper Functions
 });

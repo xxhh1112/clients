@@ -2,17 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { concatMap, filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
 
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { ThemeType } from "@bitwarden/common/enums";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Component({
   selector: "app-preferences",
@@ -51,7 +53,9 @@ export class PreferencesComponent implements OnInit {
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private platformUtilsService: PlatformUtilsService,
     private messagingService: MessagingService,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private settingsService: SettingsService,
+    private dialogService: DialogServiceAbstraction
   ) {
     this.vaultTimeoutOptions = [
       { name: i18nService.t("oneMinute"), value: 1 },
@@ -110,13 +114,12 @@ export class PreferencesComponent implements OnInit {
       .pipe(
         concatMap(async (action) => {
           if (action === VaultTimeoutAction.LogOut) {
-            const confirmed = await this.platformUtilsService.showDialog(
-              this.i18nService.t("vaultTimeoutLogOutConfirmation"),
-              this.i18nService.t("vaultTimeoutLogOutConfirmationTitle"),
-              this.i18nService.t("yes"),
-              this.i18nService.t("cancel"),
-              "warning"
-            );
+            const confirmed = await this.dialogService.openSimpleDialog({
+              title: { key: "vaultTimeoutLogOutConfirmationTitle" },
+              content: { key: "vaultTimeoutLogOutConfirmation" },
+              type: SimpleDialogType.WARNING,
+            });
+
             if (!confirmed) {
               this.form.controls.vaultTimeoutAction.patchValue(VaultTimeoutAction.Lock, {
                 emitEvent: false,
@@ -128,11 +131,10 @@ export class PreferencesComponent implements OnInit {
         takeUntil(this.destroy$)
       )
       .subscribe();
-
     const initialFormValues = {
       vaultTimeout: await this.vaultTimeoutSettingsService.getVaultTimeout(),
       vaultTimeoutAction: await this.vaultTimeoutSettingsService.getVaultTimeoutAction(),
-      enableFavicons: !(await this.stateService.getDisableFavicon()),
+      enableFavicons: !(await this.settingsService.getDisableFavicon()),
       enableFullWidth: await this.stateService.getEnableFullWidth(),
       theme: await this.stateService.getTheme(),
       locale: (await this.stateService.getLocale()) ?? null,
@@ -157,7 +159,7 @@ export class PreferencesComponent implements OnInit {
       values.vaultTimeout,
       values.vaultTimeoutAction
     );
-    await this.stateService.setDisableFavicon(!values.enableFavicons);
+    await this.settingsService.setDisableFavicon(!values.enableFavicons);
     await this.stateService.setEnableFullWidth(values.enableFullWidth);
     this.messagingService.send("setFullWidth");
     if (values.theme !== this.startingTheme) {

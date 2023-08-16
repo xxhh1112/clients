@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
 import {
   All,
@@ -26,7 +26,7 @@ export class VaultHeaderComponent {
    */
   @Input() loading: boolean;
 
-  /** Current active fitler */
+  /** Current active filter */
   @Input() filter: RoutedVaultFilterModel;
 
   /**
@@ -40,9 +40,24 @@ export class VaultHeaderComponent {
   @Input() collection?: TreeNode<CollectionView>;
 
   /**
+   * Whether 'Collection' option is shown in the 'New' dropdown
+   */
+  @Input() canCreateCollections: boolean;
+
+  /**
    * Emits an event when the new item button is clicked in the header
    */
   @Output() onAddCipher = new EventEmitter<void>();
+
+  /**
+   * Emits an event when the new collection button is clicked in the 'New' dropdown menu
+   */
+  @Output() onAddCollection = new EventEmitter<null>();
+
+  /**
+   * Emits an event when the new folder button is clicked in the 'New' dropdown menu
+   */
+  @Output() onAddFolder = new EventEmitter<null>();
 
   constructor(private i18nService: I18nService) {}
 
@@ -114,5 +129,13 @@ export class VaultHeaderComponent {
 
   protected addCipher() {
     this.onAddCipher.emit();
+  }
+
+  async addFolder(): Promise<void> {
+    this.onAddFolder.emit();
+  }
+
+  async addCollection(): Promise<void> {
+    this.onAddCollection.emit();
   }
 }

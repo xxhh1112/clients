@@ -1,5 +1,3 @@
-<!-- Please remove this disable statement when editing this file! -->
-<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <header>
   <div class="left">
     <button type="button" (click)="close()">{{ "close" | i18n }}</button>
@@ -74,7 +72,7 @@
             <div
               *ngIf="showPassword && !showPasswordCount"
               class="monospaced password-wrapper"
-              appSelectCopy
+              [appCopyText]="cipher.login.password"
               [innerHTML]="cipher.login.password | colorPassword"
             ></div>
             <div
@@ -557,7 +555,11 @@
         class="box-content-row"
         appStopClick
         (click)="fillCipher()"
-        *ngIf="cipher.type !== cipherType.SecureNote && !cipher.isDeleted && !inPopout"
+        *ngIf="
+          cipher.type !== cipherType.SecureNote &&
+          !cipher.isDeleted &&
+          (!this.inPopout || this.loadAction)
+        "
       >
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
@@ -655,6 +657,7 @@
       <div *ngIf="cipher.hasPasswordHistory">
         <b class="font-weight-semibold">{{ "passwordHistory" | i18n }}:</b>
         <button
+          type="button"
           routerLink="/cipher-password-history"
           [queryParams]="{ cipherId: cipher.id }"
           appStopClick

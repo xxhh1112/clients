@@ -3,16 +3,17 @@ import * as os from "os";
 import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/tools/export/components/export.component";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
 const BroadcasterSubscriptionId = "ExportComponent";
@@ -33,7 +34,8 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     formBuilder: UntypedFormBuilder,
     private broadcasterService: BroadcasterService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    dialogService: DialogServiceAbstraction
   ) {
     super(
       cryptoService,
@@ -46,7 +48,8 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       logService,
       userVerificationService,
       formBuilder,
-      fileDownloadService
+      fileDownloadService,
+      dialogService
     );
   }
 
@@ -56,25 +59,23 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
 
   async warningDialog() {
     if (this.encryptedFormat) {
-      return await this.platformUtilsService.showDialog(
-        this.i18nService.t("encExportKeyWarningDesc") +
+      return await this.dialogService.openSimpleDialog({
+        title: { key: "confirmVaultExport" },
+        content:
+          this.i18nService.t("encExportKeyWarningDesc") +
           os.EOL +
           os.EOL +
           this.i18nService.t("encExportAccountWarningDesc"),
-        this.i18nService.t("confirmVaultExport"),
-        this.i18nService.t("exportVault"),
-        this.i18nService.t("cancel"),
-        "warning",
-        true
-      );
+        acceptButtonText: { key: "exportVault" },
+        type: SimpleDialogType.WARNING,
+      });
     } else {
-      return await this.platformUtilsService.showDialog(
-        this.i18nService.t("exportWarningDesc"),
-        this.i18nService.t("confirmVaultExport"),
-        this.i18nService.t("exportVault"),
-        this.i18nService.t("cancel"),
-        "warning"
-      );
+      return await this.dialogService.openSimpleDialog({
+        title: { key: "confirmVaultExport" },
+        content: { key: "exportWarningDesc" },
+        acceptButtonText: { key: "exportVault" },
+        type: SimpleDialogType.WARNING,
+      });
     }
   }
 }

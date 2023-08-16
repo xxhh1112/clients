@@ -12,7 +12,7 @@ import {
   tap,
 } from "rxjs";
 
-import { Utils } from "@bitwarden/common/misc/utils";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SelectItemView } from "@bitwarden/components/src/multi-select/models/select-item-view";
 
 import { BaseAccessPolicyView } from "../../models/view/access-policy.view";
@@ -43,7 +43,7 @@ export class AccessSelectorComponent implements OnInit {
   static readonly projectIcon = "bwi-collection";
 
   /**
-   * Emits the selected itemss on submit.
+   * Emits the selected items on submit.
    */
   @Output() onCreateAccessPolicies = new EventEmitter<SelectItemView[]>();
   @Output() onDeleteAccessPolicy = new EventEmitter<AccessSelectorRowView>();
@@ -57,7 +57,16 @@ export class AccessSelectorComponent implements OnInit {
 
   protected rows$ = new Subject<AccessSelectorRowView[]>();
   @Input() private set rows(value: AccessSelectorRowView[]) {
-    this.rows$.next(value);
+    const sorted = value.sort((a, b) => {
+      if (a.icon == b.icon) {
+        return a.name.localeCompare(b.name);
+      }
+      if (a.icon == AccessSelectorComponent.userIcon) {
+        return -1;
+      }
+      return 1;
+    });
+    this.rows$.next(sorted);
   }
 
   private maxLength = 15;

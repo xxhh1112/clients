@@ -1,12 +1,14 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-
-import { SimpleDialogCloseType } from "./models/simple-dialog-close-type.enum";
-import { SimpleDialogOptions } from "./models/simple-dialog-options";
-import { SimpleDialogType } from "./models/simple-dialog-type.enum";
-import { Translation } from "./models/translation";
+import {
+  SimpleDialogType,
+  SimpleDialogCloseType,
+  Translation,
+} from "@bitwarden/angular/services/dialog";
+import { SimpleDialogOptions } from "@bitwarden/angular/services/dialog/simple-dialog-options";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 const DEFAULT_ICON: Record<SimpleDialogType, string> = {
   [SimpleDialogType.PRIMARY]: "bwi-business",
@@ -25,12 +27,11 @@ const DEFAULT_COLOR: Record<SimpleDialogType, string> = {
 };
 
 @Component({
-  selector: "bit-simple-configurable-dialog",
   templateUrl: "./simple-configurable-dialog.component.html",
 })
 export class SimpleConfigurableDialogComponent {
-  SimpleDialogType = SimpleDialogType;
-  SimpleDialogCloseType = SimpleDialogCloseType;
+  protected SimpleDialogType = SimpleDialogType;
+  protected SimpleDialogCloseType = SimpleDialogCloseType;
 
   get iconClasses() {
     return [
@@ -39,12 +40,13 @@ export class SimpleConfigurableDialogComponent {
     ];
   }
 
-  title: string;
-  content: string;
-  acceptButtonText: string;
-  cancelButtonText: string;
+  protected title: string;
+  protected content: string;
+  protected acceptButtonText: string;
+  protected cancelButtonText: string;
+  protected formGroup = new FormGroup({});
 
-  showCancelButton = this.simpleDialogOpts.cancelButtonText !== null;
+  protected showCancelButton = this.simpleDialogOpts.cancelButtonText !== null;
 
   constructor(
     public dialogRef: DialogRef,
@@ -53,6 +55,14 @@ export class SimpleConfigurableDialogComponent {
   ) {
     this.localizeText();
   }
+
+  protected accept = async () => {
+    if (this.simpleDialogOpts.acceptAction) {
+      await this.simpleDialogOpts.acceptAction();
+    }
+
+    this.dialogRef.close(SimpleDialogCloseType.ACCEPT);
+  };
 
   private localizeText() {
     this.title = this.translate(this.simpleDialogOpts.title);
@@ -71,7 +81,7 @@ export class SimpleConfigurableDialogComponent {
   private translate(translation: string | Translation, defaultKey?: string): string {
     // Translation interface use implies we must localize.
     if (typeof translation === "object") {
-      return this.i18nService.t(translation.key, ...translation.placeholders);
+      return this.i18nService.t(translation.key, ...(translation.placeholders ?? []));
     }
 
     // Use string that is already translated or use default key post translate

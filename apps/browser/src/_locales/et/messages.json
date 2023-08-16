@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Jah, uuenda"
   },
+  "notificationUnlockDesc": {
+    "message": "Ava Bitwardeni hoidla, et automaattäide lõpuni viia."
+  },
+  "notificationUnlock": {
+    "message": "Lukusta lahti"
+  },
   "enableContextMenuItem": {
     "message": "Kuva parema kliki menüü valikud"
   },
@@ -1461,8 +1467,35 @@
   "autoFillSuccess": {
     "message": "Kirje täideti"
   },
+  "insecurePageWarning": {
+    "message": "Hoiatus: See on ebaturvaline HTTP lehekülg. Teised osapooled võivad sinu sisestatud infot potentsiaalselt näha ja muuta. Algselt oli see kirje salvestatud turvalise (HTTPS) lehe jaoks."
+  },
+  "insecurePageWarningFillPrompt": {
+    "message": "Soovid kirje automaattäita?"
+  },
+  "autofillIframeWarning": {
+    "message": "See vorm on majutatud teistsugusel domeenil kui sinu salvestatud URI. Vajuta OK, et automaattäita või Tühista, et täitmine peatada."
+  },
+  "autofillIframeWarningTip": {
+    "message": "Selleks, et antud teavitust edaspidi ei kuvataks, salvesta see URI $HOSTNAME$ Bitwardeni kirjesse.",
+    "placeholders": {
+      "hostname": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
   "setMasterPassword": {
     "message": "Määra ülemparool"
+  },
+  "currentMasterPass": {
+    "message": "Praegune ülemparool"
+  },
+  "newMasterPass": {
+    "message": "Uus ülemparool"
+  },
+  "confirmNewMasterPass": {
+    "message": "Kinnita uus ülemparool"
   },
   "masterPasswordPolicyInEffect": {
     "message": "Üks või enam organisatsiooni eeskirja nõuavad, et ülemparool vastaks nendele nõudmistele:"
@@ -1844,6 +1877,9 @@
   "updateMasterPasswordWarning": {
     "message": "Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead seda nüüd uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Sinu ülemparool ei vasta ühele või rohkemale organisatsiooni poolt seatud poliitikale. Hoidlale ligipääsemiseks pead oma ülemaprooli uuendama. Jätkamisel logitakse sind praegusest sessioonist välja, mistõttu pead uuesti sisse logima. Teistes seadmetes olevad aktiivsed sessioonid aeguvad umbes ühe tunni jooksul."
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automaatne liitumine"
   },
@@ -1872,6 +1908,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on $HOURS$ tund(i) ja $MINUTES$ minut(it). Sinu hoidla ajalõpu tegevus on $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Organisatsiooni poliitika on sinu hoidla ajalõpu tegevuse seadistanud $ACTION$ peale.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2164,5 +2226,26 @@
         "example": "CTRL+Shift+L"
       }
     }
+  },
+  "loggingInOn": {
+    "message": "Sisselogimas kui"
+  },
+  "opensInANewWindow": {
+    "message": "Avaneb uues aknas"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Ligipääs keelatud. Sul pole lubatud seda lehekülge vaadata."
+  },
+  "general": {
+    "message": "Üldine"
+  },
+  "display": {
+    "message": "Kuvamine"
   }
 }

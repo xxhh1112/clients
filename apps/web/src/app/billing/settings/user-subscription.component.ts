@@ -1,13 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { SubscriptionResponse } from "@bitwarden/common/billing/models/response/subscription.response";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 @Component({
   selector: "app-user-subscription",
@@ -21,6 +23,7 @@ export class UserSubscriptionComponent implements OnInit {
   showUpdateLicense = false;
   sub: SubscriptionResponse;
   selfHosted = false;
+  cloudWebVaultUrl: string;
 
   cancelPromise: Promise<any>;
   reinstatePromise: Promise<any>;
@@ -32,9 +35,12 @@ export class UserSubscriptionComponent implements OnInit {
     private i18nService: I18nService,
     private router: Router,
     private logService: LogService,
-    private fileDownloadService: FileDownloadService
+    private fileDownloadService: FileDownloadService,
+    private dialogService: DialogServiceAbstraction,
+    private environmentService: EnvironmentService
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
+    this.cloudWebVaultUrl = this.environmentService.getCloudWebVaultUrl();
   }
 
   async ngOnInit() {
@@ -64,22 +70,23 @@ export class UserSubscriptionComponent implements OnInit {
     }
 
     if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("manageSubscriptionFromStore"),
-        this.i18nService.t("cancelSubscription"),
-        null,
-        null,
-        "warning"
-      );
+      this.dialogService.openSimpleDialog({
+        title: { key: "cancelSubscription" },
+        content: { key: "manageSubscriptionFromStore" },
+        acceptButtonText: { key: "ok" },
+        cancelButtonText: null,
+        type: SimpleDialogType.WARNING,
+      });
+
       return;
     }
 
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("reinstateConfirmation"),
-      this.i18nService.t("reinstateSubscription"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "reinstateSubscription" },
+      content: { key: "reinstateConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return;
     }
@@ -100,23 +107,23 @@ export class UserSubscriptionComponent implements OnInit {
     }
 
     if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("manageSubscriptionFromStore"),
-        this.i18nService.t("cancelSubscription"),
-        null,
-        null,
-        "warning"
-      );
+      this.dialogService.openSimpleDialog({
+        title: { key: "cancelSubscription" },
+        content: { key: "manageSubscriptionFromStore" },
+        acceptButtonText: { key: "ok" },
+        cancelButtonText: null,
+        type: SimpleDialogType.WARNING,
+      });
+
       return;
     }
 
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("cancelConfirmation"),
-      this.i18nService.t("cancelSubscription"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "cancelSubscription" },
+      content: { key: "cancelConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return;
     }
@@ -163,13 +170,14 @@ export class UserSubscriptionComponent implements OnInit {
 
   adjustStorage(add: boolean) {
     if (this.usingInAppPurchase) {
-      this.platformUtilsService.showDialog(
-        this.i18nService.t("cannotPerformInAppPurchase"),
-        this.i18nService.t(add ? "addStorage" : "removeStorage"),
-        null,
-        null,
-        "warning"
-      );
+      this.dialogService.openSimpleDialog({
+        title: { key: add ? "addStorage" : "removeStorage" },
+        content: { key: "cannotPerformInAppPurchase" },
+        acceptButtonText: { key: "ok" },
+        cancelButtonText: null,
+        type: SimpleDialogType.WARNING,
+      });
+
       return;
     }
     this.adjustStorageAdd = add;

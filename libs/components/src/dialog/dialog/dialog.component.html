@@ -1,12 +1,12 @@
 <div
+  class="tw-flex tw-w-full tw-flex-col tw-self-center tw-overflow-hidden tw-rounded tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-text-main"
   [ngClass]="width"
-  class="tw-flex tw-flex-col tw-overflow-hidden tw-rounded tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-text-main"
   @fadeIn
 >
   <div
     class="tw-flex tw-items-center tw-gap-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-p-4"
   >
-    <h1 bitDialogTitleContainer class="tw-mb-0 tw-grow tw-truncate tw-text-lg tw-uppercase">
+    <h1 bitDialogTitleContainer class="tw-mb-0 tw-grow tw-truncate tw-text-lg">
       <ng-content select="[bitDialogTitle]"></ng-content>
     </h1>
     <button
@@ -20,12 +20,27 @@
     ></button>
   </div>
 
-  <div class="tw-overflow-y-auto tw-pb-8" [ngClass]="{ 'tw-p-4': !disablePadding }">
-    <ng-content select="[bitDialogContent]"></ng-content>
+  <div class="tw-relative tw-flex tw-flex-col tw-overflow-hidden">
+    <div
+      *ngIf="loading"
+      class="tw-absolute tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center"
+    >
+      <i class="bwi bwi-spinner bwi-spin bwi-3x"></i>
+    </div>
+    <div
+      class="tw-pb-8"
+      [ngClass]="{
+        'tw-p-4': !disablePadding,
+        'tw-overflow-y-auto': !loading,
+        'tw-invisible tw-overflow-y-hidden': loading
+      }"
+    >
+      <ng-content select="[bitDialogContent]"></ng-content>
+    </div>
   </div>
 
   <div
-    class="tw-border-0 tw-border-t tw-border-solid tw-border-secondary-300 tw-bg-background-alt tw-p-4"
+    class="tw-flex tw-flex-row tw-items-center tw-gap-2 tw-border-0 tw-border-t tw-border-solid tw-border-secondary-300 tw-bg-background-alt tw-p-4"
   >
     <ng-content select="[bitDialogFooter]"></ng-content>
   </div>

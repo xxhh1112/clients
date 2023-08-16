@@ -1,4 +1,3 @@
-import { Injectable } from "@angular/core";
 import {
   HttpTransportType,
   HubConnection,
@@ -8,16 +7,15 @@ import {
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "../abstractions/anonymousHub.service";
-import { EnvironmentService } from "../abstractions/environment.service";
-import { LogService } from "../abstractions/log.service";
 import { AuthService } from "../auth/abstractions/auth.service";
+import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { LogService } from "../platform/abstractions/log.service";
 
 import {
   AuthRequestPushNotification,
   NotificationResponse,
 } from "./../models/response/notification.response";
 
-@Injectable()
 export class AnonymousHubService implements AnonymousHubServiceAbstraction {
   private anonHubConnection: HubConnection;
   private url: string;
@@ -53,7 +51,7 @@ export class AnonymousHubService implements AnonymousHubServiceAbstraction {
   }
 
   private async ProcessNotification(notification: NotificationResponse) {
-    await this.authService.authResponsePushNotifiction(
+    await this.authService.authResponsePushNotification(
       notification.payload as AuthRequestPushNotification
     );
   }

@@ -145,6 +145,7 @@ export class Program {
             this.main.cryptoFunctionService,
             this.main.environmentService,
             this.main.passwordGenerationService,
+            this.main.passwordStrengthService,
             this.main.platformUtilsService,
             this.main.stateService,
             this.main.cryptoService,
@@ -157,7 +158,7 @@ export class Program {
             async () => await this.main.logout()
           );
           const response = await command.run(email, password, options);
-          this.processResponse(response);
+          this.processResponse(response, true);
         }
       });
 

@@ -1,23 +1,30 @@
+import { DatePipe } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
+import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationApiKeyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { PlanType } from "@bitwarden/common/billing/enums";
+import { BitwardenProductType, PlanType } from "@bitwarden/common/billing/enums";
 import { OrganizationSubscriptionResponse } from "@bitwarden/common/billing/models/response/organization-subscription.response";
+import { BillingSubscriptionItemResponse } from "@bitwarden/common/billing/models/response/subscription.response";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import {
   BillingSyncApiKeyComponent,
   BillingSyncApiModalData,
 } from "./billing-sync-api-key.component";
+import { SecretsManagerSubscriptionOptions } from "./secrets-manager/sm-adjust-subscription.component";
 
 @Component({
   selector: "app-org-subscription-cloud",
@@ -25,6 +32,7 @@ import {
 })
 export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy {
   sub: OrganizationSubscriptionResponse;
+  lineItems: BillingSubscriptionItemResponse[] = [];
   organizationId: string;
   userOrg: Organization;
   showChangePlan = false;
@@ -32,9 +40,15 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   adjustStorageAdd = true;
   showAdjustStorage = false;
   hasBillingSyncToken: boolean;
+  showAdjustSecretsManager = false;
+
+  showSecretsManagerSubscribe = false;
 
   firstLoaded = false;
   loading: boolean;
+
+  private readonly _smBetaEndingDate = new Date(2023, 7, 25);
+  private readonly _smGracePeriodEndingDate = new Date(2023, 9, 24);
 
   private destroy$ = new Subject<void>();
 
@@ -46,7 +60,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private modalService: ModalService,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialogService: DialogServiceAbstraction,
+    private configService: ConfigServiceAbstraction,
+    private datePipe: DatePipe
   ) {}
 
   async ngOnInit() {
@@ -66,6 +83,17 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       .subscribe();
   }
 
+  productName(product: BitwardenProductType) {
+    switch (product) {
+      case BitwardenProductType.PasswordManager:
+        return this.i18nService.t("passwordManager");
+      case BitwardenProductType.SecretsManager:
+        return this.i18nService.t("secretsManager");
+      default:
+        return this.i18nService.t("passwordManager");
+    }
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -79,6 +107,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     this.userOrg = this.organizationService.get(this.organizationId);
     if (this.userOrg.canViewSubscription) {
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
+      this.lineItems = this.sub?.subscription?.items?.sort(sortSubscriptionItems) ?? [];
     }
 
     const apiKeyResponse = await this.organizationApiService.getApiKeyInformation(
@@ -88,7 +117,29 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       (i) => i.keyType === OrganizationApiKeyType.BillingSync
     );
 
+    this.showSecretsManagerSubscribe =
+      this.userOrg.canEditSubscription &&
+      !this.userOrg.useSecretsManager &&
+      !this.subscription?.cancelled &&
+      !this.subscriptionMarkedForCancel;
+
+    this.showAdjustSecretsManager =
+      this.userOrg.canEditSubscription &&
+      this.userOrg.useSecretsManager &&
+      this.subscription != null &&
+      this.sub.secretsManagerPlan?.hasAdditionalSeatsOption &&
+      !this.sub.secretsManagerBeta &&
+      !this.subscription.cancelled &&
+      !this.subscriptionMarkedForCancel;
+
     this.loading = false;
+
+    // Remove the remaining lines when the sm-ga-billing flag is deleted
+    const smBillingEnabled = await this.configService.getFeatureFlagBool(
+      FeatureFlag.SecretsManagerBilling
+    );
+    this.showSecretsManagerSubscribe = this.showSecretsManagerSubscribe && smBillingEnabled;
+    this.showAdjustSecretsManager = this.showAdjustSecretsManager && smBillingEnabled;
   }
 
   get subscription() {
@@ -134,6 +185,20 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
   get seats() {
     return this.sub.seats;
+  }
+
+  get smOptions(): SecretsManagerSubscriptionOptions {
+    return {
+      seatCount: this.sub.smSeats,
+      maxAutoscaleSeats: this.sub.maxAutoscaleSmSeats,
+      seatPrice: this.sub.secretsManagerPlan.seatPrice,
+      maxAutoscaleServiceAccounts: this.sub.maxAutoscaleSmServiceAccounts,
+      additionalServiceAccounts:
+        this.sub.smServiceAccounts - this.sub.secretsManagerPlan.baseServiceAccount,
+      interval: this.sub.secretsManagerPlan.isAnnual ? "year" : "month",
+      additionalServiceAccountPrice: this.sub.secretsManagerPlan.additionalPricePerServiceAccount,
+      baseServiceAccountCount: this.sub.secretsManagerPlan.baseServiceAccount,
+    };
   }
 
   get maxAutoscaleSeats() {
@@ -198,18 +263,25 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     );
   }
 
+  get smBetaEndedDesc() {
+    return this.i18nService.translate(
+      "smBetaEndedDesc",
+      this.datePipe.transform(this._smBetaEndingDate),
+      Utils.daysRemaining(this._smGracePeriodEndingDate).toString()
+    );
+  }
+
   cancel = async () => {
     if (this.loading) {
       return;
     }
 
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("cancelConfirmation"),
-      this.i18nService.t("cancelSubscription"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("no"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "cancelSubscription" },
+      content: { key: "cancelConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return;
     }
@@ -232,12 +304,12 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       return;
     }
 
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("reinstateConfirmation"),
-      this.i18nService.t("reinstateSubscription"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "reinstateSubscription" },
+      content: { key: "reinstateConfirmation" },
+      type: SimpleDialogType.WARNING,
+    });
+
     if (!confirmed) {
       return;
     }
@@ -303,15 +375,14 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   }
 
   removeSponsorship = async () => {
-    const isConfirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("removeSponsorshipConfirmation"),
-      this.i18nService.t("removeSponsorship"),
-      this.i18nService.t("remove"),
-      this.i18nService.t("cancel"),
-      "warning"
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "removeSponsorship" },
+      content: { key: "removeSponsorshipConfirmation" },
+      acceptButtonText: { key: "remove" },
+      type: SimpleDialogType.WARNING,
+    });
 
-    if (!isConfirmed) {
+    if (!confirmed) {
       return;
     }
 
@@ -331,4 +402,24 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   get showChangePlanButton() {
     return this.subscription == null && this.sub.planType === PlanType.Free && !this.showChangePlan;
   }
+}
+
+/**
+ * Helper to sort subscription items by product type and then by addon status
+ */
+function sortSubscriptionItems(
+  a: BillingSubscriptionItemResponse,
+  b: BillingSubscriptionItemResponse
+) {
+  if (a.bitwardenProduct == b.bitwardenProduct) {
+    if (a.addonSubscriptionItem == b.addonSubscriptionItem) {
+      return 0;
+    }
+    // sort addon items to the bottom
+    if (a.addonSubscriptionItem) {
+      return 1;
+    }
+    return -1;
+  }
+  return a.bitwardenProduct - b.bitwardenProduct;
 }

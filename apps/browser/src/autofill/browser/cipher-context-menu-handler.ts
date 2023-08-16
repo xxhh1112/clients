@@ -1,10 +1,9 @@
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { StateFactory } from "@bitwarden/common/factories/stateFactory";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -12,9 +11,9 @@ import {
   authServiceFactory,
   AuthServiceInitOptions,
 } from "../../auth/background/service-factories/auth-service.factory";
-import { CachedServices } from "../../background/service_factories/factory-options";
-import { BrowserApi } from "../../browser/browserApi";
 import { Account } from "../../models/account";
+import { CachedServices } from "../../platform/background/service-factories/factory-options";
+import { BrowserApi } from "../../platform/browser/browser-api";
 import {
   cipherServiceFactory,
   CipherServiceInitOptions,
@@ -79,6 +78,12 @@ export class CipherContextMenuHandler {
       await authServiceFactory(cachedServices, serviceOptions),
       await cipherServiceFactory(cachedServices, serviceOptions)
     );
+  }
+
+  static async windowsOnFocusChangedListener(windowId: number, serviceCache: CachedServices) {
+    const cipherContextMenuHandler = await CipherContextMenuHandler.create(serviceCache);
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    await cipherContextMenuHandler.update(tab?.url);
   }
 
   static async tabsOnActivatedListener(
@@ -146,7 +151,7 @@ export class CipherContextMenuHandler {
     const authStatus = await this.authService.getAuthStatus();
     await MainContextMenuHandler.removeAll();
     if (authStatus !== AuthenticationStatus.Unlocked) {
-      // Should I pass in the auth status or even have two seperate methods for this
+      // Should I pass in the auth status or even have two separate methods for this
       // on MainContextMenuHandler
       await this.mainContextMenuHandler.noAccess();
       return;
@@ -171,11 +176,7 @@ export class CipherContextMenuHandler {
   }
 
   private async updateForCipher(url: string, cipher: CipherView) {
-    if (
-      cipher == null ||
-      cipher.type !== CipherType.Login ||
-      cipher.reprompt !== CipherRepromptType.None
-    ) {
+    if (cipher == null || cipher.type !== CipherType.Login) {
       return;
     }
 

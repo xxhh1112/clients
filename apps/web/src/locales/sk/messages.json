@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ webový trezor",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Aký typ položky to je?"
   },
@@ -618,8 +608,8 @@
   "loginWithDevice": {
     "message": "Prihlásenie pomocou zariadenia"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Prihlásenie pomocou zariadenia musí byť povolené v nastaveniach mobilnej aplikácie Biwarden. Potrebujete inú možnosť?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?"
   },
   "loginWithMasterPassword": {
     "message": "Prihlásenie pomocou hlavného hesla"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Vyskytla sa neočakávaná chyba."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Emailová adresa"
   },
   "yourVaultIsLocked": {
     "message": "Váš trezor je uzamknutý. Overte sa hlavným heslom ak chcete pokračovať."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Odomknúť"
@@ -958,13 +954,22 @@
   "copyVerificationCode": {
     "message": "Kopírovať overovací kód"
   },
+  "copyUuid": {
+    "message": "Copy UUID"
+  },
   "warning": {
     "message": "Upozornenie"
   },
   "confirmVaultExport": {
     "message": "Potvrdiť export trezoru"
   },
+  "confirmSecretsExport": {
+    "message": "Potvrdiť export položiek"
+  },
   "exportWarningDesc": {
+    "message": "Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať."
+  },
+  "exportSecretsWarningDesc": {
     "message": "Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať."
   },
   "encExportKeyWarningDesc": {
@@ -978,6 +983,9 @@
   },
   "exportVault": {
     "message": "Export trezoru"
+  },
+  "exportSecrets": {
+    "message": "Exportovať položky"
   },
   "fileFormat": {
     "message": "Formát Súboru"
@@ -1284,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Chyba pri dešifrovaní exportovaného súboru. Váš šifrovací kľúč sa nezhoduje so šifrovacím kľúčom použitým pri exporte údajov."
+  },
+  "importDestination": {
+    "message": "Cieľ importu"
+  },
+  "learnAboutImportOptions": {
+    "message": "Zistiť viac o možnostiach importu"
+  },
+  "selectImportFolder": {
+    "message": "Vyberte priečinok"
+  },
+  "selectImportCollection": {
+    "message": "Vyberte zbierku"
+  },
+  "importTargetHint": {
+    "message": "Zvoľte túto možnosť ak chcete obsah importovaného súboru presunúť do $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Súbor obsahuje nepridelené položky."
   },
   "selectFormat": {
     "message": "Vyberte formát súboru importu"
@@ -2636,6 +2669,12 @@
   "webVault": {
     "message": "Webový trezor"
   },
+  "bitWebVault": {
+    "message": "Webový trezor Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
   "loggedIn": {
     "message": "Prihlásený."
   },
@@ -2656,6 +2695,12 @@
   },
   "failedLogin2fa": {
     "message": "Prihlásenie zlyhalo pre nesprávnu dvojstupňovú autorizáciu."
+  },
+  "incorrectPassword": {
+    "message": "Nesprávne heslo"
+  },
+  "incorrectCode": {
+    "message": "Nesprávny kód"
   },
   "exportedVault": {
     "message": "Trezor exportovaný."
@@ -2747,6 +2792,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "Zobraziť zbierku - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Upraviť položku - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -3290,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Nastavte limit počtu používateľov predplatného. Po jeho dosiahnutí nebudete môcť pozvať nových používateľov."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Nastavte limit počtu používateľov predplatného pre Secrets Manager. Po jeho dosiahnutí nebudete môcť pozvať nových používateľov."
+  },
   "maxSeatLimit": {
     "message": "Maximálny počet miest (voliteľné)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3558,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Táto položka má staré prílohy, ktoré je potrebné opraviť."
   },
-  "attachmentFixDesc": {
-    "message": "Táto stará príloha musí byť opravená. Kliknite ak sa chcete dozvedieť viac."
+  "attachmentFixDescription": {
+    "message": "Táto príloha používa zastaralý systém šifrovania. Zvoľte „Opraviť“ pre stiahnutie, opätovné zašifrovanie a nahranie prílohy."
   },
   "fix": {
     "message": "Opraviť",
@@ -4342,8 +4408,8 @@
   "manageUsers": {
     "message": "Spravovať používateľov"
   },
-  "manageResetPassword": {
-    "message": "Správa resetovania hesla"
+  "manageAccountRecovery": {
+    "message": "Spravovať obnovu konta"
   },
   "disableRequiredError": {
     "message": "Pred zakázaním tejto zásady musíte ručne vypnúť zásadu $POLICYNAME$.",
@@ -4474,14 +4540,14 @@
   "hintEqualsPassword": {
     "message": "Nápoveda pre heslo nemôže byť rovnaká ako heslo."
   },
-  "enrollPasswordReset": {
-    "message": "Zaregistrovať sa pre obnovu hesla"
+  "enrollAccountRecovery": {
+    "message": "Zapísať sa na obnovu konta"
   },
-  "enrolledPasswordReset": {
-    "message": "Zaregistrovaný pre obnovu hesla"
+  "enrolledAccountRecovery": {
+    "message": "Zapísaný na obnovu konta"
   },
-  "withdrawPasswordReset": {
-    "message": "Odhlásiť sa z obnovy hesla"
+  "withdrawAccountRecovery": {
+    "message": "Odhlásiť sa z obnovy konta"
   },
   "enrollPasswordResetSuccess": {
     "message": "Registrácia úspešná!"
@@ -4489,8 +4555,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Odhlásenie úspešné!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Používateľ $ID$ sa registroval na pomoc s obnovou hesla.",
+  "eventEnrollAccountRecovery": {
+    "message": "Používateľ $ID$ zapísaný na obnovu konta.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4498,8 +4564,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Používateľ $ID$ sa odhlásil z pomoci obnovy hesla.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Používateľ $ID$ sa odhlásil z obnovy konta.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4558,23 +4624,20 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo. Naozaj sa chcete zaregistrovať?"
   },
-  "resetPasswordPolicy": {
-    "message": "Hlavné heslo obnovené"
+  "accountRecoveryPolicy": {
+    "message": "Správa obnovy konta"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Umožní správcom v organizácii resetovať hlavné heslo používateľov organizácie."
+  "accountRecoveryPolicyDesc": {
+    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Používatelia v organizácii sa budú musieť sami zaregistrovať alebo byť automaticky zaregistrovaní predtým, ako budú môcť správcovia resetovať ich hlavné heslo."
+  "accountRecoveryPolicyWarning": {
+    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single organization Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrácia"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Všetci používatelia budú po prijatí pozvánky automaticky zaregistrovaní na obnovenie hesla."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Používatelia, ktorí už v organizácii sú, nebudú spätne zaregistrovaní na obnovenie hesla. Budú sa musieť sami zaregistrovať predtým, ako im administrátori obnovia hlavné heslo."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Automaticky zaregistrovať nových používateľov"
@@ -4675,8 +4738,8 @@
   "error": {
     "message": "Chyba"
   },
-  "resetPasswordManageUsers": {
-    "message": "Správa používateľov musí byť povolená aj s oprávnením spravovať obnovenie hesla"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Nastavenie poskytovateľa"
@@ -4812,6 +4875,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Vaše hlavné heslo nespĺňa pravidlá tejto organizácie. Ak sa chcete pripojiť k tejto organizácii, musíte teraz aktualizovať vaše hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
+  },
   "maximumVaultTimeout": {
     "message": "Časový limit pre trezor"
   },
@@ -4840,6 +4906,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je $HOURS$ h a $MINUTES$ m. Nastavenie akcie pri vypršaní časového limitu je $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Zásady vašej organizácie nastavili akciu pri vypršaní časového limitu trezora na $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5162,16 +5254,13 @@
     "message": "Povoliť",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "require single-sign-on authentication policy",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "to require all members to log in with SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
-  },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "The require SSO authentication and single organization policies are required to set up Key Connector decryption."
   },
   "memberDecryptionOption": {
     "message": "Member decryption options"
@@ -5182,8 +5271,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. Contact Bitwarden Support for set up assistance."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Login with SSO and Key Connector Decryption\" is activated. This policy will only apply to owners and admins."
@@ -5365,7 +5463,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Exportované budú iba položky trezora organizácie spojené s $ORGANIZATION$. Položky osobného trezora a položky z iných organizácií nebudú zahrnuté.",
     "placeholders": {
       "organization": {
@@ -5398,6 +5496,15 @@
   "currentOrganization": {
     "message": "Aktuálna organizácia",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountLoggedInAsName": {
+    "message": "Konto: Prihlásený ako $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
   },
   "accountSettings": {
     "message": "Nastavenia účtu"
@@ -5478,7 +5585,7 @@
   },
   "lastSync": {
     "message": "Posledná synchronizácia",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Sponzorstvo s vlastným hostingom synchronizované."
@@ -5617,6 +5724,24 @@
       "characters": {
         "content": "$1",
         "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Hodnota musí byť aspoň $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Zadaná hodnota nesmie prekročiť $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
       }
     }
   },
@@ -6099,10 +6224,6 @@
     "message": "Access token created and copied to clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Permissions management is unavailable for beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Revoke access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6116,6 +6237,10 @@
   "accessTokenRevoked": {
     "message": "Prístupové tokeny boli zrušené",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "Nebol zvolený prístupový token ktorý sa má zrušiť",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "Submenu"
@@ -6468,6 +6593,18 @@
   "billingSyncHelp": {
     "message": "Billing Sync help"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Upload license"
   },
@@ -6507,23 +6644,23 @@
   "lowKdfIterations": {
     "message": "Nízky počet iterácií KDF"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Zvýšte nastavenia šifrovania KDF, aby ste zvýšili bezpečnosť svojho účtu."
-  },
-  "changeKdfSettings": {
-    "message": "Zmeniť nastavenia KDF"
+  "updateLowKdfIterationsDesc": {
+    "message": "Aktualizujte vaše nastavenie šifrovania aby ste boli v súlade s bezpečnostnými odporúčaniami a vylepšili si tak ochranu vášho konta."
   },
   "changeKdfLoggedOutWarning": {
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
+  "secretsManager": {
+    "message": "Secrets Manager"
+  },
   "secretsManagerBeta": {
     "message": "Beta verzia Secrets Manager"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Počas Beta programu zadarmo povoliť používateľovi prístup k Secrets Manager."
+  "secretsManagerAccessDescription": {
+    "message": "Aktivovať používateľovi prístup k Secrets Manager."
   },
-  "userAccessSecretsManager": {
-    "message": "Tento používateľ má prístup k beta verzii Secrets Manager"
+  "userAccessSecretsManagerGA": {
+    "message": "Tento používateľ má prístup k Secrets Manager"
   },
   "important": {
     "message": "Dôležité:"
@@ -6682,10 +6819,298 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
   },
   "notAvailableForFreeOrganization": {
     "message": "Táto funkcia nie je dostupná pre bezplatné organizácie. Pre upgrade kontaktujte vlastníka organizácie."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Pre správu položiek tohto projektu kontaktujte správcu organizácie.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Požadovať po súčasných členoch, aby si zmenili heslo"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Na odstránenie tohto projektu nemáte oprávnenia",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Následujúce projekty na nedajú odstrániť. Chcete pokračovať?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Aktualizovať nastavenia KDF"
+  },
+  "trustedDevices": {
+    "message": "Dôveryhodné zariadenia"
+  },
+  "memberDecryptionTdeDescriptionPartOne": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "single organization",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "policy and ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "account recovery administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ nenájdené",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Obnoviť účet"
+  },
+  "updatedTempPassword": {
+    "message": "Použivateľ aktualizoval heslo ktoré bolo vydané pri obnove konta."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Aktivovaný prístup k Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Aktivovať prístup"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Povoliť následujúcim členom prístup k Secrets Manager. Rola udelená v správcovi hesiel bude aplikovaná aj na Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Aktivovať Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Fráza odtlačku vašej organizácie",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Povolenia zariadení"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Povoľte žiadosť o prihlásenie nižšie ak chcete povoliť členovi dokončiť prihlásenie. Nepovolené žiadosti expirujú po týždni čakania. Overte informácie o členovi pred povolením."
+  },
+  "deviceInfo": {
+    "message": "Informácie o zariadení"
+  },
+  "time": {
+    "message": "Čas"
+  },
+  "denyAllRequests": {
+    "message": "Zamietnuť všetky žiadosti"
+  },
+  "denyRequest": {
+    "message": "Zamietnuť žiadosť"
+  },
+  "approveRequest": {
+    "message": "Schváliť žiadosť"
+  },
+  "noDeviceRequests": {
+    "message": "Žiadne žiadosti pre zariadenia"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Žiadosti členov pre povolenie zariadení sa zobrazia tu"
+  },
+  "loginRequestDenied": {
+    "message": "Žiadosť o prihlásenie zamietnutá"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Všetky žiadosti o prihlásenie zamietnuté"
+  },
+  "loginRequestApproved": {
+    "message": "Žiadosť o prihlásenie schválená"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Začnite 7-dňovú skúšobnú dobu Bitwardenu zadarmo pre $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Ďalej"
+  },
+  "usFlag": {
+    "message": "Vlajka USA"
+  },
+  "euFlag": {
+    "message": "Vlajka EU"
+  },
+  "selectedRegionFlag": {
+    "message": "Selected region flag"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Žiadne aktívne Sendy",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Použite Send na bezpečné zdieľanie zašifrovaných informácii s kýmkoľvek.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Pozvať používateľov"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager pre $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Pre inžinierske tímy a tímy DevOps na správu tajomstiev počas celého životného cyklu vývoja softvéru."
+  },
+  "free2PersonOrganization": {
+    "message": "2-členné organizácie zadarmo"
+  },
+  "unlimitedSecrets": {
+    "message": "Neobmedzený počet položiek"
+  },
+  "unlimitedProjects": {
+    "message": "Neobmedzený počet projektov"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ zahrnutých projektov",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ zahrnutých služobných kont",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ mesačne pre dodatočné služobné kontá",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Pridať Secrets Manager"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Do aktualizovaného plánu pridajte Secret Manager, aby ste si zachovali prístup k všetkým tajomstvám vytvoreným v predchádzajúcom pláne."
+  },
+  "additionalServiceAccounts": {
+    "message": "Dodatočné služobné kontá"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Cena plánu Správcu Hesiel"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Cena plánu Secrets Manager"
+  },
+  "passwordManager": {
+    "message": "Správca hesiel"
+  },
+  "freeOrganization": {
+    "message": "Organizácia zadarmo"
+  },
+  "limitServiceAccounts": {
+    "message": "Limitovať služobné kontá (voliteľné)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Nastavte limit počtu služobných kont. Po jeho dosiahnutí nebudete môcť vytvoriť nové služobné kontá."
+  },
+  "serviceAccountLimit": {
+    "message": "Limit služobných kont (voliteľné)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Maximálna možná cena služobných kont"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }

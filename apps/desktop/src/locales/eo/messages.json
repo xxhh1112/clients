@@ -3,25 +3,25 @@
     "message": "Bitwarden"
   },
   "filters": {
-    "message": "Filters"
+    "message": "Filtriloj"
   },
   "allItems": {
-    "message": "All items"
+    "message": "Ĉiuj Eroj"
   },
   "favorites": {
-    "message": "Favorites"
+    "message": "Plej ŝatataj"
   },
   "types": {
-    "message": "Types"
+    "message": "Tipoj"
   },
   "typeLogin": {
     "message": "Saluto"
   },
   "typeCard": {
-    "message": "Card"
+    "message": "Karto"
   },
   "typeIdentity": {
-    "message": "Identity"
+    "message": "Idento"
   },
   "typeSecureNote": {
     "message": "Sekura noto"
@@ -30,10 +30,10 @@
     "message": "Dosierujoj"
   },
   "collections": {
-    "message": "Collections"
+    "message": "Kolektoj"
   },
   "searchVault": {
-    "message": "Search vault"
+    "message": "Traserĉu trezorejon"
   },
   "addItem": {
     "message": "Aldoni elementon"
@@ -45,10 +45,10 @@
     "message": "Kundividi"
   },
   "moveToOrganization": {
-    "message": "Move to organization"
+    "message": "Movu al organizo"
   },
   "movedItemToOrg": {
-    "message": "$ITEMNAME$ moved to $ORGNAME$",
+    "message": "$ITEMNAME$ moviĝis al $ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -61,7 +61,7 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
+    "message": "Elektu organizon kun kiu vi volas dividi ĉi tiun eron. Dividado transdonas posedon de la ero al la organizo. Vi ne plu estos la rekta posedanto de ĉi tiu ero post kiam ĝi estos dividita."
   },
   "attachments": {
     "message": "Aldonaĵoj"
@@ -104,10 +104,10 @@
     "message": "Retpoŝta adreso"
   },
   "verificationCodeTotp": {
-    "message": "Verification code (TOTP)"
+    "message": "Kontrola kodo (TOTP)"
   },
   "website": {
-    "message": "Website"
+    "message": "Retejo"
   },
   "notes": {
     "message": "Notoj"
@@ -116,10 +116,10 @@
     "message": "Propraj kampoj"
   },
   "launch": {
-    "message": "Launch"
+    "message": "Lanĉo"
   },
   "copyValue": {
-    "message": "Copy value",
+    "message": "Kopii valoron",
     "description": "Copy value to clipboard"
   },
   "minimizeOnCopyToClipboard": {
@@ -169,10 +169,10 @@
     "message": "Email"
   },
   "phone": {
-    "message": "Phone"
+    "message": "Telefono"
   },
   "address": {
-    "message": "Address"
+    "message": "Adreso"
   },
   "premiumRequired": {
     "message": "Premium required"
@@ -187,28 +187,28 @@
     "message": "Error"
   },
   "january": {
-    "message": "January"
+    "message": "januaro"
   },
   "february": {
-    "message": "February"
+    "message": "februaro"
   },
   "march": {
-    "message": "March"
+    "message": "marto"
   },
   "april": {
-    "message": "April"
+    "message": "aprilo"
   },
   "may": {
-    "message": "May"
+    "message": "majo"
   },
   "june": {
-    "message": "June"
+    "message": "junio"
   },
   "july": {
-    "message": "July"
+    "message": "julio"
   },
   "august": {
-    "message": "August"
+    "message": "aŭgusto"
   },
   "september": {
     "message": "September"
@@ -227,22 +227,22 @@
     "description": "Short abbreviation for 'example'."
   },
   "title": {
-    "message": "Title"
+    "message": "Titolo"
   },
   "mr": {
-    "message": "Mr"
+    "message": "S-ro"
   },
   "mrs": {
-    "message": "Mrs"
+    "message": "S-ino"
   },
   "ms": {
-    "message": "Ms"
+    "message": "S-ino"
   },
   "mx": {
     "message": "Mx"
   },
   "dr": {
-    "message": "Dr"
+    "message": "Dr-o"
   },
   "expirationMonth": {
     "message": "Expiration month"
@@ -1392,20 +1392,32 @@
   "unlockWithWindowsHello": {
     "message": "Unlock with Windows Hello"
   },
+  "additionalWindowsHelloSettings": {
+    "message": "Additional Windows Hello settings"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verify for Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Unlock with Touch ID"
   },
+  "additionalTouchIdSettings": {
+    "message": "Additional Touch ID settings"
+  },
   "touchIdConsentMessage": {
     "message": "unlock your vault"
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "Ask for Windows Hello on app start"
   },
   "autoPromptTouchId": {
-    "message": "Ask for Touch ID on launch"
+    "message": "Ask for Touch ID on app start"
+  },
+  "requirePasswordOnStart": {
+    "message": "Require password or PIN on app start"
+  },
+  "recommendedForSecurity": {
+    "message": "Recommended for security."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lock with master password on restart"
@@ -1526,6 +1538,9 @@
   },
   "ssoCompleteRegistration": {
     "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
+  },
+  "currentMasterPass": {
+    "message": "Current master password"
   },
   "newMasterPass": {
     "message": "New master password"
@@ -1843,6 +1858,9 @@
   "updateMasterPasswordWarning": {
     "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "hours": {
     "message": "Hours"
   },
@@ -1850,7 +1868,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1859,6 +1877,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -2201,5 +2245,26 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

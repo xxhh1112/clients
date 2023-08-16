@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationSubscriptionUpdateRequest } from "@bitwarden/common/billing/models/request/organization-subscription-update.request";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Component({
   selector: "app-adjust-subscription",
@@ -40,7 +40,7 @@ export class AdjustSubscription {
     try {
       const seatAdjustment = this.newSeatCount - this.currentSeatCount;
       const request = new OrganizationSubscriptionUpdateRequest(seatAdjustment, this.newMaxSeats);
-      this.formPromise = this.organizationApiService.updateSubscription(
+      this.formPromise = this.organizationApiService.updatePasswordManagerSeats(
         this.organizationId,
         request
       );

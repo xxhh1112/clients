@@ -2,14 +2,14 @@
 import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType, DEFAULT_PBKDF2_ITERATIONS } from "@bitwarden/common/enums";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
 import { CipherWithIdExport } from "@bitwarden/common/models/export/cipher-with-ids.export";
-import { StateService } from "@bitwarden/common/services/state.service";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { StateService } from "@bitwarden/common/platform/services/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -20,7 +20,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
-import { BuildTestObject, GetUniqueString } from "../../../../common/spec/utils";
+import { BuildTestObject, GetUniqueString } from "../../../../common/spec";
 
 import { VaultExportService } from "./vault-export.service";
 
@@ -172,7 +172,7 @@ describe("VaultExportService", () => {
     );
   });
 
-  it("exports unecrypted user ciphers", async () => {
+  it("exports unencrypted user ciphers", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews.slice(0, 1));
 
     const actual = await exportService.getExport("json");
@@ -188,7 +188,7 @@ describe("VaultExportService", () => {
     expectEqualCiphers(UserCipherDomains.slice(0, 1), actual);
   });
 
-  it("does not unecrypted export trashed user items", async () => {
+  it("does not unencrypted export trashed user items", async () => {
     cipherService.getAllDecrypted().resolves(UserCipherViews);
 
     const actual = await exportService.getExport("json");
