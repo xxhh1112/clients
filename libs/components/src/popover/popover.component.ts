@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from "@angular/core";
 
 @Component({
+  standalone: true,
   selector: "bit-popover",
   templateUrl: "./popover.component.html",
   exportAs: "popoverComponent",

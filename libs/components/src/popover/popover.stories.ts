@@ -10,8 +10,8 @@ export default {
   component: PopoverTriggerForDirective,
   decorators: [
     moduleMetadata({
-      imports: [A11yModule, OverlayModule],
-      declarations: [PopoverTriggerForDirective, PopoverComponent],
+      imports: [A11yModule, OverlayModule, PopoverComponent],
+      declarations: [PopoverTriggerForDirective],
     }),
   ],
   parameters: {
