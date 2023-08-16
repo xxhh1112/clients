@@ -113,6 +113,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  private accountUpdateInProgress: { [userId: string]: boolean } = {};
+
   constructor(
     private broadcasterService: BroadcasterService,
     private folderService: InternalFolderService,
@@ -510,7 +512,11 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       const accounts: { [userId: string]: MenuAccount } = {};
       for (const i in stateAccounts) {
-        if (i != null && stateAccounts[i]?.profile?.userId != null) {
+        if (
+          i != null &&
+          stateAccounts[i]?.profile?.userId != null &&
+          !this.isAccountUpdateInProgress(stateAccounts[i].profile.userId)
+        ) {
           const userId = stateAccounts[i].profile.userId;
           const availableTimeoutActions = await firstValueFrom(
             this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(userId)
@@ -540,77 +546,90 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private async logOut(expired: boolean, userId?: string) {
     console.warn("logOut");
+
     const stack = new Error().stack;
     console.info(stack);
 
     const userBeingLoggedOut = await this.stateService.getUserId({ userId: userId });
 
-    console.log("userBeingLoggedOut: ", userBeingLoggedOut);
-    console.log("this.activeUserId: ", this.activeUserId);
+    // Mark account as being updated so that the updateAppMenu logic (executed on syncCompleted)
+    // doesn't attempt to update a user that is being logged out as we will manually
+    // call updateAppMenu when the logout is complete.
+    this.startAccountUpdate(userBeingLoggedOut);
 
-    await this.eventUploadService.uploadEvents(userBeingLoggedOut);
-    console.log("EventUploadService: Events uploaded for userBeingLoggedOut.");
+    let preLogoutActiveUserId;
+    try {
+      console.log("userBeingLoggedOut: ", userBeingLoggedOut);
+      console.log("this.activeUserId: ", this.activeUserId);
 
-    await this.stateService.logAccount();
+      await this.eventUploadService.uploadEvents(userBeingLoggedOut);
+      console.log("EventUploadService: Events uploaded for userBeingLoggedOut.");
 
-    await this.syncService.setLastSync(new Date(0), userBeingLoggedOut);
-    console.log("SyncService: Last sync set for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.syncService.setLastSync(new Date(0), userBeingLoggedOut);
+      console.log("SyncService: Last sync set for userBeingLoggedOut.");
 
-    await this.cryptoService.clearKeys(userBeingLoggedOut);
-    console.log("CryptoService: Keys cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.cryptoService.clearKeys(userBeingLoggedOut);
+      console.log("CryptoService: Keys cleared for userBeingLoggedOut.");
 
-    await this.settingsService.clear(userBeingLoggedOut);
-    console.log("SettingsService: Settings cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.settingsService.clear(userBeingLoggedOut);
+      console.log("SettingsService: Settings cleared for userBeingLoggedOut.");
 
-    await this.cipherService.clear(userBeingLoggedOut);
-    console.log("CipherService: Cipher cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.cipherService.clear(userBeingLoggedOut);
+      console.log("CipherService: Cipher cleared for userBeingLoggedOut.");
 
-    await this.folderService.clear(userBeingLoggedOut);
-    console.log("FolderService: Folder cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.folderService.clear(userBeingLoggedOut);
+      console.log("FolderService: Folder cleared for userBeingLoggedOut.");
 
-    await this.collectionService.clear(userBeingLoggedOut);
-    console.log("CollectionService: Collection cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.collectionService.clear(userBeingLoggedOut);
+      console.log("CollectionService: Collection cleared for userBeingLoggedOut.");
 
-    await this.passwordGenerationService.clear(userBeingLoggedOut);
-    console.log(
-      "PasswordGenerationService: Password generation settings cleared for userBeingLoggedOut."
-    );
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.passwordGenerationService.clear(userBeingLoggedOut);
+      console.log(
+        "PasswordGenerationService: Password generation settings cleared for userBeingLoggedOut."
+      );
 
-    await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
-    console.log("VaultTimeoutSettingsService: Timeout settings cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
+      console.log("VaultTimeoutSettingsService: Timeout settings cleared for userBeingLoggedOut.");
 
-    await this.policyService.clear(userBeingLoggedOut);
-    console.log("PolicyService: Policy cleared for userBeingLoggedOut.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.policyService.clear(userBeingLoggedOut);
+      console.log("PolicyService: Policy cleared for userBeingLoggedOut.");
 
-    await this.keyConnectorService.clear();
-    console.log("KeyConnectorService: Key connector cleared.");
+      await this.stateService.logAccount();
 
-    await this.stateService.logAccount();
+      await this.keyConnectorService.clear();
+      console.log("KeyConnectorService: Key connector cleared.");
 
-    const preLogoutActiveUserId = this.activeUserId;
+      await this.stateService.logAccount();
 
-    console.log("preLogoutActiveUserId: ", preLogoutActiveUserId);
-    await this.stateService.clean({ userId: userBeingLoggedOut });
+      preLogoutActiveUserId = this.activeUserId;
 
-    console.log("state service clean ran");
+      console.log("preLogoutActiveUserId: ", preLogoutActiveUserId);
+
+      console.log("this.stateService.clean");
+      await this.stateService.clean({ userId: userBeingLoggedOut });
+
+      console.log("state service clean ran");
+    } finally {
+      this.finishAccountUpdate(userBeingLoggedOut);
+    }
 
     if (this.activeUserId == null) {
       console.log("go to login");
@@ -750,5 +769,20 @@ export class AppComponent implements OnInit, OnDestroy {
     const timeout = await this.stateService.getVaultTimeout({ userId: userId });
     const action = await this.stateService.getVaultTimeoutAction({ userId: userId });
     return [timeout, action];
+  }
+
+  // Mark an account's update as started
+  private startAccountUpdate(userId: string): void {
+    this.accountUpdateInProgress[userId] = true;
+  }
+
+  // Mark an account's update as finished
+  private finishAccountUpdate(userId: string): void {
+    this.accountUpdateInProgress[userId] = false;
+  }
+
+  // Check if an account's update is in progress
+  private isAccountUpdateInProgress(userId: string): boolean {
+    return this.accountUpdateInProgress[userId] === true;
   }
 }
