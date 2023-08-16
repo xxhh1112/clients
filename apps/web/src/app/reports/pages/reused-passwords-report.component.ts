@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -20,11 +19,10 @@ export class ReusedPasswordsReportComponent extends CipherReportComponent implem
   constructor(
     protected cipherService: CipherService,
     modalService: ModalService,
-    messagingService: MessagingService,
     stateService: StateService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, messagingService, true, passwordRepromptService);
+    super(modalService, true, passwordRepromptService);
   }
 
   async ngOnInit() {

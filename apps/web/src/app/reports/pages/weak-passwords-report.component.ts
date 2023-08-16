@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
@@ -24,10 +23,9 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     protected cipherService: CipherService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     modalService: ModalService,
-    messagingService: MessagingService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, messagingService, true, passwordRepromptService);
+    super(modalService, true, passwordRepromptService);
   }
 
   async ngOnInit() {
