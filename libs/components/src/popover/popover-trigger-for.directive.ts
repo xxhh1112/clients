@@ -9,6 +9,7 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 
+import { popoverPositions } from "./popover-positions";
 import { PopoverComponent } from "./popover.component";
 
 @Directive({
@@ -24,52 +25,13 @@ export class PopoverTriggerForDirective {
   private overlayRef: OverlayRef;
   private defaultPopoverConfig: OverlayConfig = {
     panelClass: "bit-popover-panel",
-    hasBackdrop: true,
-    backdropClass: "cdk-overlay-transparent-backdrop",
+    // hasBackdrop: true,
+    // backdropClass: "cdk-overlay-transparent-backdrop",
     scrollStrategy: this.overlay.scrollStrategies.reposition(),
     positionStrategy: this.overlay
       .position()
       .flexibleConnectedTo(this.elementRef)
-      .withPositions([
-        // Popover opens to right of trigger
-        {
-          offsetX: 5,
-          offsetY: -36,
-          originX: "end",
-          originY: "center",
-          overlayX: "start",
-          overlayY: "top",
-          panelClass: "bit-popover-right",
-        },
-        // ... to left of trigger
-        {
-          offsetX: -5,
-          offsetY: -36,
-          originX: "start",
-          originY: "center",
-          overlayX: "end",
-          overlayY: "top",
-          panelClass: "bit-popover-left",
-        },
-        // ... above trigger
-        {
-          offsetY: -5,
-          originX: "center",
-          originY: "top",
-          overlayX: "center",
-          overlayY: "bottom",
-          panelClass: "bit-popover-above",
-        },
-        // ... below trigger
-        {
-          offsetY: 5,
-          originX: "center",
-          originY: "bottom",
-          overlayX: "center",
-          overlayY: "top",
-          panelClass: "bit-popover-below",
-        },
-      ])
+      .withPositions(popoverPositions)
       .withLockedPosition(true)
       .withFlexibleDimensions(false)
       .withPush(true),
@@ -100,5 +62,6 @@ export class PopoverTriggerForDirective {
     }
 
     this.isOpen = false;
+    this.overlayRef.dispose();
   }
 }
