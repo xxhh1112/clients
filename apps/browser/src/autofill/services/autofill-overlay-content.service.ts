@@ -29,17 +29,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
-  private defaultOverlayStyles: Partial<CSSStyleDeclaration> = {
-    position: "fixed",
-    display: "block",
-    zIndex: "2147483647",
-    lineHeight: "0",
-    overflow: "hidden",
-    transition: "opacity 125ms ease-out 0s",
-    visibility: "visible",
-    clipPath: "none",
-    pointerEvents: "auto",
-  };
   private eventHandlersMemo: { [key: string]: EventListener } = {};
 
   constructor() {
@@ -431,10 +420,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     return customElement;
   }
 
-  private convertToKebabCase(styleProperty: string): string {
-    return styleProperty.replace(/([a-z])([A-Z])/g, "$1-$2");
-  }
-
   private setOverlayRepositionEventListeners() {
     document.body?.addEventListener("scroll", this.handleOverlayRepositionEvent);
     window.addEventListener("scroll", this.handleOverlayRepositionEvent);
@@ -496,7 +481,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private handleOverlayElementMutationObserverUpdate = (mutationRecord: MutationRecord[]) => {
-    // Remove All Attributes Given to the Overlay Elements
+    mutationRecord.forEach((record) => {
+      if (record.type !== "attributes") {
+        return;
+      }
+
+      const element = record.target as HTMLElement;
+      const attributes = Array.from(element.attributes);
+      attributes.forEach((attribute) => element.removeAttribute(attribute.name));
+    });
   };
 
   private handleBodyElementMutationObserverUpdate = () => {
