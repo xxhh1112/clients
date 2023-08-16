@@ -42,10 +42,18 @@ export default {
   ],
   argTypes: {
     totalPages: {
-      control: { type: "number" },
+      type: "number",
+      description: "The total number of pages in the associated table.",
+      defaultValue: 1,
     },
-    page: {
-      control: { type: "number" },
+    queryParam: {
+      type: "string",
+      description: "The query parameter key associated with the current page number.",
+      defaultValue: "page",
+    },
+    pageChange: {
+      action: "pageChange",
+      description: "Fires when the query parameter supplied by `queryParam` changes.",
     },
   },
   parameters: {
@@ -62,16 +70,14 @@ export const Default: Story = {
   render: (args) => ({
     props: {
       ...args,
-      // eslint-disable-next-line no-console
-      handlePageChange: (page: number) => console.log("Page changed to:", page),
     },
     template: `
-      <bit-pagination [totalPages]="totalPages" (pageChange)="handlePageChange($event)"></bit-pagination>
+      <bit-pagination [totalPages]="totalPages" [queryParam]="queryParam" (pageChange)="pageChange($event)"></bit-pagination>
     `,
   }),
   args: {
     totalPages: 10,
-    page: 1,
+    queryParam: "page",
   },
 };
 
@@ -79,7 +85,6 @@ export const Single: Story = {
   ...Default,
   args: {
     totalPages: 1,
-    page: 1,
   },
 };
 
@@ -87,6 +92,5 @@ export const WithoutPrevNext: Story = {
   ...Default,
   args: {
     totalPages: 7,
-    page: 1,
   },
 };
