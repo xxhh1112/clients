@@ -14,8 +14,8 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { MasterKey, UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { DialogService } from "@bitwarden/components";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
 import { PasswordColorText } from "../../shared/components/password-strength/password-strength.component";
 
 @Directive()
@@ -44,7 +44,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     protected stateService: StateService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -167,7 +167,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       const result = await this.dialogService.openSimpleDialog({
         title: { key: "weakAndExposedMasterPassword" },
         content: { key: "weakAndBreachedMasterPasswordDesc" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (!result) {
@@ -178,7 +178,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         const result = await this.dialogService.openSimpleDialog({
           title: { key: "weakMasterPassword" },
           content: { key: "weakMasterPasswordDesc" },
-          type: SimpleDialogType.WARNING,
+          type: "warning",
         });
 
         if (!result) {
@@ -189,7 +189,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         const result = await this.dialogService.openSimpleDialog({
           title: { key: "exposedMasterPassword" },
           content: { key: "exposedMasterPasswordDesc" },
-          type: SimpleDialogType.WARNING,
+          type: "warning",
         });
 
         if (!result) {
@@ -206,7 +206,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       title: { key: "logOut" },
       content: { key: "logOutConfirmation" },
       acceptButtonText: { key: "logOut" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (confirmed) {

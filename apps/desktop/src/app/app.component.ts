@@ -15,7 +15,6 @@ import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
@@ -45,6 +44,7 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { DialogService } from "@bitwarden/components";
 
 import { DeleteAccountComponent } from "../auth/delete-account.component";
 import { LoginApprovalComponent } from "../auth/login/login-approval.component";
@@ -142,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private keyConnectorService: KeyConnectorService,
     private userVerificationService: UserVerificationService,
     private configService: ConfigServiceAbstraction,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -250,7 +250,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.i18nService.t("yourAccountsFingerprint") + ":\n" + fingerprint.join("-"),
               acceptButtonText: { key: "learnMore" },
               cancelButtonText: { key: "close" },
-              type: SimpleDialogType.INFO,
+              type: "info",
             });
 
             if (result) {
@@ -285,7 +285,7 @@ export class AppComponent implements OnInit, OnDestroy {
               title: { key: "premiumRequired" },
               content: { key: "premiumRequiredDesc" },
               acceptButtonText: { key: "learnMore" },
-              type: SimpleDialogType.SUCCESS,
+              type: "success",
             });
             if (premiumConfirmed) {
               await this.openModal<PremiumComponent>(PremiumComponent, this.premiumRef);
@@ -297,7 +297,7 @@ export class AppComponent implements OnInit, OnDestroy {
               title: { key: "emailVerificationRequired" },
               content: { key: "emailVerificationRequiredDesc" },
               acceptButtonText: { key: "learnMore" },
-              type: SimpleDialogType.INFO,
+              type: "info",
             });
             if (emailVerificationConfirmed) {
               this.platformUtilsService.launchUri(

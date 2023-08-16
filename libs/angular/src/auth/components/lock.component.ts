@@ -29,8 +29,7 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export class LockComponent implements OnInit, OnDestroy {
@@ -73,7 +72,7 @@ export class LockComponent implements OnInit, OnDestroy {
     protected policyApiService: PolicyApiServiceAbstraction,
     protected policyService: InternalPolicyService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
-    protected dialogService: DialogServiceAbstraction,
+    protected dialogService: DialogService,
     protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     protected userVerificationService: UserVerificationService
   ) {}
@@ -107,7 +106,7 @@ export class LockComponent implements OnInit, OnDestroy {
       title: { key: "logOut" },
       content: { key: "logOutConfirmation" },
       acceptButtonText: { key: "logOut" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (confirmed) {
