@@ -3,7 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
@@ -23,12 +22,11 @@ export class ReusedPasswordsReportComponent extends BaseReusedPasswordsReportCom
   constructor(
     cipherService: CipherService,
     modalService: ModalService,
-    stateService: StateService,
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(cipherService, modalService, stateService, passwordRepromptService);
+    super(cipherService, modalService, passwordRepromptService);
   }
 
   async ngOnInit() {
