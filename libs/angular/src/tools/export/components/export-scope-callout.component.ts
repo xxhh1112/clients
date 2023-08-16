@@ -45,12 +45,12 @@ export class ExportScopeCalloutComponent implements OnInit {
       organizationId != null
         ? {
             title: "exportingOrganizationVaultTitle",
-            description: "exportingOrganizationVaultDescription",
+            description: "exportingOrganizationVaultDesc",
             scopeIdentifier: this.organizationService.get(organizationId).name,
           }
         : {
             title: "exportingPersonalVaultTitle",
-            description: "exportingPersonalVaultDescription",
+            description: "exportingIndividualVaultDescription",
             scopeIdentifier: await this.stateService.getEmail(),
           };
   }

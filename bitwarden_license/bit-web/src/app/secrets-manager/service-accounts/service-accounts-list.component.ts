@@ -6,28 +6,32 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { TableDataSource } from "@bitwarden/components";
 
-import { ServiceAccountView } from "../models/view/service-account.view";
+import {
+  ServiceAccountSecretsDetailsView,
+  ServiceAccountView,
+} from "../models/view/service-account.view";
 
 @Component({
   selector: "sm-service-accounts-list",
   templateUrl: "./service-accounts-list.component.html",
 })
 export class ServiceAccountsListComponent implements OnDestroy {
-  protected dataSource = new TableDataSource<ServiceAccountView>();
+  protected dataSource = new TableDataSource<ServiceAccountSecretsDetailsView>();
 
   @Input()
-  get serviceAccounts(): ServiceAccountView[] {
+  get serviceAccounts(): ServiceAccountSecretsDetailsView[] {
     return this._serviceAccounts;
   }
-  set serviceAccounts(serviceAccounts: ServiceAccountView[]) {
+  set serviceAccounts(serviceAccounts: ServiceAccountSecretsDetailsView[]) {
     this.selection.clear();
     this._serviceAccounts = serviceAccounts;
     this.dataSource.data = serviceAccounts;
   }
-  private _serviceAccounts: ServiceAccountView[];
+  private _serviceAccounts: ServiceAccountSecretsDetailsView[];
 
   @Input()
   set search(search: string) {
+    this.selection.clear();
     this.dataSource.filter = search;
   }
 
@@ -55,19 +59,24 @@ export class ServiceAccountsListComponent implements OnDestroy {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.serviceAccounts.length;
-    return numSelected === numRows;
+    if (this.selection.selected?.length > 0) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.filteredData.length;
+      return numSelected === numRows;
+    }
+    return false;
   }
 
   toggleAll() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.selection.select(...this.serviceAccounts.map((s) => s.id));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selection.select(...this.dataSource.filteredData.map((s) => s.id));
+    }
   }
 
-  delete(serviceAccount: ServiceAccountView) {
-    this.deleteServiceAccountsEvent.emit([serviceAccount]);
+  delete(serviceAccount: ServiceAccountSecretsDetailsView) {
+    this.deleteServiceAccountsEvent.emit([serviceAccount as ServiceAccountView]);
   }
 
   bulkDeleteServiceAccounts() {

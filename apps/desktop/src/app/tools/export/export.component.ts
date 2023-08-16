@@ -1,9 +1,6 @@
-import * as os from "os";
-
 import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ExportComponent as BaseExportComponent } from "@bitwarden/angular/tools/export/components/export.component";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -13,6 +10,7 @@ import { FileDownloadService } from "@bitwarden/common/platform/abstractions/fil
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { DialogService } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
 
 @Component({
@@ -30,7 +28,7 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
     formBuilder: UntypedFormBuilder,
     logService: LogService,
     fileDownloadService: FileDownloadService,
-    dialogService: DialogServiceAbstraction,
+    dialogService: DialogService,
     organizationService: OrganizationService
   ) {
     super(
@@ -46,27 +44,5 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       dialogService,
       organizationService
     );
-  }
-
-  async warningDialog() {
-    if (this.encryptedFormat) {
-      return await this.dialogService.openSimpleDialog({
-        title: { key: "confirmVaultExport" },
-        content:
-          this.i18nService.t("encExportKeyWarningDesc") +
-          os.EOL +
-          os.EOL +
-          this.i18nService.t("encExportAccountWarningDesc"),
-        acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
-      });
-    } else {
-      return await this.dialogService.openSimpleDialog({
-        title: { key: "confirmVaultExport" },
-        content: { key: "exportWarningDesc" },
-        acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
-      });
-    }
   }
 }

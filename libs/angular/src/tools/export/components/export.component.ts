@@ -17,9 +17,8 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { DialogService } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../../services/dialog";
 
 @Directive()
 export class ExportComponent implements OnInit, OnDestroy {
@@ -67,7 +66,7 @@ export class ExportComponent implements OnInit, OnDestroy {
     private userVerificationService: UserVerificationService,
     private formBuilder: UntypedFormBuilder,
     protected fileDownloadService: FileDownloadService,
-    protected dialogService: DialogServiceAbstraction,
+    protected dialogService: DialogService,
     protected organizationService: OrganizationService
   ) {}
 
@@ -168,14 +167,14 @@ export class ExportComponent implements OnInit, OnDestroy {
           " " +
           this.i18nService.t("encExportAccountWarningDesc"),
         acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
     } else {
       return await this.dialogService.openSimpleDialog({
         title: { key: "confirmVaultExport" },
         content: { key: "exportWarningDesc" },
         acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
     }
   }

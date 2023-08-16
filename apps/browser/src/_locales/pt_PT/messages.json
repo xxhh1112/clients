@@ -3,7 +3,7 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden - gestor de palavras-passe",
+    "message": "Bitwarden - Gestor de Palavras-passe",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
@@ -464,7 +464,7 @@
     "message": "Código de verificação inválido"
   },
   "valueCopied": {
-    "message": "$VALUE$ copiado(a)",
+    "message": "$VALUE$ copiado",
     "description": "Value has been copied to the clipboard.",
     "placeholders": {
       "value": {
@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Atualizar"
   },
+  "notificationUnlockDesc": {
+    "message": "Desbloqueie o seu cofre Bitwarden para completar o pedido de preenchimento automático."
+  },
+  "notificationUnlock": {
+    "message": "Desbloquear"
+  },
   "enableContextMenuItem": {
     "message": "Mostrar opções do menu de contexto"
   },
@@ -658,7 +664,7 @@
     "description": "Light color"
   },
   "solarizedDark": {
-    "message": "Solarized Dark",
+    "message": "Solarized (escuro)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportVault": {
@@ -1134,7 +1140,7 @@
     "message": "Sr."
   },
   "mrs": {
-    "message": "Sra."
+    "message": "Sr.ª"
   },
   "ms": {
     "message": "Menina"
@@ -1338,7 +1344,7 @@
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
-    "message": "Palavra-passe atualizada",
+    "message": "Palavra-passe atualizada a",
     "description": "ex. Date this password was updated"
   },
   "neverLockWarning": {
@@ -2005,7 +2011,7 @@
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Utilize as capacidades de subendereçamento do seu provedor de e-mail."
+    "message": "Utilize as capacidades de subendereçamento do seu fornecedor de e-mail."
   },
   "catchallEmail": {
     "message": "E-mail de captura geral"
@@ -2221,21 +2227,25 @@
       }
     }
   },
-  "region": {
-    "message": "Região"
+  "loggingInOn": {
+    "message": "A iniciar sessão em"
   },
   "opensInANewWindow": {
     "message": "Abrir numa nova janela"
   },
-  "eu": {
-    "message": "UE",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "EUA",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Acesso negado. Não tem permissão para visualizar esta página."
+  },
+  "general": {
+    "message": "Geral"
+  },
+  "display": {
+    "message": "Display"
   }
 }

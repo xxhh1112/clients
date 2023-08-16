@@ -464,7 +464,7 @@
     "message": "Neveljavna koda za preverjanje"
   },
   "valueCopied": {
-    "message": "$VALUE$ kopirano",
+    "message": "$VALUE$ kopirana",
     "description": "Value has been copied to the clipboard.",
     "placeholders": {
       "value": {
@@ -629,6 +629,12 @@
   },
   "notificationChangeSave": {
     "message": "Da, posodobi zdaj"
+  },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
   },
   "enableContextMenuItem": {
     "message": "Prikaži možnosti kontekstnega menuja"
@@ -2221,21 +2227,25 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "Odpre se v novem oknu"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Display"
   }
 }
