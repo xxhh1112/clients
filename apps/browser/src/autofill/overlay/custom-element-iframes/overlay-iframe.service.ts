@@ -2,6 +2,22 @@ class OverlayIframeService {
   private port: chrome.runtime.Port | null = null;
   private extensionOriginsSet: Set<string>;
   private readonly iframe: HTMLIFrameElement;
+  private readonly iframeStyles: Partial<CSSStyleDeclaration> = {
+    all: "initial",
+    position: "fixed",
+    display: "block",
+    zIndex: "2147483647",
+    lineHeight: "0",
+    overflow: "hidden",
+    transition: "opacity 125ms ease-out 0s",
+    visibility: "visible",
+    clipPath: "none",
+    pointerEvents: "auto",
+    margin: "0",
+    padding: "0",
+    colorScheme: "normal",
+    opacity: "0",
+  };
 
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
     this.iframe = document.createElement("iframe");
@@ -11,15 +27,9 @@ class OverlayIframeService {
     ]);
   }
 
-  initOverlayIframe() {
+  initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>) {
     this.iframe.src = chrome.runtime.getURL(this.iframePath);
-    this.iframe.style.border = "none";
-    this.iframe.style.background = "transparent";
-    this.iframe.style.margin = "0";
-    this.iframe.style.padding = "0";
-    this.iframe.style.width = "100%";
-    this.iframe.style.height = "100%";
-    this.iframe.style.colorScheme = "normal";
+    this.updateElementStyles(this.iframe, { ...this.iframeStyles, ...initStyles });
     this.iframe.setAttribute("sandbox", "allow-scripts");
     this.iframe.setAttribute("allowtransparency", "true");
     this.iframe.addEventListener("load", this.setupPortMessageListener);
@@ -39,6 +49,7 @@ class OverlayIframeService {
       return;
     }
 
+    this.updateElementStyles(this.iframe, { opacity: "0", height: "0" });
     window.removeEventListener("message", this.handleWindowMessage);
     this.port.onMessage.removeListener(this.handlePortMessage);
     this.port.onDisconnect.removeListener(this.handlePortDisconnect);
@@ -51,8 +62,18 @@ class OverlayIframeService {
       return;
     }
 
+    if (message.command === "updateIframePosition") {
+      this.updateIframePosition(message.position);
+      return;
+    }
+
     this.iframe.contentWindow.postMessage(message, "*");
   };
+
+  private updateIframePosition(position: Partial<CSSStyleDeclaration>) {
+    this.updateElementStyles(this.iframe, position);
+    setTimeout(() => this.updateElementStyles(this.iframe, { opacity: "1" }), 0);
+  }
 
   private handleWindowMessage = (event: MessageEvent) => {
     if (
@@ -63,8 +84,32 @@ class OverlayIframeService {
       return;
     }
 
+    const message = event.data;
+    if (message.command === "updateAutofillOverlayListHeight") {
+      this.updateElementStyles(this.iframe, { height: `${message.height}px` });
+      return;
+    }
+
     this.port.postMessage(event.data);
   };
+
+  private updateElementStyles(customElement: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
+    if (!customElement) {
+      return;
+    }
+
+    for (const styleProperty in styles) {
+      customElement.style.setProperty(
+        this.convertToKebabCase(styleProperty),
+        styles[styleProperty],
+        "important"
+      );
+    }
+  }
+
+  private convertToKebabCase(stringValue: string): string {
+    return stringValue.replace(/([a-z])([A-Z])/g, "$1-$2");
+  }
 
   /**
    * Chrome returns null for any sandboxed iframe sources.

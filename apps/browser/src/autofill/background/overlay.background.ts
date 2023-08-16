@@ -30,11 +30,18 @@ class OverlayBackground {
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayIconPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
+  private focusedFieldData: {
+    focusedFieldStyles: Partial<CSSStyleDeclaration>;
+    focusedFieldRects: Partial<DOMRect>;
+  };
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
+    bgUpdateAutofillOverlayIconPosition: () => this.updateAutofillOverlayIconPosition(),
+    bgUpdateAutofillOverlayListPosition: () => this.updateAutofillOverlayListPosition(),
+    bgUpdateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
@@ -140,6 +147,68 @@ class OverlayBackground {
     }
 
     chrome.tabs.sendMessage(sender.tab.id, { command: "closeAutofillOverlay" });
+  }
+
+  private updateAutofillOverlayIconPosition() {
+    if (!this.overlayIconPort) {
+      return;
+    }
+
+    this.overlayIconPort.postMessage({
+      command: "updateIframePosition",
+      position: this.getOverlayIconPosition(),
+    });
+  }
+
+  private updateAutofillOverlayListPosition() {
+    if (!this.overlayListPort) {
+      return;
+    }
+
+    this.overlayListPort.postMessage({
+      command: "updateIframePosition",
+      position: this.getOverlayListPosition(),
+    });
+  }
+
+  private updateFocusedFieldData(message: any) {
+    this.focusedFieldData = message.focusedFieldData;
+  }
+
+  private getOverlayIconPosition() {
+    if (!this.focusedFieldData) {
+      return;
+    }
+
+    const { top, left, width, height } = this.focusedFieldData.focusedFieldRects;
+    const { paddingRight, paddingLeft } = this.focusedFieldData.focusedFieldStyles;
+    const elementOffset = height * 0.37;
+    const elementHeight = height - elementOffset;
+    const elementTopPosition = top + elementOffset / 2;
+    let elementLeftPosition = left + width - height + elementOffset / 2;
+
+    const fieldPaddingRight = parseInt(paddingRight, 10);
+    const fieldPaddingLeft = parseInt(paddingLeft, 10);
+    if (fieldPaddingRight > fieldPaddingLeft) {
+      elementLeftPosition = left + width - height - (fieldPaddingRight - elementOffset + 2);
+    }
+
+    return {
+      top: `${elementTopPosition}px`,
+      left: `${elementLeftPosition}px`,
+      height: `${elementHeight}px`,
+      width: `${elementHeight}px`,
+    };
+  }
+
+  private getOverlayListPosition() {
+    const { top, left, width, height } = this.focusedFieldData.focusedFieldRects;
+
+    return {
+      width: `${width}px`,
+      top: `${top + height}px`,
+      left: `${left}px`,
+    };
   }
 
   private overlayIconClosed() {
@@ -327,6 +396,7 @@ class OverlayBackground {
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       styleSheetUrl: chrome.runtime.getURL("overlay/icon.css"),
     });
+    this.updateAutofillOverlayIconPosition();
     this.overlayIconPort.onMessage.addListener(this.handleOverlayIconPortMessage);
   };
 
@@ -355,6 +425,7 @@ class OverlayBackground {
       ciphers: this.currentTabCiphers,
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
     });
+    this.updateAutofillOverlayListPosition();
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
   };
 

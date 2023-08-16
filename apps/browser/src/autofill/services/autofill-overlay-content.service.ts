@@ -24,13 +24,22 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private overlayIconElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
-  private mostRecentlyFocusedFieldRects: DOMRect | null;
-  private mostRecentlyFocusedFieldStyles: CSSStyleDeclaration;
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
+  private defaultOverlayStyles: Partial<CSSStyleDeclaration> = {
+    position: "fixed",
+    display: "block",
+    zIndex: "2147483647",
+    lineHeight: "0",
+    overflow: "hidden",
+    transition: "opacity 125ms ease-out 0s",
+    visibility: "visible",
+    clipPath: "none",
+    pointerEvents: "auto",
+  };
   private eventHandlersMemo: { [key: string]: EventListener } = {};
 
   constructor() {
@@ -60,7 +69,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   openAutofillOverlay(authStatus?: AuthenticationStatus, focusFieldElement?: boolean) {
-    if (!this.mostRecentlyFocusedFieldRects) {
+    if (!this.mostRecentlyFocusedField) {
       return;
     }
 
@@ -86,7 +95,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayIconElement.remove();
-    this.overlayIconElement.style.opacity = "0";
     this.isOverlayIconVisible = false;
     sendExtensionMessage("bgAutofillOverlayIconClosed");
     this.removeOverlayRepositionEventListeners();
@@ -98,8 +106,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.overlayListElement.remove();
-    this.overlayListElement.style.height = "0";
-    this.overlayListElement.style.opacity = "0";
     this.isOverlayListVisible = false;
     sendExtensionMessage("bgAutofillOverlayListClosed");
   }
@@ -109,9 +115,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (!this.overlayListElement || !updatedHeight) {
       return;
     }
-
-    this.overlayListElement.style.height = `${updatedHeight}px`;
-    this.fadeInOverlayElements();
   }
 
   addNewVaultItem() {
@@ -226,7 +229,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.removeAutofillOverlayList();
     }
 
-    this.updateOverlayIconPosition(true);
+    this.updateOverlayIconPosition();
   }
 
   private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {
@@ -270,55 +273,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.updateOverlayListPosition();
   }
 
-  private updateOverlayIconPosition(isOpeningWithoutList = false) {
+  private updateOverlayIconPosition() {
     if (!this.overlayIconElement) {
       this.createOverlayIconElement();
     }
 
-    if (!this.mostRecentlyFocusedFieldRects) {
+    if (!this.mostRecentlyFocusedField) {
       return;
     }
-
-    const elementOffset = this.mostRecentlyFocusedFieldRects.height * 0.37;
-    const elementHeight = this.mostRecentlyFocusedFieldRects.height - elementOffset;
-    const elementTopPosition = this.mostRecentlyFocusedFieldRects.top + elementOffset / 2;
-    const elementLeftPosition = this.getOverlayIconLeftPosition(elementOffset);
-    this.updateElementStyles(this.overlayIconElement, {
-      height: `${elementHeight}px`,
-      width: `${elementHeight}px`,
-      top: `${elementTopPosition}px`,
-      left: `${elementLeftPosition}px`,
-    });
 
     if (!this.isOverlayIconVisible) {
       document.body.appendChild(this.overlayIconElement);
       this.isOverlayIconVisible = true;
       this.setOverlayRepositionEventListeners();
     }
-
-    if (isOpeningWithoutList) {
-      this.fadeInOverlayElements();
-    }
-  }
-
-  private getOverlayIconLeftPosition(elementOffset: number) {
-    const fieldPaddingRight = parseInt(this.mostRecentlyFocusedFieldStyles.paddingRight, 10);
-    const fieldPaddingLeft = parseInt(this.mostRecentlyFocusedFieldStyles.paddingLeft, 10);
-    if (fieldPaddingRight > fieldPaddingLeft) {
-      return (
-        this.mostRecentlyFocusedFieldRects.left +
-        this.mostRecentlyFocusedFieldRects.width -
-        this.mostRecentlyFocusedFieldRects.height -
-        (fieldPaddingRight - elementOffset + 2)
-      );
-    }
-
-    return (
-      this.mostRecentlyFocusedFieldRects.left +
-      this.mostRecentlyFocusedFieldRects.width -
-      this.mostRecentlyFocusedFieldRects.height +
-      elementOffset / 2
-    );
+    sendExtensionMessage("bgUpdateAutofillOverlayIconPosition");
   }
 
   private updateOverlayListPosition() {
@@ -326,37 +295,22 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.createAutofillOverlayList();
     }
 
-    if (!this.mostRecentlyFocusedFieldRects) {
+    if (!this.mostRecentlyFocusedField) {
       return;
     }
-
-    this.updateElementStyles(this.overlayListElement, {
-      width: `${this.mostRecentlyFocusedFieldRects.width}px`,
-      top:
-        this.mostRecentlyFocusedFieldRects.top + this.mostRecentlyFocusedFieldRects.height + `px`,
-      left: `${this.mostRecentlyFocusedFieldRects.left}px`,
-    });
 
     if (!this.isOverlayListVisible) {
       document.body.appendChild(this.overlayListElement);
       this.isOverlayListVisible = true;
     }
-  }
 
-  private fadeInOverlayElements() {
-    if (this.isOverlayIconVisible) {
-      setTimeout(() => (this.overlayIconElement.style.opacity = "1"), 0);
-    }
-
-    if (this.isOverlayListVisible) {
-      setTimeout(() => (this.overlayListElement.style.opacity = "1"), 0);
-    }
+    sendExtensionMessage("bgUpdateAutofillOverlayListPosition");
   }
 
   private toggleOverlayHidden(isHidden: boolean) {
     const displayValue = isHidden ? "none" : "block";
-    this.overlayIconElement?.style.setProperty("display", displayValue);
-    this.overlayListElement?.style.setProperty("display", displayValue);
+    this.updateElementStyles(this.overlayIconElement, { display: displayValue });
+    this.updateElementStyles(this.overlayListElement, { display: displayValue });
 
     this.isOverlayIconVisible = !isHidden;
     this.isOverlayListVisible = !isHidden;
@@ -366,21 +320,29 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     formFieldElement: ElementWithOpId<FormFieldElement>
   ) {
     this.mostRecentlyFocusedField = formFieldElement;
-    await this.updateMostRecentlyFocusedFieldRects(formFieldElement);
-    this.mostRecentlyFocusedFieldStyles = window.getComputedStyle(formFieldElement);
-  }
-
-  private async updateMostRecentlyFocusedFieldRects(
-    formFieldElement: ElementWithOpId<FormFieldElement>
-  ) {
-    this.mostRecentlyFocusedFieldRects = await this.getBoundingClientRectFromIntersectionObserver(
+    const { paddingRight, paddingLeft } = window.getComputedStyle(formFieldElement);
+    const { width, height, top, left } = await this.getMostRecentlyFocusedFieldRects(
       formFieldElement
     );
-    if (this.mostRecentlyFocusedFieldRects) {
-      return;
+    const focusedFieldData = {
+      focusedFieldStyles: { paddingRight, paddingLeft },
+      focusedFieldRects: { width, height, top, left },
+    };
+
+    sendExtensionMessage("bgUpdateFocusedFieldData", { focusedFieldData });
+  }
+
+  private async getMostRecentlyFocusedFieldRects(
+    formFieldElement: ElementWithOpId<FormFieldElement>
+  ) {
+    const focusedFieldRects = await this.getBoundingClientRectFromIntersectionObserver(
+      formFieldElement
+    );
+    if (focusedFieldRects) {
+      return focusedFieldRects;
     }
 
-    this.mostRecentlyFocusedFieldRects = formFieldElement.getBoundingClientRect();
+    return formFieldElement.getBoundingClientRect();
   }
 
   private async getBoundingClientRectFromIntersectionObserver(
@@ -442,9 +404,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.overlayIconElement = this.createOverlayCustomElement(
       AutofillOverlayCustomElement.BitwardenIcon
     );
-    this.overlayIconElement.style.lineHeight = "0";
 
-    const mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    const mutationObserver = new MutationObserver(this.handleOverlayElementMutationObserverUpdate);
     mutationObserver.observe(this.overlayIconElement, { attributes: true });
   }
 
@@ -461,51 +422,32 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenList
     );
 
-    this.updateElementStyles(this.overlayListElement, {
-      height: "0",
-      lineHeight: "0",
-      minWidth: "250px",
-      maxHeight: "180px",
-      boxShadow: "2px 4px 6px 0px rgba(0, 0, 0, 0.1)",
-      borderRadius: "4px",
-      border: "1px solid rgb(206, 212, 220)",
-      backgroundColor: "#fff",
-    });
-
-    const mutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    const mutationObserver = new MutationObserver(this.handleOverlayElementMutationObserverUpdate);
     mutationObserver.observe(this.overlayListElement, { attributes: true });
   }
 
   private createOverlayCustomElement(elementName: string): HTMLElement {
     const customElement = document.createElement(elementName);
-    customElement.style.opacity = "0";
-    this.setDefaultOverlayStyles(customElement);
 
     return customElement;
   }
 
-  private setDefaultOverlayStyles(customElement: HTMLElement) {
-    this.updateElementStyles(customElement, {
-      position: "fixed",
-      display: "block",
-      zIndex: "2147483647",
-      overflow: "hidden",
-      transition: "opacity 125ms ease-out",
-    });
-  }
-
-  private isCustomElementStylesModified(customElement: HTMLElement): boolean {
-    return (
-      customElement.style.position !== "fixed" ||
-      customElement.style.display !== "block" ||
-      customElement.style.zIndex !== "2147483647" ||
-      customElement.style.overflow !== "hidden" ||
-      customElement.style.transition !== "opacity 125ms ease-out"
-    );
-  }
-
   private updateElementStyles(customElement: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
-    Object.assign(customElement.style, styles);
+    if (!customElement) {
+      return;
+    }
+
+    for (const styleProperty in styles) {
+      customElement.style.setProperty(
+        this.convertToKebabCase(styleProperty),
+        styles[styleProperty],
+        "important"
+      );
+    }
+  }
+
+  private convertToKebabCase(styleProperty: string): string {
+    return styleProperty.replace(/([a-z])([A-Z])/g, "$1-$2");
   }
 
   private setOverlayRepositionEventListeners() {
@@ -559,7 +501,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private setupMutationObserver = () => {
-    const bodyMutationObserver = new MutationObserver(this.handleMutationObserverUpdate);
+    const bodyMutationObserver = new MutationObserver(this.handleBodyElementMutationObserverUpdate);
     bodyMutationObserver.observe(document.body, { childList: true });
 
     const documentElementMutationObserver = new MutationObserver(
@@ -568,7 +510,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     documentElementMutationObserver.observe(document.documentElement, { childList: true });
   };
 
-  private handleMutationObserverUpdate = () => {
+  private handleOverlayElementMutationObserverUpdate = (mutationRecord: MutationRecord[]) => {
+    // Remove All Attributes Given to the Overlay Elements
+  };
+
+  private handleBodyElementMutationObserverUpdate = () => {
     // TODO: CG - This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
     // In general, we need to think about this further and come up with a more robust solution.
     // The code below basically attempts to ensure that our two elements are always the last two elements in the body.
@@ -579,6 +525,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     // also check the z-index of the last element in the body and ensure that our elements are always above that.
     //
     // WARNING: It's really easy to trigger a infinite loop with this observer. Keep that in mind while updating this implementation.
+
     if (this.mutationObserverIterationsResetTimeout) {
       clearTimeout(this.mutationObserverIterationsResetTimeout);
     }
@@ -586,6 +533,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
       return;
     }
+
     this.mutationObserverIterations++;
     this.mutationObserverIterationsResetTimeout = setTimeout(
       () => (this.mutationObserverIterations = 0),
@@ -597,14 +545,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       clearTimeout(this.mutationObserverIterationsResetTimeout);
       this.removeAutofillOverlay();
       return;
-    }
-
-    if (
-      this.isCustomElementStylesModified(this.overlayIconElement) ||
-      this.isCustomElementStylesModified(this.overlayListElement)
-    ) {
-      this.setDefaultOverlayStyles(this.overlayIconElement);
-      this.setDefaultOverlayStyles(this.overlayListElement);
     }
 
     const lastChild = document.body.lastChild;

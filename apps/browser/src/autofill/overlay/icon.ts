@@ -13,9 +13,9 @@ class AutofillOverlayIcon extends HTMLElement {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private shadowDom: ShadowRoot;
   private iconElement: HTMLElement;
-  private logoIconElement: HTMLElement;
-  private logoLockedIconElement: HTMLElement;
   private messageOrigin: string;
+  private readonly logoIconElement: HTMLElement;
+  private readonly logoLockedIconElement: HTMLElement;
   private readonly windowMessageHandlers: OverlayIconWindowMessageHandlers = {
     initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
     checkOverlayIconFocused: () => this.checkOverlayIconFocused(),

@@ -5,6 +5,9 @@ type OverlayBackgroundExtensionMessageHandlers = {
   bgOpenAutofillOverlayList: () => void;
   bgCheckOverlayFocused: () => void;
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
+  bgUpdateAutofillOverlayIconPosition: () => void;
+  bgUpdateAutofillOverlayListPosition: () => void;
+  bgUpdateFocusedFieldData: ({ message }: { message: any }) => void;
   bgAutofillOverlayIconClosed: () => void;
   bgAutofillOverlayListClosed: () => void;
   bgAddNewVaultItem: ({
