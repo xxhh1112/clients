@@ -41,6 +41,9 @@ export class AnonAddyForwarder implements Forwarder {
     if (response.status === 401) {
       throw "Invalid AnonAddy API token.";
     }
+    if (response?.statusText != null) {
+      throw "AnonAddy error:\n" + response.statusText;
+    }
     throw "Unknown AnonAddy error occurred.";
   }
 }
