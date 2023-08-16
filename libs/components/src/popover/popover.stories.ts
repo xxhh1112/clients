@@ -36,7 +36,7 @@ export const TargetLeft: Story = {
         <i class="bwi bwi-question-circle"></i>
       </button>
 
-      <bit-popover #myPopover>
+      <bit-popover [header]="'Example Header'" #myPopover>
         <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
         <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
           <li>Dolor sit amet consectetur</li>
@@ -62,7 +62,7 @@ export const TargetCenter: Story = {
         </button>
       </div>
 
-      <bit-popover #myPopover>
+      <bit-popover [header]="'Example Header'" #myPopover>
         <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
         <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
           <li>Dolor sit amet consectetur</li>
@@ -88,7 +88,7 @@ export const TargetRight: Story = {
         </button>
       </div>
 
-      <bit-popover #myPopover>
+      <bit-popover [header]="'Example Header'" #myPopover>
         <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
         <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
           <li>Dolor sit amet consectetur</li>
