@@ -18,7 +18,7 @@ export class UnsecuredWebsitesReportComponent extends CipherReportComponent impl
     modalService: ModalService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, true, passwordRepromptService);
+    super(modalService, passwordRepromptService);
   }
 
   async ngOnInit() {

@@ -25,7 +25,7 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     modalService: ModalService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, true, passwordRepromptService);
+    super(modalService, passwordRepromptService);
   }
 
   async ngOnInit() {

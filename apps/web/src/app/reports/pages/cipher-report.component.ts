@@ -21,7 +21,6 @@ export class CipherReportComponent {
 
   constructor(
     private modalService: ModalService,
-    public requiresPaid: boolean,
     protected passwordRepromptService: PasswordRepromptService
   ) {}
 
