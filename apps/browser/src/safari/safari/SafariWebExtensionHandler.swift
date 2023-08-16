@@ -133,6 +133,7 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
                         status = SecKeychainFindGenericPassword(nil, UInt32(ServiceNameBiometric.utf8.count), ServiceNameBiometric, UInt32(fallbackName.utf8.count), fallbackName, &passwordLength, &passwordPtr, nil)
                     }
 
+                    // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3473)
                     if status != errSecSuccess {
                         let secondaryFallbackName = "_masterkey_biometric"
                         status = SecKeychainFindGenericPassword(nil, UInt32(ServiceNameBiometric.utf8.count), ServiceNameBiometric, UInt32(secondaryFallbackName.utf8.count), secondaryFallbackName, &passwordLength, &passwordPtr, nil)

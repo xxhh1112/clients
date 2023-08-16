@@ -930,6 +930,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   // --LEGACY METHODS--
   // We previously used the master key for additional keys, but now we use the user key.
   // These methods support migrating the old keys to the new ones.
+  // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3475)
 
   async clearDeprecatedKeys(keySuffix: KeySuffixOptions, userId?: string) {
     if (keySuffix === KeySuffixOptions.Auto) {

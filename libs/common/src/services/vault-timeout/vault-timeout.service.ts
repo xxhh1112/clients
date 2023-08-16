@@ -36,6 +36,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     if (this.inited) {
       return;
     }
+    // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3483)
     await this.migrateKeyForNeverLockIfNeeded();
 
     this.inited = true;
