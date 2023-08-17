@@ -12,8 +12,7 @@ import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
 import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export class SendComponent implements OnInit, OnDestroy {
@@ -25,11 +24,9 @@ export class SendComponent implements OnInit, OnDestroy {
   expired = false;
   type: SendType = null;
   sends: SendView[] = [];
-  filteredSends: SendView[] = [];
   searchText: string;
   selectedType: SendType;
   selectedAll: boolean;
-  searchPlaceholder: string;
   filter: (cipher: SendView) => boolean;
   searchPending = false;
   hasSearched = false; // search() function called - returns true if text qualifies for search
@@ -41,6 +38,15 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private searchTimeout: any;
   private destroy$ = new Subject<void>();
+  private _filteredSends: SendView[];
+
+  get filteredSends(): SendView[] {
+    return this._filteredSends;
+  }
+
+  set filteredSends(filteredSends: SendView[]) {
+    this._filteredSends = filteredSends;
+  }
 
   constructor(
     protected sendService: SendService,
@@ -52,7 +58,7 @@ export class SendComponent implements OnInit, OnDestroy {
     protected policyService: PolicyService,
     private logService: LogService,
     protected sendApiService: SendApiService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -132,7 +138,7 @@ export class SendComponent implements OnInit, OnDestroy {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "removePassword" },
       content: { key: "removePasswordConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -163,7 +169,7 @@ export class SendComponent implements OnInit, OnDestroy {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "deleteSend" },
       content: { key: "deleteSendConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {

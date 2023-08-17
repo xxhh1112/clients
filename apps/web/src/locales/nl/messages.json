@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ Webkluis",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Van welke categorie is dit item?"
   },
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Er is een onverwachte fout opgetreden."
   },
+  "expirationDateError": {
+    "message": "Kies een vervaldatum in de toekomst."
+  },
   "emailAddress": {
     "message": "E-mailadres"
   },
   "yourVaultIsLocked": {
     "message": "Je kluis is vergrendeld. Voer je hoofdwachtwoord in om door te gaan."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Ontgrendelen"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Verificatiecode kopiëren"
+  },
+  "copyUuid": {
+    "message": "UUID kopiëren"
   },
   "warning": {
     "message": "Waarschuwing"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Fout bij het decoderen van het geëxporteerde bestand. Je encryptiesleutel komt niet overeen met de gebruikte sleutel waarmee de gegevens zijn geëxporteerd."
+  },
+  "importDestination": {
+    "message": "Importbestemming"
+  },
+  "learnAboutImportOptions": {
+    "message": "Leer meer over je importopties"
+  },
+  "selectImportFolder": {
+    "message": "Map selecteren"
+  },
+  "selectImportCollection": {
+    "message": "Collectie selecteren"
+  },
+  "importTargetHint": {
+    "message": "Kies deze optie als je de geïmporteerde bestandsinhoud wilt verplaatsen naar een $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Bestand bevat niet-toegewezen items."
   },
   "selectFormat": {
     "message": "Selecteer het formaat van het importbestand"
@@ -2645,6 +2669,12 @@
   "webVault": {
     "message": "Webkluis"
   },
+  "bitWebVault": {
+    "message": "Bitwarden Webkluis"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
   "loggedIn": {
     "message": "Ingelogd."
   },
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Stel een limiet voor gebruikersplaatsen in voor je abonnement. Zodra deze limiet is bereikt, kun je geen nieuwe gebruikers uitnodigen."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Stel een limiet voor gebruikersplaatsen in voor je Secrets Manager-abonnement. Zodra deze limiet is bereikt, kun je geen nieuwe leden uitnodigen."
+  },
   "maxSeatLimit": {
     "message": "Maximale gebruikersplaatsen (optioneel)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Dit item heeft oude bestandsbijlagen die aangepast moeten worden."
   },
-  "attachmentFixDesc": {
-    "message": "Dit is een oude bestandsbijlage die moet worden aangepast. Klik voor meer informatie."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Oplossen",
@@ -4375,8 +4408,8 @@
   "manageUsers": {
     "message": "Gebruikers beheren"
   },
-  "manageResetPassword": {
-    "message": "Wachtwoordherstel beheren"
+  "manageAccountRecovery": {
+    "message": "Accountherstel beheren"
   },
   "disableRequiredError": {
     "message": "Je moet handmatig het $POLICYNAME$-beleid uitschakelen voordat je dit beleid kunt uitschakelen.",
@@ -4705,8 +4738,8 @@
   "error": {
     "message": "Fout"
   },
-  "resetPasswordManageUsers": {
-    "message": "Gebruikers beheren moet ingeschakeld zijn met de optie Wachtwoordherstel beheren"
+  "accountRecoveryManageUsers": {
+    "message": "Gebruikers beheren moet je ook accountherstel beheren toekennen"
   },
   "setupProvider": {
     "message": "Providerinstellingen"
@@ -5430,7 +5463,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Exporteert alleen de organisatiekluis van $ORGANIZATION$. Geen persoonlijke kluis-items of items van andere organisaties.",
     "placeholders": {
       "organization": {
@@ -6617,11 +6650,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Bèta"
-  },
   "secretsManager": {
     "message": "Secrets Manager"
+  },
+  "secretsManagerBeta": {
+    "message": "Secrets Manager Bèta"
   },
   "secretsManagerAccessDescription": {
     "message": "Gebruikerstoegang tot Secrets Manager inschakelen."
@@ -6803,16 +6836,11 @@
   "enforceOnLoginDesc": {
     "message": "Verplicht bestaande leden hun wachtwoord te wijzigen"
   },
-  "region": {
-    "message": "Regio"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "VS",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Je hebt geen rechten om dit project te verwijderen",
@@ -6825,8 +6853,8 @@
   "updateKdfSettings": {
     "message": "KDF instellingen bijwerken"
   },
-  "trustedDeviceEncryption": {
-    "message": "Vertrouwde apparaat encryptie"
+  "trustedDevices": {
+    "message": "Vertrouwde apparaten"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
@@ -6955,5 +6983,134 @@
   },
   "selectedRegionFlag": {
     "message": "Geselecteerde regionale vlag"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Geen actieve Sends",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Gebruik Verzenden voor het veilig delen van versleutelde informatie met wie dan ook.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Gebruikers uitnodigen"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager voor $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Voor het beheren van geheimen tijdens de ontwikkelcyclus van software door ontwikkel- en DevOpsteams."
+  },
+  "free2PersonOrganization": {
+    "message": "Gratis 2-persoonsorganisaties"
+  },
+  "unlimitedSecrets": {
+    "message": "Onbeperkte geheimen"
+  },
+  "unlimitedProjects": {
+    "message": "Onbeperkte projecten"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ projecten inbegrepen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ service accounts inbegrepen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ per maand voor extra service accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Secrets Manager toevoegen"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Secrets Manager toevoegen aan je geüpgraded abonnement zodat je toegang houdt tot geheimen die met je vorige abonnement zijn aangemaakt."
+  },
+  "additionalServiceAccounts": {
+    "message": "Extra service accounts"
+  },
+  "includedServiceAccounts": {
+    "message": "Bij je abonnement horen $COUNT$ serviceaccounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Je kunt extra serviceaccounts toevoegen voor $COST$ per maand.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Abonnementskosten wachtwoordbeheerder"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Secrets Manager abonnementskosten"
+  },
+  "passwordManager": {
+    "message": "Wachtwoordbeheerder"
+  },
+  "freeOrganization": {
+    "message": "Gratis organisatie"
+  },
+  "limitServiceAccounts": {
+    "message": "Service accounts beperken (optioneel)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Stel een limiet in voor service accounts. Zodra deze limiet is bereikt, kun je geen nieuwe service accounts toevoegen."
+  },
+  "serviceAccountLimit": {
+    "message": "Service account limiet (optioneel)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Max potential service account cost"
+  },
+  "smBetaEndedDesc": {
+    "message": "De Secrets Manager Beta eindigde $BETA_ENDING_DATE$. Je hebt nog $DAYS$ dagen over voor het toevoegen van Secrets Manager aan je betaalde abonnement en toegang te houden tot de gegevens in Secrets Manager. Neem contact op met Customer Success voor het toevoegen van Secrets Manager aan je abonnement.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta beëindigd"
+  },
+  "beta": {
+    "message": "Beta"
   }
 }

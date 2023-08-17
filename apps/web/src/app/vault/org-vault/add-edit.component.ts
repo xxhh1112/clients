@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
@@ -20,8 +19,7 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
-import { CipherCreateRequest } from "@bitwarden/common/vault/models/request/cipher-create.request";
-import { CipherRequest } from "@bitwarden/common/vault/models/request/cipher.request";
+import { DialogService } from "@bitwarden/components";
 
 import { AddEditComponent as BaseAddEditComponent } from "../individual-vault/add-edit.component";
 
@@ -51,7 +49,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     passwordRepromptService: PasswordRepromptService,
     organizationService: OrganizationService,
     sendApiService: SendApiService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogService
   ) {
     super(
       cipherService,
@@ -113,19 +111,6 @@ export class AddEditComponent extends BaseAddEditComponent {
       return super.encryptCipher();
     }
     return this.cipherService.encrypt(this.cipher, null, this.originalCipher);
-  }
-
-  protected async saveCipher(cipher: Cipher) {
-    if (!this.organization.canEditAnyCollection || cipher.organizationId == null) {
-      return super.saveCipher(cipher);
-    }
-    if (this.editMode && !this.cloneMode) {
-      const request = new CipherRequest(cipher);
-      return this.apiService.putCipherAdmin(this.cipherId, request);
-    } else {
-      const request = new CipherCreateRequest(cipher);
-      return this.apiService.postCipherAdmin(request);
-    }
   }
 
   protected async deleteCipher() {
