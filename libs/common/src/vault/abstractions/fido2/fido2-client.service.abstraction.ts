@@ -11,6 +11,7 @@ export abstract class Fido2ClientService {
     params: AssertCredentialParams,
     abortController?: AbortController
   ) => Promise<AssertCredentialResult>;
+  isFido2FeatureEnabled: () => Promise<boolean>;
 }
 
 export interface CreateCredentialParams {

@@ -52,7 +52,11 @@ export default class RuntimeBackground {
       sender: chrome.runtime.MessageSender,
       sendResponse: any
     ) => {
-      const messagesWithResponse = ["fido2RegisterCredentialRequest", "fido2GetCredentialRequest"];
+      const messagesWithResponse = [
+        "checkFido2FeatureEnabled",
+        "fido2RegisterCredentialRequest",
+        "fido2GetCredentialRequest",
+      ];
 
       if (messagesWithResponse.includes(msg.command)) {
         this.processMessage(msg, sender).then(
@@ -233,6 +237,8 @@ export default class RuntimeBackground {
       case "fido2AbortRequest":
         this.abortControllers.get(msg.abortedRequestId)?.abort();
         break;
+      case "checkFido2FeatureEnabled":
+        return await this.main.fido2ClientService.isFido2FeatureEnabled();
       case "fido2RegisterCredentialRequest":
         return await this.main.fido2ClientService
           .createCredential(msg.data, this.createAbortController(msg.requestId))

@@ -34,13 +34,15 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     private logService?: LogService
   ) {}
 
+  async isFido2FeatureEnabled(): Promise<boolean> {
+    return await this.configService.getFeatureFlagBool(FeatureFlag.Fido2VaultCredentials);
+  }
+
   async createCredential(
     params: CreateCredentialParams,
     abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
-    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
-      FeatureFlag.Fido2VaultCredentials
-    );
+    const enableFido2VaultCredentials = await this.isFido2FeatureEnabled();
 
     if (!enableFido2VaultCredentials) {
       this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
@@ -191,9 +193,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     params: AssertCredentialParams,
     abortController = new AbortController()
   ): Promise<AssertCredentialResult> {
-    const enableFido2VaultCredentials = await this.configService.getFeatureFlagBool(
-      FeatureFlag.Fido2VaultCredentials
-    );
+    const enableFido2VaultCredentials = await this.isFido2FeatureEnabled();
 
     if (!enableFido2VaultCredentials) {
       this.logService?.warning(`[Fido2Client] Fido2VaultCredential is not enabled`);
