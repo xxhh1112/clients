@@ -49,7 +49,7 @@ class OverlayIframeService {
       return;
     }
 
-    this.updateElementStyles(this.iframe, { opacity: "0", height: "0" });
+    this.updateElementStyles(this.iframe, { opacity: "0", height: "0", display: "block" });
     globalThis.removeEventListener("message", this.handleWindowMessage);
     this.port.onMessage.removeListener(this.handlePortMessage);
     this.port.onDisconnect.removeListener(this.handlePortDisconnect);
