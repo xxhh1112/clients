@@ -196,7 +196,7 @@ export class AttachmentsComponent implements OnInit {
       await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain)
     );
 
-    this.hasUpdatedKey = await this.cryptoService.hasEncKey();
+    this.hasUpdatedKey = await this.cryptoService.hasUserKey();
     const canAccessPremium = await this.stateService.getCanAccessPremium();
     this.canAccessAttachments = canAccessPremium || this.cipher.organizationId != null;
 

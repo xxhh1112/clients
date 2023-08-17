@@ -11,7 +11,7 @@ import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { OrgKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { ServerConfigResponse } from "../../platform/models/response/server-config.response";
 import { ContainerService } from "../../platform/services/container.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
@@ -137,7 +137,7 @@ describe("Cipher Service", () => {
       const fileName = "filename";
       const fileData = new Uint8Array(10).buffer;
       cryptoService.getOrgKey.mockReturnValue(
-        Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))
+        Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)) as OrgKey)
       );
       cryptoService.makeEncKey.mockReturnValue(
         Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))

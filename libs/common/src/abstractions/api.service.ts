@@ -200,6 +200,7 @@ export abstract class ApiService {
   postConvertToKeyConnector: () => Promise<void>;
   //passwordless
   postAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
+  postAdminAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
   getAuthResponse: (id: string, accessCode: string) => Promise<AuthRequestResponse>;
   getAuthRequest: (id: string) => Promise<AuthRequestResponse>;
   putAuthRequest: (id: string, request: PasswordlessAuthRequest) => Promise<AuthRequestResponse>;

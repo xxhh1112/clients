@@ -81,6 +81,6 @@ export abstract class CipherService {
     organizationId?: string,
     asAdmin?: boolean
   ) => Promise<void>;
-  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<SymmetricCryptoKey>;
+  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<any>;
   getCipherKeyEncryptionEnabled: () => Promise<boolean>;
 }
