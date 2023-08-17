@@ -4,7 +4,7 @@
       <button
         class="tw-min-w-[3em]"
         type="button"
-        [disabled]="true"
+        disabled
         bitButton
         buttonType="secondary"
         grouping="inner"
@@ -22,7 +22,7 @@
           [buttonType]="n === currPage ? 'primary' : 'secondary'"
           routerLink=""
           [queryParams]="getParams | memo : [queryParam, n]"
-          [queryParamsHandling]="'merge'"
+          queryParamsHandling="merge"
           [grouping]="getGrouping | memo : [totalPages, n]"
           [attr.aria-label]="(n === totalPages ? 'lastPage' : 'goToPage') | i18n : n"
           [attr.aria-current]="n === currPage ? 'true' : 'false'"
