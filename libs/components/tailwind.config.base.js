@@ -86,9 +86,9 @@ module.exports = {
         "50vw": "50vw",
         "75vw": "75vw",
       },
-      minWidth: {
-        52: "13rem",
-      },
+      minWidth: ({ theme }) => ({
+        ...theme("width"),
+      }),
       maxWidth: ({ theme }) => ({
         ...theme("width"),
         "90vw": "90vw",

@@ -2,7 +2,7 @@
   <ul aria-label="table pages" class="tw-flex tw-list-none">
     <ng-template #dots>
       <button
-        class="tw-min-w-[3em]"
+        class="tw-min-w-11"
         type="button"
         [disabled]="true"
         bitButton
@@ -16,7 +16,7 @@
     <ng-template #item let-n="n">
       <li>
         <a
-          class="tw-min-w-[3em]"
+          class="tw-min-w-11"
           [ngClass]="{ 'tw-z-20': n === currPage }"
           bitButton
           [buttonType]="n === currPage ? 'primary' : 'secondary'"
