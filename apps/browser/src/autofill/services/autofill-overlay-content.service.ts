@@ -26,10 +26,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
+  private overlayElementsMutationObserver: MutationObserver;
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
   private eventHandlersMemo: { [key: string]: EventListener } = {};
+  private readonly customElementDefaultStyles: Partial<CSSStyleDeclaration> = {
+    all: "initial",
+    position: "fixed",
+    display: "block",
+    zIndex: "2147483647",
+  };
 
   constructor() {
     this.initMutationObserver();
@@ -393,8 +400,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenIcon
     );
 
-    const mutationObserver = new MutationObserver(this.handleOverlayElementMutationObserverUpdate);
-    mutationObserver.observe(this.overlayIconElement, { attributes: true });
+    this.overlayElementsMutationObserver?.observe(this.overlayIconElement, { attributes: true });
+    this.setCustomElementsDefaultStyles([this.overlayIconElement]);
   }
 
   private createAutofillOverlayList() {
@@ -410,14 +417,43 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenList
     );
 
-    const mutationObserver = new MutationObserver(this.handleOverlayElementMutationObserverUpdate);
-    mutationObserver.observe(this.overlayListElement, { attributes: true });
+    this.overlayElementsMutationObserver?.observe(this.overlayListElement, { attributes: true });
+    this.setCustomElementsDefaultStyles([this.overlayListElement]);
   }
 
   private createOverlayCustomElement(elementName: string): HTMLElement {
     const customElement = globalThis.document.createElement(elementName);
 
     return customElement;
+  }
+
+  private setCustomElementsDefaultStyles(elements: HTMLElement[] = []) {
+    for (const styleProperty in this.customElementDefaultStyles) {
+      elements.forEach((element) =>
+        element.style.setProperty(
+          this.convertToKebabCase(styleProperty),
+          this.customElementDefaultStyles[styleProperty],
+          "important"
+        )
+      );
+    }
+  }
+
+  private isCustomElementDefaultStylesModified(element: HTMLElement) {
+    for (const styleProperty in this.customElementDefaultStyles) {
+      if (
+        element.style.getPropertyValue(this.convertToKebabCase(styleProperty)) !==
+        this.customElementDefaultStyles[styleProperty]
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private convertToKebabCase(stringValue: string): string {
+    return stringValue.replace(/([a-z])([A-Z])/g, "$1-$2");
   }
 
   private setOverlayRepositionEventListeners() {
@@ -480,6 +516,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     documentElementMutationObserver.observe(globalThis.document.documentElement, {
       childList: true,
     });
+
+    this.overlayElementsMutationObserver = new MutationObserver(
+      this.handleOverlayElementMutationObserverUpdate
+    );
   };
 
   private handleOverlayElementMutationObserverUpdate = (mutationRecord: MutationRecord[]) => {
@@ -489,8 +529,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       }
 
       const element = record.target as HTMLElement;
-      const attributes = Array.from(element.attributes);
-      attributes.forEach((attribute) => element.removeAttribute(attribute.name));
+      if (record.attributeName !== "style") {
+        const attributes = Array.from(element.attributes);
+        attributes.forEach((attribute) => element.removeAttribute(attribute.name));
+
+        return;
+      }
+
+      if (!this.isCustomElementDefaultStylesModified(element)) {
+        return;
+      }
+
+      element.removeAttribute("style");
+      this.setCustomElementsDefaultStyles([element]);
     });
   };
 

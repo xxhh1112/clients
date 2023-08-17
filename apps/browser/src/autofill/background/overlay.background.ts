@@ -291,20 +291,20 @@ class OverlayBackground {
       login: {
         username: cipher.login.username,
       },
-      card: {
-        cardholderName: cipher.card.cardholderName,
-        partialNumber: cipher.card.number?.slice(-4),
-        expMonth: cipher.card.expMonth,
-        expYear: cipher.card.expYear,
-      },
-      identity: {
-        title: cipher.identity.title,
-        firstName: cipher.identity.firstName,
-        middleName: cipher.identity.middleName,
-        lastName: cipher.identity.lastName,
-        email: cipher.identity.email,
-        company: cipher.identity.company,
-      },
+      // card: {
+      //   cardholderName: cipher.card.cardholderName,
+      //   partialNumber: cipher.card.number?.slice(-4),
+      //   expMonth: cipher.card.expMonth,
+      //   expYear: cipher.card.expYear,
+      // },
+      // identity: {
+      //   title: cipher.identity.title,
+      //   firstName: cipher.identity.firstName,
+      //   middleName: cipher.identity.middleName,
+      //   lastName: cipher.identity.lastName,
+      //   email: cipher.identity.email,
+      //   company: cipher.identity.company,
+      // },
     }));
 
     this.overlayListPort?.postMessage({
