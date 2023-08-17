@@ -25,19 +25,17 @@ export class PopoverTriggerForDirective implements OnDestroy {
   popover: PopoverComponent;
 
   @Input("position")
-  preferredPosition: string;
+  position: string;
 
   private overlayRef: OverlayRef;
   private closedEventsSub: Subscription;
 
   get positions() {
-    if (!this.preferredPosition) {
+    if (!this.position) {
       return defaultPositions;
     }
 
-    const preferredPosition = defaultPositions.find(
-      (position) => position.id === this.preferredPosition
-    );
+    const preferredPosition = defaultPositions.find((position) => position.id === this.position);
 
     if (preferredPosition) {
       return [preferredPosition, ...defaultPositions];

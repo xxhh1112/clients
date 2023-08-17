@@ -20,6 +20,28 @@ export default {
       url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1717-15868",
     },
   },
+  argTypes: {
+    position: {
+      options: [
+        "right-start",
+        "right-center",
+        "right-end",
+        "left-start",
+        "left-center",
+        "left-end",
+        "below-start",
+        "below-center",
+        "below-end",
+        "above-start",
+        "above-center",
+        "above-end",
+      ],
+      control: { type: "select" },
+    },
+  },
+  args: {
+    position: "right-start",
+  },
 } as Meta;
 
 type Story = StoryObj<PopoverTriggerForDirective>;
@@ -54,6 +76,9 @@ export const Default: Story = {
 };
 
 export const RightStart: Story = {
+  args: {
+    position: "right-start",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -62,7 +87,7 @@ export const RightStart: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'right-start'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -73,6 +98,9 @@ export const RightStart: Story = {
 };
 
 export const RightCenter: Story = {
+  args: {
+    position: "right-center",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -81,7 +109,7 @@ export const RightCenter: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'right-center'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -92,6 +120,9 @@ export const RightCenter: Story = {
 };
 
 export const RightEnd: Story = {
+  args: {
+    position: "right-end",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -100,7 +131,7 @@ export const RightEnd: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'right-end'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -111,6 +142,9 @@ export const RightEnd: Story = {
 };
 
 export const LeftStart: Story = {
+  args: {
+    position: "left-start",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -119,7 +153,7 @@ export const LeftStart: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'left-start'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -130,6 +164,9 @@ export const LeftStart: Story = {
 };
 
 export const LeftCenter: Story = {
+  args: {
+    position: "left-center",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -138,7 +175,7 @@ export const LeftCenter: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'left-center'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -148,6 +185,9 @@ export const LeftCenter: Story = {
   }),
 };
 export const LeftEnd: Story = {
+  args: {
+    position: "left-end",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -156,7 +196,7 @@ export const LeftEnd: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'left-end'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -167,6 +207,9 @@ export const LeftEnd: Story = {
 };
 
 export const BelowStart: Story = {
+  args: {
+    position: "below-start",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -175,7 +218,7 @@ export const BelowStart: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'below-start'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -186,6 +229,9 @@ export const BelowStart: Story = {
 };
 
 export const BelowCenter: Story = {
+  args: {
+    position: "below-center",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -194,7 +240,7 @@ export const BelowCenter: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'below-center'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -205,6 +251,9 @@ export const BelowCenter: Story = {
 };
 
 export const BelowEnd: Story = {
+  args: {
+    position: "below-end",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -213,7 +262,7 @@ export const BelowEnd: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'below-end'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -224,6 +273,9 @@ export const BelowEnd: Story = {
 };
 
 export const AboveStart: Story = {
+  args: {
+    position: "above-start",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -232,7 +284,7 @@ export const AboveStart: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'above-start'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -243,6 +295,9 @@ export const AboveStart: Story = {
 };
 
 export const AboveCenter: Story = {
+  args: {
+    position: "above-center",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -251,7 +306,7 @@ export const AboveCenter: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'above-center'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
@@ -262,6 +317,9 @@ export const AboveCenter: Story = {
 };
 
 export const AboveEnd: Story = {
+  args: {
+    position: "above-end",
+  },
   render: (args) => ({
     props: args,
     template: `
@@ -270,7 +328,7 @@ export const AboveEnd: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
-          [position]="'above-end'"
+          [position]="'${args.position}'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>

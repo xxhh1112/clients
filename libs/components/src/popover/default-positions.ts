@@ -3,7 +3,7 @@ import { ConnectedPosition } from "@angular/cdk/overlay";
 const ORIGIN_OFFSET_PX = 6;
 const OVERLAY_OFFSET_PX = 24;
 
-type PositionIdentifier =
+export type PositionIdentifier =
   | "right-start"
   | "right-center"
   | "right-end"
