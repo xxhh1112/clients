@@ -1,11 +1,13 @@
 import { NgModule } from "@angular/core";
 import { Route, RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
-import { redirectGuard } from "@bitwarden/angular/auth/guards/redirect.guard";
-import { tdeDecryptionRequiredGuard } from "@bitwarden/angular/auth/guards/tde-decryption-required.guard";
-import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
+import {
+  AuthGuard,
+  lockGuard,
+  redirectGuard,
+  tdeDecryptionRequiredGuard,
+  UnauthGuard,
+} from "@bitwarden/angular/auth/guards";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
@@ -60,7 +62,7 @@ const routes: Routes = [
         path: "",
         pathMatch: "full",
         children: [], // Children lets us have an empty component.
-        canActivate: [redirectGuard({ loggedIn: "/vault", loggedOut: "/login", locked: "/lock" })],
+        canActivate: [redirectGuard()], // Redirects either to vault, login, or lock page.
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {

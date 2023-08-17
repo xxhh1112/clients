@@ -110,6 +110,7 @@ export class UserVerificationService implements UserVerificationServiceAbstracti
       return decryptionOptions.hasMasterPassword;
     }
 
+    // TODO: PM-3518 - Left for backwards compatibility, remove after 2023.12.0
     return !(await this.stateService.getUsesKeyConnector({ userId }));
   }
 

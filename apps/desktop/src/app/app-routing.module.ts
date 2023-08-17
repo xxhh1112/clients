@@ -1,10 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
-import { redirectGuard } from "@bitwarden/angular/auth/guards/redirect.guard";
-import { tdeDecryptionRequiredGuard } from "@bitwarden/angular/auth/guards/tde-decryption-required.guard";
+import {
+  AuthGuard,
+  lockGuard,
+  redirectGuard,
+  tdeDecryptionRequiredGuard,
+} from "@bitwarden/angular/auth/guards";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 

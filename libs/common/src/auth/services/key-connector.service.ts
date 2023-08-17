@@ -61,9 +61,9 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
   }
 
   // TODO: UserKey should be renamed to MasterKey and typed accordingly
-  async getAndSetMasterKey(url: string) {
+  async setMasterKeyFromUrl(url: string) {
     try {
-      const masterKeyResponse = await this.apiService.getUserKeyFromKeyConnector(url);
+      const masterKeyResponse = await this.apiService.getMasterKeyFromKeyConnector(url);
       const keyArr = Utils.fromB64ToArray(masterKeyResponse.key);
       const masterKey = new SymmetricCryptoKey(keyArr) as MasterKey;
       await this.cryptoService.setMasterKey(masterKey);

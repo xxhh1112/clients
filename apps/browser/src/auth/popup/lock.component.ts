@@ -84,7 +84,7 @@ export class LockComponent extends BaseLockComponent {
       (await this.stateService.getDisableAutoBiometricsPrompt()) ?? true;
 
     window.setTimeout(async () => {
-      document.getElementById(this.pinEnabled ? "pin" : "masterPassword").focus();
+      document.getElementById(this.pinEnabled ? "pin" : "masterPassword")?.focus();
       if (
         this.biometricLock &&
         !disableAutoBiometricsPrompt &&

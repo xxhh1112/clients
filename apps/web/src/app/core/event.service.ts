@@ -81,8 +81,7 @@ export class EventService {
         msg = humanReadableMsg = this.i18nService.t("migratedKeyConnector");
         break;
       case EventType.User_RequestedDeviceApproval:
-        msg = this.i18nService.t("requestedDeviceApproval");
-        humanReadableMsg = this.i18nService.t("requestedDeviceApproval");
+        msg = humanReadableMsg = this.i18nService.t("requestedDeviceApproval");
         break;
       // Cipher
       case EventType.Cipher_Created:

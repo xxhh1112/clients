@@ -524,7 +524,7 @@ export abstract class ApiService {
   ) => Promise<void>;
   postResendSponsorshipOffer: (sponsoringOrgId: string) => Promise<void>;
 
-  getUserKeyFromKeyConnector: (keyConnectorUrl: string) => Promise<KeyConnectorUserKeyResponse>;
+  getMasterKeyFromKeyConnector: (keyConnectorUrl: string) => Promise<KeyConnectorUserKeyResponse>;
   postUserKeyToKeyConnector: (
     keyConnectorUrl: string,
     request: KeyConnectorUserKeyRequest

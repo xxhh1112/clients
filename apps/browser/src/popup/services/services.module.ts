@@ -1,12 +1,13 @@
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
-import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
+import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards";
 import { MEMORY_STORAGE, SECURE_STORAGE } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ThemingService } from "@bitwarden/angular/services/theming/theming.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { DevicesServiceAbstraction } from "@bitwarden/common/abstractions/devices/devices.service.abstraction";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
@@ -254,16 +255,17 @@ function getBgService<T>(service: keyof MainBackground) {
     },
     {
       provide: AuthRequestCryptoServiceAbstraction,
-      useFactory: () => {
-        return getBgService<AuthRequestCryptoServiceAbstraction>("authRequestCryptoService")();
-      },
+      useFactory: getBgService<AuthRequestCryptoServiceAbstraction>("authRequestCryptoService"),
       deps: [],
     },
     {
       provide: DeviceTrustCryptoServiceAbstraction,
-      useFactory: () => {
-        return getBgService<DeviceTrustCryptoServiceAbstraction>("deviceTrustCryptoService")();
-      },
+      useFactory: getBgService<DeviceTrustCryptoServiceAbstraction>("deviceTrustCryptoService"),
+      deps: [],
+    },
+    {
+      provide: DevicesServiceAbstraction,
+      useFactory: getBgService<DevicesServiceAbstraction>("devicesService"),
       deps: [],
     },
     {

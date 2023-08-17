@@ -318,6 +318,26 @@ export abstract class CryptoService {
     protectedKeyCs?: EncString
   ) => Promise<UserKey>;
   /**
+   * Creates a new Pin key that encrypts the user key instead of the
+   * master key. Clears the old Pin key from state.
+   * @param masterPasswordOnRestart True if Master Password on Restart is enabled
+   * @param pin User's PIN
+   * @param email User's email
+   * @param kdf User's KdfType
+   * @param kdfConfig User's KdfConfig
+   * @param oldPinKey The old Pin key from state (retrieved from different
+   * places depending on if Master Password on Restart was enabled)
+   * @returns The user key
+   */
+  decryptAndMigrateOldPinKey: (
+    masterPasswordOnRestart: boolean,
+    pin: string,
+    email: string,
+    kdf: KdfType,
+    kdfConfig: KdfConfig,
+    oldPinKey: EncString
+  ) => Promise<UserKey>;
+  /**
    * Replaces old master auto keys with new user auto keys
    */
   migrateAutoKeyIfNeeded: (userId?: string) => Promise<void>;

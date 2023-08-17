@@ -59,7 +59,7 @@ export class UserApiLogInStrategy extends LogInStrategy {
   protected override async setMasterKey(response: IdentityTokenResponse) {
     if (response.apiUseKeyConnector) {
       const keyConnectorUrl = this.environmentService.getKeyConnectorUrl();
-      await this.keyConnectorService.getAndSetMasterKey(keyConnectorUrl);
+      await this.keyConnectorService.setMasterKeyFromUrl(keyConnectorUrl);
     }
   }
 
