@@ -42,7 +42,7 @@
           [queryParams]="getParams | memo : [queryParam, currPage - 1]"
           [disabled]="currPage === 1"
           grouping="first"
-          [attr.aria-label]="'previousPage' | i18n : $any(currPage - 1)"
+          [attr.aria-label]="'previousPage' | i18n : currPage - 1"
         >
           Previous
         </button>
@@ -59,7 +59,7 @@
           [queryParams]="getParams | memo : [queryParam, currPage + 1]"
           [disabled]="currPage === totalPages"
           grouping="last"
-          [attr.aria-label]="'nextPage' | i18n : $any(currPage + 1)"
+          [attr.aria-label]="'nextPage' | i18n : currPage + 1"
         >
           Next
         </button>
