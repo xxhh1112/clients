@@ -441,10 +441,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private isCustomElementDefaultStylesModified(element: HTMLElement) {
     for (const styleProperty in this.customElementDefaultStyles) {
-      if (
-        element.style.getPropertyValue(this.convertToKebabCase(styleProperty)) !==
-        this.customElementDefaultStyles[styleProperty]
-      ) {
+      if (styleProperty === "all") {
+        continue;
+      }
+
+      const elementPropertyValue = element.style.getPropertyValue(
+        this.convertToKebabCase(styleProperty)
+      );
+      const expectedPropertyValue = this.customElementDefaultStyles[styleProperty];
+      if (!isNaN(parseInt(elementPropertyValue))) {
+        if (parseInt(elementPropertyValue) !== parseInt(expectedPropertyValue)) {
+          return true;
+        }
+      } else if (elementPropertyValue !== expectedPropertyValue) {
         return true;
       }
     }

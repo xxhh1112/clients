@@ -24,13 +24,13 @@ class AutofillOverlayIconIframe extends AutofillOverlayCustomElementIframe {
 class AutofillOverlayListIframe extends AutofillOverlayCustomElementIframe {
   constructor() {
     super("overlay/list.html", AutofillOverlayPort.List, {
-      height: "0",
+      height: "0px",
       minWidth: "250px",
       maxHeight: "180px",
-      boxShadow: "2px 4px 6px 0px rgba(0, 0, 0, 0.1)",
+      boxShadow: "rgba(0, 0, 0, 0.1) 2px 4px 6px 0px",
       borderRadius: "4px",
       border: "1px solid rgb(206, 212, 220)",
-      backgroundColor: "#fff",
+      backgroundColor: "rgb(255, 255, 255)",
     });
   }
 }

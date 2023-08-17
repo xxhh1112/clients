@@ -2,7 +2,8 @@ class OverlayIframeService {
   private port: chrome.runtime.Port | null = null;
   private extensionOriginsSet: Set<string>;
   private readonly iframe: HTMLIFrameElement;
-  private readonly iframeStyles: Partial<CSSStyleDeclaration> = {
+  // private updatingIframeStyles = false;
+  private iframeStyles: Partial<CSSStyleDeclaration> = {
     all: "initial",
     position: "fixed",
     display: "block",
@@ -25,6 +26,9 @@ class OverlayIframeService {
       chrome.runtime.getURL("").slice(0, -1).toLowerCase(), // Remove the trailing slash and normalize the extension url to lowercase
       "null",
     ]);
+
+    const mutationObserver = new MutationObserver(this.handleMutationObserver);
+    mutationObserver.observe(this.iframe, { attributes: true });
   }
 
   initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>) {
@@ -49,7 +53,7 @@ class OverlayIframeService {
       return;
     }
 
-    this.updateElementStyles(this.iframe, { opacity: "0", height: "0", display: "block" });
+    this.updateElementStyles(this.iframe, { opacity: "0", height: "0px", display: "block" });
     globalThis.removeEventListener("message", this.handleWindowMessage);
     this.port.onMessage.removeListener(this.handlePortMessage);
     this.port.onDisconnect.removeListener(this.handlePortDisconnect);
@@ -102,7 +106,7 @@ class OverlayIframeService {
     if (!customElement) {
       return;
     }
-
+    // this.updatingIframeStyles = true;
     for (const styleProperty in styles) {
       customElement.style.setProperty(
         this.convertToKebabCase(styleProperty),
@@ -110,6 +114,31 @@ class OverlayIframeService {
         "important"
       );
     }
+
+    this.iframeStyles = { ...this.iframeStyles, ...styles };
+  }
+
+  private isIframeElementStylesModified(): boolean {
+    for (const styleProperty in this.iframeStyles) {
+      if (styleProperty === "all" || styleProperty === "border") {
+        continue;
+      }
+
+      const elementPropertyValue = this.iframe.style.getPropertyValue(
+        this.convertToKebabCase(styleProperty)
+      );
+      const iframePropertyValue = this.iframeStyles[styleProperty];
+
+      if (!isNaN(parseInt(elementPropertyValue))) {
+        if (parseInt(elementPropertyValue) !== parseInt(iframePropertyValue)) {
+          return true;
+        }
+      } else if (elementPropertyValue !== iframePropertyValue) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private convertToKebabCase(stringValue: string): string {
@@ -127,6 +156,20 @@ class OverlayIframeService {
   private isFromExtensionOrigin(messageOrigin: string): boolean {
     return this.extensionOriginsSet.has(messageOrigin);
   }
+
+  private handleMutationObserver = (mutations: MutationRecord[]) => {
+    mutations.forEach((mutation) => {
+      if (
+        mutation.type !== "attributes" ||
+        mutation.attributeName !== "style" ||
+        !this.isIframeElementStylesModified()
+      ) {
+        return;
+      }
+
+      this.updateElementStyles(this.iframe, this.iframeStyles);
+    });
+  };
 }
 
 export default OverlayIframeService;
