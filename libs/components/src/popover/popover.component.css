@@ -10,8 +10,8 @@
   @apply tw-right-1 tw-translate-x-1/2 tw-rounded-tr-sm tw-border-r tw-border-t tw-border-r-secondary-300 tw-border-t-secondary-300;
 }
 
-.bit-popover-right-top .bit-popover-arrow,
-.bit-popover-left-top .bit-popover-arrow {
+.bit-popover-right-start .bit-popover-arrow,
+.bit-popover-left-start .bit-popover-arrow {
   @apply tw-top-6 -tw-translate-y-1/2;
 }
 
@@ -20,8 +20,8 @@
   @apply tw-top-1/2 -tw-translate-y-1/2;
 }
 
-.bit-popover-right-bottom .bit-popover-arrow,
-.bit-popover-left-bottom .bit-popover-arrow {
+.bit-popover-right-end .bit-popover-arrow,
+.bit-popover-left-end .bit-popover-arrow {
   @apply tw-bottom-6 tw-translate-y-1/2;
 }
 

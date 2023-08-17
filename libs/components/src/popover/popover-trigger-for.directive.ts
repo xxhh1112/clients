@@ -11,7 +11,7 @@ import {
 } from "@angular/core";
 import { Observable, Subscription, mergeWith } from "rxjs";
 
-import { popoverPositions } from "./popover-positions";
+import { defaultPositions } from "./default-positions";
 import { PopoverComponent } from "./popover.component";
 
 @Directive({
@@ -24,21 +24,43 @@ export class PopoverTriggerForDirective implements OnDestroy {
   @Input("bitPopoverTriggerFor")
   popover: PopoverComponent;
 
+  @Input("position")
+  preferredPosition: string;
+
   private overlayRef: OverlayRef;
-  private defaultPopoverConfig: OverlayConfig = {
-    panelClass: "bit-popover-panel",
-    hasBackdrop: true,
-    backdropClass: "cdk-overlay-transparent-backdrop",
-    scrollStrategy: this.overlay.scrollStrategies.reposition(),
-    positionStrategy: this.overlay
-      .position()
-      .flexibleConnectedTo(this.elementRef)
-      .withPositions(popoverPositions)
-      .withLockedPosition(true)
-      .withFlexibleDimensions(false)
-      .withPush(true),
-  };
   private closedEventsSub: Subscription;
+
+  get positions() {
+    if (!this.preferredPosition) {
+      return defaultPositions;
+    }
+
+    const preferredPosition = defaultPositions.find(
+      (position) => position.id === this.preferredPosition
+    );
+
+    if (preferredPosition) {
+      return [preferredPosition, ...defaultPositions];
+    }
+
+    return defaultPositions;
+  }
+
+  get defaultPopoverConfig(): OverlayConfig {
+    return {
+      panelClass: "bit-popover-panel",
+      hasBackdrop: true,
+      backdropClass: "cdk-overlay-transparent-backdrop",
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo(this.elementRef)
+        .withPositions(this.positions)
+        .withLockedPosition(true)
+        .withFlexibleDimensions(false)
+        .withPush(true),
+    };
+  }
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
@@ -47,15 +69,7 @@ export class PopoverTriggerForDirective implements OnDestroy {
   ) {}
 
   @HostListener("click")
-  togglePopover() {
-    this.isOpen ? this.destroyPopover() : this.openPopover();
-  }
-
-  ngOnDestroy() {
-    this.disposeAll();
-  }
-
-  private openPopover() {
+  openPopover() {
     this.isOpen = true;
     this.overlayRef = this.overlay.create(this.defaultPopoverConfig);
 
@@ -65,6 +79,10 @@ export class PopoverTriggerForDirective implements OnDestroy {
     this.closedEventsSub = this.getClosedEvents().subscribe(() => {
       this.destroyPopover();
     });
+  }
+
+  ngOnDestroy() {
+    this.disposeAll();
   }
 
   private getClosedEvents(): Observable<any> {

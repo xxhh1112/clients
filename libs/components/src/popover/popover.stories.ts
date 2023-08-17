@@ -24,35 +24,22 @@ export default {
 
 type Story = StoryObj<PopoverTriggerForDirective>;
 
-export const TargetLeft: Story = {
+const popoverContent = `
+  <bit-popover [header]="'Example Header'" #myPopover>
+    <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
+    <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
+      <li>Dolor sit amet consectetur</li>
+      <li>Esse labore veniam tempora</li>
+      <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
+    </ul>
+  </bit-popover>
+`;
+
+export const Default: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <button
-        type="button"
-        class="tw-border-none tw-bg-transparent tw-text-primary-500"
-        [bitPopoverTriggerFor]="myPopover"
-      >
-        <i class="bwi bwi-question-circle"></i>
-      </button>
-
-      <bit-popover [header]="'Example Header'" #myPopover>
-        <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
-        <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
-          <li>Dolor sit amet consectetur</li>
-          <li>Esse labore veniam tempora</li>
-          <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
-        </ul>
-      </bit-popover>
-      `,
-  }),
-};
-
-export const TargetCenter: Story = {
-  render: (args) => ({
-    props: args,
-    template: `
-      <div class="tw-flex tw-justify-center">
+      <div class="tw-mt-32">
         <button
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
@@ -61,41 +48,234 @@ export const TargetCenter: Story = {
           <i class="bwi bwi-question-circle"></i>
         </button>
       </div>
-
-      <bit-popover [header]="'Example Header'" #myPopover>
-        <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
-        <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
-          <li>Dolor sit amet consectetur</li>
-          <li>Esse labore veniam tempora</li>
-          <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
-        </ul>
-      </bit-popover>
+      ${popoverContent}
       `,
   }),
 };
 
-export const TargetRight: Story = {
+export const RightStart: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <div class="tw-flex tw-justify-end">
+      <div class="tw-mt-32">
         <button
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
+          [position]="'right-start'"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
       </div>
+      ${popoverContent}
+      `,
+  }),
+};
 
-      <bit-popover [header]="'Example Header'" #myPopover>
-        <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
-        <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
-          <li>Dolor sit amet consectetur</li>
-          <li>Esse labore veniam tempora</li>
-          <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
-        </ul>
-      </bit-popover>
+export const RightCenter: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'right-center'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const RightEnd: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'right-end'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const LeftStart: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-end">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'left-start'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const LeftCenter: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-end">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'left-center'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+export const LeftEnd: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-end">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'left-end'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const BelowStart: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'below-start'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const BelowCenter: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'below-center'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const BelowEnd: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'below-end'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const AboveStart: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'above-start'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const AboveCenter: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'above-center'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
+      `,
+  }),
+};
+
+export const AboveEnd: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <div class="tw-mt-32 tw-flex tw-justify-center">
+        <button
+          type="button"
+          class="tw-border-none tw-bg-transparent tw-text-primary-500"
+          [bitPopoverTriggerFor]="myPopover"
+          [position]="'above-end'"
+        >
+          <i class="bwi bwi-question-circle"></i>
+        </button>
+      </div>
+      ${popoverContent}
       `,
   }),
 };

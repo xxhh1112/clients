@@ -3,7 +3,25 @@ import { ConnectedPosition } from "@angular/cdk/overlay";
 const ORIGIN_OFFSET_PX = 6;
 const OVERLAY_OFFSET_PX = 24;
 
-export const popoverPositions: ConnectedPosition[] = [
+type PositionIdentifier =
+  | "right-start"
+  | "right-center"
+  | "right-end"
+  | "left-start"
+  | "left-center"
+  | "left-end"
+  | "below-start"
+  | "below-center"
+  | "below-end"
+  | "above-start"
+  | "above-center"
+  | "above-end";
+
+export interface DefaultPosition extends ConnectedPosition {
+  id: PositionIdentifier;
+}
+
+export const defaultPositions: DefaultPosition[] = [
   /**
    * The order of these positions matters. The first position will take precedence
    * over the second (assuming it fits in the viewport), and so forth.
@@ -11,6 +29,17 @@ export const popoverPositions: ConnectedPosition[] = [
 
   // Popover opens to right of trigger
   {
+    id: "right-start",
+    offsetX: ORIGIN_OFFSET_PX,
+    offsetY: -OVERLAY_OFFSET_PX,
+    originX: "end",
+    originY: "center",
+    overlayX: "start",
+    overlayY: "top",
+    panelClass: ["bit-popover-right", "bit-popover-right-start"],
+  },
+  {
+    id: "right-center",
     offsetX: ORIGIN_OFFSET_PX,
     originX: "end",
     originY: "center",
@@ -19,25 +48,28 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-right", "bit-popover-right-center"],
   },
   {
-    offsetX: ORIGIN_OFFSET_PX,
-    offsetY: -OVERLAY_OFFSET_PX,
-    originX: "end",
-    originY: "center",
-    overlayX: "start",
-    overlayY: "top",
-    panelClass: ["bit-popover-right", "bit-popover-right-top"],
-  },
-  {
+    id: "right-end",
     offsetX: ORIGIN_OFFSET_PX,
     offsetY: OVERLAY_OFFSET_PX,
     originX: "end",
     originY: "center",
     overlayX: "start",
     overlayY: "bottom",
-    panelClass: ["bit-popover-right", "bit-popover-right-bottom"],
+    panelClass: ["bit-popover-right", "bit-popover-right-end"],
   },
   // ... to left of trigger
   {
+    id: "left-start",
+    offsetX: -ORIGIN_OFFSET_PX,
+    offsetY: -OVERLAY_OFFSET_PX,
+    originX: "start",
+    originY: "center",
+    overlayX: "end",
+    overlayY: "top",
+    panelClass: ["bit-popover-left", "bit-popover-left-start"],
+  },
+  {
+    id: "left-center",
     offsetX: -ORIGIN_OFFSET_PX,
     originX: "start",
     originY: "center",
@@ -46,25 +78,18 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-left", "bit-popover-left-center"],
   },
   {
-    offsetX: -ORIGIN_OFFSET_PX,
-    offsetY: -OVERLAY_OFFSET_PX,
-    originX: "start",
-    originY: "center",
-    overlayX: "end",
-    overlayY: "top",
-    panelClass: ["bit-popover-left", "bit-popover-left-top"],
-  },
-  {
+    id: "left-end",
     offsetX: -ORIGIN_OFFSET_PX,
     offsetY: OVERLAY_OFFSET_PX,
     originX: "start",
     originY: "center",
     overlayX: "end",
     overlayY: "bottom",
-    panelClass: ["bit-popover-left", "bit-popover-left-bottom"],
+    panelClass: ["bit-popover-left", "bit-popover-left-end"],
   },
   // ... below trigger
   {
+    id: "below-center",
     offsetY: ORIGIN_OFFSET_PX,
     originX: "center",
     originY: "bottom",
@@ -73,6 +98,7 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-below", "bit-popover-below-center"],
   },
   {
+    id: "below-start",
     offsetX: -OVERLAY_OFFSET_PX,
     offsetY: ORIGIN_OFFSET_PX,
     originX: "center",
@@ -82,6 +108,7 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-below", "bit-popover-below-start"],
   },
   {
+    id: "below-end",
     offsetX: OVERLAY_OFFSET_PX,
     offsetY: ORIGIN_OFFSET_PX,
     originX: "center",
@@ -92,6 +119,7 @@ export const popoverPositions: ConnectedPosition[] = [
   },
   // ... above trigger
   {
+    id: "above-center",
     offsetY: -ORIGIN_OFFSET_PX,
     originX: "center",
     originY: "top",
@@ -100,6 +128,7 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-above", "bit-popover-above-center"],
   },
   {
+    id: "above-start",
     offsetX: -OVERLAY_OFFSET_PX,
     offsetY: -ORIGIN_OFFSET_PX,
     originX: "center",
@@ -109,6 +138,7 @@ export const popoverPositions: ConnectedPosition[] = [
     panelClass: ["bit-popover-above", "bit-popover-above-start"],
   },
   {
+    id: "above-end",
     offsetX: OVERLAY_OFFSET_PX,
     offsetY: -ORIGIN_OFFSET_PX,
     originX: "center",
