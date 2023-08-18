@@ -687,6 +687,45 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
   }
 
+  async deleteCollection(collection: CollectionView): Promise<void> {
+    const organization = this.organizationService.get(collection.organizationId);
+    if (!organization.canDeleteAssignedCollections && !organization.canDeleteAnyCollection) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("missingPermissions")
+      );
+      return;
+    }
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: collection.name,
+      content: { key: "deleteCollectionConfirmation" },
+      type: "warning",
+    });
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await this.collectionService.delete(collection.id);
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("deletedCollectionId", collection.name)
+      );
+      // Navigate away if we deleted the collection we were viewing
+      if (this.selectedCollection?.node.id === collection.id) {
+        this.router.navigate([], {
+          queryParams: { collectionId: this.selectedCollection.parent?.node.id ?? null },
+          queryParamsHandling: "merge",
+          replaceUrl: true,
+        });
+      }
+      this.refresh();
+    } catch (e) {
+      this.logService.error(e);
+    }
+  }
+
   async cloneCipher(cipher: CipherView) {
     const component = await this.editCipher(cipher);
     component.cloneMode = true;
