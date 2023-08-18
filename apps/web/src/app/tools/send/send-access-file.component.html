@@ -1,0 +1,12 @@
+<p>{{ send.file.fileName }}</p>
+<button
+  bitButton
+  type="button"
+  buttonType="primary"
+  (click)="download()"
+  [loading]="downloading"
+  [block]="true"
+>
+  <i class="bwi bwi-download" aria-hidden="true"></i>
+  {{ "downloadFile" | i18n }} ({{ send.file.sizeName }})
+</button>

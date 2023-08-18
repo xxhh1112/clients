@@ -80,28 +80,11 @@
         </ng-container>
         <!-- File -->
         <ng-container *ngIf="send.type === sendType.File">
-          <p>{{ send.file.fileName }}</p>
-          <button
-            class="btn btn-primary btn-block"
-            type="button"
-            (click)="download()"
-            *ngIf="!downloading"
-          >
-            <i class="bwi bwi-download" aria-hidden="true"></i>
-            {{ "downloadFile" | i18n }} ({{ send.file.sizeName }})
-          </button>
-          <button
-            class="btn btn-primary btn-block"
-            type="button"
-            *ngIf="downloading"
-            disabled="true"
-          >
-            <i
-              class="bwi bwi-spinner bwi-spin"
-              title="{{ 'loading' | i18n }}"
-              aria-hidden="true"
-            ></i>
-          </button>
+          <app-send-access-file
+            [send]="send"
+            [decKey]="decKey"
+            [accessRequest]="accessRequest"
+          ></app-send-access-file>
         </ng-container>
         <p *ngIf="expirationDate" class="text-center text-muted">
           Expires: {{ expirationDate | date : "medium" }}

@@ -5,11 +5,9 @@ import { SEND_KDF_ITERATIONS } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { EncArrayBuffer } from "@bitwarden/common/platform/models/domain/enc-array-buffer";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
 import { SendAccess } from "@bitwarden/common/tools/send/models/domain/send-access";
@@ -26,7 +24,6 @@ import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.s
 export class AccessComponent implements OnInit {
   send: SendAccessView;
   sendType = SendType;
-  downloading = false;
   loading = true;
   passwordRequired = false;
   formPromise: Promise<SendAccessResponse>;
@@ -37,8 +34,8 @@ export class AccessComponent implements OnInit {
 
   private id: string;
   private key: string;
-  private decKey: SymmetricCryptoKey;
-  private accessRequest: SendAccessRequest;
+  decKey: SymmetricCryptoKey;
+  accessRequest: SendAccessRequest;
 
   constructor(
     private i18nService: I18nService,
@@ -46,7 +43,6 @@ export class AccessComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private route: ActivatedRoute,
     private cryptoService: CryptoService,
-    private fileDownloadService: FileDownloadService,
     private sendApiService: SendApiService
   ) {}
 
@@ -74,48 +70,6 @@ export class AccessComponent implements OnInit {
       }
       await this.load();
     });
-  }
-
-  async download() {
-    if (this.send == null || this.decKey == null) {
-      return;
-    }
-
-    if (this.downloading) {
-      return;
-    }
-
-    const downloadData = await this.sendApiService.getSendFileDownloadData(
-      this.send,
-      this.accessRequest
-    );
-
-    if (Utils.isNullOrWhitespace(downloadData.url)) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("missingSendFile"));
-      return;
-    }
-
-    this.downloading = true;
-    const response = await fetch(new Request(downloadData.url, { cache: "no-store" }));
-    if (response.status !== 200) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
-      this.downloading = false;
-      return;
-    }
-
-    try {
-      const encBuf = await EncArrayBuffer.fromResponse(response);
-      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, this.decKey);
-      this.fileDownloadService.download({
-        fileName: this.send.file.fileName,
-        blobData: decBuf,
-        downloadMethod: "save",
-      });
-    } catch (e) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
-    }
-
-    this.downloading = false;
   }
 
   copyText() {
