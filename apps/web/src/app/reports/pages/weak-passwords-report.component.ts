@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -32,10 +31,9 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     protected organizationService: OrganizationService,
     modalService: ModalService,
-    messagingService: MessagingService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, messagingService, true, passwordRepromptService);
+    super(modalService, passwordRepromptService);
   }
 
   async ngOnInit() {

@@ -3,7 +3,6 @@ import { ActivatedRoute } from "@angular/router";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -20,18 +19,11 @@ export class UnsecuredWebsitesReportComponent extends BaseUnsecuredWebsitesRepor
   constructor(
     cipherService: CipherService,
     modalService: ModalService,
-    messagingService: MessagingService,
     private route: ActivatedRoute,
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(
-      cipherService,
-      organizationService,
-      modalService,
-      messagingService,
-      passwordRepromptService
-    );
+    super(cipherService, organizationService, modalService, passwordRepromptService);
   }
 
   async ngOnInit() {

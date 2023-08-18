@@ -4,7 +4,6 @@ import { ActivatedRoute } from "@angular/router";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
@@ -25,19 +24,11 @@ export class ExposedPasswordsReportComponent extends BaseExposedPasswordsReportC
     cipherService: CipherService,
     auditService: AuditService,
     modalService: ModalService,
-    messagingService: MessagingService,
     organizationService: OrganizationService,
     private route: ActivatedRoute,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(
-      cipherService,
-      auditService,
-      organizationService,
-      modalService,
-      messagingService,
-      passwordRepromptService
-    );
+    super(cipherService, auditService, organizationService, modalService, passwordRepromptService);
   }
 
   async ngOnInit() {
