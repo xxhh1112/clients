@@ -92,7 +92,6 @@ import { UpdateLicenseComponent } from "../settings/update-license.component";
 import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.component";
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
-import { AccessComponent } from "../tools/send/access.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/send/efflux-dates.component";
 import { SendAccessTextComponent } from "../tools/send/send-access-text.component";
@@ -134,7 +133,6 @@ import { SharedModule } from "./shared.module";
     AcceptEmergencyComponent,
     AcceptFamilySponsorshipComponent,
     AcceptOrganizationComponent,
-    AccessComponent,
     AccountComponent,
     AddCreditComponent,
     AddEditComponent,
@@ -239,7 +237,6 @@ import { SharedModule } from "./shared.module";
     PremiumBadgeComponent,
     AcceptEmergencyComponent,
     AcceptOrganizationComponent,
-    AccessComponent,
     AccountComponent,
     AddCreditComponent,
     AddEditComponent,

@@ -15,10 +15,14 @@ import { SendAccessRequest } from "@bitwarden/common/tools/send/models/request/s
 import { SendAccessResponse } from "@bitwarden/common/tools/send/models/response/send-access.response";
 import { SendAccessView } from "@bitwarden/common/tools/send/models/view/send-access.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
+import { LooseComponentsModule, SharedModule } from "../../shared";
+import { SendAccessFileComponent } from "./send-access-file.component";
 
 @Component({
   selector: "app-send-access",
   templateUrl: "access.component.html",
+  standalone: true,
+  imports: [SendAccessFileComponent, LooseComponentsModule, SharedModule],
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AccessComponent implements OnInit {
