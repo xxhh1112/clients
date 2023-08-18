@@ -216,17 +216,17 @@
     "message": "إظهار / إخفاء"
   },
   "toggleCollapse": {
-    "message": "تبديل الطي",
+    "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
   },
   "generatePassword": {
     "message": "توليد كلمة مرور"
   },
   "checkPassword": {
-    "message": "تحقق مما إذا تم الكشف عن كلمة المرور."
+    "message": "Check if password has been exposed."
   },
   "passwordExposed": {
-    "message": "تم الكشف عن كلمة المرور هذه $VALUE$ مرّة (ات) في خروقات البيانات. يجب عليك تغييرها.",
+    "message": "This password has been exposed $VALUE$ time(s) in data breaches. You should change it.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -271,29 +271,29 @@
     "message": "بحث في المفضلة"
   },
   "searchLogin": {
-    "message": "البحث عن تسجيلات الدخول",
+    "message": "Search logins",
     "description": "Search Login type"
   },
   "searchCard": {
-    "message": "البحث عن بطاقات",
+    "message": "Search cards",
     "description": "Search Card type"
   },
   "searchIdentity": {
-    "message": "البحث عن الهويات",
+    "message": "Search identities",
     "description": "Search Identity type"
   },
   "searchSecureNote": {
-    "message": "البحث عن ملاحظات آمنة",
+    "message": "Search secure notes",
     "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "البحث في الخزنة"
   },
   "searchMyVault": {
-    "message": "البحث في خزنتي"
+    "message": "Search my vault"
   },
   "searchOrganization": {
-    "message": "البحث عن المؤسسة"
+    "message": "Search organization"
   },
   "searchMembers": {
     "message": "البحث في الأعضاء"
@@ -467,7 +467,7 @@
     "message": "عناصر الخزنة"
   },
   "filter": {
-    "message": "تصفية"
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "نقل العناصر المختارة إلى منظمة"
@@ -518,7 +518,7 @@
     "message": "تم تعديل العنصر"
   },
   "movedItemToOrg": {
-    "message": "$ITEMNAME$ انتقل إلى $ORGNAME$",
+    "message": "$ITEMNAME$ moved to $ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -576,7 +576,7 @@
     "message": "تم حذف المجلد"
   },
   "editInfo": {
-    "message": "تعديل المعلومات"
+    "message": "Edit info"
   },
   "access": {
     "message": "وصول"
@@ -609,7 +609,7 @@
     "message": "تسجيل الدخول باستخدام جهاز"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "تسجيل الدخول باستخدام الجهاز يجب أن يتم إعداده في إعدادات تطبيق Bitwarden. هل تحتاج إلى خيار آخر؟"
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "loginWithMasterPassword": {
     "message": "تسجيل الدخول باستخدام كلمة المرور الرئيسية"
@@ -645,10 +645,10 @@
     "message": "كلمة المرور الرئيسية"
   },
   "masterPassDesc": {
-    "message": "كلمة المرور الرئيسية هي كلمة المرور التي تستخدمها للوصول إلى خزنتك. من المهم جدا ألا تنسى كلمة المرور الرئيسية. لا توجد طريقة لاسترداد كلمة المرور في حال نسيتها."
+    "message": "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
   },
   "masterPassImportant": {
-    "message": "لا يمكن استعادة كلمة المرور الرئيسية إذا نسيتها!"
+    "message": "Your master password cannot be recovered if you forget it!"
   },
   "masterPassHintDesc": {
     "message": "يمكن أن يساعدك تلميح كلمة المرور الرئيسية في تذكر كلمة المرور الخاصة بك في حال نسيتها."
@@ -669,7 +669,7 @@
     "message": "تلميح كلمة المرور"
   },
   "enterEmailToGetHint": {
-    "message": "أدخل عنوان البريد الإلكتروني لحسابك للحصول على تلميح كلمة المرور الرئيسية."
+    "message": "Enter your account email address to receive your master password hint."
   },
   "getMasterPasswordHint": {
     "message": "احصل على تلميح لكلمة المرور الرئيسية"
@@ -687,7 +687,7 @@
     "message": "مطلوب إعادة إدخال كلمة المرور الرئيسية."
   },
   "masterPasswordMinlength": {
-    "message": "كلمة المرور الرئيسية يجب أن تكون على الأقل $VALUE$ حرفاً.",
+    "message": "Master password must be at least $VALUE$ characters long.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -706,22 +706,16 @@
     "message": "تم إنشاء الحساب بنجاح."
   },
   "masterPassSent": {
-    "message": "لقد أرسلنا لك رسالة بريد إلكتروني تحتوي على تلميح كلمة المرور الرئيسية."
+    "message": "We've sent you an email with your master password hint."
   },
   "unexpectedError": {
     "message": "حدث خطأ غير متوقع."
-  },
-  "expirationDateError": {
-    "message": "الرجاء تحديد تاريخ انتهاء الصلاحية في المستقبل."
   },
   "emailAddress": {
     "message": "عنوان البريد الإلكتروني"
   },
   "yourVaultIsLocked": {
     "message": "خزنتك مقفلة. تحقق من كلمة المرور الرئيسية للمتابعة."
-  },
-  "uuid": {
-    "message": "معرف المستخدم الحالي"
   },
   "unlock": {
     "message": "إلغاء القفل"
@@ -743,7 +737,7 @@
     "message": "كلمة المرور الرئيسية غير صالحة"
   },
   "invalidFilePassword": {
-    "message": "كلمة مرور الملف غير صالحة، الرجاء استخدام كلمة المرور التي أدخلتها عند إنشاء ملف التصدير."
+    "message": "Invalid file password, please use the password you entered when you created the export file."
   },
   "lockNow": {
     "message": "قفل الآن"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "نسخ رمز التحقق"
-  },
-  "copyUuid": {
-    "message": "Copy UUID"
   },
   "warning": {
     "message": "تحذير"
@@ -1292,31 +1283,6 @@
   },
   "importEncKeyError": {
     "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
-  },
-  "importDestination": {
-    "message": "Import destination"
-  },
-  "learnAboutImportOptions": {
-    "message": "Learn about your import options"
-  },
-  "selectImportFolder": {
-    "message": "Select a folder"
-  },
-  "selectImportCollection": {
-    "message": "Select a collection"
-  },
-  "importTargetHint": {
-    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "حدد تنسيق ملف الاستيراد"
@@ -3624,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "This item has old file attachments that need to be fixed."
   },
-  "attachmentFixDescription": {
-    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
+  "attachmentFixDesc": {
+    "message": "This is an old file attachment the needs to be fixed. Click to learn more."
   },
   "fix": {
     "message": "Fix",
@@ -5463,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6836,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Region"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
@@ -7052,20 +7023,15 @@
   "additionalServiceAccounts": {
     "message": "Additional service accounts"
   },
-  "includedServiceAccounts": {
-    "message": "Your plan comes with $COUNT$ service accounts.",
+  "additionalServiceAccountsDesc": {
+    "message": "Your plan comes with $COUNT$ service accounts. You can add additional service accounts for $COST$ per month.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "You can add additional service accounts for $COST$ per month.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
@@ -7093,24 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Max potential service account cost"
-  },
-  "smBetaEndedDesc": {
-    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Beta Ending"
-  },
-  "beta": {
-    "message": "Beta"
   }
 }

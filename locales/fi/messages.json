@@ -711,17 +711,11 @@
   "unexpectedError": {
     "message": "Tapahtui odottamaton virhe."
   },
-  "expirationDateError": {
-    "message": "Valitse erääntymispäivä, joka on tulevaisuudessa."
-  },
   "emailAddress": {
     "message": "Sähköpostiosoite"
   },
   "yourVaultIsLocked": {
     "message": "Holvi on lukittu. Jatka vahvistamalla pääsalasanasi."
-  },
-  "uuid": {
-    "message": "UUID"
   },
   "unlock": {
     "message": "Avaa holvi"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "Kopioi todennuskoodi"
-  },
-  "copyUuid": {
-    "message": "Kopioi UUID"
   },
   "warning": {
     "message": "Varoitus"
@@ -1292,31 +1283,6 @@
   },
   "importEncKeyError": {
     "message": "Virhe purettaessa viedyn tiedoston salausta. Salausavaimesi ei vastaa viennissä käytettyä salausavainta."
-  },
-  "importDestination": {
-    "message": "Tuontikohde"
-  },
-  "learnAboutImportOptions": {
-    "message": "Lue lisää tuontivaihtoehdoista"
-  },
-  "selectImportFolder": {
-    "message": "Valitse kansio"
-  },
-  "selectImportCollection": {
-    "message": "Valitse kokoelma"
-  },
-  "importTargetHint": {
-    "message": "Valitse tämä, jos haluat tuoda tiedoston sisällön kohteesee $DESTINATION$.",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "Tiedosto sisältää määrittämättömiä kohteita."
   },
   "selectFormat": {
     "message": "Valitse tuotavan tiedoston muoto"
@@ -3624,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "Kohteella on vanhoja tiedostoliitteitä, jotka on korjattava."
   },
-  "attachmentFixDescription": {
-    "message": "Liite käyttää vanhentunutta salausta. Lataa liite, salaa se uudelleen ja lisää se uudestaan valitsemalla \"Korjaa\"."
+  "attachmentFixDesc": {
+    "message": "Vanha tiedostoliite, joka on korjattava. Klikkaa lukeaksesi lisää."
   },
   "fix": {
     "message": "Korjaa",
@@ -4739,7 +4705,7 @@
     "message": "Virhe"
   },
   "accountRecoveryManageUsers": {
-    "message": "\"Tilien palautusavun hallinta\" -oikeuden kanssa on myönnettävä myös \"Käyttäjien hallinta\" -oikeus."
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Toimittajan määritys"
@@ -5463,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Vain organisaatioon $ORGANIZATION$ liitetyn holvin kohteet viedään. Yksityisen holvin ja muiden organisaatioiden kohteita ei sisällytetä.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt holvin kohteet viedään. Yksityisen holvin ja muiden organisaatioiden kohteita ei sisällytetä.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6546,7 +6512,7 @@
     "message": "Organisaation salaisten tietojen vienti"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt Salaisuushallinnan tiedot viedään. Muiden tuotteiden tai organisaatioiden kohteita ei sisällytetä.",
+    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt Salaisuushallinnan tiedot viedään. Muiden tuotteiden ja organisaatioiden kohteet eivät sisälly tähän.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6836,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Vaadi nykyisiä jäseniä vaihtamaan salasanansa"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Alue"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Käyttöoikeutesi eivät salli tämän projektin poistamista",
@@ -6854,7 +6825,7 @@
     "message": "Päivitä KDF-asetukset"
   },
   "trustedDevices": {
-    "message": "Luotetut laitteet"
+    "message": "Trusted devices"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Kun jäsenet on todennettu, he voivat purkaa holvin salauksen heidän laitteellaan säilytettävällä avaimella.",
@@ -7052,20 +7023,15 @@
   "additionalServiceAccounts": {
     "message": "Lisättävät palvelutilit"
   },
-  "includedServiceAccounts": {
-    "message": "Tilaukseesi sisältyy $COUNT$ palvelutiliä.",
+  "additionalServiceAccountsDesc": {
+    "message": "Tilaukseesi sisältyy $COUNT$ palvelutiliä ja voit hankkia lisää hintaan $COST$/palvelutili/kuukausi.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "Voit hankkia lisää palvelutilejä hintaan $COST$/tili/kuukausi.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
@@ -7093,24 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Palvelutilin mahdollinen enimmäiskustannus"
-  },
-  "smBetaEndedDesc": {
-    "message": "Salaisuushallinnan beta päättyi $BETA_ENDING_DATE$. Sinulla on $DAYS$ päivää aikaa lisätä Salaisuushallinta maksulliseen tilaukseesi säilyttääksesi Salaisuushallinnassa olevien tietojesi käyttöoikeuden. Lisää Salaisuushallinta tilaukseesi olemalla yhteydessä asiakaspalveluun.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Beta päättyy"
-  },
-  "beta": {
-    "message": "Beta"
   }
 }

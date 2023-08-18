@@ -711,17 +711,11 @@
   "unexpectedError": {
     "message": "Произошла непредвиденная ошибка."
   },
-  "expirationDateError": {
-    "message": "Выберите дату истечения срока действия в будущем."
-  },
   "emailAddress": {
     "message": "Адрес email"
   },
   "yourVaultIsLocked": {
     "message": "Ваше хранилище заблокировано. Для продолжения введите мастер-пароль."
-  },
-  "uuid": {
-    "message": "UUID"
   },
   "unlock": {
     "message": "Разблокировать"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "Скопировать код подтверждения"
-  },
-  "copyUuid": {
-    "message": "Скопировать UUID"
   },
   "warning": {
     "message": "Предупреждение"
@@ -1292,31 +1283,6 @@
   },
   "importEncKeyError": {
     "message": "Ошибка при расшифровке экспортированного файла. Ваш ключ шифрования не совпадает с ключом шифрования, используемым для экспорта данных."
-  },
-  "importDestination": {
-    "message": "Направление импорта"
-  },
-  "learnAboutImportOptions": {
-    "message": "Узнайте о возможностях импорта"
-  },
-  "selectImportFolder": {
-    "message": "Выбрать папку"
-  },
-  "selectImportCollection": {
-    "message": "Выбрать коллекцию"
-  },
-  "importTargetHint": {
-    "message": "Выберите эту опцию, если хотите, чтобы содержимое импортированного файла было перемещено в папку $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Выберите формат файла импорта"
@@ -3624,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "К этому элементу прикреплены старые вложения, которые необходимо исправить."
   },
-  "attachmentFixDescription": {
-    "message": "Вложение использует устаревшее шифрование. Выберите 'Исправить' дня загрузки, повторного шифрования и выгрузки вложения."
+  "attachmentFixDesc": {
+    "message": "Это старое вложение необходимо исправить. Нажмите, чтобы узнать больше."
   },
   "fix": {
     "message": "Исправить",
@@ -4739,7 +4705,7 @@
     "message": "Ошибка"
   },
   "accountRecoveryManageUsers": {
-    "message": "Для управления пользователями также необходимо предоставить разрешение на управление восстановлением аккаунта"
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Настройка поставщика"
@@ -5463,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Элементы из личных хранилищ и из других организаций включены не будут.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Личные элементы хранилища и элементы из других организаций включены не будут.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6836,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Требовать от существующих пользователей смены паролей"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Регион"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "Европа",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас недостаточно прав для удаления этого проекта",
@@ -6854,7 +6825,7 @@
     "message": "Обновить параметры KDF"
   },
   "trustedDevices": {
-    "message": "Доверенные устройства"
+    "message": "Trusted devices"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "После аутентификации участники расшифровывают данные хранилища с помощью ключа, хранящегося на их устройстве.",
@@ -7052,20 +7023,15 @@
   "additionalServiceAccounts": {
     "message": "Дополнительные сервисные аккаунты"
   },
-  "includedServiceAccounts": {
-    "message": "Ваш план включает в себя $COUNT$ сервисных аккаунтов.",
+  "additionalServiceAccountsDesc": {
+    "message": "Ваш тарифный план включает в себя $COUNT$ сервисных аккаунтов. Вы можете добавить дополнительные сервисные аккаунты за $COST$ в месяц.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "Вы можете добавить дополнительные сервисные аккаунты за $COST$ в месяц.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
@@ -7093,24 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Максимальная потенциальная стоимость сервисного аккаунта"
-  },
-  "smBetaEndedDesc": {
-    "message": "Бета-версия Менеджера секретов завершилась $BETA_ENDING_DATE$. У вас осталось $DAYS$ дней, чтобы добавить его к своей платной подписке и сохранить доступ к данным. Чтобы добавить Менеджер секретов к подписке, обратитесь в службу поддержки клиентов.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Окончание бета-версии"
-  },
-  "beta": {
-    "message": "Beta"
   }
 }

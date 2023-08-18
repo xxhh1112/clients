@@ -711,17 +711,11 @@
   "unexpectedError": {
     "message": "Gözlənilməz bir səhv baş verdi."
   },
-  "expirationDateError": {
-    "message": "Zəhmət olmasa gələcəkdə son istifadə tarixi seçin."
-  },
   "emailAddress": {
     "message": "E-poçt ünvanı"
   },
   "yourVaultIsLocked": {
     "message": "Anbarınız kilidlənib. Davam etmək üçün ana parolunuzu təsdiqləyin."
-  },
-  "uuid": {
-    "message": "UUID"
   },
   "unlock": {
     "message": "Kilidi aç"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "Təsdiqləmə kodunu kopyala"
-  },
-  "copyUuid": {
-    "message": "UUID-ni kopyala"
   },
   "warning": {
     "message": "Xəbərdarlıq"
@@ -1292,31 +1283,6 @@
   },
   "importEncKeyError": {
     "message": "İxrac edilən faylın parolu açılarkən xəta baş verdi. Şifrələmə açarınız, verilənlərin ixracında istifadə olunan şifrələmə açarı ilə uyğunlaşmır."
-  },
-  "importDestination": {
-    "message": "Import destination"
-  },
-  "learnAboutImportOptions": {
-    "message": "Learn about your import options"
-  },
-  "selectImportFolder": {
-    "message": "Bir qovluq seçin"
-  },
-  "selectImportCollection": {
-    "message": "Bir kolleksiya seçin"
-  },
-  "importTargetHint": {
-    "message": "Daxilə köçürülən fayl məzmununun $DESTINATION$ yerinə daşınmasını istəyirsinizsə bu variantı seçin",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "Faylda təyin edilməmiş elementlər var."
   },
   "selectFormat": {
     "message": "İdxal faylının formatını seçin"
@@ -2670,7 +2636,7 @@
     "message": "Veb anbar"
   },
   "bitWebVault": {
-    "message": "Bitwarden Web anbarı"
+    "message": "Bitwarden Web vault"
   },
   "bitSecretsManager": {
     "message": "Bitwarden Secrets Manager"
@@ -3624,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "Bu element, düzəldilməli köhnə fayl qoşmalarını ehtiva edir."
   },
-  "attachmentFixDescription": {
-    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
+  "attachmentFixDesc": {
+    "message": "Bu, düzəldilməli köhnə bir fayl qoşmasıdır. Daha ətraflı öyrənmək üçün klikləyin."
   },
   "fix": {
     "message": "Düzəlt",
@@ -5463,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Yalnız $ORGANIZATION$ ilə əlaqələndirilmiş təşkilat anbarı ixrac ediləcək. Fərdi anbardakı və digər təşkilat elementlər daxil edilmir.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Yalnız $ORGANIZATION$ ilə əlaqəli təşkilat anbar elementləri ixrac ediləcək. Şəxsi anbar elementləri və digər təşkilatlardan olan elementlər daxil edilmir.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6836,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Mövcud üzvlərin öz parollarını dəyişdirməsini tələb et"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Bölgə"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "AB",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "ABŞ",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Bu layihəni silmək icazəniz yoxdur",
@@ -6854,7 +6825,7 @@
     "message": "KDF tənzimləmələrini güncəllə"
   },
   "trustedDevices": {
-    "message": "Güvənli cihazlar"
+    "message": "Trusted devices"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Kimlik təsdiqləndikdən sonra üzvlər, cihazlarından saxlanılan açarı istifadə edərək anbar verilənlərinin şifrələrini aça biləcək",
@@ -6964,7 +6935,7 @@
     "message": "Ana parolu olmayan üzvləri onlar üçün parol tənzimləmədən silmək, tam hesablarına müraciəti məhdudlaşdıra bilər."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "$ORG$ üçün Bitwarden 7 günlük ödənişsiz sınağı başladın",
+    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
     "placeholders": {
       "org": {
         "content": "$1",
@@ -6973,16 +6944,16 @@
     }
   },
   "next": {
-    "message": "Növbəti"
+    "message": "Next"
   },
   "usFlag": {
-    "message": "US bayrağı"
+    "message": "US flag"
   },
   "euFlag": {
-    "message": "EU bayrağı"
+    "message": "EU flag"
   },
   "selectedRegionFlag": {
-    "message": "Seçilmiş bölgə bayrağı"
+    "message": "Selected region flag"
   },
   "sendsNoItemsTitle": {
     "message": "Aktiv \"Send\" yoxdur",
@@ -7008,7 +6979,7 @@
     "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
   },
   "free2PersonOrganization": {
-    "message": "Ödənişsiz 2 nəfərlik Təşkilatlar"
+    "message": "Free 2-person Organizations"
   },
   "unlimitedSecrets": {
     "message": "Unlimited secrets"
@@ -7052,20 +7023,15 @@
   "additionalServiceAccounts": {
     "message": "Əlavə xidmət hesabları"
   },
-  "includedServiceAccounts": {
-    "message": "Your plan comes with $COUNT$ service accounts.",
+  "additionalServiceAccountsDesc": {
+    "message": "Planınız $COUNT$ xidmət hesabı ilə gəlir. Əlavə xidmət hesablarını ayda $COST$ qarşılığında əlavə edə bilərsiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "Aylıq $COST$ qiymətinə əlavə xidmət hesablarını əlavə edə bilərsiniz.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
@@ -7093,24 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Maksimal mümkün xidmət hesabı qiyməti"
-  },
-  "smBetaEndedDesc": {
-    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Beta Sonu"
-  },
-  "beta": {
-    "message": "Beta"
   }
 }
