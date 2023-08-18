@@ -60,7 +60,11 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import { DialogService, Icons } from "@bitwarden/components";
 
 import { UpdateKeyComponent } from "../../settings/update-key.component";
-import { CollectionDialogAction, openCollectionDialog } from "../components/collection-dialog";
+import {
+  CollectionDialogAction,
+  CollectionDialogTabType,
+  openCollectionDialog,
+} from "../components/collection-dialog";
 import { VaultItemEvent } from "../components/vault-items/vault-item-event";
 import { getNestedCollectionTree } from "../utils/collection-utils";
 
@@ -133,7 +137,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected showBulkMove: boolean;
   protected canAccessPremium: boolean;
   protected allCollections: CollectionView[];
-  protected allOrganizations: Organization[];
+  protected allOrganizations: Organization[] = [];
   protected ciphers: CipherView[];
   protected collections: CollectionView[];
   protected isEmpty: boolean;
@@ -451,6 +455,10 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
       } else if (event.type === "copyField") {
         await this.copy(event.item, event.field);
+      } else if (event.type === "editCollection") {
+        await this.editCollection(event.item, CollectionDialogTabType.Info);
+      } else if (event.type === "viewCollectionAccess") {
+        await this.editCollection(event.item, CollectionDialogTabType.Access);
       }
     } finally {
       this.processingEvent = false;
@@ -657,9 +665,24 @@ export class VaultComponent implements OnInit, OnDestroy {
         await this.collectionService.upsert(c);
       }
       this.refresh();
+    }
+  }
+
+  async editCollection(c: CollectionView, tab: CollectionDialogTabType): Promise<void> {
+    const dialog = openCollectionDialog(this.dialogService, {
+      data: { collectionId: c?.id, organizationId: c.organizationId, initialTab: tab },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result.action === CollectionDialogAction.Saved) {
+      if (result.collection) {
+        // Update CollectionService with the new collection
+        const c = new CollectionData(result.collection as CollectionDetailsResponse);
+        await this.collectionService.upsert(c);
+      }
+      this.refresh();
     } else if (result.action === CollectionDialogAction.Deleted) {
-      // TODO: Remove collection from collectionService when collection
-      // deletion is implemented in the individual vault in AC-1347
+      await this.collectionService.delete(result.collectionId);
       this.refresh();
     }
   }

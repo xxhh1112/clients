@@ -33,7 +33,6 @@ export class VaultItemsComponent {
   @Input() showCollections: boolean;
   @Input() showGroups: boolean;
   @Input() useEvents: boolean;
-  @Input() editableCollections: boolean;
   @Input() cloneableOrganizationCiphers: boolean;
   @Input() showPremiumFeatures: boolean;
   @Input() showBulkMove: boolean;
@@ -81,43 +80,41 @@ export class VaultItemsComponent {
   }
 
   protected canEditCollection(collection: CollectionView): boolean {
-    // We currently don't support editing collections from individual vault
-    if (!(collection instanceof CollectionAdminView)) {
-      return false;
-    }
-
     // Only allow allow deletion if collection editing is enabled and not deleting "Unassigned"
-    if (!this.editableCollections || collection.id === Unassigned) {
+    if (collection.id === Unassigned) {
       return false;
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
 
-    // Otherwise, check if we can edit the specified collection
-    return (
-      organization?.canEditAnyCollection ||
-      (organization?.canEditAssignedCollections && collection.assigned)
-    );
+    if (collection instanceof CollectionAdminView) {
+      return (
+        organization?.canEditAnyCollection ||
+        (organization?.canEditAssignedCollections && collection.assigned)
+      );
+    } else {
+      // From the individual vault where user can only see assigned collections
+      return organization?.canEditAnyCollection || organization?.canEditAssignedCollections;
+    }
   }
 
   protected canDeleteCollection(collection: CollectionView): boolean {
-    // We currently don't support editing collections from individual vault
-    if (!(collection instanceof CollectionAdminView)) {
-      return false;
-    }
-
     // Only allow allow deletion if collection editing is enabled and not deleting "Unassigned"
-    if (!this.editableCollections || collection.id === Unassigned) {
+    if (collection.id === Unassigned) {
       return false;
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
-
-    // Otherwise, check if we can delete the specified collection
-    return (
-      organization?.canDeleteAnyCollection ||
-      (organization?.canDeleteAssignedCollections && collection.assigned)
-    );
+    if (collection instanceof CollectionAdminView) {
+      // Otherwise, check if we can delete the specified collection
+      return (
+        organization?.canDeleteAnyCollection ||
+        (organization?.canDeleteAssignedCollections && collection.assigned)
+      );
+    } else {
+      // From the individual vault where user can only see assigned collections
+      return organization?.canDeleteAnyCollection || organization?.canDeleteAssignedCollections;
+    }
   }
 
   protected toggleAll() {

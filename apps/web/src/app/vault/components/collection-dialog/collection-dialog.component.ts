@@ -51,7 +51,8 @@ export interface CollectionDialogParams {
 
 export interface CollectionDialogResult {
   action: CollectionDialogAction;
-  collection: CollectionResponse;
+  collection?: CollectionResponse;
+  collectionId?: string;
 }
 
 export enum CollectionDialogAction {
@@ -263,7 +264,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       this.i18nService.t("deletedCollectionId", this.collection?.name)
     );
 
-    this.close(CollectionDialogAction.Deleted);
+    this.close(CollectionDialogAction.Deleted, null, this.params.collectionId);
   };
 
   ngOnDestroy(): void {
@@ -271,8 +272,12 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private close(action: CollectionDialogAction, collection?: CollectionResponse) {
-    this.dialogRef.close({ action, collection } as CollectionDialogResult);
+  private close(
+    action: CollectionDialogAction,
+    collection?: CollectionResponse,
+    collectionId?: string
+  ) {
+    this.dialogRef.close({ action, collection, collectionId } as CollectionDialogResult);
   }
 }
 
