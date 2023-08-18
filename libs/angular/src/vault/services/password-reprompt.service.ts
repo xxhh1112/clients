@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
+import { lastValueFrom } from "rxjs";
 
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { DialogService } from "@bitwarden/components";
 
-import { DialogServiceAbstraction } from "../../services/dialog";
-import { ModalService } from "../../services/modal.service";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 
 /**
@@ -16,9 +16,8 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   protected component = PasswordRepromptComponent;
 
   constructor(
-    private modalService: ModalService,
     private keyConnectorService: KeyConnectorService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   protectedFields() {
@@ -30,13 +29,12 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
       return true;
     }
 
-    const ref = this.modalService.open(this.component, { allowMultipleModals: true });
+    const dialog = this.dialogService.open<boolean>(this.component, {
+      ariaModal: true,
+    });
 
-    if (ref == null) {
-      return false;
-    }
+    const result = await lastValueFrom(dialog.closed);
 
-    const result = await ref.onClosedPromise();
     return result === true;
   }
 
