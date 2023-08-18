@@ -1,8 +1,10 @@
+import { setElementStyles } from "../utils/utils";
+
 class OverlayIframeService {
   private port: chrome.runtime.Port | null = null;
   private extensionOriginsSet: Set<string>;
+  private iframeMutationObserver: MutationObserver;
   private readonly iframe: HTMLIFrameElement;
-  // private updatingIframeStyles = false;
   private iframeStyles: Partial<CSSStyleDeclaration> = {
     all: "initial",
     position: "fixed",
@@ -27,8 +29,7 @@ class OverlayIframeService {
       "null",
     ]);
 
-    const mutationObserver = new MutationObserver(this.handleMutationObserver);
-    mutationObserver.observe(this.iframe, { attributes: true });
+    this.iframeMutationObserver = new MutationObserver(this.handleMutationObserver);
   }
 
   initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>) {
@@ -106,39 +107,13 @@ class OverlayIframeService {
     if (!customElement) {
       return;
     }
-    // this.updatingIframeStyles = true;
-    for (const styleProperty in styles) {
-      customElement.style.setProperty(
-        this.convertToKebabCase(styleProperty),
-        styles[styleProperty],
-        "important"
-      );
-    }
 
+    this.unobserveIframe();
+
+    setElementStyles(customElement, styles, "important");
     this.iframeStyles = { ...this.iframeStyles, ...styles };
-  }
 
-  private isIframeElementStylesModified(): boolean {
-    for (const styleProperty in this.iframeStyles) {
-      if (styleProperty === "all" || styleProperty === "border") {
-        continue;
-      }
-
-      const elementPropertyValue = this.iframe.style.getPropertyValue(
-        this.convertToKebabCase(styleProperty)
-      );
-      const iframePropertyValue = this.iframeStyles[styleProperty];
-
-      if (!isNaN(parseInt(elementPropertyValue))) {
-        if (parseInt(elementPropertyValue) !== parseInt(iframePropertyValue)) {
-          return true;
-        }
-      } else if (elementPropertyValue !== iframePropertyValue) {
-        return true;
-      }
-    }
-
-    return false;
+    this.observeIframe();
   }
 
   private convertToKebabCase(stringValue: string): string {
@@ -159,17 +134,22 @@ class OverlayIframeService {
 
   private handleMutationObserver = (mutations: MutationRecord[]) => {
     mutations.forEach((mutation) => {
-      if (
-        mutation.type !== "attributes" ||
-        mutation.attributeName !== "style" ||
-        !this.isIframeElementStylesModified()
-      ) {
+      if (mutation.type !== "attributes" || mutation.attributeName !== "style") {
         return;
       }
 
+      this.iframe.removeAttribute("style");
       this.updateElementStyles(this.iframe, this.iframeStyles);
     });
   };
+
+  private observeIframe() {
+    this.iframeMutationObserver.observe(this.iframe, { attributes: true });
+  }
+
+  private unobserveIframe() {
+    this.iframeMutationObserver.disconnect();
+  }
 }
 
 export default OverlayIframeService;

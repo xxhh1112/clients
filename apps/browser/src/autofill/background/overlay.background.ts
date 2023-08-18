@@ -76,6 +76,9 @@ class OverlayBackground {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
     this.setupExtensionMessageListeners();
+
+    // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THE USAGE OF THIS METHOD.
+    this.overrideUserAutofillSettings();
   }
 
   removePageDetails(tabId: number) {
@@ -501,6 +504,33 @@ class OverlayBackground {
 
     await BrowserApi.tabSendMessageData(sender.tab, "openAddEditCipher", {
       cipherId: cipherView.id,
+    });
+  }
+
+  // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THIS MODIFICATION.
+  // Other password managers leverage this privacy API to force autofill settings to be disabled.
+  // This helps with the user experience when using a third party password manager.
+  // However, it overrides the users settings and can be considered a privacy concern.
+  // If we approach using this API, we need to ensure that it is strictly an opt-in experience and
+  // convey why a user might want to disable autofill in their browser.
+  private overrideUserAutofillSettings() {
+    chrome.privacy.services.autofillAddressEnabled.get({}, (details) => {
+      const { levelOfControl, value } = details;
+      if (
+        levelOfControl === "controllable_by_this_extension" ||
+        (levelOfControl === "controlled_by_this_extension" && value === true)
+      ) {
+        chrome.privacy.services.autofillAddressEnabled.set({ value: false });
+      }
+    });
+    chrome.privacy.services.autofillCreditCardEnabled.get({}, function (details) {
+      const { levelOfControl, value } = details;
+      if (
+        levelOfControl === "controllable_by_this_extension" ||
+        (levelOfControl === "controlled_by_this_extension" && value === true)
+      ) {
+        chrome.privacy.services.autofillCreditCardEnabled.set({ value: false });
+      }
     });
   }
 }

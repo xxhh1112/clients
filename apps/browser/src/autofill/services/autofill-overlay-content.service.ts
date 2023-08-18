@@ -9,7 +9,7 @@ import {
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
 import { AutofillOverlayCustomElement } from "../overlay/utils/autofill-overlay.enum";
-import { sendExtensionMessage } from "../overlay/utils/utils";
+import { sendExtensionMessage, setElementStyles } from "../overlay/utils/utils";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
@@ -396,12 +396,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenIcon,
       AutofillOverlayIconIframe
     );
-    this.overlayIconElement = this.createOverlayCustomElement(
+    this.overlayIconElement = globalThis.document.createElement(
       AutofillOverlayCustomElement.BitwardenIcon
     );
 
-    this.overlayElementsMutationObserver?.observe(this.overlayIconElement, { attributes: true });
-    this.setCustomElementsDefaultStyles([this.overlayIconElement]);
+    this.updateCustomElementDefaultStyles(this.overlayIconElement);
   }
 
   private createAutofillOverlayList() {
@@ -413,52 +412,32 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       AutofillOverlayCustomElement.BitwardenList,
       AutofillOverlayListIframe
     );
-    this.overlayListElement = this.createOverlayCustomElement(
+    this.overlayListElement = globalThis.document.createElement(
       AutofillOverlayCustomElement.BitwardenList
     );
 
-    this.overlayElementsMutationObserver?.observe(this.overlayListElement, { attributes: true });
-    this.setCustomElementsDefaultStyles([this.overlayListElement]);
+    this.updateCustomElementDefaultStyles(this.overlayListElement);
   }
 
-  private createOverlayCustomElement(elementName: string): HTMLElement {
-    const customElement = globalThis.document.createElement(elementName);
+  private updateCustomElementDefaultStyles(element: HTMLElement) {
+    this.unobserveCustomElements();
 
-    return customElement;
+    setElementStyles(element, this.customElementDefaultStyles, "important");
+
+    this.observeCustomElement(this.overlayIconElement);
+    this.observeCustomElement(this.overlayListElement);
   }
 
-  private setCustomElementsDefaultStyles(elements: HTMLElement[] = []) {
-    for (const styleProperty in this.customElementDefaultStyles) {
-      elements.forEach((element) =>
-        element.style.setProperty(
-          this.convertToKebabCase(styleProperty),
-          this.customElementDefaultStyles[styleProperty],
-          "important"
-        )
-      );
-    }
-  }
-
-  private isCustomElementDefaultStylesModified(element: HTMLElement) {
-    for (const styleProperty in this.customElementDefaultStyles) {
-      if (styleProperty === "all") {
-        continue;
-      }
-
-      const elementPropertyValue = element.style.getPropertyValue(
-        this.convertToKebabCase(styleProperty)
-      );
-      const expectedPropertyValue = this.customElementDefaultStyles[styleProperty];
-      if (!isNaN(parseInt(elementPropertyValue))) {
-        if (parseInt(elementPropertyValue) !== parseInt(expectedPropertyValue)) {
-          return true;
-        }
-      } else if (elementPropertyValue !== expectedPropertyValue) {
-        return true;
-      }
+  private observeCustomElement(element: HTMLElement) {
+    if (!element) {
+      return;
     }
 
-    return false;
+    this.overlayElementsMutationObserver?.observe(element, { attributes: true });
+  }
+
+  private unobserveCustomElements() {
+    this.overlayElementsMutationObserver?.disconnect();
   }
 
   private convertToKebabCase(stringValue: string): string {
@@ -545,12 +524,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
         return;
       }
 
-      if (!this.isCustomElementDefaultStylesModified(element)) {
-        return;
-      }
-
       element.removeAttribute("style");
-      this.setCustomElementsDefaultStyles([element]);
+      this.updateCustomElementDefaultStyles(element);
     });
   };
 
@@ -580,9 +555,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       2000
     );
 
-    if (this.mutationObserverIterations > 200) {
-      this.mutationObserverIterations = 0;
+    if (this.mutationObserverIterations > 50) {
       clearTimeout(this.mutationObserverIterationsResetTimeout);
+      this.mutationObserverIterations = 0;
+      this.mostRecentlyFocusedField.blur();
       this.removeAutofillOverlay();
       return;
     }

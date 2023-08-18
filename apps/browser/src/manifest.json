@@ -57,7 +57,8 @@
     "http://*/*",
     "https://*/*",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "privacy"
   ],
   "optional_permissions": ["nativeMessaging"],
   "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
