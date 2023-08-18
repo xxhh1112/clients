@@ -2109,7 +2109,7 @@
   "logInWithAnotherDevice": {
     "message": "Log in with another device"
   },
-  "logInInitiated": {
+  "loginInitiated": {
     "message": "Login initiated"
   },
   "notificationSentDevice": {

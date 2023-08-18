@@ -2152,7 +2152,7 @@
   "notificationSentDevice": {
     "message": "A notification has been sent to your device."
   },
-  "logInInitiated": {
+  "loginInitiated": {
     "message": "Login initiated"
   },
   "exposedMasterPassword": {
