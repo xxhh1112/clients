@@ -463,8 +463,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         stateService: StateServiceAbstraction,
         authService: AuthServiceAbstraction,
         vaultTimeoutSettingsService: VaultTimeoutSettingsServiceAbstraction,
-        lockedCallback: any,
-        logoutCallback: any
+        lockedCallback: (userId?: string) => Promise<void>,
+        logoutCallback: (expired: boolean, userId?: string) => Promise<void>
       ) => {
         return new VaultTimeoutService(
           cipherService,

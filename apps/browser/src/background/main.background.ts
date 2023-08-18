@@ -9,7 +9,6 @@ import { SearchService as SearchServiceAbstraction } from "@bitwarden/common/abs
 import { SettingsService as SettingsServiceAbstraction } from "@bitwarden/common/abstractions/settings.service";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/abstractions/totp.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
-import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { InternalOrganizationServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { InternalPolicyService as InternalPolicyServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -164,7 +163,7 @@ export default class MainBackground {
   cipherService: CipherServiceAbstraction;
   folderService: InternalFolderServiceAbstraction;
   collectionService: CollectionServiceAbstraction;
-  vaultTimeoutService: VaultTimeoutServiceAbstraction;
+  vaultTimeoutService: VaultTimeoutService;
   vaultTimeoutSettingsService: VaultTimeoutSettingsServiceAbstraction;
   syncService: SyncServiceAbstraction;
   passwordGenerationService: PasswordGenerationServiceAbstraction;
@@ -436,6 +435,15 @@ export default class MainBackground {
       this.authRequestCryptoService
     );
 
+    this.userVerificationApiService = new UserVerificationApiService(this.apiService);
+
+    this.userVerificationService = new UserVerificationService(
+      this.stateService,
+      this.cryptoService,
+      this.i18nService,
+      this.userVerificationApiService
+    );
+
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
       this.cryptoService,
       this.tokenService,
@@ -502,15 +510,6 @@ export default class MainBackground {
       this.eventUploadService
     );
     this.totpService = new TotpService(this.cryptoFunctionService, this.logService);
-
-    this.userVerificationApiService = new UserVerificationApiService(this.apiService);
-
-    this.userVerificationService = new UserVerificationService(
-      this.stateService,
-      this.cryptoService,
-      this.i18nService,
-      this.userVerificationApiService
-    );
 
     this.autofillService = new AutofillService(
       this.cipherService,
@@ -682,7 +681,7 @@ export default class MainBackground {
 
     await this.stateService.init();
 
-    await (this.vaultTimeoutService as VaultTimeoutService).init(true);
+    await this.vaultTimeoutService.init(true);
     await (this.i18nService as BrowserI18nService).init();
     await (this.eventUploadService as EventUploadService).init(true);
     await this.runtimeBackground.init();

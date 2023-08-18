@@ -358,7 +358,7 @@ export class Main {
       this.authRequestCryptoService
     );
 
-    const lockedCallback = async () =>
+    const lockedCallback = async (userId?: string) =>
       await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
     this.userVerificationService = new UserVerificationService(
