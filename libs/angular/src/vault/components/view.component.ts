@@ -34,8 +34,7 @@ import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.v
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 const BroadcasterSubscriptionId = "ViewComponent";
 
@@ -87,7 +86,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     private logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -182,7 +181,7 @@ export class ViewComponent implements OnDestroy, OnInit {
       content: {
         key: this.cipher.isDeleted ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation",
       },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -206,16 +205,6 @@ export class ViewComponent implements OnDestroy, OnInit {
 
   async restore(): Promise<boolean> {
     if (!this.cipher.isDeleted) {
-      return false;
-    }
-
-    const confirmed = await this.dialogService.openSimpleDialog({
-      title: { key: "restoreItem" },
-      content: { key: "restoreItemConfirmation" },
-      type: SimpleDialogType.WARNING,
-    });
-
-    if (!confirmed) {
       return false;
     }
 
@@ -316,16 +305,16 @@ export class ViewComponent implements OnDestroy, OnInit {
     this.platformUtilsService.launchUri(uri.launchUri);
   }
 
-  async copy(value: string, typeI18nKey: string, aType: string) {
+  async copy(value: string, typeI18nKey: string, aType: string): Promise<boolean> {
     if (value == null) {
-      return;
+      return false;
     }
 
     if (
       this.passwordRepromptService.protectedFields().includes(aType) &&
       !(await this.promptPassword())
     ) {
-      return;
+      return false;
     }
 
     const copyOptions = this.win != null ? { window: this.win } : null;
@@ -343,6 +332,8 @@ export class ViewComponent implements OnDestroy, OnInit {
     } else if (aType === "H_Field") {
       this.eventCollectionService.collect(EventType.Cipher_ClientCopiedHiddenField, this.cipherId);
     }
+
+    return true;
   }
 
   setTextDataOnDrag(event: DragEvent, data: string) {
