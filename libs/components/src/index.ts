@@ -27,3 +27,5 @@ export * from "./tabs";
 export * from "./toggle-group";
 export * from "./typography";
 export * from "./utils/i18n-mock.service";
+
+export * from "./component-library.module";

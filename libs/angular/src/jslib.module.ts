@@ -2,6 +2,8 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
+import { ComponentLibraryModule } from "@bitwarden/components";
+
 import { CalloutComponent } from "./components/callout.component";
 import { BitwardenToastModule } from "./components/toastr.component";
 import { A11yInvalidDirective } from "./directives/a11y-invalid.directive";
@@ -42,6 +44,7 @@ import { IconComponent } from "./vault/components/icon.component";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ComponentLibraryModule,
   ],
   declarations: [
     A11yInvalidDirective,
@@ -103,6 +106,7 @@ import { IconComponent } from "./vault/components/icon.component";
     UserTypePipe,
     IfFeatureDirective,
     FingerprintPipe,
+    ComponentLibraryModule,
   ],
   providers: [
     CreditCardNumberPipe,

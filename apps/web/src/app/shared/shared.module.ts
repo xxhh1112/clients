@@ -7,30 +7,6 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import {
-  AsyncActionsModule,
-  AvatarModule,
-  BadgeListModule,
-  BadgeModule,
-  ButtonModule,
-  CalloutModule,
-  CheckboxModule,
-  ColorPasswordModule,
-  DialogModule,
-  FormFieldModule,
-  IconButtonModule,
-  IconModule,
-  LinkModule,
-  MenuModule,
-  MultiSelectModule,
-  ProgressModule,
-  RadioButtonModule,
-  SelectModule,
-  TableModule,
-  TabsModule,
-  ToggleGroupModule,
-  TypographyModule,
-} from "@bitwarden/components";
 
 // Register the locales for the application
 import "./locales";
@@ -53,30 +29,6 @@ import "./locales";
     ToastrModule,
     JslibModule,
 
-    // Component library modules
-    // Only add components that are used almost everywhere in the application
-    AsyncActionsModule,
-    AvatarModule,
-    BadgeListModule,
-    BadgeModule,
-    ButtonModule,
-    CalloutModule,
-    CheckboxModule,
-    ColorPasswordModule,
-    DialogModule,
-    FormFieldModule,
-    IconButtonModule,
-    IconModule,
-    LinkModule,
-    MenuModule,
-    MultiSelectModule,
-    ProgressModule,
-    RadioButtonModule,
-    TableModule,
-    TabsModule,
-    ToggleGroupModule,
-    TypographyModule,
-
     // Web specific
   ],
   exports: [
@@ -88,30 +40,6 @@ import "./locales";
     RouterModule,
     ToastrModule,
     JslibModule,
-
-    // Component library
-    AsyncActionsModule,
-    AvatarModule,
-    BadgeListModule,
-    BadgeModule,
-    ButtonModule,
-    CalloutModule,
-    CheckboxModule,
-    ColorPasswordModule,
-    DialogModule,
-    FormFieldModule,
-    IconButtonModule,
-    IconModule,
-    LinkModule,
-    MenuModule,
-    MultiSelectModule,
-    ProgressModule,
-    RadioButtonModule,
-    SelectModule,
-    TableModule,
-    TabsModule,
-    ToggleGroupModule,
-    TypographyModule,
 
     // Web specific
   ],
