@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Element birdəfəlik silindi"
   },
-  "restoreItem": {
-    "message": "Elementi bərpa et"
-  },
-  "restoreItemConfirmation": {
-    "message": "Elementi bərpa etmək istədiyinizə əminsiniz?"
-  },
   "restoredItem": {
     "message": "Element bərpa edildi"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Tövsiyə edilən Tənzimləmələr Güncəlləməsi"
   },
-  "region": {
-    "message": "Bölgə"
+  "loggingInOn": {
+    "message": "Giriş edilir"
   },
-  "eu": {
-    "message": "AB",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "ABŞ",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Öz-özünə sahiblik edən"

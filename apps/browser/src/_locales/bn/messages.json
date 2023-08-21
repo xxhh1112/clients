@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "হ্যাঁ, এখনই হালনাগাদ করুন"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "Show context menu options"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "বস্তু পুনরুদ্ধার"
   },
-  "restoreItemConfirmation": {
-    "message": "আপনি কি নিশ্চিত যে আপনি এই বস্তুটি পুনরুদ্ধার করতে চান?"
-  },
   "restoredItem": {
     "message": "বস্তু পুনরুদ্ধারকৃত"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "Opens in a new window"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."

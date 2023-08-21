@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Opdatér"
   },
+  "notificationUnlockDesc": {
+    "message": "Oplås din Bitwarden boks for at færdiggøre autoudfyldanmodningen."
+  },
+  "notificationUnlock": {
+    "message": "Oplås"
+  },
   "enableContextMenuItem": {
     "message": "Vis indstillinger i kontekstmenuen"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Gendan element"
   },
-  "restoreItemConfirmation": {
-    "message": "Er du sikker på, at du vil gendanne dette element?"
-  },
   "restoredItem": {
     "message": "Element gendannet"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logger ind på"
   },
   "opensInANewWindow": {
     "message": "Åbnes i et nyt vindue"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "USA",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Adgang nægtet. Nødvendig tilladelse til at se siden mangler."

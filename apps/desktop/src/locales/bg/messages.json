@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Записът е изтрит окончателно"
   },
-  "restoreItem": {
-    "message": "Възстановяване на запис"
-  },
-  "restoreItemConfirmation": {
-    "message": "Сигурни ли сте, че искате да възстановите записа?"
-  },
   "restoredItem": {
     "message": "Записът е възстановен"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Препоръчителна промяна на настройките"
   },
-  "region": {
-    "message": "Регион"
+  "loggingInOn": {
+    "message": "Вписване в"
   },
-  "eu": {
-    "message": "ЕС",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "САЩ",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Собствен хостинг"
