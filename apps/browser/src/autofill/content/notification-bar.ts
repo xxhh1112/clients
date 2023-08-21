@@ -64,7 +64,7 @@ async function loadNotificationBar() {
       // It is managed in the Settings > Excluded Domains page in the browser extension.
       // Example: '{"bitwarden.com":null}'
       const excludedDomainsDict = userSettings.neverDomains;
-      if (!excludedDomainsDict[window.location.hostname]) {
+      if (!(window.location.hostname in excludedDomainsDict)) {
         // Set local disabled preferences
         disabledAddLoginNotification = userSettings.disableAddLoginNotification;
         disabledChangedPasswordNotification = userSettings.disableChangedPasswordNotification;
