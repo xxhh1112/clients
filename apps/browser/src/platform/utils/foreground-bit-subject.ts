@@ -1,44 +1,23 @@
-import { BrowserApi } from "../browser/browser-api";
-
 import { BrowserBitSubject } from "./browser-bit-subject";
 
 export class ForegroundBitSubject<T = never> extends BrowserBitSubject<T> {
-  constructor(serviceObservableName: string, initializer: (json: Required<T>) => T) {
-    super(serviceObservableName, initializer);
+  private _port: chrome.runtime.Port;
+  private _lastId: string;
 
-    BrowserApi.messageListener(
-      this.fromBackgroundMessageName,
-      (message: { command: string; data: Required<T> }) => {
-        if (message.command !== this.fromBackgroundMessageName) {
-          return;
-        }
+  constructor(serviceObservableName: string, private initializer: (json: Required<T>) => T) {
+    super(serviceObservableName);
 
-        super.next(this.initializer(message.data));
-      }
-    );
+    this._port = chrome.runtime.connect({ name: this.portName });
+    this._port.onMessage.addListener(this.onMessageFromBackground.bind(this));
   }
 
   override next(value: T): void {
     // Do not next the subject, background does it first, then tells us to
-    BrowserApi.sendMessage(this.fromForegroundMessageName, { data: value });
+    this._port.postMessage({ expectedId: this._lastId, data: value });
   }
 
-  async init(fallbackInitialValue?: T): Promise<this> {
-    // Initialize from background without waiting for a new emit
-    await new Promise<void>((resolve) => {
-      BrowserApi.sendMessage(this.requestInitMessageName, null, (response) => {
-        if (response === undefined) {
-          // did not receive a response
-          response = fallbackInitialValue;
-        }
-
-        if (response !== undefined) {
-          super.next(this.initializer(response));
-        }
-        resolve();
-      });
-    });
-
-    return this;
+  private onMessageFromBackground(message: { id: string; data: Required<T> }) {
+    this._lastId = message.id;
+    super.next(this.initializer(message.data));
   }
 }

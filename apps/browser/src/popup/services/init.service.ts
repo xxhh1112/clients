@@ -6,7 +6,6 @@ import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 import { BrowserStateService as StateServiceAbstraction } from "../../platform/services/abstractions/browser-state.service";
-import { ForegroundFolderService } from "../../vault/popup/services/foreground-folder.service";
 
 import { PopupUtilsService } from "./popup-utils.service";
 
@@ -18,14 +17,12 @@ export class InitService {
     private popupUtilsService: PopupUtilsService,
     private stateService: StateServiceAbstraction,
     private logService: LogServiceAbstraction,
-    private themingService: AbstractThemingService,
-    private folderService: ForegroundFolderService
+    private themingService: AbstractThemingService
   ) {}
 
   init() {
     return async () => {
       await this.stateService.init();
-      await this.folderService.init();
 
       if (!this.popupUtilsService.inPopup(window)) {
         window.document.body.classList.add("body-full");

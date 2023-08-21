@@ -1,32 +1,52 @@
-import { BrowserApi } from "../browser/browser-api";
+import { Subscription } from "rxjs";
+
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { BrowserBitSubject } from "./browser-bit-subject";
 
 export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
-  constructor(serviceObservableName: string, initializer: (obj: Required<T>) => T) {
-    super(serviceObservableName, initializer);
+  private _portSubscriptions = new Map<chrome.runtime.Port, Subscription>();
+  private _lastId: string;
 
-    BrowserApi.messageListener(
-      this.fromForegroundMessageName,
-      (message: { command: string; data: Required<T> }) => {
-        if (message.command !== this.fromForegroundMessageName) {
-          return;
-        }
+  constructor(serviceObservableName: string, private initializer: (obj: Required<T>) => T) {
+    super(serviceObservableName);
 
-        this.next(this.initializer(message.data));
-      }
-    );
-
-    BrowserApi.messageListener(this.requestInitMessageName, (message, sender, response) => {
-      if (message.command !== this.requestInitMessageName || !this._initialized) {
+    chrome.runtime.onConnect.addListener((port) => {
+      if (port.name !== this.portName) {
         return;
       }
-      return response(this.value);
+
+      port.onDisconnect.addListener(this.onDisconnect.bind(this));
+      port.onMessage.addListener(this.onMessageFromForeground.bind(this));
+      const subscription = this.asObservable().subscribe((value) => {
+        this.sendValue(port, value);
+      });
+
+      this._portSubscriptions.set(port, subscription);
     });
   }
 
   override next(value: T): void {
+    // Set new message id before nexting the subject
+    this._lastId = Utils.newGuid();
     super.next(value);
-    BrowserApi.sendMessage(this.fromBackgroundMessageName, { data: value });
+  }
+
+  private onDisconnect(port: chrome.runtime.Port) {
+    this._portSubscriptions.get(port)?.unsubscribe();
+    this._portSubscriptions.delete(port);
+  }
+
+  private onMessageFromForeground(message: { expectedId: string; data: Required<T> }) {
+    if (message.expectedId !== this._lastId) {
+      // Ignore out of sync messages
+      return;
+    }
+
+    this.next(this.initializer(message.data));
+  }
+
+  private sendValue(port: chrome.runtime.Port, value: T) {
+    port.postMessage({ id: this._lastId, data: this.value });
   }
 }

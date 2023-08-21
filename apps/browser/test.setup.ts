@@ -23,6 +23,10 @@ const runtime = {
   },
   sendMessage: jest.fn(),
   getManifest: jest.fn(),
+  onConnect: {
+    addListener: jest.fn(),
+  },
+  connect: jest.fn(),
 };
 
 const contextMenus = {
@@ -36,3 +40,16 @@ global.chrome = {
   runtime,
   contextMenus,
 } as any;
+
+export function makePort(name: string): chrome.runtime.Port {
+  return {
+    name,
+    onDisconnect: {
+      addListener: jest.fn(),
+    },
+    onMessage: {
+      addListener: jest.fn(),
+    },
+    postMessage: jest.fn(),
+  } as any;
+}

@@ -2,6 +2,7 @@ import mock from "jest-mock-extended/lib/Mock";
 
 import { BitSubject } from "@bitwarden/common/platform/misc/bit-subject";
 
+import { makePort } from "../../../test.setup";
 import { BrowserApi } from "../browser/browser-api";
 
 import { ForegroundBitSubject } from "./foreground-bit-subject";
@@ -13,59 +14,63 @@ jest.mock("../browser/browser-api", () => {
 });
 
 describe("ForegroundBitSubject", () => {
-  let subject: ForegroundBitSubject<string>;
+  let sut: ForegroundBitSubject<string>;
+  const port = makePort("serviceObservableName_port");
 
   beforeEach(() => {
-    subject = new ForegroundBitSubject<string>("serviceObservableName", (json) => json);
+    (chrome.runtime.connect as jest.Mock).mockReturnValue(port);
+    sut = new ForegroundBitSubject<string>("serviceObservableName", (json) => json);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("it should set up a message listener", () => {
-    expect(BrowserApi.messageListener).toHaveBeenCalled(); // from beforeEach constructor
+  describe("constructor", () => {
+    it("should connect to the background", () => {
+      expect(chrome.runtime.connect).toHaveBeenCalledWith({ name: "serviceObservableName_port" });
+    });
+
+    it("should set up a message listener on the port", () => {
+      expect(port.onMessage.addListener).toHaveBeenCalled();
+    });
   });
 
-  it("should send a message when next is called", () => {
-    subject.next("test");
-    expect(BrowserApi.sendMessage).toHaveBeenCalled();
+  describe("next", () => {
+    it("should send a message to the background", () => {
+      sut.next("test");
+      expect(port.postMessage).toHaveBeenCalledWith({ expectedId: undefined, data: "test" });
+    });
+
+    it("should not next the subject", () => {
+      const subjectSpy = jest.spyOn(sut["_subject"], "next");
+      const superSpy = jest.spyOn(BitSubject.prototype, "next");
+      sut.next("test");
+      expect(subjectSpy).not.toHaveBeenCalled();
+      expect(superSpy).not.toHaveBeenCalled();
+    });
   });
 
-  it("should not emit when next is called", () => {
-    const subjectSpy = jest.spyOn(subject["_subject"], "next");
-    const superSpy = jest.spyOn(BitSubject.prototype, "next");
-    subject.next("test");
-    expect(subjectSpy).not.toHaveBeenCalled();
-    expect(superSpy).not.toHaveBeenCalled();
-  });
-
-  it("should call super.next when a message is received from background", () => {
-    const spy = jest.spyOn(BitSubject.prototype, "next");
-    const thisNextSpy = jest.spyOn(subject, "next");
-    (BrowserApi.messageListener as jest.Mock).mock.calls[0][1]({
-      command: subject["fromBackgroundMessageName"],
+  describe("onMessageFromBackground", () => {
+    let messageReceiveCallback: (message: { id: string; data: string }) => void;
+    const message = {
+      id: "expected",
       data: "test",
-    });
-    expect(spy).toHaveBeenCalled();
-    expect(thisNextSpy).not.toHaveBeenCalled();
-  });
+    };
 
-  it("should initialize from background", () => {
-    BrowserApi.sendMessage = jest.fn((message, data, callback) => {
-      callback("expected");
+    beforeEach(() => {
+      messageReceiveCallback = (port.onMessage.addListener as jest.Mock).mock.calls[0]?.[0];
     });
-    subject.init("not expected").then((s) => {
-      expect(s.value).toBe("expected");
-    });
-  });
 
-  it("should initialize from background with fallback value", () => {
-    BrowserApi.sendMessage = jest.fn((message, data, callback) => {
-      callback(undefined);
+    it("should store the id", () => {
+      messageReceiveCallback(message);
+      expect(sut["_lastId"]).toBe("expected");
     });
-    subject.init("expected").then((s) => {
-      expect(s.value).toBe("expected");
+
+    it("should next the subject", () => {
+      const subjectSpy = jest.spyOn(sut["_subject"], "next");
+      messageReceiveCallback(message);
+      expect(subjectSpy).toHaveBeenCalledWith("test");
     });
   });
 });

@@ -14,10 +14,4 @@ export class ForegroundFolderService extends FolderService {
     "folderService_folderViews",
     arrayInitialize(assignPrototype(FolderView))
   );
-
-  async init(): Promise<ForegroundFolderService> {
-    await this._folders.init([]);
-    await this._folderViews.init([]);
-    return this;
-  }
 }

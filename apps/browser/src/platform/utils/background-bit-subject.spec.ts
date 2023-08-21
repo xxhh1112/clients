@@ -2,6 +2,7 @@ import mock from "jest-mock-extended/lib/Mock";
 
 import { BitSubject } from "@bitwarden/common/platform/misc/bit-subject";
 
+import { makePort } from "../../../test.setup";
 import { BrowserApi } from "../browser/browser-api";
 
 import { BackgroundBitSubject } from "./background-bit-subject";
@@ -13,69 +14,124 @@ jest.mock("../browser/browser-api", () => {
 });
 
 describe("BackgroundBitSubject", () => {
+  let sut: BackgroundBitSubject<string>;
+  let port: chrome.runtime.Port;
+  let onConnectListener: (port: chrome.runtime.Port) => void;
+
+  beforeEach(() => {
+    sut = new BackgroundBitSubject<string>("serviceObservableName", (data) => data);
+    port = makePort("serviceObservableName_port");
+    onConnectListener = (chrome.runtime.onConnect.addListener as jest.Mock).mock.calls[0]?.[0];
+    onConnectListener(port); // connect a port
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("it should set up a message listeners", () => {
-    new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    expect(BrowserApi.messageListener).toHaveBeenCalledTimes(2);
-  });
-
-  it("should call next when a message is received from the foreground", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    const spy = jest.spyOn(subject, "next");
-    (BrowserApi.messageListener as jest.Mock).mock.calls[0][1]({
-      command: subject["fromForegroundMessageName"],
-      data: "test",
+  describe("constructor", () => {
+    it("should set up connection listener", () => {
+      const onConnect = (chrome.runtime.onConnect.addListener as jest.Mock).mock.calls[0]?.[0];
+      expect(onConnect).toBeDefined();
     });
-    expect(spy).toHaveBeenCalled();
   });
 
-  it("should return the current value when initialization is requested", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    subject.next("test");
-    (BrowserApi.messageListener as jest.Mock).mock.calls[1][1](
-      {
-        command: subject["requestInitMessageName"],
-      },
-      null,
-      (response: string) => {
-        expect(response).toBe("test");
-      }
-    );
+  describe("onConnectListener", () => {
+    let subscribeSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      subscribeSpy = jest.spyOn(sut["_subject"], "subscribe");
+    });
+
+    it("should ignore connections that are not for this service", () => {
+      jest.resetAllMocks(); // ignore calls from beforeEach
+      const port = makePort("notServiceObservableName_port");
+      onConnectListener(port);
+      expect(port.onDisconnect.addListener).not.toHaveBeenCalled();
+      expect(port.onMessage.addListener).not.toHaveBeenCalled();
+    });
+
+    it("should set up disconnect listener", () => {
+      onConnectListener(port);
+      expect(port.onDisconnect.addListener).toHaveBeenCalled();
+    });
+
+    it("should set up message listener", () => {
+      onConnectListener(port);
+      expect(port.onMessage.addListener).toHaveBeenCalled();
+    });
+
+    it("should subscribe the port to observable updates", () => {
+      onConnectListener(port);
+      expect(subscribeSpy).toHaveBeenCalled();
+    });
   });
 
-  it("should return undefined if initialization is requested before the value is set", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    (BrowserApi.messageListener as jest.Mock).mock.calls[1][1](
-      {
-        command: subject["requestInitMessageName"],
-      },
-      null,
-      (response: string) => {
-        expect(response).toBeUndefined();
-      }
-    );
+  describe("onDisconnectListener", () => {
+    let onDisconnectListener: (port: chrome.runtime.Port) => void;
+    let unsubscribeSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      unsubscribeSpy = jest.spyOn(sut["_portSubscriptions"].get(port), "unsubscribe");
+      onDisconnectListener = (port.onDisconnect.addListener as jest.Mock).mock.calls[0]?.[0];
+      onDisconnectListener(port);
+    });
+
+    it("should unsubscribe the port from observable updates", () => {
+      expect(unsubscribeSpy).toHaveBeenCalled();
+    });
+
+    it("should delete the port", () => {
+      expect(sut["_portSubscriptions"].get(port)).toBeUndefined();
+    });
   });
 
-  it("should send a message when next is called", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    subject.next("test");
-    expect(BrowserApi.sendMessage).toHaveBeenCalled();
+  describe("next", () => {
+    it("should set a new message id", () => {
+      sut.next("test");
+      expect(sut["_lastId"]).toBeDefined();
+    });
+
+    it("should next the backing subject", () => {
+      const spy = jest.spyOn(BitSubject.prototype, "next");
+      sut.next("test");
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should post the value to listening ports", () => {
+      sut.next("test");
+      expect(port.postMessage).toHaveBeenCalledWith({
+        id: sut["_lastId"],
+        data: "test",
+      });
+    });
   });
 
-  it("should call super.next when next is called", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    const spy = jest.spyOn(BitSubject.prototype, "next");
-    subject.next("test");
+  describe("onMessageFromForeground", () => {
+    let nextSpy: jest.SpyInstance;
+    let onMessageListener: (message: { expectedId: string; data: Required<string> }) => void;
 
-    expect(spy).toHaveBeenCalled();
-  });
+    beforeEach(() => {
+      sut["_lastId"] = "lastId";
+      nextSpy = jest.spyOn(sut, "next");
+      onMessageListener = (port.onMessage.addListener as jest.Mock).mock.calls[0]?.[0];
+    });
 
-  it("should send a message to the foreground when next is called", () => {
-    const subject = new BackgroundBitSubject<string>("serviceObservableName", (json) => json);
-    subject.next("test");
-    expect(BrowserApi.sendMessage).toHaveBeenCalled();
+    it("should ignore messages that are out of sync", () => {
+      onMessageListener({
+        expectedId: "notLastId",
+        data: "test",
+      });
+
+      expect(nextSpy).not.toHaveBeenCalled();
+    });
+
+    it("should call next with the message data", () => {
+      onMessageListener({
+        expectedId: sut["_lastId"],
+        data: "test",
+      });
+      expect(nextSpy).toHaveBeenCalledWith("test");
+    });
   });
 });
