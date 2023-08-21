@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "مورد برای همیشه حذف شد"
   },
-  "restoreItem": {
-    "message": "بازیابی مورد"
-  },
-  "restoreItemConfirmation": {
-    "message": "آیا مطمئن هستید که می‌خواهید این مورد را بازیابی کنید؟"
-  },
   "restoredItem": {
     "message": "مورد بازیابی شد"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "به‌روز رسانی تنظیمات توصیه شده"
   },
-  "region": {
-    "message": "منطقه"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
-  "eu": {
-    "message": "اروپا",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "امریکا",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "خود میزبان"

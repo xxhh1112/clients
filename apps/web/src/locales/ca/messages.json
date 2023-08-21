@@ -711,11 +711,17 @@
   "unexpectedError": {
     "message": "S'ha produït un error inesperat."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Adreça electrònica"
   },
   "yourVaultIsLocked": {
     "message": "La caixa forta està bloquejada. Verifiqueu la contrasenya mestra per continuar."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Desbloqueja"
@@ -947,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Copia el codi de verificació"
+  },
+  "copyUuid": {
+    "message": "Copy UUID"
   },
   "warning": {
     "message": "Advertiment"
@@ -1283,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Error en desxifrar el fitxer exportat. La vostra clau de xifratge no coincideix amb la clau de xifratge utilitzada per exportar les dades."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Seleccioneu el format del fitxer d'importació"
@@ -3590,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Aquest element té fitxers adjunts antics que s'han de corregir."
   },
-  "attachmentFixDesc": {
-    "message": "Es tracta d'un arxiu adjunt antic que cal corregir. Feu clic per obtenir més informació."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Corregeix",
@@ -3808,29 +3842,11 @@
   "restoreSelected": {
     "message": "Restaura selecció"
   },
-  "restoreItem": {
-    "message": "Restaura l'element"
-  },
   "restoredItem": {
     "message": "Element restaurat"
   },
   "restoredItems": {
     "message": "Elements restaurats"
-  },
-  "restoreItemConfirmation": {
-    "message": "Esteu segur que voleu restaurar aquest element?"
-  },
-  "restoreItems": {
-    "message": "Restaura elements"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Heu seleccionat $COUNT$ elements per restaurar. Esteu segur que voleu restaurar tots aquests elements?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Element $ID$ restaurat.",
@@ -4705,7 +4721,7 @@
     "message": "Error"
   },
   "accountRecoveryManageUsers": {
-    "message": "Manage users must also be granted with the manage account recovery permission"
+    "message": "L'administració d'usuaris també ha d'estar habilitada amb el permís de recuperació del compte de gestió"
   },
   "setupProvider": {
     "message": "Configuració del proveïdor"
@@ -4916,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Inhabilita l'exportació de la caixa forta personal"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Prohibeix als usuaris exportar les dades de la seua caixa forta privada."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "L'exportació de la caixa forta s'ha suprimit"
@@ -5420,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "S'està exportant la caixa forta de l’organització"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Només s'exportaran els elements personals de la caixa forta associats a $EMAIL$. Els elements de la caixa forta de l'organització no s'inclouran.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5429,8 +5445,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Només s'exportaran els elements personals de la caixa forta associats a $ORGANIZATION$. Els elements de la caixa forta personal no s'inclouran.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6802,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Exigeix que els membres existents canvien les seues contrasenyes"
   },
-  "region": {
-    "message": "Regió"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "UE",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "EUA",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "No teniu permisos per suprimir aquest projecte",
@@ -6825,7 +6836,7 @@
     "message": "Actualitza la configuració de KDF"
   },
   "trustedDevices": {
-    "message": "Trusted devices"
+    "message": "Dispositius de confiança"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Una vegada autenticats, els membres desxifraran les dades de la caixa forta mitjançant una clau emmagatzemada al seu dispositiu. La",
@@ -7023,15 +7034,20 @@
   "additionalServiceAccounts": {
     "message": "Comptes de serveis addicionals"
   },
-  "additionalServiceAccountsDesc": {
-    "message": "El vostre pla inclou $COUNT$ comptes de servei. Podeu afegir comptes de servei addicionals per $COST$ al mes.",
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      },
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
       "cost": {
-        "content": "$2",
+        "content": "$1",
         "example": "$0.50"
       }
     }
@@ -7059,5 +7075,27 @@
   },
   "maxServiceAccountCost": {
     "message": "Cost potencial màxim del compte de servei"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }

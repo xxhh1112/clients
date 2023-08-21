@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "項目已永久刪除"
   },
-  "restoreItem": {
-    "message": "還原項目"
-  },
-  "restoreItemConfirmation": {
-    "message": "您確定要恢復此項目嗎？"
-  },
   "restoredItem": {
     "message": "項目已還原"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Recommended Settings Update"
   },
-  "region": {
-    "message": "區域"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
-  "eu": {
-    "message": "歐洲 (EU)",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "美國 (US)",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "自建"

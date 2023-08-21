@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Ажурирај"
   },
+  "notificationUnlockDesc": {
+    "message": "Откључати Bitwarden сеф да би извршили ауто-пуњење."
+  },
+  "notificationUnlock": {
+    "message": "Откључај"
+  },
   "enableContextMenuItem": {
     "message": "Прикажи контекстни мени"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Врати ставку"
   },
-  "restoreItemConfirmation": {
-    "message": "Да ли сте сигурни да желите да вратите ову ставку?"
-  },
   "restoredItem": {
     "message": "Ставка враћена"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Регион"
+  "loggingInOn": {
+    "message": "Пријављено на"
   },
   "opensInANewWindow": {
     "message": "Отвара се у новом прозору"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Одбијен приступ. Немате дозволу да видите ову страницу."

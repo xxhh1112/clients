@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Элемент выдалены назаўсёды"
   },
-  "restoreItem": {
-    "message": "Аднавіць элемент"
-  },
-  "restoreItemConfirmation": {
-    "message": "Вы сапраўды хочаце аднавіць гэты элемент?"
-  },
   "restoredItem": {
     "message": "Элемент адноўлены"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Рэкамендаваныя налады абнаўлення"
   },
-  "region": {
-    "message": "Рэгіён"
+  "loggingInOn": {
+    "message": "Увайсці на"
   },
-  "eu": {
-    "message": "ЕС",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "ЗША",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Уласнае размяшчэнне"

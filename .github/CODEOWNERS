@@ -4,7 +4,7 @@
 
 # The following owners will be the default owners for everything in the repo.
 # Unless a later match takes precedence
-* @bitwarden/team-leads-eng
+* @bitwarden/tech-leads
 
 ## Secrets Manager team files ##
 bitwarden_license/bit-web/src/app/secrets-manager @bitwarden/team-secrets-manager-dev
@@ -74,6 +74,7 @@ apps/web/src/translation-constants.ts @bitwarden/team-platform-dev
 apps/browser/src/autofill @bitwarden/team-autofill-dev
 
 ## Component Library ##
+.storybook @bitwarden/team-platform-dev
 libs/components @bitwarden/team-platform-dev
 
 ## Desktop native module ##
@@ -95,7 +96,7 @@ apps/desktop/src/package.json
 
 package-lock.json
 
-## Locales ## 
+## Locales ##
 apps/browser/src/_locales/en/messages.json
 apps/cli/src/locales/en/messages.json
 apps/desktop/src/locales/en/messages.json

@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Da, posodobi zdaj"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "Prikaži možnosti kontekstnega menuja"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Obnovi element"
   },
-  "restoreItemConfirmation": {
-    "message": "Ste prepričani, da želite obnoviti ta element?"
-  },
   "restoredItem": {
     "message": "Element obnovljen"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
   "opensInANewWindow": {
     "message": "Odpre se v novem oknu"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
