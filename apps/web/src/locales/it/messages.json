@@ -711,11 +711,17 @@
   "unexpectedError": {
     "message": "Si è verificato un errore imprevisto."
   },
+  "expirationDateError": {
+    "message": "Seleziona una data di scadenza nel futuro."
+  },
   "emailAddress": {
     "message": "Indirizzo email"
   },
   "yourVaultIsLocked": {
     "message": "La tua cassaforte è bloccata. Verifica la tua password principale per continuare."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Sblocca"
@@ -869,7 +875,7 @@
     "message": "Usa qualsiasi chiave di sicurezza abilitata WebAuthn per accedere al tuo account."
   },
   "webAuthnMigrated": {
-    "message": "(Migrati da FIDO)"
+    "message": "(Trasferito da FIDO)"
   },
   "emailTitle": {
     "message": "Email"
@@ -947,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Copia codice di verifica"
+  },
+  "copyUuid": {
+    "message": "Copia UUID"
   },
   "warning": {
     "message": "Attenzione"
@@ -1283,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Errore durante la decriptografia del file esportato. La chiave di criptografia non corrisponde alla chiave di criptografia usata per esportare i dati."
+  },
+  "importDestination": {
+    "message": "Destinazione dell'importazione"
+  },
+  "learnAboutImportOptions": {
+    "message": "Ulteriori informazioni sulle tue opzioni di importazione"
+  },
+  "selectImportFolder": {
+    "message": "Seleziona una cartella"
+  },
+  "selectImportCollection": {
+    "message": "Seleziona una raccolta"
+  },
+  "importTargetHint": {
+    "message": "Seleziona questa opzione se vuoi che i contenuti del file di importazione siano spostati in una $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Il file contiene elementi non assegnati."
   },
   "selectFormat": {
     "message": "Seleziona il formato del file da importare"
@@ -3590,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Questo elemento ha vecchi file allegati che devono essere corretti."
   },
-  "attachmentFixDesc": {
-    "message": "Questo è un vecchio file allegato che deve essere corretto. Clicca per ulteriori informazioni."
+  "attachmentFixDescription": {
+    "message": "Questo allegato usa una criptografia obsoleta. Seleziona \"Correggi\" per scaricare, criptografare di nuovo, e caricare di nuovo l'allegato."
   },
   "fix": {
     "message": "Correggi",
@@ -3808,29 +3842,11 @@
   "restoreSelected": {
     "message": "Ripristina selezionati"
   },
-  "restoreItem": {
-    "message": "Ripristina elemento"
-  },
   "restoredItem": {
     "message": "Elemento ripristinato"
   },
   "restoredItems": {
     "message": "Elementi ripristinati"
-  },
-  "restoreItemConfirmation": {
-    "message": "Sei sicuro di voler ripristinare questo elemento?"
-  },
-  "restoreItems": {
-    "message": "Ripristina elementi"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Hai selezionato $COUNT$ elementi da ripristinare. Sei sicuro di voler ripristinare questi elementi?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "$ID$ ripristinato",
@@ -4600,7 +4616,7 @@
     "message": "Gli account esistenti con password principali richiederanno ai membri di registrarsi autonomamente prima che gli amministratori possano recuperare i loro account. L'iscrizione automatica attiverà il recupero dell'account per i nuovi membri."
   },
   "accountRecoverySingleOrgRequirementDesc": {
-    "message": "La politica aziendale per l'organizzazione unica deve essere attivata prima di attivare questo politica."
+    "message": "La politica aziendale per l'organizzazione unica deve essere attivata prima di attivare questa politica."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Iscrizione automatica"
@@ -4705,7 +4721,7 @@
     "message": "Errore"
   },
   "accountRecoveryManageUsers": {
-    "message": "Manage users must also be granted with the manage account recovery permission"
+    "message": "Gestisci utenti deve essere abilitato con il permesso di gestire il ripristino delle password"
   },
   "setupProvider": {
     "message": "Configurazione del fornitore"
@@ -4916,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Rimuovi esportazione cassaforte individuale"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Non consentire ai membri di esportare la loro cassaforte individuale."
+  "disablePersonalVaultExportDescription": {
+    "message": "Non consentire ai membri di esportare i dati dalla loro cassaforte individuale."
   },
   "vaultExportDisabled": {
     "message": "Esportazione cassaforte rimossa"
@@ -5420,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Esportando cassaforte dell'organizzazione"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Solo gli elementi della cassaforte personale associati a $EMAIL$ saranno esportati. Gli elementi della cassaforte dell'organizzazione non saranno inclusi. Solo le informazioni sugli elementi della cassaforte saranno esportate e non includeranno la cronologia delle password o gli allegati.",
+  "exportingIndividualVaultDescription": {
+    "message": "Solo gli elementi della cassaforte personale associati a $EMAIL$ saranno esportati. Gli elementi della cassaforte dell'organizzazione non saranno inclusi. Solo le informazioni sugli elementi della cassaforte saranno esportate e non includeranno gli allegati.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5429,7 +5445,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Solo la cassaforte dell'organizzazione associata a $ORGANIZATION$ sarà esportata. Elementi nelle casseforti individuali o in altre organizzazioni non saranno inclusi.",
     "placeholders": {
       "organization": {
@@ -6802,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Obbliga i membri esistenti a cambiare le loro password"
   },
-  "region": {
-    "message": "Regione"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "UE",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Non hai l'autorizzazione per eliminare questo progetto",
@@ -6976,7 +6987,7 @@
     }
   },
   "secretsManagerForPlanDesc": {
-    "message": "Per i team di ingegneria e DevOps per gestire i segreti durante l'intero ciclo di vita dello sviluppo del software."
+    "message": "Per gestire i segreti dei team di software engineering e DevOps durante l'intero ciclo di sviluppo del software."
   },
   "free2PersonOrganization": {
     "message": "Organizzazioni gratis per 2 persone"
@@ -7023,15 +7034,20 @@
   "additionalServiceAccounts": {
     "message": "Account di servizio aggiuntivi"
   },
-  "additionalServiceAccountsDesc": {
-    "message": "Il tuo piano include $COUNT$ account di servizio. Puoi aggiungere più account di servizio a $COST$ al mese.",
+  "includedServiceAccounts": {
+    "message": "Il tuo piano include $COUNT$ account di servizio.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      },
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Puoi aggiungere più account di servizio a $COST$ al mese.",
+    "placeholders": {
       "cost": {
-        "content": "$2",
+        "content": "$1",
         "example": "$0.50"
       }
     }
@@ -7059,5 +7075,27 @@
   },
   "maxServiceAccountCost": {
     "message": "Costo massimo potenziale dell'account di servizio"
+  },
+  "smBetaEndedDesc": {
+    "message": "La beta del Gestore dei Segreti è terminata in $BETA_ENDING_DATE$. Ti rimangono $DAYS$ giorni per aggiungere il Gestore dei Segreti al tuo abbonamento a pagamento e mantenere l'accesso ai dati del Gestore dei Segreti. Contatta il Successo del Cliente per aggiungere il Gestore dei Segreti al tuo abbonamento.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Termine della beta"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Hai già un account?"
   }
 }

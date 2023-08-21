@@ -62,6 +62,8 @@ export default class RuntimeBackground {
   }
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
+    const cipherId = msg.data?.cipherId;
+
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -69,7 +71,7 @@ export default class RuntimeBackground {
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
           item = this.lockedVaultPendingNotifications.pop();
-          await this.browserPopoutWindowService.closeLoginPrompt();
+          await this.browserPopoutWindowService.closeUnlockPrompt();
         }
 
         await this.main.refreshBadge();
@@ -109,12 +111,21 @@ export default class RuntimeBackground {
         break;
       case "promptForLogin":
       case "bgReopenPromptForLogin":
-        await this.browserPopoutWindowService.openLoginPrompt(sender.tab?.windowId);
+        await this.browserPopoutWindowService.openUnlockPrompt(sender.tab?.windowId);
+        break;
+      case "passwordReprompt":
+        if (cipherId) {
+          await this.browserPopoutWindowService.openPasswordRepromptPrompt(sender.tab?.windowId, {
+            cipherId: cipherId,
+            senderTabId: sender.tab.id,
+            action: msg.data?.action,
+          });
+        }
         break;
       case "openAddEditCipher":
         await this.browserPopoutWindowService.openAddEditCipherWindow(
           sender.tab.windowId,
-          msg.data.cipherId
+          cipherId
         );
         break;
       case "closeAddEditCipher":

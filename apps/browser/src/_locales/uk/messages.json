@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Оновити"
   },
+  "notificationUnlockDesc": {
+    "message": "Розблокуйте своє сховище Bitwarden, щоб завершити запит автозаповнення."
+  },
+  "notificationUnlock": {
+    "message": "Розблокувати"
+  },
   "enableContextMenuItem": {
     "message": "Показувати в контекстному меню"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Відновити запис"
   },
-  "restoreItemConfirmation": {
-    "message": "Ви дійсно хочете відновити цей запис?"
-  },
   "restoredItem": {
     "message": "Запис відновлено"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Регіон"
+  "loggingInOn": {
+    "message": "Увійти на"
   },
   "opensInANewWindow": {
     "message": "Відкривається у новому вікні"
   },
-  "eu": {
-    "message": "ЄС",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "США",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Доступ заборонено. У вас немає дозволу на перегляд цієї сторінки."

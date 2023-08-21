@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Položka natrvalo odstránená"
   },
-  "restoreItem": {
-    "message": "Obnoviť položku"
-  },
-  "restoreItemConfirmation": {
-    "message": "Naozaj chcete obnoviť túto položku?"
-  },
   "restoredItem": {
     "message": "Obnovená položka"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Odporúčaná aktualizácia nastavenia"
   },
-  "region": {
-    "message": "Región"
+  "loggingInOn": {
+    "message": "Prihlásenie na"
   },
-  "eu": {
-    "message": "EÚ",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "USA",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Vlastný hosting"

@@ -711,11 +711,17 @@
   "unexpectedError": {
     "message": "Vyskytla sa neočakávaná chyba."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Emailová adresa"
   },
   "yourVaultIsLocked": {
     "message": "Váš trezor je uzamknutý. Overte sa hlavným heslom ak chcete pokračovať."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Odomknúť"
@@ -947,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Kopírovať overovací kód"
+  },
+  "copyUuid": {
+    "message": "Copy UUID"
   },
   "warning": {
     "message": "Upozornenie"
@@ -1283,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Chyba pri dešifrovaní exportovaného súboru. Váš šifrovací kľúč sa nezhoduje so šifrovacím kľúčom použitým pri exporte údajov."
+  },
+  "importDestination": {
+    "message": "Cieľ importu"
+  },
+  "learnAboutImportOptions": {
+    "message": "Zistiť viac o možnostiach importu"
+  },
+  "selectImportFolder": {
+    "message": "Vyberte priečinok"
+  },
+  "selectImportCollection": {
+    "message": "Vyberte zbierku"
+  },
+  "importTargetHint": {
+    "message": "Zvoľte túto možnosť ak chcete obsah importovaného súboru presunúť do $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Súbor obsahuje nepridelené položky."
   },
   "selectFormat": {
     "message": "Vyberte formát súboru importu"
@@ -3590,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Táto položka má staré prílohy, ktoré je potrebné opraviť."
   },
-  "attachmentFixDesc": {
-    "message": "Táto stará príloha musí byť opravená. Kliknite ak sa chcete dozvedieť viac."
+  "attachmentFixDescription": {
+    "message": "Táto príloha používa zastaralý systém šifrovania. Zvoľte „Opraviť“ pre stiahnutie, opätovné zašifrovanie a nahranie prílohy."
   },
   "fix": {
     "message": "Opraviť",
@@ -3808,29 +3842,11 @@
   "restoreSelected": {
     "message": "Obnoviť zvolené"
   },
-  "restoreItem": {
-    "message": "Obnoviť položku"
-  },
   "restoredItem": {
     "message": "Obnovená položka"
   },
   "restoredItems": {
     "message": "Obnovené položky"
-  },
-  "restoreItemConfirmation": {
-    "message": "Naozaj chcete obnoviť tieto položky?"
-  },
-  "restoreItems": {
-    "message": "Obnoviť položky"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Vybrali ste $COUNT$ položiek na obnovenie. Ste si istý, že chcete obnoviť všetky tieto položky?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Položka $ID$ obnovená.",
@@ -4916,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Zakázať export osobného trezora"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Zakazuje používateľom exportovať údaje zo súkromného trezora."
+  "disablePersonalVaultExportDescription": {
+    "message": "Zakázať používateľom exportovať údaje zo súkromného trezora."
   },
   "vaultExportDisabled": {
     "message": "Export trezoru je zakázaný"
@@ -5420,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Exportovanie trezora organizácie"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Exportované budú iba položy osobného trezora spojené s $EMAIL$. Položky trezora organizácie nebudú zahrnuté.",
+  "exportingIndividualVaultDescription": {
+    "message": "Exportované budú iba položky súvisiace s $EMAIL$. Položky z trezora organizácie nebudú zahrnuté v exporte. Export bude obsahovať iba informácie z položiek v trezore, súvisiace prílohy nebudú súčasťou exportu.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5429,7 +5445,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Exportované budú iba položky trezora organizácie spojené s $ORGANIZATION$. Položky osobného trezora a položky z iných organizácií nebudú zahrnuté.",
     "placeholders": {
       "organization": {
@@ -6802,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Požadovať po súčasných členoch, aby si zmenili heslo"
   },
-  "region": {
-    "message": "Region"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Na odstránenie tohto projektu nemáte oprávnenia",
@@ -7023,15 +7034,20 @@
   "additionalServiceAccounts": {
     "message": "Dodatočné služobné kontá"
   },
-  "additionalServiceAccountsDesc": {
-    "message": "Váš plán zahŕňa $COUNT$ služobných kont. Ďalšie služobné kontá môžete pridať za $COST$ mesačne.",
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      },
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
       "cost": {
-        "content": "$2",
+        "content": "$1",
         "example": "$0.50"
       }
     }
@@ -7059,5 +7075,27 @@
   },
   "maxServiceAccountCost": {
     "message": "Maximálna možná cena služobných kont"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Už máte účet?"
   }
 }
