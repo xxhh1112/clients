@@ -30,6 +30,7 @@ import {
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
@@ -65,6 +66,7 @@ import {
   CollectionDialogTabType,
   openCollectionDialog,
 } from "../components/collection-dialog";
+import { VaultItem } from "../components/vault-items/vault-item";
 import { VaultItemEvent } from "../components/vault-items/vault-item-event";
 import { getNestedCollectionTree } from "../utils/collection-utils";
 
@@ -176,7 +178,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private eventCollectionService: EventCollectionService,
     private searchService: SearchService,
     private searchPipe: SearchPipe,
-    private configService: ConfigServiceAbstraction
+    private configService: ConfigServiceAbstraction,
+    private apiService: ApiService
   ) {}
 
   async ngOnInit() {
@@ -439,12 +442,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           await this.bulkRestore(event.items);
         }
       } else if (event.type === "delete") {
-        const ciphers = event.items.filter((i) => i.collection === undefined).map((i) => i.cipher);
-        if (ciphers.length === 1) {
-          await this.deleteCipher(ciphers[0]);
-        } else {
-          await this.bulkDelete(ciphers);
-        }
+        await this.handleDeleteEvent(event.items);
       } else if (event.type === "moveToFolder") {
         await this.bulkMove(event.items);
       } else if (event.type === "moveToOrganization") {
@@ -706,6 +704,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
     try {
+      await this.apiService.deleteCollection(collection.organizationId, collection.id);
       await this.collectionService.delete(collection.id);
       this.platformUtilsService.showToast(
         "success",
@@ -769,6 +768,26 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.refresh();
   }
 
+  private async handleDeleteEvent(items: VaultItem[]) {
+    const ciphers = items.filter((i) => i.collection === undefined).map((i) => i.cipher);
+    const collections = items.filter((i) => i.cipher === undefined).map((i) => i.collection);
+    if (ciphers.length === 1 && collections.length === 0) {
+      await this.deleteCipher(ciphers[0]);
+    } else if (ciphers.length === 0 && collections.length === 1) {
+      await this.deleteCollection(collections[0]);
+    } else {
+      const orgIds = items
+        .filter((i) => i.cipher === undefined)
+        .map((i) => i.collection.organizationId);
+      const orgs = await firstValueFrom(
+        this.organizationService.organizations$.pipe(
+          map((orgs) => orgs.filter((o) => orgIds.includes(o.id)))
+        )
+      );
+      await this.bulkDelete(ciphers, collections, orgs);
+    }
+  }
+
   async deleteCipher(c: CipherView): Promise<boolean> {
     if (!(await this.repromptCipher([c]))) {
       return;
@@ -799,13 +818,16 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
   }
 
-  async bulkDelete(ciphers: CipherView[]) {
+  async bulkDelete(
+    ciphers: CipherView[],
+    collections: CollectionView[],
+    organizations: Organization[]
+  ) {
     if (!(await this.repromptCipher(ciphers))) {
       return;
     }
 
-    const selectedIds = ciphers.map((cipher) => cipher.id);
-    if (selectedIds.length === 0) {
+    if (ciphers.length === 0 && collections.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -814,7 +836,13 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
     const dialog = openBulkDeleteDialog(this.dialogService, {
-      data: { permanent: this.filter.type === "trash", cipherIds: selectedIds },
+      data: {
+        permanent: this.filter.type === "trash",
+        cipherIds: ciphers.map((c) => c.id),
+        collectionIds: collections.map((c) => c.id),
+        organizations: organizations,
+        collections: collections,
+      },
     });
 
     const result = await lastValueFrom(dialog.closed);

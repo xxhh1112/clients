@@ -79,6 +79,12 @@ export class VaultItemsComponent {
     return this.dataSource.data.length === 0;
   }
 
+  get bulkMoveAllowed() {
+    return (
+      this.showBulkMove && this.selection.selected.filter((item) => item.collection).length === 0
+    );
+  }
+
   protected canEditCollection(collection: CollectionView): boolean {
     // Only allow allow deletion if collection editing is enabled and not deleting "Unassigned"
     if (collection.id === Unassigned) {
