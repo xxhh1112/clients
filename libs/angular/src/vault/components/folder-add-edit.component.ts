@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Validators, FormBuilder } from "@angular/forms";
+import { firstValueFrom } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -99,8 +100,9 @@ export class FolderAddEditComponent implements OnInit {
     if (this.editMode) {
       this.editMode = true;
       this.title = this.i18nService.t("editFolder");
-      const folder = await this.folderService.get(this.folderId);
-      this.folder = await folder.decrypt();
+      this.folder = await firstValueFrom(this.folderService.folderViews$).then((views) =>
+        views.find((v) => v.id === this.folderId)
+      );
     } else {
       this.title = this.i18nService.t("addFolder");
     }
