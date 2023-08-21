@@ -1,17 +1,13 @@
-import { A11yModule } from "@angular/cdk/a11y";
-import { OverlayModule } from "@angular/cdk/overlay";
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { PopoverTriggerForDirective } from "./popover-trigger-for.directive";
-import { PopoverComponent } from "./popover.component";
+import { PopoverModule } from "./popover.module";
 
 export default {
   title: "Component Library/Popover",
-  component: PopoverTriggerForDirective,
   decorators: [
     moduleMetadata({
-      imports: [A11yModule, OverlayModule, PopoverComponent],
-      declarations: [PopoverTriggerForDirective],
+      imports: [PopoverModule],
     }),
   ],
   parameters: {

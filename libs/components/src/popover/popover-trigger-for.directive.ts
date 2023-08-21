@@ -16,6 +16,7 @@ import { PopoverComponent } from "./popover.component";
 
 @Directive({
   selector: "[bitPopoverTriggerFor]",
+  standalone: true,
 })
 export class PopoverTriggerForDirective implements OnDestroy {
   @HostBinding("attr.aria-expanded")
