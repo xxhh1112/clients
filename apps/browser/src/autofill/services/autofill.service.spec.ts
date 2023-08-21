@@ -685,15 +685,23 @@ describe("AutofillService", function () {
         expect(result).toBe(totpCode);
       });
 
-      // TODO: CG - Need to fix this test before merging in autofill v2
-      it.skip("will skip autofill and return a null value if the cipher re-prompt type is not `None`", async function () {
+      it("will skip autofill, launch the password reprompt window, and return a null value if the cipher re-prompt type is not `None`", async function () {
         cipher.reprompt = CipherRepromptType.Password;
         jest.spyOn(autofillService, "doAutoFill");
         jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(cipher);
+        jest
+          .spyOn(userVerificationService, "hasMasterPasswordAndMasterKeyHash")
+          .mockResolvedValueOnce(true);
+        jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
 
         const result = await autofillService.doAutoFillOnTab(pageDetails, tab, true);
 
         expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
+        expect(userVerificationService.hasMasterPasswordAndMasterKeyHash).toHaveBeenCalled();
+        expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(tab, "passwordReprompt", {
+          cipherId: cipher.id,
+          action: "autofill",
+        });
         expect(autofillService.doAutoFill).not.toHaveBeenCalled();
         expect(result).toBeNull();
       });
