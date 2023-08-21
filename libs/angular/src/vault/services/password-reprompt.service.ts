@@ -17,7 +17,7 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
 
   constructor(
     private keyConnectorService: KeyConnectorService,
-    protected dialogService: DialogService
+    private dialogService: DialogService
   ) {}
 
   protectedFields() {
