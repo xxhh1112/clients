@@ -6,7 +6,6 @@ import { concat, Observable, Subject, lastValueFrom, combineLatest } from "rxjs"
 import { map, takeUntil } from "rxjs/operators";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import {
   canAccessImportExport,
@@ -24,6 +23,7 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+import { DialogService } from "@bitwarden/components";
 import {
   ImportOption,
   ImportResult,
@@ -75,7 +75,7 @@ export class ImportComponent implements OnInit, OnDestroy {
     private logService: LogService,
     protected modalService: ModalService,
     protected syncService: SyncService,
-    protected dialogService: DialogServiceAbstraction,
+    protected dialogService: DialogService,
     protected folderService: FolderService,
     protected collectionService: CollectionService,
     protected organizationService: OrganizationService,
@@ -326,7 +326,15 @@ export class ImportComponent implements OnInit, OnDestroy {
 
   private getFileContents(file: File): Promise<string> {
     if (this.format === "1password1pux") {
-      return this.extract1PuxContent(file);
+      return this.extractZipContent(file, "export.data");
+    }
+    if (
+      this.format === "protonpass" &&
+      (file.type === "application/zip" ||
+        file.type == "application/x-zip-compressed" ||
+        file.name.endsWith(".zip"))
+    ) {
+      return this.extractZipContent(file, "Proton Pass/data.json");
     }
 
     return new Promise((resolve, reject) => {
@@ -353,11 +361,11 @@ export class ImportComponent implements OnInit, OnDestroy {
     });
   }
 
-  private extract1PuxContent(file: File): Promise<string> {
+  private extractZipContent(zipFile: File, contentFilePath: string): Promise<string> {
     return new JSZip()
-      .loadAsync(file)
+      .loadAsync(zipFile)
       .then((zip) => {
-        return zip.file("export.data").async("string");
+        return zip.file(contentFilePath).async("string");
       })
       .then(
         function success(content) {

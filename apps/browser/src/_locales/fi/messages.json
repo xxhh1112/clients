@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Päivitä"
   },
+  "notificationUnlockDesc": {
+    "message": "Viimeistele automaattitäytön pyyntö avaamalla Bitwarden-holvisi lukitus."
+  },
+  "notificationUnlock": {
+    "message": "Avaa"
+  },
   "enableContextMenuItem": {
     "message": "Näytä sisältövalikon valinnat"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Palauta kohde"
   },
-  "restoreItemConfirmation": {
-    "message": "Haluatko varmasti palauttaa kohteen?"
-  },
   "restoredItem": {
     "message": "Kohde palautettiin"
   },
@@ -2221,19 +2224,17 @@
       }
     }
   },
-  "region": {
-    "message": "Alue"
+  "loggingInOn": {
+    "message": "Kirjaudutaan sijaintiin"
   },
   "opensInANewWindow": {
     "message": "Avautuu uudessa ikkunassa"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Pääsy estetty. Sinulla ei ole oikeutta avata sivua."
