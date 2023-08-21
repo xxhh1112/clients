@@ -34,53 +34,6 @@ if (document.readyState === "loading") {
 }
 
 async function loadNotificationBar() {
-  // These are preferences for whether to show the notification bar based on the user's settings
-  // and they are set in the Settings > Options page in the browser extension.
-  let disabledAddLoginNotification = false;
-  let disabledChangedPasswordNotification = false;
-  let showNotificationBar = true;
-
-  // Look up the active user id from storage
-  const activeUserIdKey = "activeUserId";
-  let activeUserId: string;
-
-  const activeUserStorageValue = await getFromLocalStorage(activeUserIdKey);
-  if (activeUserStorageValue[activeUserIdKey]) {
-    activeUserId = activeUserStorageValue[activeUserIdKey];
-  }
-
-  // Look up the user's settings from storage
-  const userSettingsStorageValue = await getFromLocalStorage(activeUserId);
-  if (userSettingsStorageValue[activeUserId]) {
-    const userSettings: UserSettings = userSettingsStorageValue[activeUserId].settings;
-
-    // Do not show the notification bar on the Bitwarden vault
-    // because they can add logins and change passwords there
-    if (window.location.origin === userSettings.serverConfig.environment.vault) {
-      showNotificationBar = false;
-    } else {
-      // NeverDomains is a dictionary of domains that the user has chosen to never
-      // show the notification bar on (for login detail collection or password change).
-      // It is managed in the Settings > Excluded Domains page in the browser extension.
-      // Example: '{"bitwarden.com":null}'
-      const excludedDomainsDict = userSettings.neverDomains;
-      if (!(window.location.hostname in excludedDomainsDict)) {
-        // Set local disabled preferences
-        disabledAddLoginNotification = userSettings.disableAddLoginNotification;
-        disabledChangedPasswordNotification = userSettings.disableChangedPasswordNotification;
-
-        if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
-          // If the user has not disabled both notifications, then handle the initial page change (null -> actual page)
-          handlePageChange();
-        }
-      }
-    }
-  }
-
-  if (!showNotificationBar) {
-    return;
-  }
-
   // Initialize required variables and set default values
   const watchedForms: WatchedForm[] = [];
   let barType: string = null;
@@ -124,6 +77,53 @@ async function loadNotificationBar() {
     "save",
   ]);
   const changePasswordButtonContainsNames = new Set(["pass", "change", "contras", "senha"]);
+
+  // These are preferences for whether to show the notification bar based on the user's settings
+  // and they are set in the Settings > Options page in the browser extension.
+  let disabledAddLoginNotification = false;
+  let disabledChangedPasswordNotification = false;
+  let showNotificationBar = true;
+
+  // Look up the active user id from storage
+  const activeUserIdKey = "activeUserId";
+  let activeUserId: string;
+
+  const activeUserStorageValue = await getFromLocalStorage(activeUserIdKey);
+  if (activeUserStorageValue[activeUserIdKey]) {
+    activeUserId = activeUserStorageValue[activeUserIdKey];
+  }
+
+  // Look up the user's settings from storage
+  const userSettingsStorageValue = await getFromLocalStorage(activeUserId);
+  if (userSettingsStorageValue[activeUserId]) {
+    const userSettings: UserSettings = userSettingsStorageValue[activeUserId].settings;
+
+    // Do not show the notification bar on the Bitwarden vault
+    // because they can add logins and change passwords there
+    if (window.location.origin === userSettings.serverConfig.environment.vault) {
+      showNotificationBar = false;
+    } else {
+      // NeverDomains is a dictionary of domains that the user has chosen to never
+      // show the notification bar on (for login detail collection or password change).
+      // It is managed in the Settings > Excluded Domains page in the browser extension.
+      // Example: '{"bitwarden.com":null}'
+      const excludedDomainsDict = userSettings.neverDomains;
+      if (!excludedDomainsDict || !(window.location.hostname in excludedDomainsDict)) {
+        // Set local disabled preferences
+        disabledAddLoginNotification = userSettings.disableAddLoginNotification;
+        disabledChangedPasswordNotification = userSettings.disableChangedPasswordNotification;
+
+        if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
+          // If the user has not disabled both notifications, then handle the initial page change (null -> actual page)
+          handlePageChange();
+        }
+      }
+    }
+  }
+
+  if (!showNotificationBar) {
+    return;
+  }
 
   // Message Processing
 
