@@ -27,6 +27,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private overlayElementsMutationObserver: MutationObserver;
+  private bodyElementMutationObserver: MutationObserver;
   private mutationObserverIterations = 0;
   private mutationObserverIterationsResetTimeout: NodeJS.Timeout;
   private autofillFieldKeywordsMap: WeakMap<AutofillField, string> = new WeakMap();
@@ -39,7 +40,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
-    this.initMutationObserver();
+    this.initMutationObservers();
   }
 
   setupOverlayIconListenerOnField(
@@ -81,6 +82,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   removeAutofillOverlay = () => {
+    this.unobserveBodyElement();
     this.removeAutofillOverlayIcon();
     this.removeAutofillOverlayList();
   };
@@ -279,7 +281,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (!this.isOverlayIconVisible) {
-      globalThis.document.body.appendChild(this.overlayIconElement);
+      this.appendOverlayElementToBody(this.overlayIconElement);
       this.isOverlayIconVisible = true;
       this.setOverlayRepositionEventListeners();
     }
@@ -296,11 +298,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (!this.isOverlayListVisible) {
-      globalThis.document.body.appendChild(this.overlayListElement);
+      this.appendOverlayElementToBody(this.overlayListElement);
       this.isOverlayListVisible = true;
     }
 
     sendExtensionMessage("bgUpdateAutofillOverlayListPosition");
+  }
+
+  private appendOverlayElementToBody(element: HTMLElement) {
+    this.observerBodyElement();
+    globalThis.document.body.appendChild(element);
   }
 
   private toggleOverlayHidden(isHidden: boolean) {
@@ -424,24 +431,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     setElementStyles(element, this.customElementDefaultStyles, "important");
 
-    this.observeCustomElement(this.overlayIconElement);
-    this.observeCustomElement(this.overlayListElement);
-  }
-
-  private observeCustomElement(element: HTMLElement) {
-    if (!element) {
-      return;
-    }
-
-    this.overlayElementsMutationObserver?.observe(element, { attributes: true });
-  }
-
-  private unobserveCustomElements() {
-    this.overlayElementsMutationObserver?.disconnect();
-  }
-
-  private convertToKebabCase(stringValue: string): string {
-    return stringValue.replace(/([a-z])([A-Z])/g, "$1-$2");
+    this.observeCustomElements();
   }
 
   private setOverlayRepositionEventListeners() {
@@ -485,7 +475,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  private initMutationObserver = () => {
+  private initMutationObservers = () => {
     if (globalThis.document.readyState === "loading") {
       globalThis.document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
       return;
@@ -495,8 +485,13 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private setupMutationObserver = () => {
-    const bodyMutationObserver = new MutationObserver(this.handleBodyElementMutationObserverUpdate);
-    bodyMutationObserver.observe(globalThis.document.body, { childList: true });
+    this.overlayElementsMutationObserver = new MutationObserver(
+      this.handleOverlayElementMutationObserverUpdate
+    );
+
+    this.bodyElementMutationObserver = new MutationObserver(
+      this.handleBodyElementMutationObserverUpdate
+    );
 
     const documentElementMutationObserver = new MutationObserver(
       this.handleDocumentElementMutationObserverUpdate
@@ -504,13 +499,35 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     documentElementMutationObserver.observe(globalThis.document.documentElement, {
       childList: true,
     });
-
-    this.overlayElementsMutationObserver = new MutationObserver(
-      this.handleOverlayElementMutationObserverUpdate
-    );
   };
 
+  private observeCustomElements() {
+    if (this.overlayIconElement) {
+      this.overlayElementsMutationObserver?.observe(this.overlayIconElement, { attributes: true });
+    }
+
+    if (this.overlayListElement) {
+      this.overlayElementsMutationObserver?.observe(this.overlayListElement, { attributes: true });
+    }
+  }
+
+  private unobserveCustomElements() {
+    this.overlayElementsMutationObserver?.disconnect();
+  }
+
+  private observerBodyElement() {
+    this.bodyElementMutationObserver?.observe(globalThis.document.body, { childList: true });
+  }
+
+  private unobserveBodyElement() {
+    this.bodyElementMutationObserver?.disconnect();
+  }
+
   private handleOverlayElementMutationObserverUpdate = (mutationRecord: MutationRecord[]) => {
+    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+      return;
+    }
+
     mutationRecord.forEach((record) => {
       if (record.type !== "attributes") {
         return;
@@ -541,25 +558,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     //
     // WARNING: It's really easy to trigger a infinite loop with this observer. Keep that in mind while updating this implementation.
 
-    if (this.mutationObserverIterationsResetTimeout) {
-      clearTimeout(this.mutationObserverIterationsResetTimeout);
-    }
-
-    if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
-      return;
-    }
-
-    this.mutationObserverIterations++;
-    this.mutationObserverIterationsResetTimeout = setTimeout(
-      () => (this.mutationObserverIterations = 0),
-      2000
-    );
-
-    if (this.mutationObserverIterations > 50) {
-      clearTimeout(this.mutationObserverIterationsResetTimeout);
-      this.mutationObserverIterations = 0;
-      this.mostRecentlyFocusedField.blur();
-      this.removeAutofillOverlay();
+    if (this.isTriggeringExcessiveMutationObserverIterations()) {
       return;
     }
 
@@ -579,6 +578,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     // TODO - Think about this decision. This is a heavy handed approach to solve the question of "What if someone attempts to overlay our element using an element within the `<html>` tag?"
     // There might be better ways to handle this, and given that we are directly modifying the DOM for a third party website, this isn't entirely desirable to do.
 
+    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+      return;
+    }
+
     const ignoredElements = new Set([globalThis.document.body, globalThis.document.head]);
     for (const record of mutationRecords) {
       if (record.type !== "childList" || record.addedNodes.length === 0) {
@@ -594,6 +597,29 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       }
     }
   };
+
+  private isTriggeringExcessiveMutationObserverIterations() {
+    if (this.mutationObserverIterationsResetTimeout) {
+      clearTimeout(this.mutationObserverIterationsResetTimeout);
+    }
+
+    this.mutationObserverIterations++;
+    this.mutationObserverIterationsResetTimeout = setTimeout(
+      () => (this.mutationObserverIterations = 0),
+      2000
+    );
+
+    if (this.mutationObserverIterations > 100) {
+      clearTimeout(this.mutationObserverIterationsResetTimeout);
+      this.mutationObserverIterations = 0;
+      this.mostRecentlyFocusedField?.blur();
+      this.removeAutofillOverlay();
+
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export default AutofillOverlayContentService;
