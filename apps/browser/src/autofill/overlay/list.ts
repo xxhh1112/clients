@@ -4,7 +4,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import { OverlayListWindowMessageHandlers } from "./abstractions/list";
 import { AutofillOverlayCustomElement } from "./utils/autofill-overlay.enum";
-import { globeIcon, lockIcon, plusIcon } from "./utils/svg-icons";
+import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "./utils/svg-icons";
 import { buildSvgDomElement } from "./utils/utils";
 
 require("./list.scss");
@@ -13,9 +13,8 @@ class AutofillOverlayList extends HTMLElement {
   private authStatus: AuthenticationStatus;
   private shadowDom: ShadowRoot;
   private overlayListContainer: HTMLDivElement;
-  private globeIconElement: HTMLElement;
-  private plusIconElement: HTMLElement;
-  private lockIconElement: HTMLElement;
+  private readonly plusIconElement: HTMLElement;
+  private readonly lockIconElement: HTMLElement;
   private styleSheetUrl: string;
   private messageOrigin: string;
   private resizeObserver: ResizeObserver;
@@ -29,7 +28,6 @@ class AutofillOverlayList extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
-    this.globeIconElement = buildSvgDomElement(globeIcon);
     this.plusIconElement = buildSvgDomElement(plusIcon);
     this.lockIconElement = buildSvgDomElement(lockIcon);
     this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
@@ -115,22 +113,46 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherListItemElement(cipher: any) {
-    const cipherDetailsElement = this.buildCipherDetailsElement(cipher);
-    const cipherIcon = this.buildCipherIconElement(cipher);
-    const handleCipherClickEvent = () =>
-      this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
+    const fillCipherElement = this.buildFillCipherElement(cipher);
+    const viewCipherElement = this.buildViewCipherElement(cipher);
 
     const cipherListItemElement = globalThis.document.createElement("li");
     cipherListItemElement.className = "cipher";
-    cipherListItemElement.addEventListener("click", handleCipherClickEvent);
-    cipherListItemElement.appendChild(cipherIcon);
-    cipherListItemElement.appendChild(cipherDetailsElement);
+    cipherListItemElement.appendChild(fillCipherElement);
+    cipherListItemElement.appendChild(viewCipherElement);
 
     return cipherListItemElement;
   }
 
+  private buildFillCipherElement(cipher: any) {
+    const handleFillCipherClick = () =>
+      this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
+    const cipherIcon = this.buildCipherIconElement(cipher);
+    const cipherDetailsElement = this.buildCipherDetailsElement(cipher);
+
+    const fillCipherElement = globalThis.document.createElement("button");
+    fillCipherElement.className = "fill-cipher-button";
+    fillCipherElement.appendChild(cipherIcon);
+    fillCipherElement.appendChild(cipherDetailsElement);
+    fillCipherElement.addEventListener("click", handleFillCipherClick);
+
+    return fillCipherElement;
+  }
+
+  private buildViewCipherElement(cipher: any) {
+    const handleViewCipherClick = () =>
+      this.postMessageToParent({ command: "viewSelectedCipher", cipherId: cipher.id });
+
+    const viewCipherElement = globalThis.document.createElement("button");
+    viewCipherElement.className = "view-cipher-button";
+    viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
+    viewCipherElement.addEventListener("click", handleViewCipherClick);
+
+    return viewCipherElement;
+  }
+
   private buildCipherIconElement(cipher: any) {
-    const cipherIcon = globalThis.document.createElement("div");
+    const cipherIcon = globalThis.document.createElement("span");
     cipherIcon.classList.add("cipher-icon");
     cipherIcon.setAttribute("aria-hidden", "true");
 
@@ -149,7 +171,7 @@ class AutofillOverlayList extends HTMLElement {
       return cipherIcon;
     }
 
-    cipherIcon.append(this.globeIconElement);
+    cipherIcon.append(buildSvgDomElement(globeIcon));
     return cipherIcon;
   }
 
@@ -157,7 +179,7 @@ class AutofillOverlayList extends HTMLElement {
     const cipherNameElement = this.buildCipherNameElement(cipher);
     const cipherUserLoginElement = this.buildCipherUserLoginElement(cipher);
 
-    const cipherDetailsElement = globalThis.document.createElement("div");
+    const cipherDetailsElement = globalThis.document.createElement("span");
     cipherDetailsElement.className = "cipher-details";
     cipherDetailsElement.appendChild(cipherNameElement);
     cipherDetailsElement.appendChild(cipherUserLoginElement);
@@ -166,7 +188,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherNameElement(cipher: any) {
-    const cipherNameElement = globalThis.document.createElement("div");
+    const cipherNameElement = globalThis.document.createElement("span");
     cipherNameElement.className = "cipher-name";
     cipherNameElement.textContent = cipher.name;
     cipherNameElement.setAttribute("title", cipher.name);
@@ -175,7 +197,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private buildCipherUserLoginElement(cipher: any) {
-    const cipherUserLoginElement = globalThis.document.createElement("div");
+    const cipherUserLoginElement = globalThis.document.createElement("span");
     cipherUserLoginElement.className = "cipher-user-login";
     cipherUserLoginElement.textContent = cipher.login.username;
     cipherUserLoginElement.setAttribute("title", cipher.login.username);

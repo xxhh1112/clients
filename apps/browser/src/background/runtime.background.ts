@@ -122,6 +122,17 @@ export default class RuntimeBackground {
           this.browserPopoutWindowService.closeAddEditCipherWindow();
         }, msg.delay ?? 0);
         break;
+      case "openViewCipher":
+        await this.browserPopoutWindowService.openViewCipherWindow(
+          sender.tab.windowId,
+          msg.data.cipherId
+        );
+        break;
+      case "closeViewCipher":
+        setTimeout(() => {
+          this.browserPopoutWindowService.closeViewCipherWindow();
+        }, msg.delay ?? 0);
+        break;
       case "triggerAutofillScriptInjection":
         await this.autofillService.injectAutofillScripts(
           sender,

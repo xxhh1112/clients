@@ -255,6 +255,11 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   close() {
+    if (this.popupUtilsService.inSingleActionPopout(window, "viewCipher")) {
+      this.messagingService.send("closeViewCipher");
+      return;
+    }
+
     this.location.back();
   }
 

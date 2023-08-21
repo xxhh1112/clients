@@ -63,6 +63,7 @@ class OverlayBackground {
       this.autofillOverlayListItem(message, port.sender),
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItem: () => this.getNewVaultItemDetails(),
+    viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
   };
 
   constructor(
@@ -470,6 +471,12 @@ class OverlayBackground {
 
     handler({ message, port });
   };
+
+  private async viewSelectedCipher(message: any, sender: chrome.runtime.MessageSender) {
+    await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
+      cipherId: message.cipherId,
+    });
+  }
 
   // TODO: CG - Need to go through and refactor this implementation to be more robust.
   private getNewVaultItemDetails() {

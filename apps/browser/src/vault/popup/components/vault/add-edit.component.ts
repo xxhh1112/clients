@@ -157,7 +157,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
 
     // TODO: CG - Need to think a bit more about how this should be refined. This change seems effective, but likely comes with caveats.
-    if (this.popupUtilsService.inPopout(window)) {
+    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
       this.popupUtilsService.disableCloseTabWarning();
 
       // TODO: CG - Need to come back to this and add it to the messaging service.
@@ -200,7 +200,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     super.cancel();
 
     // TODO: CG - Need to think a bit more about how this should be refined. This change seems effective, but likely comes with caveats.
-    if (this.popupUtilsService.inPopout(window)) {
+    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
       this.messagingService.send("closeAddEditCipher");
       return;
     }

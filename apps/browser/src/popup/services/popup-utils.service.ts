@@ -21,6 +21,11 @@ export class PopupUtilsService {
     return win.location.search !== "" && win.location.search.indexOf("uilocation=popout") > -1;
   }
 
+  // TODO: CG - Need to think about whether or not this is the right approach for this.
+  inSingleActionPopout(win: Window, key: string): boolean {
+    return this.inPopout(win) && win.location.search.indexOf(`singleActionPopout=${key}`) > -1;
+  }
+
   inPopup(win: Window): boolean {
     return (
       win.location.search === "" ||

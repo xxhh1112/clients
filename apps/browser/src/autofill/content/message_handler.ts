@@ -32,6 +32,7 @@ const forwardCommands = [
   "unlockCompleted",
   "addedCipher",
   "openAddEditCipher",
+  "openViewCipher",
 ];
 
 chrome.runtime.onMessage.addListener((event) => {

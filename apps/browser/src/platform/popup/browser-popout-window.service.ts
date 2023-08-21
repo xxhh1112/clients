@@ -35,6 +35,23 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     await this.closeSingleActionPopout("addEditCipher");
   }
 
+  async openViewCipherWindow(senderWindowId: number, cipherId: string) {
+    if (!cipherId) {
+      return;
+    }
+
+    await this.closeViewCipherWindow();
+    await this.openPopoutWindow(
+      senderWindowId,
+      `popup/index.html#/view-cipher?cipherId=${cipherId}`,
+      "viewCipher"
+    );
+  }
+
+  async closeViewCipherWindow() {
+    await this.closeSingleActionPopout("viewCipher");
+  }
+
   private async openPopoutWindow(
     senderWindowId: number,
     popupWindowUrl: string,
@@ -42,11 +59,10 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
   ) {
     const senderWindow = senderWindowId && (await BrowserApi.getWindow(senderWindowId));
     let url = chrome.extension.getURL(popupWindowUrl);
-    if (!url.includes("uilocation=popout")) {
-      const parsedUrl = new URL(url);
-      parsedUrl.searchParams.set("uilocation", "popout");
-      url = parsedUrl.toString();
-    }
+    const parsedUrl = new URL(url);
+    parsedUrl.searchParams.set("uilocation", "popout");
+    parsedUrl.searchParams.set("singleActionPopout", singleActionPopoutKey);
+    url = parsedUrl.toString();
     const offsetRight = 15;
     const offsetTop = 90;
     const popupWidth = this.defaultPopoutWindowOptions.width;
