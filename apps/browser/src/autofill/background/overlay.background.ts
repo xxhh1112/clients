@@ -293,7 +293,7 @@ class OverlayBackground {
         ? WebsiteIconService.buildCipherIconData(this.iconsServerUrl, cipher, isFaviconDisabled)
         : null,
       login: {
-        username: cipher.login.username,
+        username: this.getObscureName(cipher.login.username),
       },
       // card: {
       //   cardholderName: cipher.card.cardholderName,
@@ -315,6 +315,39 @@ class OverlayBackground {
       command: "updateOverlayListCiphers",
       ciphers: this.currentTabCiphers,
     });
+  }
+
+  private getObscureName(name: string): string {
+    const [username, domain] = name.split("@");
+    const usernameLength = username?.length;
+    if (!usernameLength) {
+      return name;
+    }
+
+    const startingCharacters = username.slice(0, usernameLength <= 4 ? 1 : 2);
+    let numberStars = usernameLength;
+    if (usernameLength > 4) {
+      numberStars = usernameLength < 6 ? numberStars - 1 : numberStars - 2;
+    }
+
+    let obscureName = `${startingCharacters}${new Array(numberStars).join("*")}`;
+    if (usernameLength >= 6) {
+      obscureName = `${obscureName}${username.slice(-1)}`;
+    }
+
+    return domain ? `${obscureName}@${domain}` : obscureName;
+  }
+
+  private getObscureNameStars(usernameLength: number): string {
+    if (usernameLength <= 4) {
+      return new Array(usernameLength).join("*");
+    }
+
+    if (usernameLength < 6) {
+      return new Array(usernameLength - 1).join("*");
+    }
+
+    return new Array(usernameLength - 2).join("*");
   }
 
   private updateAutofillOverlayListHeight(message: any) {
