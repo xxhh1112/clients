@@ -12,10 +12,9 @@ import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/mod
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
-import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { MasterPasswordPolicyResponse } from "@bitwarden/common/auth/models/response/master-password-policy.response";
-import { HashPurpose, KdfType, KeySuffixOptions } from "@bitwarden/common/enums";
+import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/enums";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -29,8 +28,7 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export class LockComponent implements OnInit, OnDestroy {
@@ -73,7 +71,7 @@ export class LockComponent implements OnInit, OnDestroy {
     protected policyApiService: PolicyApiServiceAbstraction,
     protected policyService: InternalPolicyService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
-    protected dialogService: DialogServiceAbstraction,
+    protected dialogService: DialogService,
     protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     protected userVerificationService: UserVerificationService
   ) {}
@@ -107,7 +105,7 @@ export class LockComponent implements OnInit, OnDestroy {
       title: { key: "logOut" },
       content: { key: "logOutConfirmation" },
       acceptButtonText: { key: "logOut" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (confirmed) {
@@ -182,8 +180,10 @@ export class LockComponent implements OnInit, OnDestroy {
 
       let userKey: UserKey;
       if (oldPinKey) {
-        userKey = await this.decryptAndMigrateOldPinKey(
+        userKey = await this.cryptoService.decryptAndMigrateOldPinKey(
           this.pinStatus === "TRANSIENT",
+          this.pin,
+          this.email,
           kdf,
           kdfConfig,
           oldPinKey
@@ -343,7 +343,7 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   private async load() {
-    this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
+    // TODO: Investigate PM-3515
 
     // The loading of the lock component works as follows:
     //   1. First, is locking a valid timeout action?  If not, we will log the user out.
@@ -352,12 +352,17 @@ export class LockComponent implements OnInit, OnDestroy {
     //        - If they have a PIN set, they will be presented with the PIN input
     //        - If they have a master password and no PIN, they will be presented with the master password input
     //        - If they have biometrics enabled, they will be presented with the biometric prompt
-    //   Note: The following scenario is currently NOT handled:
-    //     - The user has a master password and no PIN
-    //     - The user has logged in with Trusted Device Encryption
-    //     - The user is offline
-    //     - The user locks their vault
-    //   This will result in the user not being able to unlock their vault and having to log out.
+
+    const availableVaultTimeoutActions = await firstValueFrom(
+      this.vaultTimeoutSettingsService.availableVaultTimeoutActions$()
+    );
+    const supportsLock = availableVaultTimeoutActions.includes(VaultTimeoutAction.Lock);
+    if (!supportsLock) {
+      return await this.vaultTimeoutService.logOut();
+    }
+
+    this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
+
     let ephemeralPinSet = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
     ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
     this.pinEnabled =
@@ -371,17 +376,6 @@ export class LockComponent implements OnInit, OnDestroy {
         !this.platformUtilsService.supportsSecureStorage());
     this.biometricText = await this.stateService.getBiometricText();
     this.email = await this.stateService.getEmail();
-
-    // TODO: might have to duplicate/extend this check a bit - should it use new AcctDecryptionOptions?
-    // if the user has no MP hash via TDE and they get here without biometric / pin as well, they should logout as well.
-
-    const availableVaultTimeoutActions = await firstValueFrom(
-      this.vaultTimeoutSettingsService.availableVaultTimeoutActions$()
-    );
-    const supportsLock = availableVaultTimeoutActions.includes(VaultTimeoutAction.Lock);
-    if (!supportsLock) {
-      return await this.vaultTimeoutService.logOut();
-    }
 
     const webVaultUrl = this.environmentService.getWebVaultUrl();
     const vaultUrl =
@@ -411,54 +405,5 @@ export class LockComponent implements OnInit, OnDestroy {
       this.masterPassword,
       this.enforcedMasterPasswordOptions
     );
-  }
-
-  /**
-   * Creates a new Pin key that encrypts the user key instead of the
-   * master key. Clears the old Pin key from state.
-   * @param masterPasswordOnRestart True if Master Password on Restart is enabled
-   * @param kdf User's KdfType
-   * @param kdfConfig User's KdfConfig
-   * @param oldPinKey The old Pin key from state (retrieved from different
-   * places depending on if Master Password on Restart was enabled)
-   * @returns The user key
-   */
-  private async decryptAndMigrateOldPinKey(
-    masterPasswordOnRestart: boolean,
-    kdf: KdfType,
-    kdfConfig: KdfConfig,
-    oldPinKey: EncString
-  ): Promise<UserKey> {
-    // Decrypt
-    const masterKey = await this.cryptoService.decryptMasterKeyWithPin(
-      this.pin,
-      this.email,
-      kdf,
-      kdfConfig,
-      oldPinKey
-    );
-    const encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
-    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
-      masterKey,
-      new EncString(encUserKey)
-    );
-    // Migrate
-    const pinKey = await this.cryptoService.makePinKey(this.pin, this.email, kdf, kdfConfig);
-    const pinProtectedKey = await this.cryptoService.encrypt(userKey.key, pinKey);
-    if (masterPasswordOnRestart) {
-      await this.stateService.setDecryptedPinProtected(null);
-      await this.stateService.setPinKeyEncryptedUserKeyEphemeral(pinProtectedKey);
-    } else {
-      await this.stateService.setEncryptedPinProtected(null);
-      await this.stateService.setPinKeyEncryptedUserKey(pinProtectedKey);
-      // We previously only set the protected pin if MP on Restart was enabled
-      // now we set it regardless
-      const encPin = await this.cryptoService.encrypt(this.pin, userKey);
-      await this.stateService.setProtectedPin(encPin.encryptedString);
-    }
-    // This also clears the old Biometrics key since the new Biometrics key will
-    // be created when the user key is set.
-    await this.stateService.setCryptoMasterKeyBiometric(null);
-    return userKey;
   }
 }

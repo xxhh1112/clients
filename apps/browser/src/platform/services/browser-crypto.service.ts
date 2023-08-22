@@ -21,8 +21,7 @@ export class BrowserCryptoService extends CryptoService {
   protected override async getKeyFromStorage(keySuffix: KeySuffixOptions): Promise<UserKey> {
     if (keySuffix === KeySuffixOptions.Biometric) {
       await this.platformUtilService.authenticateBiometric();
-      // this will check for an auto key, but that is acceptable
-      const userKey = await this.getUserKey();
+      const userKey = await this.stateService.getUserKey();
       if (userKey) {
         return new SymmetricCryptoKey(Utils.fromB64ToArray(userKey.keyB64)) as UserKey;
       }

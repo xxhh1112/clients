@@ -1,14 +1,16 @@
 import { Injectable, NgModule } from "@angular/core";
 import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { lockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
-import { tdeDecryptionRequiredGuard } from "@bitwarden/angular/auth/guards/tde-decryption-required.guard";
-import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
+import {
+  redirectGuard,
+  AuthGuard,
+  lockGuard,
+  tdeDecryptionRequiredGuard,
+  UnauthGuard,
+} from "@bitwarden/angular/auth/guards";
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
-import { redirectGuard } from "../../../../libs/angular/src/auth/guards/redirect.guard";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";

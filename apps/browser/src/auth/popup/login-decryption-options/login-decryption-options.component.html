@@ -1,7 +1,7 @@
 <div id="login-initiated">
   <header>
     <h1 class="margin-auto">
-      <span class="title">{{ "logInInitiated" | i18n }}</span>
+      <span class="title">{{ "loginInitiated" | i18n }}</span>
     </h1>
   </header>
 
@@ -13,7 +13,7 @@
     <ng-container *ngIf="!loading">
       <ng-container *ngIf="data.state == State.ExistingUserUntrustedDevice">
         <div class="standard-x-margin">
-          <p class="lead">{{ "logInInitiated" | i18n }}</p>
+          <p class="lead">{{ "loginInitiated" | i18n }}</p>
           <h6 class="mb-20px">{{ "deviceApprovalRequired" | i18n }}</h6>
         </div>
 
@@ -66,7 +66,7 @@
 
       <ng-container *ngIf="data.state == State.NewUser">
         <div class="standard-x-margin">
-          <p class="lead">{{ "logInInitiated" | i18n }}</p>
+          <p class="lead">{{ "loginInitiated" | i18n }}</p>
         </div>
 
         <form

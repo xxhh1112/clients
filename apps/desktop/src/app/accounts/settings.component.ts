@@ -3,7 +3,6 @@ import { FormBuilder } from "@angular/forms";
 import { BehaviorSubject, firstValueFrom, Observable, Subject } from "rxjs";
 import { concatMap, debounceTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
@@ -18,6 +17,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { DialogService } from "@bitwarden/components";
 
 import { flagEnabled } from "../../platform/flags";
 import { ElectronStateService } from "../../platform/services/electron-state.service.abstraction";
@@ -116,7 +116,7 @@ export class SettingsComponent implements OnInit {
     private modalService: ModalService,
     private themingService: AbstractThemingService,
     private settingsService: SettingsService,
-    private dialogService: DialogServiceAbstraction,
+    private dialogService: DialogService,
     private userVerificationService: UserVerificationServiceAbstraction
   ) {
     const isMac = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
@@ -345,7 +345,7 @@ export class SettingsComponent implements OnInit {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "warning" },
         content: { key: "neverLockWarning" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (!confirmed) {
@@ -381,7 +381,7 @@ export class SettingsComponent implements OnInit {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "vaultTimeoutLogOutConfirmationTitle" },
         content: { key: "vaultTimeoutLogOutConfirmation" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (!confirmed) {
@@ -522,7 +522,7 @@ export class SettingsComponent implements OnInit {
       const confirm = await this.dialogService.openSimpleDialog({
         title: { key: "confirmTrayTitle" },
         content: { key: "confirmTrayDesc" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (confirm) {
@@ -584,7 +584,7 @@ export class SettingsComponent implements OnInit {
         content: { key: "browserIntegrationMasOnlyDesc" },
         acceptButtonText: { key: "ok" },
         cancelButtonText: null,
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       this.form.controls.enableBrowserIntegration.setValue(false);
@@ -595,7 +595,7 @@ export class SettingsComponent implements OnInit {
         content: { key: "browserIntegrationWindowsStoreDesc" },
         acceptButtonText: { key: "ok" },
         cancelButtonText: null,
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       this.form.controls.enableBrowserIntegration.setValue(false);
@@ -606,7 +606,7 @@ export class SettingsComponent implements OnInit {
         content: { key: "browserIntegrationLinuxDesc" },
         acceptButtonText: { key: "ok" },
         cancelButtonText: null,
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       this.form.controls.enableBrowserIntegration.setValue(false);

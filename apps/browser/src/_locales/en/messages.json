@@ -1449,9 +1449,6 @@
   "restoreItem": {
     "message": "Restore item"
   },
-  "restoreItemConfirmation": {
-    "message": "Are you sure you want to restore this item?"
-  },
   "restoredItem": {
     "message": "Item restored"
   },
@@ -2155,7 +2152,7 @@
   "notificationSentDevice": {
     "message": "A notification has been sent to your device."
   },
-  "logInInitiated": {
+  "loginInitiated": {
     "message": "Login initiated"
   },
   "exposedMasterPassword": {

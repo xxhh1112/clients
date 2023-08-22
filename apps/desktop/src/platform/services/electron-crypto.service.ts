@@ -28,6 +28,7 @@ export class ElectronCryptoService extends CryptoService {
 
   override async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: string): Promise<boolean> {
     if (keySuffix === KeySuffixOptions.Biometric) {
+      // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3474)
       const oldKey = await this.stateService.hasCryptoMasterKeyBiometric({ userId: userId });
       return oldKey || (await this.stateService.hasUserKeyBiometric({ userId: userId }));
     }
@@ -115,6 +116,7 @@ export class ElectronCryptoService extends CryptoService {
   // --LEGACY METHODS--
   // We previously used the master key for additional keys, but now we use the user key.
   // These methods support migrating the old keys to the new ones.
+  // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3475)
 
   override async clearDeprecatedKeys(keySuffix: KeySuffixOptions, userId?: string) {
     if (keySuffix === KeySuffixOptions.Biometric) {

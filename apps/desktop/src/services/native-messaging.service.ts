@@ -145,6 +145,7 @@ export class NativeMessagingService {
         if (userKey != null) {
           // we send the master key still for backwards compatibility
           // with older browser extensions
+          // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
           this.send(
             {
               command: "biometricUnlock",

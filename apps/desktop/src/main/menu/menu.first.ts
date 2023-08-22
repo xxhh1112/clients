@@ -64,6 +64,10 @@ export class FirstMenu {
   protected get lockSubmenu(): MenuItemConstructorOptions[] {
     const value: MenuItemConstructorOptions[] = [];
     for (const userId in this._accounts) {
+      if (!userId) {
+        continue;
+      }
+
       const account = this._accounts[userId];
 
       if (account == null || !account.isLockable) {

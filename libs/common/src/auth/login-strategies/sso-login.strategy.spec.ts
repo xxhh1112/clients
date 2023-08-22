@@ -280,7 +280,7 @@ describe("SsoLogInStrategy", () => {
 
       await ssoLogInStrategy.logIn(credentials);
 
-      expect(keyConnectorService.getAndSetMasterKey).toHaveBeenCalledWith(keyConnectorUrl);
+      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
     });
 
     it("converts new SSO user to Key Connector on first login", async () => {

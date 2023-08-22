@@ -83,7 +83,7 @@ export class SsoLogInStrategy extends LogInStrategy {
 
     if (tokenResponse.keyConnectorUrl != null) {
       if (!newSsoUser) {
-        await this.keyConnectorService.getAndSetMasterKey(tokenResponse.keyConnectorUrl);
+        await this.keyConnectorService.setMasterKeyFromUrl(tokenResponse.keyConnectorUrl);
       } else {
         await this.keyConnectorService.convertNewSsoUserToKeyConnector(tokenResponse, this.orgId);
       }

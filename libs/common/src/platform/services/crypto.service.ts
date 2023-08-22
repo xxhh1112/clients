@@ -935,6 +935,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   // --LEGACY METHODS--
   // We previously used the master key for additional keys, but now we use the user key.
   // These methods support migrating the old keys to the new ones.
+  // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3475)
 
   async clearDeprecatedKeys(keySuffix: KeySuffixOptions, userId?: string) {
     if (keySuffix === KeySuffixOptions.Auto) {
@@ -964,6 +965,38 @@ export class CryptoService implements CryptoServiceAbstraction {
       // set encrypted user key in case user immediately locks without syncing
       await this.setMasterKeyEncryptedUserKey(encryptedUserKey);
     }
+  }
+
+  async decryptAndMigrateOldPinKey(
+    masterPasswordOnRestart: boolean,
+    pin: string,
+    email: string,
+    kdf: KdfType,
+    kdfConfig: KdfConfig,
+    oldPinKey: EncString
+  ): Promise<UserKey> {
+    // Decrypt
+    const masterKey = await this.decryptMasterKeyWithPin(pin, email, kdf, kdfConfig, oldPinKey);
+    const encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
+    const userKey = await this.decryptUserKeyWithMasterKey(masterKey, new EncString(encUserKey));
+    // Migrate
+    const pinKey = await this.makePinKey(pin, email, kdf, kdfConfig);
+    const pinProtectedKey = await this.encryptService.encrypt(userKey.key, pinKey);
+    if (masterPasswordOnRestart) {
+      await this.stateService.setDecryptedPinProtected(null);
+      await this.stateService.setPinKeyEncryptedUserKeyEphemeral(pinProtectedKey);
+    } else {
+      await this.stateService.setEncryptedPinProtected(null);
+      await this.stateService.setPinKeyEncryptedUserKey(pinProtectedKey);
+      // We previously only set the protected pin if MP on Restart was enabled
+      // now we set it regardless
+      const encPin = await this.encryptService.encrypt(pin, userKey);
+      await this.stateService.setProtectedPin(encPin.encryptedString);
+    }
+    // This also clears the old Biometrics key since the new Biometrics key will
+    // be created when the user key is set.
+    await this.stateService.setCryptoMasterKeyBiometric(null);
+    return userKey;
   }
 
   // --DEPRECATED METHODS--

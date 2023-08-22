@@ -236,11 +236,19 @@ export default class AutofillService implements AutofillServiceInterface {
       }
     }
 
+    if (cipher == null) {
+      return null;
+    }
+
     if (
-      cipher == null ||
-      (cipher.reprompt !== CipherRepromptType.None &&
-        (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash()))
+      cipher.reprompt !== CipherRepromptType.None &&
+      (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash())
     ) {
+      await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+        cipherId: cipher.id,
+        action: "autofill",
+      });
+
       return null;
     }
 
