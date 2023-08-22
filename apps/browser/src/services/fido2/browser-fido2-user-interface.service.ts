@@ -352,7 +352,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     this.popout = await this.generatePopOut(authStatus);
 
     if (this.popout.type === "window") {
-      const popoutWindow = this.popout as { type: "window"; window: chrome.windows.Window };
+      const popoutWindow = this.popout;
       this.windowClosed$
         .pipe(
           filter((windowId) => popoutWindow.window.id === windowId),
@@ -363,7 +363,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
           this.abort();
         });
     } else if (this.popout.type === "tab") {
-      const popoutTab = this.popout as { type: "tab"; tab: chrome.tabs.Tab };
+      const popoutTab = this.popout;
       this.tabClosed$
         .pipe(
           filter((tabId) => popoutTab.tab.id === tabId),
@@ -379,8 +379,16 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   }
 
   private async generatePopOut(authStatus: AuthenticationStatus) {
-    let path: string;
+    if (authStatus === AuthenticationStatus.Unlocked) {
+      const queryParams = new URLSearchParams({ sessionId: this.sessionId });
+      return this.popupUtilsService.popOut(
+        null,
+        `popup/index.html?uilocation=popout#/fido2?${queryParams.toString()}`,
+        { center: true }
+      );
+    }
 
+    let path: string;
     switch (authStatus) {
       case AuthenticationStatus.LoggedOut:
         path = "home";
@@ -389,21 +397,16 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
         path = "lock";
         break;
       default:
-        path = "fido2";
+        throw new Error(`Unexpected auth status: ${authStatus}`);
     }
 
-    const queryParams = new URLSearchParams({ sessionId: this.sessionId });
-    if (
-      authStatus === AuthenticationStatus.LoggedOut ||
-      authStatus === AuthenticationStatus.Locked
-    ) {
-      queryParams.append("redirectPath", "fido2");
-    }
+    const redirectUrlParams = new URLSearchParams({ sessionId: this.sessionId });
+    const redirectUrl = `/fido2?${redirectUrlParams.toString()}`;
 
-    const queryString = queryParams.toString();
+    const queryParams = new URLSearchParams({ redirectUrl });
     return this.popupUtilsService.popOut(
       null,
-      `popup/index.html?uilocation=popout#/${path}?${queryString}`,
+      `popup/index.html?uilocation=popout#/${path}?${queryParams.toString()}`,
       { center: true }
     );
   }

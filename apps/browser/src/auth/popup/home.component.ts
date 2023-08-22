@@ -20,9 +20,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroyed$: Subject<void> = new Subject();
 
   loginInitiated = false;
-  //use this to redirect somehwere else after login
-  redirectPath: string;
-  sessionId: string;
   formGroup = this.formBuilder.group({
     email: ["", [Validators.required, Validators.email]],
     rememberEmail: [false],
@@ -40,11 +37,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.route?.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
-      this.redirectPath = params?.redirectPath;
-      this.sessionId = params?.sessionId;
-    });
-
     let savedEmail = this.loginService.getEmail();
     const rememberEmail = this.loginService.getRememberEmail();
 
@@ -90,11 +82,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loginService.setEmail(this.formGroup.value.email);
     this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
 
+    // redirectUrl can be decoded like this
+    const decodedRedirectUrl = decodeURIComponent(this.route.snapshot.queryParams.redirectUrl);
+    console.log(decodedRedirectUrl, this.route);
+
     this.router.navigate(["login"], {
       queryParams: {
         email: this.formGroup.value.email,
-        redirectPath: this.redirectPath,
-        sessionId: this.sessionId,
+        redirectUrl: this.route.snapshot.queryParams.redirectUrl,
       },
     });
   }
