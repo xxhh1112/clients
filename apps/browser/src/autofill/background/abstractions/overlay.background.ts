@@ -18,6 +18,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: any;
     sender: chrome.runtime.MessageSender;
   }) => void;
+  bgFocusAutofillOverlayList: () => void;
   collectPageDetailsResponse: ({
     message,
     sender,
@@ -50,6 +51,7 @@ type OverlayListPortMessageHandlers = {
   updateAutofillOverlayListHeight: ({ message }: { message: any }) => void;
   addNewVaultItem: () => void;
   viewSelectedCipher: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
+  focusMostRecentInputElement: ({ port }: { port: chrome.runtime.Port }) => void;
 };
 
 export {

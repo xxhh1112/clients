@@ -52,7 +52,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent);
-    formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
+    formFieldElement.addEventListener("keydown", this.handleFormFieldKeydownEvent);
     formFieldElement.addEventListener(
       "input",
       this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
@@ -130,6 +130,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgAddNewVaultItem", { login });
   }
 
+  // TODO: CG - Need to figure a performant way to focus the previous element and next elements when coming out of the overlay.
+  focusMostRecentInputElement() {
+    this.mostRecentlyFocusedField?.focus();
+  }
+
   private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
     return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = eventHandler);
   };
@@ -139,9 +144,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgCheckOverlayFocused");
   };
 
-  private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
-    if (event.code === "Escape") {
+  private handleFormFieldKeydownEvent = (event: KeyboardEvent) => {
+    const eventCode = event.code;
+    if (eventCode === "Escape") {
       this.removeAutofillOverlay();
+    }
+
+    if (eventCode === "ArrowDown") {
+      if (!this.isOverlayListVisible) {
+        this.updateOverlayListPosition();
+      }
+
+      sendExtensionMessage("bgFocusAutofillOverlayList");
     }
   };
 

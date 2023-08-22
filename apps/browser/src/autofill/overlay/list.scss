@@ -38,26 +38,37 @@ body {
   }
 }
 
+.overlay-list-button-container {
+  width: 100%;
+  padding: 0.2rem;
+  background: transparent;
+  transition: background-color 0.2s ease-in-out;
+  border-top: 0.1rem solid $color-light-gray;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+}
+
 .overlay-list-button {
   display: flex;
   align-content: center;
   justify-content: flex-start;
   width: 100%;
-  background: transparent;
   font-family: $font-family-sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
   color: $color-blue;
   text-align: left;
+  background: transparent;
   border: none;
-  border-top: 0.1rem solid $color-light-gray;
-  padding: 0.8rem;
+  padding: 0.7rem;
   margin: 0;
-  transition: background-color 0.2s ease-in-out;
   cursor: pointer;
+  border-radius: 0.4rem;
 
-  &:hover {
-    background: #f0f0f0;
+  &:focus:focus-visible {
+    outline: 2px solid #1252a3;
   }
 
   svg {
@@ -83,19 +94,15 @@ body {
   }
 }
 
-.ciphers-list {
+.overlay-actions-list {
   padding: 0;
   margin: 0;
 }
 
-.cipher {
-  padding: 0.8rem 0.4rem 0.8rem 0.8rem;
-  display: flex;
-  align-content: flex-start;
-  align-items: center;
-  justify-content: flex-start;
+.overlay-actions-list-item {
   transition: background-color 0.2s ease-in-out;
   list-style: none;
+  padding: 0.2rem;
 
   &:not(:last-child) {
     border-bottom: 0.1rem solid $color-light-gray;
@@ -103,6 +110,19 @@ body {
 
   &:hover {
     background: #f0f0f0;
+  }
+
+  .cipher-container {
+    display: flex;
+    align-content: flex-start;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.7rem 0.3rem 0.7rem 0.7rem;
+    border-radius: 0.4rem;
+
+    &:focus-within:not(.remove-outline) {
+      outline: 2px solid #1252a3;
+    }
   }
 
   .fill-cipher-button,
@@ -121,6 +141,7 @@ body {
     align-content: center;
     justify-content: flex-start;
     width: calc(100% - 4rem);
+    outline: none;
   }
 
   .view-cipher-button {
@@ -130,6 +151,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 0.4rem;
+
+    &:focus:focus-visible {
+      outline: 0.2rem solid #1252a3;
+    }
   }
 
   .cipher-icon {

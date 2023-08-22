@@ -27,6 +27,8 @@ class AutofillInit implements AutofillInitInterface {
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
+    focusMostRecentInputElement: () =>
+      this.autofillOverlayContentService.focusMostRecentInputElement(),
   };
 
   /**

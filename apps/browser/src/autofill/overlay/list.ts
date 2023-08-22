@@ -22,6 +22,7 @@ class AutofillOverlayList extends HTMLElement {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
     updateOverlayListCiphers: ({ message }) => this.updateAutofillOverlayList(message),
+    focusOverlayList: () => this.focusOverlayList(),
   };
 
   constructor() {
@@ -79,15 +80,26 @@ class AutofillOverlayList extends HTMLElement {
     lockedOverlay.className = "locked-overlay overlay-list-message";
     lockedOverlay.textContent = "Unlock your account to view matching logins";
 
-    const unlockButton = globalThis.document.createElement("button");
-    unlockButton.className = "unlock-button overlay-list-button";
-    unlockButton.textContent = `Unlock account`;
-    unlockButton.prepend(this.lockIconElement);
+    const unlockButtonElement = globalThis.document.createElement("button");
+    unlockButtonElement.id = "unlock-button";
+    unlockButtonElement.tabIndex = -1;
+    unlockButtonElement.className = "unlock-button overlay-list-button";
+    unlockButtonElement.textContent = `Unlock account`;
+    unlockButtonElement.setAttribute("aria-label", "Unlock account, opens in a new window");
+    unlockButtonElement.setAttribute(
+      "aria-description",
+      "Unlock your account to view matching logins"
+    );
+    unlockButtonElement.prepend(this.lockIconElement);
 
-    unlockButton.addEventListener("click", this.handleUnlockButtonClick);
+    unlockButtonElement.addEventListener("click", this.handleUnlockButtonClick);
+
+    const overlayListButtonContainer = globalThis.document.createElement("div");
+    overlayListButtonContainer.className = "overlay-list-button-container";
+    overlayListButtonContainer.appendChild(unlockButtonElement);
 
     this.overlayListContainer.appendChild(lockedOverlay);
-    this.overlayListContainer.appendChild(unlockButton);
+    this.overlayListContainer.appendChild(overlayListButtonContainer);
   }
 
   private handleUnlockButtonClick = () => {
@@ -103,38 +115,104 @@ class AutofillOverlayList extends HTMLElement {
     this.resetOverlayListContainer();
 
     const ciphersList = globalThis.document.createElement("ul");
-    ciphersList.className = "ciphers-list";
+    ciphersList.className = "overlay-actions-list";
 
     message.ciphers.forEach((cipher: any) =>
-      ciphersList.appendChild(this.buildCipherListItemElement(cipher))
+      ciphersList.appendChild(this.buildOverlayActionsListItem(cipher))
     );
 
     this.overlayListContainer.appendChild(ciphersList);
   }
 
-  private buildCipherListItemElement(cipher: any) {
+  private buildOverlayActionsListItem(cipher: any) {
     const fillCipherElement = this.buildFillCipherElement(cipher);
     const viewCipherElement = this.buildViewCipherElement(cipher);
 
-    const cipherListItemElement = globalThis.document.createElement("li");
-    cipherListItemElement.className = "cipher";
-    cipherListItemElement.appendChild(fillCipherElement);
-    cipherListItemElement.appendChild(viewCipherElement);
+    const cipherContainerElement = globalThis.document.createElement("div");
+    cipherContainerElement.className = "cipher-container";
+    cipherContainerElement.appendChild(fillCipherElement);
+    cipherContainerElement.appendChild(viewCipherElement);
 
-    return cipherListItemElement;
+    const overlayActionsListItem = globalThis.document.createElement("li");
+    overlayActionsListItem.className = "overlay-actions-list-item";
+    overlayActionsListItem.appendChild(cipherContainerElement);
+
+    return overlayActionsListItem;
   }
 
   private buildFillCipherElement(cipher: any) {
     const handleFillCipherClick = () =>
       this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
+    const handleFillCipherKeyPress = (event: KeyboardEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (event.key === "Enter") {
+        handleFillCipherClick();
+        return;
+      }
+
+      if (event.key === "Tab" && event.shiftKey) {
+        this.postMessageToParent({ command: "focusMostRecentInputElement" });
+      }
+
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const parentListItem = event.target.closest(".overlay-actions-list-item") as HTMLElement;
+
+      if (event.key === "ArrowDown") {
+        const nextListItem = parentListItem.nextSibling as HTMLElement;
+        const nextSibling = nextListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (nextSibling) {
+          nextSibling.focus();
+          return;
+        }
+
+        const firstListItem = parentListItem.parentElement?.firstChild as HTMLElement;
+        const firstSibling = firstListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (firstSibling) {
+          firstSibling.focus();
+        }
+      }
+
+      if (event.key === "ArrowUp") {
+        const previousListItem = parentListItem.previousSibling as HTMLElement;
+        const previousSibling = previousListItem?.querySelector(
+          ".fill-cipher-button"
+        ) as HTMLElement;
+        if (previousSibling) {
+          previousSibling.focus();
+          return;
+        }
+
+        const lastListItem = parentListItem.parentElement?.lastChild as HTMLElement;
+        const lastSibling = lastListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (lastSibling) {
+          lastSibling.focus();
+        }
+      }
+
+      if (event.key === "ArrowRight") {
+        const cipherContainer = parentListItem.querySelector(".cipher-container") as HTMLElement;
+        cipherContainer.classList.add("remove-outline");
+        const nextSibling = event.target.nextElementSibling as HTMLElement;
+        if (nextSibling) {
+          nextSibling.focus();
+        }
+      }
+    };
     const cipherIcon = this.buildCipherIconElement(cipher);
     const cipherDetailsElement = this.buildCipherDetailsElement(cipher);
 
     const fillCipherElement = globalThis.document.createElement("button");
+    fillCipherElement.tabIndex = -1;
     fillCipherElement.className = "fill-cipher-button";
     fillCipherElement.appendChild(cipherIcon);
     fillCipherElement.appendChild(cipherDetailsElement);
     fillCipherElement.addEventListener("click", handleFillCipherClick);
+    fillCipherElement.addEventListener("keydown", handleFillCipherKeyPress);
 
     return fillCipherElement;
   }
@@ -143,10 +221,75 @@ class AutofillOverlayList extends HTMLElement {
     const handleViewCipherClick = () =>
       this.postMessageToParent({ command: "viewSelectedCipher", cipherId: cipher.id });
 
+    // TODO: CG - Need to refactor this to remove duplication and also need to add behavior for when we are only Tabbing out of the list.
+    const handleViewCipherKeyPress = (event: KeyboardEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (event.key === "Enter") {
+        handleViewCipherClick();
+        return;
+      }
+
+      if (event.key === "Tab" && event.shiftKey) {
+        this.postMessageToParent({ command: "focusMostRecentInputElement" });
+      }
+
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const parentListItem = event.target.closest(".overlay-actions-list-item") as HTMLElement;
+      const cipherContainer = parentListItem.querySelector(".cipher-container") as HTMLElement;
+      if (event.key === "ArrowLeft") {
+        cipherContainer.classList.remove("remove-outline");
+        const previousSibling = event.target.previousElementSibling as HTMLElement;
+        if (previousSibling) {
+          previousSibling.focus();
+        }
+      }
+
+      if (event.key === "ArrowDown") {
+        cipherContainer.classList.remove("remove-outline");
+        const nextListItem = parentListItem.nextSibling as HTMLElement;
+        const nextSibling = nextListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (nextSibling) {
+          nextSibling.focus();
+          return;
+        }
+
+        const firstListItem = parentListItem.parentElement?.firstChild as HTMLElement;
+        const firstSibling = firstListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (firstSibling) {
+          firstSibling.focus();
+        }
+      }
+
+      if (event.key === "ArrowUp") {
+        cipherContainer.classList.remove("remove-outline");
+        const previousListItem = parentListItem.previousSibling as HTMLElement;
+        const previousSibling = previousListItem?.querySelector(
+          ".fill-cipher-button"
+        ) as HTMLElement;
+        if (previousSibling) {
+          previousSibling.focus();
+          return;
+        }
+
+        const lastListItem = parentListItem.parentElement?.lastChild as HTMLElement;
+        const lastSibling = lastListItem?.querySelector(".fill-cipher-button") as HTMLElement;
+        if (lastSibling) {
+          lastSibling.focus();
+        }
+      }
+    };
+
     const viewCipherElement = globalThis.document.createElement("button");
+    viewCipherElement.tabIndex = -1;
     viewCipherElement.className = "view-cipher-button";
     viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
     viewCipherElement.addEventListener("click", handleViewCipherClick);
+    viewCipherElement.addEventListener("keydown", handleViewCipherKeyPress);
 
     return viewCipherElement;
   }
@@ -213,14 +356,19 @@ class AutofillOverlayList extends HTMLElement {
     noItemsMessage.textContent = "No items to show";
 
     const newItemButton = globalThis.document.createElement("button");
+    newItemButton.tabIndex = -1;
+    newItemButton.id = "new-item-button";
     newItemButton.className = "add-new-item-button overlay-list-button";
     newItemButton.textContent = `New item`;
     newItemButton.prepend(this.plusIconElement);
-
     newItemButton.addEventListener("click", this.handeNewItemButtonClick);
 
+    const overlayListButtonContainer = globalThis.document.createElement("div");
+    overlayListButtonContainer.className = "overlay-list-button-container";
+    overlayListButtonContainer.appendChild(newItemButton);
+
     this.overlayListContainer.appendChild(noItemsMessage);
-    this.overlayListContainer.appendChild(newItemButton);
+    this.overlayListContainer.appendChild(overlayListButtonContainer);
   }
 
   private handeNewItemButtonClick = () => {
@@ -233,6 +381,31 @@ class AutofillOverlayList extends HTMLElement {
     }
 
     this.postMessageToParent({ command: "checkOverlayIconFocused" });
+  }
+
+  private focusOverlayList() {
+    const unlockButtonElement = this.overlayListContainer.querySelector(
+      "#unlock-button"
+    ) as HTMLElement;
+    if (unlockButtonElement) {
+      unlockButtonElement.focus();
+      return;
+    }
+
+    const newItemButtonElement = this.overlayListContainer.querySelector(
+      "#new-item-button"
+    ) as HTMLElement;
+    if (newItemButtonElement) {
+      newItemButtonElement.focus();
+      return;
+    }
+
+    const firstCipherElement = this.overlayListContainer.querySelector(
+      ".fill-cipher-button"
+    ) as HTMLElement;
+    if (firstCipherElement) {
+      firstCipherElement.focus();
+    }
   }
 
   private postMessageToParent(message: any) {

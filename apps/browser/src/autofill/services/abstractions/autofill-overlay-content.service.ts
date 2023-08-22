@@ -14,6 +14,7 @@ interface AutofillOverlayContentService {
   removeAutofillOverlayList(): void;
   updateAutofillOverlayListHeight(message: any): void;
   addNewVaultItem(): void;
+  focusMostRecentInputElement(): void;
 }
 
 export { AutofillOverlayContentService };

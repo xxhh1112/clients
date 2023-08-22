@@ -46,6 +46,7 @@ class OverlayBackground {
     bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
+    bgFocusAutofillOverlayList: () => this.focusOverlayList(),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
     unlockCompleted: () => this.openAutofillOverlayList(true),
     addEditCipherSubmitted: () => this.updateCurrentTabCiphers(),
@@ -64,6 +65,7 @@ class OverlayBackground {
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItem: () => this.getNewVaultItemDetails(),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
+    focusMostRecentInputElement: ({ port }) => this.focusMostRecentInputElement(port.sender),
   };
 
   constructor(
@@ -328,7 +330,7 @@ class OverlayBackground {
       return name;
     }
 
-    const startingCharacters = username.slice(0, usernameLength <= 4 ? 1 : 2);
+    const startingCharacters = username.slice(0, usernameLength > 4 ? 2 : 1);
     let numberStars = usernameLength;
     if (usernameLength > 4) {
       numberStars = usernameLength < 6 ? numberStars - 1 : numberStars - 2;
@@ -340,18 +342,6 @@ class OverlayBackground {
     }
 
     return domain ? `${obscureName}@${domain}` : obscureName;
-  }
-
-  private getObscureNameStars(usernameLength: number): string {
-    if (usernameLength <= 4) {
-      return new Array(usernameLength).join("*");
-    }
-
-    if (usernameLength < 6) {
-      return new Array(usernameLength - 1).join("*");
-    }
-
-    return new Array(usernameLength - 2).join("*");
   }
 
   private updateAutofillOverlayListHeight(message: any) {
@@ -513,6 +503,18 @@ class OverlayBackground {
     await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
       cipherId: message.cipherId,
     });
+  }
+
+  private focusOverlayList() {
+    if (!this.overlayListPort) {
+      return;
+    }
+
+    this.overlayListPort.postMessage({ command: "focusOverlayList" });
+  }
+
+  private focusMostRecentInputElement(sender: chrome.runtime.MessageSender) {
+    chrome.tabs.sendMessage(sender.tab.id, { command: "focusMostRecentInputElement" });
   }
 
   // TODO: CG - Need to go through and refactor this implementation to be more robust.

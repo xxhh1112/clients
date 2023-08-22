@@ -21,6 +21,7 @@ type AutofillExtensionMessageHandlers = {
   closeAutofillOverlay: () => void;
   updateAutofillOverlayListHeight: (message: { message: any }) => void;
   addNewVaultItemFromOverlay: () => void;
+  focusMostRecentInputElement: () => void;
 };
 
 interface AutofillInit {

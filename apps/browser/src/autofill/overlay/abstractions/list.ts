@@ -3,6 +3,7 @@ type OverlayListWindowMessageHandlers = {
   initAutofillOverlayList: ({ message }: { message: any }) => void;
   checkOverlayListFocused: () => void;
   updateOverlayListCiphers: ({ message }: { message: any }) => void;
+  focusOverlayList: () => void;
 };
 
 export { OverlayListWindowMessageHandlers };
