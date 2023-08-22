@@ -56,4 +56,5 @@ export abstract class AutofillService {
     fromCommand: boolean
   ) => Promise<string | null>;
   doAutoFillActiveTab: (pageDetails: PageDetail[], fromCommand: boolean) => Promise<string | null>;
+  isPasswordRepromptRequired: (cipher: CipherView, tab: chrome.tabs.Tab) => Promise<boolean>;
 }

@@ -122,6 +122,9 @@ export default class RuntimeBackground {
           });
         }
         break;
+      case "closePasswordReprompt":
+        await this.browserPopoutWindowService.closePasswordRepromptPrompt();
+        break;
       case "openAddEditCipher":
         await this.browserPopoutWindowService.openAddEditCipherWindow(
           sender.tab.windowId,

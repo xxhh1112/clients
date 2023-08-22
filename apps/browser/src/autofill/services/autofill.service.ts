@@ -263,15 +263,7 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    if (
-      cipher.reprompt !== CipherRepromptType.None &&
-      (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash())
-    ) {
-      await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
-        cipherId: cipher.id,
-        action: "autofill",
-      });
-
+    if (await this.isPasswordRepromptRequired(cipher, tab)) {
       return null;
     }
 
@@ -294,6 +286,21 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     return totpCode;
+  }
+
+  async isPasswordRepromptRequired(cipher: CipherView, tab: chrome.tabs.Tab): Promise<boolean> {
+    const userHasMasterPasswordAndKeyHash =
+      await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
+    if (cipher.reprompt !== CipherRepromptType.None && userHasMasterPasswordAndKeyHash) {
+      await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+        cipherId: cipher.id,
+        action: "autofill",
+      });
+
+      return true;
+    }
+
+    return false;
   }
 
   /**

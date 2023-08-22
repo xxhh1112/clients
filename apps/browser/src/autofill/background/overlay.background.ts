@@ -100,7 +100,7 @@ class OverlayBackground {
     this.pageDetailsForTab[sender.tab.id] = [pageDetails];
   }
 
-  private autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
+  private async autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
     if (!message.cipherId) {
       return;
     }
@@ -111,7 +111,11 @@ class OverlayBackground {
     const cipherIndex = this.currentTabCiphers.findIndex((c) => c.id === message.cipherId);
     this.currentTabCiphers.unshift(this.currentTabCiphers.splice(cipherIndex, 1)[0]);
 
-    this.autofillService.doAutoFill({
+    if (await this.autofillService.isPasswordRepromptRequired(cipher, sender.tab)) {
+      return;
+    }
+
+    await this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
       pageDetails: this.pageDetailsForTab[sender.tab.id],

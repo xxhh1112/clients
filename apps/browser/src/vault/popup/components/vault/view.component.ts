@@ -315,6 +315,11 @@ export class ViewComponent extends BaseViewComponent {
       return;
     }
 
+    if (this.popupUtilsService.inSingleActionPopout(window, "passwordReprompt")) {
+      this.messagingService.send("closePasswordReprompt");
+      return;
+    }
+
     this.location.back();
   }
 
