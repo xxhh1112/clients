@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Vienums neatgriezeniski izdzēsts"
   },
-  "restoreItem": {
-    "message": "Atjaunot vienumu"
-  },
-  "restoreItemConfirmation": {
-    "message": "Vai tiešām atjaunot šo vienumu?"
-  },
   "restoredItem": {
     "message": "Vienums atjaunots"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Ieteicamie iestatījumu atjauninājumi"
   },
-  "region": {
-    "message": "Apgabals"
+  "loggingInOn": {
+    "message": "Piesakās"
   },
-  "eu": {
-    "message": "ES",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "ASV",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Pašizvietots"

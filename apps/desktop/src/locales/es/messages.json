@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Elemento eliminado de forma permanente"
   },
-  "restoreItem": {
-    "message": "Restaurar elemento"
-  },
-  "restoreItemConfirmation": {
-    "message": "¿Estás seguro de que quieres restaurar este elemento?"
-  },
   "restoredItem": {
     "message": "Elemento restaurado"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Actualización de ajustes recomendados"
   },
-  "region": {
-    "message": "Región"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
-  "eu": {
-    "message": "Unión Europea",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "EE.UU.",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Autoalojado"

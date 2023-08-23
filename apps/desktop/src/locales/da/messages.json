@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Emne slettet permanent"
   },
-  "restoreItem": {
-    "message": "Gendan emne"
-  },
-  "restoreItemConfirmation": {
-    "message": "Sikker på, at du vil gendanne dette emne?"
-  },
   "restoredItem": {
     "message": "Emne gendannet"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Anbefalet indstillingsopdatering"
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logger ind på"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "USA",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Selv-hostet"
