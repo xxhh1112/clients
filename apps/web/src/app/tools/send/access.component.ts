@@ -101,18 +101,18 @@ export class AccessComponent implements OnInit {
     this.unavailable = false;
     this.error = false;
     this.hideEmail = false;
-    const keyArray = Utils.fromUrlB64ToArray(this.key);
-    this.accessRequest = new SendAccessRequest();
-    if (this.password != null) {
-      const passwordHash = await this.cryptoFunctionService.pbkdf2(
-        this.password,
-        keyArray,
-        "sha256",
-        SEND_KDF_ITERATIONS
-      );
-      this.accessRequest.password = Utils.fromBufferToB64(passwordHash);
-    }
     try {
+      const keyArray = Utils.fromUrlB64ToArray(this.key);
+      this.accessRequest = new SendAccessRequest();
+      if (this.password != null) {
+        const passwordHash = await this.cryptoFunctionService.pbkdf2(
+          this.password,
+          keyArray,
+          "sha256",
+          SEND_KDF_ITERATIONS
+        );
+        this.accessRequest.password = Utils.fromBufferToB64(passwordHash);
+      }
       let sendResponse: SendAccessResponse = null;
       if (this.loading) {
         sendResponse = await this.sendApiService.postSendAccess(this.id, this.accessRequest);
@@ -133,6 +133,8 @@ export class AccessComponent implements OnInit {
         } else {
           this.error = true;
         }
+      } else {
+        this.error = true;
       }
     }
     this.loading = false;

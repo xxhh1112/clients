@@ -40,10 +40,10 @@
       <bit-no-items [icon]="expiredSendIcon" class="tw-text-main" *ngIf="!loading && unavailable">
         <ng-container slot="description">{{ "sendAccessUnavailable" | i18n }}</ng-container>
       </bit-no-items>
-      <div *ngIf="!loading && error">
-        {{ "unexpectedError" | i18n }}
-      </div>
-      <div *ngIf="!loading && !passwordRequired && send">
+      <bit-no-items [icon]="expiredSendIcon" class="tw-text-main" *ngIf="!loading && error">
+        <ng-container slot="description">{{ "unexpectedErrorSend" | i18n }}</ng-container>
+      </bit-no-items>
+      <div *ngIf="!loading && !passwordRequired && send && !error">
         <p class="text-center">
           <b>{{ send.name }}</b>
         </p>
