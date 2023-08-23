@@ -1,5 +1,6 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
+import { tabbable, FocusableElement } from "tabbable";
 
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
@@ -19,6 +20,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
+  private focusableElements: FocusableElement[] = [];
   private isOverlayIconVisible = false;
   private isOverlayListVisible = false;
   private overlayIconElement: HTMLElement;
@@ -40,7 +42,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
-    this.initMutationObservers();
+    this.initOverlayOnDomContentLoaded();
   }
 
   setupOverlayIconListenerOnField(
@@ -130,9 +132,25 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgAddNewVaultItem", { login });
   }
 
-  // TODO: CG - Need to figure a performant way to focus the previous element and next elements when coming out of the overlay.
-  focusMostRecentInputElement() {
-    this.mostRecentlyFocusedField?.focus();
+  redirectOverlayFocusOut(direction: "previous" | "next") {
+    if (!this.isOverlayListVisible) {
+      return;
+    }
+
+    if (!this.focusableElements.length) {
+      this.getFocusableElements();
+    }
+
+    const focusedElementIndex = this.focusableElements.findIndex(
+      (element) => element === this.mostRecentlyFocusedField
+    );
+    const redirectFocusElement =
+      this.focusableElements[focusedElementIndex + (direction === "previous" ? -1 : 1)];
+    redirectFocusElement?.focus();
+  }
+
+  private getFocusableElements() {
+    this.focusableElements = tabbable(globalThis.document.body);
   }
 
   private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
@@ -489,12 +507,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  private initMutationObservers = () => {
+  private initOverlayOnDomContentLoaded() {
     if (globalThis.document.readyState === "loading") {
-      globalThis.document.addEventListener("DOMContentLoaded", this.setupMutationObserver);
+      globalThis.document.addEventListener("DOMContentLoaded", this.handleDomContentLoadedEvent);
       return;
     }
 
+    this.handleDomContentLoadedEvent();
+  }
+
+  private handleDomContentLoadedEvent = () => {
     this.setupMutationObserver();
   };
 

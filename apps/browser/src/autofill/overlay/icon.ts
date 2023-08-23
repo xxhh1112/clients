@@ -41,6 +41,7 @@ class AutofillOverlayIcon extends HTMLElement {
     globalThis.addEventListener("blur", this.handleWindowBlurEvent);
 
     this.iconElement = globalThis.document.createElement("button");
+    this.iconElement.tabIndex = -1;
     this.iconElement.classList.add("overlay-icon");
     this.iconElement.addEventListener("click", this.handleIconClick);
     this.setIconElementSvg();

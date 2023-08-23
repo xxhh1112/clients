@@ -65,7 +65,8 @@ class OverlayBackground {
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItem: () => this.getNewVaultItemDetails(),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
-    focusMostRecentInputElement: ({ port }) => this.focusMostRecentInputElement(port.sender),
+    redirectOverlayFocusOut: ({ message, port }) =>
+      this.redirectOverlayFocusOut(message, port.sender),
   };
 
   constructor(
@@ -513,8 +514,11 @@ class OverlayBackground {
     this.overlayListPort.postMessage({ command: "focusOverlayList" });
   }
 
-  private focusMostRecentInputElement(sender: chrome.runtime.MessageSender) {
-    chrome.tabs.sendMessage(sender.tab.id, { command: "focusMostRecentInputElement" });
+  private redirectOverlayFocusOut(message: any, sender: chrome.runtime.MessageSender) {
+    chrome.tabs.sendMessage(sender.tab.id, {
+      command: "redirectOverlayFocusOut",
+      direction: message.direction,
+    });
   }
 
   // TODO: CG - Need to go through and refactor this implementation to be more robust.

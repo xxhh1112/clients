@@ -13,8 +13,6 @@ class AutofillOverlayList extends HTMLElement {
   private authStatus: AuthenticationStatus;
   private shadowDom: ShadowRoot;
   private overlayListContainer: HTMLDivElement;
-  private readonly plusIconElement: HTMLElement;
-  private readonly lockIconElement: HTMLElement;
   private styleSheetUrl: string;
   private messageOrigin: string;
   private resizeObserver: ResizeObserver;
@@ -29,10 +27,7 @@ class AutofillOverlayList extends HTMLElement {
     super();
 
     this.shadowDom = this.attachShadow({ mode: "closed" });
-    this.plusIconElement = buildSvgDomElement(plusIcon);
-    this.lockIconElement = buildSvgDomElement(lockIcon);
-    this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
-    this.setupWindowMessageListener();
+    this.setupGlobalListeners();
   }
 
   private async initAutofillOverlayList(message: any = {}) {
@@ -90,8 +85,7 @@ class AutofillOverlayList extends HTMLElement {
       "aria-description",
       "Unlock your account to view matching logins"
     );
-    unlockButtonElement.prepend(this.lockIconElement);
-
+    unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
     unlockButtonElement.addEventListener("click", this.handleUnlockButtonClick);
 
     const overlayListButtonContainer = globalThis.document.createElement("div");
@@ -145,15 +139,10 @@ class AutofillOverlayList extends HTMLElement {
       this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
     const handleFillCipherKeyPress = (event: KeyboardEvent) => {
       event.preventDefault();
-      event.stopPropagation();
 
       if (event.key === "Enter") {
         handleFillCipherClick();
         return;
-      }
-
-      if (event.key === "Tab" && event.shiftKey) {
-        this.postMessageToParent({ command: "focusMostRecentInputElement" });
       }
 
       if (!(event.target instanceof Element)) {
@@ -224,7 +213,6 @@ class AutofillOverlayList extends HTMLElement {
     // TODO: CG - Need to refactor this to remove duplication and also need to add behavior for when we are only Tabbing out of the list.
     const handleViewCipherKeyPress = (event: KeyboardEvent) => {
       event.preventDefault();
-      event.stopPropagation();
 
       if (event.key === "Enter") {
         handleViewCipherClick();
@@ -360,7 +348,7 @@ class AutofillOverlayList extends HTMLElement {
     newItemButton.id = "new-item-button";
     newItemButton.className = "add-new-item-button overlay-list-button";
     newItemButton.textContent = `New item`;
-    newItemButton.prepend(this.plusIconElement);
+    newItemButton.prepend(buildSvgDomElement(plusIcon));
     newItemButton.addEventListener("click", this.handeNewItemButtonClick);
 
     const overlayListButtonContainer = globalThis.document.createElement("div");
@@ -408,6 +396,10 @@ class AutofillOverlayList extends HTMLElement {
     }
   }
 
+  private redirectOverlayFocusOutMessage(direction: "previous" | "next") {
+    this.postMessageToParent({ command: "redirectOverlayFocusOut", direction });
+  }
+
   private postMessageToParent(message: any) {
     if (!this.messageOrigin) {
       return;
@@ -416,8 +408,10 @@ class AutofillOverlayList extends HTMLElement {
     globalThis.parent.postMessage(message, this.messageOrigin);
   }
 
-  private setupWindowMessageListener() {
+  private setupGlobalListeners() {
     globalThis.addEventListener("message", this.handleWindowMessage);
+    globalThis.document.addEventListener("keydown", this.handleDocumentKeyDownEvent);
+    this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {
@@ -433,6 +427,23 @@ class AutofillOverlayList extends HTMLElement {
     }
 
     handler({ message });
+  };
+
+  private handleDocumentKeyDownEvent = (event: KeyboardEvent) => {
+    const isTabKey = event.key === "Tab";
+    if (!isTabKey) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.shiftKey) {
+      this.redirectOverlayFocusOutMessage("previous");
+      return;
+    }
+
+    this.redirectOverlayFocusOutMessage("next");
   };
 
   private handleResizeObserver = (entries: ResizeObserverEntry[]) => {

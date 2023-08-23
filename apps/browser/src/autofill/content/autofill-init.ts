@@ -27,8 +27,7 @@ class AutofillInit implements AutofillInitInterface {
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
-    focusMostRecentInputElement: () =>
-      this.autofillOverlayContentService.focusMostRecentInputElement(),
+    redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
   };
 
   /**
@@ -125,6 +124,10 @@ class AutofillInit implements AutofillInitInterface {
 
   private addNewVaultItemFromOverlay() {
     this.autofillOverlayContentService.addNewVaultItem();
+  }
+
+  private redirectOverlayFocusOut(message: any) {
+    this.autofillOverlayContentService.redirectOverlayFocusOut(message.direction);
   }
 
   /**
