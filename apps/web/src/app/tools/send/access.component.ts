@@ -15,14 +15,25 @@ import { SendAccessRequest } from "@bitwarden/common/tools/send/models/request/s
 import { SendAccessResponse } from "@bitwarden/common/tools/send/models/response/send-access.response";
 import { SendAccessView } from "@bitwarden/common/tools/send/models/view/send-access.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
+import { NoItemsModule } from "@bitwarden/components";
+
 import { LooseComponentsModule, SharedModule } from "../../shared";
+
+import { ExpiredSend } from "./icons/expired-send.icon";
 import { SendAccessFileComponent } from "./send-access-file.component";
+import { SendAccessPasswordComponent } from "./send-access-password.component";
 
 @Component({
   selector: "app-send-access",
   templateUrl: "access.component.html",
   standalone: true,
-  imports: [SendAccessFileComponent, LooseComponentsModule, SharedModule],
+  imports: [
+    SendAccessFileComponent,
+    LooseComponentsModule,
+    SendAccessPasswordComponent,
+    SharedModule,
+    NoItemsModule,
+  ],
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AccessComponent implements OnInit {
@@ -40,6 +51,7 @@ export class AccessComponent implements OnInit {
   private key: string;
   decKey: SymmetricCryptoKey;
   accessRequest: SendAccessRequest;
+  expiredSendIcon = ExpiredSend;
 
   constructor(
     private i18nService: I18nService,
@@ -129,5 +141,8 @@ export class AccessComponent implements OnInit {
       !this.passwordRequired &&
       !this.loading &&
       !this.unavailable;
+  }
+  getPassword(password: string) {
+    this.password = password;
   }
 }
