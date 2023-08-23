@@ -33,14 +33,14 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
 export const AUTOFILL_ID = "autofill";
-export const OVERLAY_VIEW_CIPHER = "overlay-view-cipher";
+export const SHOW_AUTOFILL_BUTTON = "show-autofill-button";
 export const COPY_USERNAME_ID = "copy-username";
 export const COPY_PASSWORD_ID = "copy-password";
 export const COPY_VERIFICATIONCODE_ID = "copy-totp";
 
 type LoadAction =
   | typeof AUTOFILL_ID
-  | typeof OVERLAY_VIEW_CIPHER
+  | typeof SHOW_AUTOFILL_BUTTON
   | typeof COPY_USERNAME_ID
   | typeof COPY_PASSWORD_ID
   | typeof COPY_VERIFICATIONCODE_ID;
@@ -174,7 +174,7 @@ export class ViewComponent extends BaseViewComponent {
       case AUTOFILL_ID:
         this.fillCipher();
         return;
-      case OVERLAY_VIEW_CIPHER:
+      case SHOW_AUTOFILL_BUTTON:
         return;
       case COPY_USERNAME_ID:
         await this.copy(this.cipher.login.username, "username", "Username");
