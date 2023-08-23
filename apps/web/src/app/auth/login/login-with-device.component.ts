@@ -4,7 +4,9 @@ import { Router } from "@angular/router";
 import { LoginWithDeviceComponent as BaseLoginWithDeviceComponent } from "@bitwarden/angular/auth/components/login-with-device.component";
 import { AnonymousHubService } from "@bitwarden/common/abstractions/anonymousHub.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -43,7 +45,9 @@ export class LoginWithDeviceComponent
     validationService: ValidationService,
     stateService: StateService,
     loginService: LoginService,
-    private routerService: RouterService
+    private routerService: RouterService,
+    deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    authReqCryptoService: AuthRequestCryptoServiceAbstraction
   ) {
     super(
       router,
@@ -60,7 +64,9 @@ export class LoginWithDeviceComponent
       anonymousHubService,
       validationService,
       stateService,
-      loginService
+      loginService,
+      deviceTrustCryptoService,
+      authReqCryptoService
     );
     this.onSuccessfulLogin = this.goAfterLogIn;
   }

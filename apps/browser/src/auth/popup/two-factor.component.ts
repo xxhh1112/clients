@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { TwoFactorComponent as BaseTwoFactorComponent } from "@bitwarden/angular/auth/components/two-factor.component";
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
@@ -11,12 +11,14 @@ import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
@@ -46,7 +48,9 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
-    private dialogService: DialogServiceAbstraction
+    configService: ConfigServiceAbstraction,
+    private dialogService: DialogService,
+    @Inject(WINDOW) protected win: Window
   ) {
     super(
       authService,
@@ -54,18 +58,27 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       i18nService,
       apiService,
       platformUtilsService,
-      window,
+      win,
       environmentService,
       route,
       logService,
       twoFactorService,
       appIdService,
-      loginService
+      loginService,
+      configService
     );
-    super.onSuccessfulLogin = () => {
-      this.loginService.clearValues();
-      return syncService.fullSync(true);
+    super.onSuccessfulLogin = async () => {
+      syncService.fullSync(true);
     };
+
+    super.onSuccessfulLoginTde = async () => {
+      syncService.fullSync(true);
+    };
+
+    super.onSuccessfulLoginTdeNavigate = async () => {
+      this.win.close();
+    };
+
     super.successRoute = "/tabs/vault";
     // FIXME: Chromium 110 has broken WebAuthn support in extensions via an iframe
     this.webAuthnNewTab = true;
@@ -104,7 +117,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "warning" },
         content: { key: "popup2faCloseMessage" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
       if (confirmed) {
         this.popupUtilsService.popOut(window);
@@ -114,11 +127,11 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.sso === "true") {
-        super.onSuccessfulLogin = () => {
+        super.onSuccessfulLogin = async () => {
           // This is not awaited so we don't pause the application while the sync is happening.
           // This call is executed by the service that lives in the background script so it will continue
           // the sync even if this tab closes.
-          const syncPromise = this.syncService.fullSync(true);
+          this.syncService.fullSync(true);
 
           // Force sidebars (FF && Opera) to reload while exempting current window
           // because we are just going to close the current window.
@@ -127,8 +140,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
           // We don't need this window anymore because the intent is for the user to be left
           // on the web vault screen which tells them to continue in the browser extension (sidebar or popup)
           BrowserApi.closeBitwardenExtensionTab();
-
-          return syncPromise;
         };
       }
     });

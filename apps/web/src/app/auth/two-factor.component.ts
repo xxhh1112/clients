@@ -1,7 +1,8 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Inject, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { TwoFactorComponent as BaseTwoFactorComponent } from "@bitwarden/angular/auth/components/two-factor.component";
+import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
@@ -9,13 +10,14 @@ import { LoginService } from "@bitwarden/common/auth/abstractions/login.service"
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
-import { RouterService } from "../core";
+import { RouterService, StateService } from "../core";
 
 import { TwoFactorOptionsComponent } from "./two-factor-options.component";
 
@@ -41,7 +43,10 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     private routerService: RouterService,
-    loginService: LoginService
+    loginService: LoginService,
+    stateService: StateService,
+    configService: ConfigServiceAbstraction,
+    @Inject(WINDOW) protected win: Window
   ) {
     super(
       authService,
@@ -49,13 +54,15 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       i18nService,
       apiService,
       platformUtilsService,
-      window,
+      win,
       environmentService,
       route,
       logService,
       twoFactorService,
       appIdService,
-      loginService
+      loginService,
+      stateService,
+      configService
     );
     this.onSuccessfulLoginNavigate = this.goAfterLogIn;
   }
@@ -79,7 +86,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     );
   }
 
-  async goAfterLogIn() {
+  goAfterLogIn = async () => {
     this.loginService.clearValues();
     const previousUrl = await this.routerService.getAndClearPersistedPreviousUrl();
 
@@ -88,9 +95,9 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     } else {
       this.router.navigate([this.successRoute], {
         queryParams: {
-          identifier: this.identifier,
+          identifier: this.orgIdentifier,
         },
       });
     }
-  }
+  };
 }

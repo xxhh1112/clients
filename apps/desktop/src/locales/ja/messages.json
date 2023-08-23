@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "完全に削除されたアイテム"
   },
-  "restoreItem": {
-    "message": "アイテムをリストア"
-  },
-  "restoreItemConfirmation": {
-    "message": "このアイテムをリストアしますか？"
-  },
   "restoredItem": {
     "message": "リストアされたアイテム"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "設定の更新を推奨"
   },
-  "region": {
-    "message": "リージョン"
+  "loggingInOn": {
+    "message": "ログイン先"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "米国",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "自己ホスト型"
