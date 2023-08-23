@@ -1,7 +1,10 @@
-function buildSvgDomElement(svgString: string): HTMLElement {
+function buildSvgDomElement(svgString: string, ariaHidden: "true" | "false" = "true"): HTMLElement {
   const domParser = new DOMParser();
   const svgDom = domParser.parseFromString(svgString, "image/svg+xml");
-  return svgDom.documentElement;
+  const domElement = svgDom.documentElement;
+  domElement.setAttribute("aria-hidden", ariaHidden);
+
+  return domElement;
 }
 
 function sendExtensionMessage(command: string, options: any = {}) {

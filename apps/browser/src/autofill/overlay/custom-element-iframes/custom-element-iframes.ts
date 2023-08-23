@@ -3,21 +3,31 @@ import { AutofillOverlayPort } from "../utils/autofill-overlay.enum";
 import OverlayIframeService from "./overlay-iframe.service";
 
 class AutofillOverlayCustomElementIframe extends HTMLElement {
-  constructor(iframePath: string, portName: string, initStyles?: Partial<CSSStyleDeclaration>) {
+  constructor(
+    iframePath: string,
+    portName: string,
+    initStyles: Partial<CSSStyleDeclaration>,
+    ariaAlert?: string
+  ) {
     super();
 
     const shadow: ShadowRoot = this.attachShadow({ mode: "closed" });
     const overlayIframeService = new OverlayIframeService(iframePath, portName, shadow);
-    overlayIframeService.initOverlayIframe(initStyles);
+    overlayIframeService.initOverlayIframe(initStyles, ariaAlert);
   }
 }
 
 class AutofillOverlayIconIframe extends AutofillOverlayCustomElementIframe {
   constructor() {
-    super("overlay/icon.html", AutofillOverlayPort.Icon, {
-      background: "transparent",
-      border: "none",
-    });
+    super(
+      "overlay/icon.html",
+      AutofillOverlayPort.Icon,
+      {
+        background: "transparent",
+        border: "none",
+      },
+      "Bitwarden menu available. Press the down arrow key to select."
+    );
   }
 }
 

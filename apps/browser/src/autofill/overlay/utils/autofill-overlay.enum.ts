@@ -3,11 +3,17 @@ const AutofillOverlayCustomElement = {
   List: "autofill-overlay-list",
   BitwardenIcon: "bitwarden-autofill-overlay-icon",
   BitwardenList: "bitwarden-autofill-overlay-list",
-};
+} as const;
 
 const AutofillOverlayPort = {
   Icon: "autofill-overlay-icon-port",
   List: "autofill-overlay-list-port",
 } as const;
 
-export { AutofillOverlayCustomElement, AutofillOverlayPort };
+const RedirectFocusDirection = {
+  Current: "current",
+  Previous: "previous",
+  Next: "next",
+} as const;
+
+export { AutofillOverlayCustomElement, AutofillOverlayPort, RedirectFocusDirection };

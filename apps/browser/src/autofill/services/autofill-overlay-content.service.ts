@@ -9,7 +9,10 @@ import {
   AutofillOverlayIconIframe,
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
-import { AutofillOverlayCustomElement } from "../overlay/utils/autofill-overlay.enum";
+import {
+  AutofillOverlayCustomElement,
+  RedirectFocusDirection,
+} from "../overlay/utils/autofill-overlay.enum";
 import { sendExtensionMessage, setElementStyles } from "../overlay/utils/utils";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
@@ -54,7 +57,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent);
-    formFieldElement.addEventListener("keydown", this.handleFormFieldKeydownEvent);
+    formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
     formFieldElement.addEventListener(
       "input",
       this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
@@ -77,10 +80,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
-      this.mostRecentlyFocusedField.focus();
+      this.focusMostRecentOverlayField();
     }
 
     this.updateOverlayElementsPosition();
+  }
+
+  focusMostRecentOverlayField() {
+    if (!this.mostRecentlyFocusedField) {
+      return;
+    }
+
+    this.mostRecentlyFocusedField.focus();
   }
 
   removeAutofillOverlay = () => {
@@ -132,25 +143,28 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgAddNewVaultItem", { login });
   }
 
-  redirectOverlayFocusOut(direction: "previous" | "next") {
-    if (!this.isOverlayListVisible) {
+  redirectOverlayFocusOut(direction: string) {
+    if (!this.isOverlayListVisible || !this.mostRecentlyFocusedField) {
+      return;
+    }
+
+    if (direction === RedirectFocusDirection.Current) {
+      this.focusMostRecentOverlayField();
+      setTimeout(this.removeAutofillOverlay, 100);
       return;
     }
 
     if (!this.focusableElements.length) {
-      this.getFocusableElements();
+      this.focusableElements = tabbable(globalThis.document.body);
     }
 
     const focusedElementIndex = this.focusableElements.findIndex(
       (element) => element === this.mostRecentlyFocusedField
     );
-    const redirectFocusElement =
-      this.focusableElements[focusedElementIndex + (direction === "previous" ? -1 : 1)];
-    redirectFocusElement?.focus();
-  }
 
-  private getFocusableElements() {
-    this.focusableElements = tabbable(globalThis.document.body);
+    const indexOffset = direction === RedirectFocusDirection.Previous ? -1 : 1;
+    const redirectFocusElement = this.focusableElements[focusedElementIndex + indexOffset];
+    redirectFocusElement?.focus();
   }
 
   private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
@@ -162,20 +176,30 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     sendExtensionMessage("bgCheckOverlayFocused");
   };
 
-  private handleFormFieldKeydownEvent = (event: KeyboardEvent) => {
+  private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
     const eventCode = event.code;
     if (eventCode === "Escape") {
       this.removeAutofillOverlay();
+      return;
     }
 
     if (eventCode === "ArrowDown") {
-      if (!this.isOverlayListVisible) {
-        this.updateOverlayListPosition();
-      }
+      event.preventDefault();
+      event.stopPropagation();
 
-      sendExtensionMessage("bgFocusAutofillOverlayList");
+      this.focusOverlayList();
     }
   };
+
+  private focusOverlayList() {
+    if (!this.isOverlayListVisible) {
+      this.openAutofillOverlay();
+      setTimeout(() => sendExtensionMessage("bgFocusAutofillOverlayList"), 125);
+      return;
+    }
+
+    sendExtensionMessage("bgFocusAutofillOverlayList");
+  }
 
   private handleFormFieldInputEvent = (
     formFieldElement: ElementWithOpId<FormFieldElement>,

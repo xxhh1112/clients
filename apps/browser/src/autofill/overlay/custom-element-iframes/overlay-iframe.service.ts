@@ -5,6 +5,8 @@ class OverlayIframeService {
   private extensionOriginsSet: Set<string>;
   private iframeMutationObserver: MutationObserver;
   private readonly iframe: HTMLIFrameElement;
+  private ariaAlertElement: HTMLDivElement;
+  private ariaAlertTimeout: NodeJS.Timeout;
   private iframeStyles: Partial<CSSStyleDeclaration> = {
     all: "initial",
     position: "fixed",
@@ -32,12 +34,20 @@ class OverlayIframeService {
     this.iframeMutationObserver = new MutationObserver(this.handleMutationObserver);
   }
 
-  initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>) {
+  initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>, ariaAlert?: string) {
     this.iframe.src = chrome.runtime.getURL(this.iframePath);
     this.updateElementStyles(this.iframe, { ...this.iframeStyles, ...initStyles });
     this.iframe.setAttribute("sandbox", "allow-scripts");
     this.iframe.setAttribute("allowtransparency", "true");
     this.iframe.addEventListener("load", this.setupPortMessageListener);
+
+    if (ariaAlert) {
+      this.ariaAlertElement = globalThis.document.createElement("div");
+      this.ariaAlertElement.setAttribute("role", "status");
+      this.ariaAlertElement.setAttribute("aria-live", "polite");
+      this.ariaAlertElement.setAttribute("aria-atomic", "true");
+      this.ariaAlertElement.textContent = ariaAlert;
+    }
 
     this.shadow.appendChild(this.iframe);
   }
@@ -47,7 +57,22 @@ class OverlayIframeService {
     this.port.onDisconnect.addListener(this.handlePortDisconnect);
     this.port.onMessage.addListener(this.handlePortMessage);
     globalThis.addEventListener("message", this.handleWindowMessage);
+
+    this.announceAriaAlert();
   };
+
+  private announceAriaAlert() {
+    if (!this.ariaAlertElement) {
+      return;
+    }
+
+    this.ariaAlertElement.remove();
+    if (this.ariaAlertTimeout) {
+      clearTimeout(this.ariaAlertTimeout);
+    }
+
+    this.ariaAlertTimeout = setTimeout(() => this.shadow.appendChild(this.ariaAlertElement), 2000);
+  }
 
   private handlePortDisconnect = (port: chrome.runtime.Port) => {
     if (port.name !== this.portName) {
@@ -83,6 +108,7 @@ class OverlayIframeService {
   private updateIframePosition(position: Partial<CSSStyleDeclaration>) {
     this.updateElementStyles(this.iframe, position);
     setTimeout(() => this.updateElementStyles(this.iframe, { opacity: "1" }), 0);
+    this.announceAriaAlert();
   }
 
   private handleWindowMessage = (event: MessageEvent) => {

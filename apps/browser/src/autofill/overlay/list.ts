@@ -3,7 +3,10 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayListWindowMessageHandlers } from "./abstractions/list";
-import { AutofillOverlayCustomElement } from "./utils/autofill-overlay.enum";
+import {
+  AutofillOverlayCustomElement,
+  RedirectFocusDirection,
+} from "./utils/autofill-overlay.enum";
 import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "./utils/svg-icons";
 import { buildSvgDomElement } from "./utils/utils";
 
@@ -58,6 +61,7 @@ class AutofillOverlayList extends HTMLElement {
 
     this.overlayListContainer = globalThis.document.createElement("div");
     this.overlayListContainer.className = "overlay-list-container";
+    this.overlayListContainer.setAttribute("role", "dialog");
     this.resizeObserver.observe(this.overlayListContainer);
 
     this.shadowDom.appendChild(linkElement);
@@ -72,6 +76,7 @@ class AutofillOverlayList extends HTMLElement {
     this.resetOverlayListContainer();
 
     const lockedOverlay = globalThis.document.createElement("div");
+    lockedOverlay.id = "locked-overlay-description";
     lockedOverlay.className = "locked-overlay overlay-list-message";
     lockedOverlay.textContent = "Unlock your account to view matching logins";
 
@@ -81,10 +86,8 @@ class AutofillOverlayList extends HTMLElement {
     unlockButtonElement.className = "unlock-button overlay-list-button";
     unlockButtonElement.textContent = `Unlock account`;
     unlockButtonElement.setAttribute("aria-label", "Unlock account, opens in a new window");
-    unlockButtonElement.setAttribute(
-      "aria-description",
-      "Unlock your account to view matching logins"
-    );
+    // TODO: CG - Determine if we need to add this.
+    // unlockButtonElement.setAttribute("aria-describedby", "locked-overlay-description");
     unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
     unlockButtonElement.addEventListener("click", this.handleUnlockButtonClick);
 
@@ -110,6 +113,7 @@ class AutofillOverlayList extends HTMLElement {
 
     const ciphersList = globalThis.document.createElement("ul");
     ciphersList.className = "overlay-actions-list";
+    ciphersList.setAttribute("role", "list");
 
     message.ciphers.forEach((cipher: any) =>
       ciphersList.appendChild(this.buildOverlayActionsListItem(cipher))
@@ -128,6 +132,7 @@ class AutofillOverlayList extends HTMLElement {
     cipherContainerElement.appendChild(viewCipherElement);
 
     const overlayActionsListItem = globalThis.document.createElement("li");
+    overlayActionsListItem.setAttribute("role", "listitem");
     overlayActionsListItem.className = "overlay-actions-list-item";
     overlayActionsListItem.appendChild(cipherContainerElement);
 
@@ -198,6 +203,7 @@ class AutofillOverlayList extends HTMLElement {
     const fillCipherElement = globalThis.document.createElement("button");
     fillCipherElement.tabIndex = -1;
     fillCipherElement.className = "fill-cipher-button";
+    fillCipherElement.setAttribute("aria-label", `Autofill ${cipher.name}`);
     fillCipherElement.appendChild(cipherIcon);
     fillCipherElement.appendChild(cipherDetailsElement);
     fillCipherElement.addEventListener("click", handleFillCipherClick);
@@ -275,6 +281,7 @@ class AutofillOverlayList extends HTMLElement {
     const viewCipherElement = globalThis.document.createElement("button");
     viewCipherElement.tabIndex = -1;
     viewCipherElement.className = "view-cipher-button";
+    viewCipherElement.setAttribute("aria-label", `View ${cipher.name}, opens in a new window`);
     viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
     viewCipherElement.addEventListener("click", handleViewCipherClick);
     viewCipherElement.addEventListener("keydown", handleViewCipherKeyPress);
@@ -348,6 +355,7 @@ class AutofillOverlayList extends HTMLElement {
     newItemButton.id = "new-item-button";
     newItemButton.className = "add-new-item-button overlay-list-button";
     newItemButton.textContent = `New item`;
+    newItemButton.setAttribute("aria-label", "Add new vault item, opens in a new window");
     newItemButton.prepend(buildSvgDomElement(plusIcon));
     newItemButton.addEventListener("click", this.handeNewItemButtonClick);
 
@@ -396,7 +404,7 @@ class AutofillOverlayList extends HTMLElement {
     }
   }
 
-  private redirectOverlayFocusOutMessage(direction: "previous" | "next") {
+  private redirectOverlayFocusOutMessage(direction: string) {
     this.postMessageToParent({ command: "redirectOverlayFocusOut", direction });
   }
 
@@ -430,20 +438,21 @@ class AutofillOverlayList extends HTMLElement {
   };
 
   private handleDocumentKeyDownEvent = (event: KeyboardEvent) => {
-    const isTabKey = event.key === "Tab";
-    if (!isTabKey) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.redirectOverlayFocusOutMessage(
+        event.shiftKey ? RedirectFocusDirection.Previous : RedirectFocusDirection.Next
+      );
       return;
     }
 
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (event.shiftKey) {
-      this.redirectOverlayFocusOutMessage("previous");
-      return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.redirectOverlayFocusOutMessage(RedirectFocusDirection.Current);
     }
-
-    this.redirectOverlayFocusOutMessage("next");
   };
 
   private handleResizeObserver = (entries: ResizeObserverEntry[]) => {
