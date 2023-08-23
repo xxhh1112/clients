@@ -684,7 +684,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       }
       this.refresh();
     } else if (result.action === CollectionDialogAction.Deleted) {
-      await this.collectionService.delete(result.collectionId);
+      await this.collectionService.delete(result.collection?.id);
       this.refresh();
     }
   }
