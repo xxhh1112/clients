@@ -1,5 +1,5 @@
 import { UriMatchType } from "../../enums";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
+import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { CipherType } from "../enums/cipher-type";
 import { CipherData } from "../models/data/cipher.data";
 import { Cipher } from "../models/domain/cipher";
@@ -33,8 +33,8 @@ export abstract class CipherService {
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
-  createWithServer: (cipher: Cipher) => Promise<any>;
-  updateWithServer: (cipher: Cipher) => Promise<any>;
+  createWithServer: (cipher: Cipher, orgAdmin?: boolean) => Promise<any>;
+  updateWithServer: (cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean) => Promise<any>;
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
@@ -76,5 +76,9 @@ export abstract class CipherService {
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;
   restoreWithServer: (id: string, asAdmin?: boolean) => Promise<any>;
-  restoreManyWithServer: (ids: string[]) => Promise<any>;
+  restoreManyWithServer: (
+    ids: string[],
+    organizationId?: string,
+    asAdmin?: boolean
+  ) => Promise<void>;
 }

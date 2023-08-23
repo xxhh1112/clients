@@ -1,8 +1,11 @@
 import { Directive, EventEmitter, Output } from "@angular/core";
 
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import {
+  EnvironmentService,
+  Region,
+} from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 import { ModalService } from "../services/modal.service";
 
@@ -25,6 +28,9 @@ export class EnvironmentComponent {
     private modalService: ModalService
   ) {
     const urls = this.environmentService.getUrls();
+    if (this.environmentService.selectedRegion != Region.SelfHosted) {
+      return;
+    }
 
     this.baseUrl = urls.base || "";
     this.webVaultUrl = urls.webVault || "";

@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 
+import { UserVerificationModule } from "../../auth/shared/components/user-verification";
 import { LooseComponentsModule, SharedModule } from "../../shared";
 
 import { AdjustSubscription } from "./adjust-subscription.component";
@@ -11,11 +12,17 @@ import { OrganizationBillingRoutingModule } from "./organization-billing-routing
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";
 import { OrganizationSubscriptionCloudComponent } from "./organization-subscription-cloud.component";
 import { OrganizationSubscriptionSelfhostComponent } from "./organization-subscription-selfhost.component";
-import { SecretsManagerEnrollComponent } from "./secrets-manager/enroll.component";
+import { SecretsManagerBillingModule } from "./secrets-manager/sm-billing.module";
 import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
 
 @NgModule({
-  imports: [SharedModule, LooseComponentsModule, OrganizationBillingRoutingModule],
+  imports: [
+    SharedModule,
+    LooseComponentsModule,
+    OrganizationBillingRoutingModule,
+    UserVerificationModule,
+    SecretsManagerBillingModule,
+  ],
   declarations: [
     AdjustSubscription,
     BillingSyncApiKeyComponent,
@@ -26,7 +33,6 @@ import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
     OrganizationSubscriptionSelfhostComponent,
     OrganizationSubscriptionCloudComponent,
     SubscriptionHiddenComponent,
-    SecretsManagerEnrollComponent,
   ],
 })
 export class OrganizationBillingModule {}

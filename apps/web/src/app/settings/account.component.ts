@@ -1,9 +1,7 @@
 import { Component, ViewChild, ViewContainerRef } from "@angular/core";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 
 import { DeauthorizeSessionsComponent } from "../auth/settings/deauthorize-sessions.component";
 
@@ -26,13 +24,11 @@ export class AccountComponent {
 
   constructor(
     private modalService: ModalService,
-    private apiService: ApiService,
-    private keyConnectorService: KeyConnectorService,
-    private stateService: StateService
+    private userVerificationService: UserVerificationService
   ) {}
 
   async ngOnInit() {
-    this.showChangeEmail = !(await this.keyConnectorService.getUsesKeyConnector());
+    this.showChangeEmail = await this.userVerificationService.hasMasterPassword();
   }
 
   async deauthorizeSessions() {

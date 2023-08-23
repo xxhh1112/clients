@@ -1,14 +1,14 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { CryptoFunctionService } from "../../../abstractions/cryptoFunction.service";
-import { I18nService } from "../../../abstractions/i18n.service";
-import { StateService } from "../../../abstractions/state.service";
 import { SEND_KDF_ITERATIONS } from "../../../enums";
-import { Utils } from "../../../misc/utils";
-import { EncArrayBuffer } from "../../../models/domain/enc-array-buffer";
-import { EncString } from "../../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import { CryptoFunctionService } from "../../../platform/abstractions/crypto-function.service";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { I18nService } from "../../../platform/abstractions/i18n.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { Utils } from "../../../platform/misc/utils";
+import { EncArrayBuffer } from "../../../platform/models/domain/enc-array-buffer";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { SendType } from "../enums/send-type";
 import { SendData } from "../models/data/send.data";
 import { Send } from "../models/domain/send";
@@ -143,9 +143,9 @@ export class SendService implements InternalSendServiceAbstraction {
     }
 
     decSends = [];
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
-      throw new Error("No key.");
+      throw new Error("No user key found.");
     }
 
     const promises: Promise<any>[] = [];
@@ -241,7 +241,7 @@ export class SendService implements InternalSendServiceAbstraction {
     key: SymmetricCryptoKey
   ): Promise<[EncString, EncArrayBuffer]> {
     const encFileName = await this.cryptoService.encrypt(fileName, key);
-    const encFileData = await this.cryptoService.encryptToBytes(data, key);
+    const encFileData = await this.cryptoService.encryptToBytes(new Uint8Array(data), key);
     return [encFileName, encFileData];
   }
 
@@ -249,7 +249,7 @@ export class SendService implements InternalSendServiceAbstraction {
     const sends = Object.values(sendsMap || {}).map((f) => new Send(f));
     this._sends.next(sends);
 
-    if (await this.cryptoService.hasKey()) {
+    if (await this.cryptoService.hasUserKey()) {
       this._sendViews.next(await this.decryptSends(sends));
     }
   }

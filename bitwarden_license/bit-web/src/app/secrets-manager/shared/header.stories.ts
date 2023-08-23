@@ -4,14 +4,16 @@ import {
   Meta,
   Story,
   moduleMetadata,
-  componentWrapperDecorator,
   applicationConfig,
+  componentWrapperDecorator,
 } from "@storybook/angular";
 import { BehaviorSubject, combineLatest, map } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import {
   AvatarModule,
   BreadcrumbsModule,
@@ -24,7 +26,7 @@ import {
   TypographyModule,
   InputModule,
 } from "@bitwarden/components";
-import { PreloadedEnglishI18nModule } from "@bitwarden/web-vault/app/tests/preloaded-english-i18n.module";
+import { PreloadedEnglishI18nModule } from "@bitwarden/web-vault/app/core/tests";
 
 import { HeaderComponent } from "./header.component";
 
@@ -39,6 +41,12 @@ class MockStateService {
 class MockMessagingService implements MessagingService {
   send(subscriber: string, arg?: any) {
     alert(subscriber);
+  }
+}
+
+class MockVaultTimeoutService {
+  availableVaultTimeoutActions$() {
+    return new BehaviorSubject([VaultTimeoutAction.Lock]).asObservable();
   }
 }
 
@@ -89,6 +97,7 @@ export default {
       declarations: [HeaderComponent, MockProductSwitcher, MockDynamicAvatar],
       providers: [
         { provide: StateService, useClass: MockStateService },
+        { provide: VaultTimeoutSettingsService, useClass: MockVaultTimeoutService },
         {
           provide: MessagingService,
           useFactory: () => {

@@ -542,7 +542,7 @@
     "message": "Απαιτείται επιβεβαίωση του κύριου κωδικού."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Ο κύριος κωδικός πρέπει να έχει τουλάχιστον $VALUE$ χαρακτήρες μήκος.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -771,7 +771,7 @@
     "message": "Επικοινωνία"
   },
   "helpAndFeedback": {
-    "message": "Help and feedback"
+    "message": "Βοήθεια και σχόλια"
   },
   "getHelp": {
     "message": "Ζητήστε Βοήθεια"
@@ -1393,7 +1393,7 @@
     "message": "Ξεκλειδώστε με το Windows Hello"
   },
   "additionalWindowsHelloSettings": {
-    "message": "Additional Windows Hello settings"
+    "message": "Πρόσθετες ρυθμίσεις του Windows Hello"
   },
   "windowsHelloConsentMessage": {
     "message": "Επαληθεύστε για το Bitwarden."
@@ -1408,16 +1408,16 @@
     "message": "Ξεκλειδώστε το vault σας"
   },
   "autoPromptWindowsHello": {
-    "message": "Ζητήστε από τα Windows Γεια σας κατά την έναρξη"
+    "message": "Εμφάνιση Windows Hello κατά την εκκίνηση της εφαρμογής"
   },
   "autoPromptTouchId": {
     "message": "Ερώτηση για το Touch ID κατά την εκκίνηση"
   },
   "requirePasswordOnStart": {
-    "message": "Require password or PIN on app start"
+    "message": "Να απαιτείται κωδικός πρόσβασης ή PIN κατά την εκκίνηση της εφαρμογής"
   },
   "recommendedForSecurity": {
-    "message": "Recommended for security."
+    "message": "Συνίσταται για ασφάλεια."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Κλείδωμα με τον κύριο κωδικό πρόσβασης κατά την επανεκκίνηση"
@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Μόνιμα Διεγραμμένο Στοιχείο"
   },
-  "restoreItem": {
-    "message": "Ανάκτηση Στοιχείου"
-  },
-  "restoreItemConfirmation": {
-    "message": "Είστε βέβαιοι ότι θέλετε να ανακτήσετε αυτό το στοιχείο;"
-  },
   "restoredItem": {
     "message": "Στοιχείο που έχει Ανακτηθεί"
   },
@@ -1540,7 +1534,7 @@
     "message": "Για να ολοκληρώσετε τη σύνδεση με SSO, ορίστε έναν κύριο κωδικό πρόσβασης για πρόσβαση και προστασία του vault σας."
   },
   "currentMasterPass": {
-    "message": "Current master password"
+    "message": "Τρέχων κύριος κωδικός"
   },
   "newMasterPass": {
     "message": "Νέος Κύριος Κωδικός"
@@ -2250,20 +2244,21 @@
     "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
   },
   "windowsBiometricUpdateWarningTitle": {
-    "message": "Recommended Settings Update"
+    "message": "Ενημέρωση Προτεινόμενων Ρυθμίσεων"
   },
-  "region": {
-    "message": "Region"
+  "loggingInOn": {
+    "message": "Logging in on"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Self-hosted"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

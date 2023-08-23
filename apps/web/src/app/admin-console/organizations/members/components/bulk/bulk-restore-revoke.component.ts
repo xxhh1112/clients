@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 
 import { ModalConfig } from "@bitwarden/angular/services/modal.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { BulkUserDetails } from "./bulk-status.component";
 
@@ -20,6 +20,7 @@ export class BulkRestoreRevokeComponent {
   loading = false;
   done = false;
   error: string;
+  showNoMasterPasswordWarning = false;
 
   constructor(
     protected i18nService: I18nService,
@@ -29,6 +30,7 @@ export class BulkRestoreRevokeComponent {
     this.isRevoking = config.data.isRevoking;
     this.organizationId = config.data.organizationId;
     this.users = config.data.users;
+    this.showNoMasterPasswordWarning = this.users.some((u) => u.hasMasterPassword === false);
   }
 
   get bulkTitle() {
