@@ -86,8 +86,6 @@ class AutofillOverlayList extends HTMLElement {
     unlockButtonElement.className = "unlock-button overlay-list-button";
     unlockButtonElement.textContent = `Unlock account`;
     unlockButtonElement.setAttribute("aria-label", "Unlock account, opens in a new window");
-    // TODO: CG - Determine if we need to add this.
-    // unlockButtonElement.setAttribute("aria-describedby", "locked-overlay-description");
     unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
     unlockButtonElement.addEventListener("click", this.handleUnlockButtonClick);
 
@@ -203,7 +201,11 @@ class AutofillOverlayList extends HTMLElement {
     const fillCipherElement = globalThis.document.createElement("button");
     fillCipherElement.tabIndex = -1;
     fillCipherElement.className = "fill-cipher-button";
-    fillCipherElement.setAttribute("aria-label", `Autofill ${cipher.name}`);
+    fillCipherElement.setAttribute("aria-label", `fill credentials for ${cipher.name}`);
+    fillCipherElement.setAttribute(
+      "aria-description",
+      `partial username, ${cipher.login.username}`
+    );
     fillCipherElement.appendChild(cipherIcon);
     fillCipherElement.appendChild(cipherDetailsElement);
     fillCipherElement.addEventListener("click", handleFillCipherClick);
