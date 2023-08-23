@@ -1,15 +1,15 @@
-import { Constructor } from "type-fest";
+import { Constructor, Jsonify } from "type-fest";
 
 export function arrayInitialize<T>(
-  initializer: (obj: Partial<T>) => T
-): (objArray: Partial<T>[]) => T[] {
-  return (objArray: Partial<T>[]) => objArray?.map(initializer);
+  initializer: (obj: Jsonify<T>) => T
+): (objArray: Jsonify<T>[]) => T[] {
+  return (objArray: Jsonify<T>[]) => objArray?.map(initializer);
 }
 
 export function recordInitialize<T>(
-  initializer: (obj: Partial<T>) => T
-): (record: { [key: string]: Partial<T> }) => Record<string, T> {
-  return (objRecord: { [key: string]: Partial<T> }) => {
+  initializer: (obj: Jsonify<T>) => T
+): (record: { [key: string]: Jsonify<T> }) => Record<string, T> {
+  return (objRecord: { [key: string]: Jsonify<T> }) => {
     const record: Record<string, T> = {};
     for (const key in objRecord) {
       record[key] = initializer(objRecord[key]);
@@ -18,10 +18,10 @@ export function recordInitialize<T>(
   };
 }
 
-export function noopInitialize<T>(jsonObj: Partial<T>): T {
+export function noopInitialize<T>(jsonObj: Jsonify<T>): T {
   return jsonObj as T;
 }
 
-export function assignPrototype<T>(constructor: Constructor<T>): (obj: Partial<T>) => T {
-  return (obj: Partial<T>) => Object.assign(Object.create(constructor.prototype), obj);
+export function assignPrototype<T>(constructor: Constructor<T>): (obj: Jsonify<T>) => T {
+  return (obj: Jsonify<T>) => Object.assign(Object.create(constructor.prototype), obj);
 }

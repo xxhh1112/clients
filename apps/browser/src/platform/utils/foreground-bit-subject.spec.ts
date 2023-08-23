@@ -39,7 +39,10 @@ describe("ForegroundBitSubject", () => {
   describe("next", () => {
     it("should send a message to the background", () => {
       sut.next("test");
-      expect(port.postMessage).toHaveBeenCalledWith({ expectedId: undefined, data: "test" });
+      expect(port.postMessage).toHaveBeenCalledWith({
+        expectedId: undefined,
+        data: JSON.stringify("test"),
+      });
     });
 
     it("should not next the subject", () => {
@@ -55,7 +58,7 @@ describe("ForegroundBitSubject", () => {
     let messageReceiveCallback: (message: { id: string; data: string }) => void;
     const message = {
       id: "expected",
-      data: "test",
+      data: JSON.stringify("test"),
     };
 
     beforeEach(() => {

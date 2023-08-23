@@ -1,6 +1,7 @@
 import { Subscription } from "rxjs";
 
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { DeepJsonify } from "@bitwarden/common/types/deep-jsonify";
 
 import { BrowserBitSubject } from "./browser-bit-subject";
 
@@ -8,8 +9,8 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
   private _portSubscriptions = new Map<chrome.runtime.Port, Subscription>();
   private _lastId: string;
 
-  constructor(serviceObservableName: string, private initializer: (obj: Required<T>) => T) {
-    super(serviceObservableName);
+  constructor(serviceObservableName: string, initializer: (obj: DeepJsonify<T>) => T) {
+    super(serviceObservableName, initializer);
 
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name !== this.portName) {
@@ -37,16 +38,16 @@ export class BackgroundBitSubject<T = never> extends BrowserBitSubject<T> {
     this._portSubscriptions.delete(port);
   }
 
-  private onMessageFromForeground(message: { expectedId: string; data: Required<T> }) {
+  private onMessageFromForeground(message: { expectedId: string; data: string }) {
     if (message.expectedId !== this._lastId) {
       // Ignore out of sync messages
       return;
     }
 
-    this.next(this.initializer(message.data));
+    this.next(this.initializeData(message.data));
   }
 
   private sendValue(port: chrome.runtime.Port, value: T) {
-    port.postMessage({ id: this._lastId, data: this.value });
+    port.postMessage({ id: this._lastId, data: JSON.stringify(value) });
   }
 }

@@ -102,7 +102,7 @@ describe("BackgroundBitSubject", () => {
       sut.next("test");
       expect(port.postMessage).toHaveBeenCalledWith({
         id: sut["_lastId"],
-        data: "test",
+        data: JSON.stringify("test"),
       });
     });
   });
@@ -129,7 +129,7 @@ describe("BackgroundBitSubject", () => {
     it("should call next with the message data", () => {
       onMessageListener({
         expectedId: sut["_lastId"],
-        data: "test",
+        data: JSON.stringify("test"),
       });
       expect(nextSpy).toHaveBeenCalledWith("test");
     });

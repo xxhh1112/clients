@@ -8,10 +8,10 @@ import { ForegroundBitSubject } from "../../../platform/utils/foreground-bit-sub
 export class ForegroundFolderService extends FolderService {
   protected _folders = new ForegroundBitSubject<Folder[]>(
     "folderService_folders",
-    arrayInitialize(Folder.fromKeyValuePair)
+    arrayInitialize<Folder>(Folder.fromJSON)
   );
   protected _folderViews = new ForegroundBitSubject<FolderView[]>(
     "folderService_folderViews",
-    arrayInitialize(assignPrototype(FolderView))
+    arrayInitialize<FolderView>(assignPrototype(FolderView))
   );
 }
