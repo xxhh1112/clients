@@ -1,6 +1,8 @@
 import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -18,11 +20,15 @@ export class CipherReportComponent {
   hasLoaded = false;
   ciphers: CipherView[] = [];
   organization: Organization;
+  organizations$: Observable<Organization[]>;
 
   constructor(
     private modalService: ModalService,
-    protected passwordRepromptService: PasswordRepromptService
-  ) {}
+    protected passwordRepromptService: PasswordRepromptService,
+    protected organizationService: OrganizationService
+  ) {
+    this.organizations$ = this.organizationService.organizations$;
+  }
 
   async load() {
     this.loading = true;

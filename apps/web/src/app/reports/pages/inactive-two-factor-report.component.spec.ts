@@ -61,8 +61,8 @@ describe("InactiveTwoFactorReportComponent", () => {
   });
 
   it('should get only ciphers with domains in the 2fa directory that they have "Can Edit" access to', async () => {
-    const expectedIdOne: any = "cbea34a8-bde4-46ad-9d19-b05001228xy9";
-    const expectedIdTwo: any = "cbea34a8-bde4-46ad-9d19-b05001227nm9";
+    const expectedIdOne: any = "cbea34a8-bde4-46ad-9d19-b05001228xy4";
+    const expectedIdTwo: any = "cbea34a8-bde4-46ad-9d19-b05001227nm5";
     component.services.set(
       "101domain.com",
       "https://help.101domain.com/account-management/account-security/enabling-disabling-two-factor-verification"
@@ -77,6 +77,8 @@ describe("InactiveTwoFactorReportComponent", () => {
 
     expect(component.ciphers.length).toEqual(2);
     expect(component.ciphers[0].id).toEqual(expectedIdOne);
+    expect(component.ciphers[0].edit).toEqual(true);
     expect(component.ciphers[1].id).toEqual(expectedIdTwo);
+    expect(component.ciphers[1].edit).toEqual(true);
   });
 });

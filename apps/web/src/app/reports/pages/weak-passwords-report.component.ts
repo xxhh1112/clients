@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -21,7 +19,6 @@ import { CipherReportComponent } from "./cipher-report.component";
 export class WeakPasswordsReportComponent extends CipherReportComponent implements OnInit {
   passwordStrengthMap = new Map<string, [string, BadgeTypes]>();
   disabled = true;
-  organizations$: Observable<Organization[]>;
 
   private passwordStrengthCache = new Map<string, number>();
   weakPasswordCiphers: CipherView[] = [];
@@ -33,11 +30,10 @@ export class WeakPasswordsReportComponent extends CipherReportComponent implemen
     modalService: ModalService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, passwordRepromptService);
+    super(modalService, passwordRepromptService, organizationService);
   }
 
   async ngOnInit() {
-    this.organizations$ = this.organizationService.organizations$;
     await super.load();
   }
 

@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
@@ -19,7 +17,6 @@ import { CipherReportComponent } from "./cipher-report.component";
 export class ExposedPasswordsReportComponent extends CipherReportComponent implements OnInit {
   exposedPasswordMap = new Map<string, number>();
   disabled = true;
-  organizations$: Observable<Organization[]>;
 
   constructor(
     protected cipherService: CipherService,
@@ -28,11 +25,10 @@ export class ExposedPasswordsReportComponent extends CipherReportComponent imple
     modalService: ModalService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, passwordRepromptService);
+    super(modalService, passwordRepromptService, organizationService);
   }
 
   async ngOnInit() {
-    this.organizations$ = this.organizationService.organizations$;
     await super.load();
   }
 

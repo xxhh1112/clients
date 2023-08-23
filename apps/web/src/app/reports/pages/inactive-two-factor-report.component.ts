@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -21,7 +19,6 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
   services = new Map<string, string>();
   cipherDocs = new Map<string, string>();
   disabled = true;
-  organizations$: Observable<Organization[]>;
 
   constructor(
     protected cipherService: CipherService,
@@ -30,11 +27,10 @@ export class InactiveTwoFactorReportComponent extends CipherReportComponent impl
     private logService: LogService,
     passwordRepromptService: PasswordRepromptService
   ) {
-    super(modalService, passwordRepromptService);
+    super(modalService, passwordRepromptService, organizationService);
   }
 
   async ngOnInit() {
-    this.organizations$ = this.organizationService.organizations$;
     await super.load();
   }
 
