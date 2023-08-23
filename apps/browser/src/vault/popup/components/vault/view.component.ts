@@ -33,12 +33,14 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
 export const AUTOFILL_ID = "autofill";
+export const OVERLAY_VIEW_CIPHER = "overlay-view-cipher";
 export const COPY_USERNAME_ID = "copy-username";
 export const COPY_PASSWORD_ID = "copy-password";
 export const COPY_VERIFICATIONCODE_ID = "copy-totp";
 
 type LoadAction =
   | typeof AUTOFILL_ID
+  | typeof OVERLAY_VIEW_CIPHER
   | typeof COPY_USERNAME_ID
   | typeof COPY_PASSWORD_ID
   | typeof COPY_VERIFICATIONCODE_ID;
@@ -171,6 +173,8 @@ export class ViewComponent extends BaseViewComponent {
     switch (this.loadAction) {
       case AUTOFILL_ID:
         this.fillCipher();
+        return;
+      case OVERLAY_VIEW_CIPHER:
         return;
       case COPY_USERNAME_ID:
         await this.copy(this.cipher.login.username, "username", "Username");
@@ -315,21 +319,14 @@ export class ViewComponent extends BaseViewComponent {
       return;
     }
 
-    if (this.popupUtilsService.inSingleActionPopout(window, "passwordReprompt")) {
-      this.messagingService.send("closePasswordReprompt");
-      return;
-    }
-
     this.location.back();
   }
 
   private async loadPageDetails() {
     this.pageDetails = [];
-    this.tab = await BrowserApi.getTabFromCurrentWindow();
-
-    if (this.senderTabId) {
-      this.tab = await BrowserApi.getTab(this.senderTabId);
-    }
+    this.tab = this.senderTabId
+      ? await BrowserApi.getTab(this.senderTabId)
+      : await BrowserApi.getTabFromCurrentWindow();
 
     if (!this.tab) {
       return;

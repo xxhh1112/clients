@@ -503,6 +503,7 @@ class OverlayBackground {
   private async viewSelectedCipher(message: any, sender: chrome.runtime.MessageSender) {
     await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
       cipherId: message.cipherId,
+      action: "overlay-view-cipher",
     });
   }
 

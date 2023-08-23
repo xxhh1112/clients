@@ -1,7 +1,7 @@
 interface BrowserPopoutWindowService {
   openUnlockPrompt(senderWindowId: number): Promise<void>;
   closeUnlockPrompt(): Promise<void>;
-  openPasswordRepromptPrompt(
+  openViewCipherWindow(
     senderWindowId: number,
     promptData: {
       action: string;
@@ -9,11 +9,9 @@ interface BrowserPopoutWindowService {
       senderTabId: number;
     }
   ): Promise<void>;
-  closePasswordRepromptPrompt(): Promise<void>;
+  closeViewCipherWindow(): Promise<void>;
   openAddEditCipherWindow(senderWindowId: number, cipherId?: string): Promise<void>;
   closeAddEditCipherWindow(): Promise<void>;
-  openViewCipherWindow(senderWindowId: number, cipherId: string): Promise<void>;
-  closeViewCipherWindow(): Promise<void>;
 }
 
 export { BrowserPopoutWindowService };

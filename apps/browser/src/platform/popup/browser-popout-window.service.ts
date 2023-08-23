@@ -12,7 +12,6 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
   };
 
   async openUnlockPrompt(senderWindowId: number) {
-    await this.closeUnlockPrompt();
     await this.openSingleActionPopout(
       senderWindowId,
       "popup/index.html?uilocation=popout",
@@ -24,7 +23,7 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     await this.closeSingleActionPopout("unlockPrompt");
   }
 
-  async openPasswordRepromptPrompt(
+  async openViewCipherWindow(
     senderWindowId: number,
     {
       cipherId,
@@ -36,24 +35,25 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
       action: string;
     }
   ) {
-    await this.closePasswordRepromptPrompt();
+    let promptWindowPath = "popup/index.html#/view-cipher?uilocation=popout";
+    if (cipherId) {
+      promptWindowPath += `&cipherId=${cipherId}`;
+    }
+    if (senderTabId) {
+      promptWindowPath += `&senderTabId=${senderTabId}`;
+    }
+    if (action) {
+      promptWindowPath += `&action=${action}`;
+    }
 
-    const promptWindowPath =
-      "popup/index.html#/view-cipher" +
-      "?uilocation=popout" +
-      `&cipherId=${cipherId}` +
-      `&senderTabId=${senderTabId}` +
-      `&action=${action}`;
-
-    await this.openSingleActionPopout(senderWindowId, promptWindowPath, "passwordReprompt");
+    await this.openSingleActionPopout(senderWindowId, promptWindowPath, "viewCipher");
   }
 
-  async closePasswordRepromptPrompt() {
-    await this.closeSingleActionPopout("passwordReprompt");
+  async closeViewCipherWindow() {
+    await this.closeSingleActionPopout("viewCipher");
   }
 
-  async openAddEditCipherWindow(senderWindowId: number, cipherId?: string) {
-    await this.closeAddEditCipherWindow();
+  async openAddEditCipherWindow(senderWindowId: number, cipherId: string) {
     await this.openSingleActionPopout(
       senderWindowId,
       cipherId == null
@@ -65,23 +65,6 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
 
   async closeAddEditCipherWindow() {
     await this.closeSingleActionPopout("addEditCipher");
-  }
-
-  async openViewCipherWindow(senderWindowId: number, cipherId: string) {
-    if (!cipherId) {
-      return;
-    }
-
-    await this.closeViewCipherWindow();
-    await this.openSingleActionPopout(
-      senderWindowId,
-      `popup/index.html#/view-cipher?cipherId=${cipherId}`,
-      "viewCipher"
-    );
-  }
-
-  async closeViewCipherWindow() {
-    await this.closeSingleActionPopout("viewCipher");
   }
 
   private async openSingleActionPopout(
@@ -109,19 +92,16 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
 
     const popupWindow = await BrowserApi.createWindow(windowOptions);
 
-    if (!singleActionPopoutKey) {
-      return;
-    }
+    await this.closeSingleActionPopout(singleActionPopoutKey);
     this.singleActionPopoutTabIds[singleActionPopoutKey] = popupWindow?.tabs[0].id;
   }
 
   private async closeSingleActionPopout(popoutKey: string) {
     const tabId = this.singleActionPopoutTabIds[popoutKey];
-    if (!tabId) {
-      return;
-    }
 
-    await BrowserApi.removeTab(tabId);
+    if (tabId) {
+      await BrowserApi.removeTab(tabId);
+    }
     this.singleActionPopoutTabIds[popoutKey] = null;
   }
 }

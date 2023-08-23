@@ -113,17 +113,21 @@ export default class RuntimeBackground {
       case "bgReopenPromptForLogin":
         await this.browserPopoutWindowService.openUnlockPrompt(sender.tab?.windowId);
         break;
+      case "openViewCipher":
       case "passwordReprompt":
         if (cipherId) {
-          await this.browserPopoutWindowService.openPasswordRepromptPrompt(sender.tab?.windowId, {
+          await this.browserPopoutWindowService.openViewCipherWindow(sender.tab?.windowId, {
             cipherId: cipherId,
             senderTabId: sender.tab.id,
             action: msg.data?.action,
           });
         }
         break;
+      case "closeViewCipher":
       case "closePasswordReprompt":
-        await this.browserPopoutWindowService.closePasswordRepromptPrompt();
+        setTimeout(() => {
+          this.browserPopoutWindowService.closeViewCipherWindow();
+        }, msg.delay ?? 0);
         break;
       case "openAddEditCipher":
         await this.browserPopoutWindowService.openAddEditCipherWindow(
@@ -134,17 +138,6 @@ export default class RuntimeBackground {
       case "closeAddEditCipher":
         setTimeout(() => {
           this.browserPopoutWindowService.closeAddEditCipherWindow();
-        }, msg.delay ?? 0);
-        break;
-      case "openViewCipher":
-        await this.browserPopoutWindowService.openViewCipherWindow(
-          sender.tab.windowId,
-          msg.data.cipherId
-        );
-        break;
-      case "closeViewCipher":
-        setTimeout(() => {
-          this.browserPopoutWindowService.closeViewCipherWindow();
         }, msg.delay ?? 0);
         break;
       case "triggerAutofillScriptInjection":
