@@ -4,6 +4,7 @@ import { map } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { SidebarService } from "@bitwarden/components";
 
 import { SecretsManagerLogo } from "./secrets-manager-logo";
 
@@ -18,5 +19,9 @@ export class NavigationComponent {
     map((params) => this.organizationService.get(params.organizationId)?.isAdmin)
   );
 
-  constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private organizationService: OrganizationService,
+    protected sidebarService: SidebarService
+  ) {}
 }

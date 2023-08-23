@@ -1,5 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 
+import { SidebarService } from "../layout/sidebar.service";
+
 /**
  * Base class used in `NavGroupComponent` and `NavItemComponent`
  */
@@ -44,4 +46,6 @@ export abstract class NavBaseComponent {
    * Fires when main content is clicked
    */
   @Output() mainContentClicked: EventEmitter<MouseEvent> = new EventEmitter();
+
+  constructor(protected sidebarService: SidebarService) {}
 }

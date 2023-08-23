@@ -1,5 +1,12 @@
-<nav>
-  <a routerLink="." class="tw-m-5 tw-mt-7 tw-block">
+<nav *ngIf="{ open: sidebarService.open$ | async } as sidebar">
+  <bit-nav-item
+    class="tw-block"
+    [hideActiveStyles]="true"
+    route="."
+    icon="bwi-shield"
+    *ngIf="!sidebar.open"
+  ></bit-nav-item>
+  <a *ngIf="sidebar.open" routerLink="." class="tw-mx-5 tw-mb-5 tw-block">
     <bit-icon [icon]="logo"></bit-icon>
   </a>
 

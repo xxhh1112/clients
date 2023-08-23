@@ -64,6 +64,18 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
     });
   }
 
+  protected handleMainContentClicked() {
+    if (!this.sidebarService.open) {
+      if (!this.route) {
+        this.sidebarService.setOpen();
+      }
+      this.open = true;
+    } else {
+      this.toggle();
+    }
+    this.mainContentClicked.emit();
+  }
+
   ngAfterContentInit(): void {
     this.initNestedStyles();
   }
