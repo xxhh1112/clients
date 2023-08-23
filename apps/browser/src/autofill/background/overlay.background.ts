@@ -567,7 +567,7 @@ class OverlayBackground {
   private overrideUserAutofillSettings() {
     if (
       !chrome?.privacy?.services?.autofillAddressEnabled ||
-      !chrome?.privacy?.services?.autofillCreditCardEnabled
+      !chrome.privacy.services.autofillCreditCardEnabled
     ) {
       return;
     }
