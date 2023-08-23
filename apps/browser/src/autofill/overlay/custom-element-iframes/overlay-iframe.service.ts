@@ -142,10 +142,6 @@ class OverlayIframeService {
     this.observeIframe();
   }
 
-  private convertToKebabCase(stringValue: string): string {
-    return stringValue.replace(/([a-z])([A-Z])/g, "$1-$2");
-  }
-
   /**
    * Chrome returns null for any sandboxed iframe sources.
    * Firefox references the extension URI as its origin.

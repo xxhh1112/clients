@@ -563,7 +563,15 @@ class OverlayBackground {
   // However, it overrides the users settings and can be considered a privacy concern.
   // If we approach using this API, we need to ensure that it is strictly an opt-in experience and
   // convey why a user might want to disable autofill in their browser.
+  // Also worth noting that this API is only available in Chrome.
   private overrideUserAutofillSettings() {
+    if (
+      !chrome?.privacy?.services?.autofillAddressEnabled ||
+      !chrome?.privacy?.services?.autofillCreditCardEnabled
+    ) {
+      return;
+    }
+
     chrome.privacy.services.autofillAddressEnabled.get({}, (details) => {
       const { levelOfControl, value } = details;
       if (
