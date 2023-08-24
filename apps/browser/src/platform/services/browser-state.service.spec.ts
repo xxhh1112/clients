@@ -53,7 +53,7 @@ describe("Browser State Service", () => {
   describe("state methods", () => {
     let memoryStorageService: MockProxy<AbstractMemoryStorageService>;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       memoryStorageService = mock();
       const stateGetter = (key: string) => Promise.resolve(state);
       memoryStorageService.get.mockImplementation(stateGetter);
@@ -67,6 +67,7 @@ describe("Browser State Service", () => {
         stateFactory,
         useAccountCache
       );
+      await sut.init();
     });
 
     describe("getBrowserGroupingComponentState", () => {
