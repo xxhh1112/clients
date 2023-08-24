@@ -33,8 +33,7 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export class AddEditComponent implements OnInit, OnDestroy {
@@ -101,7 +100,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected passwordRepromptService: PasswordRepromptService,
     private organizationService: OrganizationService,
     protected sendApiService: SendApiService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {
     this.typeOptions = [
       { name: i18nService.t("typeLogin"), value: CipherType.Login },
@@ -404,7 +403,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       content: {
         key: this.cipher.isDeleted ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation",
       },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -435,16 +434,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const confirmed = await this.dialogService.openSimpleDialog({
-      title: { key: "restoreItem" },
-      content: { key: "restoreItemConfirmation" },
-      type: SimpleDialogType.WARNING,
-    });
-
-    if (!confirmed) {
-      return false;
-    }
-
     try {
       this.restorePromise = this.restoreCipher();
       await this.restorePromise;
@@ -463,7 +452,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "overwriteUsername" },
         content: { key: "overwriteUsernameConfirmation" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (!confirmed) {
@@ -480,7 +469,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "overwritePassword" },
         content: { key: "overwritePasswordConfirmation" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
 
       if (!confirmed) {
@@ -602,9 +591,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   protected saveCipher(cipher: Cipher) {
+    const isNotClone = this.editMode && !this.cloneMode;
+    const orgAdmin = this.organization?.isAdmin;
     return this.cipher.id == null
-      ? this.cipherService.createWithServer(cipher)
-      : this.cipherService.updateWithServer(cipher);
+      ? this.cipherService.createWithServer(cipher, orgAdmin)
+      : this.cipherService.updateWithServer(cipher, orgAdmin, isNotClone);
   }
 
   protected deleteCipher() {

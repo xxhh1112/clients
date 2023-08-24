@@ -1,23 +1,31 @@
+import { Substitute } from "@fluffy-spoon/substitute";
+import { mock, mockReset } from "jest-mock-extended";
+
 // eslint-disable-next-line no-restricted-imports
-import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
 import { makeStaticByteArray } from "../../../spec/utils";
 import { ApiService } from "../../abstractions/api.service";
 import { SearchService } from "../../abstractions/search.service";
 import { SettingsService } from "../../abstractions/settings.service";
+import { UriMatchType, FieldType } from "../../enums";
 import { ConfigApiServiceAbstraction } from "../../platform/abstractions/config/config-api.service.abstraction";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
-import { EncString } from "../../platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { OrgKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { ServerConfigResponse } from "../../platform/models/response/server-config.response";
 import { ContainerService } from "../../platform/services/container.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
+import { CipherRepromptType } from "../enums/cipher-reprompt-type";
 import { CipherType } from "../enums/cipher-type";
+import { CipherData } from "../models/data/cipher.data";
 import { Cipher } from "../models/domain/cipher";
+import { CipherCreateRequest } from "../models/request/cipher-create.request";
+import { CipherPartialRequest } from "../models/request/cipher-partial.request";
+import { CipherRequest } from "../models/request/cipher.request";
 import { CipherView } from "../models/view/cipher.view";
 
 import { CipherService } from "./cipher.service";
@@ -27,32 +35,92 @@ const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
 const DATE_NOW = new Date();
 const UNSUPPORTED_VERSION = "2023.2.0";
 
+const cipherData: CipherData = {
+  id: "id",
+  organizationId: "orgId",
+  folderId: "folderId",
+  edit: true,
+  viewPassword: true,
+  organizationUseTotp: true,
+  favorite: false,
+  revisionDate: "2022-01-31T12:00:00.000Z",
+  type: CipherType.Login,
+  name: "EncryptedString",
+  notes: "EncryptedString",
+  creationDate: "2022-01-01T12:00:00.000Z",
+  deletedDate: null,
+  key: "EncKey",
+  reprompt: CipherRepromptType.None,
+  login: {
+    uris: [{ uri: "EncryptedString", match: UriMatchType.Domain }],
+    username: "EncryptedString",
+    password: "EncryptedString",
+    passwordRevisionDate: "2022-01-31T12:00:00.000Z",
+    totp: "EncryptedString",
+    autofillOnPageLoad: false,
+  },
+  passwordHistory: [{ password: "EncryptedString", lastUsedDate: "2022-01-31T12:00:00.000Z" }],
+  attachments: [
+    {
+      id: "a1",
+      url: "url",
+      size: "1100",
+      sizeName: "1.1 KB",
+      fileName: "file",
+      key: "EncKey",
+    },
+    {
+      id: "a2",
+      url: "url",
+      size: "1100",
+      sizeName: "1.1 KB",
+      fileName: "file",
+      key: "EncKey",
+    },
+  ],
+  fields: [
+    {
+      name: "EncryptedString",
+      value: "EncryptedString",
+      type: FieldType.Text,
+      linkedId: null,
+    },
+    {
+      name: "EncryptedString",
+      value: "EncryptedString",
+      type: FieldType.Hidden,
+      linkedId: null,
+    },
+  ],
+};
+
 describe("Cipher Service", () => {
-  let cryptoService: SubstituteOf<CryptoService>;
-  let stateService: SubstituteOf<StateService>;
-  let settingsService: SubstituteOf<SettingsService>;
-  let apiService: SubstituteOf<ApiService>;
-  let cipherFileUploadService: SubstituteOf<CipherFileUploadService>;
-  let i18nService: SubstituteOf<I18nService>;
-  let searchService: SubstituteOf<SearchService>;
-  let encryptService: SubstituteOf<EncryptService>;
-  let configApiService: SubstituteOf<ConfigApiServiceAbstraction>;
+  const cryptoService = mock<CryptoService>();
+  const stateService = mock<StateService>();
+  const settingsService = mock<SettingsService>();
+  const apiService = mock<ApiService>();
+  const cipherFileUploadService = mock<CipherFileUploadService>();
+  const i18nService = mock<I18nService>();
+  const searchService = mock<SearchService>();
+  const encryptService = mock<EncryptService>();
+  const configApiService = mock<ConfigApiServiceAbstraction>();
 
   let cipherService: CipherService;
+  let cipherObj: Cipher;
 
   beforeEach(() => {
-    cryptoService = Substitute.for<CryptoService>();
-    stateService = Substitute.for<StateService>();
-    settingsService = Substitute.for<SettingsService>();
-    apiService = Substitute.for<ApiService>();
-    cipherFileUploadService = Substitute.for<CipherFileUploadService>();
-    i18nService = Substitute.for<I18nService>();
-    searchService = Substitute.for<SearchService>();
-    encryptService = Substitute.for<EncryptService>();
-    configApiService = Substitute.for<ConfigApiServiceAbstraction>();
+    mockReset(apiService);
+    mockReset(cryptoService);
+    mockReset(stateService);
+    mockReset(settingsService);
+    mockReset(cipherFileUploadService);
+    mockReset(i18nService);
+    mockReset(searchService);
+    mockReset(encryptService);
+    mockReset(configApiService);
 
-    cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
-    cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
+    encryptService.encryptToBytes.mockReturnValue(Promise.resolve(ENCRYPTED_BYTES));
+    encryptService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
 
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
@@ -67,23 +135,106 @@ describe("Cipher Service", () => {
       cipherFileUploadService,
       configApiService
     );
+
+    cipherObj = new Cipher(cipherData);
+  });
+  describe("saveAttachmentRawWithServer()", () => {
+    it("should upload encrypted file contents with save attachments", async () => {
+      const fileName = "filename";
+      const fileData = new Uint8Array(10);
+      cryptoService.getOrgKey.mockReturnValue(
+        Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)) as OrgKey)
+      );
+      cryptoService.makeDataEncKey.mockReturnValue(
+        Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))
+      );
+
+      configApiService.get.mockReturnValue(
+        Promise.resolve(new ServerConfigResponse({ version: UNSUPPORTED_VERSION }))
+      );
+      process.env.FLAGS = JSON.stringify({
+        enableCipherKeyEncryption: false,
+      });
+
+      const spy = jest.spyOn(cipherFileUploadService, "upload");
+
+      await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 
-  it("attachments upload encrypted file contents", async () => {
-    const fileName = "filename";
-    const fileData = new Uint8Array(10).buffer;
-    cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
+  describe("createWithServer()", () => {
+    it("should call apiService.postCipherAdmin when orgAdmin param is true", async () => {
+      const spy = jest
+        .spyOn(apiService, "postCipherAdmin")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.createWithServer(cipherObj, true);
+      const expectedObj = new CipherCreateRequest(cipherObj);
 
-    configApiService.get().resolves(new ServerConfigResponse({ version: UNSUPPORTED_VERSION }));
-    process.env.FLAGS = JSON.stringify({
-      enableCipherKeyEncryption: false,
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(expectedObj);
     });
 
-    await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
+    it("should call apiService.postCipherCreate if collectionsIds != null", async () => {
+      cipherObj.collectionIds = ["123"];
+      const spy = jest
+        .spyOn(apiService, "postCipherCreate")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.createWithServer(cipherObj);
+      const expectedObj = new CipherCreateRequest(cipherObj);
 
-    cipherFileUploadService
-      .received(1)
-      .upload(Arg.any(), Arg.any(), ENCRYPTED_BYTES, Arg.any(), Arg.any());
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(expectedObj);
+    });
+
+    it("should call apiService.postCipher when orgAdmin and collectionIds logic is false", async () => {
+      const spy = jest
+        .spyOn(apiService, "postCipher")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.createWithServer(cipherObj);
+      const expectedObj = new CipherRequest(cipherObj);
+
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(expectedObj);
+    });
+  });
+
+  describe("updateWithServer()", () => {
+    it("should call apiService.putCipherAdmin when orgAdmin and isNotClone params are true", async () => {
+      const spy = jest
+        .spyOn(apiService, "putCipherAdmin")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.updateWithServer(cipherObj, true, true);
+      const expectedObj = new CipherRequest(cipherObj);
+
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(cipherObj.id, expectedObj);
+    });
+
+    it("should call apiService.putCipher if cipher.edit is true", async () => {
+      cipherObj.edit = true;
+      const spy = jest
+        .spyOn(apiService, "putCipher")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.updateWithServer(cipherObj);
+      const expectedObj = new CipherRequest(cipherObj);
+
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(cipherObj.id, expectedObj);
+    });
+
+    it("should call apiService.putPartialCipher when orgAdmin, isNotClone, and edit are false", async () => {
+      cipherObj.edit = false;
+      const spy = jest
+        .spyOn(apiService, "putPartialCipher")
+        .mockImplementation(() => Promise.resolve<any>(cipherObj));
+      cipherService.updateWithServer(cipherObj);
+      const expectedObj = new CipherPartialRequest(cipherObj);
+
+      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledWith(cipherObj.id, expectedObj);
+    });
   });
 
   describe("encrypt", () => {
@@ -94,8 +245,14 @@ describe("Cipher Service", () => {
       cipherView.type = CipherType.Login;
       cipherView.key = null;
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
-      configApiService.get().resolves(new ServerConfigResponse({ version: getVersion() }));
+      encryptService.decryptToBytes.mockReturnValue(Promise.resolve(makeStaticByteArray(64)));
+      configApiService.get.mockReturnValue(
+        Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
+      );
+      cryptoService.makeCipherKey.mockReturnValue(
+        Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)))
+      );
+      cryptoService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
     });
 
     describe("cipher.key", () => {
@@ -146,13 +303,15 @@ describe("Cipher Service", () => {
       });
 
       it("is called when server version has hotfix suffix", async () => {
-        configApiService = Substitute.for<ConfigApiServiceAbstraction>();
+        mockReset(configApiService);
 
         process.env.FLAGS = JSON.stringify({
           enableCipherKeyEncryption: true,
         });
 
-        configApiService.get().resolves(new ServerConfigResponse({ version: getVersion() }));
+        configApiService.get.mockReturnValue(
+          Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
+        );
         await cipherService.encrypt(cipherView);
 
         expect(cipherService["encryptWithCipherKey"]).toHaveBeenCalled();

@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Запис остаточно видалено"
   },
-  "restoreItem": {
-    "message": "Відновити запис"
-  },
-  "restoreItemConfirmation": {
-    "message": "Ви дійсно хочете відновити цей запис?"
-  },
   "restoredItem": {
     "message": "Запис відновлено"
   },
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Оновлення рекомендованих налаштувань"
   },
-  "region": {
-    "message": "Регіон"
+  "loggingInOn": {
+    "message": "Увійти на"
   },
-  "eu": {
-    "message": "ЄС",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "США",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "Власне розміщення"

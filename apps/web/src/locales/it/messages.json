@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "Cassaforte web di $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Che tipo di elemento è questo?"
   },
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Si è verificato un errore imprevisto."
   },
+  "expirationDateError": {
+    "message": "Seleziona una data di scadenza nel futuro."
+  },
   "emailAddress": {
     "message": "Indirizzo email"
   },
   "yourVaultIsLocked": {
     "message": "La tua cassaforte è bloccata. Verifica la tua password principale per continuare."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Sblocca"
@@ -879,7 +875,7 @@
     "message": "Usa qualsiasi chiave di sicurezza abilitata WebAuthn per accedere al tuo account."
   },
   "webAuthnMigrated": {
-    "message": "(Migrati da FIDO)"
+    "message": "(Trasferito da FIDO)"
   },
   "emailTitle": {
     "message": "Email"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Copia codice di verifica"
+  },
+  "copyUuid": {
+    "message": "Copia UUID"
   },
   "warning": {
     "message": "Attenzione"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Errore durante la decriptografia del file esportato. La chiave di criptografia non corrisponde alla chiave di criptografia usata per esportare i dati."
+  },
+  "importDestination": {
+    "message": "Destinazione dell'importazione"
+  },
+  "learnAboutImportOptions": {
+    "message": "Ulteriori informazioni sulle tue opzioni di importazione"
+  },
+  "selectImportFolder": {
+    "message": "Seleziona una cartella"
+  },
+  "selectImportCollection": {
+    "message": "Seleziona una raccolta"
+  },
+  "importTargetHint": {
+    "message": "Seleziona questa opzione se vuoi che i contenuti del file di importazione siano spostati in una $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Il file contiene elementi non assegnati."
   },
   "selectFormat": {
     "message": "Seleziona il formato del file da importare"
@@ -2645,6 +2669,12 @@
   "webVault": {
     "message": "Cassaforte web"
   },
+  "bitWebVault": {
+    "message": "Cassaforte web Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "Gestore dei Segreti Bitwarden"
+  },
   "loggedIn": {
     "message": "Accesso effettuato"
   },
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Imposta un limite di slot utenti per il tuo abbonamento. Una volta raggiunto questo limite, non potrai invitare nuovi membri."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Imposta un limite di slot per il tuo abbonamento al Gestore dei Segreti. Una volta raggiunto questo limite, non potrai invitare nuovi membri."
+  },
   "maxSeatLimit": {
     "message": "Numero massimo di slot (facoltativo)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Questo elemento ha vecchi file allegati che devono essere corretti."
   },
-  "attachmentFixDesc": {
-    "message": "Questo è un vecchio file allegato che deve essere corretto. Clicca per ulteriori informazioni."
+  "attachmentFixDescription": {
+    "message": "Questo allegato usa una criptografia obsoleta. Seleziona \"Correggi\" per scaricare, criptografare di nuovo, e caricare di nuovo l'allegato."
   },
   "fix": {
     "message": "Correggi",
@@ -3809,29 +3842,11 @@
   "restoreSelected": {
     "message": "Ripristina selezionati"
   },
-  "restoreItem": {
-    "message": "Ripristina elemento"
-  },
   "restoredItem": {
     "message": "Elemento ripristinato"
   },
   "restoredItems": {
     "message": "Elementi ripristinati"
-  },
-  "restoreItemConfirmation": {
-    "message": "Sei sicuro di voler ripristinare questo elemento?"
-  },
-  "restoreItems": {
-    "message": "Ripristina elementi"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Hai selezionato $COUNT$ elementi da ripristinare. Sei sicuro di voler ripristinare questi elementi?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "$ID$ ripristinato",
@@ -4375,8 +4390,8 @@
   "manageUsers": {
     "message": "Gestisci gli utenti"
   },
-  "manageResetPassword": {
-    "message": "Gestisci il ripristino della password"
+  "manageAccountRecovery": {
+    "message": "Gestisci il recupero dell'account"
   },
   "disableRequiredError": {
     "message": "Devi disabilitare la politica $POLICYNAME$ prima di poter disabilitare questa politica.",
@@ -4601,7 +4616,7 @@
     "message": "Gli account esistenti con password principali richiederanno ai membri di registrarsi autonomamente prima che gli amministratori possano recuperare i loro account. L'iscrizione automatica attiverà il recupero dell'account per i nuovi membri."
   },
   "accountRecoverySingleOrgRequirementDesc": {
-    "message": "La politica aziendale per l'organizzazione unica deve essere attivata prima di attivare questo politica."
+    "message": "La politica aziendale per l'organizzazione unica deve essere attivata prima di attivare questa politica."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Iscrizione automatica"
@@ -4705,7 +4720,7 @@
   "error": {
     "message": "Errore"
   },
-  "resetPasswordManageUsers": {
+  "accountRecoveryManageUsers": {
     "message": "Gestisci utenti deve essere abilitato con il permesso di gestire il ripristino delle password"
   },
   "setupProvider": {
@@ -4917,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Rimuovi esportazione cassaforte individuale"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Non consentire ai membri di esportare la loro cassaforte individuale."
+  "disablePersonalVaultExportDescription": {
+    "message": "Non consentire ai membri di esportare i dati dalla loro cassaforte individuale."
   },
   "vaultExportDisabled": {
     "message": "Esportazione cassaforte rimossa"
@@ -5421,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Esportando cassaforte dell'organizzazione"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Solo gli elementi della cassaforte personale associati a $EMAIL$ saranno esportati. Gli elementi della cassaforte dell'organizzazione non saranno inclusi. Solo le informazioni sugli elementi della cassaforte saranno esportate e non includeranno la cronologia delle password o gli allegati.",
+  "exportingIndividualVaultDescription": {
+    "message": "Solo gli elementi della cassaforte personale associati a $EMAIL$ saranno esportati. Gli elementi della cassaforte dell'organizzazione non saranno inclusi. Solo le informazioni sugli elementi della cassaforte saranno esportate e non includeranno gli allegati.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5430,7 +5445,7 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
+  "exportingOrganizationVaultDesc": {
     "message": "Solo la cassaforte dell'organizzazione associata a $ORGANIZATION$ sarà esportata. Elementi nelle casseforti individuali o in altre organizzazioni non saranno inclusi.",
     "placeholders": {
       "organization": {
@@ -6617,11 +6632,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "Procedere ti farà uscire da tutte le sessioni attive. Dovrai accedere di nuovo e completare la configurazione della verifica in due passaggi. Ti consigliamo di esportare la tua cassaforte prima di cambiare le impostazioni di criptografia per prevenire perdite di dati."
   },
-  "secretsManagerBeta": {
-    "message": "Beta del Gestore dei Segreti"
-  },
   "secretsManager": {
     "message": "Gestore dei Segreti"
+  },
+  "secretsManagerBeta": {
+    "message": "Beta del Gestore dei Segreti"
   },
   "secretsManagerAccessDescription": {
     "message": "Attiva l'accesso dell'utente al Gestore dei Segreti."
@@ -6803,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Obbliga i membri esistenti a cambiare le loro password"
   },
-  "region": {
-    "message": "Regione"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "UE",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Non hai l'autorizzazione per eliminare questo progetto",
@@ -6825,8 +6835,8 @@
   "updateKdfSettings": {
     "message": "Aggiorna impostazioni KDF"
   },
-  "trustedDeviceEncryption": {
-    "message": "Criptografia dispositivo fidato"
+  "trustedDevices": {
+    "message": "Dispositivi fidati"
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Una volta autenticati, i membri decriptograferanno i dati della cassaforte usando una chiave memorizzata sul proprio dispositivo. La",
@@ -6955,5 +6965,137 @@
   },
   "selectedRegionFlag": {
     "message": "Bandiera della regione selezionata"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Nessun Send attivo",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Usa Send per condividere informazioni criptate in modo sicuro con chiunque.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Invita utenti"
+  },
+  "secretsManagerForPlan": {
+    "message": "Gestore dei Segreti per $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Per gestire i segreti dei team di software engineering e DevOps durante l'intero ciclo di sviluppo del software."
+  },
+  "free2PersonOrganization": {
+    "message": "Organizzazioni gratis per 2 persone"
+  },
+  "unlimitedSecrets": {
+    "message": "Segreti illimitati"
+  },
+  "unlimitedProjects": {
+    "message": "Progetti illimitati"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ progetti inclusi",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ account di servizio inclusi",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ al mese per account di servizio aggiuntivi",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Aggiungi Gestore dei Segreti"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Aggiungi il Gestore dei Segreti al tuo piano aggiornato per mantenere l'accesso a tutti i secret creati con il tuo piano precedente."
+  },
+  "additionalServiceAccounts": {
+    "message": "Account di servizio aggiuntivi"
+  },
+  "includedServiceAccounts": {
+    "message": "Il tuo piano include $COUNT$ account di servizio.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Puoi aggiungere più account di servizio a $COST$ al mese.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Prezzo del piano del gestore di password"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Prezzo del piano del Gestore dei Segreti"
+  },
+  "passwordManager": {
+    "message": "Gestore di password"
+  },
+  "freeOrganization": {
+    "message": "Organizzazione gratis"
+  },
+  "limitServiceAccounts": {
+    "message": "Limita gli account di servizio (facoltativo)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Imposta un limite per i tuoi account di servizio. Una volta raggiunto questo limite, non potrai creare nuovi account di servizio."
+  },
+  "serviceAccountLimit": {
+    "message": "Limite account di servizio (facoltativo)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Costo massimo potenziale dell'account di servizio"
+  },
+  "smBetaEndedDesc": {
+    "message": "La beta del Gestore dei Segreti è terminata in $BETA_ENDING_DATE$. Ti rimangono $DAYS$ giorni per aggiungere il Gestore dei Segreti al tuo abbonamento a pagamento e mantenere l'accesso ai dati del Gestore dei Segreti. Contatta il Successo del Cliente per aggiungere il Gestore dei Segreti al tuo abbonamento.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Termine della beta"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Hai già un account?"
   }
 }

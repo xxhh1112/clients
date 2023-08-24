@@ -1,8 +1,8 @@
+import { DatePipe } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalConfig, ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
@@ -17,6 +17,8 @@ import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstraction
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { DialogService } from "@bitwarden/components";
 
 import {
   BillingSyncApiKeyComponent,
@@ -45,6 +47,9 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   firstLoaded = false;
   loading: boolean;
 
+  private readonly _smBetaEndingDate = new Date(2023, 7, 15);
+  private readonly _smGracePeriodEndingDate = new Date(2023, 10, 14);
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -56,8 +61,9 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private route: ActivatedRoute,
-    private dialogService: DialogServiceAbstraction,
-    private configService: ConfigServiceAbstraction
+    private dialogService: DialogService,
+    private configService: ConfigServiceAbstraction,
+    private datePipe: DatePipe
   ) {}
 
   async ngOnInit() {
@@ -122,6 +128,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       this.userOrg.useSecretsManager &&
       this.subscription != null &&
       this.sub.secretsManagerPlan?.hasAdditionalSeatsOption &&
+      !this.sub.secretsManagerBeta &&
       !this.subscription.cancelled &&
       !this.subscriptionMarkedForCancel;
 
@@ -256,6 +263,14 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     );
   }
 
+  get smBetaEndedDesc() {
+    return this.i18nService.translate(
+      "smBetaEndedDesc",
+      this.datePipe.transform(this._smBetaEndingDate),
+      Utils.daysRemaining(this._smGracePeriodEndingDate).toString()
+    );
+  }
+
   cancel = async () => {
     if (this.loading) {
       return;
@@ -264,7 +279,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "cancelSubscription" },
       content: { key: "cancelConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -292,7 +307,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "reinstateSubscription" },
       content: { key: "reinstateConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -364,7 +379,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       title: { key: "removeSponsorship" },
       content: { key: "removeSponsorshipConfirmation" },
       acceptButtonText: { key: "remove" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {

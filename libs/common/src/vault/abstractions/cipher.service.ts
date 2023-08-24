@@ -33,8 +33,8 @@ export abstract class CipherService {
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
-  createWithServer: (cipher: Cipher) => Promise<any>;
-  updateWithServer: (cipher: Cipher) => Promise<any>;
+  createWithServer: (cipher: Cipher, orgAdmin?: boolean) => Promise<any>;
+  updateWithServer: (cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean) => Promise<any>;
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
@@ -76,7 +76,11 @@ export abstract class CipherService {
     cipher: { id: string; revisionDate: string } | { id: string; revisionDate: string }[]
   ) => Promise<any>;
   restoreWithServer: (id: string, asAdmin?: boolean) => Promise<any>;
-  restoreManyWithServer: (ids: string[]) => Promise<any>;
-  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<SymmetricCryptoKey>;
+  restoreManyWithServer: (
+    ids: string[],
+    organizationId?: string,
+    asAdmin?: boolean
+  ) => Promise<void>;
+  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<any>;
   getCipherKeyEncryptionEnabled: () => Promise<boolean>;
 }

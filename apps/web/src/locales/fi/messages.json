@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$-verkkoholvi",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Minkä tyyppinen kohde tämä on?"
   },
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Tapahtui odottamaton virhe."
   },
+  "expirationDateError": {
+    "message": "Valitse erääntymispäivä, joka on tulevaisuudessa."
+  },
   "emailAddress": {
     "message": "Sähköpostiosoite"
   },
   "yourVaultIsLocked": {
     "message": "Holvi on lukittu. Jatka vahvistamalla pääsalasanasi."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Avaa holvi"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Kopioi todennuskoodi"
+  },
+  "copyUuid": {
+    "message": "Kopioi UUID"
   },
   "warning": {
     "message": "Varoitus"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Virhe purettaessa viedyn tiedoston salausta. Salausavaimesi ei vastaa viennissä käytettyä salausavainta."
+  },
+  "importDestination": {
+    "message": "Tuontikohde"
+  },
+  "learnAboutImportOptions": {
+    "message": "Lue lisää tuontivaihtoehdoista"
+  },
+  "selectImportFolder": {
+    "message": "Valitse kansio"
+  },
+  "selectImportCollection": {
+    "message": "Valitse kokoelma"
+  },
+  "importTargetHint": {
+    "message": "Valitse tämä, jos haluat tuoda tiedoston sisällön kohteesee $DESTINATION$.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Tiedosto sisältää määrittämättömiä kohteita."
   },
   "selectFormat": {
     "message": "Valitse tuotavan tiedoston muoto"
@@ -1969,7 +1993,7 @@
     "message": "Gigatavujen määrä"
   },
   "additionalStorageIntervalDesc": {
-    "message": "Tilaukseesi sisältyy $SIZE$ salattua tallennustilaa. Voit hankkia lisää hintaan $PRICE$/Gt/$INTERVAL$.",
+    "message": "Tilaukseesi sisältyy $SIZE$ salattua tallennustilaa ja voit hankkia lisää hintaan $PRICE$/Gt/$INTERVAL$.",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -2245,7 +2269,7 @@
     "message": "Käyttäjäpaikkojen määrä"
   },
   "userSeatsAdditionalDesc": {
-    "message": "Tilaukseesi kuuluu $BASE_SEATS$ käyttäjäpaikkaa. Voit hankkia lisää hintaan $SEAT_PRICE$/käyttäjä/kuukausi.",
+    "message": "Tilaukseesi sisältyy $BASE_SEATS$ käyttäjäpaikkaa ja voit hankkia lisää hintaan $SEAT_PRICE$/käyttäjä/kuukausi.",
     "placeholders": {
       "base_seats": {
         "content": "$1",
@@ -2258,7 +2282,7 @@
     }
   },
   "userSeatsHowManyDesc": {
-    "message": "Kuinka monta käyttäjäpaikkaa tarvitset? Voit myös hankkia paikkoja tarvittaessa lisää myöhemmin."
+    "message": "Miten monta käyttäjäpaikkaa tarvitset? Voit myös hankkia paikkoja tarvittaessa lisää myöhemmin."
   },
   "planNameFree": {
     "message": "Ilmainen",
@@ -2644,6 +2668,12 @@
   },
   "webVault": {
     "message": "Verkkoholvi"
+  },
+  "bitWebVault": {
+    "message": "Bitwarden Verkkoholvi"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Salaisuushallinta"
   },
   "loggedIn": {
     "message": "Kirjautui sisään"
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Aseta tilaukseesi sisältyvä jäsenpaikkojen määrä. Määrän täytyttyä et voi kutsua uusia jäseniä."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Aseta Salaisuushallinnan tilaukseen sisältyvä jäsenpaikkojen määrä. Määrän täytyttyä et voi kutsua uusia jäseniä."
+  },
   "maxSeatLimit": {
     "message": "Käyttäjäpaikkojen enimmäismäärä (valinnainen)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3339,7 +3372,7 @@
     "description": "Seat = User Seat"
   },
   "subscriptionDesc": {
-    "message": "Tilausmuutokset aiheuttavat muutoksia laskutukseesi. Jos hiljattain kutsuttujen käyttäjien määrä ylittää tilauksesi käyttäjäpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista käyttäjistä välittömästi."
+    "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen käyttäjien määrä ylittää tilauksesi käyttäjäpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista käyttäjistä välittömästi."
   },
   "subscriptionUserSeats": {
     "message": "Tilaukseesi sisältyy $COUNT$ jäsenpaikkaa.",
@@ -3366,10 +3399,10 @@
     "message": "Jos tarvitset tilauksesi hallinnassa apua, ole yhteydessä asiakaspalveluun."
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
-    "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenten määrä ylittää tilauksesi jäsenpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi."
+    "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenien määrä ylittää tilauksesi jäsenpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi."
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenten määrä ylittää tilauksesi jäsenpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi, kunnes $MAX$ paikan enimmäismäärä täyttyy.",
+    "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenien määrä ylittää tilauksesi jäsenpaikkojen enimmäismäärän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi, kunnes $MAX$ paikan enimmäismäärä täyttyy.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Kohteella on vanhoja tiedostoliitteitä, jotka on korjattava."
   },
-  "attachmentFixDesc": {
-    "message": "Vanha tiedostoliite, joka on korjattava. Klikkaa lukeaksesi lisää."
+  "attachmentFixDescription": {
+    "message": "Liite käyttää vanhentunutta salausta. Lataa liite, salaa se uudelleen ja lisää se uudestaan valitsemalla \"Korjaa\"."
   },
   "fix": {
     "message": "Korjaa",
@@ -3809,29 +3842,11 @@
   "restoreSelected": {
     "message": "Palauta valitut"
   },
-  "restoreItem": {
-    "message": "Palauta kohde"
-  },
   "restoredItem": {
     "message": "Kohde palautettiin"
   },
   "restoredItems": {
     "message": "Kohteet palautettiin"
-  },
-  "restoreItemConfirmation": {
-    "message": "Haluatko varmasti palauttaa kohteen?"
-  },
-  "restoreItems": {
-    "message": "Palauta kohteet"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Olet valinnut palautettavaksi $COUNT$ kohdetta. Haluatko varmasti palauttaa ne?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "$ID$ palautettiin",
@@ -4375,8 +4390,8 @@
   "manageUsers": {
     "message": "Käyttäjien hallinta"
   },
-  "manageResetPassword": {
-    "message": "Salasanan palautusavun hallinta"
+  "manageAccountRecovery": {
+    "message": "Hallitse tilin palautusapua"
   },
   "disableRequiredError": {
     "message": "Käytäntö $POLICYNAME$ on poistettava käytöstä manuaalisesti ennen tämän käytännön käytöstä poistoa.",
@@ -4595,13 +4610,13 @@
     "message": "Tilien palautusavun hallinta"
   },
   "accountRecoveryPolicyDesc": {
-    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
+    "message": "Salausmenetelmästä riippuen, palauta tilejä, joiden pääsalasanat tai luotetut laitteet on unohdettu tai kadotettu."
   },
   "accountRecoveryPolicyWarning": {
-    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+    "message": "Olemassa olevat tilit, joille on määritetty pääsalasanat, edellyttävät jäsenten omatoimista liittymistä ennen kuin järjestelmänvalvojat voivat palauttaa heidän tilejään. Automaattinen liitos kytkee myös tilin palautuksen käyttöön uusille jäsenille."
   },
   "accountRecoverySingleOrgRequirementDesc": {
-    "message": "The single organization Enterprise policy must be turned on before activating this policy."
+    "message": "\"Yksittäinen organisaatio\" -käytäntö on otettava käyttöön ennen tämän käytännön käyttöönottoa."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automaattinen liitos"
@@ -4705,8 +4720,8 @@
   "error": {
     "message": "Virhe"
   },
-  "resetPasswordManageUsers": {
-    "message": "Myös \"Käyttäjien hallinta\" -oikeuden on oltava käytössä \"Salasanan palautusavun hallinta\" -oikeuden kanssa"
+  "accountRecoveryManageUsers": {
+    "message": "\"Tilien palautusavun hallinta\" -oikeuden kanssa on myönnettävä myös \"Käyttäjien hallinta\" -oikeus."
   },
   "setupProvider": {
     "message": "Toimittajan määritys"
@@ -4917,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Estä yksityisen holvin vienti"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Älä salli jäseniä viemästä yksityisten holviensa tietoja."
+  "disablePersonalVaultExportDescription": {
+    "message": "Älä salli jäsenten viedä henkilökohtaisten holviensa tietoja."
   },
   "vaultExportDisabled": {
     "message": "Holvin vienti poistettiin"
@@ -5218,15 +5233,15 @@
     "message": "Määrityksen jälkeen asetukset tallennetaan ja käyttäjät voivat tunnistautua käyttäen identiteettitoimittajansa tunnistautumistietoja."
   },
   "ssoPolicyHelpStart": {
-    "message": "Käytä",
+    "message": "Pakota kaikkia jäseniä kirjautumaan kertakirjautumisella käyttämällä",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpAnchor": {
-    "message": "require single sign-on authentication policy",
+    "message": "Vaadi todennus kertakirjautumisella",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
-    "message": "käyttöön pakottaaksesi kertakirjautumisen kaikille jäsenille.",
+    "message": "-todennuskäytäntöä.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "memberDecryptionOption": {
@@ -5421,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Organisaation holvin vienti"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Vain tunnukseen $EMAIL$ liitetyt yksityisen holvin kohteet viedään. Organisaation holvin kohteita ei sisällytetä. Vain holvin kohteiden tiedot viedään ilman niihin liittyviä salasanojen historiatietoja tai liitteitä.",
+  "exportingIndividualVaultDescription": {
+    "message": "Vain tunnukseen $EMAIL$ liitetyt yksityisen holvin kohteet viedään. Organisaation holvin kohteita ei sisällytetä. Vain holvin kohteiden tiedot viedään ilman niihin liittyviä liitteitä.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5430,8 +5445,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt holvin kohteet viedään. Yksityisen holvin ja muiden organisaatioiden kohteita ei sisällytetä.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Vain organisaatioon $ORGANIZATION$ liitetyn holvin kohteet viedään. Yksityisen holvin ja muiden organisaatioiden kohteita ei sisällytetä.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6513,7 +6528,7 @@
     "message": "Organisaation salaisten tietojen vienti"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt Salaisuushallinnan tiedot viedään. Muiden tuotteiden ja organisaatioiden kohteet eivät sisälly tähän.",
+    "message": "Vain organisaatioon $ORGANIZATION$ liitetyt Salaisuushallinnan tiedot viedään. Muiden tuotteiden tai organisaatioiden kohteita ei sisällytetä.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6617,11 +6632,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "Jos jatkat, kirjataan kaikki aktiiviset istunnot ulos, jonka jälkeen sinun on kirjauduttava sisään uudelleen ja suoritettava kaksivaiheisen todennuksen määritys. Tietojesi säilyvyyden varmistamiseksi suosittelemme, että viet holvisi sisällön ennen kuin muutat salausasetuksiasi."
   },
-  "secretsManagerBeta": {
-    "message": "Salaisuushallinta Beta"
-  },
   "secretsManager": {
     "message": "Salaisuushallinta"
+  },
+  "secretsManagerBeta": {
+    "message": "Salaisuushallinta Beta"
   },
   "secretsManagerAccessDescription": {
     "message": "Aktivoi käyttäjälle pääsy Salaisuushallintaan."
@@ -6803,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Vaadi nykyisiä jäseniä vaihtamaan salasanansa"
   },
-  "region": {
-    "message": "Alue"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Käyttöoikeutesi eivät salli tämän projektin poistamista",
@@ -6825,27 +6835,27 @@
   "updateKdfSettings": {
     "message": "Päivitä KDF-asetukset"
   },
-  "trustedDeviceEncryption": {
-    "message": "Luotettu laitesalaus"
+  "trustedDevices": {
+    "message": "Luotetut laitteet"
   },
   "memberDecryptionTdeDescriptionPartOne": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "message": "Kun jäsenet on todennettu, he voivat purkaa holvin salauksen heidän laitteellaan säilytettävällä avaimella.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "single organization",
+    "message": "Yksittäinen organisaatio",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "policy and ",
+    "message": "ja ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "account recovery administration",
+    "message": "Tilien palautusavun hallinta",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartThree": {
-    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "message": "-käytännöt automaattisella liitoksella otetaan tämän asetuksen yhteydessä käyttöön.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
@@ -6871,7 +6881,7 @@
     "message": "Myönnä pääsy"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Myönnä seuraaville jäsenille pääsy Salaisuushallintaan. Salasananhallinnassa myönnetty rooli pätee myös Salaisuushallinnassa.",
+    "message": "Myönnä seuraaville jäsenille Salaisuushallinnan käyttöoikeus. Salasanahallinnassa myönnetty rooli pätee myös Salaisuushallinnassa.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
   "activateSecretsManager": {
@@ -6955,5 +6965,137 @@
   },
   "selectedRegionFlag": {
     "message": "Valitun alueen lippu"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Aktiivisia Sendejä ei ole",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Sendillä voit jakaa salattuja tietoja turvallisesti kenelle tahansa.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Kutsu käyttäjiä"
+  },
+  "secretsManagerForPlan": {
+    "message": "Salaisuushallinta $PLAN$-tilaukseen",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Kehitys ja DevOps-tiimeille salaisuuksien hallintaan ohjelmistokehityksen koko elinkaaren ajaksi."
+  },
+  "free2PersonOrganization": {
+    "message": "Ilmainen kahden hengen organisaatioille"
+  },
+  "unlimitedSecrets": {
+    "message": "Rajattomasti salaisuuksia"
+  },
+  "unlimitedProjects": {
+    "message": "Rajattomasti projekteja"
+  },
+  "projectsIncluded": {
+    "message": "Sisältää $COUNT$ projektia",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "Sisältää $COUNT$ palvelutiliä",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "Jokainen lisätty palvelutili kustantaa $COST$ kuukaudessa",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Lisää Salaisuushallinta"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Lisää Salaisuushallinta myös päivitettyyn tilaukseesi, jottet menetä pääsyä aiemmalla tilauksellasi luotuihin salaisuuksiin."
+  },
+  "additionalServiceAccounts": {
+    "message": "Lisättävät palvelutilit"
+  },
+  "includedServiceAccounts": {
+    "message": "Tilaukseesi sisältyy $COUNT$ palvelutiliä.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Voit hankkia lisää palvelutilejä hintaan $COST$/tili/kuukausi.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Salasanahallinnan tilauksen hinta"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Salaisuushallinnan tilauksen hinta"
+  },
+  "passwordManager": {
+    "message": "Salasanahallinta"
+  },
+  "freeOrganization": {
+    "message": "Ilmainen organisaatio"
+  },
+  "limitServiceAccounts": {
+    "message": "Rajoita palvelutilien määrää (valinnainen)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Aseta tilaukseesi sisältyvä palvelutilien määrä. Määrän täytyttyä et voi luoda uusia palvelutilejä."
+  },
+  "serviceAccountLimit": {
+    "message": "Palvelutilien enimmäismäärä (valinnainen)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Palvelutilin mahdollinen enimmäiskustannus"
+  },
+  "smBetaEndedDesc": {
+    "message": "Salaisuushallinnan beta päättyi $BETA_ENDING_DATE$. Sinulla on $DAYS$ päivää aikaa lisätä Salaisuushallinta maksulliseen tilaukseesi säilyttääksesi Salaisuushallinnassa olevien tietojesi käyttöoikeuden. Lisää Salaisuushallinta tilaukseesi olemalla yhteydessä asiakaspalveluun.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta päättyy"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Onko sinulla jo tili?"
   }
 }

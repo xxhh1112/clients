@@ -56,7 +56,7 @@ export class NativeMessagingService {
 
     // Request to setup secure encryption
     if ("command" in rawMessage && rawMessage.command === "setupEncryption") {
-      const remotePublicKey = Utils.fromB64ToArray(rawMessage.publicKey).buffer;
+      const remotePublicKey = Utils.fromB64ToArray(rawMessage.publicKey);
 
       // Validate the UserId to ensure we are logged into the same account.
       const accounts = await firstValueFrom(this.stateService.accounts$);
@@ -136,14 +136,23 @@ export class NativeMessagingService {
           });
         }
 
-        const key = await this.cryptoService.getKeyFromStorage(
+        const userKey = await this.cryptoService.getUserKeyFromStorage(
           KeySuffixOptions.Biometric,
           message.userId
         );
+        const masterKey = await this.cryptoService.getMasterKey(message.userId);
 
-        if (key != null) {
+        if (userKey != null) {
+          // we send the master key still for backwards compatibility
+          // with older browser extensions
+          // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
           this.send(
-            { command: "biometricUnlock", response: "unlocked", keyB64: key.keyB64 },
+            {
+              command: "biometricUnlock",
+              response: "unlocked",
+              keyB64: masterKey?.keyB64,
+              userKeyB64: userKey.keyB64,
+            },
             appId
           );
         } else {
@@ -169,7 +178,7 @@ export class NativeMessagingService {
     ipcRenderer.send("nativeMessagingReply", { appId: appId, message: encrypted });
   }
 
-  private async secureCommunication(remotePublicKey: ArrayBuffer, appId: string) {
+  private async secureCommunication(remotePublicKey: Uint8Array, appId: string) {
     const secret = await this.cryptoFunctionService.randomBytes(64);
     this.sharedSecrets.set(appId, new SymmetricCryptoKey(secret));
 
