@@ -17,54 +17,38 @@ class AutofillOverlayButton extends HTMLElement {
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
   private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
-    initAutofillOverlayButton: ({ message }) => this.initAutofillOverlayButton(message),
+    initAutofillOverlayButton: ({ message }) =>
+      this.initAutofillOverlayButton(message.authStatus, message.styleSheetUrl),
     checkOverlayButtonFocused: () => this.checkOverlayButtonFocused(),
-    updateAuthStatus: ({ message }) => this.updateAuthStatus(message),
+    updateAuthStatus: ({ message }) => this.updateAuthStatus(message.authStatus),
   };
 
   constructor() {
     super();
 
+    this.setupWindowMessageListener();
     this.shadowDom = this.attachShadow({ mode: "closed" });
     this.logoIconElement = buildSvgDomElement(logoIcon);
     this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
-    this.setupWindowMessageListener();
   }
 
-  private isVaultUnlocked(): boolean {
-    return this.authStatus === AuthenticationStatus.Unlocked;
-  }
-
-  private async initAutofillOverlayButton(message: any = {}) {
-    this.authStatus = message.authStatus;
-
-    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
+  private async initAutofillOverlayButton(authStatus: AuthenticationStatus, styleSheetUrl: string) {
+    const linkElement = globalThis.document.createElement("link");
+    linkElement.setAttribute("rel", "stylesheet");
+    linkElement.setAttribute("href", styleSheetUrl);
 
     this.buttonElement = globalThis.document.createElement("button");
     this.buttonElement.tabIndex = -1;
     this.buttonElement.classList.add("overlay-button");
     this.buttonElement.addEventListener("click", this.handleButtonElementClick);
-    this.setIconElementSvg();
 
-    const styleSheetUrl = message.styleSheetUrl;
-    const linkElement = globalThis.document.createElement("link");
-    linkElement.setAttribute("rel", "stylesheet");
-    linkElement.setAttribute("href", styleSheetUrl);
+    this.updateAuthStatus(authStatus);
 
-    this.shadowDom.appendChild(linkElement);
-    this.shadowDom.appendChild(this.buttonElement);
+    this.shadowDom.append(linkElement, this.buttonElement);
   }
 
-  private getLogoIconElement(): HTMLElement {
-    return this.isVaultUnlocked() ? this.logoIconElement : this.logoLockedIconElement;
-  }
-
-  private handleWindowBlurEvent = () => {
-    this.postMessageToParent({ command: "overlayButtonBlurred" });
-  };
-
-  private updateAuthStatus(message: any = {}) {
-    this.authStatus = message.authStatus;
+  private updateAuthStatus(authStatus: AuthenticationStatus) {
+    this.authStatus = authStatus;
     this.setIconElementSvg();
   }
 
@@ -74,7 +58,12 @@ class AutofillOverlayButton extends HTMLElement {
     }
 
     this.buttonElement.innerHTML = "";
-    this.buttonElement.append(this.getLogoIconElement());
+
+    const iconElement =
+      this.authStatus === AuthenticationStatus.Unlocked
+        ? this.logoIconElement
+        : this.logoLockedIconElement;
+    this.buttonElement.append(iconElement);
   }
 
   private handleButtonElementClick = () => {
@@ -99,6 +88,7 @@ class AutofillOverlayButton extends HTMLElement {
 
   private setupWindowMessageListener() {
     globalThis.addEventListener("message", this.handleWindowMessage);
+    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {
@@ -114,6 +104,10 @@ class AutofillOverlayButton extends HTMLElement {
     }
 
     handler({ message });
+  };
+
+  private handleWindowBlurEvent = () => {
+    this.postMessageToParent({ command: "overlayButtonBlurred" });
   };
 }
 
