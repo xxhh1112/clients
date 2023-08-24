@@ -31,7 +31,6 @@ export class BadgeDirective {
       "tw-px-1.5",
       "tw-font-bold",
       "tw-text-center",
-      "tw-align-text-top",
       "!tw-text-contrast",
       "tw-rounded",
       "tw-border-none",
@@ -46,7 +45,8 @@ export class BadgeDirective {
     ]
       .concat(styles[this.badgeType])
       .concat(this.hasHoverEffects ? hoverStyles[this.badgeType] : [])
-      .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : []);
+      .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : [])
+      .concat([`tw-align-${this.align}`]);
   }
   @HostBinding("attr.title") get title() {
     return this.truncate ? this.el.nativeElement.textContent.trim() : null;
@@ -54,6 +54,7 @@ export class BadgeDirective {
 
   @Input() badgeType: BadgeTypes = "primary";
   @Input() truncate = true;
+  @Input() align = "text-top";
 
   private hasHoverEffects = false;
 

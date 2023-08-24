@@ -1,8 +1,22 @@
 <h2 bitTypography="h2">
   {{ "loginWithPasskey" | i18n }}
   <ng-container *ngIf="hasData">
-    <span *ngIf="hasCredentials" bitBadge badgeType="success">{{ "on" | i18n }}</span>
-    <span *ngIf="!hasCredentials" bitBadge badgeType="secondary">{{ "off" | i18n }}</span>
+    <span
+      *ngIf="hasCredentials"
+      class="tw-align-middle"
+      bitBadge
+      badgeType="success"
+      align="middle"
+      >{{ "on" | i18n }}</span
+    >
+    <span
+      *ngIf="!hasCredentials"
+      class="tw-align-middle"
+      bitBadge
+      badgeType="secondary"
+      align="middle"
+      >{{ "off" | i18n }}</span
+    >
   </ng-container>
   <ng-container *ngIf="loading">
     <i class="bwi bwi-spinner bwi-spin tw-ml-1" aria-hidden="true"></i>
