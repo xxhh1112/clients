@@ -170,8 +170,8 @@ export class CipherService implements CipherServiceAbstraction {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-
-    if (await this.getCipherKeyEncryptionEnabled()) {
+    const t = await this.getCipherKeyEncryptionEnabled();
+    if (t) {
       return this.encryptWithCipherKey(model, cipher, key);
     }
 

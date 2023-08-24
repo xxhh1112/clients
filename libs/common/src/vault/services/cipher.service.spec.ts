@@ -1,5 +1,8 @@
-// eslint-disable-next-line no-restricted-imports
+import { Substitute } from "@fluffy-spoon/substitute";
 import { mock, mockReset } from "jest-mock-extended";
+
+// eslint-disable-next-line no-restricted-imports
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
 import { makeStaticByteArray } from "../../../spec/utils";
 import { ApiService } from "../../abstractions/api.service";
@@ -11,6 +14,7 @@ import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
+import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
 import { OrgKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { ServerConfigResponse } from "../../platform/models/response/server-config.response";
 import { ContainerService } from "../../platform/services/container.service";
@@ -30,6 +34,7 @@ const ENCRYPTED_TEXT = "This data has been encrypted";
 const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
 const DATE_NOW = new Date();
 const UNSUPPORTED_VERSION = "2023.2.0";
+
 const cipherData: CipherData = {
   id: "id",
   organizationId: "orgId",
@@ -44,6 +49,7 @@ const cipherData: CipherData = {
   notes: "EncryptedString",
   creationDate: "2022-01-01T12:00:00.000Z",
   deletedDate: null,
+  key: "EncKey",
   reprompt: CipherRepromptType.None,
   login: {
     uris: [{ uri: "EncryptedString", match: UriMatchType.Domain }],
@@ -113,8 +119,8 @@ describe("Cipher Service", () => {
     mockReset(encryptService);
     mockReset(configApiService);
 
-    cryptoService.encryptToBytes(Arg.any(), Arg.any()).resolves(ENCRYPTED_BYTES);
-    cryptoService.encrypt(Arg.any(), Arg.any()).resolves(new EncString(ENCRYPTED_TEXT));
+    encryptService.encryptToBytes.mockReturnValue(Promise.resolve(ENCRYPTED_BYTES));
+    encryptService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
 
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 
@@ -135,13 +141,21 @@ describe("Cipher Service", () => {
   describe("saveAttachmentRawWithServer()", () => {
     it("should upload encrypted file contents with save attachments", async () => {
       const fileName = "filename";
-      const fileData = new Uint8Array(10).buffer;
+      const fileData = new Uint8Array(10);
       cryptoService.getOrgKey.mockReturnValue(
         Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)) as OrgKey)
       );
-      cryptoService.makeEncKey.mockReturnValue(
+      cryptoService.makeDataEncKey.mockReturnValue(
         Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))
       );
+
+      configApiService.get.mockReturnValue(
+        Promise.resolve(new ServerConfigResponse({ version: UNSUPPORTED_VERSION }))
+      );
+      process.env.FLAGS = JSON.stringify({
+        enableCipherKeyEncryption: false,
+      });
+
       const spy = jest.spyOn(cipherFileUploadService, "upload");
 
       await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
@@ -223,23 +237,6 @@ describe("Cipher Service", () => {
     });
   });
 
-  it("attachments upload encrypted file contents", async () => {
-    const fileName = "filename";
-    const fileData = new Uint8Array(10).buffer;
-    cryptoService.getOrgKey(Arg.any()).resolves(new SymmetricCryptoKey(new Uint8Array(32).buffer));
-
-    configApiService.get().resolves(new ServerConfigResponse({ version: UNSUPPORTED_VERSION }));
-    process.env.FLAGS = JSON.stringify({
-      enableCipherKeyEncryption: false,
-    });
-
-    await cipherService.saveAttachmentRawWithServer(new Cipher(), fileName, fileData);
-
-    cipherFileUploadService
-      .received(1)
-      .upload(Arg.any(), Arg.any(), ENCRYPTED_BYTES, Arg.any(), Arg.any());
-  });
-
   describe("encrypt", () => {
     let cipherView: CipherView;
 
@@ -248,8 +245,14 @@ describe("Cipher Service", () => {
       cipherView.type = CipherType.Login;
       cipherView.key = null;
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
-      configApiService.get().resolves(new ServerConfigResponse({ version: getVersion() }));
+      encryptService.decryptToBytes.mockReturnValue(Promise.resolve(makeStaticByteArray(64)));
+      configApiService.get.mockReturnValue(
+        Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
+      );
+      cryptoService.makeCipherKey.mockReturnValue(
+        Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)))
+      );
+      cryptoService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
     });
 
     describe("cipher.key", () => {
@@ -300,13 +303,15 @@ describe("Cipher Service", () => {
       });
 
       it("is called when server version has hotfix suffix", async () => {
-        configApiService = Substitute.for<ConfigApiServiceAbstraction>();
+        mockReset(configApiService);
 
         process.env.FLAGS = JSON.stringify({
           enableCipherKeyEncryption: true,
         });
 
-        configApiService.get().resolves(new ServerConfigResponse({ version: getVersion() }));
+        configApiService.get.mockReturnValue(
+          Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
+        );
         await cipherService.encrypt(cipherView);
 
         expect(cipherService["encryptWithCipherKey"]).toHaveBeenCalled();

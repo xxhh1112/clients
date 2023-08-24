@@ -7156,6 +7156,9 @@
   "maxServiceAccountCost": {
     "message": "Max potential service account cost"
   },
+  "loggedInExclamation": {
+    "message": "Logged in!"
+  },
   "smBetaEndedDesc": {
     "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
     "placeholders": {

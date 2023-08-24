@@ -524,10 +524,6 @@ function getBgService<T>(service: keyof MainBackground) {
       useClass: ConfigApiService,
       deps: [ApiService],
     },
-    {
-      provide: DialogServiceAbstraction,
-      useClass: BrowserDialogService,
-    },
   ],
 })
 export class ServicesModule {}

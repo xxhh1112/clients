@@ -364,7 +364,7 @@ export class Main {
 
     this.folderApiService = new FolderApiService(this.folderService, this.apiService);
 
-    const lockedCallback = async () =>
+    const lockedCallback = async (userId?: string) =>
       await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
     this.userVerificationService = new UserVerificationService(
