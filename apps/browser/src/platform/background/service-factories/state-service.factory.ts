@@ -2,7 +2,8 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 
 import { Account } from "../../../models/account";
-import { BackgroundStateService } from "../services/background-state.service";
+import { BrowserStateService as BrowserStateServiceAbstraction } from "../../services/abstractions/browser-state.service";
+import { BrowserStateService } from "../../services/browser-state.service";
 
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
@@ -34,24 +35,21 @@ export type StateServiceInitOptions = StateServiceFactoryOptions &
   StateMigrationServiceInitOptions;
 
 export async function stateServiceFactory(
-  cache: { stateService?: BackgroundStateService } & CachedServices,
+  cache: { stateService?: BrowserStateServiceAbstraction } & CachedServices,
   opts: StateServiceInitOptions
-): Promise<BackgroundStateService> {
-  const service = await factory(
-    cache,
-    "stateService",
-    opts,
-    async () =>
-      await new BackgroundStateService(
-        await diskStorageServiceFactory(cache, opts),
-        await secureStorageServiceFactory(cache, opts),
-        await memoryStorageServiceFactory(cache, opts),
-        await logServiceFactory(cache, opts),
-        await stateMigrationServiceFactory(cache, opts),
-        opts.stateServiceOptions.stateFactory,
-        opts.stateServiceOptions.useAccountCache
-      )
-  );
-  service.init();
+): Promise<BrowserStateServiceAbstraction> {
+  const service = await factory(cache, "stateService", opts, async () => {
+    const result = new BrowserStateService(
+      await diskStorageServiceFactory(cache, opts),
+      await secureStorageServiceFactory(cache, opts),
+      await memoryStorageServiceFactory(cache, opts),
+      await logServiceFactory(cache, opts),
+      await stateMigrationServiceFactory(cache, opts),
+      opts.stateServiceOptions.stateFactory,
+      opts.stateServiceOptions.useAccountCache
+    );
+    await result.init();
+    return result;
+  });
   return service;
 }

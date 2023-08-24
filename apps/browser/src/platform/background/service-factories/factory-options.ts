@@ -1,4 +1,8 @@
-export type CachedServices = Record<string, unknown>;
+import MainBackground from "../../../background/main.background";
+import { BrowserApi } from "../../browser/browser-api";
+
+export type CachedServices = Partial<MainBackground>;
+export type mainKeys = keyof MainBackground;
 
 export type FactoryOptions = {
   alwaysInitializeNewService?: boolean;
@@ -16,6 +20,10 @@ export async function factory<
   opts: TOpts,
   factory: () => TCache[TName] | Promise<TCache[TName]>
 ): Promise<TCache[TName]> {
+  const background = BrowserApi.getBackgroundPage();
+  if (BrowserApi.manifestVersion !== 3 && background?.bitwardenMain?.[name] != null) {
+    return background.bitwardenMain[name] as TCache[TName];
+  }
   let instance = cachedServices[name];
   if (opts.alwaysInitializeNewService || !instance) {
     const instanceOrPromise = factory();
