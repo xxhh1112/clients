@@ -1,4 +1,4 @@
-import { noopInitialize, recordInitialize } from "@bitwarden/common/platform/misc/initializers";
+import { noopInitialize, initializeRecord } from "@bitwarden/common/platform/misc/initializers";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { State } from "@bitwarden/common/platform/models/domain/state";
 
@@ -18,6 +18,6 @@ export class ForegroundStateService extends BrowserStateService {
 
   protected accountDiskCache = new ForegroundBitSubject<Record<string, Account>>(
     "stateService_accountDiskCache",
-    recordInitialize<Account>(Account.fromJSON)
+    initializeRecord<Account>(Account.fromJSON)
   );
 }
