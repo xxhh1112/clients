@@ -1,7 +1,7 @@
 import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CoreAuthModule } from "../../core.module";

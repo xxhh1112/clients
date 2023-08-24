@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationUserBulkConfirmRequest } from "@bitwarden/common/abstractions/organization-user/requests";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BulkUserDetails } from "./bulk-status.component";
 
@@ -47,7 +48,7 @@ export class BulkConfirmComponent implements OnInit {
 
     for (const entry of response.data) {
       const publicKey = Utils.fromB64ToArray(entry.key);
-      const fingerprint = await this.cryptoService.getFingerprint(entry.userId, publicKey.buffer);
+      const fingerprint = await this.cryptoService.getFingerprint(entry.userId, publicKey);
       if (fingerprint != null) {
         this.publicKeys.set(entry.id, publicKey);
         this.fingerprints.set(entry.id, fingerprint.join("-"));
@@ -67,7 +68,7 @@ export class BulkConfirmComponent implements OnInit {
         if (publicKey == null) {
           continue;
         }
-        const encryptedKey = await this.cryptoService.rsaEncrypt(key.key, publicKey.buffer);
+        const encryptedKey = await this.cryptoService.rsaEncrypt(key.key, publicKey);
         userIdsWithKeys.push({
           id: user.id,
           key: encryptedKey.encryptedString,
@@ -98,7 +99,7 @@ export class BulkConfirmComponent implements OnInit {
     );
   }
 
-  protected getCryptoKey() {
+  protected getCryptoKey(): Promise<SymmetricCryptoKey> {
     return this.cryptoService.getOrgKey(this.organizationId);
   }
 

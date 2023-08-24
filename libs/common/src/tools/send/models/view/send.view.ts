@@ -1,6 +1,6 @@
-import { Utils } from "../../../../misc/utils";
-import { SymmetricCryptoKey } from "../../../../models/domain/symmetric-crypto-key";
 import { View } from "../../../../models/view/view";
+import { Utils } from "../../../../platform/misc/utils";
+import { SymmetricCryptoKey } from "../../../../platform/models/domain/symmetric-crypto-key";
 import { DeepJsonify } from "../../../../types/deep-jsonify";
 import { SendType } from "../../enums/send-type";
 import { Send } from "../domain/send";
@@ -13,7 +13,7 @@ export class SendView implements View {
   accessId: string = null;
   name: string = null;
   notes: string = null;
-  key: ArrayBuffer;
+  key: Uint8Array;
   cryptoKey: SymmetricCryptoKey;
   type: SendType = null;
   text = new SendTextView();
@@ -82,7 +82,7 @@ export class SendView implements View {
     }
 
     return Object.assign(new SendView(), json, {
-      key: Utils.fromB64ToArray(json.key)?.buffer,
+      key: Utils.fromB64ToArray(json.key),
       cryptoKey: SymmetricCryptoKey.fromJSON(json.cryptoKey),
       text: SendTextView.fromJSON(json.text),
       file: SendFileView.fromJSON(json.file),

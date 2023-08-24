@@ -11,7 +11,7 @@
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Logga in eller skapa ett nytt konto för att komma åt dina lösenord."
+    "message": "Logga in eller skapa ett nytt konto för att komma åt ditt säkra valv."
   },
   "createAccount": {
     "message": "Skapa konto"
@@ -342,7 +342,7 @@
     "message": "Betygsätt tillägget"
   },
   "rateExtensionDesc": {
-    "message": "Överväg gärna att hjälpa oss genom att ge oss en bra recension!"
+    "message": "Överväg gärna att skriva en recension om oss!"
   },
   "browserNotSupportClipboard": {
     "message": "Din webbläsare har inte stöd för att enkelt kopiera till urklipp. Kopiera till urklipp manuellt istället."
@@ -370,7 +370,7 @@
     }
   },
   "invalidMasterPassword": {
-    "message": "Felaktigt huvudlösenord"
+    "message": "Ogiltigt huvudlösenord"
   },
   "vaultTimeout": {
     "message": "Valvets tidsgräns"
@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Uppdatera"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "Visa alternativ för snabbmenyn"
   },
@@ -730,7 +736,7 @@
     "message": "Kopiera verifieringskod"
   },
   "attachments": {
-    "message": "Bifogade filer"
+    "message": "Bilagor"
   },
   "deleteAttachment": {
     "message": "Radera bilaga"
@@ -952,7 +958,7 @@
     "message": "Server-URL"
   },
   "apiUrl": {
-    "message": "API server-URL"
+    "message": "API-server-URL"
   },
   "webVaultUrl": {
     "message": "Webbvalvsserver-URL"
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Återställ objekt"
   },
-  "restoreItemConfirmation": {
-    "message": "Är du säker på att du vill återställa detta objekt?"
-  },
   "restoredItem": {
     "message": "Återställde objekt"
   },
@@ -1462,16 +1465,16 @@
     "message": "Fyllde i objektet automatiskt"
   },
   "insecurePageWarning": {
-    "message": "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page."
+    "message": "Varning: Detta är en icke säkrad HTTP-sida, och all information du skickar kan potentiellt ses och ändras av andra. Denna inloggning sparades ursprungligen på en säker (HTTPS) sida."
   },
   "insecurePageWarningFillPrompt": {
-    "message": "Do you still wish to fill this login?"
+    "message": "Vill du fortfarande fylla i denna inloggning?"
   },
   "autofillIframeWarning": {
     "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
   },
   "autofillIframeWarningTip": {
-    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "message": "För att förhindra denna varning i framtiden, spara denna URI, $HOSTNAME$, till ditt Bitwarden inloggningsobjekt för denna webbplats.",
     "placeholders": {
       "hostname": {
         "content": "$1",
@@ -2221,7 +2224,25 @@
       }
     }
   },
+  "loggingInOn": {
+    "message": "Logga in på"
+  },
   "opensInANewWindow": {
     "message": "Öppnas i ett nytt fönster"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Display"
   }
 }

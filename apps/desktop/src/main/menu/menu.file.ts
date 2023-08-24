@@ -1,7 +1,7 @@
 import { BrowserWindow, MenuItemConstructorOptions } from "electron";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 
 import { isMac, isMacAppStore } from "../../utils";
 import { UpdaterMain } from "../updater.main";
@@ -51,9 +51,10 @@ export class FileMenu extends FirstMenu implements IMenubarMenu {
     updater: UpdaterMain,
     window: BrowserWindow,
     accounts: { [userId: string]: MenuAccount },
-    isLocked: boolean
+    isLocked: boolean,
+    isLockable: boolean
   ) {
-    super(i18nService, messagingService, updater, window, accounts, isLocked);
+    super(i18nService, messagingService, updater, window, accounts, isLocked, isLockable);
   }
 
   private get addNewLogin(): MenuItemConstructorOptions {

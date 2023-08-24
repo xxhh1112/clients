@@ -1,15 +1,19 @@
 import { NgModule } from "@angular/core";
 import { Route, RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
-import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
+import {
+  AuthGuard,
+  lockGuard,
+  redirectGuard,
+  tdeDecryptionRequiredGuard,
+  UnauthGuard,
+} from "@bitwarden/angular/auth/guards";
+import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 import { SubscriptionRoutingModule } from "../app/billing/settings/subscription-routing.module";
 import { flagEnabled, Flags } from "../utils/flags";
 
-import { TrialInitiationComponent } from "./accounts/trial-initiation/trial-initiation.component";
-import { OrganizationModule } from "./admin-console/organizations/organization.module";
 import { AcceptFamilySponsorshipComponent } from "./admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
 import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
@@ -18,6 +22,7 @@ import { AcceptEmergencyComponent } from "./auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "./auth/accept-organization.component";
 import { HintComponent } from "./auth/hint.component";
 import { LockComponent } from "./auth/lock.component";
+import { LoginDecryptionOptionsComponent } from "./auth/login/login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "./auth/login/login-with-device.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { RecoverDeleteComponent } from "./auth/recover-delete.component";
@@ -27,12 +32,12 @@ import { SetPasswordComponent } from "./auth/set-password.component";
 import { EmergencyAccessViewComponent } from "./auth/settings/emergency-access/emergency-access-view.component";
 import { EmergencyAccessComponent } from "./auth/settings/emergency-access/emergency-access.component";
 import { SsoComponent } from "./auth/sso.component";
+import { TrialInitiationComponent } from "./auth/trial-initiation/trial-initiation.component";
 import { TwoFactorComponent } from "./auth/two-factor.component";
 import { UpdatePasswordComponent } from "./auth/update-password.component";
 import { UpdateTempPasswordComponent } from "./auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "./auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "./auth/verify-recover-delete.component";
-import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
 import { ReportsModule } from "./reports";
@@ -57,7 +62,7 @@ const routes: Routes = [
         path: "",
         pathMatch: "full",
         children: [], // Children lets us have an empty component.
-        canActivate: [HomeGuard], // Redirects either to vault, login or lock page.
+        canActivate: [redirectGuard()], // Redirects either to vault, login, or lock page.
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {
@@ -65,7 +70,20 @@ const routes: Routes = [
         component: LoginWithDeviceComponent,
         data: { titleId: "loginWithDevice" },
       },
+      {
+        path: "admin-approval-requested",
+        component: LoginWithDeviceComponent,
+        data: { titleId: "loginWithDevice" },
+      },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
+      {
+        path: "login-initiated",
+        component: LoginDecryptionOptionsComponent,
+        canActivate: [
+          tdeDecryptionRequiredGuard(),
+          canAccessFeature(FeatureFlag.TrustedDeviceEncryption),
+        ],
+      },
       {
         path: "register",
         component: TrialInitiationComponent,
@@ -97,7 +115,7 @@ const routes: Routes = [
       {
         path: "lock",
         component: LockComponent,
-        canActivate: [LockGuard],
+        canActivate: [lockGuard()],
       },
       { path: "verify-email", component: VerifyEmailTokenComponent },
       {
@@ -249,7 +267,8 @@ const routes: Routes = [
   },
   {
     path: "organizations",
-    loadChildren: () => OrganizationModule,
+    loadChildren: () =>
+      import("./admin-console/organizations/organization.module").then((m) => m.OrganizationModule),
   },
 ];
 

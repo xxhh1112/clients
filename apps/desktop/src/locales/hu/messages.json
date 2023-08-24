@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Elem végleges törlése"
   },
-  "restoreItem": {
-    "message": "Elem visszaállítása"
-  },
-  "restoreItemConfirmation": {
-    "message": "Biztosan visszaállításra kerüljön ezt az elem?"
-  },
   "restoredItem": {
     "message": "Visszaállított elem"
   },
@@ -2251,5 +2245,20 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Ajánlott beállítások frissítése"
+  },
+  "loggingInOn": {
+    "message": "Bejelentkezés:"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Saját kiszolgáló"
+  },
+  "accessDenied": {
+    "message": "A hozzáférés megtagadásra került. Nincs jogosultság az oldal megtekintésére."
   }
 }

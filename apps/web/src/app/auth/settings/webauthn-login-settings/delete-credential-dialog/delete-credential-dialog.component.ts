@@ -3,12 +3,12 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { DialogService } from "@bitwarden/components";
 
 import { WebauthnService } from "../../../core";
 import { WebauthnCredentialView } from "../../../core/views/webauth-credential.view";
@@ -88,7 +88,7 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
  * @param config Configuration for the dialog
  */
 export const openDeleteCredentialDialogComponent = (
-  dialogService: DialogServiceAbstraction,
+  dialogService: DialogService,
   config: DialogConfig<DeleteCredentialDialogParams>
 ) => {
   return dialogService.open<unknown>(DeleteCredentialDialogComponent, config);

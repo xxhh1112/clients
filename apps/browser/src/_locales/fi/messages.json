@@ -3,11 +3,11 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden – Ilmainen salasananhallinta",
+    "message": "Bitwarden – Ilmainen salasanahallinta",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Turvallinen ja ilmainen salasanojen hallinta kaikille laitteillesi.",
+    "message": "Turvallinen ja ilmainen salasanahallinta kaikille laitteillesi.",
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
@@ -224,7 +224,7 @@
     "message": "Luo kirjautumistiedoillesi automaattisesti vahvoja, ainutlaatuisia salasanoja."
   },
   "bitWebVault": {
-    "message": "Bitwardenin verkkoholvi"
+    "message": "Bitwarden Verkkoholvi"
   },
   "importItems": {
     "message": "Tuo kohteita"
@@ -288,7 +288,7 @@
     "message": "Näytä"
   },
   "noItemsInList": {
-    "message": "Ei näytettäviä kohteita."
+    "message": "Näytettäviä kohteita ei ole."
   },
   "itemInformation": {
     "message": "Kohteen tiedot"
@@ -587,7 +587,7 @@
     "description": "This is the folder for uncategorized items"
   },
   "enableAddLoginNotification": {
-    "message": "Kysy lisätäänkö kirjautimistieto"
+    "message": "Kysy lisätäänkö kirjautumistieto"
   },
   "addLoginNotificationDesc": {
     "message": "Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta."
@@ -629,6 +629,12 @@
   },
   "notificationChangeSave": {
     "message": "Päivitä"
+  },
+  "notificationUnlockDesc": {
+    "message": "Viimeistele automaattitäytön pyyntö avaamalla Bitwarden-holvisi lukitus."
+  },
+  "notificationUnlock": {
+    "message": "Avaa"
   },
   "enableContextMenuItem": {
     "message": "Näytä sisältövalikon valinnat"
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Palauta kohde"
   },
-  "restoreItemConfirmation": {
-    "message": "Haluatko varmasti palauttaa kohteen?"
-  },
   "restoredItem": {
     "message": "Kohde palautettiin"
   },
@@ -1462,16 +1465,16 @@
     "message": "Kohde täytettiin automaattisesti"
   },
   "insecurePageWarning": {
-    "message": "Warning: This is an unsecured HTTP page, and any information you submit can potentially be seen and changed by others. This Login was originally saved on a secure (HTTPS) page."
+    "message": "Varoitus: Tämä on suojaamaton HTTP-sivu, eli ulkopuolisten tahojen voi olla mahdollista tarkastella ja muuttaa lähettämiäsi tietoja. Tämä kirjautumistieto on alun perin tallennettu suojatulle HTTPS-sivulle."
   },
   "insecurePageWarningFillPrompt": {
-    "message": "Do you still wish to fill this login?"
+    "message": "Haluatko silti täyttää kirjautumistiedot?"
   },
   "autofillIframeWarning": {
-    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+    "message": "Lomakkeen URI-osoite poikkeaa kirjautumistietoon tallennetusta osoitteesta. Täytä se siitä huolimatta valitsemalla OK tai peru täyttö valitsemalla Peruuta."
   },
   "autofillIframeWarningTip": {
-    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
+    "message": "Välttyäksesi varoitukselta jatkossa, tallenna URI $HOSTNAME$ sivustolle tallennettuun Bitwarden-kirjautumistietoosi.",
     "placeholders": {
       "hostname": {
         "content": "$1",
@@ -2123,7 +2126,7 @@
     "message": "Laitteella kirjautuminen"
   },
   "loginWithDeviceEnabledInfo": {
-    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-mobiilisovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
+    "message": "Laitteella kirjautuminen on määritettävä Bitwarden-sovelluksen asetuksista. Tarvitsetko eri vaihtoehdon?"
   },
   "fingerprintPhraseHeader": {
     "message": "Tunnistelauseke"
@@ -2221,7 +2224,25 @@
       }
     }
   },
+  "loggingInOn": {
+    "message": "Kirjaudutaan sijaintiin"
+  },
   "opensInANewWindow": {
     "message": "Avautuu uudessa ikkunassa"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Pääsy estetty. Sinulla ei ole oikeutta avata sivua."
+  },
+  "general": {
+    "message": "Yleiset"
+  },
+  "display": {
+    "message": "Ulkoasu"
   }
 }

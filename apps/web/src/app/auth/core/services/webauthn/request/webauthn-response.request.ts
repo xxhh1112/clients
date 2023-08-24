@@ -1,4 +1,4 @@
-import { Utils } from "@bitwarden/common/misc/utils";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 export abstract class WebauthnResponseRequest {
   id: string;

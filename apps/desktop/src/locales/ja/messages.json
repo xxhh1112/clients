@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "完全に削除されたアイテム"
   },
-  "restoreItem": {
-    "message": "アイテムをリストア"
-  },
-  "restoreItemConfirmation": {
-    "message": "このアイテムをリストアしますか？"
-  },
   "restoredItem": {
     "message": "リストアされたアイテム"
   },
@@ -2251,5 +2245,20 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "設定の更新を推奨"
+  },
+  "loggingInOn": {
+    "message": "ログイン先"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "自己ホスト型"
+  },
+  "accessDenied": {
+    "message": "アクセスが拒否されました。このページを表示する権限がありません。"
   }
 }

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 @Component({
   selector: "app-user-confirm",
@@ -28,10 +28,7 @@ export class UserConfirmComponent implements OnInit {
   async ngOnInit() {
     try {
       if (this.publicKey != null) {
-        const fingerprint = await this.cryptoService.getFingerprint(
-          this.userId,
-          this.publicKey.buffer
-        );
+        const fingerprint = await this.cryptoService.getFingerprint(this.userId, this.publicKey);
         if (fingerprint != null) {
           this.fingerprint = fingerprint.join("-");
         }

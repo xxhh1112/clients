@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Element został trwale usunięty"
   },
-  "restoreItem": {
-    "message": "Przywróć element"
-  },
-  "restoreItemConfirmation": {
-    "message": "Czy na pewno chcesz przywrócić ten element?"
-  },
   "restoredItem": {
     "message": "Element został przywrócony"
   },
@@ -2251,5 +2245,20 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Aktualizacja ustawień zalecanych"
+  },
+  "loggingInOn": {
+    "message": "Logowanie do"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Samodzielnie hostowany"
+  },
+  "accessDenied": {
+    "message": "Odmowa dostępu. Nie masz uprawnień do przeglądania tej strony."
   }
 }

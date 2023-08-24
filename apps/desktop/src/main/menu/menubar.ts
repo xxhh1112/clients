@@ -1,7 +1,7 @@
 import { Menu, MenuItemConstructorOptions } from "electron";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 
 import { isMac } from "../../utils";
 import { UpdaterMain } from "../updater.main";
@@ -62,6 +62,10 @@ export class Menubar {
       isLocked = updateRequest.accounts[updateRequest.activeUserId]?.isLocked ?? true;
     }
 
+    const isLockable = !isLocked && updateRequest?.accounts[updateRequest.activeUserId]?.isLockable;
+    const hasMasterPassword =
+      updateRequest?.accounts[updateRequest.activeUserId]?.hasMasterPassword ?? false;
+
     this.items = [
       new FileMenu(
         i18nService,
@@ -69,11 +73,19 @@ export class Menubar {
         updaterMain,
         windowMain.win,
         updateRequest?.accounts,
-        isLocked
+        isLocked,
+        isLockable
       ),
       new EditMenu(i18nService, messagingService, isLocked),
       new ViewMenu(i18nService, messagingService, isLocked),
-      new AccountMenu(i18nService, messagingService, webVaultUrl, windowMain.win, isLocked),
+      new AccountMenu(
+        i18nService,
+        messagingService,
+        webVaultUrl,
+        windowMain.win,
+        isLocked,
+        hasMasterPassword
+      ),
       new WindowMenu(i18nService, messagingService, windowMain),
       new HelpMenu(
         i18nService,
@@ -91,7 +103,8 @@ export class Menubar {
             updaterMain,
             windowMain.win,
             updateRequest?.accounts,
-            isLocked
+            isLocked,
+            isLockable
           ),
         ],
         ...this.items,

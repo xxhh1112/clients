@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Ja, nu bijwerken"
   },
+  "notificationUnlockDesc": {
+    "message": "Ontgrendel je Bitwarden-kluis om het auto-invulverzoek te voltooien."
+  },
+  "notificationUnlock": {
+    "message": "Ontgrendelen"
+  },
   "enableContextMenuItem": {
     "message": "Contextmenu-opties weergeven"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Item herstellen"
   },
-  "restoreItemConfirmation": {
-    "message": "Weet je zeker dat je dit item wilt herstellen?"
-  },
   "restoredItem": {
     "message": "Hersteld item"
   },
@@ -2221,7 +2224,25 @@
       }
     }
   },
+  "loggingInOn": {
+    "message": "Inloggen op"
+  },
   "opensInANewWindow": {
-    "message": "Opens in a new window"
+    "message": "Opent in een nieuw venster"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Toegang geweigerd. Je hebt geen toestemming om deze pagina te bekijken."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Display"
   }
 }

@@ -676,7 +676,7 @@
           var els = [];
           try {
               var elsList = theDoc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
-                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, ' +
+                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, textarea, ' +
                   'span[data-bwautofill]');
               els = Array.prototype.slice.call(elsList);
           } catch (e) { }
@@ -751,8 +751,8 @@
           ].join('\n\n');
 
           if (
-              // At least one of the `savedURLs` uses SSL
-              savedURLs.some(url => url.startsWith('https://')) &&
+              // At least one of the `savedURLs` uses SSL for the current page
+              savedURLs.some(url => url.startsWith(`https://${window.location.hostname}`)) &&
               // The current page is not using SSL
               document.location.protocol === 'http:' &&
               // There are password inputs on the page
@@ -1177,7 +1177,7 @@
           }
           try {
               // START MODIFICATION
-              var elements = Array.prototype.slice.call(selectAllFromDoc('input, select, button, ' +
+              var elements = Array.prototype.slice.call(selectAllFromDoc('input, select, button, textarea, ' +
                   'span[data-bwautofill]'));
               // END MODIFICATION
               var filteredElements = elements.filter(function (o) {

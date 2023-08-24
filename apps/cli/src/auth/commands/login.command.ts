@@ -6,11 +6,6 @@ import Separator from "inquirer/lib/objects/separator";
 import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -30,11 +25,17 @@ import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.
 import { TwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/two-factor-email.request";
 import { UpdateTempPasswordRequest } from "@bitwarden/common/auth/models/request/update-temp-password.request";
 import { NodeUtils } from "@bitwarden/common/misc/nodeUtils";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { Response } from "../../models/response";
@@ -54,6 +55,7 @@ export class LoginCommand {
     protected cryptoFunctionService: CryptoFunctionService,
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
+    protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     protected platformUtilsService: PlatformUtilsService,
     protected stateService: StateService,
     protected cryptoService: CryptoService,
@@ -404,15 +406,15 @@ export class LoginCommand {
     }
 
     try {
-      const { newPasswordHash, newEncKey, hint } = await this.collectNewMasterPasswordDetails(
+      const { newPasswordHash, newUserKey, hint } = await this.collectNewMasterPasswordDetails(
         "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now."
       );
 
       const request = new PasswordRequest();
-      request.masterPasswordHash = await this.cryptoService.hashPassword(currentPassword, null);
+      request.masterPasswordHash = await this.cryptoService.hashMasterKey(currentPassword, null);
       request.masterPasswordHint = hint;
       request.newMasterPasswordHash = newPasswordHash;
-      request.key = newEncKey[1].encryptedString;
+      request.key = newUserKey[1].encryptedString;
 
       await this.apiService.postPassword(request);
 
@@ -442,12 +444,12 @@ export class LoginCommand {
     }
 
     try {
-      const { newPasswordHash, newEncKey, hint } = await this.collectNewMasterPasswordDetails(
+      const { newPasswordHash, newUserKey, hint } = await this.collectNewMasterPasswordDetails(
         "An organization administrator recently changed your master password. In order to access the vault, you must update your master password now."
       );
 
       const request = new UpdateTempPasswordRequest();
-      request.key = newEncKey[1].encryptedString;
+      request.key = newUserKey[1].encryptedString;
       request.newMasterPasswordHash = newPasswordHash;
       request.masterPasswordHint = hint;
 
@@ -465,8 +467,8 @@ export class LoginCommand {
 
   /**
    * Collect new master password and hint from the CLI. The collected password
-   * is validated against any applicable master password policies and a new encryption
-   * key is generated
+   * is validated against any applicable master password policies, a new master
+   * key is generated, and we use it to re-encrypt the user key
    * @param prompt - Message that is displayed during the initial prompt
    * @param error
    */
@@ -475,7 +477,7 @@ export class LoginCommand {
     error?: string
   ): Promise<{
     newPasswordHash: string;
-    newEncKey: [SymmetricCryptoKey, EncString];
+    newUserKey: [SymmetricCryptoKey, EncString];
     hint?: string;
   }> {
     if (this.email == null || this.email === "undefined") {
@@ -505,7 +507,7 @@ export class LoginCommand {
     }
 
     // Strength & Policy Validation
-    const strengthResult = this.passwordGenerationService.passwordStrength(
+    const strengthResult = this.passwordStrengthService.getPasswordStrength(
       masterPassword,
       this.email
     );
@@ -557,21 +559,24 @@ export class LoginCommand {
     const kdfConfig = await this.stateService.getKdfConfig();
 
     // Create new key and hash new password
-    const newKey = await this.cryptoService.makeKey(
+    const newMasterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
       this.email.trim().toLowerCase(),
       kdf,
       kdfConfig
     );
-    const newPasswordHash = await this.cryptoService.hashPassword(masterPassword, newKey);
+    const newPasswordHash = await this.cryptoService.hashMasterKey(masterPassword, newMasterKey);
 
-    // Grab user's current enc key
-    const userEncKey = await this.cryptoService.getEncKey();
+    // Grab user key
+    const userKey = await this.cryptoService.getUserKey();
+    if (!userKey) {
+      throw new Error("User key not found.");
+    }
 
-    // Create new encKey for the User
-    const newEncKey = await this.cryptoService.remakeEncKey(newKey, userEncKey);
+    // Re-encrypt user key with new master key
+    const newUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(newMasterKey, userKey);
 
-    return { newPasswordHash, newEncKey, hint: masterPasswordHint };
+    return { newPasswordHash, newUserKey: newUserKey, hint: masterPasswordHint };
   }
 
   private async handleCaptchaRequired(

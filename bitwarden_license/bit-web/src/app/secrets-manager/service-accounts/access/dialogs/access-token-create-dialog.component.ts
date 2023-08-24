@@ -2,7 +2,7 @@ import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService, BitValidators } from "@bitwarden/components";
 
 import { ServiceAccountView } from "../../../models/view/service-account.view";
 import { AccessTokenView } from "../../models/view/access-token.view";
@@ -11,7 +11,6 @@ import { AccessService } from "../access.service";
 import { AccessTokenDetails, AccessTokenDialogComponent } from "./access-token-dialog.component";
 
 export interface AccessTokenOperation {
-  organizationId: string;
   serviceAccountView: ServiceAccountView;
 }
 
@@ -20,7 +19,10 @@ export interface AccessTokenOperation {
 })
 export class AccessTokenCreateDialogComponent implements OnInit {
   protected formGroup = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.maxLength(80)]),
+    name: new FormControl("", {
+      validators: [Validators.required, Validators.maxLength(80), BitValidators.trimValidator],
+      updateOn: "submit",
+    }),
     expirationDateControl: new FormControl(null),
   });
   protected loading = false;
@@ -30,16 +32,12 @@ export class AccessTokenCreateDialogComponent implements OnInit {
   constructor(
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: AccessTokenOperation,
-    private dialogService: DialogServiceAbstraction,
+    private dialogService: DialogService,
     private accessService: AccessService
   ) {}
 
   async ngOnInit() {
-    if (
-      !this.data.organizationId ||
-      !this.data.serviceAccountView?.id ||
-      !this.data.serviceAccountView?.name
-    ) {
+    if (!this.data.serviceAccountView) {
       this.dialogRef.close();
       throw new Error(
         `The access token create dialog was not called with the appropriate operation values.`
@@ -52,11 +50,12 @@ export class AccessTokenCreateDialogComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+
     const accessTokenView = new AccessTokenView();
     accessTokenView.name = this.formGroup.value.name;
     accessTokenView.expireAt = this.formGroup.value.expirationDateControl;
     const accessToken = await this.accessService.createAccessToken(
-      this.data.organizationId,
+      this.data.serviceAccountView.organizationId,
       this.data.serviceAccountView.id,
       accessTokenView
     );
@@ -83,19 +82,12 @@ export class AccessTokenCreateDialogComponent implements OnInit {
   }
 
   static openNewAccessTokenDialog(
-    dialogService: DialogServiceAbstraction,
-    serviceAccountId: string,
-    organizationId: string
+    dialogService: DialogService,
+    serviceAccountView: ServiceAccountView
   ) {
-    // TODO once service account names are implemented in service account contents page pass in here.
-    const serviceAccountView = new ServiceAccountView();
-    serviceAccountView.id = serviceAccountId;
-    serviceAccountView.name = "placeholder";
-
     return dialogService.open<unknown, AccessTokenOperation>(AccessTokenCreateDialogComponent, {
       data: {
-        organizationId: organizationId,
-        serviceAccountView: serviceAccountView,
+        serviceAccountView,
       },
     });
   }

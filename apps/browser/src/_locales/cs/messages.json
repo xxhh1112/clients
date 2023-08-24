@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Aktualizovat"
   },
+  "notificationUnlockDesc": {
+    "message": "Pro dokončení požadavku na automatické vyplnění odemkněte Váš trezor na Bitwardenu."
+  },
+  "notificationUnlock": {
+    "message": "Odemknout"
+  },
   "enableContextMenuItem": {
     "message": "Zobrazit volby v kontextovém menu"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Obnovit položku"
   },
-  "restoreItemConfirmation": {
-    "message": "Opravdu chcete tuto položku obnovit?"
-  },
   "restoredItem": {
     "message": "Položka byla obnovena"
   },
@@ -1977,10 +1980,10 @@
     "message": "Vypršel časový limit relace. Vraťte se zpět a zkuste se znovu přihlásit."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exportování individuálního trezoru"
+    "message": "Exportování osobního trezoru"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Budou exportovány pouze položky trezoru spojené s účtem $EMAIL$. Nebudou zahrnuty položky trezoru v organizaci.",
+    "message": "Budou exportovány jen osobní položky trezoru spojené s účtem $EMAIL$. Nebudou zahrnuty položky trezoru v organizaci.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2221,7 +2224,25 @@
       }
     }
   },
+  "loggingInOn": {
+    "message": "Přihlašování na"
+  },
   "opensInANewWindow": {
     "message": "Otevře se v novém okně"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Přístup byl odepřen. Nemáte oprávnění k zobrazení této stránky."
+  },
+  "general": {
+    "message": "Obecné"
+  },
+  "display": {
+    "message": "Zobrazení"
   }
 }

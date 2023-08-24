@@ -1,5 +1,9 @@
 import { Opaque } from "type-fest";
 
-type CsprngArray = Opaque<ArrayBuffer, "CSPRNG">;
+// You would typically use these types when you want to create a type that
+// represents an array or string value generated from a
+// cryptographic secure pseudorandom number generator (CSPRNG)
+
+type CsprngArray = Opaque<Uint8Array, "CSPRNG">;
 
 type CsprngString = Opaque<string, "CSPRNG">;

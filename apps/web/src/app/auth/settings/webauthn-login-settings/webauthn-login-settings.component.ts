@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnDestroy, OnInit } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 import { WebauthnService } from "../../core";
 import { WebauthnCredentialView } from "../../core/views/webauth-credential.view";
@@ -24,10 +24,7 @@ export class WebauthnLoginSettingsComponent implements OnInit, OnDestroy {
   protected credentials?: WebauthnCredentialView[];
   protected loading = true;
 
-  constructor(
-    private webauthnService: WebauthnService,
-    private dialogService: DialogServiceAbstraction
-  ) {}
+  constructor(private webauthnService: WebauthnService, private dialogService: DialogService) {}
 
   @HostBinding("attr.aria-busy")
   get ariaBusy() {

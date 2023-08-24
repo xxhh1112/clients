@@ -31,6 +31,7 @@ export class Organization {
   useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
+  usePasswordManager: boolean;
   useActivateAutofillPolicy: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
@@ -87,6 +88,7 @@ export class Organization {
     this.useCustomPermissions = obj.useCustomPermissions;
     this.useResetPassword = obj.useResetPassword;
     this.useSecretsManager = obj.useSecretsManager;
+    this.usePasswordManager = obj.usePasswordManager;
     this.useActivateAutofillPolicy = obj.useActivateAutofillPolicy;
     this.selfHost = obj.selfHost;
     this.usersGetPremium = obj.usersGetPremium;
@@ -213,6 +215,10 @@ export class Organization {
 
   get canManageUsersPassword() {
     return this.isAdmin || this.permissions.manageResetPassword;
+  }
+
+  get canManageDeviceApprovals() {
+    return (this.isAdmin || this.permissions.manageResetPassword) && this.useSso;
   }
 
   get isExemptFromPolicies() {

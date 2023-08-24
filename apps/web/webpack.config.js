@@ -213,6 +213,7 @@ const devServer =
             pathRewrite: { "^/notifications": "" },
             secure: false,
             changeOrigin: true,
+            ws: true,
           },
           "/icons": {
             target: envConfig.dev?.proxyIcons,
@@ -280,6 +281,7 @@ const devServer =
                   https://quack.duckduckgo.com/api/email/addresses
                   https://app.anonaddy.com/api/v1/aliases
                   https://api.fastmail.com
+                  https://api.forwardemail.net
                   http://localhost:5000
                 ;object-src
                   'self'
@@ -297,6 +299,7 @@ const devServer =
           overlay: {
             errors: true,
             warnings: false,
+            runtimeErrors: false,
           },
         },
       };

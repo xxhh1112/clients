@@ -1,27 +1,30 @@
 import { Directive, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, Validators } from "@angular/forms";
-import { merge, takeUntil, Subject, startWith } from "rxjs";
+import { merge, startWith, Subject, takeUntil } from "rxjs";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EncryptedExportType, EventType } from "@bitwarden/common/enums";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { DialogService } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../../services/dialog";
 
 @Directive()
 export class ExportComponent implements OnInit, OnDestroy {
   @Output() onSaved = new EventEmitter();
 
   formPromise: Promise<string>;
-  disabledByPolicy = false;
+  private _disabledByPolicy = false;
+
+  protected get disabledByPolicy(): boolean {
+    return this._disabledByPolicy;
+  }
 
   exportForm = this.formBuilder.group({
     format: ["json"],
@@ -51,7 +54,7 @@ export class ExportComponent implements OnInit, OnDestroy {
     private userVerificationService: UserVerificationService,
     private formBuilder: UntypedFormBuilder,
     protected fileDownloadService: FileDownloadService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   async ngOnInit() {
@@ -59,10 +62,11 @@ export class ExportComponent implements OnInit, OnDestroy {
       .policyAppliesToActiveUser$(PolicyType.DisablePersonalVaultExport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((policyAppliesToActiveUser) => {
-        this.disabledByPolicy = policyAppliesToActiveUser;
+        this._disabledByPolicy = policyAppliesToActiveUser;
+        if (this.disabledByPolicy) {
+          this.exportForm.disable();
+        }
       });
-
-    await this.checkExportDisabled();
 
     merge(
       this.exportForm.get("format").valueChanges,
@@ -75,12 +79,6 @@ export class ExportComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroy$.next();
-  }
-
-  async checkExportDisabled() {
-    if (this.disabledByPolicy) {
-      this.exportForm.disable();
-    }
   }
 
   get encryptedFormat() {
@@ -136,14 +134,14 @@ export class ExportComponent implements OnInit, OnDestroy {
           " " +
           this.i18nService.t("encExportAccountWarningDesc"),
         acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
     } else {
       return await this.dialogService.openSimpleDialog({
         title: { key: "confirmVaultExport" },
         content: { key: "exportWarningDesc" },
         acceptButtonText: { key: "exportVault" },
-        type: SimpleDialogType.WARNING,
+        type: "warning",
       });
     }
   }
