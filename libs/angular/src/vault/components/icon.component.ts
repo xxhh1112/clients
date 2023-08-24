@@ -97,7 +97,7 @@ export class IconComponent implements OnInit {
                   fallbackImage =
                     cipher.type === CipherType.Login
                       ? "images/bwi-globe.png"
-                      : "images/bwi-passkey";
+                      : "images/bwi-passkey.png";
                 } catch (e) {
                   // Ignore error since the fallback icon will be shown if image is null.
                 }
