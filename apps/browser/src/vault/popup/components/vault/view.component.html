@@ -619,7 +619,7 @@
         *ngIf="
           cipher.type !== cipherType.SecureNote &&
           !cipher.isDeleted &&
-          !inPopout &&
+          (!this.inPopout || this.loadAction) &&
           cipher.type != cipherType.Fido2Key
         "
       >

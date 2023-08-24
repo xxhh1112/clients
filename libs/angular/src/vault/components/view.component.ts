@@ -34,8 +34,7 @@ import { Launchable } from "@bitwarden/common/vault/interfaces/launchable";
 import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 const BroadcasterSubscriptionId = "ViewComponent";
 
@@ -88,7 +87,7 @@ export class ViewComponent implements OnDestroy, OnInit {
     private logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -160,7 +159,7 @@ export class ViewComponent implements OnDestroy, OnInit {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "passkeyNotCopied" },
         content: { key: "passkeyNotCopiedAlert" },
-        type: SimpleDialogType.INFO,
+        type: "info",
       });
 
       if (!confirmed) {
@@ -195,7 +194,7 @@ export class ViewComponent implements OnDestroy, OnInit {
       content: {
         key: this.cipher.isDeleted ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation",
       },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -219,16 +218,6 @@ export class ViewComponent implements OnDestroy, OnInit {
 
   async restore(): Promise<boolean> {
     if (!this.cipher.isDeleted) {
-      return false;
-    }
-
-    const confirmed = await this.dialogService.openSimpleDialog({
-      title: { key: "restoreItem" },
-      content: { key: "restoreItemConfirmation" },
-      type: SimpleDialogType.WARNING,
-    });
-
-    if (!confirmed) {
       return false;
     }
 
