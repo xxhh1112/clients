@@ -180,11 +180,7 @@ export class CipherContextMenuHandler {
   }
 
   private async updateForCipher(url: string, cipher: CipherView) {
-    if (
-      cipher == null ||
-      cipher.type !== CipherType.Login ||
-      !(await this.userVerificationService.hasMasterPasswordAndMasterKeyHash())
-    ) {
+    if (cipher == null || cipher.type !== CipherType.Login) {
       return;
     }
 
