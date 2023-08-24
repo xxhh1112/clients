@@ -89,6 +89,7 @@ import { AutofillService } from "../../autofill/services/abstractions/autofill.s
 import MainBackground from "../../background/main.background";
 import { Account } from "../../models/account";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import { ForegroundStateService } from "../../platform/popup/services/foreground-state.service";
 import { BrowserStateService as StateServiceAbstraction } from "../../platform/services/abstractions/browser-state.service";
 import { BrowserConfigService } from "../../platform/services/browser-config.service";
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
@@ -242,7 +243,7 @@ function getBgService<T>(service: keyof MainBackground) {
     { provide: TokenService, useFactory: getBgService<TokenService>("tokenService"), deps: [] },
     {
       provide: I18nServiceAbstraction,
-      useFactory: (stateService: BrowserStateService) => {
+      useFactory: (stateService: ForegroundStateService) => {
         return new BrowserI18nService(BrowserApi.getUILanguage(window), stateService);
       },
       deps: [StateService],
@@ -436,7 +437,7 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [],
     },
     {
-      provide: StateServiceAbstraction,
+      provide: ForegroundStateService,
       useFactory: (
         storageService: AbstractStorageService,
         secureStorageService: AbstractStorageService,
@@ -444,7 +445,7 @@ function getBgService<T>(service: keyof MainBackground) {
         logService: LogServiceAbstraction,
         stateMigrationService: StateMigrationService
       ) => {
-        return new BrowserStateService(
+        return new ForegroundStateService(
           storageService,
           secureStorageService,
           memoryStorageService,
@@ -460,6 +461,14 @@ function getBgService<T>(service: keyof MainBackground) {
         LogServiceAbstraction,
         StateMigrationService,
       ],
+    },
+    {
+      provide: BrowserStateService,
+      useExisting: ForegroundStateService,
+    },
+    {
+      provide: StateServiceAbstraction,
+      useExisting: ForegroundStateService,
     },
     {
       provide: UsernameGenerationServiceAbstraction,

@@ -5,7 +5,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
-import { BrowserStateService as StateServiceAbstraction } from "../../platform/services/abstractions/browser-state.service";
+import { ForegroundStateService } from "../../platform/popup/services/foreground-state.service";
 
 import { PopupUtilsService } from "./popup-utils.service";
 
@@ -15,7 +15,7 @@ export class InitService {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private popupUtilsService: PopupUtilsService,
-    private stateService: StateServiceAbstraction,
+    private stateService: ForegroundStateService,
     private logService: LogServiceAbstraction,
     private themingService: AbstractThemingService
   ) {}

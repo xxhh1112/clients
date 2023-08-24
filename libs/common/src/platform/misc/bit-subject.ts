@@ -23,4 +23,10 @@ export class BitSubject<T = never> {
   asObservable() {
     return this._subject.asObservable();
   }
+
+  static initWith<T>(value: T) {
+    const subject = new BitSubject<T>();
+    subject.next(value);
+    return subject;
+  }
 }

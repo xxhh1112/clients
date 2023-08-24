@@ -93,7 +93,7 @@ export class StateService<
   private hasBeenInited = false;
   private isRecoveredSession = false;
 
-  protected accountDiskCache = BitSubject.init<Record<string, TAccount>>({});
+  protected accountDiskCache = BitSubject.initWith<Record<string, TAccount>>({});
 
   // default account serializer, must be overridden by child class
   protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
@@ -112,7 +112,9 @@ export class StateService<
       .asObservable()
       .pipe(
         concatMap(async (userId) => {
-          if (userId == null) {
+          if (userId == null && this.activeAccountUnlockedSubject.value == false) {
+            return;
+          } else if (userId == null) {
             this.activeAccountUnlockedSubject.next(false);
           }
           // FIXME: This should be refactored into AuthService or a similar service,
@@ -128,6 +130,9 @@ export class StateService<
     if (this.hasBeenInited) {
       return;
     }
+
+    this.accountDiskCache.next({}); // start with empty cache
+    this.activeAccountUnlockedSubject.next(false); // never unlocked on startup
 
     if (await this.stateMigrationService.needsMigration()) {
       await this.stateMigrationService.migrate();

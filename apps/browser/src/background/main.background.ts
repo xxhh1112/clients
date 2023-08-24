@@ -111,6 +111,7 @@ import { AutofillService as AutofillServiceAbstraction } from "../autofill/servi
 import AutofillService from "../autofill/services/autofill.service";
 import { SafariApp } from "../browser/safariApp";
 import { Account } from "../models/account";
+import { BackgroundStateService } from "../platform/background/services/background-state.service";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { flagEnabled } from "../platform/flags";
 import { UpdateBadge } from "../platform/listeners/update-badge";
@@ -123,7 +124,6 @@ import BrowserLocalStorageService from "../platform/services/browser-local-stora
 import BrowserMessagingPrivateModeBackgroundService from "../platform/services/browser-messaging-private-mode-background.service";
 import BrowserMessagingService from "../platform/services/browser-messaging.service";
 import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
-import { BrowserStateService } from "../platform/services/browser-state.service";
 import { KeyGenerationService } from "../platform/services/key-generation.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
 import { BrowserSendService } from "../services/browser-send.service";
@@ -256,7 +256,7 @@ export default class MainBackground {
       this.secureStorageService,
       new StateFactory(GlobalState, Account)
     );
-    this.stateService = new BrowserStateService(
+    this.stateService = new BackgroundStateService(
       this.storageService,
       this.secureStorageService,
       this.memoryStorageService,

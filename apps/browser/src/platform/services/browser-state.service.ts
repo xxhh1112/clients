@@ -1,5 +1,3 @@
-import { BehaviorSubject } from "rxjs";
-
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/platform/models/domain/storage-options";
 import { StateService as BaseStateService } from "@bitwarden/common/platform/services/state.service";
@@ -8,30 +6,13 @@ import { Account } from "../../models/account";
 import { BrowserComponentState } from "../../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../../models/browserSendComponentState";
-import { browserSession, sessionSync } from "../decorators/session-sync-observable";
 
 import { BrowserStateService as StateServiceAbstraction } from "./abstractions/browser-state.service";
 
-@browserSession
 export class BrowserStateService
   extends BaseStateService<GlobalState, Account>
   implements StateServiceAbstraction
 {
-  @sessionSync({
-    initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
-    initializeAs: "record",
-  })
-  protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
-  @sessionSync({ initializer: (s: string) => s })
-  protected activeAccountSubject: BehaviorSubject<string>;
-  @sessionSync({ initializer: (b: boolean) => b })
-  protected activeAccountUnlockedSubject: BehaviorSubject<boolean>;
-  @sessionSync({
-    initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
-    initializeAs: "record",
-  })
-  protected accountDiskCache: BehaviorSubject<Record<string, Account>>;
-
   protected accountDeserializer = Account.fromJSON;
 
   async addAccount(account: Account) {
