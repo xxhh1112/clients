@@ -20,9 +20,7 @@ export class ThemingService implements AbstractThemingService {
     private stateService: StateService,
     @Inject(WINDOW) private window: Window,
     @Inject(DOCUMENT) private document: Document
-  ) {
-    this.monitorThemeChanges();
-  }
+  ) {}
 
   async monitorThemeChanges(): Promise<void> {
     this._theme.next(
