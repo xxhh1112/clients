@@ -77,7 +77,9 @@ export class NativeMessagingBackground {
     private stateService: StateService,
     private logService: LogService,
     private authService: AuthService
-  ) {
+  ) {}
+
+  init() {
     this.stateService.setBiometricFingerprintValidated(false);
 
     if (chrome?.permissions?.onAdded) {

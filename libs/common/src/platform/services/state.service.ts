@@ -1,4 +1,4 @@
-import { concatMap } from "rxjs";
+import { concatMap, map } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
@@ -75,14 +75,13 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
-  protected accountsSubject = new BitSubject<{ [userId: string]: TAccount }>();
+  protected sharedMemoryState$ = new BitSubject<State<TGlobalState, TAccount>>();
   get accounts$() {
-    return this.accountsSubject.asObservable();
+    return this.sharedMemoryState$.asObservable().pipe(map((state) => state.accounts));
   }
 
-  protected activeAccountSubject = new BitSubject<string | null>();
   get activeAccount$() {
-    return this.activeAccountSubject.asObservable();
+    return this.sharedMemoryState$.asObservable().pipe(map((state) => state.activeUserId));
   }
 
   protected activeAccountUnlockedSubject = new BitSubject<boolean>();
@@ -108,8 +107,7 @@ export class StateService<
     protected useAccountCache: boolean = true
   ) {
     // If the account gets changed, verify the new account is unlocked
-    this.activeAccountSubject
-      .asObservable()
+    this.activeAccount$
       .pipe(
         concatMap(async (userId) => {
           if (userId == null && this.activeAccountUnlockedSubject.value == false) {
@@ -138,55 +136,47 @@ export class StateService<
       await this.stateMigrationService.migrate();
     }
 
-    await this.state().then(async (state) => {
-      if (state == null) {
-        await this.setState(new State<TGlobalState, TAccount>(this.createGlobals()));
-      } else {
-        this.isRecoveredSession = true;
-      }
-    });
-    await this.initAccountState();
+    if (!(await this.sharedMemoryState$.letInitialize())) {
+      await this.initSharedMemoryStateSubject();
+    }
+
+    // TODO MDG: This is the old Prune Accounts logic, but it fails here. Logging in triggers a new account push,
+    //           but has not yet set authentication data to disk. This prune shouldn't be necessary if we handle
+    //           logouts appropriately.
+    // We preserve settings for logged out accounts, but we don't want to consider them when thinking about active account state
+    // this.accounts$.pipe(concatMap(async (accounts) => {
+    //   for (const userId in accounts) {
+    //     if (!(await this.getIsAuthenticated({ userId: userId }))) {
+    //       await this.removeAccountFromMemory(userId);
+    //     }
+    //   }})).subscribe();
 
     this.hasBeenInited = true;
   }
 
-  async initAccountState() {
-    if (this.isRecoveredSession) {
-      return;
-    }
-
-    await this.updateState(async (state) => {
-      state.authenticatedAccounts =
-        (await this.storageService.get<string[]>(keys.authenticatedAccounts)) ?? [];
-      for (const i in state.authenticatedAccounts) {
-        if (i != null) {
-          await this.syncAccountFromDisk(state.authenticatedAccounts[i]);
-        }
-      }
-      const storedActiveUser = await this.storageService.get<string>(keys.activeUserId);
-      if (storedActiveUser != null) {
-        state.activeUserId = storedActiveUser;
-      }
-      await this.pushAccounts();
-      this.activeAccountSubject.next(state.activeUserId);
-
-      return state;
+  private async initSharedMemoryStateSubject(): Promise<void> {
+    let state = await this.memoryStorageService.get<State<TGlobalState, TAccount>>(keys.state, {
+      deserializer: (s) => State.fromJSON(s, this.accountDeserializer),
     });
-  }
+    state ||= new State<TGlobalState, TAccount>(this.createGlobals());
 
-  async syncAccountFromDisk(userId: string) {
-    if (userId == null) {
-      return;
-    }
-    await this.updateState(async (state) => {
-      if (state.accounts == null) {
-        state.accounts = {};
-      }
+    // Initialize accounts from disk
+    state.authenticatedAccounts =
+      (await this.storageService.get<string[]>(keys.authenticatedAccounts))?.filter(
+        (id) => id != null
+      ) ?? [];
+    state.accounts ||= {};
+    for (const userId in state.authenticatedAccounts) {
       state.accounts[userId] = this.createAccount();
       const diskAccount = await this.getAccountFromDisk({ userId: userId });
       state.accounts[userId].profile = diskAccount.profile;
-      return state;
-    });
+    }
+    const storedActiveUser = await this.storageService.get<string>(keys.activeUserId);
+    if (storedActiveUser != null) {
+      state.activeUserId = storedActiveUser;
+    }
+
+    await this.setState(state);
   }
 
   async addAccount(account: TAccount) {
@@ -200,7 +190,6 @@ export class StateService<
     await this.scaffoldNewAccountStorage(account);
     await this.setLastActive(new Date().getTime(), { userId: account.profile.userId });
     await this.setActiveUser(account.profile.userId);
-    this.activeAccountSubject.next(account.profile.userId);
   }
 
   async setActiveUser(userId: string): Promise<void> {
@@ -208,23 +197,19 @@ export class StateService<
     await this.updateState(async (state) => {
       state.activeUserId = userId;
       await this.storageService.save(keys.activeUserId, userId);
-      this.activeAccountSubject.next(state.activeUserId);
       return state;
     });
-
-    await this.pushAccounts();
   }
 
   async clean(options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultInMemoryOptions());
     await this.deAuthenticateAccount(options.userId);
-    if (options.userId === (await this.state())?.activeUserId) {
+    if (options.userId === this.sharedMemoryState$.value?.activeUserId) {
       await this.dynamicallySetActiveUser();
     }
 
     await this.removeAccountFromDisk(options?.userId);
     this.removeAccountFromMemory(options?.userId);
-    await this.pushAccounts();
   }
 
   async getAccessToken(options?: StorageOptions): Promise<string> {
@@ -543,7 +528,7 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
 
-    if (options.userId == this.activeAccountSubject.value) {
+    if (options.userId == this.sharedMemoryState$.value.activeUserId) {
       const nextValue = value != null;
 
       // Avoid emitting if we are already unlocked
@@ -1589,7 +1574,7 @@ export class StateService<
   }
 
   async getEnvironmentUrls(options?: StorageOptions): Promise<EnvironmentUrls> {
-    if ((await this.state())?.activeUserId == null) {
+    if (this.sharedMemoryState$.value?.activeUserId == null) {
       return await this.getGlobalEnvironmentUrls(options);
     }
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
@@ -1610,7 +1595,7 @@ export class StateService<
   }
 
   async getRegion(options?: StorageOptions): Promise<string> {
-    if ((await this.state())?.activeUserId == null) {
+    if (this.sharedMemoryState$.value?.activeUserId == null) {
       options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
       return (await this.getGlobals(options)).region ?? null;
     }
@@ -2478,7 +2463,7 @@ export class StateService<
   }
 
   protected async getGlobalsFromMemory(): Promise<TGlobalState> {
-    return (await this.state()).globals;
+    return this.sharedMemoryState$.value.globals;
   }
 
   protected async getGlobalsFromDisk(options: StorageOptions): Promise<TGlobalState> {
@@ -2518,24 +2503,17 @@ export class StateService<
   }
 
   protected async getAccountFromMemory(options: StorageOptions): Promise<TAccount> {
-    return await this.state().then(async (state) => {
-      if (state.accounts == null) {
-        return null;
-      }
-      return state.accounts[await this.getUserIdFromMemory(options)];
-    });
+    return this.sharedMemoryState$.value.accounts?.[await this.getUserIdFromMemory(options)];
   }
 
   protected async getUserIdFromMemory(options: StorageOptions): Promise<string> {
-    return await this.state().then((state) => {
-      return options?.userId != null
-        ? state.accounts[options.userId]?.profile?.userId
-        : state.activeUserId;
-    });
+    return options?.userId != null
+      ? this.sharedMemoryState$.value.accounts[options.userId]?.profile?.userId
+      : this.sharedMemoryState$.value.activeUserId;
   }
 
   protected async getAccountFromDisk(options: StorageOptions): Promise<TAccount> {
-    if (options?.userId == null && (await this.state())?.activeUserId == null) {
+    if (options?.userId == null && this.sharedMemoryState$.value.activeUserId == null) {
       return null;
     }
 
@@ -2597,7 +2575,6 @@ export class StateService<
         });
       });
     }
-    await this.pushAccounts();
   }
 
   protected async scaffoldNewAccountStorage(account: TAccount): Promise<void> {
@@ -2692,19 +2669,6 @@ export class StateService<
       this.reconcileOptions({ userId: account.profile.userId }, await this.defaultOnDiskOptions())
     );
   }
-  //
-
-  protected async pushAccounts(): Promise<void> {
-    await this.pruneInMemoryAccounts();
-    await this.state().then((state) => {
-      if (state.accounts == null || Object.keys(state.accounts).length < 1) {
-        this.accountsSubject.next({});
-        return;
-      }
-
-      this.accountsSubject.next(state.accounts);
-    });
-  }
 
   protected reconcileOptions(
     requestedOptions: StorageOptions,
@@ -2727,7 +2691,7 @@ export class StateService<
   protected async defaultInMemoryOptions(): Promise<StorageOptions> {
     return {
       storageLocation: StorageLocation.Memory,
-      userId: (await this.state()).activeUserId,
+      userId: this.sharedMemoryState$.value.activeUserId,
     };
   }
 
@@ -2735,7 +2699,8 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Session,
-      userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId:
+        this.sharedMemoryState$.value.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
     };
   }
@@ -2744,7 +2709,8 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Local,
-      userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId:
+        this.sharedMemoryState$.value.activeUserId ?? (await this.getActiveUserIdFromStorage()),
       useSecureStorage: false,
     };
   }
@@ -2753,7 +2719,7 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       htmlStorageLocation: HtmlStorageLocation.Memory,
-      userId: (await this.state())?.activeUserId ?? (await this.getUserId()),
+      userId: this.sharedMemoryState$.value.activeUserId ?? (await this.getUserId()),
       useSecureStorage: false,
     };
   }
@@ -2762,7 +2728,8 @@ export class StateService<
     return {
       storageLocation: StorageLocation.Disk,
       useSecureStorage: true,
-      userId: (await this.state())?.activeUserId ?? (await this.getActiveUserIdFromStorage()),
+      userId:
+        this.sharedMemoryState$.value.activeUserId ?? (await this.getActiveUserIdFromStorage()),
     };
   }
 
@@ -2771,7 +2738,7 @@ export class StateService<
   }
 
   protected async removeAccountFromLocalStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state())?.activeUserId;
+    userId = userId ?? this.sharedMemoryState$.value.activeUserId;
     const storedAccount = await this.getAccount(
       this.reconcileOptions({ userId: userId }, await this.defaultOnDiskLocalOptions())
     );
@@ -2782,7 +2749,7 @@ export class StateService<
   }
 
   protected async removeAccountFromSessionStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state())?.activeUserId;
+    userId = userId ?? this.sharedMemoryState$.value.activeUserId;
     const storedAccount = await this.getAccount(
       this.reconcileOptions({ userId: userId }, await this.defaultOnDiskOptions())
     );
@@ -2793,7 +2760,7 @@ export class StateService<
   }
 
   protected async removeAccountFromSecureStorage(userId: string = null): Promise<void> {
-    userId = userId ?? (await this.state())?.activeUserId;
+    userId = userId ?? this.sharedMemoryState$.value.activeUserId;
     await this.setCryptoMasterKeyAuto(null, { userId: userId });
     await this.setCryptoMasterKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyB64(null, { userId: userId });
@@ -2808,15 +2775,6 @@ export class StateService<
 
       return state;
     });
-  }
-
-  protected async pruneInMemoryAccounts() {
-    // We preserve settings for logged out accounts, but we don't want to consider them when thinking about active account state
-    for (const userId in (await this.state())?.accounts) {
-      if (!(await this.getIsAuthenticated({ userId: userId }))) {
-        await this.removeAccountFromMemory(userId);
-      }
-    }
   }
 
   // settings persist even on reset, and are not effected by this method
@@ -2883,7 +2841,7 @@ export class StateService<
   }
 
   protected async dynamicallySetActiveUser() {
-    const accounts = (await this.state())?.accounts;
+    const accounts = this.sharedMemoryState$.value?.accounts;
     if (accounts == null || Object.keys(accounts).length < 1) {
       await this.setActiveUser(null);
       return;
@@ -2920,28 +2878,20 @@ export class StateService<
       : await this.secureStorageService.save(`${options.userId}${key}`, value, options);
   }
 
-  protected async state(): Promise<State<TGlobalState, TAccount>> {
-    const state = await this.memoryStorageService.get<State<TGlobalState, TAccount>>(keys.state, {
-      deserializer: (s) => State.fromJSON(s, this.accountDeserializer),
-    });
-    return state;
-  }
-
   private async setState(state: State<TGlobalState, TAccount>): Promise<void> {
     await this.memoryStorageService.save(keys.state, state);
+    this.sharedMemoryState$.next(state);
   }
 
   protected async updateState(
     stateUpdater: (state: State<TGlobalState, TAccount>) => Promise<State<TGlobalState, TAccount>>
   ) {
-    await this.state().then(async (state) => {
-      const updatedState = await stateUpdater(state);
-      if (updatedState == null) {
-        throw new Error("Attempted to update state to null value");
-      }
+    const updatedState = await stateUpdater(this.sharedMemoryState$.value);
+    if (updatedState == null) {
+      throw new Error("Attempted to update state to null value");
+    }
 
-      await this.setState(updatedState);
-    });
+    await this.setState(updatedState);
   }
 
   private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {

@@ -1,20 +1,16 @@
 import { noopInitialize, recordInitialize } from "@bitwarden/common/platform/misc/initializers";
+import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { State } from "@bitwarden/common/platform/models/domain/state";
 
 import { Account } from "../../../models/account";
 import { BrowserStateService } from "../../services/browser-state.service";
 import { ForegroundBitSubject } from "../../utils/foreground-bit-subject";
 
 export class ForegroundStateService extends BrowserStateService {
-  protected accountsSubject = new ForegroundBitSubject<{ [userId: string]: Account }>(
-    "stateService_accounts",
-    recordInitialize<Account>(Account.fromJSON)
+  protected sharedMemoryState$ = new ForegroundBitSubject<State<GlobalState, Account>>(
+    "stateService_sharedMemoryState",
+    State.deserializerWith<GlobalState, Account>(this.accountDeserializer)
   );
-
-  protected activeAccountSubject = new ForegroundBitSubject<string>(
-    "stateService_activeAccount",
-    noopInitialize
-  );
-
   protected activeAccountUnlockedSubject = new ForegroundBitSubject<boolean>(
     "stateService_activeAccountUnlocked",
     noopInitialize

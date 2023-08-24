@@ -31,6 +31,13 @@ export class State<
     });
   }
 
+  static deserializerWith<TGlobalState extends GlobalState, TAccount extends Account>(
+    accountDeserializer: (obj: Jsonify<TAccount>) => TAccount
+  ): (obj: Jsonify<State<TGlobalState, TAccount>>) => State<TGlobalState, TAccount> {
+    return (obj: Jsonify<State<TGlobalState, TAccount>>) =>
+      State.fromJSON(obj, accountDeserializer);
+  }
+
   private static buildAccountMapFromJSON<TAccount extends Account>(
     jsonAccounts: { [userId: string]: Jsonify<TAccount> },
     accountDeserializer: (json: Jsonify<TAccount>) => TAccount

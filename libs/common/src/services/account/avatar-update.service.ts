@@ -10,8 +10,10 @@ export class AvatarUpdateService implements AvatarUpdateServiceAbstraction {
   private _avatarUpdate$ = new BehaviorSubject<string | null>(null);
   avatarUpdate$: Observable<string | null> = this._avatarUpdate$.asObservable();
 
-  constructor(private apiService: ApiService, private stateService: StateService) {
-    this.loadColorFromState();
+  constructor(private apiService: ApiService, private stateService: StateService) {}
+
+  async init(): Promise<void> {
+    await this.loadColorFromState();
   }
 
   loadColorFromState(): Promise<string | null> {

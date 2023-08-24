@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 
 import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AvatarUpdateService } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "@bitwarden/common/abstractions/notifications.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
@@ -36,7 +37,8 @@ export class InitService {
     private cryptoService: CryptoServiceAbstraction,
     private nativeMessagingService: NativeMessagingService,
     private themingService: AbstractThemingService,
-    private encryptService: EncryptService
+    private encryptService: EncryptService,
+    private avatarUpdateService: AvatarUpdateService
   ) {}
 
   init() {
@@ -57,6 +59,7 @@ export class InitService {
       const htmlEl = this.win.document.documentElement;
       htmlEl.classList.add("os_" + this.platformUtilsService.getDeviceString());
       await this.themingService.monitorThemeChanges();
+      await this.avatarUpdateService.init();
       let installAction = null;
       const installedVersion = await this.stateService.getInstalledVersion();
       const currentVersion = await this.platformUtilsService.getApplicationVersion();

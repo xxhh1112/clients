@@ -1,4 +1,4 @@
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, firstValueFrom } from "rxjs";
 
 export class BitSubject<T = never> {
   private _subject = new ReplaySubject<T>(1);
@@ -28,5 +28,15 @@ export class BitSubject<T = never> {
     const subject = new BitSubject<T>();
     subject.next(value);
     return subject;
+  }
+
+  letInitialize(waitInMs = 100) {
+    return Promise.race([
+      firstValueFrom(this.asObservable()).then((v) => true),
+
+      new Promise<boolean>((resolve) => {
+        setTimeout(() => resolve(false), waitInMs);
+      }),
+    ]);
   }
 }

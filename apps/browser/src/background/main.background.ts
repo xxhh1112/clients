@@ -654,8 +654,11 @@ export default class MainBackground {
     await this.runtimeBackground.init();
     await this.notificationBackground.init();
     await this.commandsBackground.init();
+    await this.avatarUpdateService.init();
 
     this.twoFactorService.init();
+
+    this.nativeMessagingBackground.init();
 
     await this.tabsBackground.init();
     if (!this.popupOnlyContext) {

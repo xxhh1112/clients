@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { AvatarUpdateService } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -17,7 +18,8 @@ export class InitService {
     private popupUtilsService: PopupUtilsService,
     private stateService: ForegroundStateService,
     private logService: LogServiceAbstraction,
-    private themingService: AbstractThemingService
+    private themingService: AbstractThemingService,
+    private avatarUpdateService: AvatarUpdateService
   ) {}
 
   init() {
@@ -35,6 +37,7 @@ export class InitService {
       const htmlEl = window.document.documentElement;
       await this.themingService.monitorThemeChanges();
       htmlEl.classList.add("locale_" + this.i18nService.translationLocale);
+      await this.avatarUpdateService.init();
 
       // Workaround for slow performance on external monitors on Chrome + MacOS
       // See: https://bugs.chromium.org/p/chromium/issues/detail?id=971701#c64
