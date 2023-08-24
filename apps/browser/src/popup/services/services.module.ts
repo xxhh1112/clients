@@ -240,7 +240,7 @@ function getBgService<T>(service: keyof MainBackground) {
     {
       provide: I18nServiceAbstraction,
       useFactory: (stateService: BrowserStateService) => {
-        return new BrowserI18nService(BrowserApi.getUILanguage(window), stateService);
+        return new BrowserI18nService(BrowserApi.getUILanguage(), stateService);
       },
       deps: [StateService],
     },

@@ -2,6 +2,7 @@ import { SettingsService } from "@bitwarden/common/abstractions/settings.service
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { WebsiteIconService } from "@bitwarden/common/services/website-icon.service";
@@ -34,6 +35,7 @@ class OverlayBackground {
     focusedFieldStyles: Partial<CSSStyleDeclaration>;
     focusedFieldRects: Partial<DOMRect>;
   };
+  private overlayPageTranslations: Record<string, string>;
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
@@ -75,7 +77,8 @@ class OverlayBackground {
     private authService: AuthService,
     private environmentService: EnvironmentService,
     private settingsService: SettingsService,
-    private stateService: StateService
+    private stateService: StateService,
+    private i18nService: I18nService
   ) {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
     this.getAuthStatus();
@@ -452,6 +455,7 @@ class OverlayBackground {
       command: "initAutofillOverlayButton",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       styleSheetUrl: chrome.runtime.getURL("overlay/button.css"),
+      translations: this.getTranslations(),
     });
     this.updateAutofillOverlayButtonPosition();
     this.overlayButtonPort.onMessage.addListener(this.handleOverlayButtonPortMessage);
@@ -481,6 +485,7 @@ class OverlayBackground {
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       ciphers: this.currentTabCiphers,
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
+      translations: this.getTranslations(),
     });
     this.updateAutofillOverlayListPosition();
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
@@ -513,6 +518,27 @@ class OverlayBackground {
     }
 
     this.overlayListPort.postMessage({ command: "focusOverlayList" });
+  }
+
+  private getTranslations() {
+    if (!this.overlayPageTranslations) {
+      this.overlayPageTranslations = {
+        locale: BrowserApi.getUILanguage(),
+        opensInANewWindow: this.i18nService.translate("opensInANewWindow"),
+        buttonPageTitle: this.i18nService.translate("bitwardenOverlayButton"),
+        listPageTitle: this.i18nService.translate("bitwardenVault"),
+        unlockYourAccount: this.i18nService.translate("unlockYourAccountToViewMatchingLogins"),
+        unlockAccount: this.i18nService.translate("unlockAccount"),
+        fillCredentialsFor: this.i18nService.translate("fillCredentialsFor"),
+        partialUsername: this.i18nService.translate("partialUsername"),
+        view: this.i18nService.translate("view"),
+        noItemsToShow: this.i18nService.translate("noItemsToShow"),
+        newItem: this.i18nService.translate("newItem"),
+        addNewVaultItem: this.i18nService.translate("addNewVaultItem"),
+      };
+    }
+
+    return this.overlayPageTranslations;
   }
 
   private redirectOverlayFocusOut(message: any, sender: chrome.runtime.MessageSender) {

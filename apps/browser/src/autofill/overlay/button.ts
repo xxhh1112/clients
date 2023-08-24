@@ -14,11 +14,12 @@ class AutofillOverlayButton extends HTMLElement {
   private shadowDom: ShadowRoot;
   private buttonElement: HTMLButtonElement;
   private messageOrigin: string;
+  private translations: Record<string, string>;
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
   private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
     initAutofillOverlayButton: ({ message }) =>
-      this.init(message.authStatus, message.styleSheetUrl),
+      this.init(message.authStatus, message.styleSheetUrl, message.translations),
     checkAutofillOverlayButtonFocused: () => this.checkButtonFocused(),
     updateAutofillOverlayButtonAuthStatus: ({ message }) =>
       this.updateAuthStatus(message.authStatus),
@@ -37,7 +38,15 @@ class AutofillOverlayButton extends HTMLElement {
     this.logoLockedIconElement.classList.add("overlay-button-svg-icon", "logo-locked-icon");
   }
 
-  private async init(authStatus: AuthenticationStatus, styleSheetUrl: string) {
+  private async init(
+    authStatus: AuthenticationStatus,
+    styleSheetUrl: string,
+    translations: Record<string, string>
+  ) {
+    this.translations = translations;
+    globalThis.document.documentElement.setAttribute("lang", this.getTranslation("locale"));
+    globalThis.document.head.title = this.getTranslation("buttonPageTitle");
+
     const linkElement = globalThis.document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
@@ -46,6 +55,10 @@ class AutofillOverlayButton extends HTMLElement {
     this.buttonElement.tabIndex = -1;
     this.buttonElement.type = "button";
     this.buttonElement.classList.add("overlay-button");
+    this.buttonElement.setAttribute(
+      "aria-label",
+      this.getTranslation("toggleBitwardenVaultOverlay")
+    );
     this.buttonElement.addEventListener("click", this.handleButtonElementClick);
 
     this.updateAuthStatus(authStatus);
@@ -84,7 +97,11 @@ class AutofillOverlayButton extends HTMLElement {
     this.postMessageToParent({ command: "closeAutofillOverlay" });
   }
 
-  private postMessageToParent(message: any) {
+  private getTranslation(key: string): string {
+    return this.translations[key] || "";
+  }
+
+  private postMessageToParent(message: { command: string }) {
     if (!this.messageOrigin) {
       return;
     }

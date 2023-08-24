@@ -26,7 +26,7 @@ class AutofillOverlayButtonIframe extends AutofillOverlayCustomElementIframe {
         background: "transparent",
         border: "none",
       },
-      "Bitwarden menu available. Press the down arrow key to select."
+      chrome.i18n.getMessage("bitwardenOverlayMenuAvailable")
     );
   }
 }

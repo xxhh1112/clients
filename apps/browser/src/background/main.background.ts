@@ -300,7 +300,7 @@ export default class MainBackground {
       },
       window
     );
-    this.i18nService = new BrowserI18nService(BrowserApi.getUILanguage(window), this.stateService);
+    this.i18nService = new BrowserI18nService(BrowserApi.getUILanguage(), this.stateService);
     this.encryptService = flagEnabled("multithreadDecryption")
       ? new MultithreadEncryptServiceImplementation(
           this.cryptoFunctionService,
@@ -619,7 +619,8 @@ export default class MainBackground {
       this.authService,
       this.environmentService,
       this.settingsService,
-      this.stateService
+      this.stateService,
+      this.i18nService
     );
     this.tabsBackground = new TabsBackground(
       this,

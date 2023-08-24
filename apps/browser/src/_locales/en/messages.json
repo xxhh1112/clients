@@ -2406,5 +2406,38 @@
   "toggleCollapse": {
     "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
+  },
+  "bitwardenOverlayButton": {
+    "message": "Bitwarden overlay button"
+  },
+  "toggleBitwardenVaultOverlay": {
+    "message": "Toggle Bitwarden vault overlay"
+  },
+  "bitwardenVault": {
+    "message": "Bitwarden vault"
+  },
+  "unlockYourAccountToViewMatchingLogins": {
+    "message": "Unlock your account to view matching logins"
+  },
+  "unlockAccount": {
+    "message": "Unlock account"
+  },
+  "fillCredentialsFor":  {
+    "message": "Fill credentials for"
+  },
+  "partialUsername" : {
+    "message": "Partial username"
+  },
+  "noItemsToShow": {
+    "message": "No items to show"
+  },
+  "newItem": {
+    "message": "New item"
+  },
+  "addNewVaultItem": {
+    "message": "Add new vault item"
+  },
+  "bitwardenOverlayMenuAvailable": {
+    "message": "Bitwarden menu available. Press the down arrow key to select."
   }
 }
