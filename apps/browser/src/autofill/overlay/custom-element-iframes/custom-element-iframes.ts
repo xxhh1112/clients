@@ -17,11 +17,11 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
   }
 }
 
-class AutofillOverlayIconIframe extends AutofillOverlayCustomElementIframe {
+class AutofillOverlayButtonIframe extends AutofillOverlayCustomElementIframe {
   constructor() {
     super(
-      "overlay/icon.html",
-      AutofillOverlayPort.Icon,
+      "overlay/button.html",
+      AutofillOverlayPort.Button,
       {
         background: "transparent",
         border: "none",
@@ -45,4 +45,4 @@ class AutofillOverlayListIframe extends AutofillOverlayCustomElementIframe {
   }
 }
 
-export { AutofillOverlayIconIframe, AutofillOverlayListIframe };
+export { AutofillOverlayButtonIframe, AutofillOverlayListIframe };

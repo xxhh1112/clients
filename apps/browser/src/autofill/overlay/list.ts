@@ -43,7 +43,7 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private handleWindowBlurEvent = () => {
-    this.postMessageToParent({ command: "checkOverlayIconFocused" });
+    this.postMessageToParent({ command: "checkOverlayButtonFocused" });
   };
 
   private initShadowDom(styleSheetUrl: string) {
@@ -365,7 +365,7 @@ class AutofillOverlayList extends HTMLElement {
       return;
     }
 
-    this.postMessageToParent({ command: "checkOverlayIconFocused" });
+    this.postMessageToParent({ command: "checkOverlayButtonFocused" });
   }
 
   private focusOverlayList() {

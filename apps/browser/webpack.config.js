@@ -109,9 +109,9 @@ const plugins = [
     chunks: ["notification/bar"],
   }),
   new HtmlWebpackPlugin({
-    template: "./src/autofill/overlay/icon.html",
-    filename: "overlay/icon.html",
-    chunks: ["overlay/icon"],
+    template: "./src/autofill/overlay/button.html",
+    filename: "overlay/button.html",
+    chunks: ["overlay/button"],
   }),
   new HtmlWebpackPlugin({
     template: "./src/autofill/overlay/list.html",
@@ -171,7 +171,7 @@ const mainConfig = {
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
     "content/message_handler": "./src/autofill/content/message_handler.ts",
     "notification/bar": "./src/autofill/notification/bar.ts",
-    "overlay/icon": "./src/autofill/overlay/icon.ts",
+    "overlay/button": "./src/autofill/overlay/button.ts",
     "overlay/list": "./src/autofill/overlay/list.ts",
     "encrypt-worker": "../../libs/common/src/platform/services/cryptography/encrypt.worker.ts",
   },

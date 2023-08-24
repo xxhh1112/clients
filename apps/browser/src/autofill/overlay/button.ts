@@ -2,23 +2,23 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { OverlayIconWindowMessageHandlers } from "./abstractions/icon";
+import { OverlayButtonWindowMessageHandlers } from "./abstractions/button";
 import { AutofillOverlayCustomElement } from "./utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
 import { buildSvgDomElement } from "./utils/utils";
 
-require("./icon.scss");
+require("./button.scss");
 
-class AutofillOverlayIcon extends HTMLElement {
+class AutofillOverlayButton extends HTMLElement {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private shadowDom: ShadowRoot;
-  private iconElement: HTMLElement;
+  private buttonElement: HTMLElement;
   private messageOrigin: string;
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
-  private readonly windowMessageHandlers: OverlayIconWindowMessageHandlers = {
-    initAutofillOverlayIcon: ({ message }) => this.initAutofillOverlayIcon(message),
-    checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
+  private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
+    initAutofillOverlayButton: ({ message }) => this.initAutofillOverlayButton(message),
+    checkOverlayButtonFocused: () => this.checkOverlayButtonFocused(),
     updateAuthStatus: ({ message }) => this.updateAuthStatus(message),
   };
 
@@ -35,15 +35,15 @@ class AutofillOverlayIcon extends HTMLElement {
     return this.authStatus === AuthenticationStatus.Unlocked;
   }
 
-  private async initAutofillOverlayIcon(message: any = {}) {
+  private async initAutofillOverlayButton(message: any = {}) {
     this.authStatus = message.authStatus;
 
     globalThis.addEventListener("blur", this.handleWindowBlurEvent);
 
-    this.iconElement = globalThis.document.createElement("button");
-    this.iconElement.tabIndex = -1;
-    this.iconElement.classList.add("overlay-icon");
-    this.iconElement.addEventListener("click", this.handleIconClick);
+    this.buttonElement = globalThis.document.createElement("button");
+    this.buttonElement.tabIndex = -1;
+    this.buttonElement.classList.add("overlay-button");
+    this.buttonElement.addEventListener("click", this.handleButtonElementClick);
     this.setIconElementSvg();
 
     const styleSheetUrl = message.styleSheetUrl;
@@ -52,7 +52,7 @@ class AutofillOverlayIcon extends HTMLElement {
     linkElement.setAttribute("href", styleSheetUrl);
 
     this.shadowDom.appendChild(linkElement);
-    this.shadowDom.appendChild(this.iconElement);
+    this.shadowDom.appendChild(this.buttonElement);
   }
 
   private getLogoIconElement(): HTMLElement {
@@ -60,7 +60,7 @@ class AutofillOverlayIcon extends HTMLElement {
   }
 
   private handleWindowBlurEvent = () => {
-    this.postMessageToParent({ command: "overlayIconBlurred" });
+    this.postMessageToParent({ command: "overlayButtonBlurred" });
   };
 
   private updateAuthStatus(message: any = {}) {
@@ -69,19 +69,19 @@ class AutofillOverlayIcon extends HTMLElement {
   }
 
   private setIconElementSvg() {
-    if (!this.iconElement) {
+    if (!this.buttonElement) {
       return;
     }
 
-    this.iconElement.innerHTML = "";
-    this.iconElement.append(this.getLogoIconElement());
+    this.buttonElement.innerHTML = "";
+    this.buttonElement.append(this.getLogoIconElement());
   }
 
-  private handleIconClick = () => {
-    this.postMessageToParent({ command: "overlayIconClicked" });
+  private handleButtonElementClick = () => {
+    this.postMessageToParent({ command: "overlayButtonClicked" });
   };
 
-  private checkOverlayIconFocused() {
+  private checkOverlayButtonFocused() {
     if (globalThis.document.hasFocus()) {
       return;
     }
@@ -118,5 +118,5 @@ class AutofillOverlayIcon extends HTMLElement {
 }
 
 (function () {
-  globalThis.customElements.define(AutofillOverlayCustomElement.Icon, AutofillOverlayIcon);
+  globalThis.customElements.define(AutofillOverlayCustomElement.Button, AutofillOverlayButton);
 })();

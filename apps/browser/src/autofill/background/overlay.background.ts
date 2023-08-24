@@ -18,7 +18,7 @@ import { AutofillService, PageDetail } from "../services/abstractions/autofill.s
 
 import {
   OverlayBackgroundExtensionMessageHandlers,
-  OverlayIconPortMessageHandlers,
+  OverlayButtonPortMessageHandlers,
   OverlayListPortMessageHandlers,
 } from "./abstractions/overlay.background";
 
@@ -28,7 +28,7 @@ class OverlayBackground {
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
-  private overlayIconPort: chrome.runtime.Port;
+  private overlayButtonPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
   private focusedFieldData: {
     focusedFieldStyles: Partial<CSSStyleDeclaration>;
@@ -39,11 +39,11 @@ class OverlayBackground {
     bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
     bgCheckOverlayFocused: () => this.checkOverlayFocused(),
     bgCheckAuthStatus: async () => await this.getAuthStatus(),
-    bgUpdateAutofillOverlayIconPosition: () => this.updateAutofillOverlayIconPosition(),
+    bgUpdateAutofillOverlayButtonPosition: () => this.updateAutofillOverlayButtonPosition(),
     bgUpdateAutofillOverlayListPosition: () => this.updateAutofillOverlayListPosition(),
     bgUpdateOverlayHidden: ({ message }) => this.updateAutofillOverlayHidden(message),
     bgUpdateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
-    bgAutofillOverlayIconClosed: () => this.overlayIconClosed(),
+    bgAutofillOverlayButtonClosed: () => this.overlayButtonClosed(),
     bgAutofillOverlayListClosed: () => this.overlayListClosed(),
     bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
     bgFocusAutofillOverlayList: () => this.focusOverlayList(),
@@ -52,13 +52,13 @@ class OverlayBackground {
     addEditCipherSubmitted: () => this.updateCurrentTabCiphers(),
     deletedCipher: () => this.updateCurrentTabCiphers(),
   };
-  private readonly overlayIconPortMessageHandlers: OverlayIconPortMessageHandlers = {
-    overlayIconClicked: ({ port }) => this.handleOverlayIconClicked(port.sender),
+  private readonly overlayButtonPortMessageHandlers: OverlayButtonPortMessageHandlers = {
+    overlayButtonClicked: ({ port }) => this.handleOverlayButtonClicked(port.sender),
     closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
-    overlayIconBlurred: () => this.checkOverlayListFocused(),
+    overlayButtonBlurred: () => this.checkOverlayListFocused(),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
-    checkOverlayIconFocused: () => this.checkOverlayIconFocused(),
+    checkOverlayButtonFocused: () => this.checkOverlayButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
@@ -134,15 +134,15 @@ class OverlayBackground {
       return;
     }
 
-    this.checkOverlayIconFocused();
+    this.checkOverlayButtonFocused();
   }
 
-  private checkOverlayIconFocused() {
-    if (!this.overlayIconPort) {
+  private checkOverlayButtonFocused() {
+    if (!this.overlayButtonPort) {
       return;
     }
 
-    this.overlayIconPort.postMessage({ command: "checkOverlayIconFocused" });
+    this.overlayButtonPort.postMessage({ command: "checkOverlayButtonFocused" });
   }
 
   private checkOverlayListFocused() {
@@ -161,14 +161,14 @@ class OverlayBackground {
     chrome.tabs.sendMessage(sender.tab.id, { command: "closeAutofillOverlay" });
   }
 
-  private updateAutofillOverlayIconPosition() {
-    if (!this.overlayIconPort) {
+  private updateAutofillOverlayButtonPosition() {
+    if (!this.overlayButtonPort) {
       return;
     }
 
-    this.overlayIconPort.postMessage({
+    this.overlayButtonPort.postMessage({
       command: "updateIframePosition",
-      position: this.getOverlayIconPosition(),
+      position: this.getOverlayButtonPosition(),
     });
   }
 
@@ -188,8 +188,8 @@ class OverlayBackground {
       return;
     }
 
-    if (this.overlayIconPort) {
-      this.overlayIconPort.postMessage({
+    if (this.overlayButtonPort) {
+      this.overlayButtonPort.postMessage({
         command: "updateOverlayHidden",
         display: message.display,
       });
@@ -207,7 +207,7 @@ class OverlayBackground {
     this.focusedFieldData = message.focusedFieldData;
   }
 
-  private getOverlayIconPosition() {
+  private getOverlayButtonPosition() {
     if (!this.focusedFieldData) {
       return;
     }
@@ -243,13 +243,13 @@ class OverlayBackground {
     };
   }
 
-  private overlayIconClosed() {
-    if (!this.overlayIconPort) {
+  private overlayButtonClosed() {
+    if (!this.overlayButtonPort) {
       return;
     }
 
-    this.overlayIconPort.disconnect();
-    this.overlayIconPort = null;
+    this.overlayButtonPort.disconnect();
+    this.overlayButtonPort = null;
   }
 
   private overlayListClosed() {
@@ -360,7 +360,7 @@ class OverlayBackground {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
-      this.updateAutofillOverlayIconAuthStatus();
+      this.updateAutofillOverlayButtonAuthStatus();
       await this.updateCurrentTabCiphers();
     }
 
@@ -368,18 +368,18 @@ class OverlayBackground {
     return this.userAuthStatus;
   }
 
-  private updateAutofillOverlayIconAuthStatus() {
-    if (!this.overlayIconPort) {
+  private updateAutofillOverlayButtonAuthStatus() {
+    if (!this.overlayButtonPort) {
       return;
     }
 
-    this.overlayIconPort.postMessage({
+    this.overlayButtonPort.postMessage({
       command: "updateAuthStatus",
       authStatus: this.userAuthStatus,
     });
   }
 
-  private handleOverlayIconClicked(sender: chrome.runtime.MessageSender) {
+  private handleOverlayButtonClicked(sender: chrome.runtime.MessageSender) {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
       this.unlockVault(sender);
       return;
@@ -437,8 +437,8 @@ class OverlayBackground {
   };
 
   private handlePortOnConnect = (port: chrome.runtime.Port) => {
-    if (port.name === AutofillOverlayPort.Icon) {
-      this.setupOverlayIconPort(port);
+    if (port.name === AutofillOverlayPort.Button) {
+      this.setupOverlayButtonPort(port);
     }
 
     if (port.name === AutofillOverlayPort.List) {
@@ -446,23 +446,23 @@ class OverlayBackground {
     }
   };
 
-  private setupOverlayIconPort = async (port: chrome.runtime.Port) => {
-    this.overlayIconPort = port;
-    this.overlayIconPort.postMessage({
-      command: "initAutofillOverlayIcon",
+  private setupOverlayButtonPort = async (port: chrome.runtime.Port) => {
+    this.overlayButtonPort = port;
+    this.overlayButtonPort.postMessage({
+      command: "initAutofillOverlayButton",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      styleSheetUrl: chrome.runtime.getURL("overlay/icon.css"),
+      styleSheetUrl: chrome.runtime.getURL("overlay/button.css"),
     });
-    this.updateAutofillOverlayIconPosition();
-    this.overlayIconPort.onMessage.addListener(this.handleOverlayIconPortMessage);
+    this.updateAutofillOverlayButtonPosition();
+    this.overlayButtonPort.onMessage.addListener(this.handleOverlayButtonPortMessage);
   };
 
-  private handleOverlayIconPortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.Icon) {
+  private handleOverlayButtonPortMessage = (message: any, port: chrome.runtime.Port) => {
+    if (port.name !== AutofillOverlayPort.Button) {
       return;
     }
 
-    const handler = this.overlayIconPortMessageHandlers[message?.command];
+    const handler = this.overlayButtonPortMessageHandlers[message?.command];
     if (!handler) {
       return;
     }

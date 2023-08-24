@@ -188,7 +188,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     };
 
     if (element instanceof HTMLSpanElement) {
-      this.autofillOverlayContentService.setupOverlayIconListenerOnField(
+      this.autofillOverlayContentService.setupAutofillOverlayListenerOnField(
         element,
         autofillFieldBase
       );
@@ -232,7 +232,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       "data-stripe": this.getPropertyOrAttribute(element, "data-stripe"),
     };
 
-    this.autofillOverlayContentService.setupOverlayIconListenerOnField(element, autofillField);
+    this.autofillOverlayContentService.setupAutofillOverlayListenerOnField(element, autofillField);
 
     return autofillField;
   };

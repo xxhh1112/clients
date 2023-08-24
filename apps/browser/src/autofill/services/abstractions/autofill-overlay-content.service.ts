@@ -4,13 +4,13 @@ import { ElementWithOpId, FormFieldElement } from "../../types";
 interface AutofillOverlayContentService {
   isFieldCurrentlyFocused: boolean;
   isCurrentlyFilling: boolean;
-  setupOverlayIconListenerOnField(
+  setupAutofillOverlayListenerOnField(
     autofillFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ): void;
   openAutofillOverlay(): void;
   removeAutofillOverlay(): void;
-  removeAutofillOverlayIcon(): void;
+  removeAutofillOverlayButton(): void;
   removeAutofillOverlayList(): void;
   updateAutofillOverlayListHeight(message: any): void;
   addNewVaultItem(): void;

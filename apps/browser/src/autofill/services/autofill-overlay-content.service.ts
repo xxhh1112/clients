@@ -6,7 +6,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import AutofillField from "../models/autofill-field";
 import {
-  AutofillOverlayIconIframe,
+  AutofillOverlayButtonIframe,
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
 import {
@@ -24,9 +24,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
   private focusableElements: FocusableElement[] = [];
-  private isOverlayIconVisible = false;
+  private isOverlayButtonVisible = false;
   private isOverlayListVisible = false;
-  private overlayIconElement: HTMLElement;
+  private overlayButtonElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
   private authStatus: AuthenticationStatus;
@@ -48,7 +48,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.initOverlayOnDomContentLoaded();
   }
 
-  setupOverlayIconListenerOnField(
+  setupAutofillOverlayListenerOnField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ) {
@@ -96,18 +96,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   removeAutofillOverlay = () => {
     this.unobserveBodyElement();
-    this.removeAutofillOverlayIcon();
+    this.removeAutofillOverlayButton();
     this.removeAutofillOverlayList();
   };
 
-  removeAutofillOverlayIcon() {
-    if (!this.overlayIconElement) {
+  removeAutofillOverlayButton() {
+    if (!this.overlayButtonElement) {
       return;
     }
 
-    this.overlayIconElement.remove();
-    this.isOverlayIconVisible = false;
-    sendExtensionMessage("bgAutofillOverlayIconClosed");
+    this.overlayButtonElement.remove();
+    this.isOverlayButtonVisible = false;
+    sendExtensionMessage("bgAutofillOverlayButtonClosed");
     this.removeOverlayRepositionEventListeners();
   }
 
@@ -247,7 +247,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private async triggerFormFieldClickedAction(formFieldElement: ElementWithOpId<FormFieldElement>) {
-    if (this.isOverlayIconVisible || this.isOverlayListVisible) {
+    if (this.isOverlayButtonVisible || this.isOverlayListVisible) {
       return;
     }
 
@@ -283,7 +283,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.removeAutofillOverlayList();
     }
 
-    this.updateOverlayIconPosition();
+    this.updateOverlayButtonPosition();
   }
 
   private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {
@@ -323,25 +323,25 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private updateOverlayElementsPosition() {
-    this.updateOverlayIconPosition();
+    this.updateOverlayButtonPosition();
     this.updateOverlayListPosition();
   }
 
-  private updateOverlayIconPosition() {
-    if (!this.overlayIconElement) {
-      this.createOverlayIconElement();
+  private updateOverlayButtonPosition() {
+    if (!this.overlayButtonElement) {
+      this.createoverlayButtonElement();
     }
 
     if (!this.mostRecentlyFocusedField) {
       return;
     }
 
-    if (!this.isOverlayIconVisible) {
-      this.appendOverlayElementToBody(this.overlayIconElement);
-      this.isOverlayIconVisible = true;
+    if (!this.isOverlayButtonVisible) {
+      this.appendOverlayElementToBody(this.overlayButtonElement);
+      this.isOverlayButtonVisible = true;
       this.setOverlayRepositionEventListeners();
     }
-    sendExtensionMessage("bgUpdateAutofillOverlayIconPosition");
+    sendExtensionMessage("bgUpdateAutofillOverlayButtonPosition");
   }
 
   private updateOverlayListPosition() {
@@ -370,7 +370,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const displayValue = isHidden ? "none" : "block";
     sendExtensionMessage("bgUpdateOverlayHidden", { display: displayValue });
 
-    this.isOverlayIconVisible = !isHidden;
+    this.isOverlayButtonVisible = !isHidden;
     this.isOverlayListVisible = !isHidden;
   }
 
@@ -450,20 +450,20 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     return !isLoginCipherField;
   }
 
-  private createOverlayIconElement() {
-    if (this.overlayIconElement) {
+  private createoverlayButtonElement() {
+    if (this.overlayButtonElement) {
       return;
     }
 
     globalThis.customElements?.define(
-      AutofillOverlayCustomElement.BitwardenIcon,
-      AutofillOverlayIconIframe
+      AutofillOverlayCustomElement.BitwardenButton,
+      AutofillOverlayButtonIframe
     );
-    this.overlayIconElement = globalThis.document.createElement(
-      AutofillOverlayCustomElement.BitwardenIcon
+    this.overlayButtonElement = globalThis.document.createElement(
+      AutofillOverlayCustomElement.BitwardenButton
     );
 
-    this.updateCustomElementDefaultStyles(this.overlayIconElement);
+    this.updateCustomElementDefaultStyles(this.overlayButtonElement);
   }
 
   private createAutofillOverlayList() {
@@ -503,7 +503,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private handleOverlayRepositionEvent = () => {
-    if (!this.isOverlayIconVisible && !this.isOverlayListVisible) {
+    if (!this.isOverlayButtonVisible && !this.isOverlayListVisible) {
       return;
     }
 
@@ -562,8 +562,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private observeCustomElements() {
-    if (this.overlayIconElement) {
-      this.overlayElementsMutationObserver?.observe(this.overlayIconElement, { attributes: true });
+    if (this.overlayButtonElement) {
+      this.overlayElementsMutationObserver?.observe(this.overlayButtonElement, {
+        attributes: true,
+      });
     }
 
     if (this.overlayListElement) {
@@ -625,7 +627,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const lastChild = globalThis.document.body.lastChild;
     if (
       lastChild === this.overlayListElement ||
-      (lastChild === this.overlayIconElement && !this.isOverlayListVisible)
+      (lastChild === this.overlayButtonElement && !this.isOverlayListVisible)
     ) {
       return;
     }

@@ -5,11 +5,11 @@ type OverlayBackgroundExtensionMessageHandlers = {
   bgOpenAutofillOverlayList: () => void;
   bgCheckOverlayFocused: () => void;
   bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
-  bgUpdateAutofillOverlayIconPosition: () => void;
+  bgUpdateAutofillOverlayButtonPosition: () => void;
   bgUpdateAutofillOverlayListPosition: () => void;
   bgUpdateOverlayHidden: ({ message }: { message: any }) => void;
   bgUpdateFocusedFieldData: ({ message }: { message: any }) => void;
-  bgAutofillOverlayIconClosed: () => void;
+  bgAutofillOverlayButtonClosed: () => void;
   bgAutofillOverlayListClosed: () => void;
   bgAddNewVaultItem: ({
     message,
@@ -30,16 +30,16 @@ type OverlayBackgroundExtensionMessageHandlers = {
   addEditCipherSubmitted: () => void;
   deletedCipher: () => void;
 };
-type OverlayIconPortMessageHandlers = {
+type OverlayButtonPortMessageHandlers = {
   [key: string]: CallableFunction;
-  overlayIconClicked: ({ port }: { port: chrome.runtime.Port }) => void;
+  overlayButtonClicked: ({ port }: { port: chrome.runtime.Port }) => void;
   closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
-  overlayIconBlurred: () => void;
+  overlayButtonBlurred: () => void;
 };
 
 type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
-  checkOverlayIconFocused: () => void;
+  checkOverlayButtonFocused: () => void;
   unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
   autofillSelectedListItem: ({
     message,
@@ -56,6 +56,6 @@ type OverlayListPortMessageHandlers = {
 
 export {
   OverlayBackgroundExtensionMessageHandlers,
-  OverlayIconPortMessageHandlers,
+  OverlayButtonPortMessageHandlers,
   OverlayListPortMessageHandlers,
 };
