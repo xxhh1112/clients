@@ -12,15 +12,16 @@ require("./button.scss");
 class AutofillOverlayButton extends HTMLElement {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private shadowDom: ShadowRoot;
-  private buttonElement: HTMLElement;
+  private buttonElement: HTMLButtonElement;
   private messageOrigin: string;
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
   private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
     initAutofillOverlayButton: ({ message }) =>
-      this.initAutofillOverlayButton(message.authStatus, message.styleSheetUrl),
-    checkOverlayButtonFocused: () => this.checkOverlayButtonFocused(),
-    updateAuthStatus: ({ message }) => this.updateAuthStatus(message.authStatus),
+      this.init(message.authStatus, message.styleSheetUrl),
+    checkAutofillOverlayButtonFocused: () => this.checkButtonFocused(),
+    updateAutofillOverlayButtonAuthStatus: ({ message }) =>
+      this.updateAuthStatus(message.authStatus),
   };
 
   constructor() {
@@ -28,17 +29,22 @@ class AutofillOverlayButton extends HTMLElement {
 
     this.setupWindowMessageListener();
     this.shadowDom = this.attachShadow({ mode: "closed" });
+
     this.logoIconElement = buildSvgDomElement(logoIcon);
+    this.logoIconElement.classList.add("overlay-button-svg-icon", "logo-icon");
+
     this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
+    this.logoLockedIconElement.classList.add("overlay-button-svg-icon", "logo-locked-icon");
   }
 
-  private async initAutofillOverlayButton(authStatus: AuthenticationStatus, styleSheetUrl: string) {
+  private async init(authStatus: AuthenticationStatus, styleSheetUrl: string) {
     const linkElement = globalThis.document.createElement("link");
     linkElement.setAttribute("rel", "stylesheet");
     linkElement.setAttribute("href", styleSheetUrl);
 
     this.buttonElement = globalThis.document.createElement("button");
     this.buttonElement.tabIndex = -1;
+    this.buttonElement.type = "button";
     this.buttonElement.classList.add("overlay-button");
     this.buttonElement.addEventListener("click", this.handleButtonElementClick);
 
@@ -70,7 +76,7 @@ class AutofillOverlayButton extends HTMLElement {
     this.postMessageToParent({ command: "overlayButtonClicked" });
   };
 
-  private checkOverlayButtonFocused() {
+  private checkButtonFocused() {
     if (globalThis.document.hasFocus()) {
       return;
     }

@@ -9,8 +9,12 @@ type InitAutofillOverlayButtonMessage = UpdateAuthStatusMessage & { styleSheetUr
 type OverlayButtonWindowMessageHandlers = {
   [key: string]: CallableFunction;
   initAutofillOverlayButton: ({ message }: { message: InitAutofillOverlayButtonMessage }) => void;
-  checkOverlayButtonFocused: () => void;
-  updateAuthStatus: ({ message }: { message: UpdateAuthStatusMessage }) => void;
+  checkAutofillOverlayButtonFocused: () => void;
+  updateAutofillOverlayButtonAuthStatus: ({
+    message,
+  }: {
+    message: UpdateAuthStatusMessage;
+  }) => void;
 };
 
 export {

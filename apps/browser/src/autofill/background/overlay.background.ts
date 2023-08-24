@@ -58,7 +58,7 @@ class OverlayBackground {
     overlayButtonBlurred: () => this.checkOverlayListFocused(),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
-    checkOverlayButtonFocused: () => this.checkOverlayButtonFocused(),
+    checkAutofillOverlayButtonFocused: () => this.checkAutofillOverlayButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
@@ -134,15 +134,15 @@ class OverlayBackground {
       return;
     }
 
-    this.checkOverlayButtonFocused();
+    this.checkAutofillOverlayButtonFocused();
   }
 
-  private checkOverlayButtonFocused() {
+  private checkAutofillOverlayButtonFocused() {
     if (!this.overlayButtonPort) {
       return;
     }
 
-    this.overlayButtonPort.postMessage({ command: "checkOverlayButtonFocused" });
+    this.overlayButtonPort.postMessage({ command: "checkAutofillOverlayButtonFocused" });
   }
 
   private checkOverlayListFocused() {
@@ -374,7 +374,7 @@ class OverlayBackground {
     }
 
     this.overlayButtonPort.postMessage({
-      command: "updateAuthStatus",
+      command: "updateAutofillOverlayButtonAuthStatus",
       authStatus: this.userAuthStatus,
     });
   }

@@ -39,7 +39,7 @@ type OverlayButtonPortMessageHandlers = {
 
 type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
-  checkOverlayButtonFocused: () => void;
+  checkAutofillOverlayButtonFocused: () => void;
   unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
   autofillSelectedListItem: ({
     message,

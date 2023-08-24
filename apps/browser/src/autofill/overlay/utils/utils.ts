@@ -7,14 +7,14 @@ function buildSvgDomElement(svgString: string, ariaHidden: "true" | "false" = "t
   return domElement;
 }
 
-function sendExtensionMessage(command: string, options: any = {}) {
+function sendExtensionMessage(command: string, options: Record<string, any> = {}) {
   chrome.runtime.sendMessage(Object.assign({ command }, options));
 }
 
 function setElementStyles(
   element: HTMLElement,
   styles: Partial<CSSStyleDeclaration>,
-  priority?: "important" | ""
+  priority: "important" | "" = ""
 ) {
   if (!element) {
     return;
