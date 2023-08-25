@@ -84,6 +84,6 @@ export default class TabsBackground {
   private updateCurrentTabData = async () => {
     await this.main.refreshBadge();
     await this.main.refreshMenu();
-    await this.overlayBackground.updateCurrentTabCiphers();
+    await this.overlayBackground.updateAutofillOverlayCiphers();
   };
 }

@@ -5,7 +5,10 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { WebsiteIconService } from "@bitwarden/common/services/website-icon.service";
+import {
+  WebsiteIconData,
+  WebsiteIconService,
+} from "@bitwarden/common/services/website-icon.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -23,12 +26,12 @@ import { AutofillService, PageDetail } from "../services/abstractions/autofill.s
 import {
   OverlayBackgroundExtensionMessageHandlers,
   OverlayButtonPortMessageHandlers,
+  OverlayCipherData,
   OverlayListPortMessageHandlers,
 } from "./abstractions/overlay.background";
 
 class OverlayBackground {
-  private ciphers: any[] = [];
-  private currentTabCiphers: any[] = [];
+  private overlayCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
@@ -51,8 +54,8 @@ class OverlayBackground {
     updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
     unlockCompleted: () => this.openOverlay(true),
-    addEditCipherSubmitted: () => this.updateCurrentTabCiphers(),
-    deletedCipher: () => this.updateCurrentTabCiphers(),
+    addEditCipherSubmitted: () => this.updateAutofillOverlayCiphers(),
+    deletedCipher: () => this.updateAutofillOverlayCiphers(),
   };
   private readonly overlayButtonPortMessageHandlers: OverlayButtonPortMessageHandlers = {
     overlayButtonClicked: ({ port }) => this.handleOverlayButtonClicked(port.sender),
@@ -92,6 +95,61 @@ class OverlayBackground {
     delete this.pageDetailsForTab[tabId];
   }
 
+  async updateAutofillOverlayCiphers() {
+    if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
+      return;
+    }
+
+    const currentTab = await BrowserApi.getTabFromCurrentWindowId();
+    if (!currentTab?.url) {
+      return;
+    }
+
+    this.overlayCiphers = new Map();
+    const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
+    const ciphers = unsortedCiphers.sort((a, b) =>
+      this.cipherService.sortCiphersByLastUsedThenName(a, b)
+    );
+    ciphers.forEach((cipher, index) => this.overlayCiphers.set(`overlayCipher_${index}`, cipher));
+
+    this.overlayListPort?.postMessage({
+      command: "updateOverlayListCiphers",
+      ciphers: this.getOverlayCipherData(),
+    });
+  }
+
+  private getOverlayCipherData(): OverlayCipherData[] {
+    const isFaviconDisabled = this.settingsService.getDisableFavicon();
+    const overlayCipherData: OverlayCipherData[] = [];
+
+    let cipherIconData: WebsiteIconData;
+    this.overlayCiphers.forEach((cipher, overlayCipherId) => {
+      if (!cipherIconData) {
+        cipherIconData = WebsiteIconService.buildCipherIconData(
+          this.iconsServerUrl,
+          cipher,
+          isFaviconDisabled
+        );
+      }
+
+      overlayCipherData.push({
+        id: overlayCipherId,
+        name: cipher.name,
+        type: cipher.type,
+        reprompt: cipher.reprompt,
+        favorite: cipher.favorite,
+        icon: cipherIconData,
+        login: cipher.type === CipherType.Login ? { username: cipher.login.username } : null,
+        card:
+          cipher.type === CipherType.Card
+            ? { brand: cipher.card.brand, partialNumber: `*${cipher.card.number?.slice(-4)}` }
+            : null,
+      });
+    });
+
+    return overlayCipherData;
+  }
+
   private storePageDetails(message: any, sender: chrome.runtime.MessageSender) {
     const pageDetails = {
       frameId: sender.frameId,
@@ -107,15 +165,12 @@ class OverlayBackground {
   }
 
   private async autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
-    if (!message.cipherId) {
+    if (!message.overlayCipherId) {
       return;
     }
 
-    const cipher = this.ciphers.find((c) => c.id === message.cipherId);
-
-    // TODO: CG - Probably need to think of a less costly way of doing this. We're iterating multiple times over the found ciphers to reorder the most recently clicked element.
-    const cipherIndex = this.currentTabCiphers.findIndex((c) => c.id === message.cipherId);
-    this.currentTabCiphers.unshift(this.currentTabCiphers.splice(cipherIndex, 1)[0]);
+    const cipher = this.overlayCiphers.get(message.overlayCipherId);
+    this.overlayCiphers = new Map([[message.overlayCipherId, cipher], ...this.overlayCiphers]);
 
     if (await this.autofillService.isPasswordRepromptRequired(cipher, sender.tab)) {
       return;
@@ -254,58 +309,6 @@ class OverlayBackground {
     });
   }
 
-  async updateCurrentTabCiphers() {
-    if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
-      return;
-    }
-
-    // TODO: CG - Its possible that this isn't entirely effective, we need to consider and test how iframed forms react to this.
-    const currentTab = await BrowserApi.getTabFromCurrentWindowId();
-    if (!currentTab?.url) {
-      return;
-    }
-
-    const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
-    this.ciphers = unsortedCiphers.sort((a, b) =>
-      this.cipherService.sortCiphersByLastUsedThenName(a, b)
-    );
-    const isFaviconDisabled = this.settingsService.getDisableFavicon();
-
-    this.currentTabCiphers = this.ciphers.map((cipher) => ({
-      id: cipher.id,
-      name: cipher.name,
-      type: cipher.type,
-      reprompt: cipher.reprompt,
-      favorite: cipher.favorite,
-      // TODO: CG - Need to consider a better way to approach this. Each login cipher type will have the same icon so we don't need to re-build that value.
-      icon: !isFaviconDisabled
-        ? WebsiteIconService.buildCipherIconData(this.iconsServerUrl, cipher, isFaviconDisabled)
-        : null,
-      login: {
-        username: this.getObscureName(cipher.login.username),
-      },
-      // card: {
-      //   cardholderName: cipher.card.cardholderName,
-      //   partialNumber: cipher.card.number?.slice(-4),
-      //   expMonth: cipher.card.expMonth,
-      //   expYear: cipher.card.expYear,
-      // },
-      // identity: {
-      //   title: cipher.identity.title,
-      //   firstName: cipher.identity.firstName,
-      //   middleName: cipher.identity.middleName,
-      //   lastName: cipher.identity.lastName,
-      //   email: cipher.identity.email,
-      //   company: cipher.identity.company,
-      // },
-    }));
-
-    this.overlayListPort?.postMessage({
-      command: "updateOverlayListCiphers",
-      ciphers: this.currentTabCiphers,
-    });
-  }
-
   private getObscureName(name: string): string {
     const [username, domain] = name.split("@");
     const usernameLength = username?.length;
@@ -343,7 +346,7 @@ class OverlayBackground {
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
       this.updateAutofillOverlayButtonAuthStatus();
-      await this.updateCurrentTabCiphers();
+      await this.updateAutofillOverlayCiphers();
     }
 
     this.userAuthStatus = authStatus;
@@ -462,7 +465,7 @@ class OverlayBackground {
     this.overlayListPort.postMessage({
       command: "initAutofillOverlayList",
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      ciphers: this.currentTabCiphers,
+      ciphers: this.getOverlayCipherData(),
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
       translations: this.getTranslations(),
     });
@@ -485,8 +488,13 @@ class OverlayBackground {
   };
 
   private async viewSelectedCipher(message: any, sender: chrome.runtime.MessageSender) {
+    if (!message.overlayCipherId) {
+      return;
+    }
+
+    const cipher = this.overlayCiphers.get(message.overlayCipherId);
     await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
-      cipherId: message.cipherId,
+      cipherId: cipher.id,
       action: "show-autofill-button",
     });
   }

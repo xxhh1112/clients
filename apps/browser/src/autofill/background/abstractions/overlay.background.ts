@@ -1,3 +1,17 @@
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+
+type OverlayCipherData = {
+  id: string;
+  name: string;
+  type: CipherType;
+  reprompt: CipherRepromptType;
+  favorite: boolean;
+  icon: { imageEnabled: boolean; image: string; fallbackImage: string; icon: string };
+  login?: { username: string };
+  card?: { brand: string; partialNumber: string };
+};
+
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   openAutofillOverlay: () => void;
@@ -50,6 +64,7 @@ type OverlayListPortMessageHandlers = {
 };
 
 export {
+  OverlayCipherData,
   OverlayBackgroundExtensionMessageHandlers,
   OverlayButtonPortMessageHandlers,
   OverlayListPortMessageHandlers,

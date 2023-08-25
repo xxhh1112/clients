@@ -134,7 +134,7 @@ class AutofillOverlayList extends HTMLElement {
 
   private buildFillCipherElement(cipher: any) {
     const handleFillCipherClick = () =>
-      this.postMessageToParent({ command: "autofillSelectedListItem", cipherId: cipher.id });
+      this.postMessageToParent({ command: "autofillSelectedListItem", overlayCipherId: cipher.id });
     const handleFillCipherKeyPress = (event: KeyboardEvent) => {
       event.preventDefault();
 
@@ -213,7 +213,7 @@ class AutofillOverlayList extends HTMLElement {
 
   private buildViewCipherElement(cipher: any) {
     const handleViewCipherClick = () =>
-      this.postMessageToParent({ command: "viewSelectedCipher", cipherId: cipher.id });
+      this.postMessageToParent({ command: "viewSelectedCipher", overlayCipherId: cipher.id });
 
     // TODO: CG - Need to refactor this to remove duplication and also need to add behavior for when we are only Tabbing out of the list.
     const handleViewCipherKeyPress = (event: KeyboardEvent) => {

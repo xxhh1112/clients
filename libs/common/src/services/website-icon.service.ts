@@ -2,6 +2,13 @@ import { Utils } from "../platform/misc/utils";
 import { CipherType } from "../vault/enums/cipher-type";
 import { CipherView } from "../vault/models/view/cipher.view";
 
+export type WebsiteIconData = {
+  imageEnabled: boolean;
+  image: string;
+  fallbackImage: string;
+  icon: string;
+};
+
 // TODO: Make a decision later as whether we want to use this or not. We could scope and optimize the behavior for use in the overlay specifically.
 class WebsiteIconService {
   static buildCipherIconData(
