@@ -18,7 +18,7 @@ class AutofillOverlayList extends HTMLElement {
   private windowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
-    updateOverlayListCiphers: ({ message }) => this.updateAutofillOverlayList(message),
+    updateOverlayListCiphers: ({ message }) => this.updateListItems(message),
     focusOverlayList: () => this.focusOverlayList(),
   };
 
@@ -37,7 +37,7 @@ class AutofillOverlayList extends HTMLElement {
     this.initShadowDom(message.styleSheetUrl);
 
     if (message.authStatus === AuthenticationStatus.Unlocked) {
-      this.updateAutofillOverlayList(message);
+      this.updateListItems(message);
       return;
     }
 
@@ -97,7 +97,7 @@ class AutofillOverlayList extends HTMLElement {
     this.postMessageToParent({ command: "unlockVault" });
   };
 
-  private updateAutofillOverlayList(message: any) {
+  private updateListItems(message: any) {
     if (!message.ciphers || message.ciphers.length === 0) {
       this.buildNoResultsOverlayList();
       return;

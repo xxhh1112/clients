@@ -106,8 +106,7 @@ class OverlayBackground {
     }
 
     this.overlayCiphers = new Map();
-    const unsortedCiphers = await this.cipherService.getAllDecryptedForUrl(currentTab.url);
-    const ciphers = unsortedCiphers.sort((a, b) =>
+    const ciphers = (await this.cipherService.getAllDecryptedForUrl(currentTab.url)).sort((a, b) =>
       this.cipherService.sortCiphersByLastUsedThenName(a, b)
     );
     ciphers.forEach((cipher, index) => this.overlayCiphers.set(`overlayCipher_${index}`, cipher));
@@ -156,6 +155,7 @@ class OverlayBackground {
       tab: sender.tab,
       details: message.details,
     };
+
     if (this.pageDetailsForTab[sender.tab.id]?.length) {
       this.pageDetailsForTab[sender.tab.id].push(pageDetails);
       return;
@@ -170,12 +170,10 @@ class OverlayBackground {
     }
 
     const cipher = this.overlayCiphers.get(message.overlayCipherId);
-    this.overlayCiphers = new Map([[message.overlayCipherId, cipher], ...this.overlayCiphers]);
 
     if (await this.autofillService.isPasswordRepromptRequired(cipher, sender.tab)) {
       return;
     }
-
     await this.autofillService.doAutoFill({
       tab: sender.tab,
       cipher: cipher,
@@ -183,6 +181,8 @@ class OverlayBackground {
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
+
+    this.overlayCiphers = new Map([[message.overlayCipherId, cipher], ...this.overlayCiphers]);
   }
 
   private checkOverlayFocused() {
