@@ -24,7 +24,6 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
@@ -41,6 +40,7 @@ import {
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
 import { RouterService } from "./core";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -58,7 +58,7 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private broadcasterService: BroadcasterService,
-    private folderService: InternalFolderService,
+    private folderService: FolderService,
     private settingsService: SettingsService,
     private syncService: SyncService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,

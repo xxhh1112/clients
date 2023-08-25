@@ -27,13 +27,9 @@ import { SendResponse } from "../../../tools/send/models/response/send.response"
 import { SendApiService } from "../../../tools/send/services/send-api.service.abstraction";
 import { InternalSendService } from "../../../tools/send/services/send.service.abstraction";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
-import { FolderApiServiceAbstraction } from "../../../vault/abstractions/folder/folder-api.service.abstraction";
-import { InternalFolderService } from "../../../vault/abstractions/folder/folder.service.abstraction";
 import { SyncService as SyncServiceAbstraction } from "../../../vault/abstractions/sync/sync.service.abstraction";
 import { CipherData } from "../../../vault/models/data/cipher.data";
-import { FolderData } from "../../../vault/models/data/folder.data";
 import { CipherResponse } from "../../../vault/models/response/cipher.response";
-import { FolderResponse } from "../../../vault/models/response/folder.response";
 import { CollectionService } from "../../abstractions/collection.service";
 import { CollectionData } from "../../models/data/collection.data";
 import { CollectionDetailsResponse } from "../../models/response/collection.response";

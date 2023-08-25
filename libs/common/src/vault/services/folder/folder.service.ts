@@ -9,7 +9,7 @@ import { StateService } from "../../../platform/abstractions/state.service";
 import { Utils } from "../../../platform/misc/utils";
 import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
-import { InternalFolderService as InternalFolderServiceAbstraction } from "../../../vault/abstractions/folder/folder.service.abstraction";
+import { FolderService as FolderServiceAbstraction } from "../../../vault/abstractions/folder/folder.service.abstraction";
 import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { Folder } from "../../../vault/models/domain/folder";
@@ -17,7 +17,7 @@ import { FolderView } from "../../../vault/models/view/folder.view";
 import { FolderApiServiceAbstraction } from "../../abstractions/folder/folder-api.service.abstraction";
 import { SyncService } from "../../abstractions/sync/sync.service.abstraction";
 
-export class FolderService implements InternalFolderServiceAbstraction {
+export class FolderService implements FolderServiceAbstraction {
   protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
   protected _folderViews: BehaviorSubject<FolderView[]> = new BehaviorSubject([]);
 
