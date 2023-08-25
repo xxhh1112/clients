@@ -27,6 +27,7 @@ import { EFFLongWordList } from "../misc/wordlist";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
 import {
+  CipherKey,
   MasterKey,
   OrgKey,
   PinKey,
@@ -589,9 +590,9 @@ export class CryptoService implements CryptoServiceAbstraction {
     return new SymmetricCryptoKey(sendKey);
   }
 
-  async makeCipherKey(): Promise<SymmetricCryptoKey> {
+  async makeCipherKey(): Promise<CipherKey> {
     const randomBytes = await this.cryptoFunctionService.randomBytes(64);
-    return new SymmetricCryptoKey(randomBytes);
+    return new SymmetricCryptoKey(randomBytes) as CipherKey;
   }
 
   async clearKeys(userId?: string): Promise<any> {

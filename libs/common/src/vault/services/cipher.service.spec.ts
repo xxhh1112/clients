@@ -1,9 +1,6 @@
 import { Substitute } from "@fluffy-spoon/substitute";
 import { mock, mockReset } from "jest-mock-extended";
 
-// eslint-disable-next-line no-restricted-imports
-import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-
 import { makeStaticByteArray } from "../../../spec/utils";
 import { ApiService } from "../../abstractions/api.service";
 import { SearchService } from "../../abstractions/search.service";
@@ -15,7 +12,12 @@ import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
-import { OrgKey, SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { EncString } from "../../platform/models/domain/enc-string";
+import {
+  CipherKey,
+  OrgKey,
+  SymmetricCryptoKey,
+} from "../../platform/models/domain/symmetric-crypto-key";
 import { ServerConfigResponse } from "../../platform/models/response/server-config.response";
 import { ContainerService } from "../../platform/services/container.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
@@ -250,7 +252,7 @@ describe("Cipher Service", () => {
         Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
       );
       cryptoService.makeCipherKey.mockReturnValue(
-        Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)))
+        Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)) as CipherKey)
       );
       cryptoService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
     });

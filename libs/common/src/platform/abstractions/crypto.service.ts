@@ -6,6 +6,7 @@ import { KeySuffixOptions, KdfType, HashPurpose } from "../../enums";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
 import {
+  CipherKey,
   MasterKey,
   OrgKey,
   PinKey,
@@ -366,6 +367,11 @@ export abstract class CryptoService {
    */
   rsaDecrypt: (encValue: string, privateKeyValue?: Uint8Array) => Promise<Uint8Array>;
   randomNumber: (min: number, max: number) => Promise<number>;
+  /**
+   * Generates a new cipher key
+   * @returns A new cipher key
+   */
+  makeCipherKey: () => Promise<CipherKey>;
 
   /**
    * Initialize all necessary crypto keys needed for a new account.
@@ -421,5 +427,4 @@ export abstract class CryptoService {
    * and then call encryptService.decryptToBytes
    */
   decryptFromBytes: (encBuffer: EncArrayBuffer, key: SymmetricCryptoKey) => Promise<Uint8Array>;
-  makeCipherKey: () => Promise<SymmetricCryptoKey>;
 }
