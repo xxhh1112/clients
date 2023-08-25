@@ -51,7 +51,7 @@ export class FolderAddEditComponent extends BaseFolderAddEditComponent {
     }
 
     try {
-      this.deletePromise = this.folderApiService.delete(this.folder.id);
+      this.deletePromise = this.folderService.delete(this.folder.id);
       await this.deletePromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("deletedFolder"));
       this.onDeletedFolder.emit(this.folder);
@@ -71,7 +71,7 @@ export class FolderAddEditComponent extends BaseFolderAddEditComponent {
 
     try {
       const folder = await this.folderService.encrypt(this.folder);
-      this.formPromise = this.folderApiService.save(folder);
+      this.formPromise = this.folderService.save(folder);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",

@@ -11,6 +11,7 @@ import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { Folder } from "../../../vault/models/domain/folder";
 import { FolderView } from "../../../vault/models/view/folder.view";
+import { FolderApiServiceAbstraction } from "../../abstractions/folder/folder-api.service.abstraction";
 import { SyncService } from "../../abstractions/sync/sync.service.abstraction";
 
 export class FolderService implements InternalFolderServiceAbstraction {
@@ -24,6 +25,7 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cryptoService: CryptoService,
     private i18nService: I18nService,
     private cipherService: CipherService,
+    private apiService: FolderApiServiceAbstraction,
     private stateService: StateService,
     private syncService: SyncService
   ) {
@@ -62,6 +64,16 @@ export class FolderService implements InternalFolderServiceAbstraction {
 
   async clearCache(): Promise<void> {
     this._folderViews.next([]);
+  }
+
+  async save(folder: Folder): Promise<any> {
+    const response = await this.apiService.save(folder);
+    await this.upsert(response);
+  }
+
+  async delete(id: string): Promise<any> {
+    await this.apiService.delete(id);
+    await this.deleteFromState(id);
   }
 
   // TODO: This should be moved to EncryptService or something
@@ -146,7 +158,7 @@ export class FolderService implements InternalFolderServiceAbstraction {
     await this.stateService.setEncryptedFolders(null, { userId: userId });
   }
 
-  async delete(id: string | string[]): Promise<any> {
+  async deleteFromState(id: string | string[]): Promise<any> {
     const folders = await this.stateService.getEncryptedFolders();
     if (folders == null) {
       return;

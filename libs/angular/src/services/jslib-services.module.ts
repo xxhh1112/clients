@@ -303,6 +303,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         CryptoServiceAbstraction,
         I18nServiceAbstraction,
         CipherServiceAbstraction,
+        FolderApiServiceAbstraction,
         StateServiceAbstraction,
         SyncServiceAbstraction,
       ],
@@ -314,7 +315,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: FolderApiServiceAbstraction,
       useClass: FolderApiService,
-      deps: [FolderServiceAbstraction, ApiServiceAbstraction],
+      deps: [ApiServiceAbstraction],
     },
     {
       provide: AccountApiServiceAbstraction,
