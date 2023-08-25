@@ -1,5 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import * as signalRMsgPack from "@microsoft/signalr-protocol-msgpack";
+import { Subject } from "rxjs";
 
 import { ApiService } from "../abstractions/api.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "../abstractions/notifications.service";
@@ -26,6 +27,9 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private inited = false;
   private inactive = false;
   private reconnectTimer: any = null;
+  private _notifications$ = new Subject<NotificationResponse>();
+
+  readonly notifications$ = this._notifications$.asObservable();
 
   constructor(
     private syncService: SyncService,
@@ -146,16 +150,6 @@ export class NotificationsService implements NotificationsServiceAbstraction {
       case NotificationType.SyncLoginDelete:
         await this.syncService.syncDeleteCipher(notification.payload as SyncCipherNotification);
         break;
-      case NotificationType.SyncFolderCreate:
-      // case NotificationType.SyncFolderUpdate:
-      //   await this.syncService.syncUpsertFolder(
-      //     notification.payload as SyncFolderNotification,
-      //     notification.type === NotificationType.SyncFolderUpdate
-      //   );
-      //   break;
-      // case NotificationType.SyncFolderDelete:
-      //   await this.syncService.syncDeleteFolder(notification.payload as SyncFolderNotification);
-      //   break;
       case NotificationType.SyncVault:
       case NotificationType.SyncCiphers:
       case NotificationType.SyncSettings:

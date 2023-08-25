@@ -306,6 +306,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         FolderApiServiceAbstraction,
         StateServiceAbstraction,
         SyncServiceAbstraction,
+        NotificationsServiceAbstraction,
       ],
     },
     {

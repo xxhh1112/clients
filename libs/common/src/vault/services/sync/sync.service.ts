@@ -129,40 +129,6 @@ export class SyncService implements SyncServiceAbstraction {
     }
   }
 
-  // async syncUpsertFolder(notification: SyncFolderNotification, isEdit: boolean): Promise<boolean> {
-  //   this.syncStarted();
-  //   if (await this.stateService.getIsAuthenticated()) {
-  //     try {
-  //       const localFolder = await this.folderService.get(notification.id);
-  //       if (
-  //         (!isEdit && localFolder == null) ||
-  //         (isEdit && localFolder != null && localFolder.revisionDate < notification.revisionDate)
-  //       ) {
-  //         const remoteFolder = await this.folderApiService.get(notification.id);
-  //         if (remoteFolder != null) {
-  //           await this.folderService.upsert(new FolderData(remoteFolder));
-  //           this.messagingService.send("syncedUpsertedFolder", { folderId: notification.id });
-  //           return this.syncCompleted(true);
-  //         }
-  //       }
-  //     } catch (e) {
-  //       this.logService.error(e);
-  //     }
-  //   }
-  //   return this.syncCompleted(false);
-  // }
-
-  // async syncDeleteFolder(notification: SyncFolderNotification): Promise<boolean> {
-  //   this.syncStarted();
-  //   if (await this.stateService.getIsAuthenticated()) {
-  //     await this.folderService.delete(notification.id);
-  //     this.messagingService.send("syncedDeletedFolder", { folderId: notification.id });
-  //     this.syncCompleted(true);
-  //     return true;
-  //   }
-  //   return this.syncCompleted(false);
-  // }
-
   async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
     this.syncStarted();
     if (await this.stateService.getIsAuthenticated()) {
