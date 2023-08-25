@@ -2,7 +2,7 @@ import { AutofillOverlayPort } from "../utils/autofill-overlay.enum";
 
 import OverlayIframeService from "./overlay-iframe.service";
 
-class AutofillOverlayCustomElementIframe extends HTMLElement {
+class AutofillOverlayElementIframe extends HTMLElement {
   constructor(
     iframePath: string,
     portName: string,
@@ -17,7 +17,7 @@ class AutofillOverlayCustomElementIframe extends HTMLElement {
   }
 }
 
-class AutofillOverlayButtonIframe extends AutofillOverlayCustomElementIframe {
+class AutofillOverlayButtonIframe extends AutofillOverlayElementIframe {
   constructor() {
     super(
       "overlay/button.html",
@@ -31,7 +31,7 @@ class AutofillOverlayButtonIframe extends AutofillOverlayCustomElementIframe {
   }
 }
 
-class AutofillOverlayListIframe extends AutofillOverlayCustomElementIframe {
+class AutofillOverlayListIframe extends AutofillOverlayElementIframe {
   constructor() {
     super("overlay/list.html", AutofillOverlayPort.List, {
       height: "0px",

@@ -1,4 +1,4 @@
-const AutofillOverlayCustomElement = {
+const AutofillOverlayElement = {
   Button: "autofill-overlay-button",
   List: "autofill-overlay-list",
   BitwardenButton: "bitwarden-autofill-overlay-button",
@@ -16,4 +16,4 @@ const RedirectFocusDirection = {
   Next: "next",
 } as const;
 
-export { AutofillOverlayCustomElement, AutofillOverlayPort, RedirectFocusDirection };
+export { AutofillOverlayElement, AutofillOverlayPort, RedirectFocusDirection };

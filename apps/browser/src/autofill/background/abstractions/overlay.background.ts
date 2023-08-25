@@ -1,24 +1,19 @@
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
-  bgOpenAutofillOverlayList: () => void;
-  bgCheckOverlayFocused: () => void;
-  bgCheckAuthStatus: () => Promise<AuthenticationStatus>;
-  bgUpdateAutofillOverlayButtonPosition: () => void;
-  bgUpdateAutofillOverlayListPosition: () => void;
-  bgUpdateOverlayHidden: ({ message }: { message: any }) => void;
-  bgUpdateFocusedFieldData: ({ message }: { message: any }) => void;
-  bgAutofillOverlayButtonClosed: () => void;
-  bgAutofillOverlayListClosed: () => void;
-  bgAddNewVaultItem: ({
+  openAutofillOverlay: () => void;
+  autofillOverlayElementClosed: ({ message }: { message: any }) => void;
+  autofillOverlayAddNewVaultItem: ({
     message,
     sender,
   }: {
     message: any;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  bgFocusAutofillOverlayList: () => void;
+  checkAutofillOverlayFocused: () => void;
+  focusAutofillOverlayList: () => void;
+  updateAutofillOverlayPosition: ({ message }: { message: any }) => void;
+  updateAutofillOverlayHidden: ({ message }: { message: any }) => void;
+  updateFocusedFieldData: ({ message }: { message: any }) => void;
   collectPageDetailsResponse: ({
     message,
     sender,

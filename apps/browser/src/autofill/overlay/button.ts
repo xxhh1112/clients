@@ -3,7 +3,7 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { OverlayButtonWindowMessageHandlers } from "./abstractions/button";
-import { AutofillOverlayCustomElement } from "./utils/autofill-overlay.enum";
+import { AutofillOverlayElement } from "./utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
 import { buildSvgDomElement } from "./utils/utils";
 
@@ -135,5 +135,5 @@ class AutofillOverlayButton extends HTMLElement {
 }
 
 (function () {
-  globalThis.customElements.define(AutofillOverlayCustomElement.Button, AutofillOverlayButton);
+  globalThis.customElements.define(AutofillOverlayElement.Button, AutofillOverlayButton);
 })();

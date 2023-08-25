@@ -10,7 +10,7 @@ import {
   AutofillOverlayListIframe,
 } from "../overlay/custom-element-iframes/custom-element-iframes";
 import {
-  AutofillOverlayCustomElement,
+  AutofillOverlayElement,
   RedirectFocusDirection,
 } from "../overlay/utils/autofill-overlay.enum";
 import { sendExtensionMessage, setElementStyles } from "../overlay/utils/utils";
@@ -107,7 +107,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.overlayButtonElement.remove();
     this.isOverlayButtonVisible = false;
-    sendExtensionMessage("bgAutofillOverlayButtonClosed");
+    sendExtensionMessage("autofillOverlayElementClosed", {
+      overlayElement: AutofillOverlayElement.Button,
+    });
     this.removeOverlayRepositionEventListeners();
   }
 
@@ -118,7 +120,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.overlayListElement.remove();
     this.isOverlayListVisible = false;
-    sendExtensionMessage("bgAutofillOverlayListClosed");
+    sendExtensionMessage("autofillOverlayElementClosed", {
+      overlayElement: AutofillOverlayElement.List,
+    });
   }
 
   updateAutofillOverlayListHeight(message: any) {
@@ -140,7 +144,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       hostname: globalThis.document.location.hostname,
     };
 
-    sendExtensionMessage("bgAddNewVaultItem", { login });
+    sendExtensionMessage("autofillOverlayAddNewVaultItem", { login });
   }
 
   redirectOverlayFocusOut(direction: string) {
@@ -173,7 +177,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private handleFormFieldBlurEvent = () => {
     this.isFieldCurrentlyFocused = false;
-    sendExtensionMessage("bgCheckOverlayFocused");
+    sendExtensionMessage("checkAutofillOverlayFocused");
   };
 
   private handleFormFieldKeyupEvent = (event: KeyboardEvent) => {
@@ -194,11 +198,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private focusOverlayList() {
     if (!this.isOverlayListVisible) {
       this.openAutofillOverlay();
-      setTimeout(() => sendExtensionMessage("bgFocusAutofillOverlayList"), 125);
+      setTimeout(() => sendExtensionMessage("focusAutofillOverlayList"), 125);
       return;
     }
 
-    sendExtensionMessage("bgFocusAutofillOverlayList");
+    sendExtensionMessage("focusAutofillOverlayList");
   }
 
   private handleFormFieldInputEvent = (
@@ -275,7 +279,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.authStatus !== AuthenticationStatus.Unlocked ||
       !(formFieldElement as HTMLInputElement).value
     ) {
-      sendExtensionMessage("bgOpenAutofillOverlayList");
+      sendExtensionMessage("openAutofillOverlay");
       return;
     }
 
@@ -341,7 +345,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.isOverlayButtonVisible = true;
       this.setOverlayRepositionEventListeners();
     }
-    sendExtensionMessage("bgUpdateAutofillOverlayButtonPosition");
+    sendExtensionMessage("updateAutofillOverlayPosition", {
+      overlayElement: AutofillOverlayElement.Button,
+    });
   }
 
   private updateOverlayListPosition() {
@@ -358,7 +364,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.isOverlayListVisible = true;
     }
 
-    sendExtensionMessage("bgUpdateAutofillOverlayListPosition");
+    sendExtensionMessage("updateAutofillOverlayPosition", {
+      overlayElement: AutofillOverlayElement.List,
+    });
   }
 
   private appendOverlayElementToBody(element: HTMLElement) {
@@ -368,7 +376,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private toggleOverlayHidden(isHidden: boolean) {
     const displayValue = isHidden ? "none" : "block";
-    sendExtensionMessage("bgUpdateOverlayHidden", { display: displayValue });
+    sendExtensionMessage("updateAutofillOverlayHidden", { display: displayValue });
 
     this.isOverlayButtonVisible = !isHidden;
     this.isOverlayListVisible = !isHidden;
@@ -387,7 +395,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       focusedFieldRects: { width, height, top, left },
     };
 
-    sendExtensionMessage("bgUpdateFocusedFieldData", { focusedFieldData });
+    sendExtensionMessage("updateFocusedFieldData", { focusedFieldData });
   }
 
   private async getMostRecentlyFocusedFieldRects(
@@ -456,11 +464,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     globalThis.customElements?.define(
-      AutofillOverlayCustomElement.BitwardenButton,
+      AutofillOverlayElement.BitwardenButton,
       AutofillOverlayButtonIframe
     );
     this.overlayButtonElement = globalThis.document.createElement(
-      AutofillOverlayCustomElement.BitwardenButton
+      AutofillOverlayElement.BitwardenButton
     );
 
     this.updateCustomElementDefaultStyles(this.overlayButtonElement);
@@ -472,11 +480,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     globalThis.customElements?.define(
-      AutofillOverlayCustomElement.BitwardenList,
+      AutofillOverlayElement.BitwardenList,
       AutofillOverlayListIframe
     );
     this.overlayListElement = globalThis.document.createElement(
-      AutofillOverlayCustomElement.BitwardenList
+      AutofillOverlayElement.BitwardenList
     );
 
     this.updateCustomElementDefaultStyles(this.overlayListElement);

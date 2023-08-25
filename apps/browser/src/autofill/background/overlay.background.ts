@@ -14,7 +14,10 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { AutofillOverlayPort } from "../overlay/utils/autofill-overlay.enum";
+import {
+  AutofillOverlayElement,
+  AutofillOverlayPort,
+} from "../overlay/utils/autofill-overlay.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
 import {
@@ -38,19 +41,16 @@ class OverlayBackground {
   private overlayPageTranslations: Record<string, string>;
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
-    bgOpenAutofillOverlayList: () => this.openAutofillOverlayList(),
-    bgCheckOverlayFocused: () => this.checkOverlayFocused(),
-    bgCheckAuthStatus: async () => await this.getAuthStatus(),
-    bgUpdateAutofillOverlayButtonPosition: () => this.updateAutofillOverlayButtonPosition(),
-    bgUpdateAutofillOverlayListPosition: () => this.updateAutofillOverlayListPosition(),
-    bgUpdateOverlayHidden: ({ message }) => this.updateAutofillOverlayHidden(message),
-    bgUpdateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
-    bgAutofillOverlayButtonClosed: () => this.overlayButtonClosed(),
-    bgAutofillOverlayListClosed: () => this.overlayListClosed(),
-    bgAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
-    bgFocusAutofillOverlayList: () => this.focusOverlayList(),
+    openAutofillOverlay: () => this.openOverlay(),
+    autofillOverlayElementClosed: ({ message }) => this.overlayElementClosed(message),
+    autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
+    checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
+    focusAutofillOverlayList: () => this.focusOverlayList(),
+    updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
+    updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
+    updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
-    unlockCompleted: () => this.openAutofillOverlayList(true),
+    unlockCompleted: () => this.openOverlay(true),
     addEditCipherSubmitted: () => this.updateCurrentTabCiphers(),
     deletedCipher: () => this.updateCurrentTabCiphers(),
   };
@@ -141,19 +141,11 @@ class OverlayBackground {
   }
 
   private checkAutofillOverlayButtonFocused() {
-    if (!this.overlayButtonPort) {
-      return;
-    }
-
-    this.overlayButtonPort.postMessage({ command: "checkAutofillOverlayButtonFocused" });
+    this.overlayButtonPort?.postMessage({ command: "checkAutofillOverlayButtonFocused" });
   }
 
   private checkOverlayListFocused() {
-    if (!this.overlayListPort) {
-      return;
-    }
-
-    this.overlayListPort.postMessage({ command: "checkOverlayListFocused" });
+    this.overlayListPort?.postMessage({ command: "checkOverlayListFocused" });
   }
 
   private closeAutofillOverlay(sender: chrome.runtime.MessageSender) {
@@ -164,50 +156,32 @@ class OverlayBackground {
     chrome.tabs.sendMessage(sender.tab.id, { command: "closeAutofillOverlay" });
   }
 
-  private updateAutofillOverlayButtonPosition() {
-    if (!this.overlayButtonPort) {
+  private overlayElementClosed({ overlayElement }: { overlayElement: string }) {
+    if (overlayElement === AutofillOverlayElement.Button) {
+      this.overlayButtonPort?.disconnect();
+      this.overlayButtonPort = null;
+
       return;
     }
 
-    this.overlayButtonPort.postMessage({
-      command: "updateIframePosition",
-      position: this.getOverlayButtonPosition(),
-    });
+    this.overlayListPort?.disconnect();
+    this.overlayListPort = null;
   }
 
-  private updateAutofillOverlayListPosition() {
-    if (!this.overlayListPort) {
+  private updateOverlayPosition({ overlayElement }: { overlayElement: string }) {
+    if (overlayElement === AutofillOverlayElement.Button) {
+      this.overlayButtonPort?.postMessage({
+        command: "updateIframePosition",
+        position: this.getOverlayButtonPosition(),
+      });
+
       return;
     }
 
-    this.overlayListPort.postMessage({
+    this.overlayListPort?.postMessage({
       command: "updateIframePosition",
       position: this.getOverlayListPosition(),
     });
-  }
-
-  private updateAutofillOverlayHidden(message: any) {
-    if (!message.display) {
-      return;
-    }
-
-    if (this.overlayButtonPort) {
-      this.overlayButtonPort.postMessage({
-        command: "updateOverlayHidden",
-        display: message.display,
-      });
-    }
-
-    if (this.overlayListPort) {
-      this.overlayListPort.postMessage({
-        command: "updateOverlayHidden",
-        display: message.display,
-      });
-    }
-  }
-
-  private updateFocusedFieldData(message: any) {
-    this.focusedFieldData = message.focusedFieldData;
   }
 
   private getOverlayButtonPosition() {
@@ -246,30 +220,35 @@ class OverlayBackground {
     };
   }
 
-  private overlayButtonClosed() {
-    if (!this.overlayButtonPort) {
+  private updateFocusedFieldData(message: any) {
+    this.focusedFieldData = message.focusedFieldData;
+  }
+
+  private updateOverlayHidden(message: any) {
+    if (!message.display) {
       return;
     }
 
-    this.overlayButtonPort.disconnect();
-    this.overlayButtonPort = null;
-  }
-
-  private overlayListClosed() {
-    if (!this.overlayListPort) {
-      return;
+    if (this.overlayButtonPort) {
+      this.overlayButtonPort.postMessage({
+        command: "updateOverlayHidden",
+        display: message.display,
+      });
     }
 
-    this.overlayListPort.disconnect();
-    this.overlayListPort = null;
+    if (this.overlayListPort) {
+      this.overlayListPort.postMessage({
+        command: "updateOverlayHidden",
+        display: message.display,
+      });
+    }
   }
 
-  private async openAutofillOverlayList(focusFieldElement = false) {
-    // TODO: CG - Its possible that this isn't entirely effective, we need to consider and test how iframed forms react to this.
+  private async openOverlay(focusFieldElement = false) {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     const authStatus = await this.getAuthStatus();
     chrome.tabs.sendMessage(currentTab.id, {
-      command: "openAutofillOverlayList",
+      command: "openAutofillOverlay",
       authStatus,
       focusFieldElement,
     });
@@ -388,7 +367,7 @@ class OverlayBackground {
       return;
     }
 
-    this.openAutofillOverlayList();
+    this.openOverlay();
   }
 
   private async unlockVault(sender?: chrome.runtime.MessageSender) {
@@ -400,7 +379,7 @@ class OverlayBackground {
     const retryMessage: LockedVaultPendingNotificationsItem = {
       commandToRetry: {
         msg: {
-          command: "bgOpenAutofillOverlayList",
+          command: "openAutofillOverlay",
         },
         sender: sender,
       },
@@ -457,7 +436,7 @@ class OverlayBackground {
       styleSheetUrl: chrome.runtime.getURL("overlay/button.css"),
       translations: this.getTranslations(),
     });
-    this.updateAutofillOverlayButtonPosition();
+    this.updateOverlayPosition({ overlayElement: AutofillOverlayElement.Button });
     this.overlayButtonPort.onMessage.addListener(this.handleOverlayButtonPortMessage);
   };
 
@@ -487,7 +466,7 @@ class OverlayBackground {
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
       translations: this.getTranslations(),
     });
-    this.updateAutofillOverlayListPosition();
+    this.updateOverlayPosition({ overlayElement: AutofillOverlayElement.List });
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
   };
 
