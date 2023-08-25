@@ -16,7 +16,6 @@ import { CredentialCreateOptionsView } from "../../../core/views/credential-crea
 import { CreatePasskeyFailedIcon } from "./create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "./create-passkey.icon";
 
-
 export enum CreateCredentialDialogResult {
   Success,
 }
