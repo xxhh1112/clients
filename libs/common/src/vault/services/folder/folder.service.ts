@@ -11,6 +11,7 @@ import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { Folder } from "../../../vault/models/domain/folder";
 import { FolderView } from "../../../vault/models/view/folder.view";
+import { SyncService } from "../../abstractions/sync/sync.service.abstraction";
 
 export class FolderService implements InternalFolderServiceAbstraction {
   protected _folders: BehaviorSubject<Folder[]> = new BehaviorSubject([]);
@@ -23,7 +24,8 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cryptoService: CryptoService,
     private i18nService: I18nService,
     private cipherService: CipherService,
-    private stateService: StateService
+    private stateService: StateService,
+    private syncService: SyncService
   ) {
     this.stateService.activeAccountUnlocked$
       .pipe(
@@ -41,6 +43,18 @@ export class FolderService implements InternalFolderServiceAbstraction {
           const data = await this.stateService.getEncryptedFolders();
 
           await this.updateObservables(data);
+        })
+      )
+      .subscribe();
+
+    this.syncService.sync$
+      .pipe(
+        concatMap(async (response) => {
+          const folders: { [id: string]: FolderData } = {};
+          response.folders.forEach((f) => {
+            folders[f.id] = new FolderData(f);
+          });
+          return await this.replace(folders);
         })
       )
       .subscribe();

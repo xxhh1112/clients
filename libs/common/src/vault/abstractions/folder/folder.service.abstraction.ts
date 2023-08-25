@@ -25,7 +25,7 @@ export abstract class FolderService {
 
 export abstract class InternalFolderService extends FolderService {
   upsert: (folder: FolderData | FolderData[]) => Promise<void>;
-  replace: (folders: { [id: string]: FolderData }) => Promise<void>;
+  // replace: (folders: { [id: string]: FolderData }) => Promise<void>;
   clear: (userId: string) => Promise<any>;
   delete: (id: string | string[]) => Promise<any>;
 }

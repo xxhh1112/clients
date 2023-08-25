@@ -304,6 +304,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         I18nServiceAbstraction,
         CipherServiceAbstraction,
         StateServiceAbstraction,
+        SyncServiceAbstraction,
       ],
     },
     {
@@ -416,7 +417,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       deps: [
         ApiServiceAbstraction,
         SettingsServiceAbstraction,
-        FolderServiceAbstraction,
         CipherServiceAbstraction,
         CryptoServiceAbstraction,
         CollectionServiceAbstraction,
@@ -427,7 +427,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         KeyConnectorServiceAbstraction,
         StateServiceAbstraction,
         ProviderServiceAbstraction,
-        FolderApiServiceAbstraction,
         OrganizationServiceAbstraction,
         SendApiServiceAbstraction,
         LOGOUT_CALLBACK,
