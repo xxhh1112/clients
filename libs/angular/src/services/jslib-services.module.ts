@@ -600,8 +600,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         LogService,
         OrganizationServiceAbstraction,
         CryptoFunctionServiceAbstraction,
-        SyncNotifierServiceAbstraction,
-        MessagingServiceAbstraction,
         LOGOUT_CALLBACK,
       ],
     },
