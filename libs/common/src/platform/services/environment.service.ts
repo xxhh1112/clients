@@ -12,7 +12,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   private readonly urlsSubject = new Subject<void>();
   urls: Observable<void> = this.urlsSubject.asObservable();
   selectedRegion?: Region;
-  initialized = true;
+  initialized = false;
 
   protected baseUrl: string;
   protected webVaultUrl: string;
@@ -23,6 +23,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   protected eventsUrl: string;
   private keyConnectorUrl: string;
   private scimUrl: string = null;
+  private cloudWebVaultUrl: string;
 
   readonly usUrls: Urls = {
     base: null,
@@ -32,7 +33,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     webVault: "https://vault.bitwarden.com",
     notifications: "https://notifications.bitwarden.com",
     events: "https://events.bitwarden.com",
-    scim: "https://scim.bitwarden.com/v2",
+    scim: "https://scim.bitwarden.com",
   };
 
   readonly euUrls: Urls = {
@@ -43,7 +44,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     webVault: "https://vault.bitwarden.eu",
     notifications: "https://notifications.bitwarden.eu",
     events: "https://events.bitwarden.eu",
-    scim: "https://scim.bitwarden.eu/v2",
+    scim: "https://scim.bitwarden.eu",
   };
 
   constructor(private stateService: StateService) {
@@ -84,6 +85,26 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       return this.baseUrl;
     }
     return "https://vault.bitwarden.com";
+  }
+
+  getCloudWebVaultUrl() {
+    if (this.cloudWebVaultUrl != null) {
+      return this.cloudWebVaultUrl;
+    }
+
+    return this.usUrls.webVault;
+  }
+
+  setCloudWebVaultUrl(region: Region) {
+    switch (region) {
+      case Region.EU:
+        this.cloudWebVaultUrl = this.euUrls.webVault;
+        break;
+      case Region.US:
+      default:
+        this.cloudWebVaultUrl = this.usUrls.webVault;
+        break;
+    }
   }
 
   getSendUrl() {
@@ -239,6 +260,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     return {
       base: this.baseUrl,
       webVault: this.webVaultUrl,
+      cloudWebVault: this.cloudWebVaultUrl,
       api: this.apiUrl,
       identity: this.identityUrl,
       icons: this.iconsUrl,
@@ -264,19 +286,20 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
   async setRegion(region: Region) {
     this.selectedRegion = region;
     await this.stateService.setRegion(region);
-    switch (region) {
-      case Region.EU:
+
+    if (region === Region.SelfHosted) {
+      // If user saves a self-hosted region with empty fields, default to US
+      if (this.isEmpty()) {
+        await this.setRegion(Region.US);
+      }
+    } else {
+      // If we are setting the region to EU or US, clear the self-hosted URLs
+      await this.stateService.setEnvironmentUrls(new EnvironmentUrls());
+      if (region === Region.EU) {
         this.setUrlsInternal(this.euUrls);
-        break;
-      case Region.US:
+      } else if (region === Region.US) {
         this.setUrlsInternal(this.usUrls);
-        break;
-      case Region.SelfHosted:
-        // if user saves with empty fields, default to US
-        if (this.isEmpty()) {
-          await this.setRegion(Region.US);
-        }
-        break;
+      }
     }
   }
 
@@ -315,16 +338,5 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       "https://api.bitwarden.eu",
       "https://vault.bitwarden.eu/api",
     ].includes(this.getApiUrl());
-  }
-
-  isSelfHosted(): boolean {
-    return ![
-      "http://vault.bitwarden.com",
-      "https://vault.bitwarden.com",
-      "http://vault.bitwarden.eu",
-      "https://vault.bitwarden.eu",
-      "http://vault.qa.bitwarden.pw",
-      "https://vault.qa.bitwarden.pw",
-    ].includes(this.getWebVaultUrl());
   }
 }

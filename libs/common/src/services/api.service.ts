@@ -133,6 +133,7 @@ import { Utils } from "../platform/misc/utils";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
+import { CipherBulkRestoreRequest } from "../vault/models/request/cipher-bulk-restore.request";
 import { CipherBulkShareRequest } from "../vault/models/request/cipher-bulk-share.request";
 import { CipherCollectionsRequest } from "../vault/models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../vault/models/request/cipher-create.request";
@@ -250,8 +251,13 @@ export class ApiService implements ApiServiceAbstraction {
     }
   }
 
+  // TODO: PM-3519: Create and move to AuthRequest Api service
   async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
     const r = await this.send("POST", "/auth-requests/", request, false, true);
+    return new AuthRequestResponse(r);
+  }
+  async postAdminAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
+    const r = await this.send("POST", "/auth-requests/admin-request", request, true, true);
     return new AuthRequestResponse(r);
   }
 
@@ -614,9 +620,16 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async putRestoreManyCiphers(
-    request: CipherBulkDeleteRequest
+    request: CipherBulkRestoreRequest
   ): Promise<ListResponse<CipherResponse>> {
     const r = await this.send("PUT", "/ciphers/restore", request, true, true);
+    return new ListResponse<CipherResponse>(r, CipherResponse);
+  }
+
+  async putRestoreManyCiphersAdmin(
+    request: CipherBulkRestoreRequest
+  ): Promise<ListResponse<CipherResponse>> {
+    const r = await this.send("PUT", "/ciphers/restore-admin", request, true, true);
     return new ListResponse<CipherResponse>(r, CipherResponse);
   }
 
@@ -881,7 +894,7 @@ export class ApiService implements ApiServiceAbstraction {
   // Plan APIs
 
   async getPlans(): Promise<ListResponse<PlanResponse>> {
-    const r = await this.send("GET", "/plans/", null, false, true);
+    const r = await this.send("GET", "/plans/all", null, false, true);
     return new ListResponse(r, PlanResponse);
   }
 
@@ -1572,7 +1585,9 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Key Connector
 
-  async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
+  async getMasterKeyFromKeyConnector(
+    keyConnectorUrl: string
+  ): Promise<KeyConnectorUserKeyResponse> {
     const authHeader = await this.getActiveBearerToken();
 
     const response = await this.fetch(

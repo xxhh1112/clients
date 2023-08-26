@@ -143,9 +143,9 @@ export class SendService implements InternalSendServiceAbstraction {
     }
 
     decSends = [];
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
-      throw new Error("No key.");
+      throw new Error("No user key found.");
     }
 
     const promises: Promise<any>[] = [];
@@ -241,7 +241,7 @@ export class SendService implements InternalSendServiceAbstraction {
     key: SymmetricCryptoKey
   ): Promise<[EncString, EncArrayBuffer]> {
     const encFileName = await this.cryptoService.encrypt(fileName, key);
-    const encFileData = await this.cryptoService.encryptToBytes(data, key);
+    const encFileData = await this.cryptoService.encryptToBytes(new Uint8Array(data), key);
     return [encFileName, encFileData];
   }
 
@@ -249,7 +249,7 @@ export class SendService implements InternalSendServiceAbstraction {
     const sends = Object.values(sendsMap || {}).map((f) => new Send(f));
     this._sends.next(sends);
 
-    if (await this.cryptoService.hasKey()) {
+    if (await this.cryptoService.hasUserKey()) {
       this._sendViews.next(await this.decryptSends(sends));
     }
   }

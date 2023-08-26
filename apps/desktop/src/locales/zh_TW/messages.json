@@ -542,7 +542,7 @@
     "message": "必須再次輸入主密碼。"
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "主密碼需要至少 $VALUE$ 個字元。",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -771,7 +771,7 @@
     "message": "聯絡我們"
   },
   "helpAndFeedback": {
-    "message": "Help and feedback"
+    "message": "幫助和意見回饋"
   },
   "getHelp": {
     "message": "尋求幫助"
@@ -1393,7 +1393,7 @@
     "message": "使用 Windows Hello 解鎖"
   },
   "additionalWindowsHelloSettings": {
-    "message": "Additional Windows Hello settings"
+    "message": "額外的 Windows Hello 設定"
   },
   "windowsHelloConsentMessage": {
     "message": "驗證 Bitwarden。"
@@ -1402,7 +1402,7 @@
     "message": "使用 Touch ID 解鎖"
   },
   "additionalTouchIdSettings": {
-    "message": "Additional Touch ID settings"
+    "message": "額外的 Touch ID 設定"
   },
   "touchIdConsentMessage": {
     "message": "解鎖您的密碼庫"
@@ -1492,6 +1492,9 @@
   "vaultTimeoutActionLogOutDesc": {
     "message": "需要重新驗證才能再次存取密碼庫。"
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "Set up an unlock method to change your vault timeout action."
+  },
   "lock": {
     "message": "鎖定",
     "description": "Verb form: to make secure or inaccesible by"
@@ -1511,12 +1514,6 @@
   },
   "permanentlyDeletedItem": {
     "message": "項目已永久刪除"
-  },
-  "restoreItem": {
-    "message": "還原項目"
-  },
-  "restoreItemConfirmation": {
-    "message": "您確定要恢復此項目嗎？"
   },
   "restoredItem": {
     "message": "項目已還原"
@@ -1540,7 +1537,7 @@
     "message": "要完成 SSO 登入設定，請設定一組主密碼以存取和保護您的密碼庫。"
   },
   "currentMasterPass": {
-    "message": "Current master password"
+    "message": "目前的主密碼"
   },
   "newMasterPass": {
     "message": "新的主密碼"
@@ -2112,11 +2109,11 @@
   "logInWithAnotherDevice": {
     "message": "使用其他裝置登入"
   },
-  "logInInitiated": {
-    "message": "Log in initiated"
+  "loginInitiated": {
+    "message": "Login initiated"
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "已傳送通知至您的裝置。"
   },
   "fingerprintMatchInfo": {
     "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
@@ -2128,17 +2125,17 @@
     "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "viewAllLoginOptions": {
-    "message": "View all login options"
+    "message": "檢視所有登入選項"
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "重新傳送通知"
   },
   "toggleCharacterCount": {
     "message": "切換字元計數",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "areYouTryingtoLogin": {
-    "message": "Are you trying to log in?"
+    "message": "您正在嘗試登入嗎？"
   },
   "logInAttemptBy": {
     "message": "Login attempt by $EMAIL$",
@@ -2150,22 +2147,22 @@
     }
   },
   "deviceType": {
-    "message": "Device Type"
+    "message": "裝置類別"
   },
   "ipAddress": {
-    "message": "IP Address"
+    "message": "IP 位址"
   },
   "time": {
-    "message": "Time"
+    "message": "時間"
   },
   "confirmLogIn": {
-    "message": "Confirm login"
+    "message": "確認登入"
   },
   "denyLogIn": {
-    "message": "Deny login"
+    "message": "拒絕登入"
   },
   "approveLoginRequests": {
-    "message": "Approve login requests"
+    "message": "批准登入要求"
   },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login confirmed for $EMAIL$ on $DEVICE$",
@@ -2214,7 +2211,7 @@
     }
   },
   "logInRequested": {
-    "message": "Log in requested"
+    "message": "已要求登入"
   },
   "exposedMasterPassword": {
     "message": "Exposed Master Password"
@@ -2229,16 +2226,16 @@
     "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
   },
   "checkForBreaches": {
-    "message": "Check known data breaches for this password"
+    "message": "檢查外洩密碼資料庫中是否有此密碼"
   },
   "important": {
-    "message": "Important:"
+    "message": "重要："
   },
   "masterPasswordHint": {
-    "message": "Your master password cannot be recovered if you forget it!"
+    "message": "如果您忘記主密碼，沒有復原的方法！"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "$LENGTH$ 個字元以上",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -2252,21 +2249,171 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "Recommended Settings Update"
   },
+  "deviceApprovalRequired": {
+    "message": "Device approval required. Select an approval option below:"
+  },
+  "rememberThisDevice": {
+    "message": "Remember this device"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Uncheck if using a public device"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approve from your other device"
+  },
+  "requestAdminApproval": {
+    "message": "Request admin approval"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approve with master password"
+  },
   "region": {
     "message": "Region"
+  },
+  "ssoIdentifierRequired": {
+    "message": "Organization SSO identifier is required."
   },
   "eu": {
     "message": "EU",
     "description": "European Union"
   },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
-    "message": "Self-hosted"
+    "message": "自建"
   },
   "accessDenied": {
-    "message": "Access denied. You do not have permission to view this page."
+    "message": "拒絕存取。您沒有檢視此頁面的權限。"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin approval requested"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Your request has been sent to your admin."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "You will be notified once approved."
+  },
+  "troubleLoggingIn": {
+    "message": "Trouble logging in?"
+  },
+  "loginApproved": {
+    "message": "Login approved"
+  },
+  "userEmailMissing": {
+    "message": "User email missing"
+  },
+  "deviceTrusted": {
+    "message": "Device trusted"
+  },
+  "inputRequired": {
+    "message": "Input is required."
+  },
+  "required": {
+    "message": "必填"
+  },
+  "search": {
+    "message": "搜尋"
+  },
+  "inputMinLength": {
+    "message": "必須輸入至少 $COUNT$ 個字元。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "輸入的內容長度不得超過 $COUNT$ 字元。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "一個或多個電子郵件無效。"
+  },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "Input is not an email address."
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- 選擇 --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to filter --"
+  },
+  "multiSelectLoading": {
+    "message": "正在取得選項…"
+  },
+  "multiSelectNotFound": {
+    "message": "找不到任何項目"
+  },
+  "multiSelectClearAll": {
+    "message": "全部清除"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "子選單"
   }
 }

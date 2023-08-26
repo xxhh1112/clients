@@ -6,6 +6,7 @@ import { OrganizationData } from "../../admin-console/models/data/organization.d
 import { PolicyData } from "../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../admin-console/models/data/provider.data";
 import { Policy } from "../../admin-console/models/domain/policy";
+import { AdminAuthRequestStorable } from "../../auth/models/domain/admin-auth-req-storable";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
@@ -43,6 +44,7 @@ import { ServerConfigData } from "../models/data/server-config.data";
 import {
   Account,
   AccountData,
+  AccountDecryptionOptions,
   AccountSettings,
   AccountSettingsSettings,
 } from "../models/domain/account";
@@ -50,7 +52,12 @@ import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
-import { DeviceKey, SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import {
+  DeviceKey,
+  MasterKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../models/domain/symmetric-crypto-key";
 
 const keys = {
   state: "state",
@@ -62,6 +69,9 @@ const keys = {
 };
 
 const partialKeys = {
+  userAutoKey: "_user_auto",
+  userBiometricKey: "_user_biometric",
+
   autoKey: "_masterkey_auto",
   biometricKey: "_masterkey_biometric",
   masterKey: "_masterkey",
@@ -112,7 +122,7 @@ export class StateService<
           // FIXME: This should be refactored into AuthService or a similar service,
           //  as checking for the existence of the crypto key is a low level
           //  implementation detail.
-          this.activeAccountUnlockedSubject.next((await this.getCryptoMasterKey()) != null);
+          this.activeAccountUnlockedSubject.next((await this.getUserKey()) != null);
         })
       )
       .subscribe();
@@ -179,7 +189,7 @@ export class StateService<
   }
 
   async addAccount(account: TAccount) {
-    account = await this.setAccountEnvironmentUrls(account);
+    account = await this.setAccountEnvironment(account);
     await this.updateState(async (state) => {
       state.authenticatedAccounts.push(account.profile.userId);
       await this.storageService.save(keys.authenticatedAccounts, state.authenticatedAccounts);
@@ -515,6 +525,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Do not save the Master Key. Use the User Symmetric Key instead
+   */
   async getCryptoMasterKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -522,6 +535,9 @@ export class StateService<
     return account?.keys?.cryptoMasterKey;
   }
 
+  /**
+   * @deprecated Do not save the Master Key. Use the User Symmetric Key instead
+   */
   async setCryptoMasterKey(value: SymmetricCryptoKey, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -542,6 +558,203 @@ export class StateService<
     }
   }
 
+  /**
+   * user key used to encrypt/decrypt data
+   */
+  async getUserKey(options?: StorageOptions): Promise<UserKey> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    return account?.keys?.userKey as UserKey;
+  }
+
+  /**
+   * user key used to encrypt/decrypt data
+   */
+  async setUserKey(value: UserKey, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.keys.userKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+
+    if (options?.userId == this.activeAccountSubject.getValue()) {
+      const nextValue = value != null;
+
+      // Avoid emitting if we are already unlocked
+      if (this.activeAccountUnlockedSubject.getValue() != nextValue) {
+        this.activeAccountUnlockedSubject.next(nextValue);
+      }
+    }
+  }
+
+  /**
+   * User's master key derived from MP, saved only if we decrypted with MP
+   */
+  async getMasterKey(options?: StorageOptions): Promise<MasterKey> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    return account?.keys?.masterKey;
+  }
+
+  /**
+   * User's master key derived from MP, saved only if we decrypted with MP
+   */
+  async setMasterKey(value: MasterKey, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.keys.masterKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
+  /**
+   * The master key encrypted User symmetric key, saved on every auth
+   * so we can unlock with MP offline
+   */
+  async getMasterKeyEncryptedUserKey(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.keys.masterKeyEncryptedUserKey;
+  }
+
+  /**
+   * The master key encrypted User symmetric key, saved on every auth
+   * so we can unlock with MP offline
+   */
+  async setMasterKeyEncryptedUserKey(value: string, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.keys.masterKeyEncryptedUserKey = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  /**
+   * user key when using the "never" option of vault timeout
+   */
+  async getUserKeyAutoUnlock(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "auto" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return null;
+    }
+    return await this.secureStorageService.get<string>(
+      `${options.userId}${partialKeys.userAutoKey}`,
+      options
+    );
+  }
+
+  /**
+   * user key when using the "never" option of vault timeout
+   */
+  async setUserKeyAutoUnlock(value: string, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "auto" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return;
+    }
+    await this.saveSecureStorageKey(partialKeys.userAutoKey, value, options);
+  }
+
+  /**
+   * User's encrypted symmetric key when using biometrics
+   */
+  async getUserKeyBiometric(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return null;
+    }
+    return await this.secureStorageService.get<string>(
+      `${options.userId}${partialKeys.userBiometricKey}`,
+      options
+    );
+  }
+
+  async hasUserKeyBiometric(options?: StorageOptions): Promise<boolean> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return false;
+    }
+    return await this.secureStorageService.has(
+      `${options.userId}${partialKeys.userBiometricKey}`,
+      options
+    );
+  }
+
+  async setUserKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(
+      this.reconcileOptions(options, { keySuffix: "biometric" }),
+      await this.defaultSecureStorageOptions()
+    );
+    if (options?.userId == null) {
+      return;
+    }
+    await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
+  }
+
+  async getPinKeyEncryptedUserKey(options?: StorageOptions): Promise<EncString> {
+    return EncString.fromJSON(
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.settings?.pinKeyEncryptedUserKey
+    );
+  }
+
+  async setPinKeyEncryptedUserKey(value: EncString, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.pinKeyEncryptedUserKey = value?.encryptedString;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getPinKeyEncryptedUserKeyEphemeral(options?: StorageOptions): Promise<EncString> {
+    return EncString.fromJSON(
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
+        ?.settings?.pinKeyEncryptedUserKeyEphemeral
+    );
+  }
+
+  async setPinKeyEncryptedUserKeyEphemeral(
+    value: EncString,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.settings.pinKeyEncryptedUserKeyEphemeral = value?.encryptedString;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
+  /**
+   * @deprecated Use UserKeyAuto instead
+   */
   async getCryptoMasterKeyAuto(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
@@ -556,6 +769,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserKeyAuto instead
+   */
   async setCryptoMasterKeyAuto(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "auto" }),
@@ -567,6 +783,9 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.autoKey, value, options);
   }
 
+  /**
+   * @deprecated I don't see where this is even used
+   */
   async getCryptoMasterKeyB64(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(options, await this.defaultSecureStorageOptions());
     if (options?.userId == null) {
@@ -578,6 +797,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated I don't see where this is even used
+   */
   async setCryptoMasterKeyB64(value: string, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultSecureStorageOptions());
     if (options?.userId == null) {
@@ -586,6 +808,9 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.masterKey, value, options);
   }
 
+  /**
+   * @deprecated Use UserKeyBiometric instead
+   */
   async getCryptoMasterKeyBiometric(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -600,6 +825,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserKeyBiometric instead
+   */
   async hasCryptoMasterKeyBiometric(options?: StorageOptions): Promise<boolean> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -614,6 +842,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserKeyBiometric instead
+   */
   async setCryptoMasterKeyBiometric(value: BiometricKey, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(
       this.reconcileOptions(options, { keySuffix: "biometric" }),
@@ -661,6 +892,9 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserKey instead
+   */
   async getDecryptedCryptoSymmetricKey(options?: StorageOptions): Promise<SymmetricCryptoKey> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -668,6 +902,9 @@ export class StateService<
     return account?.keys?.cryptoSymmetricKey?.decrypted;
   }
 
+  /**
+   * @deprecated Use UserKey instead
+   */
   async setDecryptedCryptoSymmetricKey(
     value: SymmetricCryptoKey,
     options?: StorageOptions
@@ -728,12 +965,18 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use getPinKeyEncryptedUserKeyEphemeral instead
+   */
   async getDecryptedPinProtected(options?: StorageOptions): Promise<EncString> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.settings?.pinProtected?.decrypted;
   }
 
+  /**
+   * @deprecated Use setPinKeyEncryptedUserKeyEphemeral instead
+   */
   async setDecryptedPinProtected(value: EncString, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
@@ -763,13 +1006,13 @@ export class StateService<
     );
   }
 
-  async getDecryptedPrivateKey(options?: StorageOptions): Promise<ArrayBuffer> {
+  async getDecryptedPrivateKey(options?: StorageOptions): Promise<Uint8Array> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.keys?.privateKey.decrypted;
   }
 
-  async setDecryptedPrivateKey(value: ArrayBuffer, options?: StorageOptions): Promise<void> {
+  async setDecryptedPrivateKey(value: Uint8Array, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
@@ -1069,10 +1312,17 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    return account?.keys?.deviceKey as DeviceKey;
+    const existingDeviceKey = account?.keys?.deviceKey;
+
+    // Must manually instantiate the SymmetricCryptoKey class from the JSON object
+    if (existingDeviceKey != null) {
+      return SymmetricCryptoKey.fromJSON(existingDeviceKey) as DeviceKey;
+    } else {
+      return null;
+    }
   }
 
-  async setDeviceKey(value: DeviceKey, options?: StorageOptions): Promise<void> {
+  async setDeviceKey(value: DeviceKey | null, options?: StorageOptions): Promise<void> {
     options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
 
     if (options?.userId == null) {
@@ -1081,7 +1331,94 @@ export class StateService<
 
     const account = await this.getAccount(options);
 
-    account.keys.deviceKey = value;
+    account.keys.deviceKey = value?.toJSON() ?? null;
+
+    await this.saveAccount(account, options);
+  }
+
+  async getAdminAuthRequest(options?: StorageOptions): Promise<AdminAuthRequestStorable | null> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.adminAuthRequest
+      ? AdminAuthRequestStorable.fromJSON(account.adminAuthRequest)
+      : null;
+  }
+
+  async setAdminAuthRequest(
+    adminAuthRequest: AdminAuthRequestStorable,
+    options?: StorageOptions
+  ): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.adminAuthRequest = adminAuthRequest?.toJSON();
+
+    await this.saveAccount(account, options);
+  }
+
+  async getShouldTrustDevice(options?: StorageOptions): Promise<boolean | null> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.settings?.trustDeviceChoiceForDecryption ?? null;
+  }
+
+  async setShouldTrustDevice(value: boolean, options?: StorageOptions): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.settings.trustDeviceChoiceForDecryption = value;
+
+    await this.saveAccount(account, options);
+  }
+
+  async getAccountDecryptionOptions(
+    options?: StorageOptions
+  ): Promise<AccountDecryptionOptions | null> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return null;
+    }
+
+    const account = await this.getAccount(options);
+
+    return account?.decryptionOptions as AccountDecryptionOptions;
+  }
+
+  async setAccountDecryptionOptions(
+    value: AccountDecryptionOptions,
+    options?: StorageOptions
+  ): Promise<void> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskLocalOptions());
+
+    if (options?.userId == null) {
+      return;
+    }
+
+    const account = await this.getAccount(options);
+
+    account.decryptionOptions = value;
 
     await this.saveAccount(account, options);
   }
@@ -1366,12 +1703,18 @@ export class StateService<
     );
   }
 
+  /**
+   * @deprecated Use UserKey instead
+   */
   async getEncryptedCryptoSymmetricKey(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.keys.cryptoSymmetricKey.encrypted;
   }
 
+  /**
+   * @deprecated Use UserKey instead
+   */
   async setEncryptedCryptoSymmetricKey(value: string, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -1649,6 +1992,24 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
     account.data.eventCollection = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getEverHadUserKey(options?: StorageOptions): Promise<boolean> {
+    return (
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.profile?.everHadUserKey ?? false
+    );
+  }
+
+  async setEverHadUserKey(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.profile.everHadUserKey = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
@@ -2097,14 +2458,14 @@ export class StateService<
     );
   }
 
-  async getPublicKey(options?: StorageOptions): Promise<ArrayBuffer> {
+  async getPublicKey(options?: StorageOptions): Promise<Uint8Array> {
     const keys = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
     )?.keys;
     return keys?.publicKey;
   }
 
-  async setPublicKey(value: ArrayBuffer, options?: StorageOptions): Promise<void> {
+  async setPublicKey(value: Uint8Array, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
@@ -2225,6 +2586,26 @@ export class StateService<
     globals.ssoState = value;
     await this.saveGlobals(
       globals,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
+  async getUserSsoOrganizationIdentifier(options?: StorageOptions): Promise<string> {
+    return (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.loginState?.ssoOrganizationIdentifier;
+  }
+
+  async setUserSsoOrganizationIdentifier(
+    value: string | null,
+    options?: StorageOptions
+  ): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.loginState.ssoOrganizationIdentifier = value;
+    await this.saveAccount(
+      account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
@@ -2606,8 +2987,9 @@ export class StateService<
         await this.defaultOnDiskLocalOptions()
       )
     );
-    // EnvironmentUrls are set before authenticating and should override whatever is stored from any previous session
+    // EnvironmentUrls and region are set before authenticating and should override whatever is stored from any previous session
     const environmentUrls = account.settings.environmentUrls;
+    const region = account.settings.region;
     if (storedAccount?.settings != null) {
       account.settings = storedAccount.settings;
     } else if (await this.storageService.has(keys.tempAccountSettings)) {
@@ -2615,6 +2997,8 @@ export class StateService<
       await this.storageService.remove(keys.tempAccountSettings);
     }
     account.settings.environmentUrls = environmentUrls;
+    account.settings.region = region;
+
     if (
       account.settings.vaultTimeoutAction === VaultTimeoutAction.LogOut &&
       account.settings.vaultTimeout != null
@@ -2642,6 +3026,7 @@ export class StateService<
     );
     if (storedAccount?.settings != null) {
       storedAccount.settings.environmentUrls = account.settings.environmentUrls;
+      storedAccount.settings.region = account.settings.region;
       account.settings = storedAccount.settings;
     }
     await this.storageService.save(
@@ -2664,6 +3049,7 @@ export class StateService<
     );
     if (storedAccount?.settings != null) {
       storedAccount.settings.environmentUrls = account.settings.environmentUrls;
+      storedAccount.settings.region = account.settings.region;
       account.settings = storedAccount.settings;
     }
     await this.storageService.save(
@@ -2778,6 +3164,8 @@ export class StateService<
 
   protected async removeAccountFromSecureStorage(userId: string = null): Promise<void> {
     userId = userId ?? (await this.state())?.activeUserId;
+    await this.setUserKeyAutoUnlock(null, { userId: userId });
+    await this.setUserKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyAuto(null, { userId: userId });
     await this.setCryptoMasterKeyBiometric(null, { userId: userId });
     await this.setCryptoMasterKeyB64(null, { userId: userId });
@@ -2803,16 +3191,19 @@ export class StateService<
     }
   }
 
-  // settings persist even on reset, and are not effected by this method
+  // settings persist even on reset, and are not affected by this method
   protected resetAccount(account: TAccount) {
     const persistentAccountInformation = {
       settings: account.settings,
       keys: { deviceKey: account.keys.deviceKey },
+      adminAuthRequest: account.adminAuthRequest,
     };
     return Object.assign(this.createAccount(), persistentAccountInformation);
   }
 
-  protected async setAccountEnvironmentUrls(account: TAccount): Promise<TAccount> {
+  // The environment urls and region are selected before login and are transferred here to an authenticated account
+  protected async setAccountEnvironment(account: TAccount): Promise<TAccount> {
+    account.settings.region = await this.getGlobalRegion();
     account.settings.environmentUrls = await this.getGlobalEnvironmentUrls();
     return account;
   }
@@ -2820,6 +3211,11 @@ export class StateService<
   protected async getGlobalEnvironmentUrls(options?: StorageOptions): Promise<EnvironmentUrls> {
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
     return (await this.getGlobals(options)).environmentUrls ?? new EnvironmentUrls();
+  }
+
+  protected async getGlobalRegion(options?: StorageOptions): Promise<string> {
+    options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
+    return (await this.getGlobals(options)).region ?? null;
   }
 
   protected async clearDecryptedDataForActiveUser(): Promise<void> {
@@ -2928,7 +3324,7 @@ export class StateService<
     }
   }
 
-  private deleteDiskCache(key: string) {
+  protected deleteDiskCache(key: string) {
     if (this.useAccountCache) {
       delete this.accountDiskCache.value[key];
       this.accountDiskCache.next(this.accountDiskCache.value);
