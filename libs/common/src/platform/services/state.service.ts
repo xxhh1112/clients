@@ -1249,6 +1249,24 @@ export class StateService<
     );
   }
 
+  async getDismissedPhishingCallout(options?: StorageOptions): Promise<boolean> {
+    return (
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
+        ?.settings?.dismissedPhishingCallout ?? false
+    );
+  }
+
+  async setDismissedPhishingCallout(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+    account.settings.dismissedPhishingCallout = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
+    );
+  }
+
   async getDontShowCardsCurrentTab(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))

@@ -2406,5 +2406,12 @@
   "toggleCollapse": {
     "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
+  },
+  "noPhishingHere": {
+    "message": "No Phishing Here",
+    "description": "A pun on no fishing signs. Used as a section title that describes no phishing attempts have been detected."
+  },
+  "phishingCalloutDesc": {
+    "message": "When on Bitwarden, the extension icon will display a green badge to let you know it is safe to log in and you aren't being phished."
   }
 }

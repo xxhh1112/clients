@@ -1,0 +1,11 @@
+<app-callout
+  *ngIf="!isHidden"
+  type="tip"
+  [title]="('noPhishingHere' | i18n) + ' 🐟'"
+  icon="bwi-check"
+>
+  <p>{{ "phishingCalloutDesc" | i18n }}</p>
+  <button type="button" class="btn primary callout-half" appStopClick (click)="dismiss()">
+    {{ "gotIt" | i18n }}
+  </button>
+</app-callout>

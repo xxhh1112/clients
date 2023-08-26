@@ -225,6 +225,7 @@ export class AccountSettings {
   disableContextMenuItem?: boolean;
   disableGa?: boolean;
   dismissedAutoFillOnPageLoadCallout?: boolean;
+  dismissedPhishingCallout?: boolean;
   dontShowCardsCurrentTab?: boolean;
   dontShowIdentitiesCurrentTab?: boolean;
   enableAlwaysOnTop?: boolean;
