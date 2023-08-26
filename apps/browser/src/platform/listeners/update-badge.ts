@@ -108,6 +108,8 @@ export class UpdateBadge {
     const tab = await this.getTab(opts?.tabId, opts?.windowId);
     const badgeOpts: BadgeOptions = { tab, windowId: tab?.windowId };
 
+    let badgeText: string;
+
     switch (authStatus) {
       case AuthenticationStatus.LoggedOut: {
         await this.setLoggedOut();
@@ -118,12 +120,13 @@ export class UpdateBadge {
         break;
       }
       case AuthenticationStatus.Unlocked: {
-        await this.setUnlocked(badgeOpts);
+        // Cipher count
+        badgeText = await this.setUnlocked(badgeOpts);
         break;
       }
     }
 
-    await this.setTrustedSite(badgeOpts);
+    await this.setTrustedBadge(tab, badgeText);
   }
 
   async setLoggedOut(): Promise<void> {
@@ -134,28 +137,6 @@ export class UpdateBadge {
   async setLocked() {
     await this.setBadgeIcon("_locked");
     await this.clearBadgeText();
-  }
-
-  async setTrustedSite({ tab }: BadgeOptions) {
-    await this.initServices();
-
-    const tabHost = new URL(tab?.url).host;
-    const webVaultHost = new URL(this.environmentService.getWebVaultUrl()).host;
-    if (!["bitwarden.com", webVaultHost].includes(tabHost)) {
-      return;
-    }
-
-    try {
-      const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
-      const disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
-      if (ciphers.length !== 0 && !disableBadgeCounter) {
-        return;
-      }
-    } catch {
-      /** Expected CipherService "No key" error if unauthenticated. */
-    }
-
-    await Promise.all([this.setBadgeText("✓", tab?.id), this.setBadgeBackgroundColor("#017E45")]);
   }
 
   private async clearBadgeText() {
@@ -185,6 +166,7 @@ export class UpdateBadge {
       countText = "9+";
     }
     await this.setBadgeText(countText, opts?.tab?.id);
+    return countText;
   }
 
   setBadgeBackgroundColor(color = "#294e5f") {
@@ -214,6 +196,25 @@ export class UpdateBadge {
 
     await this.setActionIcon(options);
     await this.setSidebarActionIcon(options);
+  }
+
+  /**
+   * If the web vault host and tab host match, display a green badge with a checkmark or `badgeText`.
+   */
+  private async setTrustedBadge(tab: chrome.tabs.Tab, badgeText?: string) {
+    await this.initServices();
+
+    const tabHost = new URL(tab.url).host;
+    const webVaultHost = new URL(this.environmentService.getWebVaultUrl()).host;
+
+    if (!["vault.bitwarden.com", "vault.bitwarden.eu", webVaultHost].includes(tabHost)) {
+      return;
+    }
+
+    await Promise.all([
+      this.setBadgeText(badgeText || "✓", tab.id),
+      this.setBadgeBackgroundColor(/** green */ "#017E45"),
+    ]);
   }
 
   private setActionText(text: string, tabId?: number) {
