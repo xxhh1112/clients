@@ -422,7 +422,7 @@
     "message": "单词分隔符"
   },
   "capitalize": {
-    "message": "大写",
+    "message": "首字母大写",
     "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
@@ -690,7 +690,7 @@
     "message": "自定义环境"
   },
   "customEnvironmentFooter": {
-    "message": "适用于高级用户。你可以分别指定各个服务的基础 URL。"
+    "message": "适用于高级用户。您可以分别指定各个服务的基础 URL。"
   },
   "baseUrl": {
     "message": "服务器 URL"
@@ -824,7 +824,7 @@
     "message": "解锁​​​​"
   },
   "loggedInAsOn": {
-    "message": "已使用 $EMAIL$ 在 $HOSTNAME$ 上登录。",
+    "message": "已在 $HOSTNAME$ 上以 $EMAIL$ 身份登录。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1511,12 +1511,6 @@
   },
   "permanentlyDeletedItem": {
     "message": "项目已永久删除"
-  },
-  "restoreItem": {
-    "message": "恢复项目"
-  },
-  "restoreItemConfirmation": {
-    "message": "您确定要恢复此项目吗？"
   },
   "restoredItem": {
     "message": "项目已恢复"
@@ -2252,16 +2246,14 @@
   "windowsBiometricUpdateWarningTitle": {
     "message": "推荐的设置更新"
   },
-  "region": {
-    "message": "区域"
+  "loggingInOn": {
+    "message": "登录到"
   },
-  "eu": {
-    "message": "欧盟",
-    "description": "European Union"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "us": {
-    "message": "美国",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "selfHosted": {
     "message": "自托管"

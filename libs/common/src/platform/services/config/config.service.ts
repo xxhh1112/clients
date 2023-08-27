@@ -36,16 +36,25 @@ export class ConfigService implements ConfigServiceAbstraction {
     try {
       const response = await this.configApiService.get();
 
-      if (response != null) {
-        const data = new ServerConfigData(response);
-        const serverConfig = new ServerConfig(data);
-        this._serverConfig.next(serverConfig);
-        if ((await this.authService.getAuthStatus()) === AuthenticationStatus.LoggedOut) {
-          return serverConfig;
-        }
+      if (response == null) {
+        return;
+      }
+
+      const data = new ServerConfigData(response);
+      const serverConfig = new ServerConfig(data);
+      this._serverConfig.next(serverConfig);
+
+      const userAuthStatus = await this.authService.getAuthStatus();
+      if (userAuthStatus !== AuthenticationStatus.LoggedOut) {
+        // Store the config for offline use if the user is logged in
         await this.stateService.setServerConfig(data);
         this.environmentService.setCloudWebVaultUrl(data.environment?.cloudRegion);
       }
+      // Always return new server config from server to calling method
+      // to ensure up to date information
+      // This change is specifically for the getFeatureFlag > buildServerConfig flow
+      // for locked or logged in users.
+      return serverConfig;
     } catch {
       return null;
     }
@@ -61,6 +70,11 @@ export class ConfigService implements ConfigServiceAbstraction {
 
   async getFeatureFlagNumber(key: FeatureFlag, defaultValue = 0): Promise<number> {
     return await this.getFeatureFlag(key, defaultValue);
+  }
+
+  async getCloudRegion(defaultValue = "US"): Promise<string> {
+    const serverConfig = await this.buildServerConfig();
+    return serverConfig.environment?.cloudRegion ?? defaultValue;
   }
 
   private async getFeatureFlag<T>(key: FeatureFlag, defaultValue: T): Promise<T> {

@@ -2,9 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, Observable, startWith, switchMap } from "rxjs";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 
-import { ServiceAccountView } from "../models/view/service-account.view";
+import {
+  ServiceAccountSecretsDetailsView,
+  ServiceAccountView,
+} from "../models/view/service-account.view";
 import { AccessPolicyService } from "../shared/access-policies/access-policy.service";
 
 import {
@@ -23,14 +26,14 @@ import { ServiceAccountService } from "./service-account.service";
   templateUrl: "./service-accounts.component.html",
 })
 export class ServiceAccountsComponent implements OnInit {
-  protected serviceAccounts$: Observable<ServiceAccountView[]>;
+  protected serviceAccounts$: Observable<ServiceAccountSecretsDetailsView[]>;
   protected search: string;
 
   private organizationId: string;
 
   constructor(
     private route: ActivatedRoute,
-    private dialogService: DialogServiceAbstraction,
+    private dialogService: DialogService,
     private accessPolicyService: AccessPolicyService,
     private serviceAccountService: ServiceAccountService
   ) {}
@@ -78,7 +81,7 @@ export class ServiceAccountsComponent implements OnInit {
     );
   }
 
-  private async getServiceAccounts(): Promise<ServiceAccountView[]> {
-    return await this.serviceAccountService.getServiceAccounts(this.organizationId);
+  private async getServiceAccounts(): Promise<ServiceAccountSecretsDetailsView[]> {
+    return await this.serviceAccountService.getServiceAccounts(this.organizationId, true);
   }
 }

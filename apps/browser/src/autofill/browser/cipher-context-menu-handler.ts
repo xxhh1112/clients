@@ -1,10 +1,10 @@
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -12,6 +12,7 @@ import {
   authServiceFactory,
   AuthServiceInitOptions,
 } from "../../auth/background/service-factories/auth-service.factory";
+import { userVerificationServiceFactory } from "../../auth/background/service-factories/user-verification-service.factory";
 import { Account } from "../../models/account";
 import { CachedServices } from "../../platform/background/service-factories/factory-options";
 import { BrowserApi } from "../../platform/browser/browser-api";
@@ -38,7 +39,8 @@ export class CipherContextMenuHandler {
   constructor(
     private mainContextMenuHandler: MainContextMenuHandler,
     private authService: AuthService,
-    private cipherService: CipherService
+    private cipherService: CipherService,
+    private userVerificationService: UserVerificationService
   ) {}
 
   static async create(cachedServices: CachedServices) {
@@ -77,8 +79,15 @@ export class CipherContextMenuHandler {
     return new CipherContextMenuHandler(
       await MainContextMenuHandler.mv3Create(cachedServices),
       await authServiceFactory(cachedServices, serviceOptions),
-      await cipherServiceFactory(cachedServices, serviceOptions)
+      await cipherServiceFactory(cachedServices, serviceOptions),
+      await userVerificationServiceFactory(cachedServices, serviceOptions)
     );
+  }
+
+  static async windowsOnFocusChangedListener(windowId: number, serviceCache: CachedServices) {
+    const cipherContextMenuHandler = await CipherContextMenuHandler.create(serviceCache);
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    await cipherContextMenuHandler.update(tab?.url);
   }
 
   static async tabsOnActivatedListener(
@@ -174,7 +183,7 @@ export class CipherContextMenuHandler {
     if (
       cipher == null ||
       cipher.type !== CipherType.Login ||
-      cipher.reprompt !== CipherRepromptType.None
+      (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash())
     ) {
       return;
     }

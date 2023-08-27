@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "گاوصندوق وب $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "این چه نوع موردی است؟"
   },
@@ -619,7 +609,7 @@
     "message": "ورود با دستگاه"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "ورود به سیستم با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟"
   },
   "loginWithMasterPassword": {
     "message": "با کلمه عبور اصلی وارد شوید"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "یک خطای غیر منتظره رخ داده است."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "نشانی ایمیل"
   },
   "yourVaultIsLocked": {
     "message": "گاوصندوق شما قفل است. برای ادامه کلمه عبور اصلی خود را وارد کنید."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "باز کردن قفل"
@@ -958,6 +954,9 @@
   "copyVerificationCode": {
     "message": "کپی کد تأیید"
   },
+  "copyUuid": {
+    "message": "Copy UUID"
+  },
   "warning": {
     "message": "هشدار"
   },
@@ -965,13 +964,13 @@
     "message": "برون ریزی گاوصندوق را تأیید کنید"
   },
   "confirmSecretsExport": {
-    "message": "Confirm secrets export"
+    "message": "برون ریزی رازها را تأیید کنید"
   },
   "exportWarningDesc": {
     "message": "این برون ریزی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید."
   },
   "exportSecretsWarningDesc": {
-    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
+    "message": "این برون ریزی شامل داده‌های رازها در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید."
   },
   "encExportKeyWarningDesc": {
     "message": "این برون ریزی با استفاده از کلید رمزگذاری حساب شما، اطلاعاتتان را رمزگذاری می کند. اگر زمانی کلید رمزگذاری حساب خود را بچرخانید، باید دوباره خروجی بگیرید، چون قادر به رمزگشایی این پرونده برون ریزی نخواهید بود."
@@ -986,7 +985,7 @@
     "message": "برون ریزی گاوصندوق"
   },
   "exportSecrets": {
-    "message": "Export secrets"
+    "message": "برون ریزی رازها"
   },
   "fileFormat": {
     "message": "فرمت پرونده"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "خطا در رمزگشایی پرونده‌ی درون ریزی شده. کلید رمزگذاری شما با کلید رمزگذاری استفاده شده برای درون ریزی داده‌ها مطابقت ندارد."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "فرمت پرونده‌ی درون ریزی را انتخاب کنید"
@@ -2645,6 +2669,12 @@
   "webVault": {
     "message": "گاوصندوق وب"
   },
+  "bitWebVault": {
+    "message": "گاوصندوق وب Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "مدیر اسرار Bitwarden"
+  },
   "loggedIn": {
     "message": "وارد شده"
   },
@@ -2667,10 +2697,10 @@
     "message": "تلاش ناموفق برای ورود با ورود دو مرحله ای اشتباه."
   },
   "incorrectPassword": {
-    "message": "Incorrect password"
+    "message": "کلمه عبور اشتباه"
   },
   "incorrectCode": {
-    "message": "Incorrect code"
+    "message": "کد اشتباه"
   },
   "exportedVault": {
     "message": "گاوصندوق برون ریزی شد"
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "برای اشتراک خود محدودیت جایگاه تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید اعضای جدید را دعوت کنید."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "برای اشتراک خود مدیر اسرار محدودیت جایگاه تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید اعضای جدید را دعوت کنید."
+  },
   "maxSeatLimit": {
     "message": "محدودیت جایگاه (اختیاری)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "این مورد دارای پرونده های پیوست قدیمی است که باید اصلاح شوند."
   },
-  "attachmentFixDesc": {
-    "message": "این یک پرونده پیوست قدیمی است که باید اصلاح شود. برای کسب اطلاعات بیشتر کلیک کنید."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "اصلاح",
@@ -3809,29 +3842,11 @@
   "restoreSelected": {
     "message": "بازیابی انتخاب شده"
   },
-  "restoreItem": {
-    "message": "بازیابی مورد"
-  },
   "restoredItem": {
     "message": "مورد بازیابی شد"
   },
   "restoredItems": {
     "message": "موارد بازیابی شد"
-  },
-  "restoreItemConfirmation": {
-    "message": "آیا مطمئن هستید که می‌خواهید این مورد را بازیابی کنید؟"
-  },
-  "restoreItems": {
-    "message": "بازیابی موارد"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "شما $COUNT$ مورد را برای بازیابی انتخاب کرده اید. آیا مطمئنید که می‌خواهید تمام این موارد را بازیابی کنید؟",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "مورد $ID$ بازیابی شد",
@@ -4375,8 +4390,8 @@
   "manageUsers": {
     "message": "مدیریت کاربران"
   },
-  "manageResetPassword": {
-    "message": "مدیریت بازنشانی کلمه عبور"
+  "manageAccountRecovery": {
+    "message": "مدیریت بازیابی حساب"
   },
   "disableRequiredError": {
     "message": "قبل از اینکه این سیاست غیرفعال شود، باید سیاست $POLICYNAME$ را به صورت دستی تغییر دهید.",
@@ -4594,20 +4609,17 @@
   "accountRecoveryPolicy": {
     "message": "مدیریت بازیابی حساب کاربری"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "هنگامی که کلمه عبور اصلی یا دستگاه‌های قابل اعتماد فراموش یا گم می‌شوند، حساب‌های کاربری اعضا را بازیابی کنید. فرآیندهای بازیابی بر اساس روش رمزگذاری حساب کاربری است."
+  "accountRecoveryPolicyDesc": {
+    "message": "بر اساس روش رمزگذاری، زمانی که کلمات عبور اصلی یا دستگاه‌های مورد اعتماد فراموش یا گم می‌شوند، حساب‌ها را بازیابی کنید."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "قبل از اینکه مدیران بتوانند کلمه عبور اصلی خود را بازنشانی کنند، اعضای سازمان باید خودجوش ثبت نام کنند یا به صورت خودکار ثبت نام کنند."
+  "accountRecoveryPolicyWarning": {
+    "message": "حساب‌های موجود با کلمه عبور اصلی، اعضای خود را ملزم می‌کنند تا قبل از اینکه سرپرستان بتوانند حساب‌هایشان را بازیابی کنند، ثبت‌نام کنند. ثبت نام خودکار، بازیابی حساب را برای اعضای جدید فعال می‌کند."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "قبل از فعال کردن این سیاست، سیاست سازمانی واحد باید روشن باشد."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "ثبت نام خودکار"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "پس از پذیرفته شدن دعوت، همه اعضا به‌طور خودکار در بازنشانی رمز عبور ثبت‌نام می‌شوند و اجازه انصراف نخواهند داشت."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "اعضایی که از قبل در سازمان هستند در بازنشانی کلمه عبور ثبت نام نخواهند کرد. قبل از اینکه مدیران بتوانند کلمه عبور اصلی خود را بازنشانی کنند، باید خود ثبت نام کنند."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "لازم است اعضای جدید به طور خودکار ثبت‌نام شوند"
@@ -4708,8 +4720,8 @@
   "error": {
     "message": "خطا"
   },
-  "resetPasswordManageUsers": {
-    "message": "مدیر کاربران همچنین باید مجوز مدیریت بازنشانی کلمه عبور را داشته باشد"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "راه اندازی ارائه دهنده"
@@ -4920,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "حذف برون ریزی گاوصندوق شخصی"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "به اعضا اجازه ندهید که داده‌های گاوصندوق شخصی خود را برون ریزی کنند."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "برون ریزی گاوصندوق غیرفعال شده است"
@@ -5224,7 +5236,7 @@
     "message": "استفاده",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "نیاز به سیاست احراز هویت با یک علامت وجود دارد",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -5424,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "در حال برون ریزی گاوصندوق سازمان"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "فقط موارد شخصی گاوصندوق مرتبط با $EMAIL$ برو ریزی خواهند شد. موارد گاوصندوق سازمان شامل نخواهد شد. فقط اطلاعات مورد گاوصندوق برون ریزی خواهد شد و شامل تاریخچه کلمه عبور مرتبط یا پیوست نمی‌شود.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5433,8 +5445,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "فقط گاوصندوق سازمانی مرتبط با $ORGANIZATION$ برون ریزی خواهد شد. اقلام شخصی گاوصندوق و اقلام سایر سازمان‌ها شامل نمی‌شود.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6620,17 +6632,17 @@
   "changeKdfLoggedOutWarning": {
     "message": "ادامه، شما را از تمام نشست‌های فعال خارج می‌کند. شما باید دوباره وارد شوید و راه اندازی دو مرحله ای ورود را تکمیل کنید. توصیه می‌کنیم قبل از تغییر در تنظیمات رمزگذاری برای جلوگیری از، از دست رفتن داده‌ها، گاوصندوق خود را برون ریزی کنید."
   },
+  "secretsManager": {
+    "message": "مدیر رازها"
+  },
   "secretsManagerBeta": {
     "message": "بتا مدیر اسرار"
   },
-  "secretsManager": {
-    "message": "Secrets Manager"
-  },
   "secretsManagerAccessDescription": {
-    "message": "Activate user access to Secrets Manager."
+    "message": "دسترسی کاربر به مدیر رازها را فعال کنید."
   },
   "userAccessSecretsManagerGA": {
-    "message": "This user can access Secrets Manager"
+    "message": "این کاربر می تواند به مدیر رازها دسترسی داشته باشد"
   },
   "important": {
     "message": "مهم:"
@@ -6806,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "از اعضای موجود بخواهید کلمه‌های عبور خود را تغییر دهند"
   },
-  "region": {
-    "message": "منطقه"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "اروپا",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "امریکا",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "شما مجوز حذف این پروژه را ندارید",
@@ -6828,20 +6835,28 @@
   "updateKdfSettings": {
     "message": "تنظیمات KDF را به‌روز کنید"
   },
-  "trustedDeviceEncryption": {
-    "message": "رمزگذاری دستگاه مورد اعتماد"
+  "trustedDevices": {
+    "message": "Trusted devices"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "پس از احراز هویت، اعضا با استفاده از کلید ذخیره شده در دستگاه خود، داده‌های گاوصندوق را رمزگشایی می‌کنند.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "سیایت مدیریت بازیابی حساب کاربری",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "سازمان واحد",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "با ثبت نام خودکار زمانی که از این گزینه استفاده می‌شود روشن می‌شود.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "سیاست‌ها و",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "مدیریت بازیابی حساب کاربری",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "سیاست‌ها با ثبت نام خودکار زمانی که از این گزینه استفاده می‌شود روشن می‌شود.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ پیدا نشد",
@@ -6859,18 +6874,18 @@
     "message": "کاربر کلمه عبور برون ریزی شده از طریق بازیابی حساب کاربری را به‌روز کرد."
   },
   "activatedAccessToSecretsManager": {
-    "message": "Activated access to Secrets Manager",
+    "message": "دسترسی فعال به مدیر رازها",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
   "activateAccess": {
-    "message": "Activate access"
+    "message": "فعال کردن دسترسی"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "message": "به اعضای زیر اجازه دسترسی به مدیر رازها را بدهید. نقش اعطا شده در مدیر کلمه عبور برای مدیر رازها اعمال می‌شود.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
   "activateSecretsManager": {
-    "message": "Activate Secrets Manager"
+    "message": "فعال کردن مدیر رازها"
   },
   "yourOrganizationsFingerprint": {
     "message": "عبارت اثر انگشت سازمان شما",
@@ -6931,7 +6946,7 @@
     "message": "حذف اعضایی که کلمه عبور اصلی ندارند بدون تعیین کلمه عبور برای آنها ممکن است دسترسی به حساب کامل آن‌ها را محدود کند."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "message": "نسخه آزمایشی رایگان ۷ روزه Bitwarden را با $ORG$ شروع کنید",
     "placeholders": {
       "org": {
         "content": "$1",
@@ -6940,15 +6955,147 @@
     }
   },
   "next": {
-    "message": "Next"
+    "message": "بعدی"
   },
   "usFlag": {
-    "message": "US flag"
+    "message": "پرچم ایالات متحده"
   },
   "euFlag": {
-    "message": "EU flag"
+    "message": "پرچم اتحادیه اروپا"
   },
   "selectedRegionFlag": {
-    "message": "Selected region flag"
+    "message": "پرچم منطقه انتخاب شد"
+  },
+  "sendsNoItemsTitle": {
+    "message": "ارسال‌های فعالی نیست",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "از ارسال برای اشتراک‌گذاری امن اطلاعات رمزگذاری شده با هر کسی استفاده کنید.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "دعوت کاربران"
+  },
+  "secretsManagerForPlan": {
+    "message": "مدیر اسرار برای $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "برای تیم‌های مهندسی و DevOps برای مدیریت اسرار در طول چرخه عمر توسعه نرم افزار."
+  },
+  "free2PersonOrganization": {
+    "message": "سازمان‌های ۲ نفره رایگان"
+  },
+  "unlimitedSecrets": {
+    "message": "اسرار نامحدود"
+  },
+  "unlimitedProjects": {
+    "message": "پروژه‌های نامحدود"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ پروژه گنجانده شده است",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ حساب خدمات گنجانده شده است",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ در ماه برای حساب‌های خدمات اضافی",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "افزودن مدیر رازها"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "مدیر رازها را به برنامه ارتقا یافته خود اضافه کنید تا دسترسی به رازهای ایجاد شده با برنامه قبلی خود را حفظ کنید."
+  },
+  "additionalServiceAccounts": {
+    "message": "حساب‌های خدمات اضافی"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "قیمت طرح مدیریت کلمه عبور"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "قیمت طرح مدیریت رازها"
+  },
+  "passwordManager": {
+    "message": "مدیر کلمه عبور"
+  },
+  "freeOrganization": {
+    "message": "سازمان رایگان"
+  },
+  "limitServiceAccounts": {
+    "message": "محدود کردن حساب‌های خدمات (اختیاری)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "برای حساب‌های خدمات خود محدودیتی تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید حساب‌های سرویس جدید ایجاد کنید."
+  },
+  "serviceAccountLimit": {
+    "message": "محدودیت حساب خدمات (اختیاری)"
+  },
+  "maxServiceAccountCost": {
+    "message": "حداکثر هزینه حساب خدمات بالقوه"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }

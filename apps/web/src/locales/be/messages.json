@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "Вэб-сховішча $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Які гэта элемент запісу?"
   },
@@ -619,7 +609,7 @@
     "message": "Увайсці з прыладай"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "Неабходна наладзіць уваход з прыладай у наладах мабільнай праграмы Bitwarden. Патрабуецца іншы варыянт?"
   },
   "loginWithMasterPassword": {
     "message": "Увайсці з асноўным паролем"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Адбылася нечаканая памылка."
   },
+  "expirationDateError": {
+    "message": "Выберыце дату завяршэння тэрміну дзеяння ў будучым."
+  },
   "emailAddress": {
     "message": "Адрас электроннай пошты"
   },
   "yourVaultIsLocked": {
     "message": "Ваша сховішча заблакіравана. Увядзіце асноўны пароль для працягу."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Разблакіраваць"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Скапіяваць праверачны код"
+  },
+  "copyUuid": {
+    "message": "Скапіяваць UUID"
   },
   "warning": {
     "message": "Папярэджанне"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Памылка дэшыфроўкі экспартаванага файла. Ваш ключ шыфравання не супадае з ключом шыфравання, які выкарыстоўваецца для экспартавання даных."
+  },
+  "importDestination": {
+    "message": "Імпартаванне прызначэння"
+  },
+  "learnAboutImportOptions": {
+    "message": "Даведацца пра параметры імпартавання"
+  },
+  "selectImportFolder": {
+    "message": "Выбраць папку"
+  },
+  "selectImportCollection": {
+    "message": "Выбраць калекцыю"
+  },
+  "importTargetHint": {
+    "message": "Выберыце гэты параметр, калі вы хочаце, каб змесціва імпартаванага файла было перамешчанага ў $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Файл змяшчае непадпісаныя элементы."
   },
   "selectFormat": {
     "message": "Выберыце фармат файла імпартавання"
@@ -2645,6 +2669,12 @@
   "webVault": {
     "message": "Вэб-сховішча"
   },
+  "bitWebVault": {
+    "message": "Вэб-сховішча Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "Менеджар сакрэтаў Bitwarden"
+  },
   "loggedIn": {
     "message": "Вы ўвайшлі."
   },
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Прызначыць абмежаванне месцаў для вашай падпіскі. Пасля дасягнення гэтага абмежавання, вы не зможаце запрашаць новых карыстальнікаў."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Прызначыць абмежаванне месцаў для вашай падпіскі менеджара сакрэтаў. Пасля дасягнення гэтага абмежавання, вы не зможаце запрашаць новых удзельнікаў."
+  },
   "maxSeatLimit": {
     "message": "Максімальная колькасць месцаў (неабавязкова)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Гэты элемент мае старыя далучаныя файлы, якія неабходна выправіць."
   },
-  "attachmentFixDesc": {
-    "message": "Гэта стары далучаны файл, які неабходна выправіць. Націсніце, каб даведацца больш."
+  "attachmentFixDescription": {
+    "message": "Гэта далучэнне выкарыстоўвае састарэлае шыфраванне. Выберыце \"Выправіць\", каб спампаваць, паўторна зашыфраваць і запампаваць гэта далучэнне."
   },
   "fix": {
     "message": "Выправіць",
@@ -3809,29 +3842,11 @@
   "restoreSelected": {
     "message": "Аднавіць выбранае"
   },
-  "restoreItem": {
-    "message": "Аднавіць элемент"
-  },
   "restoredItem": {
     "message": "Элемент адноўлены"
   },
   "restoredItems": {
     "message": "Адноўленыя элементы"
-  },
-  "restoreItemConfirmation": {
-    "message": "Вы сапраўды хочаце аднавіць гэты элемент?"
-  },
-  "restoreItems": {
-    "message": "Аднавіць элементы"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Вы выбралі наступную колькасць элементаў для аднаўлення: $COUNT$. Вы сапраўды хочаце аднавіць іх?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Адноўлены элемент $ID$.",
@@ -4375,8 +4390,8 @@
   "manageUsers": {
     "message": "Кіраванне карыстальнікамі"
   },
-  "manageResetPassword": {
-    "message": "Кіраванне скіданнем пароля"
+  "manageAccountRecovery": {
+    "message": "Кіраванне аднаўленнем уліковага запісу"
   },
   "disableRequiredError": {
     "message": "Перад адключэннем гэтай палітыкі, вам спачатку неабходна ўручную адключыць палітыку $POLICYNAME$.",
@@ -4594,20 +4609,17 @@
   "accountRecoveryPolicy": {
     "message": "Адміністраванне аднаўлення ўліковага запісу"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Аднаўленне ўліковага запісу ўдзельніка, калі асноўны пароль забыты або давераная прылада страчана. Працэс аднаўлення заснаваны на метадзе шыфравання ўліковага запісу."
+  "accountRecoveryPolicyDesc": {
+    "message": "На аснове метаду шыфравання вы можаце аднавіць уліковыя запісы, калі асноўныя паролі або давераныя прылады забыты або страчаны."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Карыстальнікі арганізацыі павінны зарэгістравацца самастойна або быць зарэгістраванымі аўтаматычна, каб адміністратары маглі скінуць іх асноўны пароль."
+  "accountRecoveryPolicyWarning": {
+    "message": "Існуючыя ўліковыя запісы з асноўнымі паролямі будуць патрабаваць ад дзельнікаў самастойнай рэгістрацыі перад тым, як адміністратары змогуць аднавіць іх уліковыя запісы. Аўтаматычная рэгістрацыя ўключыць аднаўленне ўліковых запісаў для новых удзельнікаў."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "Перад актывацыяй гэтай палітыкі неабходна ўключыць палітыку адзінага ўваходу (SSO) прадпрыемства."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Аўтаматычная рэгістрацыя"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Усе карыстальнікі будуць аўтаматычна зарэгістраваны на скіданне пароля, пасля таго як іх запрашэнне будзе прынята і ім не будзе дазволена адмовіцца ад яго выканання."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Карыстальнікі, якія ўжо ўваходзяць у арганізацыю не змогуць зарэгістравацца на скіданне пароля папярэднім чыслом. Яны павінны будуць самастойна зарэгістравацца, перад тым як адміністратары змогуць скінуць іх асноўны пароль."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Аўтаматычна рэгістраваць новых карыстальнікаў"
@@ -4708,8 +4720,8 @@
   "error": {
     "message": "Памылка"
   },
-  "resetPasswordManageUsers": {
-    "message": "Для кіравання карыстальнікамі неабходна даць дазвол на кіраванне скідання пароля"
+  "accountRecoveryManageUsers": {
+    "message": "Для кіравання карыстальнікамі неабходна даць дазвол на кіраванне аднаўленнем уліковым запісам"
   },
   "setupProvider": {
     "message": "Налады пастаўшчыка"
@@ -4920,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Выдаліць экспартаванне асабістага сховішча"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Не дазваляць удзельнікам экспартаваць іх індывідуальнае сховішча."
+  "disablePersonalVaultExportDescription": {
+    "message": "Не дазваляць удзельнікам экспартаваць даныя з іх індывідуальнага сховішча."
   },
   "vaultExportDisabled": {
     "message": "Экспартаванне сховішча адключана"
@@ -5224,7 +5236,7 @@
     "message": "Выкарыстоўваць",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "абавязковую палітыку аўтэнтыфікацыі адзінага ўваходу (SSO)",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -5424,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Экспартаванне сховішча арганізацыі"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Будуць экспартаваны толькі асабістыя элементы сховішча, якія звязаны з $EMAIL$. Элементы сховішча арганізацыі не будуць уключаны.",
+  "exportingIndividualVaultDescription": {
+    "message": "Будуць экспартаваны толькі індывідуальныя элементы сховішча, якія звязаны з $EMAIL$. Элементы сховішча арганізацыі не будуць уключаны. Толькі звесткі элемента сховішча будуць экспартаваны і яны не будуць уключаць звязаныя далучэнні.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5433,8 +5445,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Будуць экспартаваны толькі запісы сховішча арганізацыі, якія звязаны з $ORGANIZATION$. Элементы асабістага сховішча і элементы з іншых арганізацый не будуць уключаны.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Толькі сховішча арганізацыі, якія звязаны з $ORGANIZATION$ будуць экспартаваны. Элементы асабістага сховішча і элементы з іншых арганізацый не будуць уключаны.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6620,11 +6632,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "Калі вы працягніце, то гэта прывядзе да выхаду з усіх актыўных сеансаў. Вам неабходна будзе паўторна выканаць уваход і прайсці двухэтапную праверку. Перад зменай наладаў шыфравання мы рэкамендуем экспартаваць ваша сховішча, каб прадухіліць магчымую страту даных."
   },
-  "secretsManagerBeta": {
-    "message": "Менеджар сакрэтаў (бэта-версія)"
-  },
   "secretsManager": {
     "message": "Менеджар сакрэтаў"
+  },
+  "secretsManagerBeta": {
+    "message": "Менеджар сакрэтаў (бэта-версія)"
   },
   "secretsManagerAccessDescription": {
     "message": "Актываваць доступ карыстальнікаў да менеджара сакрэтаў."
@@ -6806,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Патрабаваць ад існуючых удзельнікаў змены пароляў"
   },
-  "region": {
-    "message": "Рэгіён"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "ЕС",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "ЗША",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас няма правоў для выдалення гэтага праекта",
@@ -6828,20 +6835,28 @@
   "updateKdfSettings": {
     "message": "Абнавіце налады KDF"
   },
-  "trustedDeviceEncryption": {
-    "message": "Шыфраванне даверанай прылады"
+  "trustedDevices": {
+    "message": "Давераныя прылады"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "Пасля аўтэнтыфікацыі ўдзельнікі расшыфроўваюць даныя сховішча з выкарыстаннем ключа, якія захоўваецца на іх прыладах",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartOne": {
+    "message": "Пасля аўтэнтыфікацыі ўдзельнікі расшыфроўваюць даныя сховішча з выкарыстаннем ключа, які захоўваецца на іх прыладах",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Палітыка адміністравання аднаўлення ўліковых запісаў",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "адзіная арганізацыя",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "з аўтаматычнай рэгістрацыяй уключаецца пры выкарыстанні гэтага параметра.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "палітыка і ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "адміністраванне аднаўлення ўліковага запісу",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "палітыка з аўтаматычнай рэгістрацыяй уключаецца пры выкарыстанні гэтага параметра.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ не знойдзены",
@@ -6950,5 +6965,137 @@
   },
   "selectedRegionFlag": {
     "message": "Сцяг выбранага рэгіёна"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Няма актыўных Send'аў",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Выкарыстоўвайце Send'ы, каб бяспечна абагуляць зашыфраваную інфармацыю з іншымі.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Запрасіць карыстальнікаў"
+  },
+  "secretsManagerForPlan": {
+    "message": "Менеджар сакрэтаў для $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Для інжынераў і каманд DevOps, каб кіраваць сакрэтамі на працягу ўсяго цыкла распрацоўкі праграмнага забеспячэння."
+  },
+  "free2PersonOrganization": {
+    "message": "Бясплатна для арганізацый з двума асобамі"
+  },
+  "unlimitedSecrets": {
+    "message": "Неабмежаваная колькасць сакрэтаў"
+  },
+  "unlimitedProjects": {
+    "message": "Неабмежаваная колькасць праектаў"
+  },
+  "projectsIncluded": {
+    "message": "Уключана праектаў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "Уключаных сэрвісных уліковых запісаў: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ у месяц для дадатковых сэрвісных уліковых запісаў",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Дадаць менеджар сакрэтаў"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Дадаць менеджар сакрэтаў у ваш абноўлены тарыфны план, каб падтрымліваць доступ да любых сакрэтаў, якія былі створаны з дапамогай вашых папярэдніх тарыфных планаў."
+  },
+  "additionalServiceAccounts": {
+    "message": "Дадатковыя сэрвісныя ўліковыя запісы"
+  },
+  "includedServiceAccounts": {
+    "message": "Ваш тарыфны план мае наступную колькасць сэрвісных уліковых запісаў: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Вы можаце дадаць дадатковую колькасць сэрвісных уліковых запісаў за $COST$ у месяц.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Кошт тарыфнага плана менеджар пароляў"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Кошт тарыфнага плана менеджар сакрэтаў"
+  },
+  "passwordManager": {
+    "message": "Мэнэджар пароляў"
+  },
+  "freeOrganization": {
+    "message": "Бясплатная арганізацыя"
+  },
+  "limitServiceAccounts": {
+    "message": "Абмежаванне сэрвісных уліковых запісаў (неабавязкова)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Прызначыць абмежаванне для вашых сэрвісных уліковых запісаў. Пасля дасягнення абмежавання, вы не зможаце ствараць новыя сэрвісныя ўліковыя запісы."
+  },
+  "serviceAccountLimit": {
+    "message": "Абмежаванне сэрвісных уліковых запісаў (неабавязкова)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Максімальны патэнцыйны кошт сэрвісных уліковых запісаў"
+  },
+  "smBetaEndedDesc": {
+    "message": "Перыяд бэта-тэсціравання менеджара сакрэтаў завершыцца $BETA_ENDING_DATE$. Дадайце менеджар сакрэтаў у сваю платную падпіску і захавайце доступ да даных (засталося дзён: $DAYS$). Звяжыцеся з нашай службай падтрымкі, каб дадаць менеджар сакрэтаў у сваю платную падпіску.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Завяршэнне бэта-версіі"
+  },
+  "beta": {
+    "message": "Бэта"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }

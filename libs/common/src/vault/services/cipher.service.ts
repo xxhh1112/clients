@@ -13,7 +13,11 @@ import { Utils } from "../../platform/misc/utils";
 import Domain from "../../platform/models/domain/domain-base";
 import { EncArrayBuffer } from "../../platform/models/domain/enc-array-buffer";
 import { EncString } from "../../platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import {
+  OrgKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "../../platform/models/domain/symmetric-crypto-key";
 import { CipherService as CipherServiceAbstraction } from "../abstractions/cipher.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherType } from "../enums/cipher-type";
@@ -325,14 +329,14 @@ export class CipherService implements CipherServiceAbstraction {
       return await this.getDecryptedCipherCache();
     }
 
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
-      throw new Error("No key.");
+      throw new Error("No user key found.");
     }
 
     const ciphers = await this.getAll();
     const orgKeys = await this.cryptoService.getOrgKeys();
-    const userKey = await this.cryptoService.getKeyForUserEncryption();
+    const userKey = await this.cryptoService.getUserKeyWithLegacySupport();
 
     // Group ciphers by orgId or under 'null' for the user's ciphers
     const grouped = ciphers.reduce((agg, c) => {
@@ -519,9 +523,12 @@ export class CipherService implements CipherServiceAbstraction {
     await this.stateService.setNeverDomains(domains);
   }
 
-  async createWithServer(cipher: Cipher): Promise<any> {
+  async createWithServer(cipher: Cipher, orgAdmin?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (cipher.collectionIds != null) {
+    if (orgAdmin) {
+      const request = new CipherCreateRequest(cipher);
+      response = await this.apiService.postCipherAdmin(request);
+    } else if (cipher.collectionIds != null) {
       const request = new CipherCreateRequest(cipher);
       response = await this.apiService.postCipherCreate(request);
     } else {
@@ -534,9 +541,12 @@ export class CipherService implements CipherServiceAbstraction {
     await this.upsert(data);
   }
 
-  async updateWithServer(cipher: Cipher): Promise<any> {
+  async updateWithServer(cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (cipher.edit) {
+    if (orgAdmin && isNotClone) {
+      const request = new CipherRequest(cipher);
+      response = await this.apiService.putCipherAdmin(cipher.id, request);
+    } else if (cipher.edit) {
       const request = new CipherRequest(cipher);
       response = await this.apiService.putCipher(cipher.id, request);
     } else {
@@ -630,14 +640,17 @@ export class CipherService implements CipherServiceAbstraction {
   async saveAttachmentRawWithServer(
     cipher: Cipher,
     filename: string,
-    data: ArrayBuffer,
+    data: Uint8Array,
     admin = false
   ): Promise<Cipher> {
-    const key = await this.cryptoService.getOrgKey(cipher.organizationId);
-    const encFileName = await this.cryptoService.encrypt(filename, key);
+    let encKey: UserKey | OrgKey;
+    encKey = await this.cryptoService.getOrgKey(cipher.organizationId);
+    encKey ||= await this.cryptoService.getUserKeyWithLegacySupport();
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
-    const encData = await this.cryptoService.encryptToBytes(data, dataEncKey[0]);
+    const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
+
+    const encFileName = await this.encryptService.encrypt(filename, encKey);
+    const encData = await this.encryptService.encryptToBytes(data, dataEncKey[0]);
 
     const response = await this.cipherFileUploadService.upload(
       cipher,
@@ -740,10 +753,11 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async deleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    const request = new CipherBulkDeleteRequest(ids);
     if (asAdmin) {
-      await this.apiService.deleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+      await this.apiService.deleteManyCiphersAdmin(request);
     } else {
-      await this.apiService.deleteManyCiphers(new CipherBulkDeleteRequest(ids));
+      await this.apiService.deleteManyCiphers(request);
     }
     await this.delete(ids);
   }
@@ -879,10 +893,11 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async softDeleteManyWithServer(ids: string[], asAdmin = false): Promise<any> {
+    const request = new CipherBulkDeleteRequest(ids);
     if (asAdmin) {
-      await this.apiService.putDeleteManyCiphersAdmin(new CipherBulkDeleteRequest(ids));
+      await this.apiService.putDeleteManyCiphersAdmin(request);
     } else {
-      await this.apiService.putDeleteManyCiphers(new CipherBulkDeleteRequest(ids));
+      await this.apiService.putDeleteManyCiphers(request);
     }
 
     await this.softDelete(ids);
@@ -915,14 +930,30 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async restoreWithServer(id: string, asAdmin = false): Promise<any> {
-    const response = asAdmin
-      ? await this.apiService.putRestoreCipherAdmin(id)
-      : await this.apiService.putRestoreCipher(id);
+    let response;
+    if (asAdmin) {
+      response = await this.apiService.putRestoreCipherAdmin(id);
+    } else {
+      response = await this.apiService.putRestoreCipher(id);
+    }
+
     await this.restore({ id: id, revisionDate: response.revisionDate });
   }
 
-  async restoreManyWithServer(ids: string[]): Promise<any> {
-    const response = await this.apiService.putRestoreManyCiphers(new CipherBulkRestoreRequest(ids));
+  async restoreManyWithServer(
+    ids: string[],
+    organizationId: string = null,
+    asAdmin = false
+  ): Promise<void> {
+    let response;
+    if (asAdmin) {
+      const request = new CipherBulkRestoreRequest(ids, organizationId);
+      response = await this.apiService.putRestoreManyCiphersAdmin(request);
+    } else {
+      const request = new CipherBulkRestoreRequest(ids);
+      response = await this.apiService.putRestoreManyCiphers(request);
+    }
+
     const restores: { id: string; revisionDate: string }[] = [];
     for (const cipher of response.data) {
       restores.push({ id: cipher.id, revisionDate: cipher.revisionDate });
@@ -946,11 +977,15 @@ export class CipherService implements CipherServiceAbstraction {
 
     const encBuf = await EncArrayBuffer.fromResponse(attachmentResponse);
     const decBuf = await this.cryptoService.decryptFromBytes(encBuf, null);
-    const key = await this.cryptoService.getOrgKey(organizationId);
-    const encFileName = await this.cryptoService.encrypt(attachmentView.fileName, key);
 
-    const dataEncKey = await this.cryptoService.makeEncKey(key);
-    const encData = await this.cryptoService.encryptToBytes(decBuf, dataEncKey[0]);
+    let encKey: UserKey | OrgKey;
+    encKey = await this.cryptoService.getOrgKey(organizationId);
+    encKey ||= (await this.cryptoService.getUserKeyWithLegacySupport()) as UserKey;
+
+    const dataEncKey = await this.cryptoService.makeDataEncKey(encKey);
+
+    const encFileName = await this.encryptService.encrypt(attachmentView.fileName, encKey);
+    const encData = await this.encryptService.encryptToBytes(new Uint8Array(decBuf), dataEncKey[0]);
 
     const fd = new FormData();
     try {

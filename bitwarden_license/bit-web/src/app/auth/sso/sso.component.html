@@ -14,7 +14,7 @@
 <form [formGroup]="ssoConfigForm" [bitSubmit]="submit" *ngIf="!loading">
   <p>
     {{ "ssoPolicyHelpStart" | i18n }}
-    <a routerLink="../policies">{{ "ssoPolicyHelpLink" | i18n }}</a>
+    <a routerLink="../policies">{{ "ssoPolicyHelpAnchor" | i18n }}</a>
     {{ "ssoPolicyHelpEnd" | i18n }}
     <br />
   </p>
@@ -78,12 +78,18 @@
         *ngIf="showTdeOptions"
       >
         <bit-label>
-          {{ "trustedDeviceEncryption" | i18n }}
+          {{ "trustedDevices" | i18n }}
         </bit-label>
         <bit-hint>
-          {{ "memberDecryptionTdeDescriptionStart" | i18n }}
-          <a routerLink="../policies">{{ "memberDecryptionTdeDescriptionLink" | i18n }}</a>
-          {{ "memberDecryptionTdeDescriptionEnd" | i18n }}
+          {{ "memberDecryptionOptionTdeDescriptionPartOne" | i18n }}
+          <a routerLink="../policies">{{ "memberDecryptionOptionTdeDescriptionLinkOne" | i18n }}</a>
+          {{ "memberDecryptionOptionTdeDescriptionPartTwo" | i18n }}
+          <a routerLink="../policies">{{ "memberDecryptionOptionTdeDescriptionLinkTwo" | i18n }}</a>
+          {{ "memberDecryptionOptionTdeDescriptionPartThree" | i18n }}
+          <a routerLink="../policies">{{
+            "memberDecryptionOptionTdeDescriptionLinkThree" | i18n
+          }}</a>
+          {{ "memberDecryptionOptionTdeDescriptionPartFour" | i18n }}
         </bit-hint>
       </bit-radio-button>
     </bit-radio-group>

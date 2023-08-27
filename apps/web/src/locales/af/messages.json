@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ Webkluis",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Welke tipe item is dit?"
   },
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "'n Onverwagte fout het voorgekom."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "E-posadres"
   },
   "yourVaultIsLocked": {
     "message": "U kluis is vergrendel. Verifieer u hoofwagwoord om voort te gaan."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Ontgrendel"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Kopieer bevestigingskode"
+  },
+  "copyUuid": {
+    "message": "Copy UUID"
   },
   "warning": {
     "message": "Waarskuwing"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Kies die invoerlêer se formaat"
@@ -2645,6 +2669,12 @@
   "webVault": {
     "message": "Webkluis"
   },
+  "bitWebVault": {
+    "message": "Bitwarden Web vault"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
   "loggedIn": {
     "message": "Aangeteken"
   },
@@ -3323,6 +3353,9 @@
   "limitSubscriptionDesc": {
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Set a seat limit for your Secrets Manger subscription. Once this limit is reached, you will not be able to invite new members."
+  },
   "maxSeatLimit": {
     "message": "Seat Limit (optional)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3591,8 +3624,8 @@
   "attachmentsNeedFix": {
     "message": "Hierdie item het ou lêeraanhegsels wat herstel moet word."
   },
-  "attachmentFixDesc": {
-    "message": "Dit is ’n ou lêeraanhegsel wat herstel moet word. Klik om meer uit te vind."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Herstel",
@@ -3809,29 +3842,11 @@
   "restoreSelected": {
     "message": "Stel gekose terug"
   },
-  "restoreItem": {
-    "message": "Stel item terug"
-  },
   "restoredItem": {
     "message": "Teruggestelde item"
   },
   "restoredItems": {
     "message": "Teruggestelde items"
-  },
-  "restoreItemConfirmation": {
-    "message": "Is u seker u wil hierdie item terugstel?"
-  },
-  "restoreItems": {
-    "message": "Stel items terug"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "U het $COUNT$ item(s) gekies om terug te stel. Is u seker u wil al hierdie items terugstel?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Item $ID$ teruggestel.",
@@ -4375,8 +4390,8 @@
   "manageUsers": {
     "message": "Bestuur gebruikers"
   },
-  "manageResetPassword": {
-    "message": "Bestuur wagwoordherstel"
+  "manageAccountRecovery": {
+    "message": "Manage account recovery"
   },
   "disableRequiredError": {
     "message": "U moet die $POLICYNAME$-beleid handmatig af voordat u die beleid kan afskakel.",
@@ -4594,20 +4609,17 @@
   "accountRecoveryPolicy": {
     "message": "Account recovery administration"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Recover member accounts when master password or trusted devices are forgotten or lost. The recovery processes is based on the account encryption method."
+  "accountRecoveryPolicyDesc": {
+    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Gebruikers in die organisasie sal self moet inskryf of moet outomaties ingeskryf word voor beheerders hul hoofwagwoord sal kan terugstel."
+  "accountRecoveryPolicyWarning": {
+    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single organization Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Outomatiese inskrywing"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Alle gebruikers sal outomaties in wagwoordterugstel ingeskryf word sodra hul uitnodiging aanvaar is; hulle sal nie kan onttrek nie."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Gebruikers wat reeds in die organisasie is sal nie terugwerkend vir wagwoordterugstel ingeskryf word nie. Hulle sal self moet inskryf voor beheerders hul hoofwagwoord kan terugstel."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Vereis dat nuwe gebruikers outomaties ingeskryf word"
@@ -4708,8 +4720,8 @@
   "error": {
     "message": "Fout"
   },
-  "resetPasswordManageUsers": {
-    "message": "Bestuur gebruikers moet geaktiveer wees met die Wagwoordherstel-toestemming"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Aanbiederopstelling"
@@ -4920,8 +4932,8 @@
   "disablePersonalVaultExport": {
     "message": "Deaktiveer uitstuur van persoonlike kluis"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Verbied gebruikers om hul privaatkluisdata uit te stuur."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "Kluisuitstuur gedeaktiveer"
@@ -5224,8 +5236,8 @@
     "message": "Aktiveer die",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "SSO-waarmerkbeleid",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -5424,8 +5436,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Stuur tans organisasiekluis uit"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Slegs die persoonlike kluisitems wat met $EMAIL$ verbind word, word uitgestuur. Organisasiekluisitems word nie ingesluit nie.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5433,8 +5445,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Slegs die organisasiekluisitems wat met $ORGANIZATION$ verbind word, word uitgestuur. Persoonlike kluisitems word nie ingesluit nie.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6620,11 +6632,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "As u voortgaan word u uit alle aktiewe sessies geteken. U sal weer aan moet teken en tweestapwaarmerking moet voltooi. Om dataverlies te voorkom, beveel ons aan dat u u kluis uitstuur alvorens u u enkripsie-instellings verander."
   },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
-  },
   "secretsManager": {
     "message": "Geheimebestuurder"
+  },
+  "secretsManagerBeta": {
+    "message": "Secrets Manager Beta"
   },
   "secretsManagerAccessDescription": {
     "message": "Aktiveer gebruikerstoegang tot Geheimebestuurder."
@@ -6806,16 +6818,11 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
-  "region": {
-    "message": "Streek"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "VS",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "U het nie toestemming om hierdie projek te skrap nie",
@@ -6828,20 +6835,28 @@
   "updateKdfSettings": {
     "message": "Werk KDF-instellings by"
   },
-  "trustedDeviceEncryption": {
-    "message": "Vertroude toestelenkripsie"
+  "trustedDevices": {
+    "message": "Trusted devices"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "single organization",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "policy and ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "account recovery administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nie gevind nie",
@@ -6950,5 +6965,137 @@
   },
   "selectedRegionFlag": {
     "message": "Gekose streekvlag"
+  },
+  "sendsNoItemsTitle": {
+    "message": "No active Sends",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Use Send to securely share encrypted information with anyone.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Invite Users"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager for $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
+  },
+  "free2PersonOrganization": {
+    "message": "Free 2-person Organizations"
+  },
+  "unlimitedSecrets": {
+    "message": "Unlimited secrets"
+  },
+  "unlimitedProjects": {
+    "message": "Unlimited projects"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ projects included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ service accounts included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ per month for additional service accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Add Secrets Manager"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Add Secrets Manager to your upgraded plan to maintain access to any secrets created with your previous plan."
+  },
+  "additionalServiceAccounts": {
+    "message": "Additional service accounts"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Password Manager plan price"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Secrets Manager plan price"
+  },
+  "passwordManager": {
+    "message": "Password Manager"
+  },
+  "freeOrganization": {
+    "message": "Free Organization"
+  },
+  "limitServiceAccounts": {
+    "message": "Limit service accounts (optional)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Set a limit for your service accounts. Once this limit is reached, you will not be able to create new service accounts."
+  },
+  "serviceAccountLimit": {
+    "message": "Service account limit (optional)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Max potential service account cost"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }
