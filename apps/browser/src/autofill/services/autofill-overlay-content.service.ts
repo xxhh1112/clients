@@ -13,7 +13,11 @@ import {
   AutofillOverlayElement,
   RedirectFocusDirection,
 } from "../overlay/utils/autofill-overlay.enum";
-import { sendExtensionMessage, setElementStyles } from "../overlay/utils/utils";
+import {
+  generateRandomCustomElementName,
+  sendExtensionMessage,
+  setElementStyles,
+} from "../overlay/utils/utils";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
@@ -333,7 +337,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private updateOverlayButtonPosition() {
     if (!this.overlayButtonElement) {
-      this.createoverlayButtonElement();
+      this.createAutofillOverlayButton();
     }
 
     if (!this.mostRecentlyFocusedField) {
@@ -458,18 +462,14 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     return !isLoginCipherField;
   }
 
-  private createoverlayButtonElement() {
+  private createAutofillOverlayButton() {
     if (this.overlayButtonElement) {
       return;
     }
 
-    globalThis.customElements?.define(
-      AutofillOverlayElement.BitwardenButton,
-      AutofillOverlayButtonIframe
-    );
-    this.overlayButtonElement = globalThis.document.createElement(
-      AutofillOverlayElement.BitwardenButton
-    );
+    const customElementName = generateRandomCustomElementName();
+    globalThis.customElements?.define(customElementName, AutofillOverlayButtonIframe);
+    this.overlayButtonElement = globalThis.document.createElement(customElementName);
 
     this.updateCustomElementDefaultStyles(this.overlayButtonElement);
   }
@@ -479,13 +479,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    globalThis.customElements?.define(
-      AutofillOverlayElement.BitwardenList,
-      AutofillOverlayListIframe
-    );
-    this.overlayListElement = globalThis.document.createElement(
-      AutofillOverlayElement.BitwardenList
-    );
+    const customElementName = generateRandomCustomElementName();
+    globalThis.customElements?.define(customElementName, AutofillOverlayListIframe);
+    this.overlayListElement = globalThis.document.createElement(customElementName);
 
     this.updateCustomElementDefaultStyles(this.overlayListElement);
   }

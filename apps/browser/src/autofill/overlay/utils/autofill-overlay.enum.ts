@@ -1,8 +1,6 @@
 const AutofillOverlayElement = {
   Button: "autofill-overlay-button",
   List: "autofill-overlay-list",
-  BitwardenButton: "bitwarden-autofill-overlay-button",
-  BitwardenList: "bitwarden-autofill-overlay-list",
 } as const;
 
 const AutofillOverlayPort = {

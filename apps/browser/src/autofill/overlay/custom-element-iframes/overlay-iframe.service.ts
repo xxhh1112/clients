@@ -46,6 +46,16 @@ class OverlayIframeService {
       this.ariaAlertElement.setAttribute("role", "status");
       this.ariaAlertElement.setAttribute("aria-live", "polite");
       this.ariaAlertElement.setAttribute("aria-atomic", "true");
+      this.updateElementStyles(this.ariaAlertElement, {
+        position: "absolute",
+        top: "-9999px",
+        left: "-9999px",
+        width: "1px",
+        height: "1px",
+        overflow: "hidden",
+        opacity: "0",
+        pointerEvents: "none",
+      });
       this.ariaAlertElement.textContent = ariaAlert;
     }
 
