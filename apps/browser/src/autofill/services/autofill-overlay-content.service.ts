@@ -5,10 +5,8 @@ import { tabbable, FocusableElement } from "tabbable";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import AutofillField from "../models/autofill-field";
-import {
-  AutofillOverlayButtonIframe,
-  AutofillOverlayListIframe,
-} from "../overlay/custom-element-iframes/custom-element-iframes";
+import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
+import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
 import {
   AutofillOverlayElement,
   RedirectFocusDirection,

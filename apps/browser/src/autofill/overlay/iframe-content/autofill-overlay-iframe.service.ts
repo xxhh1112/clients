@@ -1,12 +1,10 @@
+import {
+  BackgroundPortMessageHandlers,
+  AutofillOverlayIframeService as AutofillOverlayIframeServiceInterface,
+} from "../abstractions/autofill-overlay-iframe.service";
 import { setElementStyles } from "../utils/utils";
 
-type backgroundPortMessageHandlers = {
-  [key: string]: CallableFunction;
-  updateIframePosition: ({ message }: { message: any }) => void;
-  updateOverlayHidden: ({ message }: { message: any }) => void;
-};
-
-class OverlayIframeService {
+class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterface {
   private port: chrome.runtime.Port | null = null;
   private extensionOriginsSet: Set<string>;
   private iframeMutationObserver: MutationObserver;
@@ -29,7 +27,7 @@ class OverlayIframeService {
     colorScheme: "normal",
     opacity: "0",
   };
-  private readonly backgroundPortMessageHandlers: backgroundPortMessageHandlers = {
+  private readonly backgroundPortMessageHandlers: BackgroundPortMessageHandlers = {
     updateIframePosition: ({ message }) => this.updateIframePosition(message.position),
     updateOverlayHidden: ({ message }) =>
       this.updateElementStyles(this.iframe, { display: message.display }),
@@ -194,4 +192,4 @@ class OverlayIframeService {
   }
 }
 
-export default OverlayIframeService;
+export default AutofillOverlayIframeService;
