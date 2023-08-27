@@ -123,6 +123,8 @@ class AutofillInit implements AutofillInitInterface {
 }
 
 (function () {
-  window.bitwardenAutofillInit = new AutofillInit();
-  window.bitwardenAutofillInit.init();
+  if (!window.bitwardenAutofillInit) {
+    window.bitwardenAutofillInit = new AutofillInit();
+    window.bitwardenAutofillInit.init();
+  }
 })();

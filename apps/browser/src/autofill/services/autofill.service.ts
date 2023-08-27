@@ -41,6 +41,33 @@ export default class AutofillService implements AutofillServiceInterface {
   ) {}
 
   /**
+   * Injects the autofill scripts into the current tab and all frames
+   * found within the tab. Temporarily, will conditionally inject
+   * the refactor of the core autofill script if the feature flag
+   * is enabled.
+   * @param {chrome.runtime.MessageSender} sender
+   * @param {boolean} autofillV2
+   * @returns {Promise<void>}
+   */
+  async injectAutofillScripts(sender: chrome.runtime.MessageSender, autofillV2 = false) {
+    const mainAutofillScript = autofillV2 ? `autofill-init.js` : "autofill.js";
+    const injectedScripts = [
+      mainAutofillScript,
+      "autofiller.js",
+      "notificationBar.js",
+      "contextMenuHandler.js",
+    ];
+
+    for (const injectedScript of injectedScripts) {
+      await BrowserApi.executeScriptInTab(sender.tab.id, {
+        file: `content/${injectedScript}`,
+        allFrames: true,
+        runAt: "document_start",
+      });
+    }
+  }
+
+  /**
    * Gets all forms with password fields and formats the data
    * for both forms and password input elements.
    * @param {AutofillPageDetails} pageDetails
