@@ -1,5 +1,11 @@
 import { setElementStyles } from "../utils/utils";
 
+type backgroundPortMessageHandlers = {
+  [key: string]: CallableFunction;
+  updateIframePosition: ({ message }: { message: any }) => void;
+  updateOverlayHidden: ({ message }: { message: any }) => void;
+};
+
 class OverlayIframeService {
   private port: chrome.runtime.Port | null = null;
   private extensionOriginsSet: Set<string>;
@@ -23,6 +29,11 @@ class OverlayIframeService {
     colorScheme: "normal",
     opacity: "0",
   };
+  private readonly backgroundPortMessageHandlers: backgroundPortMessageHandlers = {
+    updateIframePosition: ({ message }) => this.updateIframePosition(message.position),
+    updateOverlayHidden: ({ message }) =>
+      this.updateElementStyles(this.iframe, { display: message.display }),
+  };
 
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
     this.iframe = globalThis.document.createElement("iframe");
@@ -42,24 +53,28 @@ class OverlayIframeService {
     this.iframe.addEventListener("load", this.setupPortMessageListener);
 
     if (ariaAlert) {
-      this.ariaAlertElement = globalThis.document.createElement("div");
-      this.ariaAlertElement.setAttribute("role", "status");
-      this.ariaAlertElement.setAttribute("aria-live", "polite");
-      this.ariaAlertElement.setAttribute("aria-atomic", "true");
-      this.updateElementStyles(this.ariaAlertElement, {
-        position: "absolute",
-        top: "-9999px",
-        left: "-9999px",
-        width: "1px",
-        height: "1px",
-        overflow: "hidden",
-        opacity: "0",
-        pointerEvents: "none",
-      });
-      this.ariaAlertElement.textContent = ariaAlert;
+      this.createAriaAlertElement(ariaAlert);
     }
 
     this.shadow.appendChild(this.iframe);
+  }
+
+  private createAriaAlertElement(ariaAlertText: string) {
+    this.ariaAlertElement = globalThis.document.createElement("div");
+    this.ariaAlertElement.setAttribute("role", "status");
+    this.ariaAlertElement.setAttribute("aria-live", "polite");
+    this.ariaAlertElement.setAttribute("aria-atomic", "true");
+    this.updateElementStyles(this.ariaAlertElement, {
+      position: "absolute",
+      top: "-9999px",
+      left: "-9999px",
+      width: "1px",
+      height: "1px",
+      overflow: "hidden",
+      opacity: "0",
+      pointerEvents: "none",
+    });
+    this.ariaAlertElement.textContent = ariaAlertText;
   }
 
   private setupPortMessageListener = () => {
@@ -102,13 +117,8 @@ class OverlayIframeService {
       return;
     }
 
-    if (message.command === "updateIframePosition") {
-      this.updateIframePosition(message.position);
-      return;
-    }
-
-    if (message.command === "updateOverlayHidden") {
-      this.updateElementStyles(this.iframe, { display: message.display });
+    if (this.backgroundPortMessageHandlers[message.command]) {
+      this.backgroundPortMessageHandlers[message.command]({ message, port });
       return;
     }
 
