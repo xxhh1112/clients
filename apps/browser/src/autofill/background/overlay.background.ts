@@ -138,7 +138,10 @@ class OverlayBackground {
         reprompt: cipher.reprompt,
         favorite: cipher.favorite,
         icon: cipherIconData,
-        login: cipher.type === CipherType.Login ? { username: cipher.login.username } : null,
+        login:
+          cipher.type === CipherType.Login
+            ? { username: this.getObscureName(cipher.login.username) }
+            : null,
         card:
           cipher.type === CipherType.Card
             ? { brand: cipher.card.brand, partialNumber: `*${cipher.card.number?.slice(-4)}` }
