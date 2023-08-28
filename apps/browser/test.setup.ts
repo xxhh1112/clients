@@ -30,8 +30,13 @@ const contextMenus = {
   removeAll: jest.fn(),
 };
 
+const i18n = {
+  getMessage: jest.fn(),
+};
+
 // set chrome
 global.chrome = {
+  i18n,
   storage,
   runtime,
   contextMenus,
