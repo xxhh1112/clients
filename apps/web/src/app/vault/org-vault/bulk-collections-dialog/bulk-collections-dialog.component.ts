@@ -7,18 +7,23 @@ import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
 import { GroupService, GroupView } from "../../../admin-console/organizations/core";
 import {
+  AccessItemType,
   AccessItemValue,
   AccessItemView,
   AccessSelectorModule,
+  convertToSelectionView,
   mapGroupToAccessItemView,
   mapUserToAccessItemView,
   PermissionMode,
 } from "../../../admin-console/organizations/shared/components/access-selector";
 import { SharedModule } from "../../../shared";
+import { CollectionAdminService } from "../../core/collection-admin.service";
 
 export interface BulkCollectionsDialogParams {
   organizationId: string;
@@ -55,7 +60,10 @@ export class BulkCollectionsDialogComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     private organizationService: OrganizationService,
     private groupService: GroupService,
-    private organizationUserService: OrganizationUserService
+    private organizationUserService: OrganizationUserService,
+    private platformUtilsService: PlatformUtilsService,
+    private i18nService: I18nService,
+    private collectionAdminService: CollectionAdminService
   ) {
     this.numCollections = this.params.collections.length;
     const organization$ = this.organizationService.get$(this.params.organizationId);
@@ -91,7 +99,24 @@ export class BulkCollectionsDialogComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  submit = () => {
+  submit = async () => {
+    const users = this.formGroup.controls.access.value
+      .filter((v) => v.type === AccessItemType.Member)
+      .map(convertToSelectionView);
+
+    const groups = this.formGroup.controls.access.value
+      .filter((v) => v.type === AccessItemType.Group)
+      .map(convertToSelectionView);
+
+    await this.collectionAdminService.bulkAssignAccess(
+      this.organization.id,
+      this.params.collections.map((c) => c.id),
+      users,
+      groups
+    );
+
+    this.platformUtilsService.showToast("success", null, this.i18nService.t("editedCollections"));
+
     this.dialogRef.close(BulkCollectionsDialogResult.Saved);
   };
 

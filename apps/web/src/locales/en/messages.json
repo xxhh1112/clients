@@ -7130,5 +7130,8 @@
   },
   "assignCollectionAccess": {
     "message": "Assign collection access"
+  },
+  "editedCollections": {
+    "message": "Edited collections"
   }
 }

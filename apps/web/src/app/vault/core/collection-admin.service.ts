@@ -10,6 +10,8 @@ import {
   CollectionResponse,
 } from "@bitwarden/common/vault/models/response/collection.response";
 
+import { CollectionAccessSelectionView } from "../../admin-console/organizations/core";
+
 import { CollectionAdminView } from "./views/collection-admin.view";
 
 @Injectable()
@@ -66,6 +68,27 @@ export class CollectionAdminService {
 
   async delete(organizationId: string, collectionId: string): Promise<void> {
     await this.apiService.deleteCollection(organizationId, collectionId);
+  }
+
+  async bulkAssignAccess(
+    organizationId: string,
+    collectionIds: string[],
+    users: CollectionAccessSelectionView[],
+    groups: CollectionAccessSelectionView[]
+  ): Promise<void> {
+    const request = {
+      collectionIds,
+      users,
+      groups,
+    };
+
+    await this.apiService.send(
+      "POST",
+      `organizations/${organizationId}/collections/bulk-access`,
+      request,
+      true,
+      false
+    );
   }
 
   private async decryptMany(
