@@ -2,17 +2,17 @@ import { DialogRef } from "@angular/cdk/dialog";
 import { Component } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 
+import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-
-import { AsyncActionsModule } from "../../../components/src/async-actions";
-import { ButtonModule } from "../../../components/src/button";
-import { DialogModule } from "../../../components/src/dialog";
-import { FormFieldModule } from "../../../components/src/form-field";
-import { IconButtonModule } from "../../../components/src/icon-button";
-
-import { JslibModule } from "./../../../angular/src/jslib.module";
+import {
+  AsyncActionsModule,
+  ButtonModule,
+  DialogModule,
+  FormFieldModule,
+  IconButtonModule,
+} from "@bitwarden/components";
 
 /**
  * Used to verify the user's Master Password for the "Master Password Re-prompt" feature only.
