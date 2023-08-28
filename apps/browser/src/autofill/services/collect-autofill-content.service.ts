@@ -8,14 +8,22 @@ import {
   FormElementWithAttribute,
 } from "../types";
 
-import { CollectAutofillContentService as CollectAutofillContentServiceInterface } from "./abstractions/collect-autofill-content.service";
+import {
+  AutofillFieldElements,
+  AutofillFormElements,
+  CollectAutofillContentService as CollectAutofillContentServiceInterface,
+} from "./abstractions/collect-autofill-content.service";
 import DomElementVisibilityService from "./dom-element-visibility.service";
 
 class CollectAutofillContentService implements CollectAutofillContentServiceInterface {
   private readonly domElementVisibilityService: DomElementVisibilityService;
+  private autofillFormElements: AutofillFormElements = new Map();
+  private autofillFieldElements: AutofillFieldElements = new Map();
 
   constructor(domElementVisibilityService: DomElementVisibilityService) {
     this.domElementVisibilityService = domElementVisibilityService;
+
+    // Setup Mutation Observer
   }
 
   /**
@@ -31,6 +39,8 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData(
       formFieldElements as FormFieldElement[]
     );
+
+    // Observe Main Body
 
     return {
       title: document.title,
@@ -76,20 +86,34 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private buildAutofillFormsData(formElements: Node[]): Record<string, AutofillForm> {
-    const autofillForms: Record<string, AutofillForm> = {};
-    formElements.forEach((formElement: HTMLFormElement, index: number) => {
-      formElement.opid = `__form__${index}`;
+    if (this.autofillFormElements.size) {
+      return this.getFormattedAutofillFormsData();
+    }
 
-      autofillForms[formElement.opid] = {
-        opid: formElement.opid,
-        htmlAction: new URL(
-          this.getPropertyOrAttribute(formElement, "action"),
-          window.location.href
-        ).href,
-        htmlName: this.getPropertyOrAttribute(formElement, "name"),
-        htmlID: this.getPropertyOrAttribute(formElement, "id"),
-        htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
-      };
+    formElements.forEach(this.addToAutofillFormElementsSet);
+    return this.getFormattedAutofillFormsData();
+  }
+
+  addToAutofillFormElementsSet = (formElement: HTMLFormElement, index: number) => {
+    formElement.opid = `__form__${index}`;
+    this.updateFormElementData(formElement);
+  };
+
+  private updateFormElementData = (formElement: HTMLFormElement) => {
+    this.autofillFormElements.set(formElement as ElementWithOpId<HTMLFormElement>, {
+      opid: formElement.opid,
+      htmlAction: new URL(this.getPropertyOrAttribute(formElement, "action"), window.location.href)
+        .href,
+      htmlName: this.getPropertyOrAttribute(formElement, "name"),
+      htmlID: this.getPropertyOrAttribute(formElement, "id"),
+      htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
+    });
+  };
+
+  private getFormattedAutofillFormsData(): Record<string, AutofillForm> {
+    const autofillForms: Record<string, AutofillForm> = {};
+    this.autofillFormElements.forEach((autofillForm, formElement) => {
+      autofillForms[formElement.opid] = autofillForm;
     });
 
     return autofillForms;
