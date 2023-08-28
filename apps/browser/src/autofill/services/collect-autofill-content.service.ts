@@ -74,7 +74,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @returns {FormFieldElement | null}
    */
   getAutofillFieldElementByOpid(opid: string): FormFieldElement | null {
-    const formFieldElements = this.getAutofillFieldElements();
+    const cachedFormFieldElements = [...this.autofillFieldElements.keys()];
+    const formFieldElements = cachedFormFieldElements?.length
+      ? cachedFormFieldElements
+      : this.getAutofillFieldElements();
     const fieldElementsWithOpid = formFieldElements.filter(
       (fieldElement) => (fieldElement as ElementWithOpId<FormFieldElement>).opid === opid
     ) as ElementWithOpId<FormFieldElement>[];
