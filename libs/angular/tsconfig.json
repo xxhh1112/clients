@@ -1,5 +1,5 @@
 {
   "extends": "../shared/tsconfig.libs",
-  "include": ["src", "spec", "../vault/src/services/password-reprompt.service.spec.ts"],
+  "include": ["src", "spec"],
   "exclude": ["node_modules", "dist"]
 }
