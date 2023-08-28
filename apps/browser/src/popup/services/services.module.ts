@@ -83,7 +83,7 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { DialogService } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
-import { PasswordRepromptService } from "@bitwarden/vault/src/services/password-reprompt.service";
+import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { BrowserOrganizationService } from "../../admin-console/services/browser-organization.service";
 import { BrowserPolicyService } from "../../admin-console/services/browser-policy.service";

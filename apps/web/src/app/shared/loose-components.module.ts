@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { PasswordRepromptComponent } from "@bitwarden/vault/src/components/password-reprompt.component";
+import { PasswordRepromptComponent } from "@bitwarden/vault";
 
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";

@@ -23,7 +23,7 @@ import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
-import { PasswordRepromptService } from "@bitwarden/vault/src/services/password-reprompt.service";
+import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { PolicyListService } from "../admin-console/core/policy-list.service";
 import { HtmlStorageService } from "../core/html-storage.service";
