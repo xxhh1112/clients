@@ -22,8 +22,6 @@ import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/p
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
-import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { PolicyListService } from "../admin-console/core/policy-list.service";
 import { HtmlStorageService } from "../core/html-storage.service";
@@ -93,10 +91,6 @@ import { WebPlatformUtilsService } from "./web-platform-utils.service";
     {
       provide: BaseStateServiceAbstraction,
       useExisting: StateService,
-    },
-    {
-      provide: PasswordRepromptServiceAbstraction,
-      useClass: PasswordRepromptService,
     },
     {
       provide: FileDownloadService,

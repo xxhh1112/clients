@@ -138,7 +138,6 @@ import {
   FolderService as FolderServiceAbstraction,
   InternalFolderService,
 } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncNotifierService as SyncNotifierServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync-notifier.service.abstraction";
 import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
@@ -182,6 +181,8 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     AuthGuard,
     UnauthGuard,
     ModalService,
+    PasswordRepromptService,
+
     { provide: WINDOW, useValue: window },
     {
       provide: LOCALE_ID,
@@ -585,7 +586,6 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         UserVerificationApiServiceAbstraction,
       ],
     },
-    { provide: PasswordRepromptServiceAbstraction, useClass: PasswordRepromptService },
     {
       provide: OrganizationServiceAbstraction,
       useClass: OrganizationService,

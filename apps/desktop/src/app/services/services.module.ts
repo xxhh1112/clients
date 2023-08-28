@@ -38,9 +38,7 @@ import { MemoryStorageService } from "@bitwarden/common/platform/services/memory
 import { SystemService } from "@bitwarden/common/platform/services/system.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { DialogService } from "@bitwarden/components";
-import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { LoginGuard } from "../../auth/guards/login.guard";
 import { Account } from "../../models/account";
@@ -125,7 +123,6 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         StateServiceAbstraction,
       ],
     },
-    { provide: PasswordRepromptServiceAbstraction, useClass: PasswordRepromptService },
     {
       provide: StateServiceAbstraction,
       useClass: ElectronStateService,

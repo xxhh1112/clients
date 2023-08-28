@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { DialogService } from "@bitwarden/components";
 
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
@@ -12,7 +11,7 @@ import { PasswordRepromptComponent } from "../components/password-reprompt.compo
  * See UserVerificationService for any other situation where you need to verify the user's identity.
  */
 @Injectable()
-export class PasswordRepromptService implements PasswordRepromptServiceAbstraction {
+export class PasswordRepromptService {
   constructor(
     private dialogService: DialogService,
     private userVerificationService: UserVerificationService
