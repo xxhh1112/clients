@@ -20,6 +20,19 @@ const hoverStyles: Record<BadgeTypes, string[]> = {
   info: ["hover:tw-bg-info-700"],
 };
 
+const textAlignment = {
+  baseline: "tw-align-baseline",
+  sub: "tw-align-sub",
+  super: "tw-align-super",
+  textTop: "tw-align-text-top",
+  textBottom: "tw-align-text-bottom",
+  middle: "tw-align-middle",
+  top: "tw-align-top",
+  bottom: "tw-align-bottom",
+};
+
+type TextAlignment = keyof typeof textAlignment;
+
 @Directive({
   selector: "span[bitBadge], a[bitBadge], button[bitBadge]",
 })
@@ -31,6 +44,7 @@ export class BadgeDirective {
       "tw-px-1.5",
       "tw-font-bold",
       "tw-text-center",
+      textAlignment[this.align],
       "!tw-text-contrast",
       "tw-rounded",
       "tw-border-none",
@@ -45,8 +59,7 @@ export class BadgeDirective {
     ]
       .concat(styles[this.badgeType])
       .concat(this.hasHoverEffects ? hoverStyles[this.badgeType] : [])
-      .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : [])
-      .concat([`tw-align-${this.align}`]);
+      .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : []);
   }
   @HostBinding("attr.title") get title() {
     return this.truncate ? this.el.nativeElement.textContent.trim() : null;
@@ -54,7 +67,7 @@ export class BadgeDirective {
 
   @Input() badgeType: BadgeTypes = "primary";
   @Input() truncate = true;
-  @Input() align = "text-top";
+  @Input() align: TextAlignment = "textTop";
 
   private hasHoverEffects = false;
 
