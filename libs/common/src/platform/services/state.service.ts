@@ -2629,19 +2629,32 @@ export class StateService<
 
   async getTwoFactorToken(options?: StorageOptions): Promise<string> {
     return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.twoFactorToken;
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.tokens?.twoFactorToken;
+
+    // return (
+    //   await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    // )?.twoFactorToken;
   }
 
   async setTwoFactorToken(value: string, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
+    const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
-    globals.twoFactorToken = value;
-    await this.saveGlobals(
-      globals,
+    account.tokens.twoFactorToken = value;
+    await this.saveAccount(
+      account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
+
+    // const globals = await this.getGlobals(
+    //   this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    // );
+    // globals.twoFactorToken = value;
+    // await this.saveGlobals(
+    //   globals,
+    //   this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    // );
   }
 
   async getUserId(options?: StorageOptions): Promise<string> {
@@ -3197,6 +3210,7 @@ export class StateService<
       settings: account.settings,
       keys: { deviceKey: account.keys.deviceKey },
       adminAuthRequest: account.adminAuthRequest,
+      tokens: { twoFactorToken: account.tokens.twoFactorToken },
     };
     return Object.assign(this.createAccount(), persistentAccountInformation);
   }

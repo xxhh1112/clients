@@ -279,6 +279,7 @@ export class AccountTokens {
   accessToken?: string;
   refreshToken?: string;
   securityStamp?: string;
+  twoFactorToken?: string;
 
   static fromJSON(obj: Jsonify<AccountTokens>): AccountTokens {
     if (obj == null) {
