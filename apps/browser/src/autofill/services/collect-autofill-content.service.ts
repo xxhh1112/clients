@@ -19,6 +19,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private readonly domElementVisibilityService: DomElementVisibilityService;
   private autofillFormElements: AutofillFormElements = new Map();
   private autofillFieldElements: AutofillFieldElements = new Map();
+  private noFieldsFound = false;
 
   constructor(domElementVisibilityService: DomElementVisibilityService) {
     this.domElementVisibilityService = domElementVisibilityService;
@@ -33,6 +34,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @public
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
+    if (this.noFieldsFound) {
+      return this.getFormattedPageDetails({}, []);
+    }
+
     if (this.autofillFormElements.size && this.autofillFieldElements.size) {
       return this.getFormattedPageDetails(
         this.getFormattedAutofillFormsData(),
@@ -46,6 +51,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData(
       formFieldElements as FormFieldElement[]
     );
+
+    if (!Object.values(autofillFormsData).length || !autofillFieldsData.length) {
+      this.noFieldsFound = true;
+    }
 
     // Observe Main Body
 
@@ -74,7 +83,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @returns {FormFieldElement | null}
    */
   getAutofillFieldElementByOpid(opid: string): FormFieldElement | null {
-    const cachedFormFieldElements = [...this.autofillFieldElements.keys()];
+    const cachedFormFieldElements = Array.from(this.autofillFieldElements.keys());
     const formFieldElements = cachedFormFieldElements?.length
       ? cachedFormFieldElements
       : this.getAutofillFieldElements();
@@ -350,7 +359,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private createLabelElementsTag = (labelElementsSet: Set<HTMLElement>): string => {
-    return [...labelElementsSet]
+    return Array.from(labelElementsSet)
       .map((labelElement) => {
         const textContent: string | null = labelElement
           ? labelElement.textContent || labelElement.innerText
@@ -614,7 +623,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private getSelectElementOptions(element: HTMLSelectElement): { options: (string | null)[][] } {
-    const options = [...element.options].map((option) => {
+    const options = Array.from(element.options).map((option) => {
       const optionText = option.text
         ? String(option.text)
             .toLowerCase()
