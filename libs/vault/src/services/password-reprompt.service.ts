@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
-import { DialogService } from "@bitwarden/components";
+import { UserVerificationService } from "@bitwarden/common/src/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/src/vault/abstractions/password-reprompt.service";
 
+import { DialogService } from "../../../components/src/dialog";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 
 /**
@@ -13,8 +13,6 @@ import { PasswordRepromptComponent } from "../components/password-reprompt.compo
  */
 @Injectable()
 export class PasswordRepromptService implements PasswordRepromptServiceAbstraction {
-  protected component = PasswordRepromptComponent;
-
   constructor(
     private dialogService: DialogService,
     private userVerificationService: UserVerificationService
@@ -29,7 +27,7 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
       return true;
     }
 
-    const dialog = this.dialogService.open<boolean>(this.component, {
+    const dialog = this.dialogService.open<boolean>(PasswordRepromptComponent, {
       ariaModal: true,
     });
 

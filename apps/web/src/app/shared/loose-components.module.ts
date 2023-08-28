@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 
+import { PasswordRepromptComponent } from "@bitwarden/vault/src/components/password-reprompt.component";
+
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
@@ -95,7 +97,6 @@ import { AccessComponent } from "../tools/send/access.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/send/efflux-dates.component";
 import { ToolsComponent } from "../tools/tools.component";
-import { PasswordRepromptComponent } from "../vault/components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
 import { AddEditCustomFieldsComponent } from "../vault/individual-vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/individual-vault/add-edit.component";
@@ -128,6 +129,8 @@ import { SharedModule } from "./shared.module";
 
     // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
     SecretsManagerBillingModule,
+
+    PasswordRepromptComponent,
   ],
   declarations: [
     AcceptEmergencyComponent,
@@ -181,7 +184,6 @@ import { SharedModule } from "./shared.module";
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
-    PasswordRepromptComponent,
     PaymentComponent,
     PaymentMethodComponent,
     PreferencesComponent,
@@ -285,7 +287,6 @@ import { SharedModule } from "./shared.module";
     OrgWeakPasswordsReportComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
-    PasswordRepromptComponent,
     PaymentComponent,
     PaymentMethodComponent,
     PreferencesComponent,
