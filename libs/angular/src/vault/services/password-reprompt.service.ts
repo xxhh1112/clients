@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { DialogService } from "@bitwarden/components";
 
@@ -16,8 +16,8 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   protected component = PasswordRepromptComponent;
 
   constructor(
-    private keyConnectorService: KeyConnectorService,
-    protected dialogService: DialogService
+    private dialogService: DialogService,
+    private userVerificationService: UserVerificationService
   ) {}
 
   protectedFields() {
@@ -39,6 +39,6 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   }
 
   async enabled() {
-    return !(await this.keyConnectorService.getUsesKeyConnector());
+    return await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
   }
 }
