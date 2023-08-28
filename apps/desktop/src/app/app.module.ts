@@ -8,7 +8,6 @@ import { NgModule } from "@angular/core";
 
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
-import { PasswordRepromptComponent } from "@bitwarden/vault";
 
 import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.component";
 import { DeleteAccountComponent } from "../auth/delete-account.component";
@@ -57,14 +56,7 @@ import { EffluxDatesComponent as SendEffluxDatesComponent } from "./tools/send/e
 import { SendComponent } from "./tools/send/send.component";
 
 @NgModule({
-  imports: [
-    SharedModule,
-    DialogModule,
-    AppRoutingModule,
-    VaultFilterModule,
-    LoginModule,
-    PasswordRepromptComponent,
-  ],
+  imports: [SharedModule, DialogModule, AppRoutingModule, VaultFilterModule, LoginModule],
   declarations: [
     AccessibilityCookieComponent,
     AccountSwitcherComponent,

@@ -1,7 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { PasswordRepromptComponent } from "@bitwarden/vault";
-
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
@@ -129,8 +127,6 @@ import { SharedModule } from "./shared.module";
 
     // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
     SecretsManagerBillingModule,
-
-    PasswordRepromptComponent,
   ],
   declarations: [
     AcceptEmergencyComponent,
