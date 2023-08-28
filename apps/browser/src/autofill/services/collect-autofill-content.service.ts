@@ -33,6 +33,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @public
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
+    if (this.autofillFormElements.size && this.autofillFieldElements.size) {
+      return this.getFormattedPageDetails(
+        this.getFormattedAutofillFormsData(),
+        this.getFormattedAutofillFieldsData()
+      );
+    }
+
     const { formElements, formFieldElements } = this.queryAutofillFormAndFieldElements();
     const autofillFormsData: Record<string, AutofillForm> =
       this.buildAutofillFormsData(formElements);
@@ -42,6 +49,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
 
     // Observe Main Body
 
+    return this.getFormattedPageDetails(autofillFormsData, autofillFieldsData);
+  }
+
+  private getFormattedPageDetails(
+    autofillFormsData: Record<string, AutofillForm>,
+    autofillFieldsData: AutofillField[]
+  ): AutofillPageDetails {
     return {
       title: document.title,
       url: (document.defaultView || window).location.href,
@@ -86,10 +100,6 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private buildAutofillFormsData(formElements: Node[]): Record<string, AutofillForm> {
-    if (this.autofillFormElements.size) {
-      return this.getFormattedAutofillFormsData();
-    }
-
     formElements.forEach(this.addToAutofillFormElementsSet);
     return this.getFormattedAutofillFormsData();
   }
@@ -211,6 +221,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     };
 
     if (element instanceof HTMLSpanElement) {
+      this.autofillFieldElements.set(element, autofillFieldBase);
       return autofillFieldBase;
     }
 
@@ -232,7 +243,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       };
     }
 
-    return {
+    const autofillField = {
       ...autofillFieldBase,
       ...autofillFieldLabels,
       rel: this.getPropertyOrAttribute(element, "rel"),
@@ -250,7 +261,17 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       "aria-haspopup": this.getPropertyOrAttribute(element, "aria-haspopup") === "true",
       "data-stripe": this.getPropertyOrAttribute(element, "data-stripe"),
     };
+
+    this.autofillFieldElements.set(element, autofillField);
+    return autofillField;
   };
+
+  private getFormattedAutofillFieldsData(): AutofillField[] {
+    const formFieldElements: AutofillField[] = [];
+    this.autofillFieldElements.forEach((autofillField) => formFieldElements.push(autofillField));
+
+    return formFieldElements;
+  }
 
   /**
    * Creates a label tag used to autofill the element pulled from a label
