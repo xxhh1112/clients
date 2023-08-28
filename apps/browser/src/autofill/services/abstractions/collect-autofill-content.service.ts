@@ -3,7 +3,7 @@ import AutofillForm from "../../models/autofill-form";
 import AutofillPageDetails from "../../models/autofill-page-details";
 import { ElementWithOpId, FormFieldElement } from "../../types";
 
-type AutofillFormElements = Map<ElementWithOpId<FormFieldElement>, AutofillForm>;
+type AutofillFormElements = Map<ElementWithOpId<HTMLFormElement>, AutofillForm>;
 
 type AutofillFieldElements = Map<ElementWithOpId<FormFieldElement>, AutofillField>;
 

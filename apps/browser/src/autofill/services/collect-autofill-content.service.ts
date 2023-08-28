@@ -17,9 +17,11 @@ import DomElementVisibilityService from "./dom-element-visibility.service";
 
 class CollectAutofillContentService implements CollectAutofillContentServiceInterface {
   private readonly domElementVisibilityService: DomElementVisibilityService;
+  private noFieldsFound = false;
+  private domRecentlyMutated = true;
   private autofillFormElements: AutofillFormElements = new Map();
   private autofillFieldElements: AutofillFieldElements = new Map();
-  private noFieldsFound = false;
+  private mutationObserver: MutationObserver | null = null;
 
   constructor(domElementVisibilityService: DomElementVisibilityService) {
     this.domElementVisibilityService = domElementVisibilityService;
@@ -34,11 +36,19 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @public
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
-    if (this.noFieldsFound) {
+    if (!this.mutationObserver) {
+      this.setupMutationObserver();
+    }
+
+    if (!this.domRecentlyMutated && this.noFieldsFound) {
       return this.getFormattedPageDetails({}, []);
     }
 
-    if (this.autofillFormElements.size && this.autofillFieldElements.size) {
+    if (
+      !this.domRecentlyMutated &&
+      this.autofillFormElements.size &&
+      this.autofillFieldElements.size
+    ) {
       return this.getFormattedPageDetails(
         this.getFormattedAutofillFormsData(),
         this.getFormattedAutofillFieldsData()
@@ -56,8 +66,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       this.noFieldsFound = true;
     }
 
-    // Observe Main Body
-
+    this.domRecentlyMutated = false;
     return this.getFormattedPageDetails(autofillFormsData, autofillFieldsData);
   }
 
@@ -117,6 +126,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   addToAutofillFormElementsSet = (formElement: HTMLFormElement, index: number) => {
+    const existingAutofillForm = this.autofillFormElements.get(
+      formElement as ElementWithOpId<HTMLFormElement>
+    );
+    if (existingAutofillForm) {
+      return;
+    }
+
     formElement.opid = `__form__${index}`;
     this.updateFormElementData(formElement);
   };
@@ -217,6 +233,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     element: ElementWithOpId<FormFieldElement>,
     index: number
   ): Promise<AutofillField> => {
+    const existingAutofillField = this.autofillFieldElements.get(element);
+    if (existingAutofillField) {
+      return existingAutofillField;
+    }
+
     element.opid = `__${index}`;
 
     const autofillFieldBase = {
@@ -746,6 +767,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
 
       const nodeShadowRoot = this.getShadowRoot(currentNode);
       if (nodeShadowRoot) {
+        this.mutationObserver.observe(nodeShadowRoot, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+        });
         this.buildTreeWalkerNodesQueryResults(
           nodeShadowRoot,
           treeWalkerQueryResults,
@@ -756,6 +782,91 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       currentNode = treeWalker.nextNode();
     }
   }
+
+  private setupMutationObserver() {
+    this.mutationObserver = new MutationObserver(this.handleMutationObserverMutation);
+    this.mutationObserver.observe(document.documentElement, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  private handleMutationObserverMutation = async (mutations: MutationRecord[]) => {
+    for (let mutationsIndex = 0; mutationsIndex < mutations.length; mutationsIndex++) {
+      const mutation = mutations[mutationsIndex];
+      if (mutation.type === "childList" && this.isAutofillElementMutation(mutation)) {
+        this.domRecentlyMutated = true;
+        this.noFieldsFound = false;
+        return;
+      }
+
+      if (mutation.type !== "attributes") {
+        continue;
+      }
+
+      this.handleAutofillElementAttributeMutation(mutation);
+    }
+  };
+
+  private isAutofillElementMutation = (mutation: MutationRecord): boolean => {
+    return (
+      this.isAutofillElementNodeMutated(mutation.removedNodes) ||
+      this.isAutofillElementNodeMutated(mutation.addedNodes)
+    );
+  };
+
+  private isAutofillElementNodeMutated = (nodes: NodeList): boolean => {
+    for (let index = 0; index < nodes.length; index++) {
+      const node = nodes[index];
+      if (!(node instanceof HTMLElement)) {
+        continue;
+      }
+
+      if (node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)) {
+        return true;
+      }
+
+      const childNodes = this.queryAllTreeWalkerNodes(
+        node,
+        (node: Node) => node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)
+      ) as HTMLElement[];
+      if (childNodes.length) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  private handleAutofillElementAttributeMutation = (mutation: MutationRecord) => {
+    const targetElement = mutation.target;
+    if (!(targetElement instanceof HTMLElement)) {
+      return;
+    }
+
+    const attributeName = mutation.attributeName;
+    const autofillForm = this.autofillFormElements.get(
+      targetElement as ElementWithOpId<HTMLFormElement>
+    );
+
+    // TODO: CG - Need to set this up to handle updating attributes on a case by case basis
+    if (autofillForm) {
+      if (attributeName === "action") {
+        autofillForm.htmlAction = new URL(
+          this.getPropertyOrAttribute(targetElement, "action"),
+          window.location.href
+        ).href;
+      }
+
+      return;
+    }
+    //
+    // const autofillField = this.autofillFieldElements.get(
+    //   targetElement as ElementWithOpId<FormFieldElement>
+    // );
+    // DO things
+  };
 }
 
 export default CollectAutofillContentService;
