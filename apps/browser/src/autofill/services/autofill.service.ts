@@ -240,7 +240,10 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    if (cipher.reprompt !== CipherRepromptType.None) {
+    if (
+      cipher.reprompt === CipherRepromptType.Password &&
+      (await this.userVerificationService.hasMasterPassword())
+    ) {
       await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
         cipherId: cipher.id,
         action: "autofill",
