@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 
-import { UserVerificationService } from "@bitwarden/common/src/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/src/vault/abstractions/password-reprompt.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { DialogService } from "@bitwarden/components";
 
-import { DialogService } from "../../../components/src/dialog";
 import { PasswordRepromptComponent } from "../components/password-reprompt.component";
 
 /**
@@ -13,9 +13,11 @@ import { PasswordRepromptComponent } from "../components/password-reprompt.compo
  */
 @Injectable()
 export class PasswordRepromptService implements PasswordRepromptServiceAbstraction {
+  protected component = PasswordRepromptComponent;
+
   constructor(
-    private dialogService: DialogService,
-    private userVerificationService: UserVerificationService
+    private keyConnectorService: KeyConnectorService,
+    private dialogService: DialogService
   ) {}
 
   protectedFields() {
@@ -27,7 +29,7 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
       return true;
     }
 
-    const dialog = this.dialogService.open<boolean>(PasswordRepromptComponent, {
+    const dialog = this.dialogService.open<boolean>(this.component, {
       ariaModal: true,
     });
 
@@ -37,6 +39,6 @@ export class PasswordRepromptService implements PasswordRepromptServiceAbstracti
   }
 
   async enabled() {
-    return await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
+    return !(await this.keyConnectorService.getUsesKeyConnector());
   }
 }
