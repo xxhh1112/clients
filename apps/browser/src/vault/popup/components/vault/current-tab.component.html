@@ -36,7 +36,7 @@
   </div>
   <ng-container *ngIf="loaded">
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
-    <phishing-callout></phishing-callout>
+    <phishing-callout [currentTabURL]="url"></phishing-callout>
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
       <p>{{ autofillCalloutText }}</p>
       <button

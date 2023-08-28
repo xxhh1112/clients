@@ -65,4 +65,5 @@ export abstract class EnvironmentService {
   getUrls: () => Urls;
   isCloud: () => boolean;
   isEmpty: () => boolean;
+  isTrustedHost: (url: string) => boolean;
 }

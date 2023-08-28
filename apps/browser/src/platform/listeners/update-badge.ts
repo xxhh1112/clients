@@ -211,10 +211,8 @@ export class UpdateBadge {
   private async setTrustedBadge(tab: chrome.tabs.Tab, badgeText?: string) {
     await this.initServices();
 
-    const tabHost = new URL(tab.url).host;
-    const webVaultHost = new URL(this.environmentService.getWebVaultUrl()).host;
-
-    if (!["vault.bitwarden.com", "vault.bitwarden.eu", webVaultHost].includes(tabHost)) {
+    const isTrustedHost = await this.environmentService.isTrustedHost(tab.url);
+    if (!isTrustedHost) {
       return;
     }
 

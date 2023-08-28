@@ -339,4 +339,18 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       "https://vault.bitwarden.eu/api",
     ].includes(this.getApiUrl());
   }
+
+  /**
+   * Returns true if the given URL matches the host of a trusted Bitwarden vault.
+   */
+  isTrustedHost(url: string) {
+    const host = new URL(url).host;
+    const webVaultHost = new URL(this.getWebVaultUrl()).host;
+
+    if (!["vault.bitwarden.com", "vault.bitwarden.eu", webVaultHost].includes(host)) {
+      return false;
+    }
+
+    return true;
+  }
 }
