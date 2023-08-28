@@ -7,9 +7,21 @@ type AutofillFormElements = Map<ElementWithOpId<HTMLFormElement>, AutofillForm>;
 
 type AutofillFieldElements = Map<ElementWithOpId<FormFieldElement>, AutofillField>;
 
+type AttributeUpdateParams = {
+  element: ElementWithOpId<HTMLFormElement | FormFieldElement>;
+  attributeName: string;
+  dataTarget?: AutofillForm | AutofillField;
+  dataTargetKey?: string;
+};
+
 interface CollectAutofillContentService {
   getPageDetails(): Promise<AutofillPageDetails>;
   getAutofillFieldElementByOpid(opid: string): HTMLElement | null;
 }
 
-export { AutofillFormElements, AutofillFieldElements, CollectAutofillContentService };
+export {
+  AutofillFormElements,
+  AutofillFieldElements,
+  AttributeUpdateParams,
+  CollectAutofillContentService,
+};

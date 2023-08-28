@@ -9,6 +9,7 @@ import {
 } from "../types";
 
 import {
+  AttributeUpdateParams,
   AutofillFieldElements,
   AutofillFormElements,
   CollectAutofillContentService as CollectAutofillContentServiceInterface,
@@ -140,8 +141,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private updateFormElementData = (formElement: HTMLFormElement) => {
     this.autofillFormElements.set(formElement as ElementWithOpId<HTMLFormElement>, {
       opid: formElement.opid,
-      htmlAction: new URL(this.getPropertyOrAttribute(formElement, "action"), window.location.href)
-        .href,
+      htmlAction: this.getFormActionAttribute(formElement as ElementWithOpId<HTMLFormElement>),
       htmlName: this.getPropertyOrAttribute(formElement, "name"),
       htmlID: this.getPropertyOrAttribute(formElement, "id"),
       htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
@@ -845,27 +845,143 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       return;
     }
 
-    const attributeName = mutation.attributeName;
+    const attributeName = mutation.attributeName?.toLowerCase();
     const autofillForm = this.autofillFormElements.get(
       targetElement as ElementWithOpId<HTMLFormElement>
     );
 
-    // TODO: CG - Need to set this up to handle updating attributes on a case by case basis
     if (autofillForm) {
-      if (attributeName === "action") {
-        autofillForm.htmlAction = new URL(
-          this.getPropertyOrAttribute(targetElement, "action"),
-          window.location.href
-        ).href;
-      }
+      this.updateAutofillFormElementData(
+        attributeName,
+        targetElement as ElementWithOpId<HTMLFormElement>,
+        autofillForm
+      );
 
       return;
     }
-    //
-    // const autofillField = this.autofillFieldElements.get(
-    //   targetElement as ElementWithOpId<FormFieldElement>
-    // );
-    // DO things
+
+    const autofillField = this.autofillFieldElements.get(
+      targetElement as ElementWithOpId<FormFieldElement>
+    );
+    if (autofillField) {
+      this.updateAutofillFieldElementData(
+        attributeName,
+        targetElement as ElementWithOpId<FormFieldElement>,
+        autofillField
+      );
+      return;
+    }
+  };
+
+  private updateAutofillFormElementData = (
+    attributeName: string,
+    element: ElementWithOpId<HTMLFormElement>,
+    dataTarget: AutofillForm
+  ) => {
+    const updateAttribute = (dataTargetKey: string) => {
+      this.updateAutofillDataAttribute({
+        element,
+        attributeName,
+        dataTarget,
+        dataTargetKey,
+      });
+    };
+    const updateActions: Record<string, CallableFunction> = {
+      action: () => (dataTarget.htmlAction = this.getFormActionAttribute(element)),
+      name: () => updateAttribute("htmlName"),
+      id: () => updateAttribute("htmlID"),
+      method: () => updateAttribute("htmlMethod"),
+    };
+
+    if (!updateActions[attributeName]) {
+      return;
+    }
+    updateActions[attributeName]();
+    this.autofillFormElements.set(element, dataTarget);
+  };
+
+  private updateAutofillFieldElementData = async (
+    attributeName: string,
+    element: ElementWithOpId<FormFieldElement>,
+    dataTarget: AutofillField
+  ) => {
+    const updateAttribute = (dataTargetKey: string) => {
+      this.updateAutofillDataAttribute({
+        element,
+        attributeName,
+        dataTarget,
+        dataTargetKey,
+      });
+    };
+    const updateActions: Record<string, CallableFunction> = {
+      maxlength: () => (dataTarget.maxLength = this.getAutofillFieldMaxLength(element)),
+      id: () => updateAttribute("htmlID"),
+      class: () => updateAttribute("htmlClass"),
+      tabindex: () => updateAttribute("tabindex"),
+      title: () => updateAttribute("tabindex"),
+      rel: () => updateAttribute("rel"),
+      tagName: () =>
+        (dataTarget.tagName = this.getPropertyOrAttribute(element, "tagName")?.toLowerCase()),
+      type: () => (dataTarget.type = this.getPropertyOrAttribute(element, "type")?.toLowerCase()),
+      value: () => (dataTarget.value = this.getElementValue(element)),
+      checked: () =>
+        (dataTarget.checked = Boolean(this.getPropertyOrAttribute(element, "checked"))),
+      disabled: () =>
+        (dataTarget.disabled = Boolean(this.getPropertyOrAttribute(element, "disabled"))),
+      readonly: () =>
+        (dataTarget.readonly = Boolean(this.getPropertyOrAttribute(element, "readonly"))),
+      autocomplete: () => {
+        const autoCompleteType =
+          this.getPropertyOrAttribute(element, "x-autocompletetype") ||
+          this.getPropertyOrAttribute(element, "autocompletetype") ||
+          this.getPropertyOrAttribute(element, "autocomplete");
+        dataTarget.autoCompleteType = autoCompleteType !== "off" ? autoCompleteType : null;
+      },
+      "aria-hidden": () =>
+        (dataTarget["aria-hidden"] =
+          this.getPropertyOrAttribute(element, "aria-hidden") === "true"),
+      "aria-disabled": () =>
+        (dataTarget["aria-disabled"] =
+          this.getPropertyOrAttribute(element, "aria-disabled") === "true"),
+      "aria-haspopup": () =>
+        (dataTarget["aria-haspopup"] =
+          this.getPropertyOrAttribute(element, "aria-haspopup") === "true"),
+      "data-stripe": () => updateAttribute("data-stripe"),
+    };
+
+    if (!updateActions[attributeName]) {
+      return;
+    }
+
+    updateActions[attributeName]();
+
+    const visibilityAttributesSet = new Set(["class", "style"]);
+    if (
+      visibilityAttributesSet.has(attributeName) &&
+      !dataTarget.htmlClass.includes("com-bitwarden-browser-animated-fill")
+    ) {
+      dataTarget.viewable = await this.domElementVisibilityService.isFormFieldViewable(element);
+    }
+
+    this.autofillFieldElements.set(element, dataTarget);
+  };
+
+  private updateAutofillDataAttribute = ({
+    element,
+    attributeName,
+    dataTarget,
+    dataTargetKey,
+  }: AttributeUpdateParams) => {
+    const attributeValue = this.getPropertyOrAttribute(element, attributeName);
+    if (dataTarget && dataTargetKey) {
+      dataTarget[dataTargetKey] = attributeValue;
+    }
+
+    return attributeValue;
+  };
+
+  private getFormActionAttribute = (element: ElementWithOpId<HTMLFormElement>) => {
+    return new URL(this.getPropertyOrAttribute(element, "action"), window.location.href).href;
   };
 }
 
