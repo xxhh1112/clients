@@ -51,7 +51,7 @@ import { CipherView } from "../models/view/cipher.view";
 import { FieldView } from "../models/view/field.view";
 import { PasswordHistoryView } from "../models/view/password-history.view";
 
-const CIPHER_KEY_ENC_MIN_SERVER_VER = "2023.5.0";
+const CIPHER_KEY_ENC_MIN_SERVER_VER = "2023.9.0";
 
 export class CipherService implements CipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
