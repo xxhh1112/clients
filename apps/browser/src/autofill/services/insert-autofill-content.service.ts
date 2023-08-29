@@ -53,7 +53,11 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
    * @private
    */
   private fillingWithinSandboxedIframe() {
-    return String(self.origin).toLowerCase() === "null";
+    return (
+      String(self.origin).toLowerCase() === "null" ||
+      window.frameElement?.hasAttribute("sandbox") ||
+      window.location.hostname === ""
+    );
   }
 
   /**
