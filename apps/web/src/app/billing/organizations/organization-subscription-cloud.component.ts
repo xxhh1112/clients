@@ -97,17 +97,19 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     if (this.userOrg.canViewSubscription) {
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
       this.lineItems = this.sub?.subscription?.items;
-      this.lineItems.forEach((item) => {
-        const itemTotalAmount = item.amount * item.quantity;
-        const seatPriceTotal = this.sub.plan?.SecretsManager?.seatPrice * item.quantity;
-        const additionalPriceTotal =
-          this.sub.plan?.SecretsManager?.additionalPricePerServiceAccount * item.quantity;
-        item.productName =
-          itemTotalAmount === seatPriceTotal || itemTotalAmount === additionalPriceTotal
-            ? "SecretsManager"
-            : "PasswordManager";
-      });
-      this.lineItems = this.lineItems?.sort(sortSubscriptionItems) ?? [];
+      if (this.lineItems && this.lineItems.length) {
+        this.lineItems.forEach((item) => {
+          const itemTotalAmount = item.amount * item.quantity;
+          const seatPriceTotal = this.sub.plan?.SecretsManager?.seatPrice * item.quantity;
+          const additionalPriceTotal =
+            this.sub.plan?.SecretsManager?.additionalPricePerServiceAccount * item.quantity;
+          item.productName =
+            itemTotalAmount === seatPriceTotal || itemTotalAmount === additionalPriceTotal
+              ? "SecretsManager"
+              : "PasswordManager";
+        });
+        this.lineItems = this.lineItems?.sort(sortSubscriptionItems) ?? [];
+      }
     }
 
     const apiKeyResponse = await this.organizationApiService.getApiKeyInformation(
@@ -119,6 +121,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
     this.showSecretsManagerSubscribe =
       this.userOrg.canEditSubscription &&
+      this.sub?.plan?.supportsSecretsManager &&
       !this.userOrg.useSecretsManager &&
       !this.subscription?.cancelled &&
       !this.subscriptionMarkedForCancel;
