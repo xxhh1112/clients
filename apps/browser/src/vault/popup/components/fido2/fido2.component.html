@@ -1,6 +1,7 @@
 <!-- TODO: Rewrite and refactor this component when implementing the new design -->
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
+    <img class="logo-image" />
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
     <ng-container *ngIf="data.showUnsupportedVerification">
       Verification required by the initiating site. This feature is not yet implemented for accounts
@@ -13,14 +14,13 @@
           data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
         "
       >
-        A site is asking for authentication, please choose one of the following credentials to use:
         <div class="box list">
           <div class="box-content">
-            <app-cipher-row
+            <app-fido2-cipher-row
               *ngFor="let cipher of ciphers"
               [cipher]="cipher"
               (onSelected)="pick(cipher)"
-            ></app-cipher-row>
+            ></app-fido2-cipher-row>
           </div>
         </div>
       </ng-container>
@@ -45,14 +45,6 @@
         You do not have a matching login for this site.
       </ng-container>
     </ng-container>
-    <button
-      *ngIf="data.fallbackSupported"
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="abort(true)"
-    >
-      Use browser built-in
-    </button>
-    <button type="button" class="btn btn-outline-secondary" (click)="abort(false)">Abort</button>
+    <a *ngIf="data.fallbackSupported" (click)="abort(true)"> Use browser </a>
   </div>
 </ng-container>
