@@ -1,0 +1,15 @@
+<bit-simple-dialog>
+  <span bitDialogTitle>
+    {{ "desktopSyncVerificationTitle" | i18n }}
+  </span>
+  <span bitDialogContent>
+    {{ "desktopIntegrationVerificationText" | i18n }}
+    <br /><br />
+    <strong>{{ params.fingerprint }}</strong>
+  </span>
+  <ng-container bitDialogFooter>
+    <button bitButton type="submit" buttonType="danger" bitDialogClose>
+      {{ "ok" | i18n }}
+    </button>
+  </ng-container>
+</bit-simple-dialog>
