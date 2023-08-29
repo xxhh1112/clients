@@ -34,10 +34,20 @@ const i18n = {
   getMessage: jest.fn(),
 };
 
+const tabs = {
+  executeScript: jest.fn(),
+};
+
+const scripting = {
+  executeScript: jest.fn(),
+};
+
 // set chrome
 global.chrome = {
   i18n,
   storage,
   runtime,
   contextMenus,
+  tabs,
+  scripting,
 } as any;

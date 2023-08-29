@@ -1,11 +1,5 @@
 import AutofillScript from "../../models/autofill-script";
 
-declare global {
-  interface Window {
-    bitwardenAutofillInit: AutofillInit;
-  }
-}
-
 type AutofillExtensionMessage = {
   command: string;
   tab?: chrome.tabs.Tab;
