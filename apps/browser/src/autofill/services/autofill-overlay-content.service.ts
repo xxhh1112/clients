@@ -22,6 +22,7 @@ import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface
 import { AutoFillConstants } from "./autofill-constants";
 
 class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
+  private readonly findTabs = tabbable;
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
@@ -161,7 +162,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (!this.focusableElements.length) {
-      this.focusableElements = tabbable(globalThis.document.body);
+      this.focusableElements = this.findTabs(globalThis.document.body, { getShadowRoot: true });
     }
 
     const focusedElementIndex = this.focusableElements.findIndex(
