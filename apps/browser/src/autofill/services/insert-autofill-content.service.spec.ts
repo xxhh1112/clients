@@ -227,11 +227,37 @@ describe("InsertAutofillContentService", function () {
   });
 
   describe("fillingWithinSandboxedIframe", function () {
+    afterEach(() => {
+      Object.defineProperty(globalThis, "window", {
+        value: { frameElement: null },
+        writable: true,
+      });
+    });
+
     it("returns false if the `self.origin` value is not null", function () {
       const result = insertAutofillContentService["fillingWithinSandboxedIframe"]();
 
       expect(result).toBe(false);
       expect(self.origin).not.toBeNull();
+    });
+
+    it("returns true if the frameElement has a sandbox attribute", () => {
+      Object.defineProperty(globalThis, "window", {
+        value: { frameElement: { hasAttribute: jest.fn(() => true) } },
+        writable: true,
+      });
+
+      const result = insertAutofillContentService["fillingWithinSandboxedIframe"]();
+
+      expect(result).toBe(true);
+    });
+
+    it("returns true if the window location hostname is empty", () => {
+      setMockWindowLocation({ protocol: "http:", hostname: "" });
+
+      const result = insertAutofillContentService["fillingWithinSandboxedIframe"]();
+
+      expect(result).toBe(true);
     });
   });
 
