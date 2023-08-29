@@ -70,20 +70,6 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return this.getFormattedPageDetails(autofillFormsData, autofillFieldsData);
   }
 
-  private getFormattedPageDetails(
-    autofillFormsData: Record<string, AutofillForm>,
-    autofillFieldsData: AutofillField[]
-  ): AutofillPageDetails {
-    return {
-      title: document.title,
-      url: (document.defaultView || window).location.href,
-      documentUrl: document.location.href,
-      forms: autofillFormsData,
-      fields: autofillFieldsData,
-      collectedTimestamp: Date.now(),
-    };
-  }
-
   /**
    * Find an AutofillField element by its opid, will only return the first
    * element if there are multiple elements with the same opid. If no
@@ -115,40 +101,69 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
+   * Formats and returns the AutofillPageDetails object
+   * @param {Record<string, AutofillForm>} autofillFormsData
+   * @param {AutofillField[]} autofillFieldsData
+   * @returns {AutofillPageDetails}
+   * @private
+   */
+  private getFormattedPageDetails(
+    autofillFormsData: Record<string, AutofillForm>,
+    autofillFieldsData: AutofillField[]
+  ): AutofillPageDetails {
+    return {
+      title: document.title,
+      url: (document.defaultView || window).location.href,
+      documentUrl: document.location.href,
+      forms: autofillFormsData,
+      fields: autofillFieldsData,
+      collectedTimestamp: Date.now(),
+    };
+  }
+
+  /**
    * Queries the DOM for all the forms elements and
    * returns a collection of AutofillForm objects.
    * @returns {Record<string, AutofillForm>}
    * @private
    */
   private buildAutofillFormsData(formElements: Node[]): Record<string, AutofillForm> {
-    formElements.forEach(this.addToAutofillFormElementsSet);
+    formElements.forEach((formElement: HTMLFormElement, index: number) => {
+      formElement.opid = `__form__${index}`;
+      this.autofillFormElements.set(formElement as ElementWithOpId<HTMLFormElement>, {
+        opid: formElement.opid,
+        htmlAction: this.getFormActionAttribute(formElement as ElementWithOpId<HTMLFormElement>),
+        htmlName: this.getPropertyOrAttribute(formElement, "name"),
+        htmlID: this.getPropertyOrAttribute(formElement, "id"),
+        htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
+      });
+    });
+
     return this.getFormattedAutofillFormsData();
   }
 
-  addToAutofillFormElementsSet = (formElement: HTMLFormElement, index: number) => {
-    formElement.opid = `__form__${index}`;
-    this.updateFormElementData(formElement);
-  };
-
-  private updateFormElementData = (formElement: HTMLFormElement) => {
-    this.autofillFormElements.set(formElement as ElementWithOpId<HTMLFormElement>, {
-      opid: formElement.opid,
-      htmlAction: this.getFormActionAttribute(formElement as ElementWithOpId<HTMLFormElement>),
-      htmlName: this.getPropertyOrAttribute(formElement, "name"),
-      htmlID: this.getPropertyOrAttribute(formElement, "id"),
-      htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
-    });
-  };
-
-  private getFormActionAttribute(element: ElementWithOpId<HTMLFormElement>) {
+  /**
+   * Returns the action attribute of the form element. If the action attribute
+   * is a relative path, it will be converted to an absolute path.
+   * @param {ElementWithOpId<HTMLFormElement>} element
+   * @returns {string}
+   * @private
+   */
+  private getFormActionAttribute(element: ElementWithOpId<HTMLFormElement>): string {
     return new URL(this.getPropertyOrAttribute(element, "action"), window.location.href).href;
   }
 
+  /**
+   * Iterates over all known form elements and returns an AutofillForm object
+   * containing a key value pair of the form element's opid and the form data.
+   * @returns {Record<string, AutofillForm>}
+   * @private
+   */
   private getFormattedAutofillFormsData(): Record<string, AutofillForm> {
     const autofillForms: Record<string, AutofillForm> = {};
-    this.autofillFormElements.forEach((autofillForm, formElement) => {
-      autofillForms[formElement.opid] = autofillForm;
-    });
+    this.autofillFormElements.forEach(
+      (autofillForm, formElement) => (autofillForms[formElement.opid] = autofillForm)
+    );
 
     return autofillForms;
   }
@@ -162,7 +177,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private async buildAutofillFieldsData(
     formFieldElements: FormFieldElement[]
   ): Promise<AutofillField[]> {
-    const autofillFieldElements = this.getAutofillFieldElements(2000, formFieldElements);
+    const autofillFieldElements = this.getAutofillFieldElements(100, formFieldElements);
     const autofillFieldDataPromises = autofillFieldElements.map(this.buildAutofillFieldItem);
 
     return Promise.all(autofillFieldDataPromises);
@@ -276,9 +291,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       selectInfo:
         element instanceof HTMLSelectElement ? this.getSelectElementOptions(element) : null,
       form: element.form ? this.getPropertyOrAttribute(element.form, "opid") : null,
-      "aria-hidden": this.getPropertyOrAttribute(element, "aria-hidden") === "true",
-      "aria-disabled": this.getPropertyOrAttribute(element, "aria-disabled") === "true",
-      "aria-haspopup": this.getPropertyOrAttribute(element, "aria-haspopup") === "true",
+      "aria-hidden": this.getAttributeBoolean(element, "aria-hidden", true),
+      "aria-disabled": this.getAttributeBoolean(element, "aria-disabled", true),
+      "aria-haspopup": this.getAttributeBoolean(element, "aria-haspopup", true),
       "data-stripe": this.getPropertyOrAttribute(element, "data-stripe"),
     };
 
@@ -286,7 +301,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return autofillField;
   };
 
-  private getAutoCompleteAttribute(element: ElementWithOpId<FormFieldElement>) {
+  /**
+   * Identifies the autocomplete attribute associated with an element and returns
+   * the value of the attribute if it is not set to "off".
+   * @param {ElementWithOpId<FormFieldElement>} element
+   * @returns {string}
+   * @private
+   */
+  private getAutoCompleteAttribute(element: ElementWithOpId<FormFieldElement>): string {
     const autoCompleteType =
       this.getPropertyOrAttribute(element, "x-autocompletetype") ||
       this.getPropertyOrAttribute(element, "autocompletetype") ||
@@ -294,11 +316,19 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return autoCompleteType !== "off" ? autoCompleteType : null;
   }
 
+  /**
+   * Returns a boolean representing the attribute value of an element.
+   * @param {ElementWithOpId<FormFieldElement>} element
+   * @param {string} attributeName
+   * @param {boolean} checkString
+   * @returns {boolean}
+   * @private
+   */
   private getAttributeBoolean(
     element: ElementWithOpId<FormFieldElement>,
     attributeName: string,
     checkString = false
-  ) {
+  ): boolean {
     if (checkString) {
       return this.getPropertyOrAttribute(element, attributeName) === "true";
     }
@@ -306,10 +336,25 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return Boolean(this.getPropertyOrAttribute(element, attributeName));
   }
 
-  private getAttributeLowerCase(element: ElementWithOpId<FormFieldElement>, attributeName: string) {
+  /**
+   * Returns the attribute of an element as a lowercase value.
+   * @param {ElementWithOpId<FormFieldElement>} element
+   * @param {string} attributeName
+   * @returns {string}
+   * @private
+   */
+  private getAttributeLowerCase(
+    element: ElementWithOpId<FormFieldElement>,
+    attributeName: string
+  ): string {
     return this.getPropertyOrAttribute(element, attributeName)?.toLowerCase();
   }
 
+  /**
+   * Returns the value of an element's property or attribute.
+   * @returns {AutofillField[]}
+   * @private
+   */
   private getFormattedAutofillFieldsData(): AutofillField[] {
     const formFieldElements: AutofillField[] = [];
     this.autofillFieldElements.forEach((autofillField) => formFieldElements.push(autofillField));
@@ -669,14 +714,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   *
-   *
+   * Queries all potential form and field elements from the DOM and returns
+   * a collection of form and field elements. Leverages the TreeWalker API
+   * to deep query Shadow DOM elements.
+   * @returns {{formElements: Node[], formFieldElements: Node[]}}
    * @private
-   * @return {
-   *     formElements: Node[];
-   *     formFieldElements: Node[];
-   *   }
-   * @memberof CollectAutofillContentService
    */
   private queryAutofillFormAndFieldElements(): {
     formElements: Node[];
@@ -702,12 +744,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   *
-   *
-   * @private
+   * Checks if the passed node is a form field element.
    * @param {Node} node
-   * @return boolean
-   * @memberof CollectAutofillContentService
+   * @returns {boolean}
+   * @private
    */
   private isNodeFormFieldElement(node: Node): boolean {
     const nodeIsSpanElementWithAutofillAttribute =
@@ -728,12 +768,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   *
-   *
-   * @private
+   * Attempts to get the ShadowRoot of the passed node. If support for the
+   * extension based openOrClosedShadowRoot API is available, it will be used.
    * @param {Node} node
-   * @return ShadowRoot | null
-   * @memberof CollectAutofillContentService
+   * @returns {ShadowRoot | null}
+   * @private
    */
   private getShadowRoot(node: Node): ShadowRoot | null {
     if (!(node instanceof HTMLElement)) {
@@ -747,6 +786,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return (node as any).openOrClosedShadowRoot || node.shadowRoot;
   }
 
+  /**
+   * Queries the DOM for all the nodes that match the given filter callback
+   * and returns a collection of nodes.
+   * @param {Node} rootNode
+   * @param {Function} filterCallback
+   * @returns {Node[]}
+   */
   queryAllTreeWalkerNodes(rootNode: Node, filterCallback: CallableFunction): Node[] {
     const treeWalkerQueryResults: Node[] = [];
 
@@ -756,20 +802,19 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   *
-   *
+   * Recursively builds a collection of nodes that match the given filter callback.
+   * If a node has a ShadowRoot, it will be observed for mutations.
    * @param {Node} rootNode
    * @param {Node[]} treeWalkerQueryResults
-   * @param {CallableFunction} filterCallback
-   * @memberof CollectAutofillContentService
+   * @param {Function} filterCallback
    */
   buildTreeWalkerNodesQueryResults(
     rootNode: Node,
     treeWalkerQueryResults: Node[],
     filterCallback: CallableFunction
   ) {
-    const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT);
-    let currentNode = treeWalker.currentNode;
+    const treeWalker = document?.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT);
+    let currentNode = treeWalker?.currentNode;
 
     while (currentNode) {
       if (filterCallback(currentNode)) {
@@ -790,10 +835,15 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         );
       }
 
-      currentNode = treeWalker.nextNode();
+      currentNode = treeWalker?.nextNode();
     }
   }
 
+  /**
+   * Sets up a mutation observer on the body of the document. Observes changes to
+   * DOM elements to ensure we have an updated set of autofill field data.
+   * @private
+   */
   private setupMutationObserver() {
     this.mutationObserver = new MutationObserver(this.handleMutationObserverMutation);
     this.mutationObserver.observe(document.documentElement, {
@@ -803,30 +853,37 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     });
   }
 
-  private handleMutationObserverMutation = async (mutations: MutationRecord[]) => {
+  /**
+   * Handles observed DOM mutations and identifies if a mutation is related to
+   * an autofill element. If so, it will update the autofill element data.
+   * @param {MutationRecord[]} mutations
+   * @private
+   */
+  private handleMutationObserverMutation = (mutations: MutationRecord[]) => {
     for (let mutationsIndex = 0; mutationsIndex < mutations.length; mutationsIndex++) {
       const mutation = mutations[mutationsIndex];
-      if (mutation.type === "childList" && this.isAutofillElementMutation(mutation)) {
+      if (
+        mutation.type === "childList" &&
+        (this.isAutofillElementNodeMutated(mutation.removedNodes) ||
+          this.isAutofillElementNodeMutated(mutation.addedNodes))
+      ) {
         this.domRecentlyMutated = true;
         this.noFieldsFound = false;
         return;
       }
 
-      if (mutation.type !== "attributes") {
-        continue;
+      if (mutation.type === "attributes") {
+        this.handleAutofillElementAttributeMutation(mutation);
       }
-
-      this.handleAutofillElementAttributeMutation(mutation);
     }
   };
 
-  private isAutofillElementMutation(mutation: MutationRecord): boolean {
-    return (
-      this.isAutofillElementNodeMutated(mutation.removedNodes) ||
-      this.isAutofillElementNodeMutated(mutation.addedNodes)
-    );
-  }
-
+  /**
+   * Checks if the passed nodes either contain or are autofill elements.
+   * @param {NodeList} nodes
+   * @returns {boolean}
+   * @private
+   */
   private isAutofillElementNodeMutated(nodes: NodeList): boolean {
     for (let index = 0; index < nodes.length; index++) {
       const node = nodes[index];
@@ -850,6 +907,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return false;
   }
 
+  /**
+   * Handles observed DOM mutations related to an autofill element attribute.
+   * @param {MutationRecord} mutation
+   * @private
+   */
   private handleAutofillElementAttributeMutation(mutation: MutationRecord) {
     const targetElement = mutation.target;
     if (!(targetElement instanceof HTMLElement)) {
@@ -885,6 +947,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     );
   }
 
+  /**
+   * Updates the autofill form element data based on the passed attribute name.
+   * @param {string} attributeName
+   * @param {ElementWithOpId<HTMLFormElement>} element
+   * @param {AutofillForm} dataTarget
+   * @private
+   */
   private updateAutofillFormElementData(
     attributeName: string,
     element: ElementWithOpId<HTMLFormElement>,
@@ -908,6 +977,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     this.autofillFormElements.set(element, dataTarget);
   }
 
+  /**
+   * Updates the autofill field element data based on the passed attribute name.
+   * @param {string} attributeName
+   * @param {ElementWithOpId<FormFieldElement>} element
+   * @param {AutofillField} dataTarget
+   * @returns {Promise<void>}
+   * @private
+   */
   private async updateAutofillFieldElementData(
     attributeName: string,
     element: ElementWithOpId<FormFieldElement>,
@@ -924,7 +1001,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       tabindex: () => updateAttribute("tabindex"),
       title: () => updateAttribute("tabindex"),
       rel: () => updateAttribute("rel"),
-      tagName: () => (dataTarget.tagName = this.getAttributeLowerCase(element, "tagName")),
+      tagname: () => (dataTarget.tagName = this.getAttributeLowerCase(element, "tagName")),
       type: () => (dataTarget.type = this.getAttributeLowerCase(element, "type")),
       value: () => (dataTarget.value = this.getElementValue(element)),
       checked: () => (dataTarget.checked = this.getAttributeBoolean(element, "checked")),
@@ -951,7 +1028,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     const visibilityAttributesSet = new Set(["class", "style"]);
     if (
       visibilityAttributesSet.has(attributeName) &&
-      !dataTarget.htmlClass.includes("com-bitwarden-browser-animated-fill")
+      !dataTarget.htmlClass?.includes("com-bitwarden-browser-animated-fill")
     ) {
       dataTarget.viewable = await this.domElementVisibilityService.isFormFieldViewable(element);
     }
@@ -959,6 +1036,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     this.autofillFieldElements.set(element, dataTarget);
   }
 
+  /**
+   * Gets teh attribute value for the passed element, and returns it. If the dataTarget
+   * and dataTargetKey are passed, it will set the value of the dataTarget[dataTargetKey].
+   * @param UpdateAutofillDataAttributeParams
+   * @returns {string}
+   * @private
+   */
   private updateAutofillDataAttribute({
     element,
     attributeName,
