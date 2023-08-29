@@ -36,6 +36,7 @@ const i18n = {
 
 const tabs = {
   executeScript: jest.fn(),
+  sendMessage: jest.fn(),
 };
 
 const scripting = {

@@ -17,11 +17,10 @@ function createBoundingClientRectMock(customProperties: Partial<any> = {}): DOMR
   };
 }
 
-describe("DomElementVisibilityService", function () {
+describe("DomElementVisibilityService", () => {
   let domElementVisibilityService: DomElementVisibilityService;
 
-  beforeEach(function () {
-    jest.clearAllMocks();
+  beforeEach(() => {
     document.body.innerHTML = `
       <form id="root">
         <label for="username">Username</label>
@@ -33,8 +32,13 @@ describe("DomElementVisibilityService", function () {
     domElementVisibilityService = new DomElementVisibilityService();
   });
 
-  describe("isFormFieldViewable", function () {
-    it("returns false if the element is outside viewport bounds", async function () {
+  afterEach(() => {
+    jest.clearAllMocks();
+    document.body.innerHTML = "";
+  });
+
+  describe("isFormFieldViewable", () => {
+    it("returns false if the element is outside viewport bounds", async () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
@@ -59,7 +63,7 @@ describe("DomElementVisibilityService", function () {
       ).not.toHaveBeenCalled();
     });
 
-    it("returns false if the element is hidden by CSS", async function () {
+    it("returns false if the element is hidden by CSS", async () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
@@ -86,7 +90,7 @@ describe("DomElementVisibilityService", function () {
       ).not.toHaveBeenCalled();
     });
 
-    it("returns false if the element is hidden behind another element", async function () {
+    it("returns false if the element is hidden behind another element", async () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
@@ -115,7 +119,7 @@ describe("DomElementVisibilityService", function () {
       ).toHaveBeenCalledWith(usernameElement, usernameElement.getBoundingClientRect());
     });
 
-    it("returns true if the form field is viewable", async function () {
+    it("returns true if the form field is viewable", async () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       jest.spyOn(usernameElement, "getBoundingClientRect");
       jest
@@ -145,8 +149,8 @@ describe("DomElementVisibilityService", function () {
     });
   });
 
-  describe("isElementHiddenByCss", function () {
-    it("returns true when a non-hidden element is passed", function () {
+  describe("isElementHiddenByCss", () => {
+    it("returns true when a non-hidden element is passed", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" />
       `;
@@ -157,7 +161,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementHidden).toEqual(false);
     });
 
-    it("returns true when the element has a `visibility: hidden;` CSS rule applied to it either inline or in a computed style", function () {
+    it("returns true when the element has a `visibility: hidden;` CSS rule applied to it either inline or in a computed style", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" style="visibility: hidden;" />
         <input type="password" name="password" id="password" />
@@ -191,7 +195,7 @@ describe("DomElementVisibilityService", function () {
       );
     });
 
-    it("returns true when the element has a `display: none;` CSS rule applied to it either inline or in a computed style", function () {
+    it("returns true when the element has a `display: none;` CSS rule applied to it either inline or in a computed style", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" style="display: none;" />
         <input type="password" name="password" id="password" />
@@ -213,7 +217,7 @@ describe("DomElementVisibilityService", function () {
       expect(isPasswordElementHidden).toEqual(true);
     });
 
-    it("returns true when the element has a `opacity: 0;` CSS rule applied to it either inline or in a computed style", function () {
+    it("returns true when the element has a `opacity: 0;` CSS rule applied to it either inline or in a computed style", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" style="opacity: 0;" />
         <input type="password" name="password" id="password" />
@@ -235,7 +239,7 @@ describe("DomElementVisibilityService", function () {
       expect(isPasswordElementHidden).toEqual(true);
     });
 
-    it("returns true when the element has a `clip-path` CSS rule applied to it that hides the element either inline or in a computed style", function () {
+    it("returns true when the element has a `clip-path` CSS rule applied to it that hides the element either inline or in a computed style", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username" style="clip-path: inset(50%);" />
         <input type="password" name="password" id="password" />
@@ -249,11 +253,11 @@ describe("DomElementVisibilityService", function () {
     });
   });
 
-  describe("isElementOutsideViewportBounds", function () {
+  describe("isElementOutsideViewportBounds", () => {
     const mockViewportWidth = 1920;
     const mockViewportHeight = 1080;
 
-    beforeEach(function () {
+    beforeEach(() => {
       Object.defineProperty(document.documentElement, "scrollWidth", {
         writable: true,
         value: mockViewportWidth,
@@ -264,7 +268,7 @@ describe("DomElementVisibilityService", function () {
       });
     });
 
-    it("returns true if the passed element's size is not sufficient for visibility", function () {
+    it("returns true if the passed element's size is not sufficient for visibility", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({
         width: 9,
@@ -278,7 +282,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
-    it("returns true if the passed element is overflowing the left viewport", function () {
+    it("returns true if the passed element is overflowing the left viewport", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({
         left: -1,
@@ -291,7 +295,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
-    it("returns true if the passed element is overflowing the right viewport", function () {
+    it("returns true if the passed element is overflowing the right viewport", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({
         left: mockViewportWidth + 1,
@@ -304,7 +308,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
-    it("returns true if the passed element is overflowing the top viewport", function () {
+    it("returns true if the passed element is overflowing the top viewport", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({
         top: -1,
@@ -317,7 +321,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
-    it("returns true if the passed element is overflowing the bottom viewport", function () {
+    it("returns true if the passed element is overflowing the bottom viewport", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({
         top: mockViewportHeight + 1,
@@ -330,7 +334,7 @@ describe("DomElementVisibilityService", function () {
       expect(isElementOutsideViewportBounds).toEqual(true);
     });
 
-    it("returns false if the passed element is not outside of the viewport bounds", function () {
+    it("returns false if the passed element is not outside of the viewport bounds", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const elementBoundingClientRect = createBoundingClientRectMock({});
 
@@ -342,8 +346,8 @@ describe("DomElementVisibilityService", function () {
     });
   });
 
-  describe("formFieldIsNotHiddenBehindAnotherElement", function () {
-    it("returns true if the element found at the center point of the passed targetElement is the targetElement itself", function () {
+  describe("formFieldIsNotHiddenBehindAnotherElement", () => {
+    it("returns true if the element found at the center point of the passed targetElement is the targetElement itself", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       jest.spyOn(usernameElement, "getBoundingClientRect");
       document.elementFromPoint = jest.fn(() => usernameElement);
@@ -356,7 +360,7 @@ describe("DomElementVisibilityService", function () {
       expect(usernameElement.getBoundingClientRect).toHaveBeenCalled();
     });
 
-    it("returns true if the element found at the center point of the passed targetElement is an implicit label of the element", function () {
+    it("returns true if the element found at the center point of the passed targetElement is an implicit label of the element", () => {
       document.body.innerHTML = `
         <label>
             <span>Username</span>
@@ -373,7 +377,7 @@ describe("DomElementVisibilityService", function () {
       expect(formFieldIsNotHiddenBehindAnotherElement).toEqual(true);
     });
 
-    it("returns true if the element found at the center point of the passed targetElement is a label of the targetElement", function () {
+    it("returns true if the element found at the center point of the passed targetElement is a label of the targetElement", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       const labelElement = document.querySelector("label[for='username']") as FormFieldElement;
       const mockBoundingRect = createBoundingClientRectMock({});
@@ -392,7 +396,7 @@ describe("DomElementVisibilityService", function () {
       expect(usernameElement.getBoundingClientRect).not.toHaveBeenCalled();
     });
 
-    it("returns false if the element found at the center point is not the passed targetElement or a label of that element", function () {
+    it("returns false if the element found at the center point is not the passed targetElement or a label of that element", () => {
       const usernameElement = document.querySelector("input[name='username']") as FormFieldElement;
       document.elementFromPoint = jest.fn(() => document.createElement("div"));
 

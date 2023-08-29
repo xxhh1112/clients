@@ -17,18 +17,22 @@ const mockLoginForm = `
   </div>
 `;
 
-describe("CollectAutofillContentService", function () {
+describe("CollectAutofillContentService", () => {
   const domElementVisibilityService = new DomElementVisibilityService();
   let collectAutofillContentService: CollectAutofillContentService;
 
-  beforeEach(function () {
-    jest.clearAllMocks();
+  beforeEach(() => {
     document.body.innerHTML = mockLoginForm;
     collectAutofillContentService = new CollectAutofillContentService(domElementVisibilityService);
   });
 
-  describe("getPageDetails", function () {
-    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", async function () {
+  afterEach(() => {
+    jest.clearAllMocks();
+    document.body.innerHTML = "";
+  });
+
+  describe("getPageDetails", () => {
+    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", async () => {
       const documentTitle = "Test Page";
       const formId = "validFormId";
       const formAction = "https://example.com/";
@@ -143,8 +147,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getAutofillFieldElementByOpid", function () {
-    it("returns the element with the opid property value matching the passed value", function () {
+  describe("getAutofillFieldElementByOpid", () => {
+    it("returns the element with the opid property value matching the passed value", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       const passwordInput = document.querySelector(
         'input[type="password"]'
@@ -161,7 +165,7 @@ describe("CollectAutofillContentService", function () {
       expect(passwordInputWithOpid).toEqual(passwordInput);
     });
 
-    it("returns the first of the element with an `opid` value matching the passed value and emits a console warning if multiple fields contain the same `opid`", function () {
+    it("returns the first of the element with an `opid` value matching the passed value and emits a console warning if multiple fields contain the same `opid`", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       const passwordInput = document.querySelector(
         'input[type="password"]'
@@ -180,7 +184,7 @@ describe("CollectAutofillContentService", function () {
       expect(console.warn).toHaveBeenCalledWith("More than one element found with opid __1");
     });
 
-    it("returns the element at the index position (parsed from passed opid) of all AutofillField elements when the passed opid value cannot be found", function () {
+    it("returns the element at the index position (parsed from passed opid) of all AutofillField elements when the passed opid value cannot be found", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       const passwordInput = document.querySelector(
         'input[type="password"]'
@@ -197,7 +201,7 @@ describe("CollectAutofillContentService", function () {
       expect(elementWithOpid2).toBeNull();
     });
 
-    it("returns null if no element can be found", function () {
+    it("returns null if no element can be found", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       textInput.opid = "__0";
 
@@ -208,8 +212,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("buildAutofillFormsData", function () {
-    it("returns an object of AutofillForm objects with the form id as a key", function () {
+  describe("buildAutofillFormsData", () => {
+    it("returns an object of AutofillForm objects with the form id as a key", () => {
       const documentTitle = "Test Page";
       const formId1 = "validFormId";
       const formAction1 = "https://example.com/";
@@ -254,8 +258,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("buildAutofillFieldsData", function () {
-    it("returns a promise containing an array of AutofillField objects", async function () {
+  describe("buildAutofillFieldsData", () => {
+    it("returns a promise containing an array of AutofillField objects", async () => {
       jest.spyOn(collectAutofillContentService as any, "getAutofillFieldElements");
       jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldItem");
       jest
@@ -337,8 +341,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getAutofillFieldElements", function () {
-    it("returns all form elements from the targeted document if no limit is set", function () {
+  describe("getAutofillFieldElements", () => {
+    it("returns all form elements from the targeted document if no limit is set", () => {
       document.body.innerHTML = `
       <div id="root">
         <form>
@@ -381,7 +385,7 @@ describe("CollectAutofillContentService", function () {
       ]);
     });
 
-    it("returns up to 2 (passed as `limit`) form elements from the targeted document with more than 2 form elements", function () {
+    it("returns up to 2 (passed as `limit`) form elements from the targeted document with more than 2 form elements", () => {
       document.body.innerHTML = `
         <div>
           <span data-bwautofill="true">included span</span>
@@ -414,7 +418,7 @@ describe("CollectAutofillContentService", function () {
       expect(formElements).toEqual([spanElement, textAreaInput]);
     });
 
-    it("returns form elements from the targeted document, ignoring input types `hidden`, `submit`, `reset`, `button`, `image`, `file`, and inputs tagged with `data-bwignore`, while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit", function () {
+    it("returns form elements from the targeted document, ignoring input types `hidden`, `submit`, `reset`, `button`, `image`, `file`, and inputs tagged with `data-bwignore`, while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit", () => {
       document.body.innerHTML = `
         <div>
           <fieldset>
@@ -479,7 +483,7 @@ describe("CollectAutofillContentService", function () {
       ]);
     });
 
-    it("returns form elements from the targeted document while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit`", function () {
+    it("returns form elements from the targeted document while giving lower order priority to `checkbox` and `radio` inputs if the returned list is truncated by `limit`", () => {
       document.body.innerHTML = `
         <div>
           <input type="checkbox" name="doYouWantToCheck" />
@@ -533,8 +537,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("buildAutofillFieldItem", function () {
-    it("returns the AutofillField base data values without the field labels or input values if the passed element is a span element", async function () {
+  describe("buildAutofillFieldItem", () => {
+    it("returns the AutofillField base data values without the field labels or input values if the passed element is a span element", async () => {
       const index = 0;
       const spanElementId = "span-element";
       const spanElementClasses = "span element classes";
@@ -609,7 +613,7 @@ describe("CollectAutofillContentService", function () {
       });
     });
 
-    it("returns the AutofillField base data, label data, and input element data", async function () {
+    it("returns the AutofillField base data, label data, and input element data", async () => {
       const index = 0;
       const usernameField = {
         labelText: "Username",
@@ -700,7 +704,7 @@ describe("CollectAutofillContentService", function () {
       });
     });
 
-    it("returns the AutofillField base data and input element data, but not the label data if the input element is of type `hidden`", async function () {
+    it("returns the AutofillField base data and input element data, but not the label data if the input element is of type `hidden`", async () => {
       const index = 0;
       const hiddenField = {
         labelText: "Hidden Field",
@@ -779,13 +783,13 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("createAutofillFieldLabelTag", function () {
-    beforeEach(function () {
+  describe("createAutofillFieldLabelTag", () => {
+    beforeEach(() => {
       jest.spyOn(collectAutofillContentService as any, "createLabelElementsTag");
       jest.spyOn(document, "querySelectorAll");
     });
 
-    it("returns the label tag early if the passed element contains any labels", function () {
+    it("returns the label tag early if the passed element contains any labels", () => {
       document.body.innerHTML = `
         <label for="username-id">Username</label>
         <input type="text" id="username-id" name="username" />
@@ -802,7 +806,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Username");
     });
 
-    it("queries all labels associated with the element's id", function () {
+    it("queries all labels associated with the element's id", () => {
       document.body.innerHTML = `
         <label for="country-id">Country</label>
         <span id="country-id"></span>
@@ -819,7 +823,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Country");
     });
 
-    it("queries all labels associated with the element's name", function () {
+    it("queries all labels associated with the element's name", () => {
       document.body.innerHTML = `
         <label for="country-name">Country</label>
         <select name="country-name"></select>
@@ -837,7 +841,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Country");
     });
 
-    it("will not add duplicate labels that are found to the label tag", function () {
+    it("will not add duplicate labels that are found to the label tag", () => {
       document.body.innerHTML = `
         <label for="country-name">Country</label>
         <div id="country-name" name="country-name"></div>
@@ -857,7 +861,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Country");
     });
 
-    it("will attempt to identify the label of an element from its parent element", function () {
+    it("will attempt to identify the label of an element from its parent element", () => {
       document.body.innerHTML = `<label>
         Username
         <input type="text" id="username-id">
@@ -873,7 +877,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Username");
     });
 
-    it("will attempt to identify the label of an element from a `dt` element associated with the element's parent", function () {
+    it("will attempt to identify the label of an element from a `dt` element associated with the element's parent", () => {
       document.body.innerHTML = `
         <dl>
           <dt id="label-element">Username</dt>
@@ -893,7 +897,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Username");
     });
 
-    it("will return an empty string value if no labels can be found for an element", function () {
+    it("will return an empty string value if no labels can be found for an element", () => {
       document.body.innerHTML = `
         <input type="text" id="username-id">
       `;
@@ -905,8 +909,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("queryElementLabels", function () {
-    it("returns null if the passed element has no id or name", function () {
+  describe("queryElementLabels", () => {
+    it("returns null if the passed element has no id or name", () => {
       document.body.innerHTML = `
         <label for="username-id">
           Username
@@ -920,7 +924,7 @@ describe("CollectAutofillContentService", function () {
       expect(labels).toBeNull();
     });
 
-    it("returns an empty NodeList if the passed element has no label", function () {
+    it("returns an empty NodeList if the passed element has no label", () => {
       document.body.innerHTML = `
         <input type="text" id="username-id">
       `;
@@ -931,7 +935,7 @@ describe("CollectAutofillContentService", function () {
       expect(labels).toEqual(document.querySelectorAll("label"));
     });
 
-    it("returns the label of an element associated with its ID value", function () {
+    it("returns the label of an element associated with its ID value", () => {
       document.body.innerHTML = `
         <label for="username-id">Username</label>
         <input type="text" id="username-id">
@@ -943,7 +947,7 @@ describe("CollectAutofillContentService", function () {
       expect(labels).toEqual(document.querySelectorAll("label[for='username-id']"));
     });
 
-    it("returns the label of an element associated with its name value", function () {
+    it("returns the label of an element associated with its name value", () => {
       document.body.innerHTML = `
         <label for="username">Username</label>
         <input type="text" name="username" id="username-id">
@@ -956,8 +960,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("createLabelElementsTag", function () {
-    it("returns a string containing all the labels associated with a given input element", function () {
+  describe("createLabelElementsTag", () => {
+    it("returns a string containing all the labels associated with a given input element", () => {
       const firstLabelText = "Username by name";
       const secondLabelText = "Username by ID";
       document.body.innerHTML = `
@@ -980,8 +984,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getAutofillFieldMaxLength", function () {
-    it("returns null if the passed FormFieldElement is not an element type that has a max length property", function () {
+  describe("getAutofillFieldMaxLength", () => {
+    it("returns null if the passed FormFieldElement is not an element type that has a max length property", () => {
       document.body.innerHTML = `
         <select name="country">
           <option value="US">United States</option>
@@ -995,7 +999,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toBeNull();
     });
 
-    it("returns a value of 999 if the passed FormFieldElement has no set maxLength value", function () {
+    it("returns a value of 999 if the passed FormFieldElement has no set maxLength value", () => {
       document.body.innerHTML = `
         <input type="text" name="username">
       `;
@@ -1006,7 +1010,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toEqual(999);
     });
 
-    it("returns a value of 999 if the passed FormFieldElement has a maxLength value higher than 999", function () {
+    it("returns a value of 999 if the passed FormFieldElement has a maxLength value higher than 999", () => {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="1000">
       `;
@@ -1017,7 +1021,7 @@ describe("CollectAutofillContentService", function () {
       expect(maxLength).toEqual(999);
     });
 
-    it("returns the maxLength property of a passed FormFieldElement", function () {
+    it("returns the maxLength property of a passed FormFieldElement", () => {
       document.body.innerHTML = `
         <input type="text" name="username" maxlength="10">
       `;
@@ -1029,8 +1033,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("createAutofillFieldRightLabel", function () {
-    it("returns an empty string if no siblings are found", function () {
+  describe("createAutofillFieldRightLabel", () => {
+    it("returns an empty string if no siblings are found", () => {
       document.body.innerHTML = `
         <input type="text" name="username">
       `;
@@ -1041,7 +1045,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("");
     });
 
-    it("returns the text content of the element's next sibling element", function () {
+    it("returns the text content of the element's next sibling element", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username-id">
         <label for="username-id">Username</label>
@@ -1053,7 +1057,7 @@ describe("CollectAutofillContentService", function () {
       expect(labelTag).toEqual("Username");
     });
 
-    it("returns the text content of the element's next sibling textNode", function () {
+    it("returns the text content of the element's next sibling textNode", () => {
       document.body.innerHTML = `
         <input type="text" name="username" id="username-id">
         Username
@@ -1066,8 +1070,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("createAutofillFieldLeftLabel", function () {
-    it("returns a string value of the text content associated with the previous siblings of the passed element", function () {
+  describe("createAutofillFieldLeftLabel", () => {
+    it("returns a string value of the text content associated with the previous siblings of the passed element", () => {
       document.body.innerHTML = `
         <div>
           <span>Text Content</span>
@@ -1083,8 +1087,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("createAutofillFieldTopLabel", function () {
-    it("returns the table column header value for the passed table element", function () {
+  describe("createAutofillFieldTopLabel", () => {
+    it("returns the table column header value for the passed table element", () => {
       document.body.innerHTML = `
         <table>
           <tbody>
@@ -1111,7 +1115,7 @@ describe("CollectAutofillContentService", function () {
       expect(targetTableCellLabel).toEqual("Password");
     });
 
-    it("will attempt to return the value for the previous sibling row as the label if a `th` cell is not found", function () {
+    it("will attempt to return the value for the previous sibling row as the label if a `th` cell is not found", () => {
       document.body.innerHTML = `
         <table>
           <tbody>
@@ -1138,7 +1142,7 @@ describe("CollectAutofillContentService", function () {
       expect(targetTableCellLabel).toEqual("Login code");
     });
 
-    it("returns null for the passed table element it's parent row has no previous sibling row", function () {
+    it("returns null for the passed table element it's parent row has no previous sibling row", () => {
       document.body.innerHTML = `
         <table>
           <tbody>
@@ -1160,7 +1164,7 @@ describe("CollectAutofillContentService", function () {
       expect(targetTableCellLabel).toEqual(null);
     });
 
-    it("returns null if the input element is not structured within a `td` element", function () {
+    it("returns null if the input element is not structured within a `td` element", () => {
       document.body.innerHTML = `
         <table>
           <tbody>
@@ -1187,7 +1191,7 @@ describe("CollectAutofillContentService", function () {
       expect(targetTableCellLabel).toEqual(null);
     });
 
-    it("returns null if the index of the `td` element is larger than the length of cells in the sibling row", function () {
+    it("returns null if the index of the `td` element is larger than the length of cells in the sibling row", () => {
       document.body.innerHTML = `
         <table>
           <tbody>
@@ -1214,7 +1218,7 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("isNewSectionElement", function () {
+  describe("isNewSectionElement", () => {
     const validElementTags = [
       "html",
       "body",
@@ -1231,33 +1235,33 @@ describe("CollectAutofillContentService", function () {
     ];
     const invalidElementTags = ["div", "span"];
 
-    describe("given a transitional element", function () {
+    describe("given a transitional element", () => {
       validElementTags.forEach((tag) => {
         const element = document.createElement(tag);
 
-        it(`returns true if the element tag is a ${tag}`, function () {
+        it(`returns true if the element tag is a ${tag}`, () => {
           expect(collectAutofillContentService["isNewSectionElement"](element)).toEqual(true);
         });
       });
     });
 
-    describe("given an non-transitional element", function () {
+    describe("given an non-transitional element", () => {
       invalidElementTags.forEach((tag) => {
         const element = document.createElement(tag);
 
-        it(`returns false if the element tag is a ${tag}`, function () {
+        it(`returns false if the element tag is a ${tag}`, () => {
           expect(collectAutofillContentService["isNewSectionElement"](element)).toEqual(false);
         });
       });
     });
 
-    it(`returns true if the provided element is falsy`, function () {
+    it(`returns true if the provided element is falsy`, () => {
       expect(collectAutofillContentService["isNewSectionElement"](undefined)).toEqual(true);
     });
   });
 
-  describe("getTextContentFromElement", function () {
-    it("returns the node value for a text node", function () {
+  describe("getTextContentFromElement", () => {
+    it("returns the node value for a text node", () => {
       document.body.innerHTML = `
         <div>
           <label>
@@ -1282,7 +1286,7 @@ describe("CollectAutofillContentService", function () {
       expect(textContent).toEqual(parsedTextContent);
     });
 
-    it("returns the text content for an element node", function () {
+    it("returns the text content for an element node", () => {
       document.body.innerHTML = `
         <div>
           <label for="username-id">Username Label</label>
@@ -1302,14 +1306,14 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("trimAndRemoveNonPrintableText", function () {
-    it("returns an empty string if no text content is passed", function () {
+  describe("trimAndRemoveNonPrintableText", () => {
+    it("returns an empty string if no text content is passed", () => {
       const textContent = collectAutofillContentService["trimAndRemoveNonPrintableText"](undefined);
 
       expect(textContent).toEqual("");
     });
 
-    it("returns a trimmed string with all non-printable text removed", function () {
+    it("returns a trimmed string with all non-printable text removed", () => {
       const nonParsedText = `Hello!\nThis is a \t
       test   string.\x0B\x08`;
 
@@ -1320,8 +1324,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("recursivelyGetTextFromPreviousSiblings", function () {
-    it("should find text adjacent to the target element likely to be a label", function () {
+  describe("recursivelyGetTextFromPreviousSiblings", () => {
+    it("should find text adjacent to the target element likely to be a label", () => {
       document.body.innerHTML = `
         <div>
           Text about things
@@ -1348,7 +1352,7 @@ describe("CollectAutofillContentService", function () {
       ]);
     });
 
-    it("should stop looking at siblings for label values when a 'new section' element is seen", function () {
+    it("should stop looking at siblings for label values when a 'new section' element is seen", () => {
       document.body.innerHTML = `
         <div>
           Text about things
@@ -1371,7 +1375,7 @@ describe("CollectAutofillContentService", function () {
       expect(elementList).toEqual(["something else"]);
     });
 
-    it("should keep looking for labels in parents when there are no siblings of the target element", function () {
+    it("should keep looking for labels in parents when there are no siblings of the target element", () => {
       document.body.innerHTML = `
         <div>
           Text about things
@@ -1390,7 +1394,7 @@ describe("CollectAutofillContentService", function () {
       expect(elementList).toEqual(["some things"]);
     });
 
-    it("should find label in parent sibling last child if no other label candidates have been encountered and there are no text nodes along the way", function () {
+    it("should find label in parent sibling last child if no other label candidates have been encountered and there are no text nodes along the way", () => {
       document.body.innerHTML = `
         <div>
           <div>
@@ -1410,7 +1414,7 @@ describe("CollectAutofillContentService", function () {
       expect(elementList).toEqual(["some nested things"]);
     });
 
-    it("should exit early if the target element has no parent element/node", function () {
+    it("should exit early if the target element has no parent element/node", () => {
       const textInput = document.querySelector("html") as HTMLHtmlElement;
 
       const elementList: string[] =
@@ -1420,8 +1424,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getPropertyOrAttribute", function () {
-    it("returns the value of the named property of the target element if the property exists within the element", function () {
+  describe("getPropertyOrAttribute", () => {
+    it("returns the value of the named property of the target element if the property exists within the element", () => {
       document.body.innerHTML += '<input type="checkbox" value="userWouldLikeToCheck" checked />';
       const textInput = document.querySelector("#username") as HTMLInputElement;
       textInput.setAttribute("value", "jsmith");
@@ -1456,7 +1460,7 @@ describe("CollectAutofillContentService", function () {
       expect(checkboxInputChecked).toEqual(true);
     });
 
-    it("returns the value of the named attribute of the element if it does not exist as a property within the element", function () {
+    it("returns the value of the named attribute of the element if it does not exist as a property within the element", () => {
       const textInput = document.querySelector("#username") as HTMLInputElement;
       textInput.setAttribute("data-unique-attribute", "unique-value");
       jest.spyOn(textInput, "getAttribute");
@@ -1470,7 +1474,7 @@ describe("CollectAutofillContentService", function () {
       expect(textInput.getAttribute).toHaveBeenCalledWith("data-unique-attribute");
     });
 
-    it("returns a null value if the element does not contain the passed attribute name as either a property or attribute value", function () {
+    it("returns a null value if the element does not contain the passed attribute name as either a property or attribute value", () => {
       const textInput = document.querySelector("#username") as HTMLInputElement;
       jest.spyOn(textInput, "getAttribute");
 
@@ -1484,8 +1488,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getElementValue", function () {
-    it("returns an empty string of passed input elements whose value is not set", function () {
+  describe("getElementValue", () => {
+    it("returns an empty string of passed input elements whose value is not set", () => {
       document.body.innerHTML += `
         <input type="checkbox" value="aTestValue" />
         <input id="hidden-input" type="hidden" />
@@ -1507,7 +1511,7 @@ describe("CollectAutofillContentService", function () {
       expect(spanInputValue).toEqual("");
     });
 
-    it("returns the value of the passed input element", function () {
+    it("returns the value of the passed input element", () => {
       document.body.innerHTML += `
         <input type="checkbox" value="aTestValue" />
         <input id="hidden-input" type="hidden" />
@@ -1532,7 +1536,7 @@ describe("CollectAutofillContentService", function () {
       expect(spanInputValue).toEqual("A span input value");
     });
 
-    it("return the truncated value of the passed hidden input type if the value length exceeds 256 characters", function () {
+    it("return the truncated value of the passed hidden input type if the value length exceeds 256 characters", () => {
       document.body.innerHTML += `
         <input id="long-value-hidden-input" type="hidden" value="’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe. | “Beware the Jabberwock, my son! | The jaws that bite, the claws that catch! | Beware the Jubjub bird, and shun | The frumious Bandersnatch!” | He took his vorpal sword in hand; | Long time the manxome foe he sought— | So rested he by the Tumtum tree | And stood awhile in thought. | And, as in uffish thought he stood, | The Jabberwock, with eyes of flame, | Came whiffling through the tulgey wood, | And burbled as it came! | One, two! One, two! And through and through | The vorpal blade went snicker-snack! | He left it dead, and with its head | He went galumphing back. | “And hast thou slain the Jabberwock? | Come to my arms, my beamish boy! | O frabjous day! Callooh! Callay!” | He chortled in his joy. | ’Twas brillig, and the slithy toves | Did gyre and gimble in the wabe: | All mimsy were the borogoves, | And the mome raths outgrabe." />
       `;
@@ -1549,8 +1553,8 @@ describe("CollectAutofillContentService", function () {
     });
   });
 
-  describe("getSelectElementOptions", function () {
-    it("returns the inner text and values of each `option` within the passed `select`", function () {
+  describe("getSelectElementOptions", () => {
+    it("returns the inner text and values of each `option` within the passed `select`", () => {
       document.body.innerHTML = `
         <select id="select-without-options"></select>
         <select id="select-with-options">

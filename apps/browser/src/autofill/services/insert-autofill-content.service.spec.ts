@@ -62,7 +62,7 @@ function setMockWindowLocation({
   }));
 }
 
-describe("InsertAutofillContentService", function () {
+describe("InsertAutofillContentService", () => {
   const domElementVisibilityService = new DomElementVisibilityService();
   const collectAutofillContentService = new CollectAutofillContentService(
     domElementVisibilityService
@@ -96,12 +96,14 @@ describe("InsertAutofillContentService", function () {
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     windowSpy.mockRestore();
     confirmSpy.mockRestore();
+    document.body.innerHTML = "";
   });
 
-  describe("fillForm", function () {
-    it("returns early if the passed fill script does not have a script property", function () {
+  describe("fillForm", () => {
+    it("returns early if the passed fill script does not have a script property", () => {
       fillScript.script = [];
       jest.spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe");
       jest.spyOn(insertAutofillContentService as any, "userCancelledInsecureUrlAutofill");
@@ -120,7 +122,7 @@ describe("InsertAutofillContentService", function () {
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
-    it("returns early if the script is filling within a sand boxed iframe", function () {
+    it("returns early if the script is filling within a sand boxed iframe", () => {
       jest
         .spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe")
         .mockReturnValue(true);
@@ -140,7 +142,7 @@ describe("InsertAutofillContentService", function () {
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
-    it("returns early if the autofill is occurring on an insecure url and the user cancels the autofill", function () {
+    it("returns early if the autofill is occurring on an insecure url and the user cancels the autofill", () => {
       jest
         .spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe")
         .mockReturnValue(false);
@@ -160,7 +162,7 @@ describe("InsertAutofillContentService", function () {
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
-    it("returns early if the iframe is untrusted and the user cancelled the autofill", function () {
+    it("returns early if the iframe is untrusted and the user cancelled the autofill", () => {
       jest
         .spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe")
         .mockReturnValue(false);
@@ -182,7 +184,7 @@ describe("InsertAutofillContentService", function () {
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
-    it("runs the fill script action for all scripts found within the fill script", function () {
+    it("runs the fill script action for all scripts found within the fill script", () => {
       jest
         .spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe")
         .mockReturnValue(false);
@@ -223,7 +225,7 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("fillingWithinSandboxedIframe", function () {
+  describe("fillingWithinSandboxedIframe", () => {
     afterEach(() => {
       Object.defineProperty(globalThis, "window", {
         value: { frameElement: null },
@@ -231,7 +233,7 @@ describe("InsertAutofillContentService", function () {
       });
     });
 
-    it("returns false if the `self.origin` value is not null", function () {
+    it("returns false if the `self.origin` value is not null", () => {
       const result = insertAutofillContentService["fillingWithinSandboxedIframe"]();
 
       expect(result).toBe(false);
@@ -258,15 +260,15 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("userCancelledInsecureUrlAutofill", function () {
+  describe("userCancelledInsecureUrlAutofill", () => {
     const currentHostname = "bitwarden.com";
 
     beforeEach(() => {
       savedURLs = [`https://${currentHostname}`];
     });
 
-    describe("returns false if Autofill occurring...", function () {
-      it("when there are no saved URLs", function () {
+    describe("returns false if Autofill occurring...", () => {
+      it("when there are no saved URLs", () => {
         savedURLs = [];
         setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
@@ -284,7 +286,7 @@ describe("InsertAutofillContentService", function () {
         expect(userCancelledInsecureUrlAutofill2).toBe(false);
       });
 
-      it("on http page and saved URLs contain no https values", function () {
+      it("on http page and saved URLs contain no https values", () => {
         savedURLs = ["http://bitwarden.com"];
         setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
@@ -295,7 +297,7 @@ describe("InsertAutofillContentService", function () {
         expect(userCancelledInsecureUrlAutofill).toBe(false);
       });
 
-      it("on https page with saved https URL", function () {
+      it("on https page with saved https URL", () => {
         setMockWindowLocation({ protocol: "https:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
@@ -305,7 +307,7 @@ describe("InsertAutofillContentService", function () {
         expect(userCancelledInsecureUrlAutofill).toBe(false);
       });
 
-      it("on page with no password field", function () {
+      it("on page with no password field", () => {
         setMockWindowLocation({ protocol: "https:", hostname: currentHostname });
 
         document.body.innerHTML = `
@@ -323,7 +325,7 @@ describe("InsertAutofillContentService", function () {
         expect(userCancelledInsecureUrlAutofill).toBe(false);
       });
 
-      it("on http page with saved https URL and user approval", function () {
+      it("on http page with saved https URL and user approval", () => {
         setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
         confirmSpy.mockImplementation(jest.fn(() => true));
 
@@ -335,7 +337,7 @@ describe("InsertAutofillContentService", function () {
       });
     });
 
-    it("returns true if Autofill occurring on http page with saved https URL and user disapproval", function () {
+    it("returns true if Autofill occurring on http page with saved https URL and user disapproval", () => {
       setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
       confirmSpy.mockImplementation(jest.fn(() => false));
 
@@ -346,7 +348,7 @@ describe("InsertAutofillContentService", function () {
       expect(userCancelledInsecureUrlAutofill).toBe(true);
     });
 
-    it("returns false if the vault item contains uris with both secure and insecure uris, but a insecure uri is being used on a insecure web page", function () {
+    it("returns false if the vault item contains uris with both secure and insecure uris, but a insecure uri is being used on a insecure web page", () => {
       setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
       savedURLs = ["http://bitwarden.com", "https://some-other-uri.com"];
 
@@ -358,8 +360,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("userCancelledUntrustedIframeAutofill", function () {
-    it("returns false if Autofill occurring within a trusted iframe", function () {
+  describe("userCancelledUntrustedIframeAutofill", () => {
+    it("returns false if Autofill occurring within a trusted iframe", () => {
       fillScript.untrustedIframe = false;
 
       const result =
@@ -369,7 +371,7 @@ describe("InsertAutofillContentService", function () {
       expect(confirmSpy).not.toHaveBeenCalled();
     });
 
-    it("returns false if Autofill occurring within an untrusted iframe and the user approves", function () {
+    it("returns false if Autofill occurring within an untrusted iframe and the user approves", () => {
       fillScript.untrustedIframe = true;
       confirmSpy.mockImplementation(jest.fn(() => true));
 
@@ -380,7 +382,7 @@ describe("InsertAutofillContentService", function () {
       expect(confirmSpy).toHaveBeenCalled();
     });
 
-    it("returns true if Autofill occurring within an untrusted iframe and the user disapproves", function () {
+    it("returns true if Autofill occurring within an untrusted iframe and the user disapproves", () => {
       fillScript.untrustedIframe = true;
       confirmSpy.mockImplementation(jest.fn(() => false));
 
@@ -392,12 +394,12 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("runFillScriptAction", function () {
-    beforeEach(function () {
+  describe("runFillScriptAction", () => {
+    beforeEach(() => {
       jest.useFakeTimers();
     });
 
-    it("returns early if no opid is provided", function () {
+    it("returns early if no opid is provided", () => {
       const action = "fill_by_opid";
       const opid = "";
       const value = "value";
@@ -410,14 +412,14 @@ describe("InsertAutofillContentService", function () {
       expect(insertAutofillContentService["autofillInsertActions"][action]).not.toHaveBeenCalled();
     });
 
-    describe("given a valid fill script action and opid", function () {
+    describe("given a valid fill script action and opid", () => {
       const fillScriptActions: FillScriptActions[] = [
         "fill_by_opid",
         "click_on_opid",
         "focus_by_opid",
       ];
       fillScriptActions.forEach((action) => {
-        it(`triggers a ${action} action`, function () {
+        it(`triggers a ${action} action`, () => {
           const opid = "opid";
           const value = "value";
           const scriptAction: FillScript = [action, opid, value];
@@ -437,8 +439,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("handleFillFieldByOpidAction", function () {
-    it("finds the field element by opid and inserts the value into the field", function () {
+  describe("handleFillFieldByOpidAction", () => {
+    it("finds the field element by opid and inserts the value into the field", () => {
       const opid = "__1";
       const value = "value";
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
@@ -462,8 +464,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("handleClickOnFieldByOpidAction", function () {
-    it("clicks on the elements targeted by the passed opid", function () {
+  describe("handleClickOnFieldByOpidAction", () => {
+    it("clicks on the elements targeted by the passed opid", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       textInput.opid = "__1";
       let clickEventCount = 0;
@@ -495,7 +497,7 @@ describe("InsertAutofillContentService", function () {
       textInput.removeEventListener("click", clickEventHandler);
     });
 
-    it("should not trigger click when no suitable elements can be found", function () {
+    it("should not trigger click when no suitable elements can be found", () => {
       const textInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       let clickEventCount = 0;
       const expectedClickEventCount = 0;
@@ -516,8 +518,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("handleFocusOnFieldByOpidAction", function () {
-    it("simulates click and focus events on the element targeted by the passed opid", function () {
+  describe("handleFocusOnFieldByOpidAction", () => {
+    it("simulates click and focus events on the element targeted by the passed opid", () => {
       const targetInput = document.querySelector('input[type="text"]') as FormElementWithAttribute;
       targetInput.opid = "__0";
       const elementEventCount: { [key: string]: number } = {
@@ -558,8 +560,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("insertValueIntoField", function () {
-    it("returns early if an element is not provided", function () {
+  describe("insertValueIntoField", () => {
+    it("returns early if an element is not provided", () => {
       const value = "test";
       const element: FormFieldElement | null = null;
       jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
@@ -571,7 +573,7 @@ describe("InsertAutofillContentService", function () {
       ).not.toHaveBeenCalled();
     });
 
-    it("returns early if a value is not provided", function () {
+    it("returns early if a value is not provided", () => {
       const value = "";
       const element: FormFieldElement | null = document.querySelector('input[type="text"]');
       jest.spyOn(insertAutofillContentService as any, "handleInsertValueAndTriggerSimulatedEvents");
@@ -583,7 +585,7 @@ describe("InsertAutofillContentService", function () {
       ).not.toHaveBeenCalled();
     });
 
-    it("will set the inner text of the element if a span element is passed", function () {
+    it("will set the inner text of the element if a span element is passed", () => {
       document.body.innerHTML = `<span id="username"></span>`;
       const value = "test";
       const element = document.getElementById("username") as FormFieldElement;
@@ -597,7 +599,7 @@ describe("InsertAutofillContentService", function () {
       ).toHaveBeenCalledWith(element, expect.any(Function));
     });
 
-    it("will set the `checked` attribute of any passed checkbox or radio elements", function () {
+    it("will set the `checked` attribute of any passed checkbox or radio elements", () => {
       document.body.innerHTML = `<input type="checkbox" id="checkbox" /><input type="radio" id="radio" />`;
       const checkboxElement = document.getElementById("checkbox") as HTMLInputElement;
       const radioElement = document.getElementById("radio") as HTMLInputElement;
@@ -622,7 +624,7 @@ describe("InsertAutofillContentService", function () {
       });
     });
 
-    it("will set the `value` attribute of any passed input or textarea elements", function () {
+    it("will set the `value` attribute of any passed input or textarea elements", () => {
       document.body.innerHTML = `<input type="text" id="username" /><textarea id="bio"></textarea>`;
       const value1 = "test";
       const value2 = "test2";
@@ -648,8 +650,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("handleInsertValueAndTriggerSimulatedEvents", function () {
-    it("triggers pre- and post-insert events on the element while filling the value into the element", function () {
+  describe("handleInsertValueAndTriggerSimulatedEvents", () => {
+    it("triggers pre- and post-insert events on the element while filling the value into the element", () => {
       const value = "test";
       const element = document.querySelector('input[type="text"]') as FormFieldElement;
       jest.spyOn(insertAutofillContentService as any, "triggerPreInsertEventsOnElement");
@@ -678,8 +680,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("triggerPreInsertEventsOnElement", function () {
-    it("triggers a simulated click and keyboard event on the element", function () {
+  describe("triggerPreInsertEventsOnElement", () => {
+    it("triggers a simulated click and keyboard event on the element", () => {
       const initialElementValue = "test";
       document.body.innerHTML = `<input type="text" id="username" value="${initialElementValue}"/>`;
       const element = document.getElementById("username") as FillableFormFieldElement;
@@ -701,8 +703,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("triggerPostInsertEventsOnElement", function () {
-    it("triggers simulated event interactions and blurs the element after", function () {
+  describe("triggerPostInsertEventsOnElement", () => {
+    it("triggers simulated event interactions and blurs the element after", () => {
       const elementValue = "test";
       document.body.innerHTML = `<input type="text" id="username" value="${elementValue}"/>`;
       const element = document.getElementById("username") as FillableFormFieldElement;
@@ -723,14 +725,14 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("triggerFillAnimationOnElement", function () {
-    beforeEach(function () {
+  describe("triggerFillAnimationOnElement", () => {
+    beforeEach(() => {
       jest.useFakeTimers();
       jest.clearAllTimers();
     });
 
-    describe("will not trigger the animation when...", function () {
-      it("the element is a non-hidden hidden input type", async function () {
+    describe("will not trigger the animation when...", () => {
+      it("the element is a non-hidden hidden input type", async () => {
         document.body.innerHTML = mockLoginForm + '<input type="hidden" />';
         const testElement = document.querySelector(
           'input[type="hidden"]'
@@ -745,7 +747,7 @@ describe("InsertAutofillContentService", function () {
         expect(testElement.classList.remove).not.toHaveBeenCalled();
       });
 
-      it("the element is a non-hidden textarea", function () {
+      it("the element is a non-hidden textarea", () => {
         document.body.innerHTML = mockLoginForm + "<textarea></textarea>";
         const testElement = document.querySelector("textarea") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
@@ -758,7 +760,7 @@ describe("InsertAutofillContentService", function () {
         expect(testElement.classList.remove).not.toHaveBeenCalled();
       });
 
-      it("the element is a unsupported tag", function () {
+      it("the element is a unsupported tag", () => {
         document.body.innerHTML = mockLoginForm + '<div id="input-tag"></div>';
         const testElement = document.querySelector("#input-tag") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
@@ -771,7 +773,7 @@ describe("InsertAutofillContentService", function () {
         expect(testElement.classList.remove).not.toHaveBeenCalled();
       });
 
-      it("the element has a `visibility: hidden;` CSS rule applied to it", function () {
+      it("the element has a `visibility: hidden;` CSS rule applied to it", () => {
         const testElement = document.querySelector(
           'input[type="password"]'
         ) as FillableFormFieldElement;
@@ -786,7 +788,7 @@ describe("InsertAutofillContentService", function () {
         expect(testElement.classList.remove).not.toHaveBeenCalled();
       });
 
-      it("the element has a `display: none;` CSS rule applied to it", function () {
+      it("the element has a `display: none;` CSS rule applied to it", () => {
         const testElement = document.querySelector(
           'input[type="password"]'
         ) as FillableFormFieldElement;
@@ -801,7 +803,7 @@ describe("InsertAutofillContentService", function () {
         expect(testElement.classList.remove).not.toHaveBeenCalled();
       });
 
-      it("a parent of the element has an `opacity: 0;` CSS rule applied to it", function () {
+      it("a parent of the element has an `opacity: 0;` CSS rule applied to it", () => {
         document.body.innerHTML =
           mockLoginForm + '<div style="opacity: 0;"><input type="email" /></div>';
         const testElement = document.querySelector(
@@ -818,8 +820,8 @@ describe("InsertAutofillContentService", function () {
       });
     });
 
-    describe("will trigger the animation when...", function () {
-      it("the element is a non-hidden password field", function () {
+    describe("will trigger the animation when...", () => {
+      it("the element is a non-hidden password field", () => {
         const testElement = document.querySelector(
           'input[type="password"]'
         ) as FillableFormFieldElement;
@@ -844,7 +846,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden email input", function () {
+      it("the element is a non-hidden email input", () => {
         document.body.innerHTML = mockLoginForm + '<input type="email" />';
         const testElement = document.querySelector(
           'input[type="email"]'
@@ -863,7 +865,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden text input", function () {
+      it("the element is a non-hidden text input", () => {
         document.body.innerHTML = mockLoginForm + '<input type="text" />';
         const testElement = document.querySelector(
           'input[type="text"]'
@@ -882,7 +884,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden number input", function () {
+      it("the element is a non-hidden number input", () => {
         document.body.innerHTML = mockLoginForm + '<input type="number" />';
         const testElement = document.querySelector(
           'input[type="number"]'
@@ -901,7 +903,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden tel input", function () {
+      it("the element is a non-hidden tel input", () => {
         document.body.innerHTML = mockLoginForm + '<input type="tel" />';
         const testElement = document.querySelector('input[type="tel"]') as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
@@ -918,7 +920,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden url input", function () {
+      it("the element is a non-hidden url input", () => {
         document.body.innerHTML = mockLoginForm + '<input type="url" />';
         const testElement = document.querySelector('input[type="url"]') as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
@@ -935,7 +937,7 @@ describe("InsertAutofillContentService", function () {
         );
       });
 
-      it("the element is a non-hidden span", function () {
+      it("the element is a non-hidden span", () => {
         document.body.innerHTML = mockLoginForm + '<span id="input-tag"></span>';
         const testElement = document.querySelector("#input-tag") as FillableFormFieldElement;
         jest.spyOn(testElement.classList, "add");
@@ -954,8 +956,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("triggerClickOnElement", function () {
-    it("will trigger a click event on the passed element", function () {
+  describe("triggerClickOnElement", () => {
+    it("will trigger a click event on the passed element", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLElement;
       jest.spyOn(inputElement, "click");
 
@@ -965,8 +967,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("triggerFocusOnElement", function () {
-    it("will trigger a focus event on the passed element and attempt to reset the value", function () {
+  describe("triggerFocusOnElement", () => {
+    it("will trigger a focus event on the passed element and attempt to reset the value", () => {
       const value = "test";
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       inputElement.value = "test";
@@ -980,7 +982,7 @@ describe("InsertAutofillContentService", function () {
       expect(inputElement.value).toEqual(value);
     });
 
-    it("will not attempt to reset the value but will still focus the element", function () {
+    it("will not attempt to reset the value but will still focus the element", () => {
       const value = "test";
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       inputElement.value = "test";
@@ -995,8 +997,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("simulateUserMouseClickAndFocusEventInteractions", function () {
-    it("will trigger click and focus events on the passed element", function () {
+  describe("simulateUserMouseClickAndFocusEventInteractions", () => {
+    it("will trigger click and focus events on the passed element", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       jest.spyOn(insertAutofillContentService as any, "triggerClickOnElement");
       jest.spyOn(insertAutofillContentService as any, "triggerFocusOnElement");
@@ -1013,8 +1015,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("simulateUserKeyboardEventInteractions", function () {
-    it("will trigger `keydown`, `keypress`, and `keyup` events on the passed element", function () {
+  describe("simulateUserKeyboardEventInteractions", () => {
+    it("will trigger `keydown`, `keypress`, and `keyup` events on the passed element", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       jest.spyOn(inputElement, "dispatchEvent");
 
@@ -1028,8 +1030,8 @@ describe("InsertAutofillContentService", function () {
     });
   });
 
-  describe("simulateInputElementChangedEvent", function () {
-    it("will trigger `input` and `change` events on the passed element", function () {
+  describe("simulateInputElementChangedEvent", () => {
+    it("will trigger `input` and `change` events on the passed element", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       jest.spyOn(inputElement, "dispatchEvent");
 
