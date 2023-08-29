@@ -133,7 +133,7 @@ export class VaultHeaderComponent {
     const organization = this.organizations.find(
       (o) => o.id === this.collection?.node.organizationId
     );
-    return organization.canEditAnyCollection || organization.canEditAssignedCollections;
+    return this.collection.node.canEdit(organization);
   }
 
   async editCollection(tab: CollectionDialogTabType): Promise<void> {
@@ -150,7 +150,7 @@ export class VaultHeaderComponent {
     const organization = this.organizations.find(
       (o) => o.id === this.collection?.node.organizationId
     );
-    return organization.canDeleteAnyCollection || organization.canDeleteAssignedCollections;
+    return this.collection.node.canDelete(organization);
   }
 
   deleteCollection() {

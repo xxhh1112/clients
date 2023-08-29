@@ -7,7 +7,6 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import { TableDataSource } from "@bitwarden/components";
 
 import { GroupView } from "../../../admin-console/organizations/core";
-import { CollectionAdminView } from "../../core/views/collection-admin.view";
 import { Unassigned } from "../../individual-vault/vault-filter/shared/models/routed-vault-filter.model";
 
 import { VaultItem } from "./vault-item";
@@ -92,16 +91,7 @@ export class VaultItemsComponent {
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
-
-    if (collection instanceof CollectionAdminView) {
-      return (
-        organization?.canEditAnyCollection ||
-        (organization?.canEditAssignedCollections && collection.assigned)
-      );
-    } else {
-      // From the individual vault where user can only see assigned collections
-      return organization?.canEditAnyCollection || organization?.canEditAssignedCollections;
-    }
+    return collection.canEdit(organization);
   }
 
   protected canDeleteCollection(collection: CollectionView): boolean {
@@ -111,16 +101,7 @@ export class VaultItemsComponent {
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
-    if (collection instanceof CollectionAdminView) {
-      // Otherwise, check if we can delete the specified collection
-      return (
-        organization?.canDeleteAnyCollection ||
-        (organization?.canDeleteAssignedCollections && collection.assigned)
-      );
-    } else {
-      // From the individual vault where user can only see assigned collections
-      return organization?.canDeleteAnyCollection || organization?.canDeleteAssignedCollections;
-    }
+    return collection.canDelete(organization);
   }
 
   protected toggleAll() {

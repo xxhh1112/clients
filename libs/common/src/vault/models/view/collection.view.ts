@@ -1,3 +1,4 @@
+import { Organization } from "../../../admin-console/models/domain/organization";
 import { ITreeNodeObject } from "../../../models/domain/tree-node";
 import { View } from "../../../models/view/view";
 import { Collection } from "../domain/collection";
@@ -25,5 +26,13 @@ export class CollectionView implements View, ITreeNodeObject {
       this.readOnly = c.readOnly;
       this.hidePasswords = c.hidePasswords;
     }
+  }
+
+  canEdit(org: Organization): boolean {
+    return org?.canEditAnyCollection || org?.canEditAssignedCollections;
+  }
+
+  canDelete(org: Organization): boolean {
+    return org?.canDeleteAnyCollection || org?.canDeleteAssignedCollections;
   }
 }
