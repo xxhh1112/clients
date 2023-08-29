@@ -7,7 +7,7 @@ type AutofillFormElements = Map<ElementWithOpId<HTMLFormElement>, AutofillForm>;
 
 type AutofillFieldElements = Map<ElementWithOpId<FormFieldElement>, AutofillField>;
 
-type AttributeUpdateParams = {
+type UpdateAutofillDataAttributeParams = {
   element: ElementWithOpId<HTMLFormElement | FormFieldElement>;
   attributeName: string;
   dataTarget?: AutofillForm | AutofillField;
@@ -22,6 +22,6 @@ interface CollectAutofillContentService {
 export {
   AutofillFormElements,
   AutofillFieldElements,
-  AttributeUpdateParams,
+  UpdateAutofillDataAttributeParams,
   CollectAutofillContentService,
 };

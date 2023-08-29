@@ -272,7 +272,7 @@ describe("CollectAutofillContentService", function () {
       const autofillFieldsData = await Promise.resolve(autofillFieldsPromise);
 
       expect(collectAutofillContentService["getAutofillFieldElements"]).toHaveBeenCalledWith(
-        50,
+        2000,
         formFieldElements
       );
       expect(collectAutofillContentService["buildAutofillFieldItem"]).toHaveBeenCalledTimes(2);
