@@ -2631,10 +2631,6 @@ export class StateService<
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.tokens?.twoFactorToken;
-
-    // return (
-    //   await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    // )?.twoFactorToken;
   }
 
   async setTwoFactorToken(value: string, options?: StorageOptions): Promise<void> {
@@ -2646,15 +2642,6 @@ export class StateService<
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
-
-    // const globals = await this.getGlobals(
-    //   this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    // );
-    // globals.twoFactorToken = value;
-    // await this.saveGlobals(
-    //   globals,
-    //   this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
-    // );
   }
 
   async getUserId(options?: StorageOptions): Promise<string> {
