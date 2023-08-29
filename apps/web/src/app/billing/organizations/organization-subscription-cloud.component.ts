@@ -99,9 +99,9 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       this.lineItems = this.sub?.subscription?.items;
       this.lineItems.forEach((item) => {
         const itemTotalAmount = item.amount * item.quantity;
-        const seatPriceTotal = this.sub.plan.SecretsManager.seatPrice * item.quantity;
+        const seatPriceTotal = this.sub.plan?.SecretsManager?.seatPrice * item.quantity;
         const additionalPriceTotal =
-          this.sub.plan.SecretsManager.additionalPricePerServiceAccount * item.quantity;
+          this.sub.plan?.SecretsManager?.additionalPricePerServiceAccount * item.quantity;
         item.productName =
           itemTotalAmount === seatPriceTotal || itemTotalAmount === additionalPriceTotal
             ? "SecretsManager"
