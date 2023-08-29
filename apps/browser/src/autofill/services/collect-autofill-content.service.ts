@@ -29,8 +29,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   * Builds the data for all the forms and fields
-   * that are found within the page DOM.
+   * Builds the data for all forms and fields found within the page DOM.
+   * Sets up a mutation observer to verify DOM changes and returns early
+   * with cached data if no changes are detected.
    * @returns {Promise<AutofillPageDetails>}
    * @public
    */

@@ -1,3 +1,5 @@
+import AutofillField from "../models/autofill-field";
+import AutofillForm from "../models/autofill-form";
 import {
   ElementWithOpId,
   FillableFormFieldElement,
@@ -28,7 +30,122 @@ describe("CollectAutofillContentService", function () {
   });
 
   describe("getPageDetails", function () {
-    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", async function () {
+    it("sets up the mutation observer the first time getPageDetails is called", async () => {
+      jest.spyOn(collectAutofillContentService as any, "setupMutationObserver");
+
+      await collectAutofillContentService.getPageDetails();
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["setupMutationObserver"]).toHaveBeenCalledTimes(1);
+    });
+
+    it("returns an object with empty forms and fields if no fields were found on a previous iteration", async () => {
+      collectAutofillContentService["domRecentlyMutated"] = false;
+      collectAutofillContentService["noFieldsFound"] = true;
+      jest.spyOn(collectAutofillContentService as any, "getFormattedPageDetails");
+      jest.spyOn(collectAutofillContentService as any, "queryAutofillFormAndFieldElements");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
+
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["getFormattedPageDetails"]).toHaveBeenCalledWith({}, []);
+      expect(
+        collectAutofillContentService["queryAutofillFormAndFieldElements"]
+      ).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFormsData"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).not.toHaveBeenCalled();
+    });
+
+    it("returns an object with cached form and field data values", () => {
+      const formId = "validFormId";
+      const formAction = "https://example.com/";
+      const formMethod = "post";
+      const formName = "validFormName";
+      const usernameFieldId = "usernameField";
+      const usernameFieldName = "username";
+      const usernameFieldLabel = "User Name";
+      const passwordFieldId = "passwordField";
+      const passwordFieldName = "password";
+      const passwordFieldLabel = "Password";
+      document.body.innerHTML = `
+        <form id="${formId}" action="${formAction}" method="${formMethod}" name="${formName}">
+            <label for="${usernameFieldId}">${usernameFieldLabel}</label>
+            <input type="text" id="${usernameFieldId}" name="${usernameFieldName}" />
+            <label for="${passwordFieldId}">${passwordFieldLabel}</label>
+            <input type="password" id="${passwordFieldId}" name="${passwordFieldName}" />
+        </form>
+      `;
+      const formElement = document.getElementById(formId) as ElementWithOpId<HTMLFormElement>;
+      const autofillForm: AutofillForm = {
+        opid: "__form__0",
+        htmlAction: formAction,
+        htmlName: formName,
+        htmlID: formId,
+        htmlMethod: formMethod,
+      };
+      const fieldElement = document.getElementById(
+        usernameFieldId
+      ) as ElementWithOpId<FormFieldElement>;
+      const autofillField: AutofillField = {
+        opid: "__0",
+        elementNumber: 0,
+        maxLength: 999,
+        viewable: true,
+        htmlID: usernameFieldId,
+        htmlName: usernameFieldName,
+        htmlClass: null,
+        tabindex: null,
+        title: "",
+        tagName: "input",
+        "label-tag": usernameFieldLabel,
+        "label-data": null,
+        "label-aria": null,
+        "label-top": null,
+        "label-right": passwordFieldLabel,
+        "label-left": usernameFieldLabel,
+        placeholder: "",
+        rel: null,
+        type: "text",
+        value: "",
+        checked: false,
+        autoCompleteType: "",
+        disabled: false,
+        readonly: false,
+        selectInfo: null,
+        form: "__form__0",
+        "aria-hidden": false,
+        "aria-disabled": false,
+        "aria-haspopup": false,
+        "data-stripe": null,
+      };
+      collectAutofillContentService["domRecentlyMutated"] = false;
+      collectAutofillContentService["autofillFormElements"] = new Map([
+        [formElement, autofillForm],
+      ]);
+      collectAutofillContentService["autofillFieldElements"] = new Map([
+        [fieldElement, autofillField],
+      ]);
+      jest.spyOn(collectAutofillContentService as any, "getFormattedPageDetails");
+      jest.spyOn(collectAutofillContentService as any, "getFormattedAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "getFormattedAutofillFieldsData");
+      jest.spyOn(collectAutofillContentService as any, "queryAutofillFormAndFieldElements");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
+
+      collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["getFormattedPageDetails"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["getFormattedAutofillFormsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["getFormattedAutofillFieldsData"]).toHaveBeenCalled();
+      expect(
+        collectAutofillContentService["queryAutofillFormAndFieldElements"]
+      ).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFormsData"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).not.toHaveBeenCalled();
+    });
+
+    it("returns an object containing information about the current page as well as autofill data for the forms and fields of the page", async function () {
       const documentTitle = "Test Page";
       const formId = "validFormId";
       const formAction = "https://example.com/";
@@ -140,6 +257,19 @@ describe("CollectAutofillContentService", function () {
         ],
         collectedTimestamp: expect.any(Number),
       });
+    });
+
+    it("sets the noFieldsFond property to true if the page has no forms or fields", async function () {
+      document.body.innerHTML = "";
+      collectAutofillContentService["noFieldsFound"] = false;
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
+
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["buildAutofillFormsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["noFieldsFound"]).toBe(true);
     });
   });
 
