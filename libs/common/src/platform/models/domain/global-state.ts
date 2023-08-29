@@ -14,7 +14,7 @@ export class GlobalState {
   rememberedEmail?: string;
   theme?: ThemeType = ThemeType.System;
   window?: WindowState = new WindowState();
-  twoFactorToken?: string;
+  // twoFactorToken?: string;
   disableFavicon?: boolean;
   biometricAwaitingAcceptance?: boolean;
   biometricFingerprintValidated?: boolean;
