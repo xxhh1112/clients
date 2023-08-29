@@ -2629,7 +2629,7 @@ export class StateService<
 
   async getTwoFactorToken(options?: StorageOptions): Promise<string> {
     return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.tokens?.twoFactorToken;
   }
 
