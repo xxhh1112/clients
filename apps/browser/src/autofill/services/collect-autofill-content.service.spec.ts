@@ -1764,11 +1764,32 @@ describe("CollectAutofillContentService", function () {
       collectAutofillContentService["buildTreeWalkerNodesQueryResults"](
         document.body,
         [],
-        callbackFilter
+        callbackFilter,
+        true
       );
 
       expect(collectAutofillContentService["buildTreeWalkerNodesQueryResults"]).toBeCalledTimes(2);
       expect(collectAutofillContentService["mutationObserver"].observe).toBeCalled();
+    });
+
+    it("will not observe the shadowDOM element if required to skip", () => {
+      collectAutofillContentService["mutationObserver"] = mock<MutationObserver>({
+        observe: jest.fn(),
+      });
+      const shadowRoot = document.createElement("div");
+      jest
+        .spyOn(collectAutofillContentService as any, "getShadowRoot")
+        .mockReturnValueOnce(shadowRoot);
+      const callbackFilter = jest.fn();
+
+      collectAutofillContentService["buildTreeWalkerNodesQueryResults"](
+        document.body,
+        [],
+        callbackFilter,
+        false
+      );
+
+      expect(collectAutofillContentService["mutationObserver"].observe).not.toBeCalled();
     });
   });
 

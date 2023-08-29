@@ -105,12 +105,22 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * and returns a collection of nodes.
    * @param {Node} rootNode
    * @param {Function} filterCallback
+   * @param {boolean} isObservingShadowRoot
    * @returns {Node[]}
    */
-  queryAllTreeWalkerNodes(rootNode: Node, filterCallback: CallableFunction): Node[] {
+  queryAllTreeWalkerNodes(
+    rootNode: Node,
+    filterCallback: CallableFunction,
+    isObservingShadowRoot = true
+  ): Node[] {
     const treeWalkerQueryResults: Node[] = [];
 
-    this.buildTreeWalkerNodesQueryResults(rootNode, treeWalkerQueryResults, filterCallback);
+    this.buildTreeWalkerNodesQueryResults(
+      rootNode,
+      treeWalkerQueryResults,
+      filterCallback,
+      isObservingShadowRoot
+    );
 
     return treeWalkerQueryResults;
   }
@@ -807,12 +817,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @param {Node} rootNode
    * @param {Node[]} treeWalkerQueryResults
    * @param {Function} filterCallback
+   * @param {boolean} isObservingShadowRoot
    * @private
    */
   private buildTreeWalkerNodesQueryResults(
     rootNode: Node,
     treeWalkerQueryResults: Node[],
-    filterCallback: CallableFunction
+    filterCallback: CallableFunction,
+    isObservingShadowRoot: boolean
   ) {
     const treeWalker = document?.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT);
     let currentNode = treeWalker?.currentNode;
@@ -824,15 +836,19 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
 
       const nodeShadowRoot = this.getShadowRoot(currentNode);
       if (nodeShadowRoot) {
-        this.mutationObserver.observe(nodeShadowRoot, {
-          attributes: true,
-          childList: true,
-          subtree: true,
-        });
+        if (isObservingShadowRoot) {
+          this.mutationObserver.observe(nodeShadowRoot, {
+            attributes: true,
+            childList: true,
+            subtree: true,
+          });
+        }
+
         this.buildTreeWalkerNodesQueryResults(
           nodeShadowRoot,
           treeWalkerQueryResults,
-          filterCallback
+          filterCallback,
+          isObservingShadowRoot
         );
       }
 

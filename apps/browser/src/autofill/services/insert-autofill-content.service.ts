@@ -90,7 +90,8 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return Boolean(
       this.collectAutofillContentService.queryAllTreeWalkerNodes(
         document.documentElement,
-        (node: Node) => node instanceof HTMLInputElement && node.type === "password"
+        (node: Node) => node instanceof HTMLInputElement && node.type === "password",
+        false
       )?.length
     );
   }
