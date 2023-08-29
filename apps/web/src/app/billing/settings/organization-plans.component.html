@@ -280,9 +280,7 @@
           <small *ngIf="selectablePlan.PasswordManager.hasAdditionalStorageOption">
             {{ "additionalStorageGb" | i18n }}:
             {{ formGroup.controls["additionalStorage"].value || 0 }} &times;
-            {{
-              selectablePlan.PasswordManager.additionalStoragePricePerGb / 12 | currency : "$"
-            }}
+            {{ selectablePlan.PasswordManager.additionalStoragePricePerGb / 12 | currency : "$" }}
             &times; 12 {{ "monthAbbr" | i18n }} =
             {{ additionalStorageTotal(selectablePlan) | currency : "$" }} /{{ "year" | i18n }}
           </small>
@@ -379,7 +377,7 @@
     >
       {{ "submit" | i18n }}
     </button>
-    <button type="button" class="btn btn-outline-secondary" (click)="cancel()" *ngIf="showCancel">
+    <button type="button" buttonType="secondary" bitButton (click)="cancel()" *ngIf="showCancel">
       {{ "cancel" | i18n }}
     </button>
   </div>
