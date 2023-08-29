@@ -101,6 +101,21 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
+   * Queries the DOM for all the nodes that match the given filter callback
+   * and returns a collection of nodes.
+   * @param {Node} rootNode
+   * @param {Function} filterCallback
+   * @returns {Node[]}
+   */
+  queryAllTreeWalkerNodes(rootNode: Node, filterCallback: CallableFunction): Node[] {
+    const treeWalkerQueryResults: Node[] = [];
+
+    this.buildTreeWalkerNodesQueryResults(rootNode, treeWalkerQueryResults, filterCallback);
+
+    return treeWalkerQueryResults;
+  }
+
+  /**
    * Formats and returns the AutofillPageDetails object
    * @param {Record<string, AutofillForm>} autofillFormsData
    * @param {AutofillField[]} autofillFieldsData
@@ -787,28 +802,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   * Queries the DOM for all the nodes that match the given filter callback
-   * and returns a collection of nodes.
-   * @param {Node} rootNode
-   * @param {Function} filterCallback
-   * @returns {Node[]}
-   */
-  queryAllTreeWalkerNodes(rootNode: Node, filterCallback: CallableFunction): Node[] {
-    const treeWalkerQueryResults: Node[] = [];
-
-    this.buildTreeWalkerNodesQueryResults(rootNode, treeWalkerQueryResults, filterCallback);
-
-    return treeWalkerQueryResults;
-  }
-
-  /**
    * Recursively builds a collection of nodes that match the given filter callback.
    * If a node has a ShadowRoot, it will be observed for mutations.
    * @param {Node} rootNode
    * @param {Node[]} treeWalkerQueryResults
    * @param {Function} filterCallback
+   * @private
    */
-  buildTreeWalkerNodesQueryResults(
+  private buildTreeWalkerNodesQueryResults(
     rootNode: Node,
     treeWalkerQueryResults: Node[],
     filterCallback: CallableFunction
