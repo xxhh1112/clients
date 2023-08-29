@@ -594,10 +594,10 @@
     "message": "Turpināt"
   },
   "enterVerificationCodeApp": {
-    "message": "Ievadi 6 ciparu apstiprinājuma kodu no autentificētāja lietotnes!"
+    "message": "Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes."
   },
   "enterVerificationCodeEmail": {
-    "message": "Ievadi 6 ciparu apstiprinājuma kodu, kas tika nosūtīts uz $EMAIL$!",
+    "message": "Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz $EMAIL$.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Vienums neatgriezeniski izdzēsts"
   },
-  "restoreItem": {
-    "message": "Atjaunot vienumu"
-  },
-  "restoreItemConfirmation": {
-    "message": "Vai tiešām atjaunot šo vienumu?"
-  },
   "restoredItem": {
     "message": "Vienums atjaunots"
   },
@@ -1594,7 +1588,7 @@
     "message": "Atzīmējot šo rūtiņu, Tu piekrīti sekojošajam:"
   },
   "acceptPoliciesRequired": {
-    "message": "Nav apstiprināti izmantošanas nosacījumi un privātuma politika."
+    "message": "Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi."
   },
   "enableBrowserIntegration": {
     "message": "Iespējot sasaistīšanu ar pārlūku"
@@ -2095,7 +2089,7 @@
     "message": "Atcerēties e-pasta adresi"
   },
   "notYou": {
-    "message": "Tas neesat Jūs?"
+    "message": "Tas neesi Tu?"
   },
   "newAroundHere": {
     "message": "Jauns šeit?"
@@ -2251,5 +2245,20 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Ieteicamie iestatījumu atjauninājumi"
+  },
+  "loggingInOn": {
+    "message": "Piesakās"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Pašizvietots"
+  },
+  "accessDenied": {
+    "message": "Piekļuve liegta. Nav nepieciešamo atļauju, lai skatītu šo lapu."
   }
 }

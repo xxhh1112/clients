@@ -1,11 +1,11 @@
 import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
@@ -103,7 +103,7 @@ export class WebauthnAdminService {
       const prfResult = (response.getClientExtensionResults() as any).prf?.results?.first;
       const symmetricPrfKey = createSymmetricKeyFromPrf(prfResult);
       const [publicKey, privateKey] = await this.cryptoService.makeKeyPair(symmetricPrfKey);
-      const rawUserKey = await this.cryptoService.getEncKey();
+      const rawUserKey = await this.cryptoService.getUserKey();
       const userKey = await this.cryptoService.rsaEncrypt(
         rawUserKey.key,
         Utils.fromB64ToArray(publicKey)

@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { Verification } from "@bitwarden/common/types/verification";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";

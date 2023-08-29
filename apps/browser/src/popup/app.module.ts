@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
+import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
 import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.component";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
@@ -19,6 +20,7 @@ import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
+import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "../auth/popup/login-with-device.component";
 import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
@@ -51,6 +53,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -62,7 +65,6 @@ import { ServicesModule } from "./services/services.module";
 import { AboutComponent } from "./settings/about.component";
 import { AutofillComponent } from "./settings/autofill.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
-import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
 import { FoldersComponent } from "./settings/folders.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
@@ -73,7 +75,7 @@ import { VaultTimeoutInputComponent } from "./settings/vault-timeout-input.compo
 import { TabsComponent } from "./tabs.component";
 
 // Register the locales for the application
-import "./locales";
+import "../platform/popup/locales";
 
 @NgModule({
   imports: [
@@ -120,6 +122,7 @@ import "./locales";
     LockComponent,
     LoginComponent,
     LoginWithDeviceComponent,
+    LoginDecryptionOptionsComponent,
     OptionsComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -153,6 +156,7 @@ import "./locales";
     AboutComponent,
     HelpAndFeedbackComponent,
     AutofillComponent,
+    EnvironmentSelectorComponent,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],

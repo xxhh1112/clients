@@ -2,6 +2,7 @@ import { KdfType } from "../../../enums";
 import { BaseResponse } from "../../../models/response/base.response";
 
 import { MasterPasswordPolicyResponse } from "./master-password-policy.response";
+import { UserDecryptionOptionsResponse } from "./user-decryption-options/user-decryption-options.response";
 
 export class IdentityTokenResponse extends BaseResponse {
   accessToken: string;
@@ -22,9 +23,11 @@ export class IdentityTokenResponse extends BaseResponse {
   apiUseKeyConnector: boolean;
   keyConnectorUrl: string;
 
+  // TODO: Merge into UserDecryptionOptionsResponse
   prfPublicKey: string;
   prfPrivateKey: string;
   userKey: string; // TODO: Rename this to something else?
+  userDecryptionOptions: UserDecryptionOptionsResponse;
 
   constructor(response: any) {
     super(response);
@@ -51,5 +54,11 @@ export class IdentityTokenResponse extends BaseResponse {
     this.prfPrivateKey = this.getResponseProperty("prfPrivateKey");
     this.prfPublicKey = this.getResponseProperty("prfPublicKey");
     this.userKey = this.getResponseProperty("userKey");
+
+    if (response.UserDecryptionOptions) {
+      this.userDecryptionOptions = new UserDecryptionOptionsResponse(
+        this.getResponseProperty("UserDecryptionOptions")
+      );
+    }
   }
 }

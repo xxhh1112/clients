@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnDestroy, OnInit } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 import { WebauthnAdminService } from "../../core";
 import {
@@ -30,7 +30,7 @@ export class WebauthnLoginSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
     private webauthnService: WebauthnAdminService,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogService
   ) {}
 
   @HostBinding("attr.aria-busy")

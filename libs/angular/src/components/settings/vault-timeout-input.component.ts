@@ -6,12 +6,14 @@ import {
   ValidationErrors,
   Validator,
 } from "@angular/forms";
-import { filter, Subject, takeUntil } from "rxjs";
+import { filter, map, Observable, Subject, takeUntil } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 @Directive()
 export class VaultTimeoutInputComponent
@@ -43,6 +45,8 @@ export class VaultTimeoutInputComponent
   vaultTimeoutPolicyHours: number;
   vaultTimeoutPolicyMinutes: number;
 
+  protected canLockVault$: Observable<boolean>;
+
   private onChange: (vaultTimeout: number) => void;
   private validatorChange: () => void;
   private destroy$ = new Subject<void>();
@@ -50,6 +54,7 @@ export class VaultTimeoutInputComponent
   constructor(
     private formBuilder: FormBuilder,
     private policyService: PolicyService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private i18nService: I18nService
   ) {}
 
@@ -86,6 +91,10 @@ export class VaultTimeoutInputComponent
           },
         });
       });
+
+    this.canLockVault$ = this.vaultTimeoutSettingsService
+      .availableVaultTimeoutActions$()
+      .pipe(map((actions) => actions.includes(VaultTimeoutAction.Lock)));
   }
 
   ngOnDestroy() {

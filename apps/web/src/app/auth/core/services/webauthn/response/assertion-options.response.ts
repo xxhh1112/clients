@@ -1,5 +1,5 @@
-import { Utils } from "@bitwarden/common/misc/utils";
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 export class AssertionOptionsResponse
   extends BaseResponse

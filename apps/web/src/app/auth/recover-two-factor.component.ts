@@ -2,12 +2,12 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { TwoFactorRecoveryRequest } from "@bitwarden/common/auth/models/request/two-factor-recovery.request";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Component({
   selector: "app-recover-two-factor",
@@ -35,7 +35,7 @@ export class RecoverTwoFactorComponent {
       request.recoveryCode = this.recoveryCode.replace(/\s/g, "").toLowerCase();
       request.email = this.email.trim().toLowerCase();
       const key = await this.authService.makePreloginKey(this.masterPassword, request.email);
-      request.masterPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, key);
+      request.masterPasswordHash = await this.cryptoService.hashMasterKey(this.masterPassword, key);
       this.formPromise = this.apiService.postTwoFactorRecover(request);
       await this.formPromise;
       this.platformUtilsService.showToast(

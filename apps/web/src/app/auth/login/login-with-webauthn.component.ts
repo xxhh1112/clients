@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 
 import { WebauthnLoginService } from "../core";
 import { WebauthnAssertionView } from "../core/views/webauthn-assertion.view";
@@ -33,7 +33,6 @@ export class LoginWithWebauthnComponent implements OnInit {
     private router: Router,
     private logService: LogService,
     private validationService: ValidationService,
-    private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private stateService: StateService
   ) {}

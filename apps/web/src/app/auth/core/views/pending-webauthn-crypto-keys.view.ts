@@ -1,4 +1,4 @@
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { EncString } from "@bitwarden/common/src/platform/models/domain/enc-string";
 
 export class PendingWebauthnCryptoKeysView {
   constructor(

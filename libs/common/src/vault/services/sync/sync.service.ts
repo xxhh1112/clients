@@ -1,22 +1,14 @@
 import { ApiService } from "../../../abstractions/api.service";
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { LogService } from "../../../abstractions/log.service";
-import { MessagingService } from "../../../abstractions/messaging.service";
 import { SettingsService } from "../../../abstractions/settings.service";
-import { StateService } from "../../../abstractions/state.service";
-import { CollectionService } from "../../../admin-console/abstractions/collection.service";
-import { InternalOrganizationService } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
+import { InternalOrganizationServiceAbstraction } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "../../../admin-console/abstractions/provider.service";
-import { CollectionData } from "../../../admin-console/models/data/collection.data";
 import { OrganizationData } from "../../../admin-console/models/data/organization.data";
 import { PolicyData } from "../../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../../admin-console/models/data/provider.data";
-import { CollectionDetailsResponse } from "../../../admin-console/models/response/collection.response";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
 import { ForceResetPasswordReason } from "../../../auth/models/domain/force-reset-password-reason";
-import { sequentialize } from "../../../misc/sequentialize";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
   SyncCipherNotification,
@@ -24,6 +16,11 @@ import {
   SyncSendNotification,
 } from "../../../models/response/notification.response";
 import { ProfileResponse } from "../../../models/response/profile.response";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { MessagingService } from "../../../platform/abstractions/messaging.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { sequentialize } from "../../../platform/misc/sequentialize";
 import { SendData } from "../../../tools/send/models/data/send.data";
 import { SendResponse } from "../../../tools/send/models/response/send.response";
 import { SendApiService } from "../../../tools/send/services/send-api.service.abstraction";
@@ -36,6 +33,9 @@ import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { CipherResponse } from "../../../vault/models/response/cipher.response";
 import { FolderResponse } from "../../../vault/models/response/folder.response";
+import { CollectionService } from "../../abstractions/collection.service";
+import { CollectionData } from "../../models/data/collection.data";
+import { CollectionDetailsResponse } from "../../models/response/collection.response";
 
 export class SyncService implements SyncServiceAbstraction {
   syncInProgress = false;
@@ -55,7 +55,7 @@ export class SyncService implements SyncServiceAbstraction {
     private stateService: StateService,
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
-    private organizationService: InternalOrganizationService,
+    private organizationService: InternalOrganizationServiceAbstraction,
     private sendApiService: SendApiService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
@@ -303,8 +303,8 @@ export class SyncService implements SyncServiceAbstraction {
       throw new Error("Stamp has changed");
     }
 
-    await this.cryptoService.setEncKey(response.key);
-    await this.cryptoService.setEncPrivateKey(response.privateKey);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
+    await this.cryptoService.setPrivateKey(response.privateKey);
     await this.cryptoService.setProviderKeys(response.providers);
     await this.cryptoService.setOrgKeys(response.organizations, response.providerOrganizations);
     await this.stateService.setAvatarColor(response.avatarColor);

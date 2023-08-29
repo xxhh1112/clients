@@ -11,10 +11,11 @@ export class DialogCloseDirective {
 
   @HostBinding("attr.disabled")
   get disableClose() {
-    return this.dialogRef.disableClose ? true : null;
+    return this.dialogRef?.disableClose ? true : null;
   }
 
-  @HostListener("click") close(): void {
+  @HostListener("click")
+  close(): void {
     if (this.disableClose) {
       return;
     }

@@ -1,9 +1,5 @@
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
-import { AppIdService } from "../abstractions/appId.service";
-import { EnvironmentService } from "../abstractions/environment.service";
-import { PlatformUtilsService } from "../abstractions/platformUtils.service";
 import { OrganizationConnectionType } from "../admin-console/enums";
-import { CollectionRequest } from "../admin-console/models/request/collection.request";
 import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/request/organization/organization-sponsorship-redeem.request";
 import { OrganizationConnectionRequest } from "../admin-console/models/request/organization-connection.request";
@@ -18,10 +14,6 @@ import { ProviderUserConfirmRequest } from "../admin-console/models/request/prov
 import { ProviderUserInviteRequest } from "../admin-console/models/request/provider/provider-user-invite.request";
 import { ProviderUserUpdateRequest } from "../admin-console/models/request/provider/provider-user-update.request";
 import { SelectionReadOnlyRequest } from "../admin-console/models/request/selection-read-only.request";
-import {
-  CollectionAccessDetailsResponse,
-  CollectionResponse,
-} from "../admin-console/models/response/collection.response";
 import {
   OrganizationConnectionConfigApis,
   OrganizationConnectionResponse,
@@ -113,7 +105,6 @@ import { SubscriptionResponse } from "../billing/models/response/subscription.re
 import { TaxInfoResponse } from "../billing/models/response/tax-info.response";
 import { TaxRateResponse } from "../billing/models/response/tax-rate.response";
 import { DeviceType } from "../enums";
-import { Utils } from "../misc/utils";
 import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { EventRequest } from "../models/request/event.request";
@@ -136,18 +127,28 @@ import { EventResponse } from "../models/response/event.response";
 import { ListResponse } from "../models/response/list.response";
 import { ProfileResponse } from "../models/response/profile.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
+import { AppIdService } from "../platform/abstractions/app-id.service";
+import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
+import { Utils } from "../platform/misc/utils";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
+import { CipherBulkRestoreRequest } from "../vault/models/request/cipher-bulk-restore.request";
 import { CipherBulkShareRequest } from "../vault/models/request/cipher-bulk-share.request";
 import { CipherCollectionsRequest } from "../vault/models/request/cipher-collections.request";
 import { CipherCreateRequest } from "../vault/models/request/cipher-create.request";
 import { CipherPartialRequest } from "../vault/models/request/cipher-partial.request";
 import { CipherShareRequest } from "../vault/models/request/cipher-share.request";
 import { CipherRequest } from "../vault/models/request/cipher.request";
+import { CollectionRequest } from "../vault/models/request/collection.request";
 import { AttachmentUploadDataResponse } from "../vault/models/response/attachment-upload-data.response";
 import { AttachmentResponse } from "../vault/models/response/attachment.response";
 import { CipherResponse } from "../vault/models/response/cipher.response";
+import {
+  CollectionAccessDetailsResponse,
+  CollectionResponse,
+} from "../vault/models/response/collection.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
 
 /**
@@ -251,8 +252,13 @@ export class ApiService implements ApiServiceAbstraction {
     }
   }
 
+  // TODO: PM-3519: Create and move to AuthRequest Api service
   async postAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
     const r = await this.send("POST", "/auth-requests/", request, false, true);
+    return new AuthRequestResponse(r);
+  }
+  async postAdminAuthRequest(request: PasswordlessCreateAuthRequest): Promise<AuthRequestResponse> {
+    const r = await this.send("POST", "/auth-requests/admin-request", request, true, true);
     return new AuthRequestResponse(r);
   }
 
@@ -615,9 +621,16 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async putRestoreManyCiphers(
-    request: CipherBulkDeleteRequest
+    request: CipherBulkRestoreRequest
   ): Promise<ListResponse<CipherResponse>> {
     const r = await this.send("PUT", "/ciphers/restore", request, true, true);
+    return new ListResponse<CipherResponse>(r, CipherResponse);
+  }
+
+  async putRestoreManyCiphersAdmin(
+    request: CipherBulkRestoreRequest
+  ): Promise<ListResponse<CipherResponse>> {
+    const r = await this.send("PUT", "/ciphers/restore-admin", request, true, true);
     return new ListResponse<CipherResponse>(r, CipherResponse);
   }
 
@@ -882,7 +895,7 @@ export class ApiService implements ApiServiceAbstraction {
   // Plan APIs
 
   async getPlans(): Promise<ListResponse<PlanResponse>> {
-    const r = await this.send("GET", "/plans/", null, false, true);
+    const r = await this.send("GET", "/plans/all", null, false, true);
     return new ListResponse(r, PlanResponse);
   }
 
@@ -1109,14 +1122,6 @@ export class ApiService implements ApiServiceAbstraction {
       true
     );
     return new DeviceVerificationResponse(r);
-  }
-
-  async getKnownDevice(email: string, deviceIdentifier: string): Promise<boolean> {
-    const r = await this.send("GET", "/devices/knowndevice", null, false, true, null, (headers) => {
-      headers.set("X-Device-Identifier", deviceIdentifier);
-      headers.set("X-Request-Email", Utils.fromUtf8ToUrlB64(email));
-    });
-    return r as boolean;
   }
 
   // Emergency Access APIs
@@ -1581,7 +1586,9 @@ export class ApiService implements ApiServiceAbstraction {
 
   // Key Connector
 
-  async getUserKeyFromKeyConnector(keyConnectorUrl: string): Promise<KeyConnectorUserKeyResponse> {
+  async getMasterKeyFromKeyConnector(
+    keyConnectorUrl: string
+  ): Promise<KeyConnectorUserKeyResponse> {
     const authHeader = await this.getActiveBearerToken();
 
     const response = await this.fetch(

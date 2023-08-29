@@ -15,11 +15,11 @@ import {
 } from "@angular/core";
 import { BehaviorSubject, concatMap, map, merge, Observable, Subject, takeUntil } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
@@ -62,7 +62,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
   selectedVault$: Observable<string | null> = this._selectedVault.asObservable();
 
   enforcePersonalOwnership = false;
-  overlayPostition: ConnectedPosition[] = [
+  overlayPosition: ConnectedPosition[] = [
     {
       originX: "start",
       originY: "bottom",
@@ -149,7 +149,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
       .withPush(true)
       .withViewportMargin(10)
       .withGrowAfterOpen(true)
-      .withPositions(this.overlayPostition);
+      .withPositions(this.overlayPosition);
 
     this.overlayRef = this.overlay.create({
       hasBackdrop: true,

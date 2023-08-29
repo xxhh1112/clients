@@ -1,13 +1,12 @@
 import { Injectable, Optional } from "@angular/core";
 import { from, Observable } from "rxjs";
 
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { ExtensionLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { CredentialAssertionOptionsView } from "../../views/credential-assertion-options.view";
 import { WebauthnAssertionView } from "../../views/webauthn-assertion.view";
@@ -25,7 +24,6 @@ export class WebauthnLoginService {
 
   constructor(
     private apiService: WebauthnApiService,
-    private cryptoService: CryptoService,
     private authService: AuthService,
     private configService: ConfigServiceAbstraction,
     @Optional() navigatorCredentials?: CredentialsContainer,

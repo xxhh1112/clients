@@ -1512,12 +1512,6 @@
   "permanentlyDeletedItem": {
     "message": "Stavka trajno izbrisana"
   },
-  "restoreItem": {
-    "message": "Vrati stavku"
-  },
-  "restoreItemConfirmation": {
-    "message": "Sigurno želiš vratiti ovu stavku?"
-  },
   "restoredItem": {
     "message": "Stavka vraćena"
   },
@@ -2251,5 +2245,20 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Recommended Settings Update"
+  },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
   }
 }

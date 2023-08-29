@@ -1,32 +1,43 @@
 import * as papa from "papaparse";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
-import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { KdfType } from "@bitwarden/common/enums";
-import { Utils } from "@bitwarden/common/misc/utils";
 import {
   CipherWithIdExport,
   CollectionWithIdExport,
   FolderWithIdExport,
 } from "@bitwarden/common/models/export";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import { Folder } from "@bitwarden/common/vault/models/domain/folder";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { ExportHelper } from "../../export-helper";
-import { BitwardenPasswordProtectedFileFormat } from "../bitwarden-password-protected-types";
+import {
+  BitwardenCsvExportType,
+  BitwardenCsvIndividualExportType,
+  BitwardenCsvOrgExportType,
+} from "../bitwarden-csv-export-type";
+import {
+  BitwardenEncryptedIndividualJsonExport,
+  BitwardenEncryptedOrgJsonExport,
+  BitwardenUnEncryptedIndividualJsonExport,
+  BitwardenUnEncryptedOrgJsonExport,
+  BitwardenPasswordProtectedFileFormat,
+} from "../bitwarden-json-export-types";
 
 import { ExportFormat, VaultExportServiceAbstraction } from "./vault-export.service.abstraction";
 
@@ -123,7 +134,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
         }
       });
 
-      const exportCiphers: any[] = [];
+      const exportCiphers: BitwardenCsvIndividualExportType[] = [];
       decCiphers.forEach((c) => {
         // only export logins and secure notes
         if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
@@ -133,7 +144,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
           return;
         }
 
-        const cipher: any = {};
+        const cipher = {} as BitwardenCsvIndividualExportType;
         cipher.folder =
           c.folderId != null && foldersMap.has(c.folderId) ? foldersMap.get(c.folderId).name : null;
         cipher.favorite = c.favorite ? 1 : null;
@@ -143,7 +154,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
 
       return papa.unparse(exportCiphers);
     } else {
-      const jsonDoc: any = {
+      const jsonDoc: BitwardenUnEncryptedIndividualJsonExport = {
         encrypted: false,
         folders: [],
         items: [],
@@ -193,7 +204,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
 
     const encKeyValidation = await this.cryptoService.encrypt(Utils.newGuid());
 
-    const jsonDoc: any = {
+    const jsonDoc: BitwardenEncryptedIndividualJsonExport = {
       encrypted: true,
       encKeyValidation_DO_NOT_EDIT: encKeyValidation.encryptedString,
       folders: [],
@@ -269,14 +280,14 @@ export class VaultExportService implements VaultExportServiceAbstraction {
         collectionsMap.set(c.id, c);
       });
 
-      const exportCiphers: any[] = [];
+      const exportCiphers: BitwardenCsvOrgExportType[] = [];
       decCiphers.forEach((c) => {
         // only export logins and secure notes
         if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
           return;
         }
 
-        const cipher: any = {};
+        const cipher = {} as BitwardenCsvOrgExportType;
         cipher.collections = [];
         if (c.collectionIds != null) {
           cipher.collections = c.collectionIds
@@ -289,7 +300,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
 
       return papa.unparse(exportCiphers);
     } else {
-      const jsonDoc: any = {
+      const jsonDoc: BitwardenUnEncryptedOrgJsonExport = {
         encrypted: false,
         collections: [],
         items: [],
@@ -317,20 +328,17 @@ export class VaultExportService implements VaultExportServiceAbstraction {
 
     promises.push(
       this.apiService.getCollections(organizationId).then((c) => {
-        const collectionPromises: any = [];
         if (c != null && c.data != null && c.data.length > 0) {
           c.data.forEach((r) => {
             const collection = new Collection(new CollectionData(r as CollectionDetailsResponse));
             collections.push(collection);
           });
         }
-        return Promise.all(collectionPromises);
       })
     );
 
     promises.push(
       this.apiService.getCiphersOrganization(organizationId).then((c) => {
-        const cipherPromises: any = [];
         if (c != null && c.data != null && c.data.length > 0) {
           c.data
             .filter((item) => item.deletedDate === null)
@@ -339,7 +347,6 @@ export class VaultExportService implements VaultExportServiceAbstraction {
               ciphers.push(cipher);
             });
         }
-        return Promise.all(cipherPromises);
       })
     );
 
@@ -348,7 +355,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
     const orgKey = await this.cryptoService.getOrgKey(organizationId);
     const encKeyValidation = await this.cryptoService.encrypt(Utils.newGuid(), orgKey);
 
-    const jsonDoc: any = {
+    const jsonDoc: BitwardenEncryptedOrgJsonExport = {
       encrypted: true,
       encKeyValidation_DO_NOT_EDIT: encKeyValidation.encryptedString,
       collections: [],
@@ -369,7 +376,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
     return JSON.stringify(jsonDoc, null, "  ");
   }
 
-  private buildCommonCipher(cipher: any, c: CipherView) {
+  private buildCommonCipher(cipher: BitwardenCsvExportType, c: CipherView): BitwardenCsvExportType {
     cipher.type = null;
     cipher.name = c.name;
     cipher.notes = c.notes;
@@ -382,7 +389,7 @@ export class VaultExportService implements VaultExportServiceAbstraction {
     cipher.login_totp = null;
 
     if (c.fields) {
-      c.fields.forEach((f: any) => {
+      c.fields.forEach((f) => {
         if (!cipher.fields) {
           cipher.fields = "";
         } else {

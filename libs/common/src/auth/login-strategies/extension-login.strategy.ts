@@ -1,12 +1,12 @@
 import { ApiService } from "../../abstractions/api.service";
-import { AppIdService } from "../../abstractions/appId.service";
-import { CryptoService } from "../../abstractions/crypto.service";
-import { LogService } from "../../abstractions/log.service";
-import { MessagingService } from "../../abstractions/messaging.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
-import { StateService } from "../../abstractions/state.service";
-import { EncString } from "../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../models/domain/symmetric-crypto-key";
+import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { LogService } from "../../platform/abstractions/log.service";
+import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
+import { StateService } from "../../platform/abstractions/state.service";
+import { EncString } from "../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey, UserKey } from "../../platform/models/domain/symmetric-crypto-key";
 import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
@@ -63,15 +63,23 @@ export class ExtensionLogInStrategy extends LogInStrategy {
     );
   }
 
-  async setUserKey(response: IdentityTokenResponse) {
+  protected setMasterKey(response: IdentityTokenResponse) {
+    return Promise.resolve();
+  }
+
+  protected async setUserKey(response: IdentityTokenResponse) {
     const encPrivateKey = new EncString(response.prfPrivateKey);
     const privateKey = await this.cryptoService.decryptToBytes(
       encPrivateKey,
       this.credentials.prfKey
     );
     const userKey = await this.cryptoService.rsaDecrypt(response.userKey, privateKey);
-    await this.cryptoService.setKey(new SymmetricCryptoKey(userKey));
+    await this.cryptoService.setUserKey(new SymmetricCryptoKey(userKey) as UserKey);
     // await this.cryptoService.setKeyHash(this.passwordlessCredentials.localPasswordHash);
+  }
+
+  protected setPrivateKey(response: IdentityTokenResponse): Promise<void> {
+    return Promise.resolve();
   }
 
   async logInTwoFactor(

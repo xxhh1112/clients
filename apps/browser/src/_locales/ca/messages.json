@@ -630,6 +630,12 @@
   "notificationChangeSave": {
     "message": "Actualitza"
   },
+  "notificationUnlockDesc": {
+    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+  },
+  "notificationUnlock": {
+    "message": "Unlock"
+  },
   "enableContextMenuItem": {
     "message": "Mostra les opcions del menú contextual"
   },
@@ -1440,9 +1446,6 @@
   "restoreItem": {
     "message": "Restaura l'element"
   },
-  "restoreItemConfirmation": {
-    "message": "Esteu segur que voleu restaurar aquest element?"
-  },
   "restoredItem": {
     "message": "Element restaurat"
   },
@@ -2221,7 +2224,25 @@
       }
     }
   },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
   "opensInANewWindow": {
     "message": "S'obri en una finestra nova"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "accessDenied": {
+    "message": "Accés denegat. No teniu permís per veure aquesta pàgina."
+  },
+  "general": {
+    "message": "General"
+  },
+  "display": {
+    "message": "Mostra"
   }
 }
