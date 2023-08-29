@@ -20,7 +20,7 @@ import {
  */
 @Component({
   standalone: true,
-  selector: "app-password-reprompt",
+  selector: "vault-password-reprompt",
   imports: [
     JslibModule,
     AsyncActionsModule,
