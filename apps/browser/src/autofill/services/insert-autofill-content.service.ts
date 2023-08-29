@@ -56,7 +56,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     return (
       String(self.origin).toLowerCase() === "null" ||
       window.frameElement?.hasAttribute("sandbox") ||
-      location.hostname === ""
+      window.location.hostname === ""
     );
   }
 
