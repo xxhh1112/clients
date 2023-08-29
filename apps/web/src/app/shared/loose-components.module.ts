@@ -93,7 +93,6 @@ import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/send/efflux-dates.component";
-import { SendAccessTextComponent } from "../tools/send/send-access-text.component";
 import { ToolsComponent } from "../tools/tools.component";
 import { PasswordRepromptComponent } from "../vault/components/password-reprompt.component";
 import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
@@ -196,7 +195,6 @@ import { SharedModule } from "./shared.module";
     SecurityComponent,
     SecurityKeysComponent,
     SelectableAvatarComponent,
-    SendAccessTextComponent,
     SendAddEditComponent,
     SendEffluxDatesComponent,
     SetPasswordComponent,
@@ -300,7 +298,6 @@ import { SharedModule } from "./shared.module";
     SecurityComponent,
     SecurityKeysComponent,
     SelectableAvatarComponent,
-    SendAccessTextComponent,
     SendAddEditComponent,
     SendEffluxDatesComponent,
     SetPasswordComponent,

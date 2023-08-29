@@ -4,9 +4,13 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SendAccessView } from "@bitwarden/common/tools/send/models/view/send-access.view";
 
+import { SharedModule } from "../../shared";
+
 @Component({
   selector: "app-send-access-text",
   templateUrl: "send-access-text.component.html",
+  imports: [SharedModule],
+  standalone: true,
 })
 export class SendAccessTextComponent {
   private _send: SendAccessView = null;

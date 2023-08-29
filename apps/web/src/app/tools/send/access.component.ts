@@ -22,6 +22,7 @@ import { LooseComponentsModule, SharedModule } from "../../shared";
 import { ExpiredSend } from "./icons/expired-send.icon";
 import { SendAccessFileComponent } from "./send-access-file.component";
 import { SendAccessPasswordComponent } from "./send-access-password.component";
+import { SendAccessTextComponent } from "./send-access-text.component";
 
 @Component({
   selector: "app-send-access",
@@ -30,6 +31,7 @@ import { SendAccessPasswordComponent } from "./send-access-password.component";
   imports: [
     SendAccessFileComponent,
     LooseComponentsModule,
+    SendAccessTextComponent,
     SendAccessPasswordComponent,
     SharedModule,
     NoItemsModule,
