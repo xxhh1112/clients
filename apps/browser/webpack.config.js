@@ -14,14 +14,8 @@ if (process.env.NODE_ENV == null) {
 }
 const ENV = (process.env.ENV = process.env.NODE_ENV);
 const manifestVersion = process.env.MANIFEST_VERSION == 3 ? 3 : 2;
-const autofillVersion = process.env.AUTOFILL_VERSION == 2 ? 2 : 1;
 
 console.log(`Building Manifest Version ${manifestVersion} app`);
-if (autofillVersion == 2) {
-  console.log(`Forcing usage of Autofill v${autofillVersion} regardless of feature flag`);
-} else {
-  console.log(`Using Autofill v${autofillVersion} or v2 depending on feature flag`);
-}
 
 const envConfig = configurator.load(ENV);
 configurator.log(envConfig);
@@ -170,6 +164,7 @@ const mainConfig = {
     "popup/main": "./src/popup/main.ts",
     "content/trigger-autofill-script-injection":
       "./src/autofill/content/trigger-autofill-script-injection.ts",
+    "content/autofill": "./src/autofill/content/autofill.js",
     "content/autofill-init": "./src/autofill/content/autofill-init.ts",
     "content/autofiller": "./src/autofill/content/autofiller.ts",
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
@@ -330,14 +325,6 @@ if (manifestVersion == 2) {
 
   configs.push(mainConfig);
   configs.push(backgroundConfig);
-}
-
-if (autofillVersion == 2) {
-  //Force usage of autofill v2 content script.
-  mainConfig.entry["content/autofill"] = "./src/autofill/content/autofill-init.ts";
-} else {
-  // Javascript (used in production, able to be toggled on/off by feature flag)
-  mainConfig.entry["content/autofill"] = "./src/autofill/content/autofill.js";
 }
 
 module.exports = configs;
