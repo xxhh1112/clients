@@ -33,8 +33,6 @@ import {
   templateUrl: "password-reprompt.component.html",
 })
 export class PasswordRepromptComponent {
-  showPassword = false;
-
   formGroup = this.formBuilder.group({
     masterPassword: ["", [Validators.required]],
   });
@@ -46,10 +44,6 @@ export class PasswordRepromptComponent {
     protected formBuilder: FormBuilder,
     protected dialogRef: DialogRef
   ) {}
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
 
   submit = async () => {
     if (
