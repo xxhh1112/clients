@@ -60,7 +60,6 @@ import { EncryptServiceImplementation } from "@bitwarden/common/platform/service
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/multithread-encrypt.service.implementation";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
-import { StateMigrationService } from "@bitwarden/common/platform/services/state-migration.service";
 import { SystemService } from "@bitwarden/common/platform/services/system.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/platform/services/web-crypto-function.service";
 import { AvatarUpdateService } from "@bitwarden/common/services/account/avatar-update.service";
@@ -179,7 +178,6 @@ export default class MainBackground {
   searchService: SearchServiceAbstraction;
   notificationsService: NotificationsServiceAbstraction;
   stateService: StateServiceAbstraction;
-  stateMigrationService: StateMigrationService;
   systemService: SystemServiceAbstraction;
   eventCollectionService: EventCollectionServiceAbstraction;
   eventUploadService: EventUploadServiceAbstraction;
@@ -265,17 +263,11 @@ export default class MainBackground {
             new KeyGenerationService(this.cryptoFunctionService)
           )
         : new MemoryStorageService();
-    this.stateMigrationService = new StateMigrationService(
-      this.storageService,
-      this.secureStorageService,
-      new StateFactory(GlobalState, Account)
-    );
     this.stateService = new BrowserStateService(
       this.storageService,
       this.secureStorageService,
       this.memoryStorageService,
       this.logService,
-      this.stateMigrationService,
       new StateFactory(GlobalState, Account)
     );
     this.platformUtilsService = new BrowserPlatformUtilsService(
