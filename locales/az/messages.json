@@ -711,11 +711,17 @@
   "unexpectedError": {
     "message": "Gözlənilməz bir səhv baş verdi."
   },
+  "expirationDateError": {
+    "message": "Zəhmət olmasa gələcəkdə son istifadə tarixi seçin."
+  },
   "emailAddress": {
     "message": "E-poçt ünvanı"
   },
   "yourVaultIsLocked": {
     "message": "Anbarınız kilidlənib. Davam etmək üçün ana parolunuzu təsdiqləyin."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Kilidi aç"
@@ -947,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "Təsdiqləmə kodunu kopyala"
+  },
+  "copyUuid": {
+    "message": "UUID-ni kopyala"
   },
   "warning": {
     "message": "Xəbərdarlıq"
@@ -1283,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "İxrac edilən faylın parolu açılarkən xəta baş verdi. Şifrələmə açarınız, verilənlərin ixracında istifadə olunan şifrələmə açarı ilə uyğunlaşmır."
+  },
+  "importDestination": {
+    "message": "Hədəfi daxilə köçür"
+  },
+  "learnAboutImportOptions": {
+    "message": "Daxilə köçürmə seçimlərinizi öyrənin"
+  },
+  "selectImportFolder": {
+    "message": "Bir qovluq seçin"
+  },
+  "selectImportCollection": {
+    "message": "Bir kolleksiya seçin"
+  },
+  "importTargetHint": {
+    "message": "Daxilə köçürülən fayl məzmununun $DESTINATION$ yerinə daşınmasını istəyirsinizsə bu variantı seçin",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Faylda təyin edilməmiş elementlər var."
   },
   "selectFormat": {
     "message": "İdxal faylının formatını seçin"
@@ -2636,7 +2670,7 @@
     "message": "Veb anbar"
   },
   "bitWebVault": {
-    "message": "Bitwarden Web vault"
+    "message": "Bitwarden Web anbarı"
   },
   "bitSecretsManager": {
     "message": "Bitwarden Secrets Manager"
@@ -3502,6 +3536,9 @@
   "vaultTimeoutDesc": {
     "message": "Anbara müraciətin bitəcəyi vaxtı seçin və seçilən əməliyyatı icra edin."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Anbarınızdan nə vaxt çıxış ediləcəyini seçin."
+  },
   "oneMinute": {
     "message": "1 dəqiqə"
   },
@@ -3590,8 +3627,8 @@
   "attachmentsNeedFix": {
     "message": "Bu element, düzəldilməli köhnə fayl qoşmalarını ehtiva edir."
   },
-  "attachmentFixDesc": {
-    "message": "Bu, düzəldilməli köhnə bir fayl qoşmasıdır. Daha ətraflı öyrənmək üçün klikləyin."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Düzəlt",
@@ -3808,29 +3845,11 @@
   "restoreSelected": {
     "message": "Seçiləni bərpa et"
   },
-  "restoreItem": {
-    "message": "Elementi bərpa et"
-  },
   "restoredItem": {
     "message": "Element bərpa edildi"
   },
   "restoredItems": {
     "message": "Elementlər bərpa edildi"
-  },
-  "restoreItemConfirmation": {
-    "message": "Elementi bərpa etmək istədiyinizə əminsiniz?"
-  },
-  "restoreItems": {
-    "message": "Elementləri bərpa et"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Bərpa üçün $COUNT$ element seçdiniz. Onların hamısını bərpa etmək istədiyinizə əminsiniz?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "$ID$ elementi bərpa edildi.",
@@ -4916,8 +4935,8 @@
   "disablePersonalVaultExport": {
     "message": "Fərdi anbarın ixracını sıradan çıxart"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "İstifadəçilərin fərdi anbar verilənlərini ixrac etməsini əngəlləyir."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "Anbar ixracı sıradan çıxarıldı"
@@ -5420,8 +5439,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Təşkilat anbarının ixracı"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Yalnız $EMAIL$ ilə əlaqəli şəxsi anbar elementləri ixrac ediləcək. Təşkilat anbar elementləri daxil edilmir.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5429,8 +5448,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Yalnız $ORGANIZATION$ ilə əlaqəli təşkilat anbar elementləri ixrac ediləcək. Şəxsi anbar elementləri və digər təşkilatlardan olan elementlər daxil edilmir.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Yalnız $ORGANIZATION$ ilə əlaqələndirilmiş təşkilat anbarı ixrac ediləcək. Fərdi anbardakı və digər təşkilat elementlər daxil edilmir.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6802,16 +6821,11 @@
   "enforceOnLoginDesc": {
     "message": "Mövcud üzvlərin öz parollarını dəyişdirməsini tələb et"
   },
-  "region": {
-    "message": "Bölgə"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "AB",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "ABŞ",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Bu layihəni silmək icazəniz yoxdur",
@@ -6824,28 +6838,60 @@
   "updateKdfSettings": {
     "message": "KDF tənzimləmələrini güncəllə"
   },
+  "loginInitiated": {
+    "message": "Giriş başladıldı"
+  },
+  "deviceApprovalRequired": {
+    "message": "Cihaz təsdiqi tələb olunur. Aşağıdan bir təsdiq variantı seçin:"
+  },
+  "rememberThisDevice": {
+    "message": "Bu cihazı xatırla"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Hər kəsə açıq bir cihaz istifadə edirsinizsə işarəni götürün"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Digər cihazınızdan təsdiqləyin"
+  },
+  "requestAdminApproval": {
+    "message": "Admin təsdiqini tələb et"
+  },
+  "approveWithMasterPassword": {
+    "message": "Ana parolla təsdiqlə"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Güvənli cihaz şifrələməsi"
+  },
   "trustedDevices": {
-    "message": "Trusted devices"
+    "message": "Güvənli cihazlar"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
+  "memberDecryptionOptionTdeDescriptionPartOne": {
     "message": "Kimlik təsdiqləndikdən sonra üzvlər, cihazlarından saxlanılan açarı istifadə edərək anbar verilənlərinin şifrələrini aça biləcək",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
     "message": "tək təşkilat",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "siyasət və ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "siyasət,",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO tələb olunur",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "siyasət və",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
     "message": "hesab bərpa administrasiyası",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
+  "memberDecryptionOptionTdeDescriptionPartFour": {
     "message": "bu seçim istifadə edildikdə avto-qeydiyyat ilə işə salınacaq.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ tapılmadı",
@@ -6934,8 +6980,29 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Ana parolu olmayan üzvləri onlar üçün parol tənzimləmədən silmək, tam hesablarına müraciəti məhdudlaşdıra bilər."
   },
+  "approvedAuthRequest": {
+    "message": "$ID$ üçün təsdiqlənmiş cihaz.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "$ID$ üçün rədd edilmiş cihaz.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Tələb edilən cihaz təsdiqi."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
-    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "message": "$ORG$ üçün Bitwarden 7 günlük ödənişsiz sınağı başladın",
     "placeholders": {
       "org": {
         "content": "$1",
@@ -6944,16 +7011,40 @@
     }
   },
   "next": {
-    "message": "Next"
+    "message": "Növbəti"
   },
   "usFlag": {
-    "message": "US flag"
+    "message": "US bayrağı"
   },
   "euFlag": {
-    "message": "EU flag"
+    "message": "EU bayrağı"
   },
   "selectedRegionFlag": {
-    "message": "Selected region flag"
+    "message": "Seçilmiş bölgə bayrağı"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Hesab uğurla yaradıldı!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin təsdiqi tələb olunur"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Tələbiniz admininizə göndərildi."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Təsdiqləndikdən sonra məlumatlandırılacaqsınız."
+  },
+  "troubleLoggingIn": {
+    "message": "Girişdə problem var?"
+  },
+  "loginApproved": {
+    "message": "Giriş təsdiqləndi"
+  },
+  "userEmailMissing": {
+    "message": "İstifadəçi e-poçtu əskikdir"
+  },
+  "deviceTrusted": {
+    "message": "Cihaz güvənlidir"
   },
   "sendsNoItemsTitle": {
     "message": "Aktiv \"Send\" yoxdur",
@@ -6979,7 +7070,7 @@
     "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
   },
   "free2PersonOrganization": {
-    "message": "Free 2-person Organizations"
+    "message": "Ödənişsiz 2 nəfərlik Təşkilatlar"
   },
   "unlimitedSecrets": {
     "message": "Unlimited secrets"
@@ -7023,15 +7114,20 @@
   "additionalServiceAccounts": {
     "message": "Əlavə xidmət hesabları"
   },
-  "additionalServiceAccountsDesc": {
-    "message": "Planınız $COUNT$ xidmət hesabı ilə gəlir. Əlavə xidmət hesablarını ayda $COST$ qarşılığında əlavə edə bilərsiniz.",
+  "includedServiceAccounts": {
+    "message": "Planınız, $COUNT$ xidmət hesabı ilə gəlir.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      },
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Aylıq $COST$ qiymətinə əlavə xidmət hesablarını əlavə edə bilərsiniz.",
+    "placeholders": {
       "cost": {
-        "content": "$2",
+        "content": "$1",
         "example": "$0.50"
       }
     }
@@ -7052,12 +7148,37 @@
     "message": "Xidmət hesablarını limitlə (ixtiyari)"
   },
   "limitServiceAccountsDesc": {
-    "message": "Set a limit for your service accounts. Once this limit is reached, you will not be able to create new service accounts."
+    "message": "Xidmət hesablarınız üçün bir limit müəyyən edin. Bu limitə çatanda, yeni xidmət hesabı yarada bilməyəcəksiniz."
   },
   "serviceAccountLimit": {
     "message": "Xidmət hesabı limiti (ixtiyari)"
   },
   "maxServiceAccountCost": {
     "message": "Maksimal mümkün xidmət hesabı qiyməti"
+  },
+  "loggedInExclamation": {
+    "message": "Giriş edildi!"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Sonu"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }
