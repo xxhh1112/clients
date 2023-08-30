@@ -171,11 +171,11 @@ export class ViewComponent extends BaseViewComponent {
     await this.loadPageDetails();
 
     switch (this.loadAction) {
-      case AUTOFILL_ID:
-        this.fillCipher();
-        return;
       case SHOW_AUTOFILL_BUTTON:
         return;
+      case AUTOFILL_ID:
+        await this.fillCipher();
+        break;
       case COPY_USERNAME_ID:
         await this.copy(this.cipher.login.username, "username", "Username");
         break;
@@ -190,7 +190,7 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     if (this.inPopout && this.loadAction) {
-      this.close();
+      setTimeout(() => this.close(), 1000);
     }
   }
 
@@ -242,10 +242,6 @@ export class ViewComponent extends BaseViewComponent {
     const didAutofill = await this.doAutofill();
     if (didAutofill) {
       this.platformUtilsService.showToast("success", null, this.i18nService.t("autoFillSuccess"));
-
-      if (this.inPopout) {
-        this.close();
-      }
     }
   }
 

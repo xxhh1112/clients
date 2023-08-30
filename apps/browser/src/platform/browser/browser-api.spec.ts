@@ -14,9 +14,9 @@ describe("BrowserApi", () => {
       const tabId = 1;
       const injectDetails = mock<chrome.tabs.InjectDetails>();
       jest.spyOn(BrowserApi, "manifestVersion", "get").mockReturnValue(2);
-      jest
-        .spyOn(chrome.tabs, "executeScript")
-        .mockImplementation((tabId, injectDetails, callback) => callback(executeScriptResult));
+      (chrome.tabs.executeScript as jest.Mock).mockImplementation(
+        (tabId, injectDetails, callback) => callback(executeScriptResult)
+      );
 
       const result = await BrowserApi.executeScriptInTab(tabId, injectDetails);
 
@@ -37,9 +37,7 @@ describe("BrowserApi", () => {
         frameId: null,
       });
       jest.spyOn(BrowserApi, "manifestVersion", "get").mockReturnValue(3);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      jest.spyOn(chrome.scripting, "executeScript").mockResolvedValue(executeScriptResult);
+      (chrome.scripting.executeScript as jest.Mock).mockResolvedValue(executeScriptResult);
 
       const result = await BrowserApi.executeScriptInTab(tabId, injectDetails);
 
