@@ -244,14 +244,14 @@ export default class AutofillService implements AutofillServiceInterface {
       cipher.reprompt === CipherRepromptType.Password &&
       (await this.userVerificationService.hasMasterPassword())
     ) {
+      if (fromCommand) {
+        this.cipherService.updateLastUsedIndexForUrl(tab.url);
+      }
+
       await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
         cipherId: cipher.id,
         action: "autofill",
       });
-
-      if (fromCommand) {
-        this.cipherService.updateLastUsedIndexForUrl(tab.url);
-      }
 
       return null;
     }
@@ -284,6 +284,10 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns The TOTP code of the successfully autofilled login, if any
    */
   async doAutoFillActiveTab(pageDetails: PageDetail[], fromCommand: boolean): Promise<string> {
+    if (!pageDetails[0]?.details?.fields?.length) {
+      return;
+    }
+
     const tab = await this.getActiveTab();
     if (!tab || !tab.url) {
       return;
