@@ -136,9 +136,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     }
 
     this.autofillFieldElements = new Map(
-      [...this.autofillFieldElements.entries()].sort(
-        (a, b) => a[1].elementNumber - b[1].elementNumber
-      )
+      [...this.autofillFieldElements].sort((a, b) => a[1].elementNumber - b[1].elementNumber)
     );
   }
 
