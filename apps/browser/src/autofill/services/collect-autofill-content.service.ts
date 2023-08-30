@@ -61,6 +61,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     const autofillFieldsData: AutofillField[] = await this.buildAutofillFieldsData(
       formFieldElements as FormFieldElement[]
     );
+    this.sortAutofillFieldElementsMap();
 
     if (!Object.values(autofillFormsData).length || !autofillFieldsData.length) {
       this.noFieldsFound = true;
@@ -123,6 +124,22 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     );
 
     return treeWalkerQueryResults;
+  }
+
+  /**
+   * Sorts the AutofillFieldElements map by the elementNumber property.
+   * @private
+   */
+  private sortAutofillFieldElementsMap() {
+    if (!this.autofillFieldElements.size) {
+      return;
+    }
+
+    this.autofillFieldElements = new Map(
+      [...this.autofillFieldElements.entries()].sort(
+        (a, b) => a[1].elementNumber - b[1].elementNumber
+      )
+    );
   }
 
   /**
