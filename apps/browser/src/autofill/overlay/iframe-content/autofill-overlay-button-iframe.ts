@@ -11,6 +11,7 @@ class AutofillOverlayButtonIframe extends AutofillOverlayIframeElement {
         background: "transparent",
         border: "none",
       },
+      chrome.i18n.getMessage("bitwardenOverlayButton"),
       chrome.i18n.getMessage("bitwardenOverlayMenuAvailable")
     );
   }

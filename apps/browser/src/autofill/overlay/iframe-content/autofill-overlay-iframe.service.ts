@@ -43,9 +43,14 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
     this.iframeMutationObserver = new MutationObserver(this.handleMutationObserver);
   }
 
-  initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>, ariaAlert?: string) {
+  initOverlayIframe(
+    initStyles: Partial<CSSStyleDeclaration>,
+    iframeTitle: string,
+    ariaAlert?: string
+  ) {
     this.iframe.src = chrome.runtime.getURL(this.iframePath);
     this.updateElementStyles(this.iframe, { ...this.iframeStyles, ...initStyles });
+    this.iframe.setAttribute("title", iframeTitle);
     this.iframe.setAttribute("sandbox", "allow-scripts");
     this.iframe.setAttribute("allowtransparency", "true");
     this.iframe.addEventListener("load", this.setupPortMessageListener);

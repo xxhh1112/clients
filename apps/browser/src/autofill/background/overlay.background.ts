@@ -516,6 +516,7 @@ class OverlayBackground {
         locale: BrowserApi.getUILanguage(),
         opensInANewWindow: this.i18nService.translate("opensInANewWindow"),
         buttonPageTitle: this.i18nService.translate("bitwardenOverlayButton"),
+        toggleBitwardenVaultOverlay: this.i18nService.translate("toggleBitwardenVaultOverlay"),
         listPageTitle: this.i18nService.translate("bitwardenVault"),
         unlockYourAccount: this.i18nService.translate("unlockYourAccountToViewMatchingLogins"),
         unlockAccount: this.i18nService.translate("unlockAccount"),
