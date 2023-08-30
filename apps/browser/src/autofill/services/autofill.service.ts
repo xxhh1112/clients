@@ -51,6 +51,15 @@ export default class AutofillService implements AutofillServiceInterface {
    */
   async injectAutofillScripts(sender: chrome.runtime.MessageSender, autofillV2 = false) {
     const mainAutofillScript = autofillV2 ? `autofill-init.js` : "autofill.js";
+
+    // TODO: Remove this log statement before asking for final reviews
+    // eslint-disable-next-line
+    console.log(
+      `Injecting Autofill v${
+        mainAutofillScript === "autofill.js" ? "1" : "2"
+      } - ${mainAutofillScript}`
+    );
+
     const injectedScripts = [
       mainAutofillScript,
       "autofiller.js",

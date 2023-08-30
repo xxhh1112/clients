@@ -1,14 +1,11 @@
-describe("TriggerAutofillScriptInjection", function () {
-  beforeEach(function () {
+describe("TriggerAutofillScriptInjection", () => {
+  afterEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
-    chrome.runtime = {
-      sendMessage: jest.fn(),
-    } as any;
   });
 
-  describe("init", function () {
-    it("sends a message to the extension background", function () {
+  describe("init", () => {
+    it("sends a message to the extension background", () => {
       require("../content/trigger-autofill-script-injection");
 
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({

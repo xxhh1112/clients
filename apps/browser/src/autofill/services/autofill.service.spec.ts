@@ -44,9 +44,8 @@ import {
 import { AutoFillConstants, IdentityAutoFillConstants } from "./autofill-constants";
 import AutofillService from "./autofill.service";
 
-describe("AutofillService", function () {
+describe("AutofillService", () => {
   let autofillService: AutofillService;
-
   const cipherService = mock<CipherService>();
   const stateService = mock<BrowserStateService>();
   const totpService = mock<TotpService>();
@@ -55,10 +54,7 @@ describe("AutofillService", function () {
   const settingsService = mock<SettingsService>();
   const userVerificationService = mock<UserVerificationService>();
 
-  beforeEach(function () {
-    jest.clearAllMocks();
-    mockReset(cipherService);
-
+  beforeEach(() => {
     autofillService = new AutofillService(
       cipherService,
       stateService,
@@ -68,12 +64,14 @@ describe("AutofillService", function () {
       settingsService,
       userVerificationService
     );
-    chrome.tabs = {
-      sendMessage: jest.fn(),
-    } as any;
   });
 
-  describe("injectAutofillScripts", function () {
+  afterEach(() => {
+    jest.clearAllMocks();
+    mockReset(cipherService);
+  });
+
+  describe("injectAutofillScripts", () => {
     const autofillV1Script = "autofill.js";
     const autofillV2Script = "autofill-init.js";
     const defaultAutofillScripts = ["autofiller.js", "notificationBar.js", "contextMenuHandler.js"];
@@ -81,13 +79,13 @@ describe("AutofillService", function () {
     let tabMock: chrome.tabs.Tab;
     let sender: chrome.runtime.MessageSender;
 
-    beforeEach(function () {
+    beforeEach(() => {
       tabMock = createChromeTabMock();
       sender = { tab: tabMock };
       jest.spyOn(BrowserApi, "executeScriptInTab").mockImplementation();
     });
 
-    it("accepts an extension message sender and injects the autofill scripts into the tab of the sender", async function () {
+    it("accepts an extension message sender and injects the autofill scripts into the tab of the sender", async () => {
       await autofillService.injectAutofillScripts(sender);
 
       [autofillV1Script, ...defaultAutofillScripts].forEach((scriptName) => {
@@ -102,7 +100,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("will inject the autofill-init class if the enableAutofillV2 flag is set", function () {
+    it("will inject the autofill-init class if the enableAutofillV2 flag is set", () => {
       autofillService.injectAutofillScripts(sender, true);
 
       expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
@@ -116,14 +114,14 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("getFormsWithPasswordFields", function () {
+  describe("getFormsWithPasswordFields", () => {
     let pageDetailsMock: AutofillPageDetails;
 
-    beforeEach(function () {
+    beforeEach(() => {
       pageDetailsMock = createAutofillPageDetailsMock();
     });
 
-    it("returns an empty FormData array if no password fields are found", function () {
+    it("returns an empty FormData array if no password fields are found", () => {
       jest.spyOn(AutofillService, "loadPasswordFields");
 
       const formData = autofillService.getFormsWithPasswordFields(pageDetailsMock);
@@ -138,7 +136,7 @@ describe("AutofillService", function () {
       expect(formData).toStrictEqual([]);
     });
 
-    it("returns an FormData array containing a form with it's autofill data", function () {
+    it("returns an FormData array containing a form with it's autofill data", () => {
       const usernameInputField = createAutofillFieldMock({
         opid: "username-field",
         form: "validFormId",
@@ -164,7 +162,7 @@ describe("AutofillService", function () {
       ]);
     });
 
-    it("narrows down three passwords that are present on a page to a single password field to autofill when only one form element is present on the page", function () {
+    it("narrows down three passwords that are present on a page to a single password field to autofill when only one form element is present on the page", () => {
       const usernameInputField = createAutofillFieldMock({
         opid: "username-field",
         form: "validFormId",
@@ -211,7 +209,7 @@ describe("AutofillService", function () {
       ]);
     });
 
-    it("will check for a hidden username field", function () {
+    it("will check for a hidden username field", () => {
       const usernameInputField = createAutofillFieldMock({
         opid: "username-field",
         form: "validFormId",
@@ -248,12 +246,12 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("doAutoFill", function () {
+  describe("doAutoFill", () => {
     let autofillOptions: AutoFillOptions;
     const nothingToAutofillError = "Nothing to auto-fill.";
     const didNotAutofillError = "Did not auto-fill.";
 
-    beforeEach(function () {
+    beforeEach(() => {
       autofillOptions = {
         cipher: mock<CipherView>({
           id: "cipherId",
@@ -288,8 +286,8 @@ describe("AutofillService", function () {
       autofillOptions.cipher.login.password = "password";
     });
 
-    describe("given a set of autofill options that are incomplete", function () {
-      it("throws an error if the tab is not provided", async function () {
+    describe("given a set of autofill options that are incomplete", () => {
+      it("throws an error if the tab is not provided", async () => {
         autofillOptions.tab = undefined;
 
         try {
@@ -300,7 +298,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("throws an error if the cipher is not provided", async function () {
+      it("throws an error if the cipher is not provided", async () => {
         autofillOptions.cipher = undefined;
 
         try {
@@ -311,7 +309,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("throws an error if the page details are not provided", async function () {
+      it("throws an error if the page details are not provided", async () => {
         autofillOptions.pageDetails = undefined;
 
         try {
@@ -322,7 +320,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("throws an error if the page details are empty", async function () {
+      it("throws an error if the page details are empty", async () => {
         autofillOptions.pageDetails = [];
 
         try {
@@ -333,7 +331,7 @@ describe("AutofillService", function () {
         }
       });
 
-      it("throws an error if an autofill did not occur for any of the passed pages", async function () {
+      it("throws an error if an autofill did not occur for any of the passed pages", async () => {
         autofillOptions.tab.url = "https://a-different-url.com";
 
         try {
@@ -345,7 +343,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("will autofill login data for a page", async function () {
+    it("will autofill login data for a page", async () => {
       jest.spyOn(stateService, "getCanAccessPremium");
       jest.spyOn(stateService, "getDefaultUriMatch");
       jest.spyOn(autofillService as any, "generateFillScript");
@@ -411,7 +409,7 @@ describe("AutofillService", function () {
       expect(autofillResult).toBeNull();
     });
 
-    it("will autofill card data for a page", async function () {
+    it("will autofill card data for a page", async () => {
       autofillOptions.cipher.type = CipherType.Card;
       autofillOptions.cipher.card = mock<CardView>({
         cardholderName: "cardholderName",
@@ -437,7 +435,7 @@ describe("AutofillService", function () {
       );
     });
 
-    it("will autofill identity data for a page", async function () {
+    it("will autofill identity data for a page", async () => {
       autofillOptions.cipher.type = CipherType.Identity;
       autofillOptions.cipher.identity = mock<IdentityView>({
         firstName: "firstName",
@@ -465,7 +463,7 @@ describe("AutofillService", function () {
       );
     });
 
-    it("blocks autofill on an untrusted iframe", async function () {
+    it("blocks autofill on an untrusted iframe", async () => {
       autofillOptions.allowUntrustedIframe = false;
       autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValueOnce(false);
       jest.spyOn(logService, "info");
@@ -481,7 +479,7 @@ describe("AutofillService", function () {
       }
     });
 
-    it("allows autofill on an untrusted iframe if the passed option allowing untrusted iframes is set to true", async function () {
+    it("allows autofill on an untrusted iframe if the passed option allowing untrusted iframes is set to true", async () => {
       autofillOptions.allowUntrustedIframe = true;
       autofillOptions.cipher.login.matchesUri = jest.fn().mockReturnValue(false);
       jest.spyOn(logService, "info");
@@ -493,7 +491,7 @@ describe("AutofillService", function () {
       );
     });
 
-    it("skips updating the cipher's last used date if the passed options indicate that we should skip the last used cipher", async function () {
+    it("skips updating the cipher's last used date if the passed options indicate that we should skip the last used cipher", async () => {
       autofillOptions.skipLastUsed = true;
       jest.spyOn(cipherService, "updateLastUsedDate");
 
@@ -502,7 +500,7 @@ describe("AutofillService", function () {
       expect(cipherService.updateLastUsedDate).not.toHaveBeenCalled();
     });
 
-    it("returns early if the fillScript cannot be generated", async function () {
+    it("returns early if the fillScript cannot be generated", async () => {
       jest.spyOn(autofillService as any, "generateFillScript").mockReturnValueOnce(undefined);
       jest.spyOn(BrowserApi, "tabSendMessage");
 
@@ -516,7 +514,7 @@ describe("AutofillService", function () {
       }
     });
 
-    it("returns a TOTP value", async function () {
+    it("returns a TOTP value", async () => {
       const totpCode = "123456";
       autofillOptions.cipher.login.totp = "totp";
       jest.spyOn(stateService, "getDisableAutoTotpCopy").mockResolvedValueOnce(false);
@@ -529,7 +527,7 @@ describe("AutofillService", function () {
       expect(autofillResult).toBe(totpCode);
     });
 
-    it("returns a null value if the cipher type is not for a Login", async function () {
+    it("returns a null value if the cipher type is not for a Login", async () => {
       autofillOptions.cipher.type = CipherType.Identity;
       autofillOptions.cipher.identity = mock<IdentityView>();
 
@@ -538,7 +536,7 @@ describe("AutofillService", function () {
       expect(autofillResult).toBeNull();
     });
 
-    it("returns a null value if the login does not contain a TOTP value", async function () {
+    it("returns a null value if the login does not contain a TOTP value", async () => {
       autofillOptions.cipher.login.totp = undefined;
       jest.spyOn(stateService, "getDisableAutoTotpCopy");
       jest.spyOn(totpService, "getCode");
@@ -550,7 +548,7 @@ describe("AutofillService", function () {
       expect(autofillResult).toBeNull();
     });
 
-    it("returns a null value if the user cannot access premium and the organization does not use TOTP", async function () {
+    it("returns a null value if the user cannot access premium and the organization does not use TOTP", async () => {
       autofillOptions.cipher.login.totp = "totp";
       autofillOptions.cipher.organizationUseTotp = false;
       jest.spyOn(stateService, "getCanAccessPremium").mockResolvedValueOnce(false);
@@ -560,7 +558,7 @@ describe("AutofillService", function () {
       expect(autofillResult).toBeNull();
     });
 
-    it("returns a null value if the user has disabled `auto TOTP copy`", async function () {
+    it("returns a null value if the user has disabled `auto TOTP copy`", async () => {
       autofillOptions.cipher.login.totp = "totp";
       autofillOptions.cipher.organizationUseTotp = true;
       jest.spyOn(stateService, "getCanAccessPremium").mockResolvedValueOnce(true);
@@ -572,11 +570,11 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("doAutoFillOnTab", function () {
+  describe("doAutoFillOnTab", () => {
     let pageDetails: PageDetail[];
     let tab: chrome.tabs.Tab;
 
-    beforeEach(function () {
+    beforeEach(() => {
       tab = createChromeTabMock();
       pageDetails = [
         {
@@ -601,8 +599,8 @@ describe("AutofillService", function () {
       ];
     });
 
-    describe("given a tab url which does not match a cipher", function () {
-      it("will skip autofill and return a null value when triggering on page load", async function () {
+    describe("given a tab url which does not match a cipher", () => {
+      it("will skip autofill and return a null value when triggering on page load", async () => {
         jest.spyOn(autofillService, "doAutoFill");
         jest.spyOn(cipherService, "getNextCipherForUrl");
         jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(null);
@@ -617,7 +615,7 @@ describe("AutofillService", function () {
         expect(result).toBeNull();
       });
 
-      it("will skip autofill and return a null value when triggering from a keyboard shortcut", async function () {
+      it("will skip autofill and return a null value when triggering from a keyboard shortcut", async () => {
         jest.spyOn(autofillService, "doAutoFill");
         jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(null);
         jest.spyOn(cipherService, "getLastLaunchedForUrl").mockResolvedValueOnce(null);
@@ -633,10 +631,10 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a tab url which matches a cipher", function () {
+    describe("given a tab url which matches a cipher", () => {
       let cipher: CipherView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         cipher = mock<CipherView>({
           reprompt: CipherRepromptType.None,
           localData: {
@@ -645,7 +643,7 @@ describe("AutofillService", function () {
         });
       });
 
-      it("will autofill the last launched cipher and return a TOTP value when triggering on page load", async function () {
+      it("will autofill the last launched cipher and return a TOTP value when triggering on page load", async () => {
         const totpCode = "123456";
         const fromCommand = false;
         jest.spyOn(autofillService, "doAutoFill").mockResolvedValueOnce(totpCode);
@@ -673,7 +671,7 @@ describe("AutofillService", function () {
         expect(result).toBe(totpCode);
       });
 
-      it("will autofill the last used cipher and return a TOTP value when triggering on page load ", async function () {
+      it("will autofill the last used cipher and return a TOTP value when triggering on page load ", async () => {
         cipher.localData.lastLaunched = Date.now().valueOf() - 30001;
         const totpCode = "123456";
         const fromCommand = false;
@@ -702,7 +700,7 @@ describe("AutofillService", function () {
         expect(result).toBe(totpCode);
       });
 
-      it("will autofill the next cipher, update the last used cipher index, and return a TOTP value when triggering from a keyboard shortcut", async function () {
+      it("will autofill the next cipher, update the last used cipher index, and return a TOTP value when triggering from a keyboard shortcut", async () => {
         const totpCode = "123456";
         const fromCommand = true;
         jest.spyOn(autofillService, "doAutoFill").mockResolvedValueOnce(totpCode);
@@ -728,7 +726,7 @@ describe("AutofillService", function () {
         expect(result).toBe(totpCode);
       });
 
-      it("will skip autofill, launch the password reprompt window, and return a null value if the cipher re-prompt type is not `None`", async function () {
+      it("will skip autofill, launch the password reprompt window, and return a null value if the cipher re-prompt type is not `None`", async () => {
         cipher.reprompt = CipherRepromptType.Password;
         jest.spyOn(autofillService, "doAutoFill");
         jest.spyOn(cipherService, "getNextCipherForUrl").mockResolvedValueOnce(cipher);
@@ -751,11 +749,11 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("doAutoFillActiveTab", function () {
+  describe("doAutoFillActiveTab", () => {
     let pageDetails: PageDetail[];
     let tab: chrome.tabs.Tab;
 
-    beforeEach(function () {
+    beforeEach(() => {
       tab = createChromeTabMock();
       pageDetails = [
         {
@@ -780,7 +778,7 @@ describe("AutofillService", function () {
       ];
     });
 
-    it("returns a null value without doing autofill if the active tab cannot be found", async function () {
+    it("returns a null value without doing autofill if the active tab cannot be found", async () => {
       jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(undefined);
       jest.spyOn(autofillService, "doAutoFill");
 
@@ -791,7 +789,7 @@ describe("AutofillService", function () {
       expect(result).toBeNull();
     });
 
-    it("returns a null value without doing autofill if the active tab url cannot be found", async function () {
+    it("returns a null value without doing autofill if the active tab url cannot be found", async () => {
       jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce({
         id: 1,
         url: undefined,
@@ -805,7 +803,7 @@ describe("AutofillService", function () {
       expect(result).toBeNull();
     });
 
-    it("queries the active tab and enacts an autofill on that tab", async function () {
+    it("queries the active tab and enacts an autofill on that tab", async () => {
       const totp = "123456";
       const fromCommand = false;
       jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(tab);
@@ -819,8 +817,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("getActiveTab", function () {
-    it("throws are error if a tab cannot be found", async function () {
+  describe("getActiveTab", () => {
+    it("throws are error if a tab cannot be found", async () => {
       jest.spyOn(BrowserApi, "getTabFromCurrentWindow").mockResolvedValueOnce(undefined);
 
       try {
@@ -832,7 +830,7 @@ describe("AutofillService", function () {
       }
     });
 
-    it("returns the active tab from the current window", async function () {
+    it("returns the active tab from the current window", async () => {
       const tab = createChromeTabMock();
       jest.spyOn(BrowserApi, "getTabFromCurrentWindow").mockResolvedValueOnce(tab);
 
@@ -842,7 +840,7 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("generateFillScript", function () {
+  describe("generateFillScript", () => {
     let defaultUsernameField: AutofillField;
     let defaultUsernameFieldView: FieldView;
     let defaultPasswordField: AutofillField;
@@ -850,7 +848,7 @@ describe("AutofillService", function () {
     let pageDetail: AutofillPageDetails;
     let generateFillScriptOptions: GenerateFillScriptOptions;
 
-    beforeEach(function () {
+    beforeEach(() => {
       defaultUsernameField = createAutofillFieldMock({
         opid: "username-field",
         form: "validFormId",
@@ -882,7 +880,7 @@ describe("AutofillService", function () {
       ];
     });
 
-    it("returns null if the page details are not provided", async function () {
+    it("returns null if the page details are not provided", async () => {
       const value = await autofillService["generateFillScript"](
         undefined,
         generateFillScriptOptions
@@ -891,7 +889,7 @@ describe("AutofillService", function () {
       expect(value).toBeNull();
     });
 
-    it("returns null if the passed options do not contain a valid cipher", async function () {
+    it("returns null if the passed options do not contain a valid cipher", async () => {
       generateFillScriptOptions.cipher = undefined;
 
       const value = await autofillService["generateFillScript"](
@@ -902,8 +900,8 @@ describe("AutofillService", function () {
       expect(value).toBeNull();
     });
 
-    describe("given a valid set of cipher fields and page detail fields", function () {
-      it("will not attempt to fill by opid duplicate fields found within the page details", async function () {
+    describe("given a valid set of cipher fields and page detail fields", () => {
+      it("will not attempt to fill by opid duplicate fields found within the page details", async () => {
         const duplicateUsernameField: AutofillField = createAutofillFieldMock({
           opid: "username-field",
           form: "validFormId",
@@ -924,7 +922,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will not attempt to fill by opid fields that are not viewable and are not a `span` element", async function () {
+      it("will not attempt to fill by opid fields that are not viewable and are not a `span` element", async () => {
         defaultUsernameField.viewable = false;
         jest.spyOn(AutofillService, "fillByOpid");
 
@@ -937,7 +935,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields that are not viewable but are a `span` element", async function () {
+      it("will fill by opid fields that are not viewable but are a `span` element", async () => {
         defaultUsernameField.viewable = false;
         defaultUsernameField.tagName = "span";
         jest.spyOn(AutofillService, "fillByOpid");
@@ -952,7 +950,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will not attempt to fill by opid fields that do not contain a property that matches the field name", async function () {
+      it("will not attempt to fill by opid fields that do not contain a property that matches the field name", async () => {
         defaultUsernameField.htmlID = "does-not-match-username";
         jest.spyOn(AutofillService, "fillByOpid");
 
@@ -965,7 +963,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields that contain a property that matches the field name", async function () {
+      it("will fill by opid fields that contain a property that matches the field name", async () => {
         jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
         jest.spyOn(autofillService as any, "findMatchingFieldIndex");
         jest.spyOn(AutofillService, "fillByOpid");
@@ -988,7 +986,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("it will fill by opid fields of type Linked", async function () {
+      it("it will fill by opid fields of type Linked", async () => {
         const fieldLinkedId: LinkedIdType = LoginLinkedId.Username;
         const linkedFieldValue = "linkedFieldValue";
         defaultUsernameFieldView.type = FieldType.Linked;
@@ -1018,7 +1016,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields of type Boolean", async function () {
+      it("will fill by opid fields of type Boolean", async () => {
         defaultUsernameFieldView.type = FieldType.Boolean;
         defaultUsernameFieldView.value = "true";
         jest.spyOn(generateFillScriptOptions.cipher, "linkedFieldValue");
@@ -1035,7 +1033,7 @@ describe("AutofillService", function () {
         );
       });
 
-      it("will fill by opid fields of type Boolean with a value of false if no value is provided", async function () {
+      it("will fill by opid fields of type Boolean with a value of false if no value is provided", async () => {
         defaultUsernameFieldView.type = FieldType.Boolean;
         defaultUsernameFieldView.value = undefined;
         jest.spyOn(AutofillService, "fillByOpid");
@@ -1051,7 +1049,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns a fill script generated for a login autofill", async function () {
+    it("returns a fill script generated for a login autofill", async () => {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "username-field": "username-value", "password-value": "password-value" }
@@ -1090,7 +1088,7 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns a fill script generated for a card autofill", async function () {
+    it("returns a fill script generated for a card autofill", async () => {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
@@ -1129,7 +1127,7 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns a fill script generated for an identity autofill", async function () {
+    it("returns a fill script generated for an identity autofill", async () => {
       const fillScriptMock = createAutofillScriptMock(
         {},
         { "first-name-field": "first-name-value", "last-name-value": "last-name-value" }
@@ -1168,7 +1166,7 @@ describe("AutofillService", function () {
       expect(value).toBe(fillScriptMock);
     });
 
-    it("returns null if the cipher type is not for a login, card, or identity", async function () {
+    it("returns null if the cipher type is not for a login, card, or identity", async () => {
       generateFillScriptOptions.cipher.type = CipherType.SecureNote;
 
       const value = await autofillService["generateFillScript"](
@@ -1180,14 +1178,14 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("generateLoginFillScript", function () {
+  describe("generateLoginFillScript", () => {
     let fillScript: AutofillScript;
     let pageDetails: AutofillPageDetails;
     let filledFields: { [id: string]: AutofillField };
     let options: GenerateFillScriptOptions;
     let defaultLoginUriView: LoginUriView;
 
-    beforeEach(function () {
+    beforeEach(() => {
       fillScript = createAutofillScriptMock();
       pageDetails = createAutofillPageDetailsMock();
       filledFields = {
@@ -1218,7 +1216,7 @@ describe("AutofillService", function () {
       options.cipher.login.matchesUri = jest.fn().mockReturnValue(true);
     });
 
-    it("returns null if the cipher does not have login data", async function () {
+    it("returns null if the cipher does not have login data", async () => {
       options.cipher.login = undefined;
       jest.spyOn(autofillService as any, "inUntrustedIframe");
       jest.spyOn(AutofillService, "loadPasswordFields");
@@ -1243,8 +1241,8 @@ describe("AutofillService", function () {
       expect(value).toBeNull();
     });
 
-    describe("given a list of login uri views", function () {
-      it("returns an empty array of saved login uri views if the login cipher has no login uri views", async function () {
+    describe("given a list of login uri views", () => {
+      it("returns an empty array of saved login uri views if the login cipher has no login uri views", async () => {
         options.cipher.login.uris = [];
 
         const value = await autofillService["generateLoginFillScript"](
@@ -1257,7 +1255,7 @@ describe("AutofillService", function () {
         expect(value.savedUrls).toStrictEqual([]);
       });
 
-      it("returns a list of saved login uri views within the fill script", async function () {
+      it("returns a list of saved login uri views within the fill script", async () => {
         const secondUriView = mock<LoginUriView>({
           uri: "https://www.second-example.com",
         });
@@ -1280,7 +1278,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("skips adding any login uri views that have a UriMatchType of Never to the list of saved urls", async function () {
+      it("skips adding any login uri views that have a UriMatchType of Never to the list of saved urls", async () => {
         const secondUriView = mock<LoginUriView>({
           uri: "https://www.second-example.com",
         });
@@ -1302,7 +1300,7 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a valid set of page details and autofill options", function () {
+    describe("given a valid set of page details and autofill options", () => {
       let usernameField: AutofillField;
       let usernameFieldView: FieldView;
       let passwordField: AutofillField;
@@ -1310,7 +1308,7 @@ describe("AutofillService", function () {
       let totpField: AutofillField;
       let totpFieldView: FieldView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         usernameField = createAutofillFieldMock({
           opid: "username",
           form: "validFormId",
@@ -1346,7 +1344,7 @@ describe("AutofillService", function () {
         options.cipher.login.totp = "totp";
       });
 
-      it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", async function () {
+      it("attempts to load the password fields from hidden and read only elements if no visible password fields are found within the page details", async () => {
         pageDetails.fields = [
           createAutofillFieldMock({
             opid: "password-field",
@@ -1383,8 +1381,8 @@ describe("AutofillService", function () {
         );
       });
 
-      describe("given a valid list of forms within the passed page details", function () {
-        beforeEach(function () {
+      describe("given a valid list of forms within the passed page details", () => {
+        beforeEach(() => {
           usernameField.viewable = false;
           usernameField.readonly = true;
           totpField.viewable = false;
@@ -1393,7 +1391,7 @@ describe("AutofillService", function () {
           jest.spyOn(autofillService as any, "findTotpField");
         });
 
-        it("will attempt to find a username field from hidden fields if no visible username fields are found", async function () {
+        it("will attempt to find a username field from hidden fields if no visible username fields are found", async () => {
           await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
@@ -1420,7 +1418,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to find a username field from hidden fields if the passed options indicate only visible fields should be referenced", async function () {
+        it("will not attempt to find a username field from hidden fields if the passed options indicate only visible fields should be referenced", async () => {
           options.onlyVisibleFields = true;
 
           await autofillService["generateLoginFillScript"](
@@ -1449,7 +1447,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to find a totp field from hidden fields if no visible totp fields are found", async function () {
+        it("will attempt to find a totp field from hidden fields if no visible totp fields are found", async () => {
           options.allowTotpAutofill = true;
           await autofillService["generateLoginFillScript"](
             fillScript,
@@ -1477,7 +1475,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to find a totp field from hidden fields if the passed options indicate only visible fields should be referenced", async function () {
+        it("will not attempt to find a totp field from hidden fields if the passed options indicate only visible fields should be referenced", async () => {
           options.allowTotpAutofill = true;
           options.onlyVisibleFields = true;
 
@@ -1507,7 +1505,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to find a totp field from hidden fields if the passed options do not allow for TOTP values to be filled", async function () {
+        it("will not attempt to find a totp field from hidden fields if the passed options do not allow for TOTP values to be filled", async () => {
           options.allowTotpAutofill = false;
 
           await autofillService["generateLoginFillScript"](
@@ -1521,14 +1519,14 @@ describe("AutofillService", function () {
         });
       });
 
-      describe("given a list of fields without forms within the passed page details", function () {
-        beforeEach(function () {
+      describe("given a list of fields without forms within the passed page details", () => {
+        beforeEach(() => {
           pageDetails.forms = undefined;
           jest.spyOn(autofillService as any, "findUsernameField");
           jest.spyOn(autofillService as any, "findTotpField");
         });
 
-        it("will attempt to match a password field that does not contain a form to a username field", async function () {
+        it("will attempt to match a password field that does not contain a form to a username field", async () => {
           await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
@@ -1546,7 +1544,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to match a password field that does not contain a form to a username field that is not visible", async function () {
+        it("will attempt to match a password field that does not contain a form to a username field that is not visible", async () => {
           usernameField.viewable = false;
           usernameField.readonly = true;
 
@@ -1576,7 +1574,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to match a password field that does not contain a form to a username field that is not visible if the passed options indicate only visible fields", async function () {
+        it("will not attempt to match a password field that does not contain a form to a username field that is not visible if the passed options indicate only visible fields", async () => {
           usernameField.viewable = false;
           usernameField.readonly = true;
           options.onlyVisibleFields = true;
@@ -1607,7 +1605,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to match a password field that does not contain a form to a TOTP field", async function () {
+        it("will attempt to match a password field that does not contain a form to a TOTP field", async () => {
           options.allowTotpAutofill = true;
 
           await autofillService["generateLoginFillScript"](
@@ -1627,7 +1625,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to match a password field that does not contain a form to a TOTP field that is not visible", async function () {
+        it("will attempt to match a password field that does not contain a form to a TOTP field that is not visible", async () => {
           options.onlyVisibleFields = false;
           options.allowTotpAutofill = true;
           totpField.viewable = false;
@@ -1660,7 +1658,7 @@ describe("AutofillService", function () {
         });
       });
 
-      describe("given a set of page details that does not contain a password field", function () {
+      describe("given a set of page details that does not contain a password field", () => {
         let emailField: AutofillField;
         let emailFieldView: FieldView;
         let telephoneField: AutofillField;
@@ -1670,7 +1668,7 @@ describe("AutofillService", function () {
         let nonViewableField: AutofillField;
         let nonViewableFieldView: FieldView;
 
-        beforeEach(function () {
+        beforeEach(() => {
           usernameField.htmlName = "username";
           emailField = createAutofillFieldMock({
             opid: "email",
@@ -1727,7 +1725,7 @@ describe("AutofillService", function () {
           jest.spyOn(AutofillService, "fillByOpid");
         });
 
-        it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", async function () {
+        it("will attempt to fuzzy match a username to a viewable text, email or tel field if no password fields are found and the username fill is not being skipped", async () => {
           await autofillService["generateLoginFillScript"](
             fillScript,
             pageDetails,
@@ -1769,7 +1767,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to fuzzy match a username if the username fill is being skipped", async function () {
+        it("will not attempt to fuzzy match a username if the username fill is being skipped", async () => {
           options.skipUsernameOnlyFill = true;
 
           await autofillService["generateLoginFillScript"](
@@ -1785,7 +1783,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will attempt to fuzzy match a totp field if totp autofill is allowed", async function () {
+        it("will attempt to fuzzy match a totp field if totp autofill is allowed", async () => {
           options.allowTotpAutofill = true;
 
           await autofillService["generateLoginFillScript"](
@@ -1801,7 +1799,7 @@ describe("AutofillService", function () {
           );
         });
 
-        it("will not attempt to fuzzy match a totp field if totp autofill is not allowed", async function () {
+        it("will not attempt to fuzzy match a totp field if totp autofill is not allowed", async () => {
           options.allowTotpAutofill = false;
 
           await autofillService["generateLoginFillScript"](
@@ -1818,7 +1816,7 @@ describe("AutofillService", function () {
         });
       });
 
-      it("returns a value indicating if the page url is in an untrusted iframe", async function () {
+      it("returns a value indicating if the page url is in an untrusted iframe", async () => {
         jest.spyOn(autofillService as any, "inUntrustedIframe").mockReturnValueOnce(true);
 
         const value = await autofillService["generateLoginFillScript"](
@@ -1831,7 +1829,7 @@ describe("AutofillService", function () {
         expect(value.untrustedIframe).toBe(true);
       });
 
-      it("returns a fill script used to autofill a login item", async function () {
+      it("returns a fill script used to autofill a login item", async () => {
         jest.spyOn(autofillService as any, "inUntrustedIframe");
         jest.spyOn(AutofillService, "loadPasswordFields");
         jest.spyOn(autofillService as any, "findUsernameField");
@@ -1903,13 +1901,13 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("generateCardFillScript", function () {
+  describe("generateCardFillScript", () => {
     let fillScript: AutofillScript;
     let pageDetails: AutofillPageDetails;
     let filledFields: { [id: string]: AutofillField };
     let options: GenerateFillScriptOptions;
 
-    beforeEach(function () {
+    beforeEach(() => {
       fillScript = createAutofillScriptMock({
         script: [],
       });
@@ -1950,7 +1948,7 @@ describe("AutofillService", function () {
       options.cipher.card = mock<CardView>();
     });
 
-    it("returns null if the passed options contains a cipher with no card view", function () {
+    it("returns null if the passed options contains a cipher with no card view", () => {
       options.cipher.card = undefined;
 
       const value = autofillService["generateCardFillScript"](
@@ -1963,7 +1961,7 @@ describe("AutofillService", function () {
       expect(value).toBeNull();
     });
 
-    describe("given an invalid autofill field", function () {
+    describe("given an invalid autofill field", () => {
       const unmodifiedFillScriptValues: AutofillScript = {
         autosubmit: null,
         metadata: {},
@@ -1974,7 +1972,7 @@ describe("AutofillService", function () {
         untrustedIframe: false,
       };
 
-      it("returns an unmodified fill script when the field is a `span` field", function () {
+      it("returns an unmodified fill script when the field is a `span` field", () => {
         const spanField = createAutofillFieldMock({
           opid: "span-field",
           form: "validFormId",
@@ -1999,7 +1997,7 @@ describe("AutofillService", function () {
       });
 
       AutoFillConstants.ExcludedAutofillTypes.forEach((excludedType) => {
-        it(`returns an unmodified fill script when the field has a '${excludedType}' type`, function () {
+        it(`returns an unmodified fill script when the field has a '${excludedType}' type`, () => {
           const invalidField = createAutofillFieldMock({
             opid: `${excludedType}-field`,
             form: "validFormId",
@@ -2027,7 +2025,7 @@ describe("AutofillService", function () {
         });
       });
 
-      it("returns an unmodified fill script when the field is not viewable", function () {
+      it("returns an unmodified fill script when the field is not viewable", () => {
         const notViewableField = createAutofillFieldMock({
           opid: "invalid-field",
           form: "validFormId",
@@ -2053,7 +2051,7 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a valid set of autofill fields", function () {
+    describe("given a valid set of autofill fields", () => {
       let cardholderNameField: AutofillField;
       let cardholderNameFieldView: FieldView;
       let cardNumberField: AutofillField;
@@ -2067,7 +2065,7 @@ describe("AutofillService", function () {
       let brandField: AutofillField;
       let brandFieldView: FieldView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         cardholderNameField = createAutofillFieldMock({
           opid: "cardholderName",
           form: "validFormId",
@@ -2142,7 +2140,7 @@ describe("AutofillService", function () {
         jest.spyOn(autofillService as any, "makeScriptActionWithValue");
       });
 
-      it("returns a fill script containing all of the passed card fields", function () {
+      it("returns a fill script containing all of the passed card fields", () => {
         const value = autofillService["generateCardFillScript"](
           fillScript,
           pageDetails,
@@ -2191,11 +2189,11 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given an expiration month field", function () {
+    describe("given an expiration month field", () => {
       let expMonthField: AutofillField;
       let expMonthFieldView: FieldView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         expMonthField = createAutofillFieldMock({
           opid: "expMonth",
           form: "validFormId",
@@ -2224,7 +2222,7 @@ describe("AutofillService", function () {
         options.cipher.card.expMonth = "05";
       });
 
-      it("returns an expiration month parsed from found select options within the field", function () {
+      it("returns an expiration month parsed from found select options within the field", () => {
         const testValue = "sometestvalue";
         expMonthField.selectInfo.options[4] = ["May", testValue];
 
@@ -2238,7 +2236,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
       });
 
-      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the end of the list of options", function () {
+      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the end of the list of options", () => {
         const testValue = "sometestvalue";
         expMonthField.selectInfo.options[4] = ["May", testValue];
         expMonthField.selectInfo.options.push(["", ""]);
@@ -2253,7 +2251,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
       });
 
-      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the start of the list of options", function () {
+      it("returns an expiration month parsed from found select options within the field when the select field has an empty option at the start of the list of options", () => {
         const testValue = "sometestvalue";
         expMonthField.selectInfo.options[4] = ["May", testValue];
         expMonthField.selectInfo.options.unshift(["", ""]);
@@ -2268,7 +2266,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expMonthField.opid, testValue]);
       });
 
-      it("returns an expiration month with a zero attached if the field requires two characters, and the vault item has only one character", function () {
+      it("returns an expiration month with a zero attached if the field requires two characters, and the vault item has only one character", () => {
         options.cipher.card.expMonth = "5";
         expMonthField.selectInfo = null;
         expMonthField.placeholder = "mm";
@@ -2285,11 +2283,11 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given an expiration year field", function () {
+    describe("given an expiration year field", () => {
       let expYearField: AutofillField;
       let expYearFieldView: FieldView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         expYearField = createAutofillFieldMock({
           opid: "expYear",
           form: "validFormId",
@@ -2309,7 +2307,7 @@ describe("AutofillService", function () {
         options.cipher.card.expYear = "2024";
       });
 
-      it("returns an expiration year parsed from the select options if an exact match is found for either the select option text or value", function () {
+      it("returns an expiration year parsed from the select options if an exact match is found for either the select option text or value", () => {
         const someTestValue = "sometestvalue";
         expYearField.selectInfo.options[1] = ["2024", someTestValue];
         options.cipher.card.expYear = someTestValue;
@@ -2335,7 +2333,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, someTestValue]);
       });
 
-      it("returns an expiration year parsed from the select options if the value of an option contains only two characters and the vault item value contains four characters", function () {
+      it("returns an expiration year parsed from the select options if the value of an option contains only two characters and the vault item value contains four characters", () => {
         const yearValue = "26";
         expYearField.selectInfo.options.push(["The year 2026", yearValue]);
         options.cipher.card.expYear = "2026";
@@ -2350,7 +2348,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", expYearField.opid, yearValue]);
       });
 
-      it("returns an expiration year parsed from the select options if the vault of an option is separated by a colon", function () {
+      it("returns an expiration year parsed from the select options if the vault of an option is separated by a colon", () => {
         const yearValue = "26";
         const colonSeparatedYearValue = `2:0${yearValue}`;
         expYearField.selectInfo.options.push(["The year 2026", colonSeparatedYearValue]);
@@ -2370,7 +2368,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("returns an expiration year with `20` prepended to the vault item value if the field to be filled expects a `yyyy` format but the vault item only has two characters", function () {
+      it("returns an expiration year with `20` prepended to the vault item value if the field to be filled expects a `yyyy` format but the vault item only has two characters", () => {
         const yearValue = "26";
         expYearField.selectInfo = null;
         expYearField.placeholder = "yyyy";
@@ -2391,7 +2389,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("returns an expiration year with only the last two values if the field to be filled expects a `yy` format but the vault item contains four characters", function () {
+      it("returns an expiration year with only the last two values if the field to be filled expects a `yy` format but the vault item contains four characters", () => {
         const yearValue = "26";
         expYearField.selectInfo = null;
         expYearField.placeholder = "yy";
@@ -2409,11 +2407,11 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a generic expiration date field", function () {
+    describe("given a generic expiration date field", () => {
       let expirationDateField: AutofillField;
       let expirationDateFieldView: FieldView;
 
-      beforeEach(function () {
+      beforeEach(() => {
         expirationDateField = createAutofillFieldMock({
           opid: "expirationDate",
           form: "validFormId",
@@ -2443,7 +2441,7 @@ describe("AutofillService", function () {
         ["mmyy", "0524"],
       ];
       expectedDateFormats.forEach((dateFormat, index) => {
-        it(`returns an expiration date format matching '${dateFormat[0]}'`, function () {
+        it(`returns an expiration date format matching '${dateFormat[0]}'`, () => {
           expirationDateField.placeholder = dateFormat[0];
           if (index === 0) {
             options.cipher.card.expYear = "24";
@@ -2463,7 +2461,7 @@ describe("AutofillService", function () {
         });
       });
 
-      it("returns an expiration date format matching `yyyy-mm` if no valid format can be identified", function () {
+      it("returns an expiration date format matching `yyyy-mm` if no valid format can be identified", () => {
         const value = autofillService["generateCardFillScript"](
           fillScript,
           pageDetails,
@@ -2476,8 +2474,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("inUntrustedIframe", function () {
-    it("returns a false value if the passed pageUrl is equal to the options tabUrl", function () {
+  describe("inUntrustedIframe", () => {
+    it("returns a false value if the passed pageUrl is equal to the options tabUrl", () => {
       const pageUrl = "https://www.example.com";
       const tabUrl = "https://www.example.com";
       const generateFillScriptOptions = createGenerateFillScriptOptionsMock({ tabUrl });
@@ -2491,7 +2489,7 @@ describe("AutofillService", function () {
       expect(result).toBe(false);
     });
 
-    it("returns a false value if the passed pageUrl matches the domain of the tabUrl", function () {
+    it("returns a false value if the passed pageUrl matches the domain of the tabUrl", () => {
       const pageUrl = "https://subdomain.example.com";
       const tabUrl = "https://www.example.com";
       const equivalentDomains = new Set(["example.com"]);
@@ -2510,7 +2508,7 @@ describe("AutofillService", function () {
       expect(result).toBe(false);
     });
 
-    it("returns a true value if the passed pageUrl does not match the domain of the tabUrl", function () {
+    it("returns a true value if the passed pageUrl does not match the domain of the tabUrl", () => {
       const pageUrl = "https://subdomain.example.com";
       const tabUrl = "https://www.not-example.com";
       const equivalentDomains = new Set(["not-example.com"]);
@@ -2530,10 +2528,10 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fieldAttrsContain", function () {
+  describe("fieldAttrsContain", () => {
     let cardNumberField: AutofillField;
 
-    beforeEach(function () {
+    beforeEach(() => {
       cardNumberField = createAutofillFieldMock({
         opid: "cardNumber",
         form: "validFormId",
@@ -2542,32 +2540,32 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns false if a field is not passed", function () {
+    it("returns false if a field is not passed", () => {
       const value = autofillService["fieldAttrsContain"](null, "data-foo");
 
       expect(value).toBe(false);
     });
 
-    it("returns false if the field does not contain the passed attribute", function () {
+    it("returns false if the field does not contain the passed attribute", () => {
       const value = autofillService["fieldAttrsContain"](cardNumberField, "data-foo");
 
       expect(value).toBe(false);
     });
 
-    it("returns true if the field contains the passed attribute", function () {
+    it("returns true if the field contains the passed attribute", () => {
       const value = autofillService["fieldAttrsContain"](cardNumberField, "card-number");
 
       expect(value).toBe(true);
     });
   });
 
-  describe("generateIdentityFillScript", function () {
+  describe("generateIdentityFillScript", () => {
     let fillScript: AutofillScript;
     let pageDetails: AutofillPageDetails;
     let filledFields: { [id: string]: AutofillField };
     let options: GenerateFillScriptOptions;
 
-    beforeEach(function () {
+    beforeEach(() => {
       fillScript = createAutofillScriptMock({ script: [] });
       pageDetails = createAutofillPageDetailsMock();
       filledFields = {};
@@ -2575,7 +2573,7 @@ describe("AutofillService", function () {
       options.cipher.identity = mock<IdentityView>();
     });
 
-    it("returns null if an identify is not found within the cipher", function () {
+    it("returns null if an identify is not found within the cipher", () => {
       options.cipher.identity = null;
       jest.spyOn(autofillService as any, "makeScriptAction");
       jest.spyOn(autofillService as any, "makeScriptActionWithValue");
@@ -2592,12 +2590,12 @@ describe("AutofillService", function () {
       expect(autofillService["makeScriptActionWithValue"]).not.toHaveBeenCalled();
     });
 
-    describe("given a set of page details that contains fields", function () {
+    describe("given a set of page details that contains fields", () => {
       const firstName = "John";
       const middleName = "A";
       const lastName = "Doe";
 
-      beforeEach(function () {
+      beforeEach(() => {
         pageDetails.fields = [];
         jest.spyOn(AutofillService, "forCustomFieldsOnly");
         jest.spyOn(autofillService as any, "isExcludedType");
@@ -2606,7 +2604,7 @@ describe("AutofillService", function () {
         jest.spyOn(autofillService as any, "makeScriptActionWithValue");
       });
 
-      it("will not attempt to match custom fields", function () {
+      it("will not attempt to match custom fields", () => {
         const customField = createAutofillFieldMock({ tagName: "span" });
         pageDetails.fields.push(customField);
 
@@ -2623,7 +2621,7 @@ describe("AutofillService", function () {
         expect(value.script).toStrictEqual([]);
       });
 
-      it("will not attempt to match a field that is of an excluded type", function () {
+      it("will not attempt to match a field that is of an excluded type", () => {
         const excludedField = createAutofillFieldMock({ type: "hidden" });
         pageDetails.fields.push(excludedField);
 
@@ -2643,7 +2641,7 @@ describe("AutofillService", function () {
         expect(value.script).toStrictEqual([]);
       });
 
-      it("will not attempt to match a field that is not viewable", function () {
+      it("will not attempt to match a field that is not viewable", () => {
         const viewableField = createAutofillFieldMock({ viewable: false });
         pageDetails.fields.push(viewableField);
 
@@ -2660,7 +2658,7 @@ describe("AutofillService", function () {
         expect(value.script).toStrictEqual([]);
       });
 
-      it("will match a full name field to the vault item identity value", function () {
+      it("will match a full name field to the vault item identity value", () => {
         const fullNameField = createAutofillFieldMock({ opid: "fullName", htmlName: "full-name" });
         pageDetails.fields = [fullNameField];
         options.cipher.identity.firstName = firstName;
@@ -2692,7 +2690,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("will match a full name field to the a vault item that only has a last name", function () {
+      it("will match a full name field to the a vault item that only has a last name", () => {
         const fullNameField = createAutofillFieldMock({ opid: "fullName", htmlName: "full-name" });
         pageDetails.fields = [fullNameField];
         options.cipher.identity.firstName = "";
@@ -2720,7 +2718,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", fullNameField.opid, lastName]);
       });
 
-      it("will match first name, middle name, and last name fields to the vault item identity value", function () {
+      it("will match first name, middle name, and last name fields to the vault item identity value", () => {
         const firstNameField = createAutofillFieldMock({
           opid: "firstName",
           htmlName: "first-name",
@@ -2780,7 +2778,7 @@ describe("AutofillService", function () {
         expect(value.script[8]).toStrictEqual(["fill_by_opid", lastNameField.opid, lastName]);
       });
 
-      it("will match title and email fields to the vault item identity value", function () {
+      it("will match title and email fields to the vault item identity value", () => {
         const titleField = createAutofillFieldMock({ opid: "title", htmlName: "title" });
         const emailField = createAutofillFieldMock({ opid: "email", htmlName: "email" });
         pageDetails.fields = [titleField, emailField];
@@ -2822,7 +2820,7 @@ describe("AutofillService", function () {
         expect(value.script[5]).toStrictEqual(["fill_by_opid", emailField.opid, email]);
       });
 
-      it("will match a full address field to the vault item identity values", function () {
+      it("will match a full address field to the vault item identity values", () => {
         const fullAddressField = createAutofillFieldMock({
           opid: "fullAddress",
           htmlName: "address",
@@ -2860,7 +2858,7 @@ describe("AutofillService", function () {
         ]);
       });
 
-      it("will match address1, address2, address3, postalCode, city, state, country, phone, username, and company fields to their corresponding vault item identity values", function () {
+      it("will match address1, address2, address3, postalCode, city, state, country, phone, username, and company fields to their corresponding vault item identity values", () => {
         const address1Field = createAutofillFieldMock({ opid: "address1", htmlName: "address-1" });
         const address2Field = createAutofillFieldMock({ opid: "address2", htmlName: "address-2" });
         const address3Field = createAutofillFieldMock({ opid: "address3", htmlName: "address-3" });
@@ -2967,7 +2965,7 @@ describe("AutofillService", function () {
         expect(value.script[29]).toStrictEqual(["fill_by_opid", countryField.opid, country]);
       });
 
-      it("will find the two character IsoState value for an identity cipher that contains the full name of a state", function () {
+      it("will find the two character IsoState value for an identity cipher that contains the full name of a state", () => {
         const stateField = createAutofillFieldMock({ opid: "state", htmlName: "state" });
         pageDetails.fields = [stateField];
         const state = "California";
@@ -2989,7 +2987,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", stateField.opid, "CA"]);
       });
 
-      it("will find the two character IsoProvince value for an identity cipher that contains the full name of a province", function () {
+      it("will find the two character IsoProvince value for an identity cipher that contains the full name of a province", () => {
         const stateField = createAutofillFieldMock({ opid: "state", htmlName: "state" });
         pageDetails.fields = [stateField];
         const state = "Ontario";
@@ -3011,7 +3009,7 @@ describe("AutofillService", function () {
         expect(value.script[2]).toStrictEqual(["fill_by_opid", stateField.opid, "ON"]);
       });
 
-      it("will find the two character IsoCountry value for an identity cipher that contains the full name of a country", function () {
+      it("will find the two character IsoCountry value for an identity cipher that contains the full name of a country", () => {
         const countryField = createAutofillFieldMock({ opid: "country", htmlName: "country" });
         pageDetails.fields = [countryField];
         const country = "Somalia";
@@ -3035,8 +3033,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("isExcludedType", function () {
-    it("returns true if the passed type is within the excluded type list", function () {
+  describe("isExcludedType", () => {
+    it("returns true if the passed type is within the excluded type list", () => {
       const value = autofillService["isExcludedType"](
         "hidden",
         AutoFillConstants.ExcludedAutofillTypes
@@ -3045,7 +3043,7 @@ describe("AutofillService", function () {
       expect(value).toBe(true);
     });
 
-    it("returns true if the passed type is within the excluded type list", function () {
+    it("returns true if the passed type is within the excluded type list", () => {
       const value = autofillService["isExcludedType"](
         "text",
         AutoFillConstants.ExcludedAutofillTypes
@@ -3055,8 +3053,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("isFieldMatch", function () {
-    it("returns true if the passed value is equal to one of the values in the passed options list", function () {
+  describe("isFieldMatch", () => {
+    it("returns true if the passed value is equal to one of the values in the passed options list", () => {
       const passedAttribute = "cc-name";
       const passedOptions = ["cc-name", "cc_full_name"];
 
@@ -3065,7 +3063,7 @@ describe("AutofillService", function () {
       expect(value).toBe(true);
     });
 
-    it("should returns true if the passed options contain a value within the containsOptions list and the passed value partial matches the option", function () {
+    it("should returns true if the passed options contain a value within the containsOptions list and the passed value partial matches the option", () => {
       const passedAttribute = "cc-name-full";
       const passedOptions = ["cc-name", "cc_full_name"];
       const containsOptions = ["cc-name"];
@@ -3079,7 +3077,7 @@ describe("AutofillService", function () {
       expect(value).toBe(true);
     });
 
-    it("returns false if the value is not a partial match to an option found within the containsOption list", function () {
+    it("returns false if the value is not a partial match to an option found within the containsOption list", () => {
       const passedAttribute = "cc-full-name";
       const passedOptions = ["cc-name", "cc_full_name"];
       const containsOptions = ["cc-name"];
@@ -3094,14 +3092,14 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("makeScriptAction", function () {
+  describe("makeScriptAction", () => {
     let fillScript: AutofillScript;
     let options: GenerateFillScriptOptions;
     let mockLoginView: any;
     let fillFields: { [key: string]: AutofillField };
     const filledFields = {};
 
-    beforeEach(function () {
+    beforeEach(() => {
       fillScript = createAutofillScriptMock({});
       options = createGenerateFillScriptOptionsMock({});
       mockLoginView = mock<LoginView>() as any;
@@ -3112,7 +3110,7 @@ describe("AutofillService", function () {
       jest.spyOn(autofillService as any, "makeScriptActionWithValue");
     });
 
-    it("makes a call to makeScriptActionWithValue using the passed dataProp value", function () {
+    it("makes a call to makeScriptActionWithValue using the passed dataProp value", () => {
       const dataProp = "username-field";
 
       autofillService["makeScriptAction"](
@@ -3131,7 +3129,7 @@ describe("AutofillService", function () {
       );
     });
 
-    it("makes a call to makeScriptActionWithValue using the passed fieldProp value used for fillFields", function () {
+    it("makes a call to makeScriptActionWithValue using the passed fieldProp value used for fillFields", () => {
       const dataProp = "value";
       const fieldProp = "username-field";
 
@@ -3153,14 +3151,14 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("makeScriptActionWithValue", function () {
+  describe("makeScriptActionWithValue", () => {
     let fillScript: AutofillScript;
     let options: GenerateFillScriptOptions;
     let mockLoginView: any;
     let fillFields: { [key: string]: AutofillField };
     const filledFields = {};
 
-    beforeEach(function () {
+    beforeEach(() => {
       fillScript = createAutofillScriptMock({});
       options = createGenerateFillScriptOptionsMock({});
       mockLoginView = mock<LoginView>() as any;
@@ -3173,7 +3171,7 @@ describe("AutofillService", function () {
       jest.spyOn(AutofillService, "fillByOpid");
     });
 
-    it("will not add an autofill action to the fill script if the value does not exist", function () {
+    it("will not add an autofill action to the fill script if the value does not exist", () => {
       const dataValue = "";
 
       autofillService["makeScriptActionWithValue"](
@@ -3187,7 +3185,7 @@ describe("AutofillService", function () {
       expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
     });
 
-    it("will not add an autofill action to the fill script if a field is not passed", function () {
+    it("will not add an autofill action to the fill script if a field is not passed", () => {
       const dataValue = "username";
 
       autofillService["makeScriptActionWithValue"](fillScript, dataValue, null, filledFields);
@@ -3196,7 +3194,7 @@ describe("AutofillService", function () {
       expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
     });
 
-    it("will add an autofill action to the fill script", function () {
+    it("will add an autofill action to the fill script", () => {
       const dataValue = "username";
 
       autofillService["makeScriptActionWithValue"](
@@ -3214,8 +3212,8 @@ describe("AutofillService", function () {
       );
     });
 
-    describe("given a autofill field value that indicates the field is a `select` input", function () {
-      it("will not add an autofil action to the fill script if the dataValue cannot be found in the select options", function () {
+    describe("given a autofill field value that indicates the field is a `select` input", () => {
+      it("will not add an autofil action to the fill script if the dataValue cannot be found in the select options", () => {
         const dataValue = "username";
         const selectField = createAutofillFieldMock({
           opid: "username-field",
@@ -3237,7 +3235,7 @@ describe("AutofillService", function () {
         expect(AutofillService.fillByOpid).not.toHaveBeenCalled();
       });
 
-      it("will update the data value to the value found in the select options, and add an autofill action to the fill script", function () {
+      it("will update the data value to the value found in the select options, and add an autofill action to the fill script", () => {
         const dataValue = "username";
         const selectField = createAutofillFieldMock({
           opid: "username-field",
@@ -3265,11 +3263,11 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("loadPasswordFields", function () {
+  describe("loadPasswordFields", () => {
     let pageDetails: AutofillPageDetails;
     let passwordField: AutofillField;
 
-    beforeEach(function () {
+    beforeEach(() => {
       pageDetails = createAutofillPageDetailsMock({});
       passwordField = createAutofillFieldMock({
         opid: "password-field",
@@ -3279,7 +3277,7 @@ describe("AutofillService", function () {
       jest.spyOn(AutofillService, "forCustomFieldsOnly");
     });
 
-    it("returns an empty array if passed a field that is a `span` element", function () {
+    it("returns an empty array if passed a field that is a `span` element", () => {
       const customField = createAutofillFieldMock({ tagName: "span" });
       pageDetails.fields = [customField];
 
@@ -3289,7 +3287,7 @@ describe("AutofillService", function () {
       expect(result).toStrictEqual([]);
     });
 
-    it("returns an empty array if passed a disabled field", function () {
+    it("returns an empty array if passed a disabled field", () => {
       passwordField.disabled = true;
       pageDetails.fields = [passwordField];
 
@@ -3298,8 +3296,8 @@ describe("AutofillService", function () {
       expect(result).toStrictEqual([]);
     });
 
-    describe("given a field that is readonly", function () {
-      it("returns an empty array if the field cannot be readonly", function () {
+    describe("given a field that is readonly", () => {
+      it("returns an empty array if the field cannot be readonly", () => {
         passwordField.readonly = true;
         pageDetails.fields = [passwordField];
 
@@ -3308,7 +3306,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns the field within an array if the field can be readonly", function () {
+      it("returns the field within an array if the field can be readonly", () => {
         passwordField.readonly = true;
         pageDetails.fields = [passwordField];
 
@@ -3318,12 +3316,12 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("give a field that is not of type `password`", function () {
-      beforeEach(function () {
+    describe("give a field that is not of type `password`", () => {
+      beforeEach(() => {
         passwordField.type = "text";
       });
 
-      it("returns an empty array if the field type is not `text`", function () {
+      it("returns an empty array if the field type is not `text`", () => {
         passwordField.type = "email";
         pageDetails.fields = [passwordField];
 
@@ -3332,7 +3330,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns an empty array if the `htmlID`, `htmlName`, or `placeholder` of the field's values do not include the word `password`", function () {
+      it("returns an empty array if the `htmlID`, `htmlName`, or `placeholder` of the field's values do not include the word `password`", () => {
         pageDetails.fields = [passwordField];
 
         const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
@@ -3340,7 +3338,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns an empty array if the `htmlID` of the field is `null", function () {
+      it("returns an empty array if the `htmlID` of the field is `null", () => {
         passwordField.htmlID = null;
         pageDetails.fields = [passwordField];
 
@@ -3349,7 +3347,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns an empty array if the `htmlID` of the field is equal to `onetimepassword`", function () {
+      it("returns an empty array if the `htmlID` of the field is equal to `onetimepassword`", () => {
         passwordField.htmlID = "onetimepassword";
         pageDetails.fields = [passwordField];
 
@@ -3358,7 +3356,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns the field in an array if the field's htmlID contains the word `password`", function () {
+      it("returns the field in an array if the field's htmlID contains the word `password`", () => {
         passwordField.htmlID = "password";
         pageDetails.fields = [passwordField];
 
@@ -3367,7 +3365,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([passwordField]);
       });
 
-      it("returns the field in an array if the field's htmlName contains the word `password`", function () {
+      it("returns the field in an array if the field's htmlName contains the word `password`", () => {
         passwordField.htmlName = "password";
         pageDetails.fields = [passwordField];
 
@@ -3376,7 +3374,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([passwordField]);
       });
 
-      it("returns the field in an array if the field's placeholder contains the word `password`", function () {
+      it("returns the field in an array if the field's placeholder contains the word `password`", () => {
         passwordField.placeholder = "password";
         pageDetails.fields = [passwordField];
 
@@ -3386,8 +3384,8 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a field that is not viewable", function () {
-      it("returns an empty array if the field cannot be hidden", function () {
+    describe("given a field that is not viewable", () => {
+      it("returns an empty array if the field cannot be hidden", () => {
         passwordField.viewable = false;
         pageDetails.fields = [passwordField];
 
@@ -3396,7 +3394,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns the field within an array if the field can be hidden", function () {
+      it("returns the field within an array if the field can be hidden", () => {
         passwordField.viewable = false;
         pageDetails.fields = [passwordField];
 
@@ -3406,8 +3404,8 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a need for the passed to be empty", function () {
-      it("returns an empty array if the passed field contains a value that is not null or empty", function () {
+    describe("given a need for the passed to be empty", () => {
+      it("returns an empty array if the passed field contains a value that is not null or empty", () => {
         passwordField.value = "Some Password Value";
         pageDetails.fields = [passwordField];
 
@@ -3416,7 +3414,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns the field within an array if the field contains a null value", function () {
+      it("returns the field within an array if the field contains a null value", () => {
         passwordField.value = null;
         pageDetails.fields = [passwordField];
 
@@ -3425,7 +3423,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([passwordField]);
       });
 
-      it("returns the field within an array if the field contains an empty value", function () {
+      it("returns the field within an array if the field contains an empty value", () => {
         passwordField.value = "";
         pageDetails.fields = [passwordField];
 
@@ -3435,12 +3433,12 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a field with a new password", function () {
-      beforeEach(function () {
+    describe("given a field with a new password", () => {
+      beforeEach(() => {
         passwordField.autoCompleteType = "new-password";
       });
 
-      it("returns an empty array if not filling a new password and the autoCompleteType is `new-password`", function () {
+      it("returns an empty array if not filling a new password and the autoCompleteType is `new-password`", () => {
         pageDetails.fields = [passwordField];
 
         const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, false);
@@ -3448,7 +3446,7 @@ describe("AutofillService", function () {
         expect(result).toStrictEqual([]);
       });
 
-      it("returns the field within an array if filling a new password and the autoCompleteType is `new-password`", function () {
+      it("returns the field within an array if filling a new password and the autoCompleteType is `new-password`", () => {
         pageDetails.fields = [passwordField];
 
         const result = AutofillService.loadPasswordFields(pageDetails, false, false, false, true);
@@ -3458,12 +3456,12 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("findUsernameField", function () {
+  describe("findUsernameField", () => {
     let pageDetails: AutofillPageDetails;
     let usernameField: AutofillField;
     let passwordField: AutofillField;
 
-    beforeEach(function () {
+    beforeEach(() => {
       pageDetails = createAutofillPageDetailsMock({});
       usernameField = createAutofillFieldMock({
         opid: "username-field",
@@ -3482,7 +3480,7 @@ describe("AutofillService", function () {
       jest.spyOn(autofillService as any, "findMatchingFieldIndex");
     });
 
-    it("returns null when passed a field that is a `span` element", function () {
+    it("returns null when passed a field that is a `span` element", () => {
       const field = createAutofillFieldMock({ tagName: "span" });
       pageDetails.fields = [field];
 
@@ -3492,7 +3490,7 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    it("returns null when the passed username field has a larger elementNumber than the passed password field", function () {
+    it("returns null when the passed username field has a larger elementNumber than the passed password field", () => {
       usernameField.elementNumber = 2;
 
       const result = autofillService["findUsernameField"](
@@ -3506,7 +3504,7 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    it("returns null if the passed username field is disabled", function () {
+    it("returns null if the passed username field is disabled", () => {
       usernameField.disabled = true;
 
       const result = autofillService["findUsernameField"](
@@ -3520,12 +3518,12 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    describe("given a field that is readonly", function () {
-      beforeEach(function () {
+    describe("given a field that is readonly", () => {
+      beforeEach(() => {
         usernameField.readonly = true;
       });
 
-      it("returns null if the field cannot be readonly", function () {
+      it("returns null if the field cannot be readonly", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3537,7 +3535,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the field can be readonly", function () {
+      it("returns the field if the field can be readonly", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3550,13 +3548,13 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a username field that does not contain a form that matches the password field", function () {
-      beforeEach(function () {
+    describe("given a username field that does not contain a form that matches the password field", () => {
+      beforeEach(() => {
         usernameField.form = "invalidFormId";
         usernameField.type = "tel";
       });
 
-      it("returns null if the field cannot be without a form", function () {
+      it("returns null if the field cannot be without a form", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3568,7 +3566,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the username field can be without a form", function () {
+      it("returns the field if the username field can be without a form", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3581,13 +3579,13 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a field that is not viewable", function () {
-      beforeEach(function () {
+    describe("given a field that is not viewable", () => {
+      beforeEach(() => {
         usernameField.viewable = false;
         usernameField.type = "email";
       });
 
-      it("returns null if the field cannot be hidden", function () {
+      it("returns null if the field cannot be hidden", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3599,7 +3597,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the field can be hidden", function () {
+      it("returns the field if the field can be hidden", () => {
         const result = autofillService["findUsernameField"](
           pageDetails,
           passwordField,
@@ -3612,7 +3610,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns null if the username field does not have a type of `text`, `email`, or `tel`", function () {
+    it("returns null if the username field does not have a type of `text`, `email`, or `tel`", () => {
       usernameField.type = "checkbox";
 
       const result = autofillService["findUsernameField"](
@@ -3626,7 +3624,7 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    it("returns the username field whose attributes most closely describe the username of the password field", function () {
+    it("returns the username field whose attributes most closely describe the username of the password field", () => {
       const usernameField2 = createAutofillFieldMock({
         opid: "username-field-2",
         type: "text",
@@ -3660,12 +3658,12 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("findTotpField", function () {
+  describe("findTotpField", () => {
     let pageDetails: AutofillPageDetails;
     let passwordField: AutofillField;
     let totpField: AutofillField;
 
-    beforeEach(function () {
+    beforeEach(() => {
       pageDetails = createAutofillPageDetailsMock({});
       passwordField = createAutofillFieldMock({
         opid: "password-field",
@@ -3686,7 +3684,7 @@ describe("AutofillService", function () {
       jest.spyOn(AutofillService, "fieldIsFuzzyMatch");
     });
 
-    it("returns null when passed a field that is a `span` element", function () {
+    it("returns null when passed a field that is a `span` element", () => {
       const field = createAutofillFieldMock({ tagName: "span" });
       pageDetails.fields = [field];
 
@@ -3696,7 +3694,7 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    it("returns null if the passed totp field is disabled", function () {
+    it("returns null if the passed totp field is disabled", () => {
       totpField.disabled = true;
 
       const result = autofillService["findTotpField"](
@@ -3710,12 +3708,12 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    describe("given a field that is readonly", function () {
-      beforeEach(function () {
+    describe("given a field that is readonly", () => {
+      beforeEach(() => {
         totpField.readonly = true;
       });
 
-      it("returns null if the field cannot be readonly", function () {
+      it("returns null if the field cannot be readonly", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3727,7 +3725,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the field can be readonly", function () {
+      it("returns the field if the field can be readonly", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3740,12 +3738,12 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a totp field that does not contain a form that matches the password field", function () {
-      beforeEach(function () {
+    describe("given a totp field that does not contain a form that matches the password field", () => {
+      beforeEach(() => {
         totpField.form = "invalidFormId";
       });
 
-      it("returns null if the field cannot be without a form", function () {
+      it("returns null if the field cannot be without a form", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3757,7 +3755,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the username field can be without a form", function () {
+      it("returns the field if the username field can be without a form", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3770,13 +3768,13 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a field that is not viewable", function () {
-      beforeEach(function () {
+    describe("given a field that is not viewable", () => {
+      beforeEach(() => {
         totpField.viewable = false;
         totpField.type = "number";
       });
 
-      it("returns null if the field cannot be hidden", function () {
+      it("returns null if the field cannot be hidden", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3788,7 +3786,7 @@ describe("AutofillService", function () {
         expect(result).toBe(null);
       });
 
-      it("returns the field if the field can be hidden", function () {
+      it("returns the field if the field can be hidden", () => {
         const result = autofillService["findTotpField"](
           pageDetails,
           passwordField,
@@ -3801,7 +3799,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns null if the totp field does not have a type of `text`, or `number`", function () {
+    it("returns null if the totp field does not have a type of `text`, or `number`", () => {
       totpField.type = "checkbox";
 
       const result = autofillService["findTotpField"](
@@ -3815,7 +3813,7 @@ describe("AutofillService", function () {
       expect(result).toBe(null);
     });
 
-    it("returns the field if the autoCompleteType is `one-time-code`", function () {
+    it("returns the field if the autoCompleteType is `one-time-code`", () => {
       totpField.autoCompleteType = "one-time-code";
       jest.spyOn(autofillService as any, "findMatchingFieldIndex").mockReturnValueOnce(-1);
 
@@ -3831,12 +3829,12 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("findMatchingFieldIndex", function () {
-    beforeEach(function () {
+  describe("findMatchingFieldIndex", () => {
+    beforeEach(() => {
       jest.spyOn(autofillService as any, "fieldPropertyIsMatch");
     });
 
-    it("returns the index of a value that matches a property prefix", function () {
+    it("returns the index of a value that matches a property prefix", () => {
       const attributes = [
         ["htmlID", "id"],
         ["htmlName", "name"],
@@ -3864,7 +3862,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns the index of a value that matches a property", function () {
+    it("returns the index of a value that matches a property", () => {
       const attributes = [
         "htmlID",
         "htmlName",
@@ -3886,8 +3884,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fieldPropertyIsPrefixMatch", function () {
-    it("returns true if the field contains a property whose value is a match", function () {
+  describe("fieldPropertyIsPrefixMatch", () => {
+    it("returns true if the field contains a property whose value is a match", () => {
       const field = createAutofillFieldMock({ htmlID: "username" });
 
       const result = autofillService["fieldPropertyIsPrefixMatch"](
@@ -3900,7 +3898,7 @@ describe("AutofillService", function () {
       expect(result).toBe(true);
     });
 
-    it("returns false if the field contains a property whose value is not a match", function () {
+    it("returns false if the field contains a property whose value is not a match", () => {
       const field = createAutofillFieldMock({ htmlID: "username" });
 
       const result = autofillService["fieldPropertyIsPrefixMatch"](
@@ -3914,15 +3912,15 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fieldPropertyIsMatch", function () {
+  describe("fieldPropertyIsMatch", () => {
     let field: AutofillField;
 
-    beforeEach(function () {
+    beforeEach(() => {
       field = createAutofillFieldMock();
       jest.spyOn(AutofillService, "hasValue");
     });
 
-    it("returns false if the property within the field does not have a value", function () {
+    it("returns false if the property within the field does not have a value", () => {
       field.htmlID = "";
 
       const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "some-value");
@@ -3931,7 +3929,7 @@ describe("AutofillService", function () {
       expect(result).toBe(false);
     });
 
-    it("returns true if the property within the field provides a value that is equal to the passed `name`", function () {
+    it("returns true if the property within the field provides a value that is equal to the passed `name`", () => {
       field.htmlID = "some-value";
 
       const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "some-value");
@@ -3940,8 +3938,8 @@ describe("AutofillService", function () {
       expect(result).toBe(true);
     });
 
-    describe("given a passed `name` value that is expecting a regex check", function () {
-      it("returns false if the property within the field fails the `name` regex check", function () {
+    describe("given a passed `name` value that is expecting a regex check", () => {
+      it("returns false if the property within the field fails the `name` regex check", () => {
         field.htmlID = "some-false-value";
 
         const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=some-value");
@@ -3949,7 +3947,7 @@ describe("AutofillService", function () {
         expect(result).toBe(false);
       });
 
-      it("returns true if the property within the field equals the `name` regex check", function () {
+      it("returns true if the property within the field equals the `name` regex check", () => {
         field.htmlID = "some-value";
 
         const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=some-value");
@@ -3957,7 +3955,7 @@ describe("AutofillService", function () {
         expect(result).toBe(true);
       });
 
-      it("returns true if the property within the field has a partial match to the `name` regex check", function () {
+      it("returns true if the property within the field has a partial match to the `name` regex check", () => {
         field.htmlID = "some-value";
 
         const result = autofillService["fieldPropertyIsMatch"](field, "htmlID", "regex=value");
@@ -3965,7 +3963,7 @@ describe("AutofillService", function () {
         expect(result).toBe(true);
       });
 
-      it("will log an error when the regex triggers a catch block", function () {
+      it("will log an error when the regex triggers a catch block", () => {
         field.htmlID = "some-value";
         jest.spyOn(autofillService["logService"], "error");
 
@@ -3976,8 +3974,8 @@ describe("AutofillService", function () {
       });
     });
 
-    describe("given a passed `name` value that is checking comma separated values", function () {
-      it("returns false if the property within the field does not have a value that matches the values within the `name` CSV", function () {
+    describe("given a passed `name` value that is checking comma separated values", () => {
+      it("returns false if the property within the field does not have a value that matches the values within the `name` CSV", () => {
         field.htmlID = "some-false-value";
 
         const result = autofillService["fieldPropertyIsMatch"](
@@ -3989,7 +3987,7 @@ describe("AutofillService", function () {
         expect(result).toBe(false);
       });
 
-      it("returns true if the property within the field matches a value within the `name` CSV", function () {
+      it("returns true if the property within the field matches a value within the `name` CSV", () => {
         field.htmlID = "some-other-value";
 
         const result = autofillService["fieldPropertyIsMatch"](
@@ -4003,7 +4001,7 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fieldIsFuzzyMatch", function () {
+  describe("fieldIsFuzzyMatch", () => {
     let field: AutofillField;
     const fieldProperties = [
       "htmlID",
@@ -4015,13 +4013,13 @@ describe("AutofillService", function () {
       "placeholder",
     ];
 
-    beforeEach(function () {
+    beforeEach(() => {
       field = createAutofillFieldMock();
       jest.spyOn(AutofillService, "hasValue");
       jest.spyOn(AutofillService as any, "fuzzyMatch");
     });
 
-    it("returns false if the field properties do not have any values", function () {
+    it("returns false if the field properties do not have any values", () => {
       fieldProperties.forEach((property) => {
         field[property] = "";
       });
@@ -4033,7 +4031,7 @@ describe("AutofillService", function () {
       expect(result).toBe(false);
     });
 
-    it("returns false if the field properties do not have a value that is a fuzzy match", function () {
+    it("returns false if the field properties do not have a value that is a fuzzy match", () => {
       fieldProperties.forEach((property) => {
         field[property] = "some-false-value";
 
@@ -4050,7 +4048,7 @@ describe("AutofillService", function () {
       });
     });
 
-    it("returns true if the field property has a value that is a fuzzy match", function () {
+    it("returns true if the field property has a value that is a fuzzy match", () => {
       fieldProperties.forEach((property) => {
         field[property] = "some-value";
 
@@ -4065,38 +4063,38 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fuzzyMatch", function () {
-    it("returns false if the passed options is null", function () {
+  describe("fuzzyMatch", () => {
+    it("returns false if the passed options is null", () => {
       const result = AutofillService["fuzzyMatch"](null, "some-value");
 
       expect(result).toBe(false);
     });
 
-    it("returns false if the passed options contains an empty array", function () {
+    it("returns false if the passed options contains an empty array", () => {
       const result = AutofillService["fuzzyMatch"]([], "some-value");
 
       expect(result).toBe(false);
     });
 
-    it("returns false if the passed value is null", function () {
+    it("returns false if the passed value is null", () => {
       const result = AutofillService["fuzzyMatch"](["some-value"], null);
 
       expect(result).toBe(false);
     });
 
-    it("returns false if the passed value is an empty string", function () {
+    it("returns false if the passed value is an empty string", () => {
       const result = AutofillService["fuzzyMatch"](["some-value"], "");
 
       expect(result).toBe(false);
     });
 
-    it("returns false if the passed value is not present in the options array", function () {
+    it("returns false if the passed value is not present in the options array", () => {
       const result = AutofillService["fuzzyMatch"](["some-value"], "some-other-value");
 
       expect(result).toBe(false);
     });
 
-    it("returns true if the passed value is within the options array", function () {
+    it("returns true if the passed value is within the options array", () => {
       const result = AutofillService["fuzzyMatch"](
         ["some-other-value", "some-value"],
         "some-value"
@@ -4106,33 +4104,33 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("hasValue", function () {
-    it("returns false if the passed string is null", function () {
+  describe("hasValue", () => {
+    it("returns false if the passed string is null", () => {
       const result = AutofillService.hasValue(null);
 
       expect(result).toBe(false);
     });
 
-    it("returns false if the passed string is an empty string", function () {
+    it("returns false if the passed string is an empty string", () => {
       const result = AutofillService.hasValue("");
 
       expect(result).toBe(false);
     });
 
-    it("returns true if the passed string is not null or an empty string", function () {
+    it("returns true if the passed string is not null or an empty string", () => {
       const result = AutofillService.hasValue("some-value");
 
       expect(result).toBe(true);
     });
   });
 
-  describe("setFillScriptForFocus", function () {
+  describe("setFillScriptForFocus", () => {
     let usernameField: AutofillField;
     let passwordField: AutofillField;
     let filledFields: { [key: string]: AutofillField };
     let fillScript: AutofillScript;
 
-    beforeEach(function () {
+    beforeEach(() => {
       usernameField = createAutofillFieldMock({
         opid: "username-field",
         type: "text",
@@ -4152,19 +4150,19 @@ describe("AutofillService", function () {
       fillScript = createAutofillScriptMock({ script: [] });
     });
 
-    it("returns a fill script with an unmodified actions list if an empty filledFields value is passed", function () {
+    it("returns a fill script with an unmodified actions list if an empty filledFields value is passed", () => {
       const result = AutofillService.setFillScriptForFocus({}, fillScript);
 
       expect(result.script).toStrictEqual([]);
     });
 
-    it("returns a fill script with the password field prioritized when adding a `focus_by_opid` action", function () {
+    it("returns a fill script with the password field prioritized when adding a `focus_by_opid` action", () => {
       const result = AutofillService.setFillScriptForFocus(filledFields, fillScript);
 
       expect(result.script).toStrictEqual([["focus_by_opid", "password-field"]]);
     });
 
-    it("returns a fill script with the username field if a password field is not present when adding a `focus_by_opid` action", function () {
+    it("returns a fill script with the username field if a password field is not present when adding a `focus_by_opid` action", () => {
       delete filledFields["password-field"];
 
       const result = AutofillService.setFillScriptForFocus(filledFields, fillScript);
@@ -4173,11 +4171,11 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("fillByOpid", function () {
+  describe("fillByOpid", () => {
     let usernameField: AutofillField;
     let fillScript: AutofillScript;
 
-    beforeEach(function () {
+    beforeEach(() => {
       usernameField = createAutofillFieldMock({
         opid: "username-field",
         type: "text",
@@ -4187,7 +4185,7 @@ describe("AutofillService", function () {
       fillScript = createAutofillScriptMock({ script: [] });
     });
 
-    it("returns a list of fill script actions for the passed field", function () {
+    it("returns a list of fill script actions for the passed field", () => {
       usernameField.maxLength = 5;
       AutofillService.fillByOpid(fillScript, usernameField, "some-long-value");
 
@@ -4198,7 +4196,7 @@ describe("AutofillService", function () {
       ]);
     });
 
-    it("returns only the `fill_by_opid` action if the passed field is a `span` element", function () {
+    it("returns only the `fill_by_opid` action if the passed field is a `span` element", () => {
       usernameField.tagName = "span";
       AutofillService.fillByOpid(fillScript, usernameField, "some-long-value");
 
@@ -4208,8 +4206,8 @@ describe("AutofillService", function () {
     });
   });
 
-  describe("forCustomFieldsOnly", function () {
-    it("returns a true value if the passed field has a tag name of `span`", function () {
+  describe("forCustomFieldsOnly", () => {
+    it("returns a true value if the passed field has a tag name of `span`", () => {
       const field = createAutofillFieldMock({ tagName: "span" });
 
       const result = AutofillService.forCustomFieldsOnly(field);
@@ -4217,7 +4215,7 @@ describe("AutofillService", function () {
       expect(result).toBe(true);
     });
 
-    it("returns a false value if the passed field does not have a tag name of `span`", function () {
+    it("returns a false value if the passed field does not have a tag name of `span`", () => {
       const field = createAutofillFieldMock({ tagName: "input" });
 
       const result = AutofillService.forCustomFieldsOnly(field);
