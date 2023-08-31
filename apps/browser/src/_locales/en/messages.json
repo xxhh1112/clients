@@ -2408,36 +2408,51 @@
     "description": "Toggling an expand/collapse state."
   },
   "bitwardenOverlayButton": {
-    "message": "Bitwarden overlay button"
+    "message": "Bitwarden auto-fill menu button",
+    "description": "Page title for the iframe containing the overlay button"
   },
   "toggleBitwardenVaultOverlay": {
-    "message": "Toggle Bitwarden vault overlay"
+    "message": "Toggle Bitwarden auto-fill menu",
+    "description": "Screen reader and tool tip label for the overlay button"
   },
   "bitwardenVault": {
-    "message": "Bitwarden vault"
+    "message": "Bitwarden auto-fill menu",
+    "description": "Page title in overlay"
   },
   "unlockYourAccountToViewMatchingLogins": {
-    "message": "Unlock your account to view matching logins"
+    "message": "Unlock your account to view matching logins",
+    "description": "Text to display in overlay when the account is locked."
   },
   "unlockAccount": {
-    "message": "Unlock account"
+    "message": "Unlock account",
+    "description": "Button text to display in overlay when the account is locked."
   },
   "fillCredentialsFor":  {
-    "message": "Fill credentials for"
+    "message": "Fill credentials for",
+    "description": "Screen reader text for when overlay item is in focused"
   },
   "partialUsername" : {
-    "message": "Partial username"
+    "message": "Partial username",
+    "description": "Screen reader text for when a login item is focused where a partial username is displayed. SR will announce this phrase before reading the text of the partial username"
   },
   "noItemsToShow": {
-    "message": "No items to show"
+    "message": "No items to show",
+    "description": "Text to show in overlay if there are no matching items"
   },
   "newItem": {
-    "message": "New item"
+    "message": "New item",
+    "description": "Button text to display in overlay when there are no matching items"
   },
   "addNewVaultItem": {
-    "message": "Add new vault item"
+    "message": "Add new vault item",
+    "description": "Screen reader text (aria-label) for new item button in overlay"
   },
   "bitwardenOverlayMenuAvailable": {
-    "message": "Bitwarden menu available. Press the down arrow key to select."
+    "message": "Bitwarden auto-fill menu available. Press the down arrow key to select.",
+    "description": "Screen reader text for announcing when the overlay opens on the page"
+  },
+  "bitwardenOverlaySetting": {
+    "message": "Show auto-fill menu on field selection",
+    "description": "Settings checkbox label that turns the overlay on/off"
   }
 }
