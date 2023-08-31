@@ -73,7 +73,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
     formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
 
-    if (globalThis.document.activeElement === formFieldElement) {
+    const documentRoot = formFieldElement.getRootNode() as ShadowRoot | Document;
+    if (documentRoot.activeElement === formFieldElement) {
       this.triggerFormFieldFocusedAction(formFieldElement);
     }
   }
