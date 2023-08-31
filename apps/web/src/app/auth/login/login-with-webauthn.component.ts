@@ -59,6 +59,8 @@ export class LoginWithWebauthnComponent implements OnInit {
     }
 
     try {
+      // TODO: Check if [[PM-3095] [Tech Debt] Refactor post-authentication routing logic into routing strategies](https://bitwarden.atlassian.net/browse/PM-3095)
+      // has been completed and if so, refactor this to use the new routing strategy.
       const authResult = await this.webauthnService.logIn(assertion);
       if (authResult.requiresTwoFactor) {
         await this.router.navigate([this.twoFactorRoute]);
