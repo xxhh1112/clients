@@ -24,23 +24,22 @@ import {
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 
 import {
+  FocusedFieldData,
   OverlayBackgroundExtensionMessageHandlers,
   OverlayButtonPortMessageHandlers,
   OverlayCipherData,
   OverlayListPortMessageHandlers,
+  OverlayBackground as OverlayBackgroundInterface,
 } from "./abstractions/overlay.background";
 
-class OverlayBackground {
+class OverlayBackground implements OverlayBackgroundInterface {
   private overlayCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayButtonPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
-  private focusedFieldData: {
-    focusedFieldStyles: Partial<CSSStyleDeclaration>;
-    focusedFieldRects: Partial<DOMRect>;
-  };
+  private focusedFieldData: FocusedFieldData;
   private overlayPageTranslations: Record<string, string>;
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {

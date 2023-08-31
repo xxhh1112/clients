@@ -1,6 +1,11 @@
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
+type FocusedFieldData = {
+  focusedFieldStyles: Partial<CSSStyleDeclaration>;
+  focusedFieldRects: Partial<DOMRect>;
+};
+
 type OverlayCipherData = {
   id: string;
   name: string;
@@ -63,9 +68,15 @@ type OverlayListPortMessageHandlers = {
   redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
 };
 
+interface OverlayBackground {
+  removePageDetails(tabId: number): void;
+}
+
 export {
+  FocusedFieldData,
   OverlayCipherData,
   OverlayBackgroundExtensionMessageHandlers,
   OverlayButtonPortMessageHandlers,
   OverlayListPortMessageHandlers,
+  OverlayBackground,
 };
