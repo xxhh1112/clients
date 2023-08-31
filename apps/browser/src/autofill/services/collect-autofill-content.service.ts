@@ -174,16 +174,25 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private buildAutofillFormsData(formElements: Node[]): Record<string, AutofillForm> {
-    formElements.forEach((formElement: HTMLFormElement, index: number) => {
+    for (let index = 0; index < formElements.length; index++) {
+      const formElement = formElements[index] as ElementWithOpId<HTMLFormElement>;
       formElement.opid = `__form__${index}`;
-      this.autofillFormElements.set(formElement as ElementWithOpId<HTMLFormElement>, {
+
+      const existingAutofillForm = this.autofillFormElements.get(formElement);
+      if (existingAutofillForm) {
+        existingAutofillForm.opid = formElement.opid;
+        this.autofillFormElements.set(formElement, existingAutofillForm);
+        continue;
+      }
+
+      this.autofillFormElements.set(formElement, {
         opid: formElement.opid,
-        htmlAction: this.getFormActionAttribute(formElement as ElementWithOpId<HTMLFormElement>),
+        htmlAction: this.getFormActionAttribute(formElement),
         htmlName: this.getPropertyOrAttribute(formElement, "name"),
         htmlID: this.getPropertyOrAttribute(formElement, "id"),
         htmlMethod: this.getPropertyOrAttribute(formElement, "method"),
       });
-    });
+    }
 
     return this.getFormattedAutofillFormsData();
   }
@@ -291,6 +300,15 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     index: number
   ): Promise<AutofillField> => {
     element.opid = `__${index}`;
+
+    const existingAutofillField = this.autofillFieldElements.get(element);
+    if (existingAutofillField) {
+      existingAutofillField.opid = element.opid;
+      existingAutofillField.elementNumber = index;
+      this.autofillFieldElements.set(element, existingAutofillField);
+
+      return existingAutofillField;
+    }
 
     const autofillFieldBase = {
       opid: element.opid,

@@ -41,7 +41,128 @@ describe("CollectAutofillContentService", () => {
   });
 
   describe("getPageDetails", () => {
-    it("returns an object containing information about the curren page as well as autofill data for the forms and fields of the page", async () => {
+    beforeEach(() => {
+      jest
+        .spyOn(collectAutofillContentService as any, "setupMutationObserver")
+        .mockImplementationOnce(() => {
+          collectAutofillContentService["mutationObserver"] = mock<MutationObserver>();
+        });
+    });
+
+    it("sets up the mutation observer the first time getPageDetails is called", async () => {
+      await collectAutofillContentService.getPageDetails();
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["setupMutationObserver"]).toHaveBeenCalledTimes(1);
+    });
+
+    it("returns an object with empty forms and fields if no fields were found on a previous iteration", async () => {
+      collectAutofillContentService["domRecentlyMutated"] = false;
+      collectAutofillContentService["noFieldsFound"] = true;
+      jest.spyOn(collectAutofillContentService as any, "getFormattedPageDetails");
+      jest.spyOn(collectAutofillContentService as any, "queryAutofillFormAndFieldElements");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
+
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["getFormattedPageDetails"]).toHaveBeenCalledWith({}, []);
+      expect(
+        collectAutofillContentService["queryAutofillFormAndFieldElements"]
+      ).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFormsData"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).not.toHaveBeenCalled();
+    });
+
+    it("returns an object with cached form and field data values", async () => {
+      const formId = "validFormId";
+      const formAction = "https://example.com/";
+      const formMethod = "post";
+      const formName = "validFormName";
+      const usernameFieldId = "usernameField";
+      const usernameFieldName = "username";
+      const usernameFieldLabel = "User Name";
+      const passwordFieldId = "passwordField";
+      const passwordFieldName = "password";
+      const passwordFieldLabel = "Password";
+      document.body.innerHTML = `
+        <form id="${formId}" action="${formAction}" method="${formMethod}" name="${formName}">
+            <label for="${usernameFieldId}">${usernameFieldLabel}</label>
+            <input type="text" id="${usernameFieldId}" name="${usernameFieldName}" />
+            <label for="${passwordFieldId}">${passwordFieldLabel}</label>
+            <input type="password" id="${passwordFieldId}" name="${passwordFieldName}" />
+        </form>
+      `;
+      const formElement = document.getElementById(formId) as ElementWithOpId<HTMLFormElement>;
+      const autofillForm: AutofillForm = {
+        opid: "__form__0",
+        htmlAction: formAction,
+        htmlName: formName,
+        htmlID: formId,
+        htmlMethod: formMethod,
+      };
+      const fieldElement = document.getElementById(
+        usernameFieldId
+      ) as ElementWithOpId<FormFieldElement>;
+      const autofillField: AutofillField = {
+        opid: "__0",
+        elementNumber: 0,
+        maxLength: 999,
+        viewable: true,
+        htmlID: usernameFieldId,
+        htmlName: usernameFieldName,
+        htmlClass: null,
+        tabindex: null,
+        title: "",
+        tagName: "input",
+        "label-tag": usernameFieldLabel,
+        "label-data": null,
+        "label-aria": null,
+        "label-top": null,
+        "label-right": passwordFieldLabel,
+        "label-left": usernameFieldLabel,
+        placeholder: "",
+        rel: null,
+        type: "text",
+        value: "",
+        checked: false,
+        autoCompleteType: "",
+        disabled: false,
+        readonly: false,
+        selectInfo: null,
+        form: "__form__0",
+        "aria-hidden": false,
+        "aria-disabled": false,
+        "aria-haspopup": false,
+        "data-stripe": null,
+      };
+      collectAutofillContentService["domRecentlyMutated"] = false;
+      collectAutofillContentService["autofillFormElements"] = new Map([
+        [formElement, autofillForm],
+      ]);
+      collectAutofillContentService["autofillFieldElements"] = new Map([
+        [fieldElement, autofillField],
+      ]);
+      jest.spyOn(collectAutofillContentService as any, "getFormattedPageDetails");
+      jest.spyOn(collectAutofillContentService as any, "getFormattedAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "getFormattedAutofillFieldsData");
+      jest.spyOn(collectAutofillContentService as any, "queryAutofillFormAndFieldElements");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFormsData");
+      jest.spyOn(collectAutofillContentService as any, "buildAutofillFieldsData");
+
+      await collectAutofillContentService.getPageDetails();
+
+      expect(collectAutofillContentService["getFormattedPageDetails"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["getFormattedAutofillFormsData"]).toHaveBeenCalled();
+      expect(collectAutofillContentService["getFormattedAutofillFieldsData"]).toHaveBeenCalled();
+      expect(
+        collectAutofillContentService["queryAutofillFormAndFieldElements"]
+      ).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFormsData"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["buildAutofillFieldsData"]).not.toHaveBeenCalled();
+    });
+
+    it("returns an object containing information about the current page as well as autofill data for the forms and fields of the page", async () => {
       const documentTitle = "Test Page";
       const formId = "validFormId";
       const formAction = "https://example.com/";
@@ -235,6 +356,44 @@ describe("CollectAutofillContentService", () => {
   });
 
   describe("buildAutofillFormsData", () => {
+    it("will not attempt to gather data from a cached form element", () => {
+      const documentTitle = "Test Page";
+      const formId = "validFormId";
+      const formAction = "https://example.com/";
+      const formMethod = "post";
+      const formName = "validFormName";
+      document.title = documentTitle;
+      document.body.innerHTML = `
+        <form id="${formId}" action="${formAction}" method="${formMethod}" name="${formName}">
+            <label for="usernameFieldId">usernameFieldLabel</label>
+            <input type="text" id="usernameFieldId" name="usernameFieldName" />
+            <label for="passwordFieldId">passwordFieldLabel</label>
+            <input type="password" id="passwordFieldId" name="passwordFieldName" />
+        </form>
+
+      `;
+      const formElement = document.getElementById(formId) as ElementWithOpId<HTMLFormElement>;
+      const existingAutofillForm: AutofillForm = {
+        opid: "__form__0",
+        htmlAction: formAction,
+        htmlName: formName,
+        htmlID: formId,
+        htmlMethod: formMethod,
+      };
+      collectAutofillContentService["autofillFormElements"] = new Map([
+        [formElement, existingAutofillForm],
+      ]);
+      const formElements = Array.from(document.querySelectorAll("form"));
+      jest.spyOn(collectAutofillContentService as any, "getFormActionAttribute");
+
+      const autofillFormsData = collectAutofillContentService["buildAutofillFormsData"](
+        formElements as Node[]
+      );
+
+      expect(collectAutofillContentService["getFormActionAttribute"]).not.toHaveBeenCalled();
+      expect(autofillFormsData).toStrictEqual({ __form__0: existingAutofillForm });
+    });
+
     it("returns an object of AutofillForm objects with the form id as a key", () => {
       const documentTitle = "Test Page";
       const formId1 = "validFormId";
@@ -566,6 +725,105 @@ describe("CollectAutofillContentService", () => {
   });
 
   describe("buildAutofillFieldItem", () => {
+    it("returns an existing autofill field item if it exists", async () => {
+      const index = 0;
+      const usernameField = {
+        labelText: "Username",
+        id: "username-id",
+        classes: "username input classes",
+        name: "username",
+        type: "text",
+        maxLength: 42,
+        tabIndex: 0,
+        title: "Username Input Title",
+        autocomplete: "username-autocomplete",
+        dataLabel: "username-data-label",
+        ariaLabel: "username-aria-label",
+        placeholder: "username-placeholder",
+        rel: "username-rel",
+        value: "username-value",
+        dataStripe: "data-stripe",
+      };
+      document.body.innerHTML = `
+        <form>
+          <label for="${usernameField.id}">${usernameField.labelText}</label>
+          <input
+            id="${usernameField.id}"
+            class="${usernameField.classes}"
+            name="${usernameField.name}"
+            type="${usernameField.type}"
+            maxlength="${usernameField.maxLength}"
+            tabindex="${usernameField.tabIndex}"
+            title="${usernameField.title}"
+            autocomplete="${usernameField.autocomplete}"
+            data-label="${usernameField.dataLabel}"
+            aria-label="${usernameField.ariaLabel}"
+            placeholder="${usernameField.placeholder}"
+            rel="${usernameField.rel}"
+            value="${usernameField.value}"
+            data-stripe="${usernameField.dataStripe}"
+          />
+        </form>
+      `;
+      document.body.innerHTML = `
+        <form>
+          <label for="${usernameField.id}">${usernameField.labelText}</label>
+          <input
+            id="${usernameField.id}"
+            class="${usernameField.classes}"
+            name="${usernameField.name}"
+            type="${usernameField.type}"
+            maxlength="${usernameField.maxLength}"
+            tabindex="${usernameField.tabIndex}"
+            title="${usernameField.title}"
+            autocomplete="${usernameField.autocomplete}"
+            data-label="${usernameField.dataLabel}"
+            aria-label="${usernameField.ariaLabel}"
+            placeholder="${usernameField.placeholder}"
+            rel="${usernameField.rel}"
+            value="${usernameField.value}"
+            data-stripe="${usernameField.dataStripe}"
+          />
+        </form>
+      `;
+      const existingFieldData: AutofillField = {
+        elementNumber: index,
+        htmlClass: usernameField.classes,
+        htmlID: usernameField.id,
+        htmlName: usernameField.name,
+        maxLength: usernameField.maxLength,
+        opid: `__${index}`,
+        tabindex: String(usernameField.tabIndex),
+        tagName: "input",
+        title: usernameField.title,
+        viewable: true,
+      };
+      const usernameInput = document.getElementById(
+        usernameField.id
+      ) as ElementWithOpId<FillableFormFieldElement>;
+      usernameInput.opid = "__0";
+      collectAutofillContentService["autofillFieldElements"].set(usernameInput, existingFieldData);
+      jest.spyOn(collectAutofillContentService as any, "getAutofillFieldMaxLength");
+      jest
+        .spyOn(collectAutofillContentService["domElementVisibilityService"], "isFormFieldViewable")
+        .mockResolvedValue(true);
+      jest.spyOn(collectAutofillContentService as any, "getPropertyOrAttribute");
+      jest.spyOn(collectAutofillContentService as any, "getElementValue");
+
+      const autofillFieldItem = await collectAutofillContentService["buildAutofillFieldItem"](
+        usernameInput,
+        0
+      );
+
+      expect(collectAutofillContentService["getAutofillFieldMaxLength"]).not.toHaveBeenCalled();
+      expect(
+        collectAutofillContentService["domElementVisibilityService"].isFormFieldViewable
+      ).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["getPropertyOrAttribute"]).not.toHaveBeenCalled();
+      expect(collectAutofillContentService["getElementValue"]).not.toHaveBeenCalled();
+      expect(autofillFieldItem).toEqual(existingFieldData);
+    });
+
     it("returns the AutofillField base data values without the field labels or input values if the passed element is a span element", async () => {
       const index = 0;
       const spanElementId = "span-element";
