@@ -62,7 +62,6 @@ type OverlayListPortMessageHandlers = {
     message: any;
     port: chrome.runtime.Port;
   }) => void;
-  updateAutofillOverlayListHeight: ({ message }: { message: any }) => void;
   addNewVaultItem: () => void;
   viewSelectedCipher: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
   redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;

@@ -128,13 +128,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     });
   }
 
-  updateAutofillOverlayListHeight(message: any) {
-    const updatedHeight = message?.height;
-    if (!this.overlayListElement || !updatedHeight) {
-      return;
-    }
-  }
-
   addNewVaultItem() {
     if (!this.isOverlayListVisible) {
       return;

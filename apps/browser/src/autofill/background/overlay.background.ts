@@ -66,7 +66,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
-    updateAutofillOverlayListHeight: ({ message }) => this.updateAutofillOverlayListHeight(message),
     addNewVaultItem: () => this.getNewVaultItemDetails(),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
     redirectOverlayFocusOut: ({ message, port }) =>
@@ -330,17 +329,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     return domain ? `${obscureName}@${domain}` : obscureName;
-  }
-
-  private updateAutofillOverlayListHeight(message: any) {
-    if (!this.overlayListSenderInfo) {
-      return;
-    }
-
-    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
-      command: "updateAutofillOverlayListHeight",
-      height: message.height,
-    });
   }
 
   private async getAuthStatus() {

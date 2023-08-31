@@ -19,7 +19,6 @@ type AutofillExtensionMessageHandlers = {
   fillForm: (message: { message: AutofillExtensionMessage }) => void;
   openAutofillOverlay: (message: { message: AutofillExtensionMessage }) => void;
   closeAutofillOverlay: () => void;
-  updateAutofillOverlayListHeight: (message: { message: any }) => void;
   addNewVaultItemFromOverlay: () => void;
   redirectOverlayFocusOut: ({ message }: { message: any }) => void;
 };
