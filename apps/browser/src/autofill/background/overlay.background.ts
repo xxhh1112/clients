@@ -35,7 +35,6 @@ import {
 class OverlayBackground implements OverlayBackgroundInterface {
   private overlayCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
-  private overlayListSenderInfo: chrome.runtime.MessageSender;
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayButtonPort: chrome.runtime.Port;
   private overlayListPort: chrome.runtime.Port;
@@ -66,7 +65,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
       this.autofillOverlayListItem(message, port.sender),
-    addNewVaultItem: () => this.getNewVaultItemDetails(),
+    addNewVaultItem: ({ port }) => this.getNewVaultItemDetails(port.sender),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
     redirectOverlayFocusOut: ({ message, port }) =>
       this.redirectOverlayFocusOut(message, port.sender),
@@ -205,11 +204,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private closeAutofillOverlay(sender: chrome.runtime.MessageSender) {
-    if (!sender) {
-      return;
-    }
-
-    chrome.tabs.sendMessage(sender.tab.id, { command: "closeAutofillOverlay" });
+    BrowserApi.tabSendMessage(sender.tab, { command: "closeAutofillOverlay" });
   }
 
   private overlayElementClosed({ overlayElement }: { overlayElement: string }) {
@@ -303,8 +298,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
   private async openOverlay(focusFieldElement = false) {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
     const authStatus = await this.getAuthStatus();
-    chrome.tabs.sendMessage(currentTab.id, {
-      command: "openAutofillOverlay",
+
+    await BrowserApi.tabSendMessageData(currentTab, "openAutofillOverlay", {
       authStatus,
       focusFieldElement,
     });
@@ -447,10 +442,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
   };
 
   private setupOverlayListPort = async (port: chrome.runtime.Port) => {
-    if (port.sender) {
-      this.overlayListSenderInfo = port.sender;
-    }
-
     this.overlayListPort = port;
     this.overlayListPort.postMessage({
       command: "initAutofillOverlayList",
@@ -520,21 +511,20 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private redirectOverlayFocusOut(message: any, sender: chrome.runtime.MessageSender) {
-    chrome.tabs.sendMessage(sender.tab.id, {
-      command: "redirectOverlayFocusOut",
+    BrowserApi.tabSendMessageData(sender.tab, "redirectOverlayFocusOut", {
       direction: message.direction,
     });
   }
 
-  // TODO: CG - Need to go through and refactor this implementation to be more robust.
-  private getNewVaultItemDetails() {
-    chrome.tabs.sendMessage(this.overlayListSenderInfo.tab.id, {
-      command: "addNewVaultItemFromOverlay",
-    });
+  private getNewVaultItemDetails(sender: chrome.runtime.MessageSender) {
+    BrowserApi.tabSendMessage(sender.tab, { command: "addNewVaultItemFromOverlay" });
   }
 
   private async addNewVaultItem(message: any, sender: chrome.runtime.MessageSender) {
-    // TODO: CG - This is an exact implementation of AddLoginQueueMessage.toCipherView. Need to find a way to abstract this logic.
+    if (!message.login) {
+      return;
+    }
+
     const uriView = new LoginUriView();
     uriView.uri = message.login.uri;
 

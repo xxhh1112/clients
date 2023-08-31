@@ -62,7 +62,7 @@ type OverlayListPortMessageHandlers = {
     message: any;
     port: chrome.runtime.Port;
   }) => void;
-  addNewVaultItem: () => void;
+  addNewVaultItem: ({ port }: { port: chrome.runtime.Port }) => void;
   viewSelectedCipher: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
   redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
 };

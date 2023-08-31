@@ -23,7 +23,7 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
     openAutofillOverlay: ({ message }) =>
-      this.openAutofillOverlay(message.authStatus, message.focusFieldElement),
+      this.openAutofillOverlay(message.data.authStatus, message.data.focusFieldElement),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),

@@ -8,8 +8,10 @@ type AutofillExtensionMessage = {
   sender?: string;
   fillScript?: AutofillScript;
   ciphers?: any;
-  authStatus?: AuthenticationStatus;
-  focusFieldElement?: boolean;
+  data?: {
+    authStatus?: AuthenticationStatus;
+    focusFieldElement?: boolean;
+  };
 };
 
 type AutofillExtensionMessageHandlers = {
