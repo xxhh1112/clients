@@ -2,10 +2,10 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
-import { OverlayButtonWindowMessageHandlers } from "./abstractions/button";
-import { AutofillOverlayElement } from "./utils/autofill-overlay.enum";
-import { logoIcon, logoLockedIcon } from "./utils/svg-icons";
-import { buildSvgDomElement } from "./utils/utils";
+import { OverlayButtonWindowMessageHandlers } from "../../abstractions/button";
+import { AutofillOverlayElement } from "../../utils/autofill-overlay.enum";
+import { logoIcon, logoLockedIcon } from "../../utils/svg-icons";
+import { buildSvgDomElement } from "../../utils/utils";
 
 require("./button.scss");
 

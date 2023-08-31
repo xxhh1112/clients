@@ -48,7 +48,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
+    sendExtensionMessage("getUserAuthStatus");
     this.initOverlayOnDomContentLoaded();
+  }
+
+  setAuthStatus(authStatus: AuthenticationStatus) {
+    this.authStatus = authStatus;
   }
 
   setupAutofillOverlayListenerOnField(
@@ -79,7 +84,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (authStatus && this.authStatus !== authStatus) {
-      this.authStatus = authStatus;
+      this.setAuthStatus(authStatus);
     }
 
     if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {

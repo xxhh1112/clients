@@ -25,6 +25,7 @@ type AutofillExtensionMessageHandlers = {
   redirectOverlayFocusOut: ({ message }: { message: any }) => void;
   promptForLogin: () => void;
   passwordReprompt: () => void;
+  updateUserAuthStatus: ({ message }: { message: any }) => void;
 };
 
 interface AutofillInit {

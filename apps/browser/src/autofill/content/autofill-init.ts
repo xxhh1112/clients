@@ -29,6 +29,7 @@ class AutofillInit implements AutofillInitInterface {
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
     promptForLogin: () => this.blurAndRemoveOverlay(),
     passwordReprompt: () => this.blurAndRemoveOverlay(),
+    updateUserAuthStatus: ({ message }) => this.updateUserAuthStatus(message),
   };
 
   /**
@@ -132,6 +133,10 @@ class AutofillInit implements AutofillInitInterface {
 
   private redirectOverlayFocusOut(message: any) {
     this.autofillOverlayContentService.redirectOverlayFocusOut(message.direction);
+  }
+
+  private updateUserAuthStatus(message: any) {
+    this.autofillOverlayContentService.setAuthStatus(message.data.authStatus);
   }
 
   /**
