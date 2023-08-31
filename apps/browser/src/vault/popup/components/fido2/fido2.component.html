@@ -2,7 +2,6 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
     <div class="logo-image"></div>
-    <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
     <ng-container *ngIf="data.showUnsupportedVerification">
       {{ "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" | i18n }}
     </ng-container>
@@ -26,7 +25,8 @@
           </div>
           <div class="box">
             <button type="submit" (click)="pick()" class="btn primary block">
-              <b>{{ "confirm" | i18n }}</b>
+              <b [hidden]="loading">{{ "confirm" | i18n }}</b>
+              <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -40,7 +40,8 @@
             </div>
           </div>
           <button type="button" class="btn primary block" (click)="confirm()">
-            {{ "savePasskey" | i18n }}
+            <b [hidden]="loading">{{ "savePasskey" | i18n }}</b>
+            <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
           </button>
         </div>
       </ng-container>
@@ -64,7 +65,7 @@
       </ng-container>
     </ng-container>
     <a *ngIf="data.fallbackSupported" (click)="abort(true)">
-      {{ "useBrowserName" | i18n }} Chrome
+      {{ "useBrowserName" | i18n }} browser
     </a>
   </div>
 </ng-container>
