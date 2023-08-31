@@ -508,7 +508,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         await this.editCollection(event.item, CollectionDialogTabType.Info);
       } else if (event.type === "viewAccess") {
         await this.editCollection(event.item, CollectionDialogTabType.Access);
-      } else if (event.type === "bulkEditAccess") {
+      } else if (event.type === "bulkEditCollectionAccess") {
         await this.bulkEditCollectionAccess(event.items);
       } else if (event.type === "viewEvents") {
         await this.viewEvents(event.item);

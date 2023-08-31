@@ -178,9 +178,9 @@ export class VaultItemsComponent {
     this.dataSource.data = items;
   }
 
-  protected bulkEditAccess() {
+  protected bulkEditCollectionAccess() {
     this.event({
-      type: "bulkEditAccess",
+      type: "bulkEditCollectionAccess",
       items: this.selection.selected
         .filter((item) => item.collection !== undefined)
         .map((item) => item.collection),

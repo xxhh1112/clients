@@ -7,7 +7,7 @@ export type VaultItemEvent =
   | { type: "viewAttachments"; item: CipherView }
   | { type: "viewCollections"; item: CipherView }
   | { type: "viewAccess"; item: CollectionView }
-  | { type: "bulkEditAccess"; items: CollectionView[] }
+  | { type: "bulkEditCollectionAccess"; items: CollectionView[] }
   | { type: "viewEvents"; item: CipherView }
   | { type: "edit"; item: CollectionView }
   | { type: "clone"; item: CipherView }
