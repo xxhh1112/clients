@@ -2439,5 +2439,38 @@
   },
   "passkeyNotCopiedAlert": {
     "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
+  "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword": {
+    "message": "Verification required by the initiating site. This feature is not yet implemented for accounts without master password."
+  },
+  "logInWithPasskey": {
+    "message": "Log in with passkey?"
+  },
+  "savePasskeyInBitwarden": {
+    "message": "Save passkey in Bitwarden?"
+  },
+  "passkeyAlreadyExistsInBitwardenForThisAccount": {
+    "message": "A passkey already exists in Bitwarden for this account"
+  },
+  "noPasskeysFoundForThisApplication": {
+    "message": "No passkeys found for this application."
+  },
+  "confirm": {
+    "message": "Confirm"
+  },
+  "savePasskey": {
+    "message": "Save passkey"
+  },
+  "viewPasskey": {
+    "message": "View passkey"
+  },
+  "useBrowserName": {
+    "message": "Use $browserName$",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Chrome"
+      }
+    }
   }
 }

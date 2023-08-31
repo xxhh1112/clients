@@ -4,8 +4,7 @@
     <div class="logo-image"></div>
     <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
     <ng-container *ngIf="data.showUnsupportedVerification">
-      Verification required by the initiating site. This feature is not yet implemented for accounts
-      without master password.
+      {{ "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" | i18n }}
     </ng-container>
     <ng-container *ngIf="!data.showUnsupportedVerification">
       <ng-container
@@ -15,7 +14,7 @@
         "
       >
         <div class="auth-flow">
-          <p class="subtitle">Log in with passkey?</p>
+          <p class="subtitle">{{ "LogInWithPasskey" | i18n }}</p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
@@ -27,25 +26,27 @@
           </div>
           <div class="box">
             <button type="submit" (click)="pick()" class="btn primary block">
-              <b>{{ "continue" | i18n }}</b>
+              <b>{{ "confirm" | i18n }}</b>
             </button>
           </div>
         </div>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
         <div class="auth-flow">
-          <p class="subtitle">Save passkey in Bitwarden?</p>
+          <p class="subtitle">{{ "SavePasskeyInBitwarden" | i18n }}</p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row [cipher]="ciphers[0]"></app-fido2-cipher-row>
             </div>
           </div>
-          <button type="button" class="btn primary block" (click)="confirm()">Create</button>
+          <button type="button" class="btn primary block" (click)="confirm()">
+            {{ "savePasskey" | i18n }}
+          </button>
         </div>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
         <div class="auth-flow">
-          <p class="subtitle">A passkey already exists in Bitwarden for this account</p>
+          <p class="subtitle">{{ "passkeyAlreadyExistsInBitwardenForThisAccount" | i18n }}</p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
@@ -57,9 +58,13 @@
         </div>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformCredentialNotFoundRequest'">
-        You do not have a matching login for this site.
+        <div class="auth-flow">
+          <p class="subtitle">{{ "noPasskeysFoundForThisApplication" | i18n }}</p>
+        </div>
       </ng-container>
     </ng-container>
-    <a *ngIf="data.fallbackSupported" (click)="abort(true)"> Use browser </a>
+    <a *ngIf="data.fallbackSupported" (click)="abort(true)">
+      {{ "useBrowserName" | i18n }} Chrome
+    </a>
   </div>
 </ng-container>
