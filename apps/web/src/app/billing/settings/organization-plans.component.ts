@@ -94,7 +94,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
   singleOrgPolicyAppliesToActiveUser = false;
   isInTrialFlow = false;
   discount = 0;
-  showSecretsManagerSubscribe: boolean;
+  secretsManagerFeatureFlagEnabled: boolean;
 
   secretsManagerSubscription = secretsManagerSubscribeFormFactory(this.formBuilder);
 
@@ -150,7 +150,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.providerId) {
+    if (this.hasProvider) {
       this.formGroup.controls.businessOwned.setValue(true);
       this.changedOwnedBusiness();
     }
@@ -169,7 +169,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         this.singleOrgPolicyAppliesToActiveUser = policyAppliesToActiveUser;
       });
 
-    this.showSecretsManagerSubscribe = await this.configService.getFeatureFlagBool(
+    this.secretsManagerFeatureFlagEnabled = await this.configService.getFeatureFlagBool(
       FeatureFlag.SecretsManagerBilling,
       false
     );
@@ -182,8 +182,14 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  get showSecretsManagerSubscribe() {
+    return (
+      this.secretsManagerFeatureFlagEnabled && this.planOffersSecretsManager && !this.hasProvider
+    );
+  }
+
   get singleOrgPolicyBlock() {
-    return this.singleOrgPolicyAppliesToActiveUser && this.providerId == null;
+    return this.singleOrgPolicyAppliesToActiveUser && !this.hasProvider;
   }
 
   get createOrganization() {
@@ -240,6 +246,10 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
       (plan) =>
         !plan.legacyYear && !plan.disabled && plan.product === this.formGroup.controls.product.value
     );
+  }
+
+  get hasProvider() {
+    return this.providerId != null;
   }
 
   additionalStoragePriceMonthly(selectedPlan: PlanResponse) {
@@ -547,7 +557,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     // Secrets Manager
     this.buildSecretsManagerRequest(request);
 
-    if (this.providerId) {
+    if (this.hasProvider) {
       const providerRequest = new ProviderOrganizationCreateRequest(
         this.formGroup.controls.clientOwnerEmail.value,
         request
