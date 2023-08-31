@@ -50,7 +50,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
     updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
     updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
-    getUserAuthStatus: ({ sender }) => this.updateUserAuthStatus(sender),
+    getUserAuthStatus: ({ sender }) => this.getAuthStatus(sender),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
     unlockCompleted: ({ message, sender }) => this.unlockCompleted(message, sender),
     addEditCipherSubmitted: () => this.updateAutofillOverlayCiphers(),
@@ -276,16 +276,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.focusedFieldData = message.focusedFieldData;
   }
 
-  private updateUserAuthStatus(sender?: chrome.runtime.MessageSender) {
-    if (!sender) {
-      return;
-    }
-
-    BrowserApi.tabSendMessageData(sender.tab, "updateUserAuthStatus", {
-      authStatus: this.userAuthStatus,
-    });
-  }
-
   private updateOverlayHidden(message: any) {
     if (!message.display) {
       return;
@@ -340,12 +330,17 @@ class OverlayBackground implements OverlayBackgroundInterface {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
-      this.updateUserAuthStatus(sender);
       this.updateAutofillOverlayButtonAuthStatus();
       await this.updateAutofillOverlayCiphers();
     }
 
     this.userAuthStatus = authStatus;
+
+    if (sender) {
+      await BrowserApi.tabSendMessageData(sender.tab, "updateUserAuthStatus", {
+        authStatus: this.userAuthStatus,
+      });
+    }
 
     return this.userAuthStatus;
   }
