@@ -13,7 +13,7 @@ import { WebauthnAssertionView } from "../core/views/webauthn-assertion.view";
 import { CreatePasskeyFailedIcon } from "../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../shared/icons/create-passkey.icon";
 
-type Step = "assert" | "assertFailed";
+type State = "assert" | "assertFailed";
 
 @Component({
   selector: "app-login-with-webauthn",
@@ -22,7 +22,7 @@ type Step = "assert" | "assertFailed";
 export class LoginWithWebauthnComponent implements OnInit {
   protected readonly Icons = { CreatePasskeyIcon, CreatePasskeyFailedIcon };
 
-  protected currentStep: Step = "assert";
+  protected currentState: State = "assert";
 
   protected twoFactorRoute = "/2fa";
   protected successRoute = "/vault";
@@ -42,7 +42,7 @@ export class LoginWithWebauthnComponent implements OnInit {
   }
 
   protected retry() {
-    this.currentStep = "assert";
+    this.currentState = "assert";
     this.authenticate();
   }
 
@@ -54,7 +54,7 @@ export class LoginWithWebauthnComponent implements OnInit {
 
       assertion = await this.webauthnService.assertCredential(options);
     } catch (error) {
-      this.currentStep = "assertFailed";
+      this.currentState = "assertFailed";
       return;
     }
 
@@ -76,7 +76,7 @@ export class LoginWithWebauthnComponent implements OnInit {
       }
 
       this.logService.error(error);
-      this.currentStep = "assertFailed";
+      this.currentState = "assertFailed";
     }
   }
 
