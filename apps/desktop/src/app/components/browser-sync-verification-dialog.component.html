@@ -8,10 +8,10 @@
     <strong>{{ params.fingerprint }}</strong>
   </span>
   <ng-container bitDialogFooter>
-    <button bitButton type="submit" buttonType="primary" bitDialogClose bit-dialog-close="true">
+    <button bitButton type="submit" buttonType="primary" [bitDialogClose]="true">
       {{ "approve" | i18n }}
     </button>
-    <button bitButton type="submit" buttonType="secondary" bitDialogClose bit-dialog-close="false">
+    <button bitButton type="submit" buttonType="secondary" [bitDialogClose]="false">
       {{ "cancel" | i18n }}
     </button>
   </ng-container>

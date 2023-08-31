@@ -8,10 +8,10 @@
     {{ "verifyNativeMessagingConnectionWarning" | i18n }}
   </span>
   <ng-container bitDialogFooter>
-    <button bitButton type="button" buttonType="primary" bitDialogClose bit-dialog-close="true">
+    <button bitButton type="button" buttonType="primary" [bitDialogClose]="true">
       {{ "yes" | i18n }}
     </button>
-    <button bitButton type="button" buttonType="secondary" bitDialogClose bit-dialog-close="false">
+    <button bitButton type="button" buttonType="secondary" [bitDialogClose]="false">
       {{ "no" | i18n }}
     </button>
   </ng-container>
