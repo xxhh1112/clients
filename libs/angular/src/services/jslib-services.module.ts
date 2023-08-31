@@ -51,6 +51,9 @@ import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification-api.service.abstraction";
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
+import { WebauthnApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-api.service.abstraction";
+import { WebauthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthRequestCryptoServiceImplementation } from "@bitwarden/common/auth/services/auth-request-crypto.service.implementation";
@@ -64,6 +67,9 @@ import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
+import { WebauthnAdminService } from "@bitwarden/common/auth/services/webauthn/webauthn-admin.service";
+import { WebauthnApiService } from "@bitwarden/common/auth/services/webauthn/webauthn-api.service";
+import { WebauthnLoginService } from "@bitwarden/common/auth/services/webauthn/webauthn-login.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config-api.service.abstraction";
@@ -171,6 +177,7 @@ import {
   STATE_SERVICE_USE_CACHE,
   SYSTEM_LANGUAGE,
   WINDOW,
+  NAVIGATOR_CREDENTIALS,
 } from "./injection-tokens";
 import { ModalService } from "./modal.service";
 import { ThemingService } from "./theming/theming.service";
@@ -219,6 +226,11 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
     {
       provide: LOG_MAC_FAILURES,
       useValue: true,
+    },
+    {
+      provide: NAVIGATOR_CREDENTIALS,
+      useFactory: (window: Window) => window.navigator.credentials,
+      deps: [WINDOW],
     },
     {
       provide: AppIdServiceAbstraction,
@@ -721,6 +733,37 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       provide: AuthRequestCryptoServiceAbstraction,
       useClass: AuthRequestCryptoServiceImplementation,
       deps: [CryptoServiceAbstraction],
+    },
+    {
+      provide: WebauthnApiServiceAbstraction,
+      useClass: WebauthnApiService,
+      deps: [
+        ApiServiceAbstraction,
+        EnvironmentServiceAbstraction,
+        UserVerificationServiceAbstraction,
+      ],
+    },
+    {
+      provide: WebauthnAdminServiceAbstraction,
+      useClass: WebauthnAdminService,
+      deps: [
+        WebauthnApiServiceAbstraction,
+        CryptoService,
+        ConfigServiceAbstraction,
+        NAVIGATOR_CREDENTIALS,
+        LoginServiceAbstraction,
+      ],
+    },
+    {
+      provide: WebauthnLoginServiceAbstraction,
+      useClass: WebauthnLoginService,
+      deps: [
+        WebauthnApiServiceAbstraction,
+        AuthServiceAbstraction,
+        ConfigServiceAbstraction,
+        NAVIGATOR_CREDENTIALS,
+        LoginServiceAbstraction,
+      ],
     },
   ],
 })

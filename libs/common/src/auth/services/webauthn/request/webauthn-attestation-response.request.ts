@@ -1,4 +1,4 @@
-import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { Utils } from "../../../../platform/misc/utils";
 
 import { WebauthnResponseRequest } from "./webauthn-response.request";
 

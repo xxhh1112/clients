@@ -1,13 +1,12 @@
 import { Component, HostBinding, OnDestroy, OnInit } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
-import { DialogService } from "@bitwarden/components";
-
-import { WebauthnAdminService } from "../../core";
+import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
 import {
   WebauthnCredentialPrfStatus,
   WebauthnCredentialView,
-} from "../../core/views/webauthn-credential.view";
+} from "@bitwarden/common/auth/models/view/webauthn/webauthn-credential.view";
+import { DialogService } from "@bitwarden/components";
 
 import { openCreateCredentialDialog } from "./create-credential-dialog/create-credential-dialog.component";
 import { openDeleteCredentialDialogComponent } from "./delete-credential-dialog/delete-credential-dialog.component";
@@ -29,7 +28,7 @@ export class WebauthnLoginSettingsComponent implements OnInit, OnDestroy {
   protected loading = true;
 
   constructor(
-    private webauthnService: WebauthnAdminService,
+    private webauthnService: WebauthnAdminServiceAbstraction,
     private dialogService: DialogService
   ) {}
 

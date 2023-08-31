@@ -21,3 +21,6 @@ export const CLIENT_TYPE = new InjectionToken<boolean>("CLIENT_TYPE");
 export const LOCALES_DIRECTORY = new InjectionToken<string>("LOCALES_DIRECTORY");
 export const SYSTEM_LANGUAGE = new InjectionToken<string>("SYSTEM_LANGUAGE");
 export const LOG_MAC_FAILURES = new InjectionToken<string>("LOG_MAC_FAILURES");
+export const NAVIGATOR_CREDENTIALS = new InjectionToken<CredentialsContainer>(
+  "NAVIGATOR_CREDENTIALS"
+);

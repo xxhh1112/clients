@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core";
-
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { ListResponse } from "@bitwarden/common/models/response/list.response";
-import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
-import { Verification } from "@bitwarden/common/types/verification";
+import { ApiService } from "../../../abstractions/api.service";
+import { ListResponse } from "../../../models/response/list.response";
+import { EnvironmentService } from "../../../platform/abstractions/environment.service";
+import { Verification } from "../../../types/verification";
+import { WebauthnApiServiceAbstraction } from "../../abstractions/webauthn/webauthn-api.service.abstraction";
+import { UserVerificationService } from "../user-verification/user-verification.service";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
 import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-response.request";
@@ -13,8 +12,7 @@ import { CredentialCreateOptionsResponse } from "./response/credential-create-op
 import { WebauthnAssertionResponse } from "./response/webauthn-assertion.response";
 import { WebauthnCredentialResponse } from "./response/webauthn-credential.response";
 
-@Injectable({ providedIn: "root" })
-export class WebauthnApiService {
+export class WebauthnApiService implements WebauthnApiServiceAbstraction {
   constructor(
     private apiService: ApiService,
     private environmentService: EnvironmentService,

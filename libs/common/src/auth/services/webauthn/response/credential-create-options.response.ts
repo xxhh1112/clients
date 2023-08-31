@@ -1,5 +1,5 @@
-import { ChallengeResponse } from "@bitwarden/common/auth/models/response/two-factor-web-authn.response";
-import { BaseResponse } from "@bitwarden/common/models/response/base.response";
+import { BaseResponse } from "../../../../models/response/base.response";
+import { ChallengeResponse } from "../../../models/response/two-factor-web-authn.response";
 
 export class CredentialCreateOptionsResponse extends BaseResponse {
   options: ChallengeResponse;

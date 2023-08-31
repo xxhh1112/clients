@@ -1,5 +1,5 @@
-import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { Utils } from "../../../platform/misc/utils";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 
 const LoginWithPrfSalt = "passwordless-login";
 

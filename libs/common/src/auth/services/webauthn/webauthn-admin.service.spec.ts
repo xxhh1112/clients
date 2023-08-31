@@ -1,10 +1,9 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
-
-import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
-import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { ConfigService } from "../../../platform/services/config/config.service";
+import { CredentialCreateOptionsView } from "../../models/view/webauthn/credential-create-options.view";
+import { PendingWebauthnCredentialView } from "../../models/view/webauthn/pending-webauthn-credential.view";
 
 import { WebauthnAdminService } from "./webauthn-admin.service";
 import { WebauthnApiService } from "./webauthn-api.service";

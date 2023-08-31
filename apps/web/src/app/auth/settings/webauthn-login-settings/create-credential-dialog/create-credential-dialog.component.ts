@@ -3,17 +3,17 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { firstValueFrom, map, Observable } from "rxjs";
 
+import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { CredentialCreateOptionsView } from "@bitwarden/common/auth/models/view/webauthn/credential-create-options.view";
+import { PendingWebauthnCredentialView } from "@bitwarden/common/auth/models/view/webauthn/pending-webauthn-credential.view";
+import { PendingWebauthnCryptoKeysView } from "@bitwarden/common/auth/models/view/webauthn/pending-webauthn-crypto-keys.view";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
-import { WebauthnAdminService } from "../../../core";
-import { CredentialCreateOptionsView } from "../../../core/views/credential-create-options.view";
-import { PendingWebauthnCredentialView } from "../../../core/views/pending-webauthn-credential.view";
-import { PendingWebauthnCryptoKeysView } from "../../../core/views/pending-webauthn-crypto-keys.view";
 import { CreatePasskeyFailedIcon } from "../../../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../../../shared/icons/create-passkey.icon";
 
@@ -53,7 +53,7 @@ export class CreateCredentialDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnAdminService,
+    private webauthnService: WebauthnAdminServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private logService: LogService

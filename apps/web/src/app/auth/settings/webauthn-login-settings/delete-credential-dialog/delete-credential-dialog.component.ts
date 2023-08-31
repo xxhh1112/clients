@@ -3,15 +3,14 @@ import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
+import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { WebauthnCredentialView } from "@bitwarden/common/auth/models/view/webauthn/webauthn-credential.view";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
-
-import { WebauthnAdminService } from "../../../core";
-import { WebauthnCredentialView } from "../../../core/views/webauthn-credential.view";
 
 export interface DeleteCredentialDialogParams {
   credentialId: string;
@@ -32,7 +31,7 @@ export class DeleteCredentialDialogComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: DeleteCredentialDialogParams,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
-    private webauthnService: WebauthnAdminService,
+    private webauthnService: WebauthnAdminServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private logService: LogService

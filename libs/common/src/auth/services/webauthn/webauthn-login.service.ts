@@ -1,36 +1,32 @@
-import { Injectable, Optional } from "@angular/core";
 import { from, Observable } from "rxjs";
 
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { ExtensionLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
-
-import { CredentialAssertionOptionsView } from "../../views/credential-assertion-options.view";
-import { WebauthnAssertionView } from "../../views/webauthn-assertion.view";
+import { FeatureFlag } from "../../../enums/feature-flag.enum";
+import { ConfigServiceAbstraction } from "../../../platform/abstractions/config/config.service.abstraction";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { AuthService } from "../../abstractions/auth.service";
+import { WebauthnApiServiceAbstraction } from "../../abstractions/webauthn/webauthn-api.service.abstraction";
+import { WebauthnLoginServiceAbstraction } from "../../abstractions/webauthn/webauthn-login.service.abstraction";
+import { AuthResult } from "../../models/domain/auth-result";
+import { ExtensionLogInCredentials } from "../../models/domain/log-in-credentials";
+import { CredentialAssertionOptionsView } from "../../models/view/webauthn/credential-assertion-options.view";
+import { WebauthnAssertionView } from "../../models/view/webauthn/webauthn-assertion.view";
 
 import { AuthenticatorAssertionResponseRequest } from "./request/authenticator-assertion-response.request";
 import { WebauthnAssertionResponseRequest } from "./request/webauthn-assertion-response.request";
 import { createSymmetricKeyFromPrf, getLoginWithPrfSalt } from "./utils";
-import { WebauthnApiService } from "./webauthn-api.service";
 
-@Injectable({ providedIn: "root" })
-export class WebauthnLoginService {
-  private navigatorCredentials: CredentialsContainer;
-
+export class WebauthnLoginService implements WebauthnLoginServiceAbstraction {
   readonly enabled$: Observable<boolean>;
 
   constructor(
-    private apiService: WebauthnApiService,
+    private apiService: WebauthnApiServiceAbstraction,
     private authService: AuthService,
     private configService: ConfigServiceAbstraction,
-    @Optional() navigatorCredentials?: CredentialsContainer,
-    @Optional() private logService?: LogService
+    private navigatorCredentials: CredentialsContainer,
+    private logService?: LogService
   ) {
     // Default parameters don't work when used with Angular DI
-    this.navigatorCredentials = navigatorCredentials ?? navigator.credentials;
     this.enabled$ = from(this.configService.getFeatureFlagBool(FeatureFlag.PasswordlessLogin));
   }
 
@@ -73,7 +69,7 @@ export class WebauthnLoginService {
     }
   }
 
-  async logIn(assertion: WebauthnAssertionView) {
+  async logIn(assertion: WebauthnAssertionView): Promise<AuthResult> {
     const credential = new ExtensionLogInCredentials(assertion.token, assertion.prfKey);
     const result = await this.authService.logIn(credential);
     return result;

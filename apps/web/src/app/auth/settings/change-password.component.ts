@@ -12,6 +12,7 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
 import { EmergencyAccessStatusType } from "@bitwarden/common/auth/enums/emergency-access-status-type";
 import { EmergencyAccessUpdateRequest } from "@bitwarden/common/auth/models/request/emergency-access-update.request";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
@@ -37,8 +38,6 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { CipherWithIdRequest } from "@bitwarden/common/vault/models/request/cipher-with-id.request";
 import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/folder-with-id.request";
 import { DialogService } from "@bitwarden/components";
-
-import { WebauthnAdminService } from "../core";
 
 @Component({
   selector: "app-change-password",
@@ -74,7 +73,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     dialogService: DialogService,
     private userVerificationService: UserVerificationService,
     private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    private webauthnService: WebauthnAdminService
+    private webauthnService: WebauthnAdminServiceAbstraction
   ) {
     super(
       i18nService,

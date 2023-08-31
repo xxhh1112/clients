@@ -15,6 +15,7 @@ import { PolicyResponse } from "@bitwarden/common/admin-console/models/response/
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { WebauthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -28,7 +29,6 @@ import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/pass
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
-import { WebauthnLoginService } from "../core";
 
 @Component({
   selector: "app-login",
@@ -66,7 +66,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     loginService: LoginService,
-    private webauthnService: WebauthnLoginService
+    private webauthnService: WebauthnLoginServiceAbstraction
   ) {
     super(
       devicesApiService,

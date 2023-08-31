@@ -2,14 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { WebauthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { WebauthnAssertionView } from "@bitwarden/common/auth/models/view/webauthn/webauthn-assertion.view";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 
-import { WebauthnLoginService } from "../core";
-import { WebauthnAssertionView } from "../core/views/webauthn-assertion.view";
 import { CreatePasskeyFailedIcon } from "../shared/icons/create-passkey-failed.icon";
 import { CreatePasskeyIcon } from "../shared/icons/create-passkey.icon";
 
@@ -29,7 +29,7 @@ export class LoginWithWebauthnComponent implements OnInit {
   protected forcePasswordResetRoute = "/update-temp-password";
 
   constructor(
-    private webauthnService: WebauthnLoginService,
+    private webauthnService: WebauthnLoginServiceAbstraction,
     private router: Router,
     private logService: LogService,
     private validationService: ValidationService,

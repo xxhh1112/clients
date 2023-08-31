@@ -1,26 +1,23 @@
-import { Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, filter, from, map, Observable, shareReplay, switchMap, tap } from "rxjs";
 
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { Verification } from "@bitwarden/common/types/verification";
-
-import { CredentialCreateOptionsView } from "../../views/credential-create-options.view";
-import { PendingWebauthnCredentialView } from "../../views/pending-webauthn-credential.view";
-import { PendingWebauthnCryptoKeysView } from "../../views/pending-webauthn-crypto-keys.view";
-import { WebauthnCredentialView } from "../../views/webauthn-credential.view";
+import { FeatureFlag } from "../../../enums/feature-flag.enum";
+import { ConfigServiceAbstraction } from "../../../platform/abstractions/config/config.service.abstraction";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { Utils } from "../../../platform/misc/utils";
+import { Verification } from "../../../types/verification";
+import { WebauthnAdminServiceAbstraction } from "../../abstractions/webauthn/webauthn-admin.service.abstraction";
+import { WebauthnApiServiceAbstraction } from "../../abstractions/webauthn/webauthn-api.service.abstraction";
+import { CredentialCreateOptionsView } from "../../models/view/webauthn/credential-create-options.view";
+import { PendingWebauthnCredentialView } from "../../models/view/webauthn/pending-webauthn-credential.view";
+import { PendingWebauthnCryptoKeysView } from "../../models/view/webauthn/pending-webauthn-crypto-keys.view";
+import { WebauthnCredentialView } from "../../models/view/webauthn/webauthn-credential.view";
 
 import { SaveCredentialRequest } from "./request/save-credential.request";
 import { WebauthnAttestationResponseRequest } from "./request/webauthn-attestation-response.request";
 import { createSymmetricKeyFromPrf, getLoginWithPrfSalt } from "./utils";
-import { WebauthnApiService } from "./webauthn-api.service";
 
-@Injectable({ providedIn: "root" })
-export class WebauthnAdminService {
-  private navigatorCredentials: CredentialsContainer;
+export class WebauthnAdminService implements WebauthnAdminServiceAbstraction {
   private _refresh$ = new BehaviorSubject<void>(undefined);
   private _loading$ = new BehaviorSubject<boolean>(true);
 
@@ -34,11 +31,11 @@ export class WebauthnAdminService {
   readonly loading$ = this._loading$.asObservable();
 
   constructor(
-    private apiService: WebauthnApiService,
+    private apiService: WebauthnApiServiceAbstraction,
     private cryptoService: CryptoService,
     private configService: ConfigServiceAbstraction,
-    @Optional() navigatorCredentials?: CredentialsContainer,
-    @Optional() private logService?: LogService
+    private navigatorCredentials: CredentialsContainer,
+    private logService?: LogService
   ) {
     // Default parameters don't work when used with Angular DI
     this.navigatorCredentials = navigatorCredentials ?? navigator.credentials;
