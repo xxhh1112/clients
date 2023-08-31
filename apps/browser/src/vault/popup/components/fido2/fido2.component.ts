@@ -126,7 +126,8 @@ export class Fido2Component implements OnInit, OnDestroy {
     });
   }
 
-  async pick(cipher: CipherView) {
+  async pick() {
+    const cipher = this.selectedItem;
     const data = this.message$.value;
     if (data?.type === "PickCredentialRequest") {
       let userVerified = false;
@@ -155,6 +156,12 @@ export class Fido2Component implements OnInit, OnDestroy {
     }
 
     this.loading = true;
+  }
+
+  selectedItem: CipherView;
+
+  selectedPasskey(item: CipherView) {
+    this.selectedItem = item;
   }
 
   async confirm() {

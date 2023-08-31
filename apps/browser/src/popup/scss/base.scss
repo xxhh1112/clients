@@ -622,19 +622,66 @@ app-fido2 {
     right: 0;
     bottom: 0;
     left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
     flex-direction: column;
-    padding: 0 25px;
+    padding: 12px 24px 12px 24px;
 
-    .btn {
-      margin-top: 25px;
+    .logo-image {
+      margin: 0;
+      width: 197px;
+      height: 30px;
+      background-size: 197px 30px;
+      background-repeat: no-repeat;
+      @include themify($themes) {
+        background-image: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
+      }
     }
-  }
 
-  .box.list {
-    overflow-y: auto;
+    .auth-flow {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      margin-top: 32px;
+      margin-bottom: 32px;
+
+      .subtitle {
+        font-family: Open Sans;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 32px;
+      }
+
+      .box.list {
+        overflow-y: auto;
+      }
+
+      .box-content-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0px;
+        padding: 0px;
+        margin-bottom: 12px;
+
+        .row-main {
+          border-radius: 6px;
+          padding: 5px 0px 5px 12px;
+
+          &:focus {
+            @include themify($themes) {
+              border-left: 5px solid themed("headerInputBackgroundFocusColor");
+              background-color: themed("headerBackgroundHoverColor");
+              color: themed("headerColor");
+            }
+          }
+        }
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
   }
 }
 
