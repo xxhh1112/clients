@@ -40,7 +40,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: any;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  unlockCompleted: () => void;
+  unlockCompleted: ({ message }: { message: any }) => void;
   addEditCipherSubmitted: () => void;
   deletedCipher: () => void;
 };
@@ -69,6 +69,7 @@ type OverlayListPortMessageHandlers = {
 
 interface OverlayBackground {
   removePageDetails(tabId: number): void;
+  updateAutofillOverlayCiphers(): void;
 }
 
 export {

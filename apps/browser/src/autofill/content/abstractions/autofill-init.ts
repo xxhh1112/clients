@@ -23,6 +23,8 @@ type AutofillExtensionMessageHandlers = {
   closeAutofillOverlay: () => void;
   addNewVaultItemFromOverlay: () => void;
   redirectOverlayFocusOut: ({ message }: { message: any }) => void;
+  promptForLogin: () => void;
+  passwordReprompt: () => void;
 };
 
 interface AutofillInit {

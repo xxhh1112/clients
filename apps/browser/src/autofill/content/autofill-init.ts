@@ -27,6 +27,8 @@ class AutofillInit implements AutofillInitInterface {
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
+    promptForLogin: () => this.blurAndRemoveOverlay(),
+    passwordReprompt: () => this.blurAndRemoveOverlay(),
   };
 
   /**
@@ -104,6 +106,11 @@ class AutofillInit implements AutofillInitInterface {
 
   private openAutofillOverlay(authStatus: AuthenticationStatus, focusFieldElement: boolean) {
     this.autofillOverlayContentService.openAutofillOverlay(authStatus, focusFieldElement);
+  }
+
+  private blurAndRemoveOverlay() {
+    this.autofillOverlayContentService.blurMostRecentOverlayField();
+    this.removeAutofillOverlay();
   }
 
   private removeAutofillOverlay() {

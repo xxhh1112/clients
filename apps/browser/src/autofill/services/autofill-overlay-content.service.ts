@@ -97,6 +97,14 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.mostRecentlyFocusedField.focus();
   }
 
+  blurMostRecentOverlayField() {
+    if (!this.mostRecentlyFocusedField) {
+      return;
+    }
+
+    this.mostRecentlyFocusedField?.blur();
+  }
+
   removeAutofillOverlay = () => {
     this.unobserveBodyElement();
     this.removeAutofillOverlayButton();
@@ -670,7 +678,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (this.mutationObserverIterations > 100) {
       clearTimeout(this.mutationObserverIterationsResetTimeout);
       this.mutationObserverIterations = 0;
-      this.mostRecentlyFocusedField?.blur();
+      this.blurMostRecentOverlayField();
       this.removeAutofillOverlay();
 
       return true;

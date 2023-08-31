@@ -51,7 +51,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
     updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
-    unlockCompleted: () => this.openOverlay(true),
+    unlockCompleted: ({ message }) => this.unlockCompleted(message),
     addEditCipherSubmitted: () => this.updateAutofillOverlayCiphers(),
     deletedCipher: () => this.updateAutofillOverlayCiphers(),
   };
@@ -486,6 +486,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.overlayListPort.postMessage({ command: "focusOverlayList" });
+  }
+
+  private async unlockCompleted(message: any) {
+    if (message.data?.commandToRetry?.msg?.command === "openAutofillOverlay") {
+      await this.openOverlay(true);
+    }
   }
 
   private getTranslations() {
