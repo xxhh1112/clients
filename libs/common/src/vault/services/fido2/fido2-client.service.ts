@@ -1,3 +1,4 @@
+import { SemVer } from "semver";
 import { parse } from "tldts";
 
 import { FeatureFlag } from "../../../enums/feature-flag.enum";
@@ -27,6 +28,8 @@ import {
 import { isValidRpId } from "./domain-utils";
 import { Fido2Utils } from "./fido2-utils";
 
+const FIDO2_VAULT_ITEM_MIN_SERVER_VER = "2023.9.0";
+
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   constructor(
     private authenticator: Fido2AuthenticatorService,
@@ -35,7 +38,12 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   ) {}
 
   async isFido2FeatureEnabled(): Promise<boolean> {
-    return await this.configService.getFeatureFlagBool(FeatureFlag.Fido2VaultCredentials);
+    const minVersion = new SemVer(FIDO2_VAULT_ITEM_MIN_SERVER_VER);
+    const serverVersion = new SemVer((await this.configService.fetchServerConfig()).version);
+    const flagEnabled = await this.configService.getFeatureFlagBool(
+      FeatureFlag.Fido2VaultCredentials
+    );
+    return flagEnabled && serverVersion.compare(minVersion) > 0;
   }
 
   async createCredential(
