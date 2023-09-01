@@ -31,6 +31,7 @@ import {
   OverlayListPortMessageHandlers,
   OverlayBackground as OverlayBackgroundInterface,
   OverlayBackgroundExtensionMessage,
+  OverlayAddNewItemMessage,
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
@@ -44,7 +45,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     openAutofillOverlay: () => this.openOverlay(),
-    autofillOverlayElementClosed: ({ message }) => this.overlayElementClosed(message),
+    autofillOverlayElementClosed: ({ message }) =>
+      this.overlayElementClosed(message.overlayElement),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
@@ -214,7 +216,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     BrowserApi.tabSendMessage(sender.tab, { command: "closeAutofillOverlay" });
   }
 
-  private overlayElementClosed({ overlayElement }: OverlayBackgroundExtensionMessage) {
+  private overlayElementClosed(overlayElement: string) {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.disconnect();
       this.overlayButtonPort = null;
@@ -528,7 +530,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     BrowserApi.tabSendMessage(sender.tab, { command: "addNewVaultItemFromOverlay" });
   }
 
-  private async addNewVaultItem(message: any, sender: chrome.runtime.MessageSender) {
+  private async addNewVaultItem(
+    message: OverlayAddNewItemMessage,
+    sender: chrome.runtime.MessageSender
+  ) {
     if (!message.login) {
       return;
     }

@@ -3,6 +3,15 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
 import AutofillPageDetails from "../../models/autofill-page-details";
 
+type OverlayAddNewItemMessage = {
+  login: {
+    uri?: string;
+    hostname: string;
+    username: string;
+    password: string;
+  };
+};
+
 type OverlayBackgroundExtensionMessage = {
   [key: string]: any;
   command: string;
@@ -11,7 +20,7 @@ type OverlayBackgroundExtensionMessage = {
   details?: AutofillPageDetails;
   overlayCipherId?: string;
   overlayElement?: string;
-};
+} & OverlayAddNewItemMessage;
 
 type FocusedFieldData = {
   focusedFieldStyles: Partial<CSSStyleDeclaration>;
@@ -106,6 +115,7 @@ export {
   OverlayBackgroundExtensionMessage,
   FocusedFieldData,
   OverlayCipherData,
+  OverlayAddNewItemMessage,
   OverlayBackgroundExtensionMessageHandlers,
   OverlayButtonPortMessageHandlers,
   OverlayListPortMessageHandlers,
