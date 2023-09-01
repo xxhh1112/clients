@@ -106,7 +106,9 @@ class OverlayBackground implements OverlayBackgroundInterface {
     const ciphers = (await this.cipherService.getAllDecryptedForUrl(currentTab.url)).sort((a, b) =>
       this.cipherService.sortCiphersByLastUsedThenName(a, b)
     );
-    ciphers.forEach((cipher, index) => this.overlayCiphers.set(`overlay-cipher-${index}`, cipher));
+    for (let cipherIndex = 0; cipherIndex < ciphers.length; cipherIndex++) {
+      this.overlayCiphers.set(`overlay-cipher-${cipherIndex}`, ciphers[cipherIndex]);
+    }
 
     this.overlayListPort?.postMessage({
       command: "updateOverlayListCiphers",
@@ -116,10 +118,9 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   private getOverlayCipherData(): OverlayCipherData[] {
     const isFaviconDisabled = this.settingsService.getDisableFavicon();
-    const overlayCipherData: OverlayCipherData[] = [];
-
     let cipherIconData: WebsiteIconData;
-    this.overlayCiphers.forEach((cipher, overlayCipherId) => {
+
+    return Array.from(this.overlayCiphers).map(([overlayCipherId, cipher]) => {
       if (!cipherIconData) {
         cipherIconData = WebsiteIconService.buildCipherIconData(
           this.iconsServerUrl,
@@ -128,7 +129,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
         );
       }
 
-      overlayCipherData.push({
+      return {
         id: overlayCipherId,
         name: cipher.name,
         type: cipher.type,
@@ -143,10 +144,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
           cipher.type === CipherType.Card
             ? { brand: cipher.card.brand, partialNumber: `*${cipher.card.number?.slice(-4)}` }
             : null,
-      });
+      };
     });
-
-    return overlayCipherData;
   }
 
   private storePageDetails(message: any, sender: chrome.runtime.MessageSender) {
