@@ -68,7 +68,7 @@ export class SsoComponent extends BaseSsoComponent {
     super.ngOnInit();
 
     this.onSuccessfulLoginNavigate = async () => {
-      this.router.navigateByUrl(await this.routerService.getPersistedUrl());
+      this.router.navigateByUrl(await this.routerService.getAndClearPersistedPreviousUrl());
     };
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
