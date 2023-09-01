@@ -106,7 +106,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     const ciphers = (await this.cipherService.getAllDecryptedForUrl(currentTab.url)).sort((a, b) =>
       this.cipherService.sortCiphersByLastUsedThenName(a, b)
     );
-    ciphers.forEach((cipher, index) => this.overlayCiphers.set(`overlayCipher_${index}`, cipher));
+    ciphers.forEach((cipher, index) => this.overlayCiphers.set(`overlay-cipher-${index}`, cipher));
 
     this.overlayListPort?.postMessage({
       command: "updateOverlayListCiphers",
@@ -280,19 +280,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    if (this.overlayButtonPort) {
-      this.overlayButtonPort.postMessage({
-        command: "updateOverlayHidden",
-        display: message.display,
-      });
-    }
+    const portMessage = {
+      command: "updateOverlayHidden",
+      display: message.display,
+    };
 
-    if (this.overlayListPort) {
-      this.overlayListPort.postMessage({
-        command: "updateOverlayHidden",
-        display: message.display,
-      });
-    }
+    this.overlayButtonPort?.postMessage(portMessage);
+    this.overlayListPort?.postMessage(portMessage);
   }
 
   private async openOverlay(focusFieldElement = false) {

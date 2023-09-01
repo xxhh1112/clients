@@ -65,8 +65,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
     formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
 
-    const documentRoot = formFieldElement.getRootNode() as ShadowRoot | Document;
-    if (documentRoot.activeElement === formFieldElement) {
+    if (this.getRootNodeActiveElement(formFieldElement) === formFieldElement) {
       this.triggerFormFieldFocusedAction(formFieldElement);
     }
   }
@@ -328,7 +327,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private recentlyFocusedFieldIsCurrentlyFocused() {
-    return globalThis.document.activeElement === this.mostRecentlyFocusedField;
+    return (
+      this.getRootNodeActiveElement(this.mostRecentlyFocusedField) === this.mostRecentlyFocusedField
+    );
   }
 
   private updateOverlayElementsPosition() {
@@ -686,6 +687,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     return false;
+  }
+
+  private getRootNodeActiveElement(element: Element): Element {
+    const documentRoot = element.getRootNode() as ShadowRoot | Document;
+    return documentRoot?.activeElement;
   }
 }
 
