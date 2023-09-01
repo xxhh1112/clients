@@ -14,10 +14,10 @@ export class Fido2KeyView extends ItemView {
 
   // Extras
   rpName: string;
-  userName: string;
+  userDisplayName: string;
 
   get subTitle(): string {
-    return this.userName;
+    return this.userDisplayName;
   }
 
   get canLaunch(): boolean {

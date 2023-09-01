@@ -15,7 +15,7 @@ export class Fido2KeyExport {
     req.userHandle = "userHandle";
     req.counter = "counter";
     req.rpName = "rpName";
-    req.userName = "userName";
+    req.userDisplayName = "userDisplayName";
     return req;
   }
 
@@ -29,7 +29,7 @@ export class Fido2KeyExport {
     view.userHandle = req.userHandle;
     view.counter = parseInt(req.counter);
     view.rpName = req.rpName;
-    view.userName = req.userName;
+    view.userDisplayName = req.userDisplayName;
     return view;
   }
 
@@ -44,7 +44,8 @@ export class Fido2KeyExport {
     domain.userHandle = req.userHandle != null ? new EncString(req.userHandle) : null;
     domain.counter = req.counter != null ? new EncString(req.counter) : null;
     domain.rpName = req.rpName != null ? new EncString(req.rpName) : null;
-    domain.userName = req.userName != null ? new EncString(req.userName) : null;
+    domain.userDisplayName =
+      req.userDisplayName != null ? new EncString(req.userDisplayName) : null;
     return domain;
   }
 
@@ -57,7 +58,7 @@ export class Fido2KeyExport {
   userHandle: string;
   counter: string;
   rpName: string;
-  userName: string;
+  userDisplayName: string;
 
   constructor(o?: Fido2KeyView | Fido2KeyDomain) {
     if (o == null) {
@@ -74,7 +75,7 @@ export class Fido2KeyExport {
       this.userHandle = o.userHandle;
       this.counter = String(o.counter);
       this.rpName = o.rpName;
-      this.userName = o.userName;
+      this.userDisplayName = o.userDisplayName;
     } else {
       this.nonDiscoverableId = o.nonDiscoverableId?.encryptedString;
       this.keyType = o.keyType?.encryptedString;
@@ -85,7 +86,7 @@ export class Fido2KeyExport {
       this.userHandle = o.userHandle?.encryptedString;
       this.counter = o.counter?.encryptedString;
       this.rpName = o.rpName?.encryptedString;
-      this.userName = o.userName?.encryptedString;
+      this.userDisplayName = o.userDisplayName?.encryptedString;
     }
   }
 }

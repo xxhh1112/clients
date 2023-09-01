@@ -428,7 +428,7 @@
       <div *ngIf="cipher.type == cipherType.Fido2Key">
         <div class="box-content-row">
           <span class="row-label">{{ "username" | i18n }}</span>
-          {{ cipher.fido2Key.userName }}
+          {{ cipher.fido2Key.userDisplayName }}
         </div>
         <div class="box-content-row">
           <span class="row-label">{{ "typePasskey" | i18n }}</span>

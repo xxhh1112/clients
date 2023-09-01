@@ -427,7 +427,7 @@ async function createKeyView(
   fido2Key.userHandle = Fido2Utils.bufferToString(params.userEntity.id);
   fido2Key.counter = 0;
   fido2Key.rpName = params.rpEntity.name;
-  fido2Key.userName = params.userEntity.displayName;
+  fido2Key.userDisplayName = params.userEntity.displayName;
 
   return fido2Key;
 }

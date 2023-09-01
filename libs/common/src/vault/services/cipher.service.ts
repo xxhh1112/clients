@@ -1103,7 +1103,7 @@ export class CipherService implements CipherServiceAbstraction {
               rpId: null,
               rpName: null,
               userHandle: null,
-              userName: null,
+              userDisplayName: null,
               origin: null,
             },
             key
@@ -1175,7 +1175,7 @@ export class CipherService implements CipherServiceAbstraction {
             rpId: null,
             rpName: null,
             userHandle: null,
-            userName: null,
+            userDisplayName: null,
             origin: null,
           },
           key

@@ -84,7 +84,7 @@ export class Fido2Component implements OnInit, OnDestroy {
           cipher.name = message.credentialName;
           cipher.type = CipherType.Fido2Key;
           cipher.fido2Key = new Fido2KeyView();
-          cipher.fido2Key.userName = message.userName;
+          cipher.fido2Key.userDisplayName = message.userName;
           this.ciphers = [cipher];
         } else if (message.type === "PickCredentialRequest") {
           this.ciphers = await Promise.all(

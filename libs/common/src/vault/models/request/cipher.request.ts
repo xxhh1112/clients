@@ -100,9 +100,9 @@ export class CipherRequest {
             cipher.login.fido2Key.userHandle != null
               ? cipher.login.fido2Key.userHandle.encryptedString
               : null;
-          this.login.fido2Key.userName =
-            cipher.login.fido2Key.userName != null
-              ? cipher.login.fido2Key.userName.encryptedString
+          this.login.fido2Key.userDisplayName =
+            cipher.login.fido2Key.userDisplayName != null
+              ? cipher.login.fido2Key.userDisplayName.encryptedString
               : null;
         }
         break;
@@ -193,8 +193,10 @@ export class CipherRequest {
           cipher.fido2Key.counter != null ? cipher.fido2Key.counter.encryptedString : null;
         this.fido2Key.userHandle =
           cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
-        this.fido2Key.userName =
-          cipher.fido2Key.userName != null ? cipher.fido2Key.userName.encryptedString : null;
+        this.fido2Key.userDisplayName =
+          cipher.fido2Key.userDisplayName != null
+            ? cipher.fido2Key.userDisplayName.encryptedString
+            : null;
         break;
       default:
         break;
