@@ -36,6 +36,7 @@ const SEPARATOR_ID = "separator";
 export const GENERATE_PASSWORD_ID = "generate-password";
 
 export const NOOP_COMMAND_SUFFIX = "noop";
+export const NONE_COMMAND_SUFFIX = "none";
 
 export class MainContextMenuHandler {
   //
@@ -223,27 +224,27 @@ export class MainContextMenuHandler {
         });
       };
 
-      if (cipher == null || !Utils.isNullOrEmpty(cipher.login?.password)) {
+      if (!cipher || !Utils.isNullOrEmpty(cipher.login?.password)) {
         await createChildItem(AUTOFILL_ID);
         if (cipher?.viewPassword ?? true) {
           await createChildItem(COPY_PASSWORD_ID);
         }
       }
 
-      if (cipher == null || !Utils.isNullOrEmpty(cipher.login?.username)) {
+      if (!cipher || !Utils.isNullOrEmpty(cipher.login?.username)) {
         await createChildItem(COPY_USERNAME_ID);
       }
 
       const canAccessPremium = await this.stateService.getCanAccessPremium();
-      if (canAccessPremium && (cipher == null || !Utils.isNullOrEmpty(cipher.login?.totp))) {
+      if (canAccessPremium && (!cipher || !Utils.isNullOrEmpty(cipher.login?.totp))) {
         await createChildItem(COPY_VERIFICATIONCODE_ID);
       }
 
-      if (cipher == null || cipher?.type === CipherType.Card) {
+      if ((!cipher || cipher?.type === CipherType.Card) && id !== NONE_COMMAND_SUFFIX) {
         await createChildItem(AUTOFILL_CARD_ID);
       }
 
-      if (cipher == null || cipher.type === CipherType.Identity) {
+      if ((!cipher || cipher.type === CipherType.Identity) && id !== NONE_COMMAND_SUFFIX) {
         await createChildItem(AUTOFILL_IDENTITY_ID);
       }
     } catch (error) {
@@ -266,6 +267,6 @@ export class MainContextMenuHandler {
   }
 
   async noLogins() {
-    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NOOP_COMMAND_SUFFIX);
+    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NONE_COMMAND_SUFFIX);
   }
 }

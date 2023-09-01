@@ -21,6 +21,8 @@ import {
 
 import { MainContextMenuHandler } from "./main-context-menu-handler";
 
+type AutofillCipherTypeId = CipherType.Login | CipherType.Card | CipherType.Identity;
+
 const NOT_IMPLEMENTED = (..._args: unknown[]) => Promise.resolve();
 
 const LISTENED_TO_COMMANDS = [
@@ -165,9 +167,20 @@ export class CipherContextMenuHandler {
     ]);
     ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
 
-    if (ciphers.length === 0) {
+    const groupedCiphers = ciphers.reduce(
+      (acc, cipher) => ({
+        ...acc,
+        [cipher.type]: [...acc[cipher.type as AutofillCipherTypeId], cipher],
+      }),
+      {
+        [CipherType.Login]: [],
+        [CipherType.Card]: [],
+        [CipherType.Identity]: [],
+      }
+    );
+
+    if (groupedCiphers[CipherType.Login].length === 0) {
       await this.mainContextMenuHandler.noLogins();
-      return;
     }
 
     for (const cipher of ciphers) {

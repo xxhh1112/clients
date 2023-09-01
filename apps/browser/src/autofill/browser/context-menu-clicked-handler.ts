@@ -40,6 +40,7 @@ import {
   COPY_USERNAME_ID,
   COPY_VERIFICATIONCODE_ID,
   GENERATE_PASSWORD_ID,
+  NONE_COMMAND_SUFFIX,
   NOOP_COMMAND_SUFFIX,
 } from "./main-context-menu-handler";
 
@@ -186,7 +187,10 @@ export class ContextMenuClickedHandler {
     // I would really love to not add it but that is a departure from how it currently works.
     const id = (info.menuItemId as string).split("_")[1]; // We create all the ids, we can guarantee they are strings
     let cipher: CipherView | undefined;
-    if (id === NOOP_COMMAND_SUFFIX) {
+    if (id === NONE_COMMAND_SUFFIX) {
+      // The no ciphers were available to select
+      return;
+    } else if (id === NOOP_COMMAND_SUFFIX) {
       // This NOOP item has come through which is generally only for no access state but since we got here
       // we are actually unlocked we will do our best to find a good match of an item to autofill this is useful
       // in scenarios like unlock on autofill
@@ -197,7 +201,7 @@ export class ContextMenuClickedHandler {
       cipher = ciphers.find((c) => c.id === id);
     }
 
-    if (cipher == null) {
+    if (!cipher) {
       return;
     }
 
