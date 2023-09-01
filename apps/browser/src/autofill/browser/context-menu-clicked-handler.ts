@@ -203,6 +203,8 @@ export class ContextMenuClickedHandler {
 
     switch (info.parentMenuItemId) {
       case AUTOFILL_ID:
+      case AUTOFILL_IDENTITY_ID:
+      case AUTOFILL_CARD_ID:
         if (tab == null) {
           return;
         }
@@ -216,18 +218,6 @@ export class ContextMenuClickedHandler {
           await this.autofillAction(tab, cipher);
         }
 
-        break;
-      case AUTOFILL_IDENTITY_ID:
-        if (tab == null) {
-          return;
-        }
-        await this.autofillAction(tab, cipher);
-        break;
-      case AUTOFILL_CARD_ID:
-        if (tab == null) {
-          return;
-        }
-        await this.autofillAction(tab, cipher);
         break;
       case COPY_USERNAME_ID:
         this.copyToClipboard({ text: cipher.login.username, tab: tab });

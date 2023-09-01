@@ -184,8 +184,17 @@ export class CipherContextMenuHandler {
     }
 
     let title = cipher.name;
-    if (!Utils.isNullOrEmpty(title) && cipher.login?.username) {
+
+    if (cipher.type === CipherType.Login && !Utils.isNullOrEmpty(title) && cipher.login?.username) {
       title += ` (${cipher.login.username})`;
+    }
+
+    if (cipher.type === CipherType.Card && cipher.card?.subTitle) {
+      title = cipher.card.subTitle;
+    }
+
+    if (cipher.type === CipherType.Identity && cipher.identity?.fullName) {
+      title = cipher.identity.fullName;
     }
 
     await this.mainContextMenuHandler.loadOptions(title, cipher.id, url, cipher);
