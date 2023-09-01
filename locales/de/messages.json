@@ -1924,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB verschlüsselter Speicherplatz für Dateianhänge."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Zusätzliche Zwei-Faktor-Authentifizierungsmöglichkeiten wie z.B. YubiKey, FIDO U2F und Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Notfallzugriff"
@@ -2039,6 +2039,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Deine Zahlungsmethode wird für alle unbezahlten Abonnements belastet."
   },
   "paymentChargedWithTrial": {
     "message": "Dein Tarif beinhaltet eine kostenlose 7-Tage-Testversion. Deine Zahlungsart wird nicht belastet, bis die Testphase abgelaufen ist. Du erhältst pro $INTERVAL$ eine Rechnung. Eine Kündigung ist zu jeder Zeit möglich."
@@ -3536,6 +3539,9 @@
   "vaultTimeoutDesc": {
     "message": "Lege einen Timeout für den Tresor und die auszuführende Aktion fest."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Wähle aus, wann du von deinem Tresor abgemeldet wirst."
+  },
   "oneMinute": {
     "message": "1 Minute"
   },
@@ -3842,29 +3848,11 @@
   "restoreSelected": {
     "message": "Auswahl wiederherstellen"
   },
-  "restoreItem": {
-    "message": "Eintrag wiederherstellen"
-  },
   "restoredItem": {
     "message": "Eintrag wiederhergestellt"
   },
   "restoredItems": {
     "message": "Einträge wiederhergestellt"
-  },
-  "restoreItemConfirmation": {
-    "message": "Soll dieser Eintrag wirklich wiederhergestellt werden?"
-  },
-  "restoreItems": {
-    "message": "Einträge wiederherstellen"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Du hast $COUNT$ Eintrag/Einträge zum Wiederherstellen ausgewählt. Bist du sicher, dass du diese(n) Eintrag/Einträge dauerhaft löschen möchtest?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Eintrag $ID$ wiederhergestellt",
@@ -4950,8 +4938,8 @@
   "disablePersonalVaultExport": {
     "message": "Persönlichen Tresor-Export deaktivieren"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Benutzern den Export ihrer privaten Tresor-Daten verbieten."
+  "disablePersonalVaultExportDescription": {
+    "message": "Mitgliedern nicht erlauben, Daten aus ihrem persönlichen Tresor zu exportieren."
   },
   "vaultExportDisabled": {
     "message": "Tresor-Export entfernt"
@@ -5454,8 +5442,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Tresor der Organisation wird exportiert"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Es werden nur persönliche Tresoreinträge exportiert, die mit $EMAIL$ verbunden sind. Tresoreinträge der Organisation werden nicht berücksichtigt. Es werden nur Informationen der Tresoreinträge exportiert. Diese enthalten nicht den zugehörigen Passwortverlauf oder Anhänge.",
+  "exportingIndividualVaultDescription": {
+    "message": "Es werden nur persönliche Tresoreinträge exportiert, die mit $EMAIL$ verbunden sind. Tresoreinträge der Organisation werden nicht berücksichtigt. Es werden nur Informationen der Tresoreinträge exportiert. Diese enthalten nicht die zugehörigen Anhänge.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -6853,28 +6841,60 @@
   "updateKdfSettings": {
     "message": "KDF-Einstellungen aktualisieren"
   },
+  "loginInitiated": {
+    "message": "Anmeldung eingeleitet"
+  },
+  "deviceApprovalRequired": {
+    "message": "Geräte-Genehmigung erforderlich. Wähle unten eine Genehmigungsoption aus:"
+  },
+  "rememberThisDevice": {
+    "message": "Dieses Gerät merken"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Deaktivieren, wenn ein öffentliches Gerät verwendet wird"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Von deinem anderen Gerät genehmigen"
+  },
+  "requestAdminApproval": {
+    "message": "Admin-Genehmigung anfragen"
+  },
+  "approveWithMasterPassword": {
+    "message": "Mit Master-Passwort genehmigen"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Vertrauenswürdige Geräteverschlüsselung"
+  },
   "trustedDevices": {
     "message": "Vertrauenswürdige Geräte"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "Einmal authentifiziert, entschlüsseln Mitglieder Tresordaten mit einem Schlüssel auf ihrem Gerät. Die",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "Einmal authentifiziert, entschlüsseln Mitglieder Tresordaten mit einem Schlüssel auf ihrem Gerät. Die Richtlinie für",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "Unternehmensrichtlinie für eine einzelne Organisation",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "einzelne Organisationen",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "und die",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": ", die Richtlinie zum",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "Richtlinie für die Kontowiederherstellungsverwaltung",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "Verlangen einer SSO-Authentifizierung",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
-    "message": "mit automatischer Registrierung wird aktiviert, wenn diese Option verwendet wird.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "und die Richtlinie für die",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "Kontowiederherstellungsverwaltung",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "mit automatischer Registrierung werden aktiviert, wenn diese Option verwendet wird.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nicht gefunden",
@@ -6963,6 +6983,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Mitglieder ohne Master-Passwort zu entfernen, ohne ein solches zu setzen, kann den Zugang zu deren gesamtem Konto einschränken."
   },
+  "approvedAuthRequest": {
+    "message": "Genehmigtes Gerät für $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Abgelehntes Gerät für $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Geräte-Genehmigung anfragen."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Starte deine 7-tägige kostenlose Testversion von Bitwarden für $ORG$",
     "placeholders": {
@@ -6983,6 +7024,30 @@
   },
   "selectedRegionFlag": {
     "message": "Flagge der ausgewählten Region"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Konto erfolgreich erstellt!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin-Genehmigung angefragt"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Deine Anfrage wurde an deinen Administrator gesendet."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Nach einer Genehmigung wirst du benachrichtigt."
+  },
+  "troubleLoggingIn": {
+    "message": "Probleme beim Anmelden?"
+  },
+  "loginApproved": {
+    "message": "Anmeldung genehmigt"
+  },
+  "userEmailMissing": {
+    "message": "E-Mail-Adresse des Benutzers fehlt"
+  },
+  "deviceTrusted": {
+    "message": "Gerät wird vertraut"
   },
   "sendsNoItemsTitle": {
     "message": "Keine aktiven Sends",
@@ -7094,6 +7159,9 @@
   "maxServiceAccountCost": {
     "message": "Maximale potentielle Kosten für Dienstkonten"
   },
+  "loggedInExclamation": {
+    "message": "Angemeldet!"
+  },
   "smBetaEndedDesc": {
     "message": "Die Secrets Manager Beta endete am $BETA_ENDING_DATE$. Du hast $DAYS$ Tage Zeit, um den Secrets Manager zu deinem kostenpflichtigen Abonnement hinzuzufügen und den Zugriff auf die Daten des Secrets Manager zu erhalten. Kontaktiere den Kundensupport, um den Secrets Manager zu deinem Abonnement hinzuzufügen.",
     "placeholders": {
@@ -7112,5 +7180,8 @@
   },
   "beta": {
     "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Hast du bereits ein Konto?"
   }
 }
