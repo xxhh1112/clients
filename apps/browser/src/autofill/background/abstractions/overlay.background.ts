@@ -1,6 +1,18 @@
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
+import AutofillPageDetails from "../../models/autofill-page-details";
+
+type OverlayBackgroundExtensionMessage = {
+  [key: string]: any;
+  command: string;
+  tab?: chrome.tabs.Tab;
+  sender?: string;
+  details?: AutofillPageDetails;
+  overlayCipherId?: string;
+  overlayElement?: string;
+};
+
 type FocusedFieldData = {
   focusedFieldStyles: Partial<CSSStyleDeclaration>;
   focusedFieldRects: Partial<DOMRect>;
@@ -20,31 +32,43 @@ type OverlayCipherData = {
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   openAutofillOverlay: () => void;
-  autofillOverlayElementClosed: ({ message }: { message: any }) => void;
+  autofillOverlayElementClosed: ({
+    message,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+  }) => void;
   autofillOverlayAddNewVaultItem: ({
     message,
     sender,
   }: {
-    message: any;
+    message: OverlayBackgroundExtensionMessage;
     sender: chrome.runtime.MessageSender;
   }) => void;
   checkAutofillOverlayFocused: () => void;
   focusAutofillOverlayList: () => void;
-  updateAutofillOverlayPosition: ({ message }: { message: any }) => void;
-  updateAutofillOverlayHidden: ({ message }: { message: any }) => void;
-  updateFocusedFieldData: ({ message }: { message: any }) => void;
+  updateAutofillOverlayPosition: ({
+    message,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+  }) => void;
+  updateAutofillOverlayHidden: ({
+    message,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+  }) => void;
+  updateFocusedFieldData: ({ message }: { message: OverlayBackgroundExtensionMessage }) => void;
   collectPageDetailsResponse: ({
     message,
     sender,
   }: {
-    message: any;
+    message: OverlayBackgroundExtensionMessage;
     sender: chrome.runtime.MessageSender;
   }) => void;
   unlockCompleted: ({
     message,
     sender,
   }: {
-    message: any;
+    message: OverlayBackgroundExtensionMessage;
     sender: chrome.runtime.MessageSender;
   }) => void;
   addEditCipherSubmitted: () => void;
@@ -79,6 +103,7 @@ interface OverlayBackground {
 }
 
 export {
+  OverlayBackgroundExtensionMessage,
   FocusedFieldData,
   OverlayCipherData,
   OverlayBackgroundExtensionMessageHandlers,

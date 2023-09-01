@@ -30,6 +30,7 @@ import {
   OverlayCipherData,
   OverlayListPortMessageHandlers,
   OverlayBackground as OverlayBackgroundInterface,
+  OverlayBackgroundExtensionMessage,
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
@@ -47,7 +48,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
-    updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
+    updateAutofillOverlayPosition: ({ message }) =>
+      this.updateOverlayPosition(message.overlayElement),
     updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
     updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
@@ -148,7 +150,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
-  private storePageDetails(message: any, sender: chrome.runtime.MessageSender) {
+  private storePageDetails(
+    message: OverlayBackgroundExtensionMessage,
+    sender: chrome.runtime.MessageSender
+  ) {
     const pageDetails = {
       frameId: sender.frameId,
       tab: sender.tab,
@@ -163,7 +168,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.pageDetailsForTab[sender.tab.id] = [pageDetails];
   }
 
-  private async autofillOverlayListItem(message: any, sender: chrome.runtime.MessageSender) {
+  private async autofillOverlayListItem(
+    message: OverlayBackgroundExtensionMessage,
+    sender: chrome.runtime.MessageSender
+  ) {
     if (!message.overlayCipherId) {
       return;
     }
@@ -206,7 +214,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     BrowserApi.tabSendMessage(sender.tab, { command: "closeAutofillOverlay" });
   }
 
-  private overlayElementClosed({ overlayElement }: { overlayElement: string }) {
+  private overlayElementClosed({ overlayElement }: OverlayBackgroundExtensionMessage) {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.disconnect();
       this.overlayButtonPort = null;
@@ -218,7 +226,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort = null;
   }
 
-  private updateOverlayPosition({ overlayElement }: { overlayElement: string }) {
+  private updateOverlayPosition(overlayElement: string) {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.postMessage({
         command: "updateIframePosition",
@@ -417,7 +425,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       styleSheetUrl: chrome.runtime.getURL("overlay/button.css"),
       translations: this.getTranslations(),
     });
-    this.updateOverlayPosition({ overlayElement: AutofillOverlayElement.Button });
+    this.updateOverlayPosition(AutofillOverlayElement.Button);
     this.overlayButtonPort.onMessage.addListener(this.handleOverlayButtonPortMessage);
   };
 
@@ -443,7 +451,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
       translations: this.getTranslations(),
     });
-    this.updateOverlayPosition({ overlayElement: AutofillOverlayElement.List });
+    this.updateOverlayPosition(AutofillOverlayElement.List);
     this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
   };
 
