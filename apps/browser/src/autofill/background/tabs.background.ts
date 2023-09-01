@@ -55,7 +55,8 @@ export default class TabsBackground {
     changeInfo: chrome.tabs.TabChangeInfo,
     tab: chrome.tabs.Tab
   ) => {
-    if (changeInfo.status !== "complete") {
+    const removePageDetailsStatus = new Set(["loading", "unloaded"]);
+    if (removePageDetailsStatus.has(changeInfo.status)) {
       this.overlayBackground.removePageDetails(tabId);
     }
 
