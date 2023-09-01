@@ -3,6 +3,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { firstValueFrom, map, Observable } from "rxjs";
 
+import { CreatePasskeyFailedIcon } from "@bitwarden/angular/auth/icons/create-passkey-failed.icon";
+import { CreatePasskeyIcon } from "@bitwarden/angular/auth/icons/create-passkey.icon";
 import { WebauthnAdminServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-admin.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { CredentialCreateOptionsView } from "@bitwarden/common/auth/models/view/webauthn/credential-create-options.view";
@@ -13,9 +15,6 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
-
-import { CreatePasskeyFailedIcon } from "../../../shared/icons/create-passkey-failed.icon";
-import { CreatePasskeyIcon } from "../../../shared/icons/create-passkey.icon";
 
 export enum CreateCredentialDialogResult {
   Success,
