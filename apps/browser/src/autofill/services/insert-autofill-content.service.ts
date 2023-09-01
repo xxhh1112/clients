@@ -31,9 +31,10 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
    * Handles autofill of the forms on the current page based on the
    * data within the passed fill script object.
    * @param {AutofillScript} fillScript
+   * @returns {Promise<void>}
    * @public
    */
-  fillForm(fillScript: AutofillScript) {
+  async fillForm(fillScript: AutofillScript) {
     if (
       !fillScript.script?.length ||
       this.fillingWithinSandboxedIframe() ||
@@ -43,7 +44,8 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
       return;
     }
 
-    fillScript.script.forEach(this.runFillScriptAction);
+    const fillActionPromises = fillScript.script.map(this.runFillScriptAction);
+    await Promise.all(fillActionPromises);
   }
 
   /**
@@ -128,20 +130,27 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   /**
    * Runs the autofill action based on the action type and the opid.
    * Each action is subsequently delayed by 20 milliseconds.
-   * @param {FillScriptActions} action
+   * @param {"click_on_opid" | "focus_by_opid" | "fill_by_opid"} action
    * @param {string} opid
    * @param {string} value
    * @param {number} actionIndex
+   * @returns {Promise<void>}
+   * @private
    */
-  private runFillScriptAction = ([action, opid, value]: FillScript, actionIndex: number): void => {
+  private runFillScriptAction = (
+    [action, opid, value]: FillScript,
+    actionIndex: number
+  ): Promise<void> => {
     if (!opid || !this.autofillInsertActions[action]) {
       return;
     }
 
     const delayActionsInMilliseconds = 20;
-    setTimeout(
-      () => this.autofillInsertActions[action]({ opid, value }),
-      delayActionsInMilliseconds * actionIndex
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        this.autofillInsertActions[action]({ opid, value });
+        resolve();
+      }, delayActionsInMilliseconds * actionIndex)
     );
   };
 

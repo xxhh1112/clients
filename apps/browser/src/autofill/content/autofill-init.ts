@@ -93,16 +93,14 @@ class AutofillInit implements AutofillInitInterface {
    * @param {AutofillScript} fillScript
    * @private
    */
-  private fillForm(fillScript: AutofillScript) {
+  private async fillForm(fillScript: AutofillScript) {
     this.autofillOverlayContentService.isCurrentlyFilling = true;
-    this.insertAutofillContentService.fillForm(fillScript);
+    await this.insertAutofillContentService.fillForm(fillScript);
 
-    // TODO: CG - This ensures that we do not show the autofill overlay as we focus and fill pages. Need to consider if there is a better way to do this.
-    // Equally, I'm not sure if we really want to focus the most recent field. This could provide problems when not filling with the overlay. Need to account for that.
     setTimeout(() => {
       this.autofillOverlayContentService.isCurrentlyFilling = false;
       this.autofillOverlayContentService.focusMostRecentOverlayField();
-    }, 500);
+    }, 0);
   }
 
   private openAutofillOverlay(authStatus: AuthenticationStatus, focusFieldElement: boolean) {
