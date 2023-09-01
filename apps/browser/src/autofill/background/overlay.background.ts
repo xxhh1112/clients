@@ -325,7 +325,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return domain ? `${obscureName}@${domain}` : obscureName;
   }
 
-  private async getAuthStatus(sender?: chrome.runtime.MessageSender) {
+  private async getAuthStatus() {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
       this.userAuthStatus = authStatus;
@@ -334,13 +334,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.userAuthStatus = authStatus;
-
-    if (sender) {
-      await BrowserApi.tabSendMessageData(sender.tab, "updateUserAuthStatus", {
-        authStatus: this.userAuthStatus,
-      });
-    }
-
     return this.userAuthStatus;
   }
 
@@ -495,7 +488,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async unlockCompleted(message: any, sender: chrome.runtime.MessageSender) {
-    await this.getAuthStatus(sender);
+    await this.getAuthStatus();
 
     if (message.data?.commandToRetry?.msg?.command === "openAutofillOverlay") {
       await this.openOverlay(true);
