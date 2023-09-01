@@ -17,6 +17,7 @@ import {
 } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { FingerprintDialogComponent } from "@bitwarden/auth";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -39,7 +40,6 @@ import { PopupUtilsService } from "../services/popup-utils.service";
 
 import { AboutComponent } from "./about.component";
 import { AwaitDesktopDialogComponent } from "./await-desktop-dialog.component";
-import { FingerprintDialogComponent } from "./fingerprint-dialog.component";
 
 const RateUrls = {
   [DeviceType.ChromeExtension]:
@@ -485,9 +485,9 @@ export class SettingsComponent implements OnInit {
   }
 
   async fingerprint() {
-    const fingerprint = await this.cryptoService
-      .getFingerprint(await this.stateService.getUserId())
-      .then((rawFingerprint) => rawFingerprint.join("-"));
+    const fingerprint = await this.cryptoService.getFingerprint(
+      await this.stateService.getUserId()
+    );
 
     const dialogRef = FingerprintDialogComponent.open(this.dialogService, {
       fingerprint,
