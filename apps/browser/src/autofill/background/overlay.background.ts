@@ -401,6 +401,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   private handlePortOnConnect = (port: chrome.runtime.Port) => {
     if (port.name === AutofillOverlayPort.Button) {
       this.setupOverlayButtonPort(port);
+      return;
     }
 
     if (port.name === AutofillOverlayPort.List) {
@@ -447,12 +448,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
   };
 
   private handleOverlayListPortMessage = (message: any, port: chrome.runtime.Port) => {
-    const command = message?.command;
-    if (!command || port.name !== AutofillOverlayPort.List) {
+    if (port.name !== AutofillOverlayPort.List) {
       return;
     }
 
-    const handler = this.overlayListPortMessageHandlers[command];
+    const handler = this.overlayListPortMessageHandlers[message?.command];
     if (!handler) {
       return;
     }
