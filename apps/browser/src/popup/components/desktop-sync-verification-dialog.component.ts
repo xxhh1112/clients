@@ -5,7 +5,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ButtonModule, DialogModule, DialogService } from "@bitwarden/components";
 
 export type DesktopSyncVerificationDialogParams = {
-  fingerprint: string;
+  fingerprint: string[];
 };
 
 @Component({

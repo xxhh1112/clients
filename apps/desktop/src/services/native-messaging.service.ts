@@ -71,12 +71,10 @@ export class NativeMessagingService {
       if (await this.stateService.getEnableBrowserIntegrationFingerprint()) {
         ipcRenderer.send("nativeMessagingReply", { command: "verifyFingerprint", appId: appId });
 
-        const fingerprint = (
-          await this.cryptoService.getFingerprint(
-            await this.stateService.getUserId(),
-            remotePublicKey
-          )
-        ).join("-");
+        const fingerprint = await this.cryptoService.getFingerprint(
+          await this.stateService.getUserId(),
+          remotePublicKey
+        );
 
         this.messagingService.send("setFocus");
 

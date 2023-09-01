@@ -5,7 +5,7 @@
   <span bitDialogContent>
     {{ "desktopIntegrationVerificationText" | i18n }}
     <br /><br />
-    <strong>{{ params.fingerprint }}</strong>
+    <strong>{{ params.fingerprint.join("-") }}</strong>
   </span>
   <ng-container bitDialogFooter>
     <button bitButton type="submit" buttonType="danger" bitDialogClose>
