@@ -2,6 +2,7 @@ import { EncString } from "../../platform/models/domain/enc-string";
 import { Login as LoginDomain } from "../../vault/models/domain/login";
 import { LoginView } from "../../vault/models/view/login.view";
 
+import { Fido2KeyExport } from "./fido2key.export";
 import { LoginUriExport } from "./login-uri.export";
 
 export class LoginExport {
@@ -11,6 +12,7 @@ export class LoginExport {
     req.username = "jdoe";
     req.password = "myp@ssword123";
     req.totp = "JBSWY3DPEHPK3PXP";
+    req.fido2Key = Fido2KeyExport.template();
     return req;
   }
 
@@ -21,6 +23,9 @@ export class LoginExport {
     view.username = req.username;
     view.password = req.password;
     view.totp = req.totp;
+    if (req.fido2Key != null) {
+      view.fido2Key = Fido2KeyExport.toView(req.fido2Key);
+    }
     return view;
   }
 
@@ -31,6 +36,7 @@ export class LoginExport {
     domain.username = req.username != null ? new EncString(req.username) : null;
     domain.password = req.password != null ? new EncString(req.password) : null;
     domain.totp = req.totp != null ? new EncString(req.totp) : null;
+    //left out fido2Key for now
     return domain;
   }
 
@@ -38,6 +44,7 @@ export class LoginExport {
   username: string;
   password: string;
   totp: string;
+  fido2Key: Fido2KeyExport = null;
 
   constructor(o?: LoginView | LoginDomain) {
     if (o == null) {
@@ -50,6 +57,10 @@ export class LoginExport {
       } else {
         this.uris = o.uris.map((u) => new LoginUriExport(u));
       }
+    }
+
+    if (o.fido2Key != null) {
+      this.fido2Key = new Fido2KeyExport(o.fido2Key);
     }
 
     if (o instanceof LoginView) {
