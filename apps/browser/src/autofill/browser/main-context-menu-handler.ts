@@ -208,7 +208,7 @@ export class MainContextMenuHandler {
     });
   }
 
-  async loadOptions(title: string, id: string, url: string, cipher?: CipherView | undefined) {
+  async loadOptions(title: string, id: string, cipher?: CipherView | undefined) {
     try {
       const sanitizedTitle = MainContextMenuHandler.sanitizeContextMenuTitle(title);
 
@@ -260,13 +260,12 @@ export class MainContextMenuHandler {
       const authed = await this.stateService.getIsAuthenticated();
       await this.loadOptions(
         this.i18nService.t(authed ? "unlockVaultMenu" : "loginToVaultMenu"),
-        NOOP_COMMAND_SUFFIX,
-        "<all_urls>"
+        NOOP_COMMAND_SUFFIX
       );
     }
   }
 
-  async noLogins(url: string) {
-    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NOOP_COMMAND_SUFFIX, url);
+  async noLogins() {
+    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NOOP_COMMAND_SUFFIX);
   }
 }

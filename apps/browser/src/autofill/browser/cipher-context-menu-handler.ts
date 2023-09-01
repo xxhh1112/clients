@@ -166,16 +166,16 @@ export class CipherContextMenuHandler {
     ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
 
     if (ciphers.length === 0) {
-      await this.mainContextMenuHandler.noLogins(url);
+      await this.mainContextMenuHandler.noLogins();
       return;
     }
 
     for (const cipher of ciphers) {
-      await this.updateForCipher(url, cipher);
+      await this.updateForCipher(cipher);
     }
   }
 
-  private async updateForCipher(url: string, cipher: CipherView) {
+  private async updateForCipher(cipher: CipherView) {
     if (
       cipher == null ||
       ![CipherType.Login, CipherType.Card, CipherType.Identity].includes(cipher.type)
@@ -197,6 +197,6 @@ export class CipherContextMenuHandler {
       title = cipher.identity.fullName;
     }
 
-    await this.mainContextMenuHandler.loadOptions(title, cipher.id, url, cipher);
+    await this.mainContextMenuHandler.loadOptions(title, cipher.id, cipher);
   }
 }
