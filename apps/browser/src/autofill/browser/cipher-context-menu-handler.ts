@@ -4,7 +4,6 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -67,9 +66,6 @@ export class CipherContextMenuHandler {
         clipboardWriteCallback: NOT_IMPLEMENTED,
         win: self,
       },
-      stateMigrationServiceOptions: {
-        stateFactory: stateFactory,
-      },
       stateServiceOptions: {
         stateFactory: stateFactory,
       },
@@ -79,6 +75,12 @@ export class CipherContextMenuHandler {
       await authServiceFactory(cachedServices, serviceOptions),
       await cipherServiceFactory(cachedServices, serviceOptions)
     );
+  }
+
+  static async windowsOnFocusChangedListener(windowId: number, serviceCache: CachedServices) {
+    const cipherContextMenuHandler = await CipherContextMenuHandler.create(serviceCache);
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    await cipherContextMenuHandler.update(tab?.url);
   }
 
   static async tabsOnActivatedListener(
@@ -171,11 +173,7 @@ export class CipherContextMenuHandler {
   }
 
   private async updateForCipher(url: string, cipher: CipherView) {
-    if (
-      cipher == null ||
-      cipher.type !== CipherType.Login ||
-      cipher.reprompt !== CipherRepromptType.None
-    ) {
+    if (cipher == null || cipher.type !== CipherType.Login) {
       return;
     }
 

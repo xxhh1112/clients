@@ -10,7 +10,11 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import {
+  MasterKey,
+  SymmetricCryptoKey,
+  UserKey,
+} from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../platform/browser/browser-api";
 
@@ -42,6 +46,7 @@ type ReceiveMessage = {
 
   // Unlock key
   keyB64?: string;
+  userKeyB64?: string;
 };
 
 type ReceiveMessageOuter = {
@@ -59,8 +64,8 @@ export class NativeMessagingBackground {
   private port: browser.runtime.Port | chrome.runtime.Port;
 
   private resolver: any = null;
-  private privateKey: ArrayBuffer = null;
-  private publicKey: ArrayBuffer = null;
+  private privateKey: Uint8Array = null;
+  private publicKey: Uint8Array = null;
   private secureSetupResolve: any = null;
   private sharedSecret: SymmetricCryptoKey;
   private appId: string;
@@ -129,7 +134,7 @@ export class NativeMessagingBackground {
 
             const encrypted = Utils.fromB64ToArray(message.sharedSecret);
             const decrypted = await this.cryptoFunctionService.rsaDecrypt(
-              encrypted.buffer,
+              encrypted,
               this.privateKey,
               EncryptionAlgorithm
             );
@@ -320,16 +325,55 @@ export class NativeMessagingBackground {
         }
 
         if (message.response === "unlocked") {
-          await this.cryptoService.setKey(
-            new SymmetricCryptoKey(Utils.fromB64ToArray(message.keyB64).buffer)
-          );
+          try {
+            if (message.userKeyB64) {
+              const userKey = new SymmetricCryptoKey(
+                Utils.fromB64ToArray(message.userKeyB64)
+              ) as UserKey;
+              await this.cryptoService.setUserKey(userKey);
+            } else if (message.keyB64) {
+              // Backwards compatibility to support cases in which the user hasn't updated their desktop app
+              // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
+              let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
+              encUserKey ||= await this.stateService.getMasterKeyEncryptedUserKey();
+              if (!encUserKey) {
+                throw new Error("No encrypted user key found");
+              }
+              const masterKey = new SymmetricCryptoKey(
+                Utils.fromB64ToArray(message.keyB64)
+              ) as MasterKey;
+              const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
+                masterKey,
+                new EncString(encUserKey)
+              );
+              await this.cryptoService.setMasterKey(masterKey);
+              await this.cryptoService.setUserKey(userKey);
+            } else {
+              throw new Error("No key received");
+            }
+          } catch (e) {
+            this.logService.error("Unable to set key: " + e);
+            this.messagingService.send("showDialog", {
+              title: { key: "biometricsFailedTitle" },
+              content: { key: "biometricsFailedDesc" },
+              acceptButtonText: { key: "ok" },
+              cancelButtonText: null,
+              type: "danger",
+            });
+
+            // Exit early
+            if (this.resolver) {
+              this.resolver(message);
+            }
+            return;
+          }
 
           // Verify key is correct by attempting to decrypt a secret
           try {
             await this.cryptoService.getFingerprint(await this.stateService.getUserId());
           } catch (e) {
             this.logService.error("Unable to verify key: " + e);
-            await this.cryptoService.clearKey();
+            await this.cryptoService.clearKeys();
             this.showWrongUserDialog();
 
             // Exit early

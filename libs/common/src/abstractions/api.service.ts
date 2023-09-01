@@ -200,6 +200,7 @@ export abstract class ApiService {
   postConvertToKeyConnector: () => Promise<void>;
   //passwordless
   postAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
+  postAdminAuthRequest: (request: PasswordlessCreateAuthRequest) => Promise<AuthRequestResponse>;
   getAuthResponse: (id: string, accessCode: string) => Promise<AuthRequestResponse>;
   getAuthRequest: (id: string) => Promise<AuthRequestResponse>;
   putAuthRequest: (id: string, request: PasswordlessAuthRequest) => Promise<AuthRequestResponse>;
@@ -241,6 +242,9 @@ export abstract class ApiService {
   putRestoreCipher: (id: string) => Promise<CipherResponse>;
   putRestoreCipherAdmin: (id: string) => Promise<CipherResponse>;
   putRestoreManyCiphers: (
+    request: CipherBulkRestoreRequest
+  ) => Promise<ListResponse<CipherResponse>>;
+  putRestoreManyCiphersAdmin: (
     request: CipherBulkRestoreRequest
   ) => Promise<ListResponse<CipherResponse>>;
 
@@ -520,7 +524,7 @@ export abstract class ApiService {
   ) => Promise<void>;
   postResendSponsorshipOffer: (sponsoringOrgId: string) => Promise<void>;
 
-  getUserKeyFromKeyConnector: (keyConnectorUrl: string) => Promise<KeyConnectorUserKeyResponse>;
+  getMasterKeyFromKeyConnector: (keyConnectorUrl: string) => Promise<KeyConnectorUserKeyResponse>;
   postUserKeyToKeyConnector: (
     keyConnectorUrl: string,
     request: KeyConnectorUserKeyRequest

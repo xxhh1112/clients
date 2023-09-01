@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ ウェブ保管庫",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "このアイテムのタイプは何ですか？"
   },
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "予期せぬエラーが発生しました。"
   },
+  "expirationDateError": {
+    "message": "有効期限は未来のものをお選びください。"
+  },
   "emailAddress": {
     "message": "メールアドレス"
   },
   "yourVaultIsLocked": {
     "message": "保管庫がロックされています。開くにはマスターパスワードを入力してください。"
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "ロック解除"
@@ -957,6 +953,9 @@
   },
   "copyVerificationCode": {
     "message": "認証コードのコピー"
+  },
+  "copyUuid": {
+    "message": "UUID をコピー"
   },
   "warning": {
     "message": "注意"
@@ -1293,6 +1292,31 @@
   },
   "importEncKeyError": {
     "message": "エクスポートされたファイルの復号でエラーが発生しました。暗号化キーが、データをエクスポートするために使用された暗号化キーと一致しません。"
+  },
+  "importDestination": {
+    "message": "インポート先"
+  },
+  "learnAboutImportOptions": {
+    "message": "インポートオプションについて学ぶ"
+  },
+  "selectImportFolder": {
+    "message": "フォルダーを選択"
+  },
+  "selectImportCollection": {
+    "message": "コレクションを選択"
+  },
+  "importTargetHint": {
+    "message": "インポートしたファイルコンテンツを $DESTINATION$ に移動したい場合は、このオプションを選択してください。",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "割り当てられていないアイテムがファイルに含まれています。"
   },
   "selectFormat": {
     "message": "インポートするファイルの形式を選択"
@@ -1900,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1GB の暗号化されたファイルストレージ"
   },
-  "premiumSignUpTwoStep": {
-    "message": "YubiKey、FIDO U2F、Duoなどの追加の2段階認証ログインオプション"
+  "premiumSignUpTwoStepOptions": {
+    "message": "YubiKey、Duo などのプロプライエタリな2段階認証オプション。"
   },
   "premiumSignUpEmergency": {
     "message": "緊急アクセス"
@@ -2015,6 +2039,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "未払いのサブスクリプションについては、指定した支払い方法へ請求されます。"
   },
   "paymentChargedWithTrial": {
     "message": "ご利用のプランでは、7日間の無料トライアルが可能です。トライアル期間が終わるまでは課金されません。トライアル終了後、$INTERVAL$毎に請求されます。いつでもキャンセルできます。"
@@ -2644,6 +2671,12 @@
   },
   "webVault": {
     "message": "ウェブ保管庫"
+  },
+  "bitWebVault": {
+    "message": "Bitwarden ウェブ保管庫"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden シークレットマネージャー"
   },
   "loggedIn": {
     "message": "ログイン"
@@ -3323,6 +3356,9 @@
   "limitSubscriptionDesc": {
     "message": "サブスクリプションの上限数を設定します。この制限に達すると、新しいユーザーを招待することができなくなります。"
   },
+  "limitSmSubscriptionDesc": {
+    "message": "シークレットマネージャーサブスクリプションの制限数を設定します。この制限に達すると、新しいメンバーを招待することができなくなります。"
+  },
   "maxSeatLimit": {
     "message": "最大ユーザー数(オプション)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3503,6 +3539,9 @@
   "vaultTimeoutDesc": {
     "message": "保管庫がタイムアウトし、選択したアクションを実行するタイミングを選択します。"
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "保管庫からいつログアウトするかを選択します。"
+  },
   "oneMinute": {
     "message": "1分"
   },
@@ -3591,8 +3630,8 @@
   "attachmentsNeedFix": {
     "message": "このアイテムは添付ファイルが古いため修正する必要があります。"
   },
-  "attachmentFixDesc": {
-    "message": "これは古い添付ファイルのため修正する必要があります。詳しくはこちら。"
+  "attachmentFixDescription": {
+    "message": "この添付ファイルは古い暗号化を使用しています。添付ファイルをダウンロード、再暗号化、再アップロードするには「修正」を選択してください。"
   },
   "fix": {
     "message": "修正",
@@ -3809,29 +3848,11 @@
   "restoreSelected": {
     "message": "選択したものをリストア"
   },
-  "restoreItem": {
-    "message": "アイテムをリストア"
-  },
   "restoredItem": {
     "message": "リストアされたアイテム"
   },
   "restoredItems": {
     "message": "リストアされたアイテム"
-  },
-  "restoreItemConfirmation": {
-    "message": "このアイテムをリストアしますか？"
-  },
-  "restoreItems": {
-    "message": "アイテムをリストア"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "$COUNT$個のアイテムをリストアしようとしています。本当にこれらのアイテムをリストアしますか？",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "アイテム $ID$ をリストアしました。",
@@ -4375,8 +4396,8 @@
   "manageUsers": {
     "message": "ユーザーを管理"
   },
-  "manageResetPassword": {
-    "message": "パスワードリセットの管理"
+  "manageAccountRecovery": {
+    "message": "アカウントの回復を管理する"
   },
   "disableRequiredError": {
     "message": "このポリシーを無効にするには、まず $POLICYNAME$ ポリシーを手動で無効にする必要があります。",
@@ -4705,8 +4726,8 @@
   "error": {
     "message": "エラー"
   },
-  "resetPasswordManageUsers": {
-    "message": "パスワードリセットの管理権限を持つユーザーの管理も有効にする必要があります"
+  "accountRecoveryManageUsers": {
+    "message": "ユーザーを管理するには、アカウントのリカバリ管理権限を付与する必要があります。"
   },
   "setupProvider": {
     "message": "プロバイダーのセットアップ"
@@ -4917,8 +4938,8 @@
   "disablePersonalVaultExport": {
     "message": "個別の保管庫のエクスポートを削除"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "メンバーが個別の保管庫データをエクスポートすることを許可しない。"
+  "disablePersonalVaultExportDescription": {
+    "message": "メンバーが個人の保管庫からデータをエクスポートすることを許可しません。"
   },
   "vaultExportDisabled": {
     "message": "保管庫のエクスポートが無効化されました"
@@ -5421,8 +5442,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "組織保管庫のエクスポート"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "$EMAIL$ に関連付けられた個人用保管庫アイテムのみがエクスポートされます。組織用保管庫アイテムは含まれません。",
+  "exportingIndividualVaultDescription": {
+    "message": "$EMAIL$ に関連付けられた個人の保管庫アイテムのみがエクスポートされます。組織の保管庫アイテムは含まれません。 保管庫アイテム情報のみがエクスポートされ、関連する添付ファイルはエクスポートされません。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5430,8 +5451,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "$ORGANIZATION$ に関連付けられた組織保管庫のアイテムのみがエクスポートされます。他の組織や個人保管庫のアイテムは含まれません。",
+  "exportingOrganizationVaultDesc": {
+    "message": "$ORGANIZATION$ に関連付けられた組織保管庫のみがエクスポートされます。個々の保管庫または他の組織にあるアイテムは含まれません。",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6617,11 +6638,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
   },
-  "secretsManagerBeta": {
-    "message": "ベータ版シークレットマネージャー"
-  },
   "secretsManager": {
     "message": "シークレットマネージャー"
+  },
+  "secretsManagerBeta": {
+    "message": "ベータ版シークレットマネージャー"
   },
   "secretsManagerAccessDescription": {
     "message": "シークレットマネージャーへのユーザーのアクセスを有効にします。"
@@ -6803,16 +6824,11 @@
   "enforceOnLoginDesc": {
     "message": "パスワードを変更するには、メンバーが存在しないといけません"
   },
-  "region": {
-    "message": "リージョン"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "米国",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "このプロジェクトを削除する権限がありません",
@@ -6825,28 +6841,60 @@
   "updateKdfSettings": {
     "message": "KDF の設定を更新する"
   },
+  "loginInitiated": {
+    "message": "ログイン開始"
+  },
+  "deviceApprovalRequired": {
+    "message": "デバイスの承認が必要です。以下から承認オプションを選択してください:"
+  },
+  "rememberThisDevice": {
+    "message": "このデバイスを記憶する"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "パブリックデバイスを使用している場合はチェックしないでください"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "他のデバイスから承認する"
+  },
+  "requestAdminApproval": {
+    "message": "管理者の承認を要求する"
+  },
+  "approveWithMasterPassword": {
+    "message": "マスターパスワードで承認する"
+  },
   "trustedDeviceEncryption": {
-    "message": "信頼できるデバイスの暗号化"
+    "message": "信頼できるデバイスでの暗号化"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "認証が完了したあとメンバーはデバイスに保存されているキーを使用して保管庫のデータを復号します。このオプションを使用すると、",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "trustedDevices": {
+    "message": "信頼できるデバイス"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "認証されると、メンバーはデバイスに保存されたキーを使って保管庫のデータを復号します。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
     "message": "単一組織",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "ポリシーと ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "ポリシー",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO 必須",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "ポリシーと",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
     "message": "アカウント回復の管理",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
-    "message": "の自動登録が有効になります。",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "自動登録のポリシーがオンになります。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ が見つかりません",
@@ -6935,6 +6983,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "マスターパスワードを設定せずにマスターパスワードを持たないメンバーを削除すると、フルアカウントへのアクセスが制限される可能性があります。"
   },
+  "approvedAuthRequest": {
+    "message": "$ID$ のデバイスを承認しました。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "$ID$ のデバイスを拒否しました。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "デバイスの承認を要求しました。"
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "$ORG$ 向けの Bitwarden 7日間無料トライアルを開始",
     "placeholders": {
@@ -6955,5 +7024,164 @@
   },
   "selectedRegionFlag": {
     "message": "リージョン選択"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "アカウントを正常に作成しました！"
+  },
+  "adminApprovalRequested": {
+    "message": "管理者の承認を要求しました"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "要求を管理者に送信しました。"
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "承認されると通知されます。 "
+  },
+  "troubleLoggingIn": {
+    "message": "ログインできない場合"
+  },
+  "loginApproved": {
+    "message": "ログインが承認されました"
+  },
+  "userEmailMissing": {
+    "message": "ユーザーのメールアドレスがありません"
+  },
+  "deviceTrusted": {
+    "message": "信頼されたデバイス"
+  },
+  "sendsNoItemsTitle": {
+    "message": "アクティブな Send なし",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Send を使用すると暗号化された情報を誰とでも安全に共有できます。",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "ユーザーを招待"
+  },
+  "secretsManagerForPlan": {
+    "message": "$PLAN$ のシークレットマネージャー",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "エンジニアリングチームと DevOps チームがソフトウェア開発ライフサイクル全体のシークレットを管理できます。"
+  },
+  "free2PersonOrganization": {
+    "message": "二人用無料組織"
+  },
+  "unlimitedSecrets": {
+    "message": "無制限のシークレット"
+  },
+  "unlimitedProjects": {
+    "message": "無制限のプロジェクト"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ 個のプロジェクトを含む",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ 個のサービスアカウントを含む",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "追加のサービスアカウントは月額 $COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "シークレットマネージャーを追加"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "アップグレードしたプランにシークレットマネージャーを追加して、以前のプランで作成されたシークレットへのアクセスを維持します。"
+  },
+  "additionalServiceAccounts": {
+    "message": "追加のサービスアカウント"
+  },
+  "includedServiceAccounts": {
+    "message": "お客様のプランには$COUNT$のサービスアカウントが付属しています。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "月々$COST$でサービスアカウントを追加できます。",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "パスワードマネージャーのプラン価格"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "シークレットマネージャーのプラン価格"
+  },
+  "passwordManager": {
+    "message": "パスワード マネージャー"
+  },
+  "freeOrganization": {
+    "message": "無料組織"
+  },
+  "limitServiceAccounts": {
+    "message": "サービスアカウントの制限 (オプション)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "サービスアカウントの上限を設定します。この制限に達すると、新しいサービスアカウントを作成することはできません。"
+  },
+  "serviceAccountLimit": {
+    "message": "サービスアカウントの上限 (オプション)"
+  },
+  "maxServiceAccountCost": {
+    "message": "潜在的なサービスアカウントのコストの最大値"
+  },
+  "loggedInExclamation": {
+    "message": "ログインしました!"
+  },
+  "smBetaEndedDesc": {
+    "message": "シークレットマネージャーベータは$BETA_ENDING_DATE$で終了しました。シークレットマネージャーを有料サブスクリプションに追加し、シークレットマネージャーのデータへのアクセスを維持するには、$DAYS$日間の猶予があります。シークレットマネージャーをサブスクリプションに追加するには、カスタマーサクセスまでお問い合わせください。",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "ベータ終了"
+  },
+  "beta": {
+    "message": "ベータ"
+  },
+  "alreadyHaveAccount": {
+    "message": "既にアカウントをお持ちですか？"
   }
 }
