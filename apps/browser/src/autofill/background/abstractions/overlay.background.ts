@@ -33,7 +33,6 @@ type OverlayBackgroundExtensionMessageHandlers = {
   updateAutofillOverlayPosition: ({ message }: { message: any }) => void;
   updateAutofillOverlayHidden: ({ message }: { message: any }) => void;
   updateFocusedFieldData: ({ message }: { message: any }) => void;
-  getUserAuthStatus: ({ sender }: { sender: chrome.runtime.MessageSender }) => void;
   collectPageDetailsResponse: ({
     message,
     sender,

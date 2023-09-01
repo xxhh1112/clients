@@ -1,5 +1,3 @@
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 import AutofillOverlayContentService from "../services/autofill-overlay-content.service";
@@ -22,14 +20,12 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
-    openAutofillOverlay: ({ message }) =>
-      this.openAutofillOverlay(message.data.authStatus, message.data.focusFieldElement),
+    openAutofillOverlay: ({ message }) => this.openAutofillOverlay(message.data.focusFieldElement),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
     promptForLogin: () => this.blurAndRemoveOverlay(),
     passwordReprompt: () => this.blurAndRemoveOverlay(),
-    updateUserAuthStatus: ({ message }) => this.updateUserAuthStatus(message),
   };
 
   /**
@@ -100,11 +96,11 @@ class AutofillInit implements AutofillInitInterface {
     setTimeout(() => {
       this.autofillOverlayContentService.isCurrentlyFilling = false;
       this.autofillOverlayContentService.focusMostRecentOverlayField();
-    }, 0);
+    }, 100);
   }
 
-  private openAutofillOverlay(authStatus: AuthenticationStatus, focusFieldElement: boolean) {
-    this.autofillOverlayContentService.openAutofillOverlay(authStatus, focusFieldElement);
+  private openAutofillOverlay(focusFieldElement: boolean) {
+    this.autofillOverlayContentService.openAutofillOverlay(focusFieldElement);
   }
 
   private blurAndRemoveOverlay() {
@@ -131,10 +127,6 @@ class AutofillInit implements AutofillInitInterface {
 
   private redirectOverlayFocusOut(message: any) {
     this.autofillOverlayContentService.redirectOverlayFocusOut(message.direction);
-  }
-
-  private updateUserAuthStatus(message: any) {
-    this.autofillOverlayContentService.setAuthStatus(message.data.authStatus);
   }
 
   /**

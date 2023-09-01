@@ -2,8 +2,6 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { tabbable, FocusableElement } from "tabbable";
 
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-
 import AutofillField from "../models/autofill-field";
 import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
 import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
@@ -32,7 +30,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private overlayButtonElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
-  private authStatus: AuthenticationStatus;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private overlayElementsMutationObserver: MutationObserver;
   private bodyElementMutationObserver: MutationObserver;
@@ -48,12 +45,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
-    sendExtensionMessage("getUserAuthStatus");
     this.initOverlayOnDomContentLoaded();
-  }
-
-  setAuthStatus(authStatus: AuthenticationStatus) {
-    this.authStatus = authStatus;
   }
 
   setupAutofillOverlayListenerOnField(
@@ -79,13 +71,9 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  openAutofillOverlay(authStatus?: AuthenticationStatus, focusFieldElement?: boolean) {
+  openAutofillOverlay(focusFieldElement?: boolean) {
     if (!this.mostRecentlyFocusedField) {
       return;
-    }
-
-    if (authStatus && this.authStatus !== authStatus) {
-      this.setAuthStatus(authStatus);
     }
 
     if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
@@ -220,33 +208,43 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     autofillFieldData: AutofillField
   ) => {
     return this.useEventHandlersMemo(
-      () => this.storeModifiedFormElement(formFieldElement, autofillFieldData),
+      () => this.triggerFormFieldInput(formFieldElement, autofillFieldData),
       `${formFieldElement.opid}-${formFieldElement.id}-input-handler`
     );
   };
 
-  private storeModifiedFormElement(
+  triggerFormFieldInput(
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ) {
-    formFieldElement.removeEventListener(
-      "input",
-      this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
-    );
-
     if (formFieldElement instanceof HTMLSpanElement) {
       return;
     }
 
-    if (!this.userFilledFields.password && formFieldElement.type === "password") {
+    this.storeModifiedFormElement(formFieldElement, autofillFieldData);
+
+    if (formFieldElement.value) {
+      this.removeAutofillOverlayList();
+      return;
+    }
+
+    this.openAutofillOverlay();
+  }
+
+  private storeModifiedFormElement(
+    formFieldElement: ElementWithOpId<FillableFormFieldElement>,
+    autofillFieldData: AutofillField
+  ) {
+    if (formFieldElement === this.mostRecentlyFocusedField) {
+      this.mostRecentlyFocusedField = formFieldElement;
+    }
+
+    if (formFieldElement.type === "password") {
       this.userFilledFields.password = formFieldElement;
       return;
     }
 
-    if (
-      this.userFilledFields.username ||
-      !this.keywordsFoundInFieldData(autofillFieldData, AutoFillConstants.UsernameFieldNames)
-    ) {
+    if (!this.keywordsFoundInFieldData(autofillFieldData, AutoFillConstants.UsernameFieldNames)) {
       return;
     }
 
@@ -285,10 +283,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const initiallyFocusedField = this.mostRecentlyFocusedField;
     await this.updateMostRecentlyFocusedField(formFieldElement);
 
-    if (
-      this.authStatus !== AuthenticationStatus.Unlocked ||
-      !(formFieldElement as HTMLInputElement).value
-    ) {
+    if (!(formFieldElement as HTMLInputElement).value) {
       sendExtensionMessage("openAutofillOverlay");
       return;
     }

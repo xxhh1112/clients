@@ -50,7 +50,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
     updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
     updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
     updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
-    getUserAuthStatus: ({ sender }) => this.getAuthStatus(sender),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
     unlockCompleted: ({ message, sender }) => this.unlockCompleted(message, sender),
     addEditCipherSubmitted: () => this.updateAutofillOverlayCiphers(),
