@@ -126,7 +126,7 @@ class AutofillInit implements AutofillInitInterface {
   }
 
   private redirectOverlayFocusOut(message: any) {
-    this.autofillOverlayContentService.redirectOverlayFocusOut(message.direction);
+    this.autofillOverlayContentService.redirectOverlayFocusOut(message?.data?.direction);
   }
 
   /**
