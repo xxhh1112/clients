@@ -3,9 +3,12 @@
     {{ "desktopSyncVerificationTitle" | i18n }}
   </span>
   <span bitDialogContent>
-    {{ "desktopIntegrationVerificationText" | i18n }}
-    <br /><br />
-    <strong>{{ params.fingerprint.join("-") }}</strong>
+    <p>
+      {{ "desktopIntegrationVerificationText" | i18n }}
+    </p>
+    <p>
+      <strong>{{ params.fingerprint.join("-") }}</strong>
+    </p>
   </span>
   <ng-container bitDialogFooter>
     <button bitButton type="submit" buttonType="danger" bitDialogClose>
