@@ -3,9 +3,10 @@
     {{ "verifyBrowserTitle" | i18n }}
   </span>
   <span bitDialogContent>
-    {{ "verifyBrowserDesc" | i18n }}
-    <br /><br />
-    <strong>{{ params.fingerprint }}</strong>
+    <p>{{ "verifyBrowserDesc" | i18n }}</p>
+    <p>
+      <strong>{{ params.fingerprint }}</strong>
+    </p>
   </span>
   <ng-container bitDialogFooter>
     <button bitButton type="submit" buttonType="primary" [bitDialogClose]="true">
