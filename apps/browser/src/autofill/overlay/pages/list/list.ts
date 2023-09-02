@@ -96,9 +96,10 @@ class AutofillOverlayList extends HTMLElement {
   };
 
   private updateListItems(message: any) {
+    const ciphers = message.ciphers;
     this.resetOverlayListContainer();
 
-    if (!message.ciphers || message.ciphers.length === 0) {
+    if (!ciphers?.length) {
       this.buildNoResultsOverlayList();
       return;
     }
@@ -107,9 +108,9 @@ class AutofillOverlayList extends HTMLElement {
     ciphersList.classList.add("overlay-actions-list");
     ciphersList.setAttribute("role", "list");
 
-    message.ciphers.forEach((cipher: any) =>
-      ciphersList.appendChild(this.buildOverlayActionsListItem(cipher))
-    );
+    for (let cipherIndex = 0; cipherIndex < ciphers.length; cipherIndex++) {
+      ciphersList.appendChild(this.buildOverlayActionsListItem(ciphers[cipherIndex]));
+    }
 
     this.overlayListContainer.appendChild(ciphersList);
   }
@@ -401,7 +402,8 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private handleResizeObserver = (entries: ResizeObserverEntry[]) => {
-    for (const entry of entries) {
+    for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
+      const entry = entries[entryIndex];
       if (entry.target !== this.overlayListContainer) {
         continue;
       }

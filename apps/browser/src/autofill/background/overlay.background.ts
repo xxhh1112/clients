@@ -85,7 +85,9 @@ class OverlayBackground implements OverlayBackgroundInterface {
     private i18nService: I18nService
   ) {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
-    this.getAuthStatus();
+    this.getAuthStatus().catch((error) => {
+      throw new Error(`Error getting auth status: ${error}`);
+    });
     this.setupExtensionMessageListeners();
 
     // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THE USAGE OF THIS METHOD.
