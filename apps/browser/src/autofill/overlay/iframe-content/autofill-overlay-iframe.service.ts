@@ -178,14 +178,15 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
   }
 
   private handleMutationObserver = (mutations: MutationRecord[]) => {
-    mutations.forEach((mutation) => {
+    for (let index = 0; index < mutations.length; index++) {
+      const mutation = mutations[index];
       if (mutation.type !== "attributes" || mutation.attributeName !== "style") {
-        return;
+        continue;
       }
 
       this.iframe.removeAttribute("style");
       this.updateElementStyles(this.iframe, this.iframeStyles);
-    });
+    }
   };
 
   private observeIframe() {

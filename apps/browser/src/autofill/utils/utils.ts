@@ -5,7 +5,8 @@ function generateRandomCustomElementName(): string {
     const randomBytes = new Uint8Array(length);
     globalThis.crypto.getRandomValues(randomBytes);
 
-    for (const byte of randomBytes) {
+    for (let byteIndex = 0; byteIndex < randomBytes.length; byteIndex++) {
+      const byte = randomBytes[byteIndex];
       randomChars.push(chars[byte % chars.length]);
     }
 
@@ -27,9 +28,10 @@ function generateRandomCustomElementName(): string {
   let randomString = "";
   let prevIndex = 0;
 
-  for (const index of hyphenIndices) {
-    randomString = randomString + generateRandomChars(index - prevIndex) + "-";
-    prevIndex = index;
+  for (let index = 0; index < hyphenIndices.length; index++) {
+    const hyphenIndex = hyphenIndices[index];
+    randomString = randomString + generateRandomChars(hyphenIndex - prevIndex) + "-";
+    prevIndex = hyphenIndex;
   }
 
   randomString += generateRandomChars(length - prevIndex);
