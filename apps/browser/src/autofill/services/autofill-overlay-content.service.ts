@@ -73,6 +73,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     if (this.getRootNodeActiveElement(formFieldElement) === formFieldElement) {
       this.triggerFormFieldFocusedAction(formFieldElement);
+      return;
+    }
+
+    if (!this.mostRecentlyFocusedField) {
+      this.updateMostRecentlyFocusedField(formFieldElement);
     }
   }
 
@@ -634,31 +639,40 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private handleBodyElementMutationObserverUpdate = () => {
-    // TODO: CG - This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
-    // In general, we need to think about this further and come up with a more robust solution.
-    // The code below basically attempts to ensure that our two elements are always the last two elements in the body.
-    // That, combined with the largest potential z-index value, should ensure that our elements are always on top.
-    // However, a potential issue comes if a script on a site is determined to ensure that IT'S element is the last
-    // within the body. We at that point will enter an infinite loop of sorts where we keep moving our elements to the end
-    // of the body, and the script keeps moving its element to the end of the body. Potentially, it might be better to
-    // also check the z-index of the last element in the body and ensure that our elements are always above that.
-    //
-    // WARNING: It's really easy to trigger a infinite loop with this observer. Keep that in mind while updating this implementation.
-
     if (this.isTriggeringExcessiveMutationObserverIterations()) {
       return;
     }
 
     const lastChild = globalThis.document.body.lastChild;
+    const secondToLastChild = lastChild?.previousSibling;
+    const lastChildIsOverlayList = lastChild === this.overlayListElement;
+    const lastChildIsOverlayButton = lastChild === this.overlayButtonElement;
+    const secondToLastChildIsOverlayList = secondToLastChild === this.overlayListElement;
+    const secondToLastChildIsOverlayButton = secondToLastChild === this.overlayButtonElement;
     if (
-      lastChild === this.overlayListElement ||
-      (lastChild === this.overlayButtonElement && !this.isOverlayListVisible)
+      (lastChildIsOverlayList && secondToLastChildIsOverlayButton) ||
+      (lastChildIsOverlayButton && !this.isOverlayListVisible)
     ) {
       return;
     }
 
-    this.removeAutofillOverlay();
-    this.openAutofillOverlay();
+    if (lastChildIsOverlayList && !secondToLastChildIsOverlayButton) {
+      globalThis.document.body.insertBefore(
+        this.overlayButtonElement,
+        this.overlayListElement.nextSibling
+      );
+      return;
+    }
+
+    if (lastChildIsOverlayButton && secondToLastChildIsOverlayList) {
+      globalThis.document.body.insertBefore(
+        this.overlayListElement,
+        this.overlayButtonElement.nextSibling
+      );
+      return;
+    }
+
+    globalThis.document.body.insertBefore(lastChild, this.overlayButtonElement);
   };
 
   private handleDocumentElementMutationObserverUpdate = (mutationRecords: MutationRecord[]) => {
