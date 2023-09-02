@@ -395,8 +395,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: any) => void
   ) => {
-    const command: string = message.command;
-    const handler: CallableFunction | undefined = this.extensionMessageHandlers[command];
+    const handler: CallableFunction | undefined = this.extensionMessageHandlers[message?.command];
     if (!handler) {
       return false;
     }
@@ -410,61 +409,40 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return true;
   };
 
-  private handlePortOnConnect = (port: chrome.runtime.Port) => {
+  private handlePortOnConnect = async (port: chrome.runtime.Port) => {
+    const isOverlayListPort = port.name === AutofillOverlayPort.List;
+
+    if (isOverlayListPort) {
+      this.overlayListPort = port;
+    } else {
+      this.overlayButtonPort = port;
+    }
+
+    port.onMessage.addListener(this.handleOverlayElementPortMessage);
+    port.postMessage({
+      command: `initAutofillOverlay${isOverlayListPort ? "List" : "Button"}`,
+      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      styleSheetUrl: chrome.runtime.getURL(`overlay/${isOverlayListPort ? "list" : "button"}.css`),
+      translations: this.getTranslations(),
+      ciphers: isOverlayListPort ? this.getOverlayCipherData() : null,
+    });
+    this.updateOverlayPosition(
+      isOverlayListPort ? AutofillOverlayElement.List : AutofillOverlayElement.Button
+    );
+  };
+
+  private handleOverlayElementPortMessage = (message: any, port: chrome.runtime.Port) => {
+    const command = message?.command;
+    let handler: CallableFunction | undefined;
+
     if (port.name === AutofillOverlayPort.Button) {
-      this.setupOverlayButtonPort(port);
-      return;
+      handler = this.overlayButtonPortMessageHandlers[command];
     }
 
     if (port.name === AutofillOverlayPort.List) {
-      this.setupOverlayListPort(port);
-    }
-  };
-
-  private setupOverlayButtonPort = async (port: chrome.runtime.Port) => {
-    this.overlayButtonPort = port;
-    this.overlayButtonPort.postMessage({
-      command: "initAutofillOverlayButton",
-      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      styleSheetUrl: chrome.runtime.getURL("overlay/button.css"),
-      translations: this.getTranslations(),
-    });
-    this.updateOverlayPosition(AutofillOverlayElement.Button);
-    this.overlayButtonPort.onMessage.addListener(this.handleOverlayButtonPortMessage);
-  };
-
-  private handleOverlayButtonPortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.Button) {
-      return;
+      handler = this.overlayListPortMessageHandlers[command];
     }
 
-    const handler = this.overlayButtonPortMessageHandlers[message?.command];
-    if (!handler) {
-      return;
-    }
-
-    handler({ message, port });
-  };
-
-  private setupOverlayListPort = async (port: chrome.runtime.Port) => {
-    this.overlayListPort = port;
-    this.overlayListPort.postMessage({
-      command: "initAutofillOverlayList",
-      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      ciphers: this.getOverlayCipherData(),
-      styleSheetUrl: chrome.runtime.getURL("overlay/list.css"),
-      translations: this.getTranslations(),
-    });
-    this.updateOverlayPosition(AutofillOverlayElement.List);
-    this.overlayListPort.onMessage.addListener(this.handleOverlayListPortMessage);
-  };
-
-  private handleOverlayListPortMessage = (message: any, port: chrome.runtime.Port) => {
-    if (port.name !== AutofillOverlayPort.List) {
-      return;
-    }
-
-    const handler = this.overlayListPortMessageHandlers[message?.command];
     if (!handler) {
       return;
     }
