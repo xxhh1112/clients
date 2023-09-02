@@ -244,7 +244,6 @@ describe("Cipher Service", () => {
     beforeEach(() => {
       cipherView = new CipherView();
       cipherView.type = CipherType.Login;
-      cipherView.key = null;
 
       encryptService.decryptToBytes.mockReturnValue(Promise.resolve(makeStaticByteArray(64)));
       configApiService.get.mockReturnValue(

@@ -3,7 +3,6 @@ import { Jsonify } from "type-fest";
 import { LinkedIdType } from "../../../enums";
 import { View } from "../../../models/view/view";
 import { InitializerMetadata } from "../../../platform/interfaces/initializer-metadata.interface";
-import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { InitializerKey } from "../../../platform/services/cryptography/initializer-key";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
@@ -44,7 +43,6 @@ export class CipherView implements View, InitializerMetadata {
   creationDate: Date = null;
   deletedDate: Date = null;
   reprompt: CipherRepromptType = CipherRepromptType.None;
-  key: SymmetricCryptoKey;
 
   constructor(c?: Cipher) {
     if (!c) {
@@ -150,7 +148,6 @@ export class CipherView implements View, InitializerMetadata {
     const attachments = obj.attachments?.map((a: any) => AttachmentView.fromJSON(a));
     const fields = obj.fields?.map((f: any) => FieldView.fromJSON(f));
     const passwordHistory = obj.passwordHistory?.map((ph: any) => PasswordHistoryView.fromJSON(ph));
-    const key = obj.key == null ? null : SymmetricCryptoKey.fromJSON(obj.key);
 
     Object.assign(view, obj, {
       revisionDate: revisionDate,
@@ -158,7 +155,6 @@ export class CipherView implements View, InitializerMetadata {
       attachments: attachments,
       fields: fields,
       passwordHistory: passwordHistory,
-      key: key,
     });
 
     switch (obj.type) {

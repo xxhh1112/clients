@@ -170,9 +170,10 @@ export class CipherService implements CipherServiceAbstraction {
         throw new Error("Cannot encrypt cipher for organization. No key.");
       }
     }
-    const t = await this.getCipherKeyEncryptionEnabled();
-    if (t) {
-      return this.encryptWithCipherKey(model, cipher, key);
+
+    if (await this.getCipherKeyEncryptionEnabled()) {
+      cipher.key = originalCipher?.key ?? null;
+      return this.encryptWithCipherKey(model, cipher);
     }
 
     return this.encryptCipher(model, cipher, key);
@@ -1206,18 +1207,24 @@ export class CipherService implements CipherServiceAbstraction {
     this.sortedCiphersCache.clear();
   }
 
-  private async encryptWithCipherKey(
-    model: CipherView,
-    cipher: Cipher,
-    key: SymmetricCryptoKey
-  ): Promise<Cipher> {
-    if (model.key == null) {
-      model.key = await this.cryptoService.makeCipherKey();
+  private async encryptWithCipherKey(model: CipherView, cipher: Cipher): Promise<Cipher> {
+    let enckey: SymmetricCryptoKey;
+    if (cipher.key == null) {
+      enckey = await this.cryptoService.makeCipherKey();
+      cipher.key = await this.encryptService.encrypt(
+        enckey.key,
+        await this.getKeyForCipherKeyDecryption(cipher)
+      );
+    } else {
+      enckey = new SymmetricCryptoKey(
+        await this.encryptService.decryptToBytes(
+          cipher.key,
+          await this.getKeyForCipherKeyDecryption(cipher)
+        )
+      );
     }
-    cipher.key = await this.cryptoService.encrypt(model.key.key, key);
-    key = model.key;
 
-    return this.encryptCipher(model, cipher, key);
+    return this.encryptCipher(model, cipher, enckey);
   }
 
   private async encryptCipher(
