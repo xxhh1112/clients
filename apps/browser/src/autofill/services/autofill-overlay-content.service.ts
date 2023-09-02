@@ -604,13 +604,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
       const element = record.target as HTMLElement;
       if (record.attributeName !== "style") {
-        const attributes = Array.from(element.attributes);
-        for (let attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
-          const attribute = attributes[attributeIndex];
-          if (attribute.name !== "style") {
-            element.removeAttribute(attribute.name);
-          }
-        }
+        this.removeModifiedElementAttributes(element);
 
         continue;
       }
@@ -619,6 +613,18 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.updateCustomElementDefaultStyles(element);
     }
   };
+
+  private removeModifiedElementAttributes(element: HTMLElement) {
+    const attributes = Array.from(element.attributes);
+    for (let attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
+      const attribute = attributes[attributeIndex];
+      if (attribute.name === "style") {
+        continue;
+      }
+
+      element.removeAttribute(attribute.name);
+    }
+  }
 
   private handleBodyElementMutationObserverUpdate = () => {
     // TODO: CG - This is a very rudimentary check to see if our overlay elements are going to be rendered above other elements.
