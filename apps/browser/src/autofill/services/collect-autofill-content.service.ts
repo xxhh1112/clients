@@ -28,7 +28,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
 
   constructor(
     domElementVisibilityService: DomElementVisibilityService,
-    autofillOverlayContentService: AutofillOverlayContentService
+    autofillOverlayContentService?: AutofillOverlayContentService
   ) {
     this.domElementVisibilityService = domElementVisibilityService;
     this.autofillOverlayContentService = autofillOverlayContentService;
@@ -327,7 +327,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
 
     if (element instanceof HTMLSpanElement) {
       this.autofillFieldElements.set(element, autofillFieldBase);
-      this.autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+      this.autofillOverlayContentService?.setupAutofillOverlayListenerOnField(
         element,
         autofillFieldBase
       );
@@ -368,7 +368,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     };
 
     this.autofillFieldElements.set(element, autofillField);
-    this.autofillOverlayContentService.setupAutofillOverlayListenerOnField(element, autofillField);
+    this.autofillOverlayContentService?.setupAutofillOverlayListenerOnField(element, autofillField);
     return autofillField;
   };
 

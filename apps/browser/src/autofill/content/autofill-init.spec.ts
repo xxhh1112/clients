@@ -4,13 +4,13 @@ import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
 
 import { AutofillExtensionMessage } from "./abstractions/autofill-init";
+import AutofillInit from "./autofill-init";
 
 describe("AutofillInit", () => {
-  let bitwardenAutofillInit: any;
+  let autofillInit: AutofillInit;
 
   beforeEach(() => {
-    require("../content/autofill-init");
-    bitwardenAutofillInit = window.bitwardenAutofillInit;
+    autofillInit = new AutofillInit();
   });
 
   afterEach(() => {
@@ -20,11 +20,11 @@ describe("AutofillInit", () => {
 
   describe("init", () => {
     it("sets up the extension message listeners", () => {
-      jest.spyOn(bitwardenAutofillInit, "setupExtensionMessageListeners");
+      jest.spyOn(autofillInit as any, "setupExtensionMessageListeners");
 
-      bitwardenAutofillInit.init();
+      autofillInit.init();
 
-      expect(bitwardenAutofillInit.setupExtensionMessageListeners).toHaveBeenCalled();
+      expect(autofillInit["setupExtensionMessageListeners"]).toHaveBeenCalled();
     });
   });
 
@@ -47,21 +47,21 @@ describe("AutofillInit", () => {
         collectedTimestamp: 0,
       };
       jest
-        .spyOn(bitwardenAutofillInit.collectAutofillContentService, "getPageDetails")
-        .mockReturnValue(pageDetails);
+        .spyOn(autofillInit["collectAutofillContentService"], "getPageDetails")
+        .mockResolvedValue(pageDetails);
     });
 
     it("returns collected page details for autofill if set to send the details in the response", async () => {
-      const response = await bitwardenAutofillInit["collectPageDetails"](extensionMessage, true);
+      const response = await autofillInit["collectPageDetails"](extensionMessage, true);
 
-      expect(bitwardenAutofillInit.collectAutofillContentService.getPageDetails).toHaveBeenCalled();
+      expect(autofillInit["collectAutofillContentService"].getPageDetails).toHaveBeenCalled();
       expect(response).toEqual(pageDetails);
     });
 
     it("sends the collected page details for autofill using a background script message", async () => {
       jest.spyOn(chrome.runtime, "sendMessage");
 
-      await bitwardenAutofillInit["collectPageDetails"](extensionMessage);
+      await autofillInit["collectPageDetails"](extensionMessage);
 
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
         command: "collectPageDetailsResponse",
@@ -73,15 +73,13 @@ describe("AutofillInit", () => {
   });
 
   describe("fillForm", () => {
-    it("will call the InsertAutofillContentService to fill the form", () => {
+    it("will call the InsertAutofillContentService to fill the form", async () => {
       const fillScript = mock<AutofillScript>();
-      jest
-        .spyOn(bitwardenAutofillInit.insertAutofillContentService, "fillForm")
-        .mockImplementation();
+      jest.spyOn(autofillInit["insertAutofillContentService"], "fillForm").mockImplementation();
 
-      bitwardenAutofillInit.fillForm(fillScript);
+      await autofillInit["fillForm"](fillScript);
 
-      expect(bitwardenAutofillInit.insertAutofillContentService.fillForm).toHaveBeenCalledWith(
+      expect(autofillInit["insertAutofillContentService"].fillForm).toHaveBeenCalledWith(
         fillScript
       );
     });
@@ -91,10 +89,10 @@ describe("AutofillInit", () => {
     it("sets up a chrome runtime on message listener", () => {
       jest.spyOn(chrome.runtime.onMessage, "addListener");
 
-      bitwardenAutofillInit["setupExtensionMessageListeners"]();
+      autofillInit["setupExtensionMessageListeners"]();
 
       expect(chrome.runtime.onMessage.addListener).toHaveBeenCalledWith(
-        bitwardenAutofillInit["handleExtensionMessage"]
+        autofillInit["handleExtensionMessage"]
       );
     });
   });
@@ -116,33 +114,21 @@ describe("AutofillInit", () => {
     it("returns a false value if a extension message handler is not found with the given message command", () => {
       message.command = "unknownCommand";
 
-      const response = bitwardenAutofillInit["handleExtensionMessage"](
-        message,
-        sender,
-        sendResponse
-      );
+      const response = autofillInit["handleExtensionMessage"](message, sender, sendResponse);
 
       expect(response).toBe(false);
     });
 
     it("returns a false value if the message handler does not return a response", async () => {
-      const response1 = await bitwardenAutofillInit["handleExtensionMessage"](
-        message,
-        sender,
-        sendResponse
-      );
+      const response1 = await autofillInit["handleExtensionMessage"](message, sender, sendResponse);
       await Promise.resolve(response1);
 
       expect(response1).not.toBe(false);
 
-      message.command = "fillForm";
+      message.command = "someOtherCommand";
       message.fillScript = mock<AutofillScript>();
 
-      const response2 = await bitwardenAutofillInit["handleExtensionMessage"](
-        message,
-        sender,
-        sendResponse
-      );
+      const response2 = await autofillInit["handleExtensionMessage"](message, sender, sendResponse);
 
       expect(response2).toBe(false);
     });
@@ -158,14 +144,10 @@ describe("AutofillInit", () => {
         collectedTimestamp: 0,
       };
       jest
-        .spyOn(bitwardenAutofillInit.collectAutofillContentService, "getPageDetails")
-        .mockReturnValue(pageDetails);
+        .spyOn(autofillInit["collectAutofillContentService"], "getPageDetails")
+        .mockResolvedValue(pageDetails);
 
-      const response = await bitwardenAutofillInit["handleExtensionMessage"](
-        message,
-        sender,
-        sendResponse
-      );
+      const response = await autofillInit["handleExtensionMessage"](message, sender, sendResponse);
       await Promise.resolve(response);
 
       expect(response).toBe(true);

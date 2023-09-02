@@ -165,7 +165,8 @@ const mainConfig = {
     "content/trigger-autofill-script-injection":
       "./src/autofill/content/trigger-autofill-script-injection.ts",
     "content/autofill": "./src/autofill/content/autofill.js",
-    "content/autofill-init": "./src/autofill/content/autofill-init.ts",
+    "content/bootstrap-autofill": "./src/autofill/content/bootstrap-autofill.ts",
+    "content/bootstrap-autofill-overlay": "./src/autofill/content/bootstrap-autofill-overlay.ts",
     "content/autofiller": "./src/autofill/content/autofiller.ts",
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",

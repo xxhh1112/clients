@@ -47,18 +47,24 @@ export default class AutofillService implements AutofillServiceInterface {
    * is enabled.
    * @param {chrome.runtime.MessageSender} sender
    * @param {boolean} autofillV2
+   * @param {boolean} autofillOverlay
    * @returns {Promise<void>}
    */
-  async injectAutofillScripts(sender: chrome.runtime.MessageSender, autofillV2 = false) {
-    const mainAutofillScript = autofillV2 ? `autofill-init.js` : "autofill.js";
+  async injectAutofillScripts(
+    sender: chrome.runtime.MessageSender,
+    autofillV2 = false,
+    autofillOverlay = false
+  ) {
+    let mainAutofillScript = "autofill.js";
 
-    // TODO: Remove this log statement before asking for final reviews
-    // eslint-disable-next-line
-    console.log(
-      `Injecting Autofill v${
-        mainAutofillScript === "autofill.js" ? "1" : "2"
-      } - ${mainAutofillScript}`
-    );
+    // TODO: CG - This needs to also account for the user setting.
+    const isUsingAutofillOverlay = autofillOverlay && true;
+
+    if (autofillV2) {
+      mainAutofillScript = isUsingAutofillOverlay
+        ? "bootstrap-autofill-overlay.js"
+        : "bootstrap-autofill.js";
+    }
 
     const injectedScripts = [
       mainAutofillScript,

@@ -143,7 +143,8 @@ export default class RuntimeBackground {
       case "triggerAutofillScriptInjection":
         await this.autofillService.injectAutofillScripts(
           sender,
-          await this.configService.getFeatureFlagBool(FeatureFlag.AutofillV2)
+          await this.configService.getFeatureFlagBool(FeatureFlag.AutofillV2),
+          await this.configService.getFeatureFlagBool(FeatureFlag.AutofillOverlay)
         );
         break;
       case "bgCollectPageDetails":

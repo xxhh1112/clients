@@ -1,6 +1,6 @@
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
-import AutofillOverlayContentService from "../services/autofill-overlay-content.service";
+import { AutofillOverlayContentService } from "../services/abstractions/autofill-overlay-content.service";
 import CollectAutofillContentService from "../services/collect-autofill-content.service";
 import DomElementVisibilityService from "../services/dom-element-visibility.service";
 import InsertAutofillContentService from "../services/insert-autofill-content.service";
@@ -12,8 +12,8 @@ import {
 } from "./abstractions/autofill-init";
 
 class AutofillInit implements AutofillInitInterface {
+  private readonly autofillOverlayContentService: AutofillOverlayContentService | undefined;
   private readonly domElementVisibilityService: DomElementVisibilityService;
-  private readonly autofillOverlayContentService: AutofillOverlayContentService;
   private readonly collectAutofillContentService: CollectAutofillContentService;
   private readonly insertAutofillContentService: InsertAutofillContentService;
   private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers = {
@@ -31,10 +31,11 @@ class AutofillInit implements AutofillInitInterface {
   /**
    * AutofillInit constructor. Initializes the DomElementVisibilityService,
    * CollectAutofillContentService and InsertAutofillContentService classes.
+   * @param {AutofillOverlayContentService} autofillOverlayContentService
    */
-  constructor() {
+  constructor(autofillOverlayContentService?: AutofillOverlayContentService) {
+    this.autofillOverlayContentService = autofillOverlayContentService;
     this.domElementVisibilityService = new DomElementVisibilityService();
-    this.autofillOverlayContentService = new AutofillOverlayContentService();
     this.collectAutofillContentService = new CollectAutofillContentService(
       this.domElementVisibilityService,
       this.autofillOverlayContentService
@@ -90,26 +91,49 @@ class AutofillInit implements AutofillInitInterface {
    * @private
    */
   private async fillForm(fillScript: AutofillScript) {
-    this.autofillOverlayContentService.isCurrentlyFilling = true;
+    this.updateOverlayIsCurrentlyFilling(true);
     await this.insertAutofillContentService.fillForm(fillScript);
 
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
     setTimeout(() => {
-      this.autofillOverlayContentService.isCurrentlyFilling = false;
+      this.updateOverlayIsCurrentlyFilling(false);
       this.autofillOverlayContentService.focusMostRecentOverlayField();
     }, 100);
   }
 
+  private updateOverlayIsCurrentlyFilling(isCurrentlyFilling: boolean) {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
+    this.autofillOverlayContentService.isCurrentlyFilling = isCurrentlyFilling;
+  }
+
   private openAutofillOverlay(focusFieldElement: boolean) {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
     this.autofillOverlayContentService.openAutofillOverlay(focusFieldElement);
   }
 
   private blurAndRemoveOverlay() {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
     this.autofillOverlayContentService.blurMostRecentOverlayField();
     this.removeAutofillOverlay();
   }
 
   private removeAutofillOverlay() {
-    if (this.autofillOverlayContentService.isFieldCurrentlyFocused) {
+    if (
+      !this.autofillOverlayContentService ||
+      this.autofillOverlayContentService.isFieldCurrentlyFocused
+    ) {
       return;
     }
 
@@ -122,10 +146,18 @@ class AutofillInit implements AutofillInitInterface {
   }
 
   private addNewVaultItemFromOverlay() {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
     this.autofillOverlayContentService.addNewVaultItem();
   }
 
   private redirectOverlayFocusOut(message: any) {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
     this.autofillOverlayContentService.redirectOverlayFocusOut(message?.data?.direction);
   }
 
@@ -168,9 +200,4 @@ class AutofillInit implements AutofillInitInterface {
   };
 }
 
-(function () {
-  if (!window.bitwardenAutofillInit) {
-    window.bitwardenAutofillInit = new AutofillInit();
-    window.bitwardenAutofillInit.init();
-  }
-})();
+export default AutofillInit;
