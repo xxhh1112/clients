@@ -1,4 +1,3 @@
-import { Substitute } from "@fluffy-spoon/substitute";
 import { mock, mockReset } from "jest-mock-extended";
 
 import { makeStaticByteArray } from "../../../spec/utils";
@@ -33,7 +32,7 @@ import { CipherView } from "../models/view/cipher.view";
 import { CipherService } from "./cipher.service";
 
 const ENCRYPTED_TEXT = "This data has been encrypted";
-const ENCRYPTED_BYTES = Substitute.for<EncArrayBuffer>();
+const ENCRYPTED_BYTES = mock<EncArrayBuffer>();
 const DATE_NOW = new Date();
 const UNSUPPORTED_VERSION = "2023.2.0";
 
