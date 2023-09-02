@@ -120,6 +120,10 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
     }
   }
 
+  // We are passing null into the EncString.decrypt() method here because we want to force the
+  // decryption to use the key that is passed in.  Organization keys are not relevant since we are implementing
+  // to cipher-level encryption.
+  // We will refactor the EncString.decrypt() in https://bitwarden.atlassian.net/browse/PM-3762
   async decrypt(encKey: SymmetricCryptoKey): Promise<CipherView> {
     const model = new CipherView(this);
 
