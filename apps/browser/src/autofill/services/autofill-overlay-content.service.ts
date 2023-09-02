@@ -6,16 +6,13 @@ import { FocusedFieldData } from "../background/abstractions/overlay.background"
 import AutofillField from "../models/autofill-field";
 import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
 import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
-import {
-  AutofillOverlayElement,
-  RedirectFocusDirection,
-} from "../overlay/utils/autofill-overlay.enum";
+import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
+import { AutofillOverlayElement, RedirectFocusDirection } from "../utils/autofill-overlay.enum";
 import {
   generateRandomCustomElementName,
   sendExtensionMessage,
   setElementStyles,
-} from "../overlay/utils/utils";
-import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
+} from "../utils/utils";
 
 import { AutofillOverlayContentService as AutofillOverlayContentServiceInterface } from "./abstractions/autofill-overlay-content.service";
 import { AutoFillConstants } from "./autofill-constants";

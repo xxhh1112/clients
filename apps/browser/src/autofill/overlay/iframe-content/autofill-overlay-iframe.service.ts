@@ -1,8 +1,8 @@
+import { setElementStyles } from "../../utils/utils";
 import {
   BackgroundPortMessageHandlers,
   AutofillOverlayIframeService as AutofillOverlayIframeServiceInterface,
 } from "../abstractions/autofill-overlay-iframe.service";
-import { setElementStyles } from "../utils/utils";
 
 class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterface {
   private port: chrome.runtime.Port | null = null;

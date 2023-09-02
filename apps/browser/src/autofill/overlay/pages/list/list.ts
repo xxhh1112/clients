@@ -2,10 +2,13 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import {
+  AutofillOverlayElement,
+  RedirectFocusDirection,
+} from "../../../utils/autofill-overlay.enum";
+import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "../../../utils/svg-icons";
+import { buildSvgDomElement } from "../../../utils/utils";
 import { OverlayListWindowMessageHandlers } from "../../abstractions/list";
-import { AutofillOverlayElement, RedirectFocusDirection } from "../../utils/autofill-overlay.enum";
-import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "../../utils/svg-icons";
-import { buildSvgDomElement } from "../../utils/utils";
 
 require("./list.scss");
 

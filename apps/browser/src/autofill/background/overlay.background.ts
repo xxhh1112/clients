@@ -17,11 +17,8 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
-import {
-  AutofillOverlayElement,
-  AutofillOverlayPort,
-} from "../overlay/utils/autofill-overlay.enum";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
+import { AutofillOverlayElement, AutofillOverlayPort } from "../utils/autofill-overlay.enum";
 
 import {
   FocusedFieldData,

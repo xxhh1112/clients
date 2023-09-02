@@ -1,4 +1,4 @@
-import { AutofillOverlayPort } from "../utils/autofill-overlay.enum";
+import { AutofillOverlayPort } from "../../utils/autofill-overlay.enum";
 
 import AutofillOverlayIframeElement from "./autofill-overlay-iframe-element";
 

@@ -216,9 +216,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   private getFormattedAutofillFormsData(): Record<string, AutofillForm> {
     const autofillForms: Record<string, AutofillForm> = {};
-    this.autofillFormElements.forEach(
-      (autofillForm, formElement) => (autofillForms[formElement.opid] = autofillForm)
-    );
+    const autofillFormElements = Array.from(this.autofillFormElements);
+    for (let index = 0; index < autofillFormElements.length; index++) {
+      const [formElement, autofillForm] = autofillFormElements[index];
+      autofillForms[formElement.opid] = autofillForm;
+    }
 
     return autofillForms;
   }
@@ -425,10 +427,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private getFormattedAutofillFieldsData(): AutofillField[] {
-    const formFieldElements: AutofillField[] = [];
-    this.autofillFieldElements.forEach((autofillField) => formFieldElements.push(autofillField));
-
-    return formFieldElements;
+    return Array.from(this.autofillFieldElements.values());
   }
 
   /**
@@ -443,13 +442,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   private createAutofillFieldLabelTag(element: FillableFormFieldElement): string {
     const labelElementsSet: Set<HTMLElement> = new Set(element.labels);
-
     if (labelElementsSet.size) {
       return this.createLabelElementsTag(labelElementsSet);
     }
 
     const labelElements: NodeListOf<HTMLLabelElement> | null = this.queryElementLabels(element);
-    labelElements?.forEach((labelElement) => labelElementsSet.add(labelElement));
+    for (let labelIndex = 0; labelIndex < labelElements?.length; labelIndex++) {
+      labelElementsSet.add(labelElements[labelIndex]);
+    }
 
     let currentElement: HTMLElement | null = element;
     while (currentElement && currentElement !== document.documentElement) {
