@@ -3,6 +3,7 @@ import "lit/polyfill-support.js";
 import { tabbable, FocusableElement } from "tabbable";
 
 import { FocusedFieldData } from "../background/abstractions/overlay.background";
+import { EVENTS } from "../constants";
 import AutofillField from "../models/autofill-field";
 import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
 import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
@@ -55,14 +56,20 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    formFieldElement.addEventListener("blur", this.handleFormFieldBlurEvent);
-    formFieldElement.addEventListener("keyup", this.handleFormFieldKeyupEvent);
+    formFieldElement.addEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
+    formFieldElement.addEventListener(EVENTS.KEYUP, this.handleFormFieldKeyupEvent);
     formFieldElement.addEventListener(
-      "input",
+      EVENTS.INPUT,
       this.handleFormFieldInputEvent(formFieldElement, autofillFieldData)
     );
-    formFieldElement.addEventListener("click", this.handleFormFieldClickEvent(formFieldElement));
-    formFieldElement.addEventListener("focus", this.handleFormFieldFocusEvent(formFieldElement));
+    formFieldElement.addEventListener(
+      EVENTS.CLICK,
+      this.handleFormFieldClickEvent(formFieldElement)
+    );
+    formFieldElement.addEventListener(
+      EVENTS.FOCUS,
+      this.handleFormFieldFocusEvent(formFieldElement)
+    );
 
     if (this.getRootNodeActiveElement(formFieldElement) === formFieldElement) {
       this.triggerFormFieldFocusedAction(formFieldElement);
@@ -488,15 +495,15 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private setOverlayRepositionEventListeners() {
-    globalThis.document.body?.addEventListener("scroll", this.handleOverlayRepositionEvent);
-    globalThis.addEventListener("scroll", this.handleOverlayRepositionEvent);
-    globalThis.addEventListener("resize", this.handleOverlayRepositionEvent);
+    globalThis.document.body?.addEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
+    globalThis.addEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
+    globalThis.addEventListener(EVENTS.RESIZE, this.handleOverlayRepositionEvent);
   }
 
   private removeOverlayRepositionEventListeners() {
-    globalThis.document.body?.removeEventListener("scroll", this.handleOverlayRepositionEvent);
-    globalThis.removeEventListener("scroll", this.handleOverlayRepositionEvent);
-    globalThis.removeEventListener("resize", this.handleOverlayRepositionEvent);
+    globalThis.document.body?.removeEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
+    globalThis.removeEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
+    globalThis.removeEventListener(EVENTS.RESIZE, this.handleOverlayRepositionEvent);
   }
 
   private handleOverlayRepositionEvent = () => {
@@ -536,7 +543,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private initOverlayOnDomContentLoaded() {
     if (globalThis.document.readyState === "loading") {
-      globalThis.document.addEventListener("DOMContentLoaded", this.handleDomContentLoadedEvent);
+      globalThis.document.addEventListener(
+        EVENTS.DOMCONTENTLOADED,
+        this.handleDomContentLoadedEvent
+      );
       return;
     }
 

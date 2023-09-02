@@ -2,6 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import { EVENTS } from "../../../constants";
 import {
   AutofillOverlayElement,
   RedirectFocusDirection,
@@ -85,7 +86,7 @@ class AutofillOverlayList extends HTMLElement {
       `${this.getTranslation("unlockAccount")}, ${this.getTranslation("opensInANewWindow")}`
     );
     unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
-    unlockButtonElement.addEventListener("click", this.handleUnlockButtonClick);
+    unlockButtonElement.addEventListener(EVENTS.CLICK, this.handleUnlockButtonClick);
 
     const overlayListButtonContainer = globalThis.document.createElement("div");
     overlayListButtonContainer.classList.add("overlay-list-button-container");
@@ -150,8 +151,8 @@ class AutofillOverlayList extends HTMLElement {
       `${this.getTranslation("partialUsername")}, ${cipher.login.username}`
     );
     fillCipherElement.append(cipherIcon, cipherDetailsElement);
-    fillCipherElement.addEventListener("click", this.handleFillCipherClickEvent(cipher));
-    fillCipherElement.addEventListener("keyup", this.handleFillCipherKeyUpEvent);
+    fillCipherElement.addEventListener(EVENTS.CLICK, this.handleFillCipherClickEvent(cipher));
+    fillCipherElement.addEventListener(EVENTS.KEYUP, this.handleFillCipherKeyUpEvent);
 
     return fillCipherElement;
   }
@@ -198,8 +199,8 @@ class AutofillOverlayList extends HTMLElement {
       `${this.getTranslation("view")} ${cipher.name}, ${this.getTranslation("opensInANewWindow")}`
     );
     viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
-    viewCipherElement.addEventListener("click", this.handleViewCipherClickEvent(cipher));
-    viewCipherElement.addEventListener("keyup", this.handleViewCipherKeyUpEvent);
+    viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
+    viewCipherElement.addEventListener(EVENTS.KEYUP, this.handleViewCipherKeyUpEvent);
 
     return viewCipherElement;
   }
@@ -304,7 +305,7 @@ class AutofillOverlayList extends HTMLElement {
       `${this.getTranslation("addNewVaultItem")}, ${this.getTranslation("opensInANewWindow")}`
     );
     newItemButton.prepend(buildSvgDomElement(plusIcon));
-    newItemButton.addEventListener("click", this.handeNewItemButtonClick);
+    newItemButton.addEventListener(EVENTS.CLICK, this.handeNewItemButtonClick);
 
     const overlayListButtonContainer = globalThis.document.createElement("div");
     overlayListButtonContainer.classList.add("overlay-list-button-container");
@@ -357,9 +358,9 @@ class AutofillOverlayList extends HTMLElement {
   }
 
   private setupGlobalListeners() {
-    globalThis.addEventListener("message", this.handleWindowMessage);
-    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
-    globalThis.document.addEventListener("keydown", this.handleDocumentKeyDownEvent);
+    globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
+    globalThis.addEventListener(EVENTS.BLUR, this.handleWindowBlurEvent);
+    globalThis.document.addEventListener(EVENTS.KEYDOWN, this.handleDocumentKeyDownEvent);
     this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
   }
 

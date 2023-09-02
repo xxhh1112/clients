@@ -2,6 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import { EVENTS } from "../../../constants";
 import { AutofillOverlayElement } from "../../../utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
@@ -59,7 +60,7 @@ class AutofillOverlayButton extends HTMLElement {
       "aria-label",
       this.getTranslation("toggleBitwardenVaultOverlay")
     );
-    this.buttonElement.addEventListener("click", this.handleButtonElementClick);
+    this.buttonElement.addEventListener(EVENTS.CLICK, this.handleButtonElementClick);
 
     this.updateAuthStatus(authStatus);
 
@@ -110,8 +111,8 @@ class AutofillOverlayButton extends HTMLElement {
   }
 
   private setupWindowMessageListener() {
-    globalThis.addEventListener("message", this.handleWindowMessage);
-    globalThis.addEventListener("blur", this.handleWindowBlurEvent);
+    globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
+    globalThis.addEventListener(EVENTS.BLUR, this.handleWindowBlurEvent);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {

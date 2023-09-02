@@ -10,4 +10,12 @@ export const EVENTS = {
   KEYDOWN: "keydown",
   KEYPRESS: "keypress",
   KEYUP: "keyup",
+  BLUR: "blur",
+  CLICK: "click",
+  FOCUS: "focus",
+  SCROLL: "scroll",
+  RESIZE: "resize",
+  DOMCONTENTLOADED: "DOMContentLoaded",
+  LOAD: "load",
+  MESSAGE: "message",
 } as const;

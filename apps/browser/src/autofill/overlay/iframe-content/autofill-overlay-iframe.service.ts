@@ -1,3 +1,4 @@
+import { EVENTS } from "../../constants";
 import { setElementStyles } from "../../utils/utils";
 import {
   BackgroundPortMessageHandlers,
@@ -53,7 +54,7 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
     this.iframe.setAttribute("title", iframeTitle);
     this.iframe.setAttribute("sandbox", "allow-scripts");
     this.iframe.setAttribute("allowtransparency", "true");
-    this.iframe.addEventListener("load", this.setupPortMessageListener);
+    this.iframe.addEventListener(EVENTS.LOAD, this.setupPortMessageListener);
 
     if (ariaAlert) {
       this.createAriaAlertElement(ariaAlert);
@@ -84,7 +85,7 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
     this.port = chrome.runtime.connect({ name: this.portName });
     this.port.onDisconnect.addListener(this.handlePortDisconnect);
     this.port.onMessage.addListener(this.handlePortMessage);
-    globalThis.addEventListener("message", this.handleWindowMessage);
+    globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
 
     this.announceAriaAlert();
   };
