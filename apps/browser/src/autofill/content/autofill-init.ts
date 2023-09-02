@@ -101,7 +101,7 @@ class AutofillInit implements AutofillInitInterface {
     setTimeout(() => {
       this.updateOverlayIsCurrentlyFilling(false);
       this.autofillOverlayContentService.focusMostRecentOverlayField();
-    }, 100);
+    }, 250);
   }
 
   private updateOverlayIsCurrentlyFilling(isCurrentlyFilling: boolean) {
