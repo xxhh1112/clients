@@ -385,77 +385,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin", { skipNotification: true });
   }
 
-  private setupExtensionMessageListeners() {
-    chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
-    chrome.runtime.onConnect.addListener(this.handlePortOnConnect);
-  }
-
-  private handleExtensionMessage = (
-    message: any,
-    sender: chrome.runtime.MessageSender,
-    sendResponse: (response?: any) => void
-  ) => {
-    const handler: CallableFunction | undefined = this.extensionMessageHandlers[message?.command];
-    if (!handler) {
-      return false;
-    }
-
-    const messageResponse = handler({ message, sender });
-    if (!messageResponse) {
-      return false;
-    }
-
-    Promise.resolve(messageResponse).then((response) => sendResponse(response));
-    return true;
-  };
-
-  private handlePortOnConnect = async (port: chrome.runtime.Port) => {
-    const isOverlayListPort = port.name === AutofillOverlayPort.List;
-
-    if (isOverlayListPort) {
-      this.overlayListPort = port;
-    } else {
-      this.overlayButtonPort = port;
-    }
-
-    port.onMessage.addListener(this.handleOverlayElementPortMessage);
-    port.postMessage({
-      command: `initAutofillOverlay${isOverlayListPort ? "List" : "Button"}`,
-      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
-      styleSheetUrl: chrome.runtime.getURL(`overlay/${isOverlayListPort ? "list" : "button"}.css`),
-      translations: this.getTranslations(),
-      ciphers: isOverlayListPort ? this.getOverlayCipherData() : null,
-    });
-    this.updateOverlayPosition(
-      isOverlayListPort ? AutofillOverlayElement.List : AutofillOverlayElement.Button
-    );
-  };
-
-  private handleOverlayElementPortMessage = (message: any, port: chrome.runtime.Port) => {
-    const command = message?.command;
-    let handler: CallableFunction | undefined;
-
-    if (port.name === AutofillOverlayPort.Button) {
-      handler = this.overlayButtonPortMessageHandlers[command];
-    }
-
-    if (port.name === AutofillOverlayPort.List) {
-      handler = this.overlayListPortMessageHandlers[command];
-    }
-
-    if (!handler) {
-      return;
-    }
-
-    handler({ message, port });
-  };
-
   private async viewSelectedCipher(message: any, sender: chrome.runtime.MessageSender) {
-    if (!message.overlayCipherId) {
+    const cipher = this.overlayCiphers.get(message.overlayCipherId);
+    if (!cipher) {
       return;
     }
 
-    const cipher = this.overlayCiphers.get(message.overlayCipherId);
     await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
       cipherId: cipher.id,
       action: "show-autofill-button",
@@ -544,6 +479,71 @@ class OverlayBackground implements OverlayBackgroundInterface {
       cipherId: cipherView.id,
     });
   }
+
+  private setupExtensionMessageListeners() {
+    chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
+    chrome.runtime.onConnect.addListener(this.handlePortOnConnect);
+  }
+
+  private handleExtensionMessage = (
+    message: any,
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response?: any) => void
+  ) => {
+    const handler: CallableFunction | undefined = this.extensionMessageHandlers[message?.command];
+    if (!handler) {
+      return false;
+    }
+
+    const messageResponse = handler({ message, sender });
+    if (!messageResponse) {
+      return false;
+    }
+
+    Promise.resolve(messageResponse).then((response) => sendResponse(response));
+    return true;
+  };
+
+  private handlePortOnConnect = async (port: chrome.runtime.Port) => {
+    const isOverlayListPort = port.name === AutofillOverlayPort.List;
+
+    if (isOverlayListPort) {
+      this.overlayListPort = port;
+    } else {
+      this.overlayButtonPort = port;
+    }
+
+    port.onMessage.addListener(this.handleOverlayElementPortMessage);
+    port.postMessage({
+      command: `initAutofillOverlay${isOverlayListPort ? "List" : "Button"}`,
+      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      styleSheetUrl: chrome.runtime.getURL(`overlay/${isOverlayListPort ? "list" : "button"}.css`),
+      translations: this.getTranslations(),
+      ciphers: isOverlayListPort ? this.getOverlayCipherData() : null,
+    });
+    this.updateOverlayPosition(
+      isOverlayListPort ? AutofillOverlayElement.List : AutofillOverlayElement.Button
+    );
+  };
+
+  private handleOverlayElementPortMessage = (message: any, port: chrome.runtime.Port) => {
+    const command = message?.command;
+    let handler: CallableFunction | undefined;
+
+    if (port.name === AutofillOverlayPort.Button) {
+      handler = this.overlayButtonPortMessageHandlers[command];
+    }
+
+    if (port.name === AutofillOverlayPort.List) {
+      handler = this.overlayListPortMessageHandlers[command];
+    }
+
+    if (!handler) {
+      return;
+    }
+
+    handler({ message, port });
+  };
 
   // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THIS MODIFICATION.
   // Other password managers leverage this privacy API to force autofill settings to be disabled.

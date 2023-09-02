@@ -2,6 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { tabbable, FocusableElement } from "tabbable";
 
+import { FocusedFieldData } from "../background/abstractions/overlay.background";
 import AutofillField from "../models/autofill-field";
 import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
 import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
@@ -30,6 +31,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private overlayButtonElement: HTMLElement;
   private overlayListElement: HTMLElement;
   private mostRecentlyFocusedField: ElementWithOpId<FormFieldElement>;
+  private focusedFieldData: FocusedFieldData;
   private userInteractionEventTimeout: NodeJS.Timeout;
   private overlayElementsMutationObserver: MutationObserver;
   private bodyElementMutationObserver: MutationObserver;
@@ -83,18 +85,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   focusMostRecentOverlayField() {
-    if (!this.mostRecentlyFocusedField) {
-      return;
-    }
-
-    this.mostRecentlyFocusedField.focus();
+    this.mostRecentlyFocusedField?.focus();
   }
 
   blurMostRecentOverlayField() {
-    if (!this.mostRecentlyFocusedField) {
-      return;
-    }
-
     this.mostRecentlyFocusedField?.blur();
   }
 
@@ -396,12 +390,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const { width, height, top, left } = await this.getMostRecentlyFocusedFieldRects(
       formFieldElement
     );
-    const focusedFieldData = {
+    this.focusedFieldData = {
       focusedFieldStyles: { paddingRight, paddingLeft },
       focusedFieldRects: { width, height, top, left },
     };
 
-    sendExtensionMessage("updateFocusedFieldData", { focusedFieldData });
+    sendExtensionMessage("updateFocusedFieldData", { focusedFieldData: this.focusedFieldData });
   }
 
   private async getMostRecentlyFocusedFieldRects(
@@ -438,7 +432,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
         {
           root: globalThis.document.body,
           rootMargin: "0px",
-          threshold: 0.9999,
+          threshold: 0.9999, // Safari doesn't seem to function properly with a threshold of 1
         }
       );
       intersectionObserver.observe(formFieldElement);
@@ -515,7 +509,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.toggleOverlayHidden(true);
     this.clearUserInteractionEventTimeout();
-    this.userInteractionEventTimeout = setTimeout(this.triggerOverlayRepositionUpdates, 500);
+    this.userInteractionEventTimeout = setTimeout(this.triggerOverlayRepositionUpdates, 750);
   };
 
   private triggerOverlayRepositionUpdates = async () => {
@@ -529,6 +523,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.updateOverlayElementsPosition();
     this.toggleOverlayHidden(false);
     this.clearUserInteractionEventTimeout();
+
+    if (this.focusedFieldData.focusedFieldRects?.top > 0) {
+      return;
+    }
+
+    this.removeAutofillOverlay();
   };
 
   private clearUserInteractionEventTimeout() {
