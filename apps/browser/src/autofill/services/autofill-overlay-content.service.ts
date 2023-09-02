@@ -596,22 +596,28 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    mutationRecord.forEach((record) => {
+    for (let recordIndex = 0; recordIndex < mutationRecord.length; recordIndex++) {
+      const record = mutationRecord[recordIndex];
       if (record.type !== "attributes") {
-        return;
+        continue;
       }
 
       const element = record.target as HTMLElement;
       if (record.attributeName !== "style") {
         const attributes = Array.from(element.attributes);
-        attributes.forEach((attribute) => element.removeAttribute(attribute.name));
+        for (let attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
+          const attribute = attributes[attributeIndex];
+          if (attribute.name !== "style") {
+            element.removeAttribute(attribute.name);
+          }
+        }
 
-        return;
+        continue;
       }
 
       element.removeAttribute("style");
       this.updateCustomElementDefaultStyles(element);
-    });
+    }
   };
 
   private handleBodyElementMutationObserverUpdate = () => {
