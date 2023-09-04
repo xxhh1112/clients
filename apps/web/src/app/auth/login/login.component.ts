@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
@@ -40,8 +40,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   policies: ListResponse<PolicyResponse>;
   showPasswordless = false;
 
-  protected showWebauthnLogin$: Observable<boolean>;
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -66,7 +64,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     loginService: LoginService,
-    private webauthnService: WebauthnLoginServiceAbstraction
+    webauthnService: WebauthnLoginServiceAbstraction
   ) {
     super(
       devicesApiService,
@@ -84,7 +82,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       formBuilder,
       formValidationErrorService,
       route,
-      loginService
+      loginService,
+      webauthnService
     );
     this.onSuccessfulLogin = async () => {
       this.messagingService.send("setFullWidth");
@@ -94,8 +93,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   }
 
   async ngOnInit() {
-    this.showWebauthnLogin$ = this.webauthnService.enabled$;
-
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.premium != null) {

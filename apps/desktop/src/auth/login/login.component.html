@@ -45,6 +45,14 @@
               {{ "continue" | i18n }}
             </button>
           </div>
+
+          <div class="buttons-row" *ngIf="showWebauthnLogin$ | async">
+            <a type="button" class="btn block" routerLink="/login-with-passkey">
+              <span>
+                <i class="bwi bwi-mobile" aria-hidden="true"></i> {{ "loginWithPasskey" | i18n }}
+              </span>
+            </a>
+          </div>
         </div>
         <div class="sub-options">
           <p class="no-margin">{{ "newAroundHere" | i18n }}</p>

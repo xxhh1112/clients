@@ -46,6 +46,7 @@ export class BaseLoginWithWebauthnComponent implements OnInit {
 
       assertion = await this.webauthnService.assertCredential(options);
     } catch (error) {
+      this.validationService.showError(error);
       this.currentState = "assertFailed";
       return;
     }

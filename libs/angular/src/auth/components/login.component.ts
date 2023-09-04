@@ -1,11 +1,13 @@
 import { Directive, ElementRef, NgZone, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Observable } from "rxjs";
 import { take } from "rxjs/operators";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { WebauthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
@@ -49,6 +51,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
+  protected showWebauthnLogin$: Observable<boolean>;
 
   get loggedEmail() {
     return this.formGroup.value.email;
@@ -70,7 +73,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     protected formBuilder: FormBuilder,
     protected formValidationErrorService: FormValidationErrorsService,
     protected route: ActivatedRoute,
-    protected loginService: LoginService
+    protected loginService: LoginService,
+    protected webauthnService: WebauthnLoginServiceAbstraction
   ) {
     super(environmentService, i18nService, platformUtilsService);
   }
@@ -80,6 +84,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   }
 
   async ngOnInit() {
+    this.showWebauthnLogin$ = this.webauthnService.enabled$;
+
     this.route?.queryParams.subscribe((params) => {
       if (params != null) {
         const queryParamsEmail = params["email"];

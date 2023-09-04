@@ -7,6 +7,7 @@ import { SharedModule } from "../../app/shared/shared.module";
 
 import { LoginDecryptionOptionsComponent } from "./login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "./login-with-device.component";
+import { LoginWithWebauthnComponent } from "./login-with-webauthn.component";
 import { LoginComponent } from "./login.component";
 
 @NgModule({
@@ -14,6 +15,7 @@ import { LoginComponent } from "./login.component";
   declarations: [
     LoginComponent,
     LoginWithDeviceComponent,
+    LoginWithWebauthnComponent,
     EnvironmentSelectorComponent,
     LoginDecryptionOptionsComponent,
   ],

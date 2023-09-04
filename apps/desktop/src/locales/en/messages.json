@@ -2085,6 +2085,27 @@
   "loginWithMasterPassword": {
     "message": "Log in with master password"
   },
+  "loginWithPasskey": {
+    "message": "Log in with passkey"
+  },
+  "loginWithPasskeyInfo": {
+    "message": "Use a generated passkey that will automatically log you in without a password. Biometrics, like facial recognition or fingerprint, or another FIDO2 security method will verify your identity."
+  },
+    "tryAgain": {
+    "message": "Try again"
+  },
+  "readingPasskeyLoading": {
+    "message": "Reading passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "errorReadingPasskey": {
+    "message": "Error reading passkey"
+  },
+  "errorReadingPasskeyInfo": {
+    "message": "There was a problem reading your passkey."
+  },
   "loggingInAs": {
     "message": "Logging in as"
   },

@@ -16,6 +16,7 @@ import { HintComponent } from "../auth/hint.component";
 import { LockComponent } from "../auth/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/login/login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "../auth/login/login-with-device.component";
+import { LoginWithWebauthnComponent } from "../auth/login/login-with-webauthn.component";
 import { LoginComponent } from "../auth/login/login.component";
 import { RegisterComponent } from "../auth/register.component";
 import { RemovePasswordComponent } from "../auth/remove-password.component";
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: "login-with-device",
     component: LoginWithDeviceComponent,
+  },
+  {
+    path: "login-with-passkey",
+    component: LoginWithWebauthnComponent,
   },
   {
     path: "admin-approval-requested",

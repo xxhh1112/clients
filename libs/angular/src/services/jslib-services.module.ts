@@ -751,7 +751,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         CryptoService,
         ConfigServiceAbstraction,
         NAVIGATOR_CREDENTIALS,
-        LoginServiceAbstraction,
+        LogService,
       ],
     },
     {
@@ -762,7 +762,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         AuthServiceAbstraction,
         ConfigServiceAbstraction,
         NAVIGATOR_CREDENTIALS,
-        LoginServiceAbstraction,
+        LogService,
       ],
     },
   ],
