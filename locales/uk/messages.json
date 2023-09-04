@@ -711,17 +711,11 @@
   "unexpectedError": {
     "message": "Сталася неочікувана помилка."
   },
-  "expirationDateError": {
-    "message": "Вкажіть термін дії в майбутньому."
-  },
   "emailAddress": {
     "message": "Адреса е-пошти"
   },
   "yourVaultIsLocked": {
     "message": "Сховище заблоковано. Введіть головний пароль для продовження."
-  },
-  "uuid": {
-    "message": "UUID"
   },
   "unlock": {
     "message": "Розблокувати"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "Копіювати код підтвердження"
-  },
-  "copyUuid": {
-    "message": "Копіювати UUID"
   },
   "warning": {
     "message": "Попередження"
@@ -1292,31 +1283,6 @@
   },
   "importEncKeyError": {
     "message": "Помилка розшифрування експортованого файлу. Ваш ключ шифрування відрізняється від ключа, використаного для експортування даних."
-  },
-  "importDestination": {
-    "message": "Призначення імпорту"
-  },
-  "learnAboutImportOptions": {
-    "message": "Дізнайтеся про параметри імпорту"
-  },
-  "selectImportFolder": {
-    "message": "Вибрати теку"
-  },
-  "selectImportCollection": {
-    "message": "Вибрати збірку"
-  },
-  "importTargetHint": {
-    "message": "Оберіть цю опцію, якщо ви хочете, щоб вміст імпортованого файлу було збережено в $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "Файл містить непризначені елементи."
   },
   "selectFormat": {
     "message": "Оберіть формат імпортованого файлу"
@@ -1924,8 +1890,8 @@
   "premiumSignUpStorage": {
     "message": "1 ГБ зашифрованого сховища для файлів."
   },
-  "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+  "premiumSignUpTwoStep": {
+    "message": "Додаткові можливості двоетапної перевірки, наприклад, YubiKey, FIDO U2F та Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Екстрений доступ"
@@ -2039,9 +2005,6 @@
         "example": "month or year"
       }
     }
-  },
-  "paymentChargedWithUnpaidSubscription": {
-    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Ваш тарифний план має 7 днів безплатного пробного періоду. З вас не буде стягнуто плату до завершення цього періоду. Ви можете скасувати це в будь-який час."
@@ -3539,9 +3502,6 @@
   "vaultTimeoutDesc": {
     "message": "Оберіть дію, яка виконається після завершення часу очікування сховища."
   },
-  "vaultTimeoutLogoutDesc": {
-    "message": "Виберіть, коли ваше сховище буде закрито."
-  },
   "oneMinute": {
     "message": "1 хвилина"
   },
@@ -3630,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "Цей елемент має старі вкладені файли, які необхідно виправити."
   },
-  "attachmentFixDescription": {
-    "message": "Це вкладення використовує застаріле шифрування. Виберіть \"Виправити\", щоб завантажити, повторно зашифрувати та вивантажити вкладення."
+  "attachmentFixDesc": {
+    "message": "Цей старий вкладений файл необхідно виправити. Натисніть, щоб дізнатися більше."
   },
   "fix": {
     "message": "Виправити",
@@ -3848,11 +3808,29 @@
   "restoreSelected": {
     "message": "Відновити вибрані"
   },
+  "restoreItem": {
+    "message": "Відновити запис"
+  },
   "restoredItem": {
     "message": "Запис відновлено"
   },
   "restoredItems": {
     "message": "Записи відновлено"
+  },
+  "restoreItemConfirmation": {
+    "message": "Ви дійсно хочете відновити цей запис?"
+  },
+  "restoreItems": {
+    "message": "Відновити записи"
+  },
+  "restoreSelectedItemsDesc": {
+    "message": "Вибрані записи ($COUNT$) для відновлення. Ви справді хочете відновити всі ці записи?",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
   },
   "restoredItemId": {
     "message": "Запис $ID$ відновлено",
@@ -4727,7 +4705,7 @@
     "message": "Помилка"
   },
   "accountRecoveryManageUsers": {
-    "message": "Разом із дозволом на керування відновленням облікового запису також необхідно надати дозвіл на керування користувачами"
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Налаштування постачальника"
@@ -4938,8 +4916,8 @@
   "disablePersonalVaultExport": {
     "message": "Вилучити експорт особистого сховища"
   },
-  "disablePersonalVaultExportDescription": {
-    "message": "Не дозволяти учасникам експортувати дані з їхнього особистого сховища."
+  "disablePersonalVaultExportDesc": {
+    "message": "Заборонити учасникам експортувати дані їхнього особистого сховища."
   },
   "vaultExportDisabled": {
     "message": "Експорт сховища вилучено"
@@ -5442,8 +5420,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Експортування сховища організації"
   },
-  "exportingIndividualVaultDescription": {
-    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без пов'язаних вкладень.",
+  "exportingPersonalVaultDescription": {
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без історії та вкладень.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5451,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Елементи особистих сховищ або інших організацій не будуть включені.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Будуть експортовані лише записи сховища організації, пов'язані з $ORGANIZATION$. Записи особистого сховища та записи з інших організацій не буде включено.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6639,16 +6617,16 @@
     "message": "Продовжуючи, ви вийдете з усіх активних сеансів. Необхідно буде повторно виконати вхід і пройти двоетапну перевірку. Перед зміною налаштувань шифрування ми рекомендуємо експортувати ваше сховище, щоб запобігти можливій втраті даних."
   },
   "secretsManager": {
-    "message": "Менеджер секретів"
+    "message": "Керування секретами"
   },
   "secretsManagerBeta": {
-    "message": "Менеджер секретів (бета-версія)"
+    "message": "Керування секретами (бета-версія)"
   },
   "secretsManagerAccessDescription": {
-    "message": "Активувати доступ користувача до менеджера секретів."
+    "message": "Активувати доступ користувача до керування секретами."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Цей користувач має доступ до менеджера секретів"
+    "message": "Цей користувач має доступ до керування секретами"
   },
   "important": {
     "message": "Важливо:"
@@ -6705,7 +6683,7 @@
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "Менеджер секретів CLI"
+    "message": "Керування секретами CLI"
   },
   "importSecrets": {
     "message": "Імпортувати секрети"
@@ -6748,10 +6726,10 @@
     "message": "Потрібен вибір."
   },
   "secretsManagerSubscriptionDesc": {
-    "message": "Увімкніть доступ організації до менеджера секретів безплатно впродовж періоду бета-тестування. Користувачам можна надати доступ в бета-версії в меню учасників."
+    "message": "Увімкніть доступ організації до керування секретами безплатно упродовж періоду бета-тестування. Користувачам можна надати доступ в бета-версії в меню учасників."
   },
   "secretsManagerEnable": {
-    "message": "Увімкнути менеджер секретів (бета-версія)"
+    "message": "Увімкнути керування секретами (бета-версія)"
   },
   "saPeopleWarningTitle": {
     "message": "Токени доступу все ще доступні"
@@ -6824,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Вимагати від наявних учасників змінювати паролі"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Регіон"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "ЄС",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "США",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас немає дозволу на видалення цього проєкту",
@@ -6841,60 +6824,28 @@
   "updateKdfSettings": {
     "message": "Оновити налаштування KDF"
   },
-  "loginInitiated": {
-    "message": "Ініційовано вхід"
-  },
-  "deviceApprovalRequired": {
-    "message": "Необхідне підтвердження пристрою. Виберіть варіант підтвердження нижче:"
-  },
-  "rememberThisDevice": {
-    "message": "Запам'ятати цей пристрій"
-  },
-  "uncheckIfPublicDevice": {
-    "message": "Зніміть позначку, якщо використовуєте загальнодоступний пристрій"
-  },
-  "approveFromYourOtherDevice": {
-    "message": "Затвердіть з іншого пристрою"
-  },
-  "requestAdminApproval": {
-    "message": "Запит підтвердження адміністратора"
-  },
-  "approveWithMasterPassword": {
-    "message": "Затвердити з головним паролем"
-  },
-  "trustedDeviceEncryption": {
-    "message": "Шифрування довіреного пристрою"
-  },
   "trustedDevices": {
-    "message": "Довірені пристрої"
+    "message": "Trusted devices"
   },
-  "memberDecryptionOptionTdeDescriptionPartOne": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Після авторизації учасники розшифровуватимуть дані сховища з використанням ключа, збереженого на їхньому пристрої.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionLinkOne": {
-    "message": "Політику єдиної",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "Якщо використовується",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionPartTwo": {
-    "message": "організації,",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "ця опція, ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionLinkTwo": {
-    "message": "політику обов'язкового",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "буде увімкнено політику єдиної",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionPartThree": {
-    "message": "SSO та",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionOptionTdeDescriptionLinkThree": {
-    "message": "політику адміністрування облікового",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionOptionTdeDescriptionPartFour": {
-    "message": "запису з автоматичним розгортанням буде увімкнено, якщо використовується ця опція.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "організації та адміністрування відновлення облікового запису.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ не знайдено",
@@ -6912,18 +6863,18 @@
     "message": "Користувач оновив пароль під час відновлення облікового запису."
   },
   "activatedAccessToSecretsManager": {
-    "message": "Активовано доступ до менеджера секретів",
+    "message": "Активовано доступ до керування секретами",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
   "activateAccess": {
     "message": "Активувати доступ"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Надати зазначеним учасникам доступ до менеджера секретів. Роль, надана в менеджері паролів, буде застосована до менеджера секретів.",
+    "message": "Надати зазначеним учасникам доступ до керування секретами. Роль, надана в менеджері паролів, буде застосована до керування секретами.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
   "activateSecretsManager": {
-    "message": "Активувати менеджер секретів"
+    "message": "Активувати керування секретами"
   },
   "yourOrganizationsFingerprint": {
     "message": "Фраза відбитка вашої організації",
@@ -6983,27 +6934,6 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Вилучення учасників, які не мають головного пароля, попередньо не встановивши його для них, може призвести до обмеження доступу до їхніх облікових записів."
   },
-  "approvedAuthRequest": {
-    "message": "Затверджений пристрій для $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "First 8 Character of a GUID"
-      }
-    }
-  },
-  "rejectedAuthRequest": {
-    "message": "Заборонений пристрій для $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "First 8 Character of a GUID"
-      }
-    }
-  },
-  "requestedDeviceApproval": {
-    "message": "Запит підтвердження пристрою."
-  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Розпочніть 7-денний пробний період Bitwarden для $ORG$",
     "placeholders": {
@@ -7024,30 +6954,6 @@
   },
   "selectedRegionFlag": {
     "message": "Прапор вибраного регіону"
-  },
-  "accountSuccessfullyCreated": {
-    "message": "Обліковий запис успішно створено!"
-  },
-  "adminApprovalRequested": {
-    "message": "Запитано затвердження адміністратором"
-  },
-  "adminApprovalRequestSentToAdmins": {
-    "message": "Ваш запит відправлено адміністратору."
-  },
-  "youWillBeNotifiedOnceApproved": {
-    "message": "Ви отримаєте сповіщення після затвердження."
-  },
-  "troubleLoggingIn": {
-    "message": "Проблема під час входу?"
-  },
-  "loginApproved": {
-    "message": "Вхід затверджено"
-  },
-  "userEmailMissing": {
-    "message": "Немає адреси електронної пошти"
-  },
-  "deviceTrusted": {
-    "message": "Довірений пристрій"
   },
   "sendsNoItemsTitle": {
     "message": "Немає активних відправлень",
@@ -7112,25 +7018,20 @@
     "message": "Додати менеджер секретів"
   },
   "addSecretsManagerUpgradeDesc": {
-    "message": "Додайте менеджер секретів до свого оновленого плану, щоб підтримувати доступ до будь-яких секретів, створених у вашому минулому плані."
+    "message": "Додайте Менеджер секретів до свого оновленого плану, щоб підтримувати доступ до будь-яких секретів, створених у вашому минулому плані."
   },
   "additionalServiceAccounts": {
     "message": "Додаткові службові облікові записи"
   },
-  "includedServiceAccounts": {
-    "message": "Ваш тарифний план включає $COUNT$ службових облікових записів.",
+  "additionalServiceAccountsDesc": {
+    "message": "Ваш план включає $COUNT$ службових облікових записів. Ви можете додати більше службових облікових записів за $COST$ на місяць.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "Ви можете додати більше службових облікових записів за $COST$/місяць.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
@@ -7158,30 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Потенційна максимальна вартість службового облікового запису"
-  },
-  "loggedInExclamation": {
-    "message": "Ви увійшли!"
-  },
-  "smBetaEndedDesc": {
-    "message": "Бета-тестування менеджера секретів завершилося $BETA_ENDING_DATE$. У вас лишилося $DAYS$ днів, щоб додати менеджер секретів до свого тарифного плану та керувати доступом до даних. Зверніться до команди підтримки клієнтів, щоб додати менеджер секретів до своєї передплати.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Бета-тестування завершилося"
-  },
-  "beta": {
-    "message": "Бета"
-  },
-  "alreadyHaveAccount": {
-    "message": "Вже маєте обліковий запис?"
   }
 }

@@ -711,17 +711,11 @@
   "unexpectedError": {
     "message": "Дошло је до неочекиване грешке."
   },
-  "expirationDateError": {
-    "message": "Изаберите датум истека који је у будућности."
-  },
   "emailAddress": {
     "message": "Имејл"
   },
   "yourVaultIsLocked": {
     "message": "Сеф је блокиран. Унесите главну лозинку за наставак."
-  },
-  "uuid": {
-    "message": "UUID"
   },
   "unlock": {
     "message": "Откључај"
@@ -953,9 +947,6 @@
   },
   "copyVerificationCode": {
     "message": "Копирај верификациони код"
-  },
-  "copyUuid": {
-    "message": "Копирај UUID"
   },
   "warning": {
     "message": "Упозорење"
@@ -1293,31 +1284,6 @@
   "importEncKeyError": {
     "message": "Грешка у дешифрирању извозне датотеке. Ваш кључ за шифровање не одговара кључу који се користио за извоз података."
   },
-  "importDestination": {
-    "message": "Смештај увоза"
-  },
-  "learnAboutImportOptions": {
-    "message": "Сазнајте више о опцијама увоза"
-  },
-  "selectImportFolder": {
-    "message": "Изабери фасциклу"
-  },
-  "selectImportCollection": {
-    "message": "Изабери колекцију"
-  },
-  "importTargetHint": {
-    "message": "Изаберите ову опцију ако желите да се садржај увезене датотеке премести у $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
-    "placeholders": {
-      "destination": {
-        "content": "$1",
-        "example": "folder or collection"
-      }
-    }
-  },
-  "importUnassignedItemsError": {
-    "message": "Датотека садржи недодељене ставке."
-  },
   "selectFormat": {
     "message": "Одабрати формат датотеке за увоз"
   },
@@ -1365,7 +1331,7 @@
     "message": "Прикажи иконе сајтова"
   },
   "faviconDesc": {
-    "message": "Прикажи препознатљиву иконицу поред сваке ставке за пријаву."
+    "message": "Прикажи препознатљиву слику поред сваке ставке за пријаву."
   },
   "enableFullWidth": {
     "message": "Упали пуни ширину распореда",
@@ -1924,8 +1890,8 @@
   "premiumSignUpStorage": {
     "message": "1ГБ шифровано складиште за прилоге."
   },
-  "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+  "premiumSignUpTwoStep": {
+    "message": "Додатне опције пријаве у два корака као што су YubiKey, FIDO U2F, и Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Улаз у хитним случајевима"
@@ -2039,9 +2005,6 @@
         "example": "month or year"
       }
     }
-  },
-  "paymentChargedWithUnpaidSubscription": {
-    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Ваш план долази са бесплатним 7-дневним пробним периодом. Начин плаћања неће бити наплаћен док се пробно време не заврши. Наплата ће се вршити периодично, сваки $INTERVAL$. Можете отказати било када."
@@ -2673,10 +2636,10 @@
     "message": "Интернет Сеф"
   },
   "bitWebVault": {
-    "message": "Bitwarden Интернет Сеф"
+    "message": "Bitwarden Web vault"
   },
   "bitSecretsManager": {
-    "message": "Bitwarden Менаџер Тајности"
+    "message": "Bitwarden Secrets Manager"
   },
   "loggedIn": {
     "message": "Пријављено."
@@ -3357,7 +3320,7 @@
     "message": "Поставите ограничење лиценце за своју претплату. Једном када се достигне ова граница, нећете моћи да позовете нове кориснике."
   },
   "limitSmSubscriptionDesc": {
-    "message": "Поставите ограничење лиценце за своју претплату менаџера тајни. Једном када се достигне ова граница, нећете моћи да позовете нове чланове."
+    "message": "Set a seat limit for your Secrets Manger subscription. Once this limit is reached, you will not be able to invite new members."
   },
   "maxSeatLimit": {
     "message": "Максимална граница лиценце (опционо)",
@@ -3539,9 +3502,6 @@
   "vaultTimeoutDesc": {
     "message": "Изаберите када ће сеф истећи и да изврши одабрану радњу."
   },
-  "vaultTimeoutLogoutDesc": {
-    "message": "Одаберите када ће ваш сеф бити одјављен."
-  },
   "oneMinute": {
     "message": "1 минут"
   },
@@ -3630,8 +3590,8 @@
   "attachmentsNeedFix": {
     "message": "Ова ставка има старе прилоге које треба поправити."
   },
-  "attachmentFixDescription": {
-    "message": "Овај прилог користи застарело шифровање. Изаберите „Поправи“ да бисте преузели, поново шифровали и поново отпремили прилог."
+  "attachmentFixDesc": {
+    "message": "Ово је стари прилог који треба поправити. Кликните да бисте сазнали више."
   },
   "fix": {
     "message": "Фиксирај",
@@ -3848,11 +3808,29 @@
   "restoreSelected": {
     "message": "Врати изабрано"
   },
+  "restoreItem": {
+    "message": "Врати ставку"
+  },
   "restoredItem": {
     "message": "Ставка враћена"
   },
   "restoredItems": {
     "message": "Ставке враћене"
+  },
+  "restoreItemConfirmation": {
+    "message": "Да ли сте сигурни да желите да вратите ову ставку?"
+  },
+  "restoreItems": {
+    "message": "Врати ставке"
+  },
+  "restoreSelectedItemsDesc": {
+    "message": "Одабрали сте $COUNT$ ставке за повраћај. Да ли сте сигурни да желите да повратите све ове ставке?",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
   },
   "restoredItemId": {
     "message": "Ставка $ID$ повраћена.",
@@ -4397,7 +4375,7 @@
     "message": "Управљај корисницима"
   },
   "manageAccountRecovery": {
-    "message": "Управљајте опоравком налога"
+    "message": "Manage account recovery"
   },
   "disableRequiredError": {
     "message": "Морате ручно да онемогућите $POLICYNAME$ пријаву пре него што ова политика може да се онемогући.",
@@ -4727,7 +4705,7 @@
     "message": "Грешка"
   },
   "accountRecoveryManageUsers": {
-    "message": "Корисницима за управљање такође мора бити додељена дозвола за опоравак налога за управљање"
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Подешавање првајдера"
@@ -4938,8 +4916,8 @@
   "disablePersonalVaultExport": {
     "message": "Онемогућите извоз личног сефа"
   },
-  "disablePersonalVaultExportDescription": {
-    "message": "Не дозволи члановима да извозе податке из свог индивидуалног сефа."
+  "disablePersonalVaultExportDesc": {
+    "message": "Забрањује корисницима да извозе своје приватне податке из сефа."
   },
   "vaultExportDisabled": {
     "message": "Извоз сефа онемогућен"
@@ -5442,8 +5420,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Извоз сефа организације"
   },
-  "exportingIndividualVaultDescription": {
-    "message": "Само појединачне ставке сефа повезане са $EMAIL$ ће бити извењене. Ставке организационог сефа неће бити укључене. Само информације о ставкама из сефа ће бити извезене и неће укључивати повезане прилоге.",
+  "exportingPersonalVaultDescription": {
+    "message": "Само предмети личног сефа повезани са $EMAIL$ биће извезени. Ставке организационог сефа неће бити укључене.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5451,8 +5429,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDesc": {
-    "message": "Биће извезен само сеф организације повезан са $ORGANIZATION$. Ставке у појединачним сефовима или другим организацијама неће бити укључене.",
+  "exportingOrganizationVaultDescription": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6824,11 +6802,16 @@
   "enforceOnLoginDesc": {
     "message": "Захтевајте од постојећих чланова да промене њихове лозинке"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
+  "region": {
+    "message": "Регион"
   },
-  "euDomain": {
-    "message": "bitwarden.eu"
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "Немате дозволе да избришете овај пројекат",
@@ -6841,60 +6824,28 @@
   "updateKdfSettings": {
     "message": "Ажурирати KDF подешавања"
   },
-  "loginInitiated": {
-    "message": "Пријава је покренута"
-  },
-  "deviceApprovalRequired": {
-    "message": "Потребно је одобрење уређаја. Изаберите опцију одобрења испод:"
-  },
-  "rememberThisDevice": {
-    "message": "Запамти овај уређај"
-  },
-  "uncheckIfPublicDevice": {
-    "message": "Искључите ако се користи јавни уређај"
-  },
-  "approveFromYourOtherDevice": {
-    "message": "Одобри са мојим другим уређајем"
-  },
-  "requestAdminApproval": {
-    "message": "Затражити одобрење администратора"
-  },
-  "approveWithMasterPassword": {
-    "message": "Одобрити са главном лозинком"
-  },
-  "trustedDeviceEncryption": {
-    "message": "Шифровање поузданог уређаја"
-  },
   "trustedDevices": {
-    "message": "Поуздани уређаји"
+    "message": "Trusted devices"
   },
-  "memberDecryptionOptionTdeDescriptionPartOne": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Када се аутентификују, чланови ће дешифровати податке из сефљ користећи кључ сачуван на њиховом уређају",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionLinkOne": {
+  "memberDecryptionTdeDescriptionLinkOne": {
     "message": "јединствена организација",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionPartTwo": {
-    "message": "полиса,",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "полиса и ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionLinkTwo": {
-    "message": "SSO потребан",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionOptionTdeDescriptionPartThree": {
-    "message": "полиса, и",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
-  },
-  "memberDecryptionOptionTdeDescriptionLinkThree": {
+  "memberDecryptionTdeDescriptionLinkTwo": {
     "message": "администрација опоравка налога",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionOptionTdeDescriptionPartFour": {
+  "memberDecryptionTdeDescriptionPartThree": {
     "message": "полисе са аутоматским уписом ће се укључити када се користи ова опција.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ није нађено/а",
@@ -6983,27 +6934,6 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Уклањање чланова који немају главну лозинку без постављања једне за њих може ограничити приступ њиховом пуном налогу."
   },
-  "approvedAuthRequest": {
-    "message": "Одобрен уређај за $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "First 8 Character of a GUID"
-      }
-    }
-  },
-  "rejectedAuthRequest": {
-    "message": "Одбијен уређај за $ID$.",
-    "placeholders": {
-      "id": {
-        "content": "$1",
-        "example": "First 8 Character of a GUID"
-      }
-    }
-  },
-  "requestedDeviceApproval": {
-    "message": "Затражено је одобрење уређаја."
-  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Започните своју 7-дневну бесплатну пробну Bitwarden-а за $ORG$",
     "placeholders": {
@@ -7025,40 +6955,16 @@
   "selectedRegionFlag": {
     "message": "Одабрана застава"
   },
-  "accountSuccessfullyCreated": {
-    "message": "Налог је успешно креиран!"
-  },
-  "adminApprovalRequested": {
-    "message": "Захтевано је одобрење администратора"
-  },
-  "adminApprovalRequestSentToAdmins": {
-    "message": "Ваш захтев је послат вашем администратору."
-  },
-  "youWillBeNotifiedOnceApproved": {
-    "message": "Бићете обавештени када буде одобрено."
-  },
-  "troubleLoggingIn": {
-    "message": "Имате проблема са пријављивањем?"
-  },
-  "loginApproved": {
-    "message": "Пријава је одобрена"
-  },
-  "userEmailMissing": {
-    "message": "Недостаје имејл корисника"
-  },
-  "deviceTrusted": {
-    "message": "Уређај поуздан"
-  },
   "sendsNoItemsTitle": {
-    "message": "Нема активних Sends",
+    "message": "No active Sends",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendsNoItemsMessage": {
-    "message": "Употребите Send да безбедно делите шифроване информације са било ким.",
+    "message": "Use Send to securely share encrypted information with anyone.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "inviteUsers": {
-    "message": "Позови кориснике"
+    "message": "Invite Users"
   },
   "secretsManagerForPlan": {
     "message": "Secrets Manager for $PLAN$",
@@ -7073,13 +6979,13 @@
     "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
   },
   "free2PersonOrganization": {
-    "message": "Бесплатна организација за 2 особе"
+    "message": "Free 2-person Organizations"
   },
   "unlimitedSecrets": {
-    "message": "Неограничене тајне"
+    "message": "Unlimited secrets"
   },
   "unlimitedProjects": {
-    "message": "Неограничени пројекти"
+    "message": "Unlimited projects"
   },
   "projectsIncluded": {
     "message": "$COUNT$ projects included",
@@ -7109,43 +7015,38 @@
     }
   },
   "addSecretsManager": {
-    "message": "Додати Менаџер Тајни"
+    "message": "Add Secrets Manager"
   },
   "addSecretsManagerUpgradeDesc": {
     "message": "Add Secrets Manager to your upgraded plan to maintain access to any secrets created with your previous plan."
   },
   "additionalServiceAccounts": {
-    "message": "Додатни сервисни налози"
+    "message": "Additional service accounts"
   },
-  "includedServiceAccounts": {
-    "message": "Ваш план долази са $COUNT$ налога сервиса.",
+  "additionalServiceAccountsDesc": {
+    "message": "Your plan comes with $COUNT$ service accounts. You can add additional service accounts for $COST$ per month.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "50"
-      }
-    }
-  },
-  "addAdditionalServiceAccounts": {
-    "message": "Можете додати још сервисних налога за $COST$ месечно.",
-    "placeholders": {
+      },
       "cost": {
-        "content": "$1",
+        "content": "$2",
         "example": "$0.50"
       }
     }
   },
   "passwordManagerPlanPrice": {
-    "message": "Цена плана менаџера лозинки"
+    "message": "Password Manager plan price"
   },
   "secretsManagerPlanPrice": {
-    "message": "Цена плана менаџера тајни"
+    "message": "Secrets Manager plan price"
   },
   "passwordManager": {
-    "message": "Менаџер лозинки"
+    "message": "Password Manager"
   },
   "freeOrganization": {
-    "message": "Бесплатна организација"
+    "message": "Free Organization"
   },
   "limitServiceAccounts": {
     "message": "Limit service accounts (optional)"
@@ -7158,30 +7059,5 @@
   },
   "maxServiceAccountCost": {
     "message": "Max potential service account cost"
-  },
-  "loggedInExclamation": {
-    "message": "Пријављено!"
-  },
-  "smBetaEndedDesc": {
-    "message": "Бета менаџера тајни се завршио $BETA_ENDING_DATE$. Остало вам је $DAYS$ дана да додате Менаџер тајни у вашу претплату и да задржите приступ подацима Манагера тајни. Контактирајте подршку да додате Менаџер тајни у своју претплату.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Крај бета"
-  },
-  "beta": {
-    "message": "Бета"
-  },
-  "alreadyHaveAccount": {
-    "message": "Већ имате налог?"
   }
 }
