@@ -33,7 +33,6 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
   identifier: string = null;
   orgId: string;
   resetPasswordAutoEnroll = false;
-
   onSuccessfulChangePassword: () => Promise<void>;
   successRoute = "vault";
 
@@ -83,8 +82,9 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
         const response = await this.organizationApiService.getAutoEnrollStatus(this.identifier);
         this.orgId = response.id;
         this.resetPasswordAutoEnroll = response.resetPasswordEnabled;
+
         this.enforcedPolicyOptions =
-          await this.policyApiService.getMasterPasswordPoliciesForInvitedUsers(this.orgId);
+          await this.policyApiService.getMasterPasswordPolicyOptsForOrgUser(this.orgId);
       } catch {
         this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
       }
