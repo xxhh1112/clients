@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   BehaviorSubject,
   combineLatest,
@@ -36,6 +36,7 @@ interface ViewData {
   styleUrls: [],
 })
 export class Fido2Component implements OnInit, OnDestroy {
+  selectedItem: CipherView;
   private destroy$ = new Subject<void>();
 
   protected data$: Observable<ViewData>;
@@ -46,6 +47,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   private message$ = new BehaviorSubject<BrowserFido2Message>(null);
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private cipherService: CipherService,
     private passwordRepromptService: PasswordRepromptService
@@ -158,8 +160,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     this.loading = true;
   }
 
-  selectedItem: CipherView;
-
   selectedPasskey(item: CipherView) {
     this.selectedItem = item;
   }
@@ -181,6 +181,11 @@ export class Fido2Component implements OnInit, OnDestroy {
       userVerified,
     });
     this.loading = true;
+  }
+
+  viewPasskey() {
+    const cipher = this.ciphers[0];
+    this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
   }
 
   abort(fallback: boolean) {
