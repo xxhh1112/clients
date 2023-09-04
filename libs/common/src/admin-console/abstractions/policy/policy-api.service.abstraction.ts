@@ -14,10 +14,19 @@ export class PolicyApiServiceAbstraction {
     email: string,
     organizationUserId: string
   ) => Promise<ListResponse<PolicyResponse>>;
+  /**
+   * @deprecated Use `getMasterPasswordPolicyOptsForOrgUser` instead
+   * TODO: PM-??? remove this with 2024.01.0 release + remove from mobile
+   */
   getPoliciesByInvitedUser: (
     organizationId: string,
     userId: string
   ) => Promise<ListResponse<PolicyResponse>>;
+  /**
+   * @deprecated Use `getMasterPasswordPolicyOptsForOrgUser` instead
+   * TODO: PM-??? remove this with 2024.01.0 release + remove from mobile
+   */
   getMasterPasswordPoliciesForInvitedUsers: (orgId: string) => Promise<MasterPasswordPolicyOptions>;
+  getMasterPasswordPolicyOptsForOrgUser: (orgId: string) => Promise<MasterPasswordPolicyOptions>;
   putPolicy: (organizationId: string, type: PolicyType, request: PolicyRequest) => Promise<any>;
 }
