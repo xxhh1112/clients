@@ -10,5 +10,6 @@ export abstract class SettingsService {
   getEquivalentDomains: (url: string) => Set<string>;
   setDisableFavicon: (value: boolean) => Promise<any>;
   getDisableFavicon: () => boolean;
+  getEnableAutoFillOverlay: () => Promise<boolean>;
   clear: (userId?: string) => Promise<void>;
 }

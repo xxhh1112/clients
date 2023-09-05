@@ -11,6 +11,34 @@
   <div class="right"></div>
 </header>
 <main tabindex="-1">
+  <div class="box tw-mt-4">
+    <div class="box-content">
+      <button
+        type="button"
+        class="box-content-row box-content-row-link box-content-row-flex"
+        (click)="commandSettings()"
+      >
+        <div class="row-main">{{ "autofillShortcut" | i18n }}</div>
+        <i class="bwi bwi-external-link bwi-lg bwi-fw" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div id="autofillKeyboardHelp" class="box-footer">
+      {{ autofillKeyboardHelperText }}
+    </div>
+  </div>
+  <div class="box">
+    <div class="box-content">
+      <div class="box-content-row box-content-row-checkbox" appBoxRow>
+        <label for="autofill-overlay">{{ "enableAutoFillOverlay" | i18n }}</label>
+        <input
+          id="autofill-overlay"
+          type="checkbox"
+          (change)="updateEnableAutoFillOverlay()"
+          [(ngModel)]="enableAutoFillOverlay"
+        />
+      </div>
+    </div>
+  </div>
   <div class="box">
     <div class="box-content">
       <div class="box-content-row box-content-row-checkbox" appBoxRow>
@@ -80,21 +108,6 @@
     </div>
     <div id="defaultUriMatchHelp" class="box-footer">
       {{ "defaultUriMatchDetectionDesc" | i18n }}
-    </div>
-  </div>
-  <div class="box">
-    <div class="box-content">
-      <button
-        type="button"
-        class="box-content-row box-content-row-link box-content-row-flex"
-        (click)="commandSettings()"
-      >
-        <div class="row-main">{{ "autofillShortcut" | i18n }}</div>
-        <i class="bwi bwi-external-link bwi-lg bwi-fw" aria-hidden="true"></i>
-      </button>
-    </div>
-    <div id="autofillKeyboardHelp" class="box-footer">
-      {{ autofillKeyboardHelperText }}
     </div>
   </div>
 </main>

@@ -57,8 +57,8 @@ export default class AutofillService implements AutofillServiceInterface {
   ) {
     let mainAutofillScript = "autofill.js";
 
-    // TODO: CG - This needs to also account for the user setting.
-    const isUsingAutofillOverlay = autofillOverlay && true;
+    const isUsingAutofillOverlay =
+      autofillOverlay && (await this.settingsService.getEnableAutoFillOverlay());
 
     if (autofillV2) {
       mainAutofillScript = isUsingAutofillOverlay

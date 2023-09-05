@@ -74,6 +74,10 @@ export class SettingsService implements SettingsServiceAbstraction {
     return this._disableFavicon.getValue();
   }
 
+  async getEnableAutoFillOverlay(): Promise<boolean> {
+    return await this.stateService.getEnableAutoFillOverlay();
+  }
+
   async clear(userId?: string): Promise<void> {
     if (userId == null || userId == (await this.stateService.getUserId())) {
       this._settings.next({});

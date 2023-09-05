@@ -12,6 +12,7 @@ import { BrowserApi } from "../../platform/browser/browser-api";
   templateUrl: "autofill.component.html",
 })
 export class AutofillComponent implements OnInit {
+  enableAutoFillOverlay = false;
   enableAutoFillOnPageLoad = false;
   autoFillOnPageLoadDefault = false;
   autoFillOnPageLoadOptions: any[];
@@ -39,6 +40,7 @@ export class AutofillComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.enableAutoFillOverlay = await this.stateService.getEnableAutoFillOverlay();
     this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
 
     this.autoFillOnPageLoadDefault =
@@ -49,6 +51,10 @@ export class AutofillComponent implements OnInit {
 
     const command = await this.platformUtilsService.getAutofillKeyboardShortcut();
     await this.setAutofillKeyboardHelperText(command);
+  }
+
+  async updateEnableAutoFillOverlay() {
+    await this.stateService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
   }
 
   async updateAutoFillOnPageLoad() {

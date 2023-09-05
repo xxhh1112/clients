@@ -1486,6 +1486,24 @@ export class StateService<
     );
   }
 
+  async getEnableAutoFillOverlay(options?: StorageOptions): Promise<boolean> {
+    return (
+      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
+        ?.settings?.enableAutoFillOverlay ?? false
+    );
+  }
+
+  async setEnableAutoFillOverlay(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+    account.settings.enableAutoFillOverlay = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultInMemoryOptions())
+    );
+  }
+
   async getEnableAutoFillOnPageLoad(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
