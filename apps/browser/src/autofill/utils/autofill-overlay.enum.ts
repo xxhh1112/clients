@@ -15,7 +15,6 @@ const RedirectFocusDirection = {
 } as const;
 
 const AutofillOverlayAppearance = {
-  Disabled: 0,
   OnButtonClick: 1,
   OnFieldFocus: 2,
 } as const;
