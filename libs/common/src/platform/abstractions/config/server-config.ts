@@ -42,6 +42,10 @@ export class ServerConfig {
     return this.getAgeInMilliseconds() >= eighteenHoursInMilliseconds;
   }
 
+  isAutoFillOverlayActive(): boolean {
+    return Boolean(this.featureStates["autofill-overlay"]);
+  }
+
   static fromJSON(obj: Jsonify<ServerConfig>): ServerConfig {
     if (obj == null) {
       return null;

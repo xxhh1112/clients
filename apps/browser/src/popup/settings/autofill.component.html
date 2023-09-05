@@ -26,36 +26,38 @@
       {{ autofillKeyboardHelperText }}
     </div>
   </div>
-  <div class="box">
-    <div class="box-content">
-      <div class="box-content-row box-content-row-checkbox" appBoxRow>
-        <label for="autofill-overlay">{{ "enableAutoFillOverlay" | i18n }}</label>
-        <input
-          id="autofill-overlay"
-          type="checkbox"
-          (change)="updateAutoFillOverlay()"
-          [(ngModel)]="enableAutoFillOverlay"
-        />
+  <ng-container *ngIf="serverConfig$ | async as serverConfig">
+    <div class="box" *ngIf="this.serverConfig.isAutoFillOverlayActive()">
+      <div class="box-content">
+        <div class="box-content-row box-content-row-checkbox" appBoxRow>
+          <label for="autofill-overlay">{{ "enableAutoFillOverlay" | i18n }}</label>
+          <input
+            id="autofill-overlay"
+            type="checkbox"
+            (change)="updateAutoFillOverlay()"
+            [(ngModel)]="enableAutoFillOverlay"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="box" *ngIf="enableAutoFillOverlay">
-    <div class="box-content">
-      <div class="box-content-row" appBoxRow>
-        <label for="autofill-overlay-appearance">{{ "autofillOverlayAppearance" | i18n }}</label>
-        <select
-          id="autofill-overlay-appearance"
-          name="autofill-overlay-appearance"
-          [(ngModel)]="autoFillOverlayAppearance"
-          (change)="updateAutoFillOverlayAppearance()"
-        >
-          <option *ngFor="let o of autoFillOverlayAppearanceOptions" [ngValue]="o.value">
-            {{ o.name }}
-          </option>
-        </select>
+    <div class="box" *ngIf="this.serverConfig.isAutoFillOverlayActive() && enableAutoFillOverlay">
+      <div class="box-content">
+        <div class="box-content-row" appBoxRow>
+          <label for="autofill-overlay-appearance">{{ "autofillOverlayAppearance" | i18n }}</label>
+          <select
+            id="autofill-overlay-appearance"
+            name="autofill-overlay-appearance"
+            [(ngModel)]="autoFillOverlayAppearance"
+            (change)="updateAutoFillOverlayAppearance()"
+          >
+            <option *ngFor="let o of autoFillOverlayAppearanceOptions" [ngValue]="o.value">
+              {{ o.name }}
+            </option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
   <div class="box tw-mt-4">
     <div class="box-content">
       <div class="box-content-row box-content-row-checkbox" appBoxRow>

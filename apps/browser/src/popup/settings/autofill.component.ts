@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { UriMatchType } from "@bitwarden/common/enums";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { ServerConfig } from "@bitwarden/common/platform/abstractions/config/server-config";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -13,6 +16,7 @@ import { BrowserApi } from "../../platform/browser/browser-api";
   templateUrl: "autofill.component.html",
 })
 export class AutofillComponent implements OnInit {
+  serverConfig$: Observable<ServerConfig>;
   enableAutoFillOverlay = false;
   autoFillOverlayAppearance: number;
   autoFillOverlayAppearanceOptions: any[];
@@ -26,8 +30,10 @@ export class AutofillComponent implements OnInit {
   constructor(
     private stateService: StateService,
     private i18nService: I18nService,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    configService: ConfigServiceAbstraction
   ) {
+    this.serverConfig$ = configService.serverConfig$;
     this.autoFillOverlayAppearanceOptions = [
       {
         name: i18nService.t("autofillOverlayAppearanceOnFieldFocus"),
