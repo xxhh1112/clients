@@ -124,12 +124,22 @@ export default class RuntimeBackground {
         }
         break;
       case "openAddEditCipher": {
-        const addEditCipherUrl =
-          cipherId == null
+        const isNewCipher = !cipherId;
+        const cipherType = msg.data?.cipherType;
+        const openPopout = cipherType && isNewCipher;
+
+        if (openPopout) {
+          await this.browserPopoutWindowService.openCipherCreation(sender.tab?.windowId, {
+            cipherType,
+            senderTabId: sender.tab.id,
+          });
+        } else {
+          const addEditCipherUrl = isNewCipher
             ? "popup/index.html#/edit-cipher"
             : "popup/index.html#/edit-cipher?cipherId=" + cipherId;
 
-        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
+          BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
+        }
         break;
       }
       case "closeTab":

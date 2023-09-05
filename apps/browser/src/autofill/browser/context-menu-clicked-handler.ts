@@ -232,14 +232,16 @@ export class ContextMenuClickedHandler {
       case AUTOFILL_IDENTITY_ID:
       case AUTOFILL_CARD_ID:
         if (info.menuItemId === CREATE_IDENTITY_ID) {
-          // @TODO cipher creation window
-          alert("placeholder for adding identity UX");
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Identity,
+          });
           break;
         }
 
         if (info.menuItemId === CREATE_CARD_ID) {
-          // @TODO cipher creation window
-          alert("placeholder for adding card UX");
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Card,
+          });
           break;
         }
 

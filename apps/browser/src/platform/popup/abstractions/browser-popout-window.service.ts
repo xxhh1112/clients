@@ -1,3 +1,5 @@
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+
 interface BrowserPopoutWindowService {
   openUnlockPrompt(senderWindowId: number): Promise<void>;
   closeUnlockPrompt(): Promise<void>;
@@ -6,6 +8,13 @@ interface BrowserPopoutWindowService {
     promptData: {
       action: string;
       cipherId: string;
+      senderTabId: number;
+    }
+  ): Promise<void>;
+  openCipherCreation(
+    senderWindowId: number,
+    promptData: {
+      cipherType: CipherType;
       senderTabId: number;
     }
   ): Promise<void>;

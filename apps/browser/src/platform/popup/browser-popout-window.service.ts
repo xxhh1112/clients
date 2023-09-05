@@ -1,3 +1,5 @@
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+
 import { BrowserApi } from "../browser/browser-api";
 
 import { BrowserPopoutWindowService as BrowserPopupWindowServiceInterface } from "./abstractions/browser-popout-window.service";
@@ -43,6 +45,25 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
       `&action=${action}`;
 
     await this.openSingleActionPopout(senderWindowId, promptWindowPath, "passwordReprompt");
+  }
+
+  async openCipherCreation(
+    senderWindowId: number,
+    {
+      cipherType,
+      senderTabId,
+    }: {
+      cipherType: CipherType;
+      senderTabId: number;
+    }
+  ) {
+    const promptWindowPath =
+      "popup/index.html#/edit-cipher" +
+      "?uilocation=popout" +
+      `&type=${cipherType}` +
+      `&senderTabId=${senderTabId}`;
+
+    await this.openSingleActionPopout(senderWindowId, promptWindowPath, "cipherCreation");
   }
 
   async closePasswordRepromptPrompt() {
