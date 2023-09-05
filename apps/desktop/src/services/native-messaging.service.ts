@@ -78,11 +78,11 @@ export class NativeMessagingService {
 
         this.messagingService.send("setFocus");
 
-        const submitted = await firstValueFrom(
+        const browserSyncVerified = await firstValueFrom(
           BrowserSyncVerificationDialogComponent.open(this.dialogService, { fingerprint }).closed
         );
 
-        if (submitted !== true) {
+        if (browserSyncVerified !== true) {
           return;
         }
       }
