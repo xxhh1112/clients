@@ -14,4 +14,15 @@ const RedirectFocusDirection = {
   Next: "next",
 } as const;
 
-export { AutofillOverlayElement, AutofillOverlayPort, RedirectFocusDirection };
+const AutofillOverlayAppearance = {
+  Disabled: 0,
+  OnButtonClick: 1,
+  OnFieldFocus: 2,
+} as const;
+
+export {
+  AutofillOverlayElement,
+  AutofillOverlayPort,
+  RedirectFocusDirection,
+  AutofillOverlayAppearance,
+};

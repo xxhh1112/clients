@@ -5,6 +5,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
+import { AutofillOverlayAppearance } from "../../autofill/utils/autofill-overlay.enum";
 import { BrowserApi } from "../../platform/browser/browser-api";
 
 @Component({
@@ -13,6 +14,8 @@ import { BrowserApi } from "../../platform/browser/browser-api";
 })
 export class AutofillComponent implements OnInit {
   enableAutoFillOverlay = false;
+  autoFillOverlayAppearance: number;
+  autoFillOverlayAppearanceOptions: any[];
   enableAutoFillOnPageLoad = false;
   autoFillOnPageLoadDefault = false;
   autoFillOnPageLoadOptions: any[];
@@ -25,6 +28,16 @@ export class AutofillComponent implements OnInit {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService
   ) {
+    this.autoFillOverlayAppearanceOptions = [
+      {
+        name: i18nService.t("autofillOverlayAppearanceOnFieldFocus"),
+        value: AutofillOverlayAppearance.OnFieldFocus,
+      },
+      {
+        name: i18nService.t("autofillOverlayAppearanceOnButtonClick"),
+        value: AutofillOverlayAppearance.OnButtonClick,
+      },
+    ];
     this.autoFillOnPageLoadOptions = [
       { name: i18nService.t("autoFillOnPageLoadYes"), value: true },
       { name: i18nService.t("autoFillOnPageLoadNo"), value: false },
@@ -41,8 +54,11 @@ export class AutofillComponent implements OnInit {
 
   async ngOnInit() {
     this.enableAutoFillOverlay = await this.stateService.getEnableAutoFillOverlay();
-    this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
+    this.autoFillOverlayAppearance =
+      (await this.stateService.getAutoFillOverlayAppearance()) ||
+      AutofillOverlayAppearance.OnFieldFocus;
 
+    this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
     this.autoFillOnPageLoadDefault =
       (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
 
@@ -53,8 +69,12 @@ export class AutofillComponent implements OnInit {
     await this.setAutofillKeyboardHelperText(command);
   }
 
-  async updateEnableAutoFillOverlay() {
+  async updateAutoFillOverlay() {
     await this.stateService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
+  }
+
+  async updateAutoFillOverlayAppearance() {
+    await this.stateService.setAutoFillOverlayAppearance(this.autoFillOverlayAppearance);
   }
 
   async updateAutoFillOnPageLoad() {

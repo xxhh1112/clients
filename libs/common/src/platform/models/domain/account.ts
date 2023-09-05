@@ -229,6 +229,7 @@ export class AccountSettings {
   dontShowIdentitiesCurrentTab?: boolean;
   enableAlwaysOnTop?: boolean;
   enableAutoFillOverlay?: boolean;
+  autoFillOverlayAppearance?: number;
   enableAutoFillOnPageLoad?: boolean;
   enableBiometric?: boolean;
   enableFullWidth?: boolean;
