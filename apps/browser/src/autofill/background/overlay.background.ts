@@ -60,6 +60,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
     overlayButtonClicked: ({ port }) => this.handleOverlayButtonClicked(port.sender),
     closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
     overlayButtonBlurred: () => this.checkOverlayListFocused(),
+    redirectOverlayFocusOut: ({ message, port }) =>
+      this.redirectOverlayFocusOut(message, port.sender),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
     checkAutofillOverlayButtonFocused: () => this.checkAutofillOverlayButtonFocused(),

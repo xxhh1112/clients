@@ -3,7 +3,10 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { EVENTS } from "../../../constants";
-import { AutofillOverlayElement } from "../../../utils/autofill-overlay.enum";
+import {
+  AutofillOverlayElement,
+  RedirectFocusDirection,
+} from "../../../utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
 import { OverlayButtonWindowMessageHandlers } from "../../abstractions/button";
@@ -29,7 +32,7 @@ class AutofillOverlayButton extends HTMLElement {
   constructor() {
     super();
 
-    this.setupWindowMessageListener();
+    this.setupGlobalListeners();
     this.shadowDom = this.attachShadow({ mode: "closed" });
 
     this.logoIconElement = buildSvgDomElement(logoIcon);
@@ -102,7 +105,7 @@ class AutofillOverlayButton extends HTMLElement {
     return this.translations[key] || "";
   }
 
-  private postMessageToParent(message: { command: string }) {
+  private postMessageToParent(message: { command: string; direction?: string }) {
     if (!this.messageOrigin) {
       return;
     }
@@ -110,9 +113,10 @@ class AutofillOverlayButton extends HTMLElement {
     globalThis.parent.postMessage(message, this.messageOrigin);
   }
 
-  private setupWindowMessageListener() {
+  private setupGlobalListeners() {
     globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
     globalThis.addEventListener(EVENTS.BLUR, this.handleWindowBlurEvent);
+    globalThis.document.addEventListener(EVENTS.KEYDOWN, this.handleDocumentKeyDownEvent);
   }
 
   private handleWindowMessage = (event: MessageEvent) => {
@@ -133,6 +137,29 @@ class AutofillOverlayButton extends HTMLElement {
   private handleWindowBlurEvent = () => {
     this.postMessageToParent({ command: "overlayButtonBlurred" });
   };
+
+  private handleDocumentKeyDownEvent = (event: KeyboardEvent) => {
+    const listenedForKeys = new Set(["Tab", "Escape"]);
+    if (!listenedForKeys.has(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.key === "Tab") {
+      this.redirectOverlayFocusOutMessage(
+        event.shiftKey ? RedirectFocusDirection.Previous : RedirectFocusDirection.Next
+      );
+      return;
+    }
+
+    this.redirectOverlayFocusOutMessage(RedirectFocusDirection.Current);
+  };
+
+  private redirectOverlayFocusOutMessage(direction: string) {
+    this.postMessageToParent({ command: "redirectOverlayFocusOut", direction });
+  }
 }
 
 (function () {

@@ -88,6 +88,7 @@ type OverlayButtonPortMessageHandlers = {
   overlayButtonClicked: ({ port }: { port: chrome.runtime.Port }) => void;
   closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
   overlayButtonBlurred: () => void;
+  redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
 };
 
 type OverlayListPortMessageHandlers = {
