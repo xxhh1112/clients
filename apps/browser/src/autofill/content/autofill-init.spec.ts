@@ -135,7 +135,7 @@ describe("AutofillInit", () => {
 
       expect(response1).not.toBe(false);
 
-      message.command = "fillForm";
+      message.command = "addNewVaultItemFromOverlay";
       message.fillScript = mock<AutofillScript>();
 
       const response2 = await bitwardenAutofillInit["handleExtensionMessage"](
