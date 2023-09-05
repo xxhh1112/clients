@@ -41,7 +41,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   private overlayPageTranslations: Record<string, string>;
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
-    openAutofillOverlay: () => this.openOverlay(),
+    openAutofillOverlay: () => this.openOverlay(false),
     autofillOverlayElementClosed: ({ message }) =>
       this.overlayElementClosed(message.overlayElement),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
@@ -297,12 +297,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort?.postMessage(portMessage);
   }
 
-  private async openOverlay(focusFieldElement = false) {
+  private async openOverlay(focusFieldElement = false, isOpeningFullOverlay = false) {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
 
     await BrowserApi.tabSendMessageData(currentTab, "openAutofillOverlay", {
       authStatus: this.userAuthStatus || (await this.getAuthStatus()),
       focusFieldElement,
+      isOpeningFullOverlay,
     });
   }
 
@@ -356,7 +357,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    this.openOverlay();
+    this.openOverlay(false, true);
   }
 
   private async unlockVault(sender?: chrome.runtime.MessageSender) {

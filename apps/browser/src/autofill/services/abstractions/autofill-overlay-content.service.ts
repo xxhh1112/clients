@@ -8,7 +8,7 @@ interface AutofillOverlayContentService {
     autofillFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ): void;
-  openAutofillOverlay(focusFieldElement?: boolean): void;
+  openAutofillOverlay(focusFieldElement?: boolean, isOpeningFullOverlay?: boolean): void;
   removeAutofillOverlay(): void;
   removeAutofillOverlayButton(): void;
   removeAutofillOverlayList(): void;

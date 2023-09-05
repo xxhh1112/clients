@@ -11,6 +11,7 @@ type AutofillExtensionMessage = {
   data?: {
     authStatus?: AuthenticationStatus;
     focusFieldElement?: boolean;
+    isOpeningFullOverlay?: boolean;
   };
 };
 

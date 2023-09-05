@@ -8,7 +8,11 @@ import AutofillField from "../models/autofill-field";
 import AutofillOverlayButtonIframe from "../overlay/iframe-content/autofill-overlay-button-iframe";
 import AutofillOverlayListIframe from "../overlay/iframe-content/autofill-overlay-list-iframe";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
-import { AutofillOverlayElement, RedirectFocusDirection } from "../utils/autofill-overlay.enum";
+import {
+  AutofillOverlayElement,
+  RedirectFocusDirection,
+  AutofillOverlayAppearance,
+} from "../utils/autofill-overlay.enum";
 import {
   generateRandomCustomElementName,
   sendExtensionMessage,
@@ -23,6 +27,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
+  private autofillOverlayAppearance: number = AutofillOverlayAppearance.OnFieldFocus;
   private focusableElements: FocusableElement[] = [];
   private isOverlayButtonVisible = false;
   private isOverlayListVisible = false;
@@ -45,6 +50,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
+    this.getOverlayAppearanceFromUserSettings();
     this.initOverlayOnDomContentLoaded();
   }
 
@@ -81,13 +87,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  openAutofillOverlay(focusFieldElement?: boolean) {
+  openAutofillOverlay(focusFieldElement?: boolean, isOpeningFullOverlay?: boolean) {
     if (!this.mostRecentlyFocusedField) {
       return;
     }
 
     if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.focusMostRecentOverlayField();
+    }
+
+    if (
+      this.autofillOverlayAppearance === AutofillOverlayAppearance.OnButtonClick &&
+      !isOpeningFullOverlay
+    ) {
+      this.updateOverlayButtonPosition();
+      return;
     }
 
     this.updateOverlayElementsPosition();
@@ -197,7 +211,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   private focusOverlayList() {
     if (!this.isOverlayListVisible) {
-      this.openAutofillOverlay();
+      this.openAutofillOverlay(false, true);
       setTimeout(() => sendExtensionMessage("focusAutofillOverlayList"), 125);
       return;
     }
@@ -544,6 +558,24 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (this.userInteractionEventTimeout) {
       clearTimeout(this.userInteractionEventTimeout);
     }
+  }
+
+  private async getOverlayAppearanceFromUserSettings() {
+    this.autofillOverlayAppearance = await new Promise((resolve) => {
+      chrome.storage.local.get("activeUserId", ({ activeUserId }: { activeUserId: string }) => {
+        if (!activeUserId) {
+          return;
+        }
+
+        chrome.storage.local.get(activeUserId, (obj: any) => {
+          if (!obj?.[activeUserId]?.settings?.autoFillOverlayAppearance) {
+            return;
+          }
+
+          resolve(obj[activeUserId].settings.autoFillOverlayAppearance);
+        });
+      });
+    });
   }
 
   private initOverlayOnDomContentLoaded() {
