@@ -27,6 +27,8 @@ export const ROOT_ID = "root";
 export const AUTOFILL_ID = "autofill";
 export const AUTOFILL_IDENTITY_ID = "autofill-identity";
 export const AUTOFILL_CARD_ID = "autofill-card";
+export const CREATE_IDENTITY_ID = "create-identity";
+export const CREATE_CARD_ID = "create-card";
 export const COPY_USERNAME_ID = "copy-username";
 export const COPY_PASSWORD_ID = "copy-password";
 export const COPY_VERIFICATIONCODE_ID = "copy-totp";
@@ -36,7 +38,7 @@ const SEPARATOR_ID = "separator";
 export const GENERATE_PASSWORD_ID = "generate-password";
 
 export const NOOP_COMMAND_SUFFIX = "noop";
-export const NONE_COMMAND_SUFFIX = "none";
+export const NONE_LOGIN_SUFFIX = "none";
 
 export class MainContextMenuHandler {
   //
@@ -127,18 +129,6 @@ export class MainContextMenuHandler {
       });
 
       await create({
-        id: AUTOFILL_IDENTITY_ID,
-        parentId: ROOT_ID,
-        title: "Auto-fill identity",
-      });
-
-      await create({
-        id: AUTOFILL_CARD_ID,
-        parentId: ROOT_ID,
-        title: "Auto-fill card",
-      });
-
-      await create({
         id: COPY_USERNAME_ID,
         parentId: ROOT_ID,
         title: this.i18nService.t("copyUsername"),
@@ -159,7 +149,27 @@ export class MainContextMenuHandler {
       }
 
       await create({
-        id: SEPARATOR_ID,
+        id: SEPARATOR_ID + 1,
+        type: "separator",
+        parentId: ROOT_ID,
+      });
+
+      await create({
+        id: AUTOFILL_IDENTITY_ID,
+        parentId: ROOT_ID,
+        // @TODO i18n
+        title: "Auto-fill identity",
+      });
+
+      await create({
+        id: AUTOFILL_CARD_ID,
+        parentId: ROOT_ID,
+        // @TODO i18n
+        title: "Auto-fill card",
+      });
+
+      await create({
+        id: SEPARATOR_ID + 2,
         type: "separator",
         parentId: ROOT_ID,
       });
@@ -209,7 +219,7 @@ export class MainContextMenuHandler {
     });
   }
 
-  async loadOptions(title: string, id: string, cipher?: CipherView | undefined) {
+  async loadOptions(title: string, id: string, cipher?: CipherView) {
     try {
       const sanitizedTitle = MainContextMenuHandler.sanitizeContextMenuTitle(title);
 
@@ -240,11 +250,11 @@ export class MainContextMenuHandler {
         await createChildItem(COPY_VERIFICATIONCODE_ID);
       }
 
-      if ((!cipher || cipher?.type === CipherType.Card) && id !== NONE_COMMAND_SUFFIX) {
+      if ((!cipher || cipher?.type === CipherType.Card) && id !== NONE_LOGIN_SUFFIX) {
         await createChildItem(AUTOFILL_CARD_ID);
       }
 
-      if ((!cipher || cipher.type === CipherType.Identity) && id !== NONE_COMMAND_SUFFIX) {
+      if ((!cipher || cipher.type === CipherType.Identity) && id !== NONE_LOGIN_SUFFIX) {
         await createChildItem(AUTOFILL_IDENTITY_ID);
       }
     } catch (error) {
@@ -267,6 +277,6 @@ export class MainContextMenuHandler {
   }
 
   async noLogins() {
-    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NONE_COMMAND_SUFFIX);
+    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NONE_LOGIN_SUFFIX);
   }
 }
