@@ -51,6 +51,7 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
   ) {
     this.iframe.src = chrome.runtime.getURL(this.iframePath);
     this.updateElementStyles(this.iframe, { ...this.iframeStyles, ...initStyles });
+    this.iframe.tabIndex = -1;
     this.iframe.setAttribute("title", iframeTitle);
     this.iframe.setAttribute("sandbox", "allow-scripts");
     this.iframe.setAttribute("allowtransparency", "true");
