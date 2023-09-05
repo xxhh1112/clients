@@ -4,7 +4,7 @@
 
 # The following owners will be the default owners for everything in the repo.
 # Unless a later match takes precedence
-# @bitwarden/team-leads
+* @bitwarden/tech-leads
 
 ## Secrets Manager team files ##
 bitwarden_license/bit-web/src/app/secrets-manager @bitwarden/team-secrets-manager-dev
@@ -13,9 +13,11 @@ bitwarden_license/bit-web/src/app/secrets-manager @bitwarden/team-secrets-manage
 apps/browser/src/auth @bitwarden/team-auth-dev
 apps/cli/src/auth @bitwarden/team-auth-dev
 apps/desktop/src/auth @bitwarden/team-auth-dev
-apps/web/src/auth @bitwarden/team-auth-dev
+apps/web/src/app/auth @bitwarden/team-auth-dev
+libs/auth @bitwarden/team-auth-dev
 # web connectors used for auth
 apps/web/src/connectors @bitwarden/team-auth-dev
+bitwarden_license/bit-web/src/app/auth @bitwarden/team-auth-dev
 libs/angular/src/auth @bitwarden/team-auth-dev
 libs/common/src/auth @bitwarden/team-auth-dev
 
@@ -31,13 +33,13 @@ libs/exporter @bitwarden/team-tools-dev
 libs/importer @bitwarden/team-tools-dev
 
 ## Vault team files ##
-apps/browser/src/autofill @bitwarden/team-vault-dev
 apps/browser/src/vault @bitwarden/team-vault-dev
 apps/cli/src/vault @bitwarden/team-vault-dev
 apps/desktop/src/vault @bitwarden/team-vault-dev
 apps/web/src/app/vault @bitwarden/team-vault-dev
 libs/angular/src/vault @bitwarden/team-vault-dev
 libs/common/src/vault @bitwarden/team-vault-dev
+libs/vault @bitwarden/team-vault-dev
 
 ## Admin Console team files ##
 apps/browser/src/admin-console @bitwarden/team-admin-console-dev
@@ -52,3 +54,54 @@ libs/common/src/admin-console @bitwarden/team-admin-console-dev
 apps/web/src/app/billing @bitwarden/team-billing-dev
 libs/angular/src/billing @bitwarden/team-billing-dev
 libs/common/src/billing @bitwarden/team-billing-dev
+
+## Platform team files ##
+apps/browser/src/platform @bitwarden/team-platform-dev
+apps/cli/src/platform @bitwarden/team-platform-dev
+apps/desktop/src/platform @bitwarden/team-platform-dev
+apps/web/src/app/platform @bitwarden/team-platform-dev
+libs/angular/src/platform @bitwarden/team-platform-dev
+libs/common/src/platform @bitwarden/team-platform-dev
+# Node-specifc platform files
+libs/node @bitwarden/team-platform-dev
+# Web utils used across app and connectors
+apps/web/src/utils/ @bitwarden/team-platform-dev
+# Web core and shared files
+apps/web/src/app/core @bitwarden/team-platform-dev
+apps/web/src/app/shared @bitwarden/team-platform-dev
+apps/web/src/translation-constants.ts @bitwarden/team-platform-dev
+
+## Autofill team files ##
+apps/browser/src/autofill @bitwarden/team-autofill-dev
+
+## Component Library ##
+.storybook @bitwarden/team-platform-dev
+libs/components @bitwarden/team-platform-dev
+
+## Desktop native module ##
+apps/desktop/desktop_native @bitwarden/team-platform-dev
+
+## Multiple file owners ##
+apps/browser/package.json
+apps/browser/src/manifest.json
+apps/browser/src/manifest.v3.json
+
+apps/cli/package.json
+
+apps/desktop/package.json
+apps/desktop/src/package-lock.json
+apps/desktop/src/package.json
+
+/apps/web/config
+/apps/web/package.json
+
+package-lock.json
+
+## Locales ##
+apps/browser/src/_locales/en/messages.json
+apps/cli/src/locales/en/messages.json
+apps/desktop/src/locales/en/messages.json
+apps/web/src/locales/en/messages.json
+
+## DevOps team files ##
+/.github/workflows @bitwarden/dept-devops

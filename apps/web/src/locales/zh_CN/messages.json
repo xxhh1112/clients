@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ 网页密码库",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "这是什么类型的项目？"
   },
@@ -616,10 +606,10 @@
     "message": "登录或者创建一个账户来访问您的安全密码库。"
   },
   "loginWithDevice": {
-    "message": "设备登录"
+    "message": "使用设备登录"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "必须在 Bitwarden 移动应用程序的设置中启用设备登录。需要其他选项吗？"
+  "loginWithDeviceEnabledNote": {
+    "message": "设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？"
   },
   "loginWithMasterPassword": {
     "message": "使用主密码登录"
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "发生意外错误。"
   },
+  "expirationDateError": {
+    "message": "请选择一个将来的过期日期。"
+  },
   "emailAddress": {
     "message": "电子邮件地址"
   },
   "yourVaultIsLocked": {
     "message": "您的密码库已锁定，请验证您的主密码以继续。"
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "解锁​​​​"
@@ -958,14 +954,23 @@
   "copyVerificationCode": {
     "message": "复制验证码"
   },
+  "copyUuid": {
+    "message": "复制 UUID"
+  },
   "warning": {
     "message": "警告"
   },
   "confirmVaultExport": {
     "message": "确认密码库导出"
   },
+  "confirmSecretsExport": {
+    "message": "确认机密导出"
+  },
   "exportWarningDesc": {
-    "message": "导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。"
+    "message": "本次导出包含未加密格式的密码库数据。您不应该通过不安全的渠道（例如电子邮件）来存储或发送此导出文件。用完后请立即将其删除。"
+  },
+  "exportSecretsWarningDesc": {
+    "message": "本次导出包含未加密格式的机密数据。您不应该通过不安全的渠道（例如电子邮件）来存储或发送此导出文件。用完后请立即将其删除。"
   },
   "encExportKeyWarningDesc": {
     "message": "此导出使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。"
@@ -978,6 +983,9 @@
   },
   "exportVault": {
     "message": "导出密码库"
+  },
+  "exportSecrets": {
+    "message": "导出机密"
   },
   "fileFormat": {
     "message": "文件格式"
@@ -1001,7 +1009,7 @@
     "message": "确认文件密码"
   },
   "accountRestrictedOptionDescription": {
-    "message": "使用衍生自您账户的用户名和主密码的加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 帐户。"
+    "message": "使用衍生自您账户的用户名和主密码的加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 账户。"
   },
   "passwordProtectedOptionDescription": {
     "message": "设置一个密码用来加密导出的数据，并使用此密码解密以导入到任意 Bitwarden 账户。"
@@ -1010,7 +1018,7 @@
     "message": "导出类型"
   },
   "accountRestricted": {
-    "message": "账户受限"
+    "message": "账户限制"
   },
   "passwordProtected": {
     "message": "密码保护"
@@ -1070,7 +1078,7 @@
     "message": "单词分隔符"
   },
   "capitalize": {
-    "message": "大写",
+    "message": "首字母大写",
     "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
@@ -1285,6 +1293,31 @@
   "importEncKeyError": {
     "message": "解密导出的文件时出错。您的加密密钥与导出数据时使用的加密密钥不匹配。"
   },
+  "importDestination": {
+    "message": "导入目的地"
+  },
+  "learnAboutImportOptions": {
+    "message": "了解您的导入选项"
+  },
+  "selectImportFolder": {
+    "message": "选择一个文件夹"
+  },
+  "selectImportCollection": {
+    "message": "选择一个集合"
+  },
+  "importTargetHint": {
+    "message": "如果您希望将导入的文件内容移动到某个 $DESTINATION$，请选择此选项",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "文件包含未分配项目。"
+  },
   "selectFormat": {
     "message": "选择导入文件的格式"
   },
@@ -1387,7 +1420,7 @@
     "message": "两步登录"
   },
   "twoStepLoginEnforcement": {
-    "message": "两步登录实施"
+    "message": "强制两步登录"
   },
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
@@ -1891,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB 文件附件加密存储。"
   },
-  "premiumSignUpTwoStep": {
-    "message": "额外的两步登录选项，如 YubiKey、FIDO U2F 和 Duo。"
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "紧急访问"
@@ -1960,7 +1993,7 @@
     "message": "# GB 附加存储"
   },
   "additionalStorageIntervalDesc": {
-    "message": "您的计划附带 $SIZE$ 的加密存储空间。您也可以以 $PRICE$ 每 GB 每 $INTERVAL$ 购买附加存储。",
+    "message": "您的计划包含 $SIZE$ 的加密存储空间。您也可以以 $PRICE$ 每 GB 每 $INTERVAL$ 购买附加存储。",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -2007,6 +2040,9 @@
       }
     }
   },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "任何未付费订阅都将通过您的付款方式收取费用。"
+  },
   "paymentChargedWithTrial": {
     "message": "您的计划包含了 7 天的免费试用期。在试用期结束前，不会从您的付款方式中扣款。您可以随时取消。"
   },
@@ -2029,7 +2065,7 @@
     "message": "取消订阅"
   },
   "subscriptionExpiration": {
-    "message": "订阅过期"
+    "message": "订阅过期时间"
   },
   "subscriptionCanceled": {
     "message": "您的订阅已取消。"
@@ -2111,7 +2147,7 @@
     "message": "添加付款方式"
   },
   "changePaymentMethod": {
-    "message": "更改支付方式"
+    "message": "更改付款方式"
   },
   "invoices": {
     "message": "账单"
@@ -2176,7 +2212,7 @@
     "message": "联系客户支持"
   },
   "updatedPaymentMethod": {
-    "message": "付款方式已更新"
+    "message": "已更新付款方式。"
   },
   "purchasePremium": {
     "message": "购买高级会员"
@@ -2236,7 +2272,7 @@
     "message": "# 用户席位"
   },
   "userSeatsAdditionalDesc": {
-    "message": "您的计划包含 $BASE_SEATS$ 个用户席位。添加附加用户的价格是 $SEAT_PRICE$ 每用户每月。",
+    "message": "您的计划包含 $BASE_SEATS$ 个用户席位。您也可以以 $SEAT_PRICE$ 每用户每月购买附加用户。",
     "placeholders": {
       "base_seats": {
         "content": "$1",
@@ -2415,7 +2451,7 @@
     "message": "组织已创建"
   },
   "organizationReadyToGo": {
-    "message": "你的组织准备好了！"
+    "message": "您的新组织已准备就绪！"
   },
   "organizationUpgraded": {
     "message": "组织已升级"
@@ -2636,8 +2672,14 @@
   "webVault": {
     "message": "网页密码库"
   },
+  "bitWebVault": {
+    "message": "Bitwarden 网页密码库"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden 机密管理器"
+  },
   "loggedIn": {
-    "message": "已登录"
+    "message": "登录了"
   },
   "changedPassword": {
     "message": "更改了帐户密码"
@@ -2656,6 +2698,12 @@
   },
   "failedLogin2fa": {
     "message": "登录失败，两步登录不正确。"
+  },
+  "incorrectPassword": {
+    "message": "密码错误"
+  },
+  "incorrectCode": {
+    "message": "验证码错误"
   },
   "exportedVault": {
     "message": "导出了密码库"
@@ -3144,7 +3192,7 @@
     "message": "管理员确认您的成员资格后，您将能访问此组织。到时我们将向您发送电子邮件通知。"
   },
   "inviteInitAcceptedDesc": {
-    "message": "您现在可以访问此组织。"
+    "message": "您现在可以访问这个组织了。"
   },
   "inviteAcceptFailed": {
     "message": "无法接受邀请。请向组织管理员请求发送新的邀请。"
@@ -3307,6 +3355,9 @@
   },
   "limitSubscriptionDesc": {
     "message": "为您的订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
+  },
+  "limitSmSubscriptionDesc": {
+    "message": "为您的机密管理器订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "maxSeatLimit": {
     "message": "席位限制（可选）",
@@ -3488,6 +3539,9 @@
   "vaultTimeoutDesc": {
     "message": "选择您的密码库何时执行密码库超时动作。"
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "选择您的密码库何时注销。"
+  },
   "oneMinute": {
     "message": "1 分钟"
   },
@@ -3525,7 +3579,7 @@
     "message": "组织已停用"
   },
   "disabledOrganizationFilterError": {
-    "message": "无法访问已暂停组织中的项目。请联系您的组织所有者获取帮助。"
+    "message": "无法访问已停用组织中的项目。请联系您的组织所有者获取协助。"
   },
   "licenseIsExpired": {
     "message": "授权已过期"
@@ -3576,15 +3630,15 @@
   "attachmentsNeedFix": {
     "message": "此项目有需要修复的旧文件附件。"
   },
-  "attachmentFixDesc": {
-    "message": "这是一个需要修复的旧文件附件。点击了解更多。"
+  "attachmentFixDescription": {
+    "message": "此附件使用了过时的加密方式。选择「修复」以下载、重新加密，然后重新上传此附件。"
   },
   "fix": {
     "message": "修复",
     "description": "This is a verb. ex. 'Fix The Car'"
   },
   "oldAttachmentsNeedFixDesc": {
-    "message": "需要先修复密码库中的旧文件附件，然后才能轮换账户的加密密钥。"
+    "message": "需要先修复您的密码库中的旧文件附件，然后才能轮换您账户的加密密钥。"
   },
   "yourAccountsFingerprint": {
     "message": "您的账户的指纹短语",
@@ -3703,7 +3757,7 @@
     }
   },
   "policyInEffectUppercase": {
-    "message": "至少包含一个大写字母"
+    "message": "至少包含一个大写字符"
   },
   "policyInEffectLowercase": {
     "message": "至少包含一个小写字母"
@@ -3794,29 +3848,11 @@
   "restoreSelected": {
     "message": "恢复所选"
   },
-  "restoreItem": {
-    "message": "恢复项目"
-  },
   "restoredItem": {
     "message": "项目已恢复"
   },
   "restoredItems": {
     "message": "项目已恢复"
-  },
-  "restoreItemConfirmation": {
-    "message": "确定要恢复此项目吗？"
-  },
-  "restoreItems": {
-    "message": "恢复项目"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "您选择了要恢复 $COUNT$ 个项目。确定要恢复这些项目吗？",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "恢复了项目 $ID$",
@@ -4235,7 +4271,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
-    "message": "可以管理组织策略的组织成员豁免此策略的执行。"
+    "message": "可以管理组织策略的组织成员豁免此策略。"
   },
   "sendDisabled": {
     "message": "Send 已禁用",
@@ -4254,7 +4290,7 @@
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
-    "message": "可以管理组织策略的组织成员豁免此策略的执行。"
+    "message": "可以管理组织策略的组织成员豁免此策略。"
   },
   "disableHideEmail": {
     "message": "在创建或编辑 Send 时，始终向收件人显示成员的电子邮件地址。",
@@ -4360,8 +4396,8 @@
   "manageUsers": {
     "message": "管理用户"
   },
-  "manageResetPassword": {
-    "message": "管理密码重置"
+  "manageAccountRecovery": {
+    "message": "管理账户恢复"
   },
   "disableRequiredError": {
     "message": "您必须先手动切换 $POLICYNAME$ 策略，然后才能停用此策略。",
@@ -4492,14 +4528,14 @@
   "hintEqualsPassword": {
     "message": "密码提示不能与密码相同。"
   },
-  "enrollPasswordReset": {
-    "message": "注册密码重置"
+  "enrollAccountRecovery": {
+    "message": "注册账户恢复"
   },
-  "enrolledPasswordReset": {
-    "message": "已注册密码重置"
+  "enrolledAccountRecovery": {
+    "message": "注册了账户恢复"
   },
-  "withdrawPasswordReset": {
-    "message": "撤销密码重置"
+  "withdrawAccountRecovery": {
+    "message": "撤销账户恢复"
   },
   "enrollPasswordResetSuccess": {
     "message": "注册成功！"
@@ -4507,8 +4543,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "撤销成功！"
   },
-  "eventEnrollPasswordReset": {
-    "message": "用户 $ID$ 注册了密码重置。",
+  "eventEnrollAccountRecovery": {
+    "message": "用户 $ID$ 注册了账户恢复。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4516,8 +4552,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "用户 $ID$ 撤销了密码重置。",
+  "eventWithdrawAccountRecovery": {
+    "message": "用户 $ID$ 撤销了账户恢复。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4576,23 +4612,20 @@
   "resetPasswordEnrollmentWarning": {
     "message": "注册后将允许组织管理员更改您的主密码"
   },
-  "resetPasswordPolicy": {
-    "message": "主密码重置"
+  "accountRecoveryPolicy": {
+    "message": "账户恢复管理"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "允许管理员重置成员的主密码。"
+  "accountRecoveryPolicyDesc": {
+    "message": "基于加密方式，当主密码或受信任设备被遗忘或丢失时恢复账户。"
   },
-  "resetPasswordPolicyWarning": {
-    "message": "组织中的成员自行注册或被自动注册后，管理员才能重置他们的主密码。"
+  "accountRecoveryPolicyWarning": {
+    "message": "对于具有主密码的现有账户，需要他们自行注册后，管理员才可以恢复他们的账户。对于新的成员，将自动注册以打开账户恢复功能。"
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "激活此策略前，需先开启「单一组织」企业策略。"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自动注册"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "所有接受邀请的用戶，将会被自动注册密码重置，并且不允许撤销。"
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "已经在组织中的成员将不会被注册密码重置。需要他们自行注册后，管理员才能重置他们的主密码。"
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "为新用户启用自动注册"
@@ -4693,8 +4726,8 @@
   "error": {
     "message": "错误"
   },
-  "resetPasswordManageUsers": {
-    "message": "管理用户也必须获得管理密码重置权限"
+  "accountRecoveryManageUsers": {
+    "message": "管理用户也必须被授予管理账户恢复的权限"
   },
   "setupProvider": {
     "message": "提供商设置"
@@ -4905,8 +4938,8 @@
   "disablePersonalVaultExport": {
     "message": "禁用个人密码库导出"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "不允许成员导出他们的个人密码库数据。"
+  "disablePersonalVaultExportDescription": {
+    "message": "不允许成员从个人密码库导出数据。"
   },
   "vaultExportDisabled": {
     "message": "密码库导出已禁用"
@@ -4954,7 +4987,7 @@
     "message": "客户 ID"
   },
   "clientSecret": {
-    "message": "客户机密"
+    "message": "客户端机密"
   },
   "metadataAddress": {
     "message": "元数据地址"
@@ -5209,12 +5242,12 @@
     "message": "使用",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "要求单点登录身份验证策略",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
-    "message": "将要求所有成员使用 SSO 登录。",
+    "message": "以要求所有成员使用 SSO 登录。",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "memberDecryptionOption": {
@@ -5227,15 +5260,15 @@
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDescStart": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "message": "连接 SSO 登录到您的自托管解密密钥服务器。使用此选项后，成员将不再需要使用主密码解密密码库数据。需要",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescLink": {
-    "message": "require SSO authentication and single organization policies",
+    "message": "要求 SSO 身份验证和单一组织策略",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescEnd": {
-    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "message": "以用于设置 Key Connector 解密。请联系 Bitwarden 支持获取协助。",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
@@ -5314,7 +5347,7 @@
     "message": "轮换令牌"
   },
   "rotateBillingSyncTokenWarning": {
-    "message": "要继续，您需要重新设置您的自托管服务器上的计费同步功能。"
+    "message": "继续的话，您需要重新设置您的自托管服务器上的计费同步功能。"
   },
   "rotateBillingSyncTokenTitle": {
     "message": "轮换计费同步令牌将使之前的令牌失效。"
@@ -5392,7 +5425,7 @@
     "message": "如果实体 ID 不是一个 URL，则必填。"
   },
   "openIdOptionalCustomizations": {
-    "message": "可选定制"
+    "message": "自定义（可选）"
   },
   "openIdAuthorityRequired": {
     "message": "如果授权无效，则必填。"
@@ -5401,7 +5434,7 @@
     "message": "使用逗号分隔。"
   },
   "sessionTimeout": {
-    "message": "您的会话已超时。请返回并尝试重新登录。"
+    "message": "您的会话已超时。请返回然后尝试重新登录。"
   },
   "exportingPersonalVaultTitle": {
     "message": "正在导出个人密码库"
@@ -5409,8 +5442,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "正在导出组织密码库"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "仅会导出与 $EMAIL$ 关联的个人密码库项目，不包括组织密码库的项目。仅会导出密码库项目信息，不包括关联的密码历史记录或附件。",
+  "exportingIndividualVaultDescription": {
+    "message": "仅会导出与 $EMAIL$ 关联的个人密码库项目，不包括组织密码库项目。仅会导出密码库项目信息，不包括关联的附件。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5418,8 +5451,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "仅会导出与 $ORGANIZATION$ 关联的组织密码库。个人或其他组织的密码库项目不会导出。",
+  "exportingOrganizationVaultDesc": {
+    "message": "仅会导出与 $ORGANIZATION$ 关联的组织密码库数据。不包括个人密码库和其他组织中的项目。",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5453,7 +5486,7 @@
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
   },
   "accountLoggedInAsName": {
-    "message": "账户: 以 $NAME$ 登录",
+    "message": "账户：登录为 $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -5791,7 +5824,7 @@
     "message": "正在获取选项..."
   },
   "multiSelectNotFound": {
-    "message": "未找到任何项目"
+    "message": "未找到任何条目"
   },
   "multiSelectClearAll": {
     "message": "清除全部"
@@ -6156,11 +6189,11 @@
     "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
   },
   "expiresOnAccessToken": {
-    "message": "有效期至：",
+    "message": "过期时间：",
     "description": "Label for the expiration date of an access token."
   },
   "accessTokenCallOutTitle": {
-    "message": "访问令牌未存储，无法获取",
+    "message": "访问令牌不会被存储并且以后无法获取",
     "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
   },
   "copyToken": {
@@ -6179,10 +6212,6 @@
     "message": "访问令牌已创建且已复制到剪贴板",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "权限管理在 Beat 版中不可用。",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "吊销访问令牌",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6198,7 +6227,7 @@
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "noAccessTokenSelected": {
-    "message": "未选择要撤销的访问令牌",
+    "message": "未选中任何要撤销的访问令牌",
     "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
@@ -6313,7 +6342,7 @@
     "message": "DNS TXT 记录"
   },
   "dnsTxtRecordInputHint": {
-    "message": "复制并粘贴 TXT 记录到您的 DNS 供应商。"
+    "message": "复制并粘贴 TXT 记录到您的 DNS 提供商。"
   },
   "domainNameInputHint": {
     "message": "例如：mydomain.com。子域需要单独的条目进行验证。"
@@ -6448,7 +6477,7 @@
     "message": "邀请成员"
   },
   "needsConfirmation": {
-    "message": "需确认"
+    "message": "需要确认"
   },
   "memberRole": {
     "message": "成员角色"
@@ -6505,7 +6534,7 @@
     "message": "正在导出组织机密数据"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "仅会导出与 $ORGANIZATION$ 关联的机密管理器数据。不包括其他产品中的项目或来自其他组织的项目。",
+    "message": "仅会导出与 $ORGANIZATION$ 关联的机密管理器数据。不包括其他产品中的项目和来自其他组织的项目。",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6520,7 +6549,7 @@
     "message": "可接受的格式："
   },
   "copyPasteImportContents": {
-    "message": "复制并粘贴导入内容："
+    "message": "复制并粘贴要导入的内容："
   },
   "or": {
     "message": "或"
@@ -6551,6 +6580,18 @@
   },
   "billingSyncHelp": {
     "message": "计费同步帮助"
+  },
+  "licensePaidFeaturesHelp": {
+    "message": "许可证付费功能帮助"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "订阅到期后，您有 60 天时间为您的组织应用更新后的许可证文件。宽限期结束于 $GRACE_PERIOD_END_DATE$。",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
   },
   "uploadLicense": {
     "message": "上传许可证"
@@ -6597,14 +6638,17 @@
   "changeKdfLoggedOutWarning": {
     "message": "接下来将会注销您所有的活动会话。您将需要重新登录并完成两步登录设置。我们建议在更改您的加密设置之前导出您的密码库，以防数据丢失。"
   },
+  "secretsManager": {
+    "message": "机密管理器"
+  },
   "secretsManagerBeta": {
     "message": "机密管理器 Beta 版"
   },
-  "secretsManagerBetaDesc": {
-    "message": "在 Beta 计划期间，启用用户对机密管理器的访问是免费的。"
+  "secretsManagerAccessDescription": {
+    "message": "激活用户对机密管理器的访问权限。"
   },
-  "userAccessSecretsManager": {
-    "message": "此用户可以访问机密管理器 Beta 版"
+  "userAccessSecretsManagerGA": {
+    "message": "此用户可以访问机密管理器"
   },
   "important": {
     "message": "重要："
@@ -6683,10 +6727,10 @@
     }
   },
   "restoreSecret": {
-    "message": "还原机密"
+    "message": "恢复机密"
   },
   "restoreSecrets": {
-    "message": "还原机密"
+    "message": "恢复机密"
   },
   "restoreSecretPrompt": {
     "message": "您确定要恢复此机密吗？"
@@ -6701,7 +6745,7 @@
     "message": "机密已恢复"
   },
   "selectionIsRequired": {
-    "message": "必须选择"
+    "message": "必须选择。"
   },
   "secretsManagerSubscriptionDesc": {
     "message": "在 Beta 计划期间，开启组织对机密管理器的访问是免费的。成员中的用户会被授予对 Beta 版的访问权限。"
@@ -6763,6 +6807,10 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "输入不能只包含空格。",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "取消"
   },
@@ -6770,36 +6818,370 @@
     "message": "免费组织不能使用此功能。请联系您的组织所有者寻求升级。"
   },
   "smProjectSecretsNoItemsNoAccess": {
-    "message": "请联系您的组织的管理员来管理此项目的秘密。",
+    "message": "请联系您的组织的管理员来管理此工程的机密。",
     "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
   },
   "enforceOnLoginDesc": {
     "message": "要求现有成员更改他们的密码"
   },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
   "smProjectDeleteAccessRestricted": {
-    "message": "您无权删除此项目",
+    "message": "您无权删除此工程",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
-    "message": "无法删除下列项目。是否继续？",
+    "message": "无法删除下列工程。是否继续？",
     "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
   },
   "updateKdfSettings": {
     "message": "更新 KDF 设置"
   },
+  "loginInitiated": {
+    "message": "登录已发起"
+  },
+  "deviceApprovalRequired": {
+    "message": "需要设备批准。请在下面选择一个批准选项："
+  },
+  "rememberThisDevice": {
+    "message": "记住此设备"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "若使用公共设备，请取消勾选"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "从您的其他设备批准"
+  },
+  "requestAdminApproval": {
+    "message": "请求管理员批准"
+  },
+  "approveWithMasterPassword": {
+    "message": "使用主密码批准"
+  },
   "trustedDeviceEncryption": {
-    "message": "Trusted device encryption"
+    "message": "受信任的设备加密"
   },
-  "memberDecryptionTdeDescStart": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "trustedDevices": {
+    "message": "受信任的设备"
   },
-  "memberDecryptionTdeDescLink": {
-    "message": "主密码重置策略",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "验证后，成员将使用存储在他们设备上的密钥解密密码库数据。使用此选项后，",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "单一组织",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "策略，",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "要求 SSO",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "策略以及具有自动注册的",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "账户恢复管理",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "策略将被开启。",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ 未找到",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "恢复账户"
+  },
+  "updatedTempPassword": {
+    "message": "用户更新了通过账户恢复颁发的密码。"
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "已激活对机密管理器的访问权限",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "激活访问权限"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "允许以下成员访问机密管理器。密码管理器中授予的角色将适用于机密管理器。",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "激活机密管理器"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "您组织的指纹短语",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "设备批准"
+  },
+  "deviceApprovalsDesc": {
+    "message": "批准下面的登录请求以允许请求的成员完成登录。未批准的请求将在 1 周后过期。请在批准前验证成员的信息。"
+  },
+  "deviceInfo": {
+    "message": "设备信息"
+  },
+  "time": {
+    "message": "时间"
+  },
+  "denyAllRequests": {
+    "message": "拒绝所有请求"
+  },
+  "denyRequest": {
+    "message": "拒绝请求"
+  },
+  "approveRequest": {
+    "message": "批准请求"
+  },
+  "noDeviceRequests": {
+    "message": "无设备请求"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "成员的设备批准请求将显示在这里"
+  },
+  "loginRequestDenied": {
+    "message": "登录请求被拒绝"
+  },
+  "allLoginRequestsDenied": {
+    "message": "所有登录请求被拒绝"
+  },
+  "loginRequestApproved": {
+    "message": "登录请求已批准"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "账户没有主密码"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "移除没有为其设置主密码的 $USER$ 可能会限制对他们的完整账户的访问权限。确定要继续吗？",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "无主密码"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "移除没有为其设置主密码的成员可能会限制对他们的完整账户的访问权限。"
+  },
+  "approvedAuthRequest": {
+    "message": "批准了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "拒绝了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "请求了设备批准。"
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "为 $ORG$ 开始您的 Bitwarden 7 天免费试用",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "下一步"
+  },
+  "usFlag": {
+    "message": "美国旗帜"
+  },
+  "euFlag": {
+    "message": "欧盟旗帜"
+  },
+  "selectedRegionFlag": {
+    "message": "选择的区域旗帜"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "账户已成功创建！"
+  },
+  "adminApprovalRequested": {
+    "message": "已请求管理员批准"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "您的请求已发送给您的管理员。"
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "批准后，您将收到通知。"
+  },
+  "troubleLoggingIn": {
+    "message": "登录遇到问题？"
+  },
+  "loginApproved": {
+    "message": "登录已批准"
+  },
+  "userEmailMissing": {
+    "message": "缺少用户电子邮件"
+  },
+  "deviceTrusted": {
+    "message": "设备已信任"
+  },
+  "sendsNoItemsTitle": {
+    "message": "没有活跃的 Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "使用 Send 与任何人安全地分享加密信息。",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "邀请用户"
+  },
+  "secretsManagerForPlan": {
+    "message": "适用于 $PLAN$ 的机密管理器",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "供工程和 DevOps 团队在整个软件开发生命周期中管理机密。"
+  },
+  "free2PersonOrganization": {
+    "message": "免费的 2 人组织"
+  },
+  "unlimitedSecrets": {
+    "message": "不限数量的机密"
+  },
+  "unlimitedProjects": {
+    "message": "不限数量的工程"
+  },
+  "projectsIncluded": {
+    "message": "包含 $COUNT$ 个工程",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "包含 $COUNT$ 个服务账户",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "附加服务账户 $COST$ 每月",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "添加机密管理器"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "将机密管理器添加到升级后的计划中，以保留对使用之前的计划创建的所有机密的访问权限。"
+  },
+  "additionalServiceAccounts": {
+    "message": "附加服务账户"
+  },
+  "includedServiceAccounts": {
+    "message": "您的计划包含 $COUNT$ 个服务账户。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "您可以以 $COST$ 每月购买附加服务账户。",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "密码管理器计划价格"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "机密管理器计划价格"
+  },
+  "passwordManager": {
+    "message": "密码管理器"
+  },
+  "freeOrganization": {
+    "message": "免费组织"
+  },
+  "limitServiceAccounts": {
+    "message": "限制服务账户（可选）"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "为您的服务账户设置一个限制。达到此限制后，您将无法创建新的服务账户。"
+  },
+  "serviceAccountLimit": {
+    "message": "服务账户限制（可选）"
+  },
+  "maxServiceAccountCost": {
+    "message": "最大潜在服务账户费用"
+  },
+  "loggedInExclamation": {
+    "message": "已登录！"
+  },
+  "smBetaEndedDesc": {
+    "message": "机密管理器 Beta 版将于 $BETA_ENDING_DATE$ 结束。您还剩余 $DAYS$ 天时间将机密管理器添加到您的付费订阅中，以保持对其数据的访问权限。联系客户成功团队将机密管理器添加到您的订阅中。",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta 版即将结束"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "已经有一个账户？"
   }
 }

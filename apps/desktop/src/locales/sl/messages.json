@@ -12,7 +12,7 @@
     "message": "Priljubljene"
   },
   "types": {
-    "message": "Tipi"
+    "message": "Vrste"
   },
   "typeLogin": {
     "message": "Prijava"
@@ -36,7 +36,7 @@
     "message": "Išči v trezorju"
   },
   "addItem": {
-    "message": "Dodaj vnos"
+    "message": "Dodaj element"
   },
   "shared": {
     "message": "Deljeno"
@@ -67,7 +67,7 @@
     "message": "Priloge"
   },
   "viewItem": {
-    "message": "Ogled vnosa"
+    "message": "Prikaži element"
   },
   "name": {
     "message": "Naziv"
@@ -98,7 +98,7 @@
     "message": "Večbesedno geslo"
   },
   "editItem": {
-    "message": "Uredi vnos"
+    "message": "Uredi element"
   },
   "emailAddress": {
     "message": "E-poštni naslov"
@@ -349,13 +349,13 @@
     "message": "Ime je obvezen podatek."
   },
   "addedItem": {
-    "message": "Vnos dodan"
+    "message": "Element dodan"
   },
   "editedItem": {
-    "message": "Vnos urejen"
+    "message": "Element urejen"
   },
   "deleteItem": {
-    "message": "Vnos odstranjen"
+    "message": "Element odstranjen"
   },
   "deleteFolder": {
     "message": "Izbriši mapo"
@@ -367,7 +367,7 @@
     "message": "Ali res želite poslati v koš?"
   },
   "deletedItem": {
-    "message": "Pošlji vnos v smeti"
+    "message": "Pošlji element v smeti"
   },
   "overwritePasswordConfirmation": {
     "message": "Ali ste prepričani, da želite prepisati vaše trenutno geslo?"
@@ -564,10 +564,10 @@
     "message": "An unexpected error has occurred."
   },
   "itemInformation": {
-    "message": "Informacije o vnosu"
+    "message": "Informacije o elementu"
   },
   "noItemsInList": {
-    "message": "Ni vnosov za prikaz."
+    "message": "Ni elementov za prikaz."
   },
   "sendVerificationCode": {
     "message": "Pošlji verifikacijsko kodo po e-pošti"
@@ -1077,8 +1077,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB encrypted storage for file attachments."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Additional two-step login options such as YubiKey, FIDO U2F, and Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpReports": {
     "message": "Password hygiene, account health, and data breach reports to keep your vault safe."
@@ -1353,7 +1353,7 @@
     "message": "Lastništvo"
   },
   "whoOwnsThisItem": {
-    "message": "Kdo je lastnik tega vnosa?"
+    "message": "Kdo je lastnik tega elementa?"
   },
   "strong": {
     "message": "Močno",
@@ -1492,6 +1492,9 @@
   "vaultTimeoutActionLogOutDesc": {
     "message": "Re-authentication is required to access your vault again."
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "Set up an unlock method to change your vault timeout action."
+  },
   "lock": {
     "message": "Lock",
     "description": "Verb form: to make secure or inaccesible by"
@@ -1511,12 +1514,6 @@
   },
   "permanentlyDeletedItem": {
     "message": "Item permanently deleted"
-  },
-  "restoreItem": {
-    "message": "Restore item"
-  },
-  "restoreItemConfirmation": {
-    "message": "Are you sure you want to restore this item?"
   },
   "restoredItem": {
     "message": "Item restored"
@@ -1922,7 +1919,7 @@
     "message": "One or more organization policies prevents you from exporting your personal vault."
   },
   "addAccount": {
-    "message": "Add account"
+    "message": "Dodaj račun"
   },
   "removeMasterPassword": {
     "message": "Odstranite glavno geslo"
@@ -2112,8 +2109,8 @@
   "logInWithAnotherDevice": {
     "message": "Log in with another device"
   },
-  "logInInitiated": {
-    "message": "Log in initiated"
+  "loginInitiated": {
+    "message": "Login initiated"
   },
   "notificationSentDevice": {
     "message": "A notification has been sent to your device."
@@ -2251,5 +2248,172 @@
   },
   "windowsBiometricUpdateWarningTitle": {
     "message": "Recommended Settings Update"
+  },
+  "deviceApprovalRequired": {
+    "message": "Device approval required. Select an approval option below:"
+  },
+  "rememberThisDevice": {
+    "message": "Remember this device"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Uncheck if using a public device"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approve from your other device"
+  },
+  "requestAdminApproval": {
+    "message": "Request admin approval"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approve with master password"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "ssoIdentifierRequired": {
+    "message": "Organization SSO identifier is required."
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "usDomain": {
+    "message": "bitwarden.com"
+  },
+  "euDomain": {
+    "message": "bitwarden.eu"
+  },
+  "selfHosted": {
+    "message": "Self-hosted"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin approval requested"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Your request has been sent to your admin."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "You will be notified once approved."
+  },
+  "troubleLoggingIn": {
+    "message": "Trouble logging in?"
+  },
+  "loginApproved": {
+    "message": "Login approved"
+  },
+  "userEmailMissing": {
+    "message": "User email missing"
+  },
+  "deviceTrusted": {
+    "message": "Device trusted"
+  },
+  "inputRequired": {
+    "message": "Input is required."
+  },
+  "required": {
+    "message": "required"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "inputMinLength": {
+    "message": "Input must be at least $COUNT$ characters long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Input must not exceed $COUNT$ characters in length.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 or more emails are invalid"
+  },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "Input is not an email address."
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- Select --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to filter --"
+  },
+  "multiSelectLoading": {
+    "message": "Retrieving options..."
+  },
+  "multiSelectNotFound": {
+    "message": "No items found"
+  },
+  "multiSelectClearAll": {
+    "message": "Clear all"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "Submenu"
   }
 }

@@ -124,31 +124,31 @@
     <value>Saugi ir nemokama slaptažodžių tvarkyklė visiems įrenginiams</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. yra patronuojančioji 8bit Solutions LLC įmonė.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+GERIAUSIU SLAPTAŽODŽIŲ TVARKYTOJU PRIPAŽINTAS THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET IR KT.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Tvarkyk, laikyk, saugok ir bendrink neribotą skaičių slaptažodžių neribotuose įrenginiuose iš bet kurios vietos. Bitwarden teikia atvirojo kodo slaptažodžių valdymo sprendimus visiems – tiek namuose, tiek darbe, ar keliaujant.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Generuok stiprius, unikalius ir atsitiktinius slaptažodžius pagal saugos reikalavimus kiekvienai lankomai svetainei.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send greitai perduoda užšifruotą informaciją – failus ir paprastą tekstą – tiesiogiai bet kam.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden siūlo komandoms ir verslui planus įmonėms, kad galėtum saugiai dalytis slaptažodžiais su kolegomis.
 
-Why Choose Bitwarden:
+Kodėl rinktis Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashing, and PBKDF2 SHA-256) so your data stays secure and private.
+Pasaulinės klasės šifravimas
+Slaptažodžiai yra saugomi su pažangiu šifravimu nuo galo iki galo (AES-256 bitų, sūdytu šifravimu ir PBKDF2 SHA-256), todėl tavo duomenys išliks saugūs ir privatūs.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Integruotas slaptažodžių generatorius
+Generuok stiprius, unikalius ir atsitiktinius slaptažodžius pagal saugos reikalavimus kiekvienai dažnai lankomai svetainei.
 
-Global Translations 
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Visuotiniai vertimai
+Mūsų pasaulinės bendruomenės dėka Bitwarden vertimai egzistuoja 40 kalbose ir vis daugėja.
 
-Cross-Platform Applications 
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Įvairių platformų programos
+Apsaugok ir bendrink neskelbtinus duomenis savo Bitwarden Vault iš bet kurios naršyklės, mobiliojo įrenginio ar darbalaukio OS ir kt.
 </value>
   </data>
   <data name="AssetTitle" xml:space="preserve">

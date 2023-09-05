@@ -6,18 +6,17 @@ import {
   STATE_FACTORY,
   STATE_SERVICE_USE_CACHE,
 } from "@bitwarden/angular/services/injection-tokens";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { StateMigrationService } from "@bitwarden/common/abstractions/stateMigration.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
-} from "@bitwarden/common/abstractions/storage.service";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { StateFactory } from "@bitwarden/common/factories/stateFactory";
-import { StorageOptions } from "@bitwarden/common/models/domain/storage-options";
-import { StateService as BaseStateService } from "@bitwarden/common/services/state.service";
+} from "@bitwarden/common/platform/abstractions/storage.service";
+import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
+import { StorageOptions } from "@bitwarden/common/platform/models/domain/storage-options";
+import { StateService as BaseStateService } from "@bitwarden/common/platform/services/state.service";
 import { SendData } from "@bitwarden/common/tools/send/models/data/send.data";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { FolderData } from "@bitwarden/common/vault/models/data/folder.data";
 
 import { Account } from "./account";
@@ -30,7 +29,6 @@ export class StateService extends BaseStateService<GlobalState, Account> {
     @Inject(SECURE_STORAGE) secureStorageService: AbstractStorageService,
     @Inject(MEMORY_STORAGE) memoryStorageService: AbstractMemoryStorageService,
     logService: LogService,
-    stateMigrationService: StateMigrationService,
     @Inject(STATE_FACTORY) stateFactory: StateFactory<GlobalState, Account>,
     @Inject(STATE_SERVICE_USE_CACHE) useAccountCache = true
   ) {
@@ -39,7 +37,6 @@ export class StateService extends BaseStateService<GlobalState, Account> {
       secureStorageService,
       memoryStorageService,
       logService,
-      stateMigrationService,
       stateFactory,
       useAccountCache
     );

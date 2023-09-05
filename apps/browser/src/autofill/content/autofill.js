@@ -676,7 +676,7 @@
           var els = [];
           try {
               var elsList = theDoc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
-                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, ' +
+                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, textarea, ' +
                   'span[data-bwautofill]');
               els = Array.prototype.slice.call(elsList);
           } catch (e) { }
@@ -751,8 +751,8 @@
           ].join('\n\n');
 
           if (
-              // At least one of the `savedURLs` uses SSL
-              savedURLs.some(url => url.startsWith('https://')) &&
+              // At least one of the `savedURLs` uses SSL for the current page
+              savedURLs.some(url => url.startsWith(`https://${window.location.hostname}`)) &&
               // The current page is not using SSL
               document.location.protocol === 'http:' &&
               // There are password inputs on the page
@@ -768,8 +768,16 @@
 
       // Detect if within an iframe, and the iframe is sandboxed
       function isSandboxed() {
-          // self.origin is 'null' if inside a frame with sandboxed csp or iframe tag
-          return self.origin == null || self.origin === 'null';
+        // self.origin is 'null' if inside a frame with sandboxed csp or iframe tag
+        if (String(self.origin).toLowerCase() === "null") {
+          return true;
+        }
+
+        if (window.frameElement?.hasAttribute("sandbox")) {
+          return true;
+        }
+
+        return location.hostname === "";
       }
 
       function doFill(fillScript) {
@@ -1177,7 +1185,7 @@
           }
           try {
               // START MODIFICATION
-              var elements = Array.prototype.slice.call(selectAllFromDoc('input, select, button, ' +
+              var elements = Array.prototype.slice.call(selectAllFromDoc('input, select, button, textarea, ' +
                   'span[data-bwautofill]'));
               // END MODIFICATION
               var filteredElements = elements.filter(function (o) {

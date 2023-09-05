@@ -3,19 +3,19 @@ import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angula
 import { FormBuilder, Validators } from "@angular/forms";
 import { catchError, combineLatest, from, map, of, Subject, switchMap, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { CollectionService } from "@bitwarden/common/admin-console/abstractions/collection.service";
-import { CollectionData } from "@bitwarden/common/admin-console/models/data/collection.data";
-import { Collection } from "@bitwarden/common/admin-console/models/domain/collection";
-import { CollectionDetailsResponse } from "@bitwarden/common/admin-console/models/response/collection.response";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
+import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { Collection } from "@bitwarden/common/vault/models/domain/collection";
+import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
+import { DialogService } from "@bitwarden/components";
 
-import { GroupService, GroupView } from "../core";
+import { InternalGroupService as GroupService, GroupView } from "../core";
 import {
   AccessItemType,
   AccessItemValue,
@@ -64,7 +64,7 @@ export enum GroupAddEditDialogResultType {
  * @param config Configuration for the dialog
  */
 export const openGroupAddEditDialog = (
-  dialogService: DialogServiceAbstraction,
+  dialogService: DialogService,
   config: DialogConfig<GroupAddEditDialogParams>
 ) => {
   return dialogService.open<GroupAddEditDialogResultType, GroupAddEditDialogParams>(
@@ -181,7 +181,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     private logService: LogService,
     private formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogService
   ) {
     this.tabIndex = params.initialTab ?? GroupAddEditTabType.Info;
   }
@@ -273,7 +273,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: this.group.name,
       content: { key: "deleteGroupConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
     if (!confirmed) {
       return false;

@@ -2,6 +2,7 @@ import * as program from "commander";
 import * as inquirer from "inquirer";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { ImportServiceAbstraction, ImportType } from "@bitwarden/importer";
 
 import { Response } from "../models/response";
@@ -11,7 +12,8 @@ import { CliUtils } from "../utils";
 export class ImportCommand {
   constructor(
     private importService: ImportServiceAbstraction,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private syncService: SyncService
   ) {}
 
   async run(
@@ -65,7 +67,9 @@ export class ImportCommand {
     try {
       let contents;
       if (format === "1password1pux") {
-        contents = await CliUtils.extract1PuxContent(filepath);
+        contents = await CliUtils.extractZipContent(filepath, "export.data");
+      } else if (format === "protonpass" && filepath.endsWith(".zip")) {
+        contents = await CliUtils.extractZipContent(filepath, "Proton Pass/data.json");
       } else {
         contents = await CliUtils.readFile(filepath);
       }
@@ -76,6 +80,7 @@ export class ImportCommand {
 
       const response = await this.importService.import(importer, contents, organizationId);
       if (response.success) {
+        this.syncService.fullSync(true);
         return Response.success(new MessageResponse("Imported " + filepath, null));
       }
     } catch (err) {

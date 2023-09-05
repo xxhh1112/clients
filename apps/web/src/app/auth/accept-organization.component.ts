@@ -1,23 +1,24 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import {
   OrganizationUserAcceptInitRequest,
   OrganizationUserAcceptRequest,
 } from "@bitwarden/common/abstractions/organization-user/requests";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { OrgKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { BaseAcceptComponent } from "../common/base.accept.component";
 
@@ -108,16 +109,14 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     const request = new OrganizationUserAcceptInitRequest();
     request.token = qParams.token;
 
-    const [encryptedOrgShareKey, orgShareKey] = await this.cryptoService.makeShareKey();
-    const [orgPublicKey, encryptedOrgPrivateKey] = await this.cryptoService.makeKeyPair(
-      orgShareKey
-    );
+    const [encryptedOrgKey, orgKey] = await this.cryptoService.makeOrgKey<OrgKey>();
+    const [orgPublicKey, encryptedOrgPrivateKey] = await this.cryptoService.makeKeyPair(orgKey);
     const collection = await this.cryptoService.encrypt(
       this.i18nService.t("defaultCollection"),
-      orgShareKey
+      orgKey
     );
 
-    request.key = encryptedOrgShareKey.encryptedString;
+    request.key = encryptedOrgKey.encryptedString;
     request.keys = new OrganizationKeysRequest(
       orgPublicKey,
       encryptedOrgPrivateKey.encryptedString
@@ -141,8 +140,8 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
       const publicKey = Utils.fromB64ToArray(response.publicKey);
 
       // RSA Encrypt user's encKey.key with organization public key
-      const encKey = await this.cryptoService.getEncKey();
-      const encryptedKey = await this.cryptoService.rsaEncrypt(encKey.key, publicKey.buffer);
+      const userKey = await this.cryptoService.getUserKey();
+      const encryptedKey = await this.cryptoService.rsaEncrypt(userKey.key, publicKey);
 
       // Add reset password key to accept request
       request.resetPasswordKey = encryptedKey.encryptedString;

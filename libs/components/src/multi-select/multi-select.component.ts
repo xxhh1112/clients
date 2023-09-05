@@ -13,7 +13,7 @@ import {
 import { ControlValueAccessor, NgControl, Validators } from "@angular/forms";
 import { NgSelectComponent } from "@ng-select/ng-select";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { BitFormFieldControl } from "../form-field/form-field-control";
 
@@ -72,12 +72,6 @@ export class MultiSelectComponent implements OnInit, BitFormFieldControl, Contro
   /** Needs to be arrow function to retain `this` scope. */
   keyDown = (event: KeyboardEvent) => {
     if (!this.select.isOpen && event.key === "Enter" && !hasModifierKey(event)) {
-      return false;
-    }
-
-    if (this.select.isOpen && event.key === "Enter" && !hasModifierKey(event)) {
-      this.select.close();
-      event.preventDefault();
       return false;
     }
 

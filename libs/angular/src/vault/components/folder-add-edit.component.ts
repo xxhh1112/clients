@@ -1,13 +1,13 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Validators, FormBuilder } from "@angular/forms";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-
-import { DialogServiceAbstraction, SimpleDialogType } from "../../services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export class FolderAddEditComponent implements OnInit {
@@ -22,13 +22,18 @@ export class FolderAddEditComponent implements OnInit {
   deletePromise: Promise<any>;
   protected componentName = "";
 
+  formGroup = this.formBuilder.group({
+    name: ["", [Validators.required]],
+  });
+
   constructor(
     protected folderService: FolderService,
     protected folderApiService: FolderApiServiceAbstraction,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
-    private logService: LogService,
-    protected dialogService: DialogServiceAbstraction
+    protected logService: LogService,
+    protected dialogService: DialogService,
+    protected formBuilder: FormBuilder
   ) {}
 
   async ngOnInit() {
@@ -36,6 +41,7 @@ export class FolderAddEditComponent implements OnInit {
   }
 
   async submit(): Promise<boolean> {
+    this.folder.name = this.formGroup.controls.name.value;
     if (this.folder.name == null || this.folder.name === "") {
       this.platformUtilsService.showToast(
         "error",
@@ -67,7 +73,7 @@ export class FolderAddEditComponent implements OnInit {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "deleteFolder" },
       content: { key: "deleteFolderConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {
@@ -97,5 +103,6 @@ export class FolderAddEditComponent implements OnInit {
     } else {
       this.title = this.i18nService.t("addFolder");
     }
+    this.formGroup.controls.name.setValue(this.folder.name);
   }
 }

@@ -1,20 +1,22 @@
 import { ApiService } from "../../../abstractions/api.service";
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { StateService } from "../../../abstractions/state.service";
-import { EFFLongWordList } from "../../../misc/wordlist";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { EFFLongWordList } from "../../../platform/misc/wordlist";
 
 import {
   AnonAddyForwarder,
   DuckDuckGoForwarder,
   FastmailForwarder,
   FirefoxRelayForwarder,
+  ForwardEmailForwarder,
   Forwarder,
   ForwarderOptions,
   SimpleLoginForwarder,
 } from "./email-forwarders";
+import { UsernameGeneratorOptions } from "./username-generation-options";
 import { UsernameGenerationServiceAbstraction } from "./username-generation.service.abstraction";
 
-const DefaultOptions = {
+const DefaultOptions: UsernameGeneratorOptions = {
   type: "word",
   wordCapitalize: true,
   wordIncludeNumber: true,
@@ -22,6 +24,7 @@ const DefaultOptions = {
   catchallType: "random",
   forwardedService: "",
   forwardedAnonAddyDomain: "anonaddy.me",
+  forwardedForwardEmailDomain: "hideaddress.net",
 };
 
 export class UsernameGenerationService implements UsernameGenerationServiceAbstraction {
@@ -31,7 +34,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     private apiService: ApiService
   ) {}
 
-  generateUsername(options: any): Promise<string> {
+  generateUsername(options: UsernameGeneratorOptions): Promise<string> {
     if (options.type === "catchall") {
       return this.generateCatchall(options);
     } else if (options.type === "subaddress") {
@@ -43,7 +46,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     }
   }
 
-  async generateWord(options: any): Promise<string> {
+  async generateWord(options: UsernameGeneratorOptions): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.wordCapitalize == null) {
@@ -65,7 +68,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return word;
   }
 
-  async generateSubaddress(options: any): Promise<string> {
+  async generateSubaddress(options: UsernameGeneratorOptions): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     const subaddressEmail = o.subaddressEmail;
@@ -92,7 +95,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return emailBeginning + "+" + subaddressString + "@" + emailEnding;
   }
 
-  async generateCatchall(options: any): Promise<string> {
+  async generateCatchall(options: UsernameGeneratorOptions): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.catchallDomain == null || o.catchallDomain === "") {
@@ -111,7 +114,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return startString + "@" + o.catchallDomain;
   }
 
-  async generateForwarded(options: any): Promise<string> {
+  async generateForwarded(options: UsernameGeneratorOptions): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.forwardedService == null) {
@@ -137,6 +140,10 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     } else if (o.forwardedService === "duckduckgo") {
       forwarder = new DuckDuckGoForwarder();
       forwarderOptions.apiKey = o.forwardedDuckDuckGoToken;
+    } else if (o.forwardedService === "forwardemail") {
+      forwarder = new ForwardEmailForwarder();
+      forwarderOptions.apiKey = o.forwardedForwardEmailApiToken;
+      forwarderOptions.forwardemail.domain = o.forwardedForwardEmailDomain;
     }
 
     if (forwarder == null) {
@@ -146,7 +153,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return forwarder.generate(this.apiService, forwarderOptions);
   }
 
-  async getOptions(): Promise<any> {
+  async getOptions(): Promise<UsernameGeneratorOptions> {
     let options = await this.stateService.getUsernameGenerationOptions();
     if (options == null) {
       options = Object.assign({}, DefaultOptions);
@@ -157,7 +164,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return options;
   }
 
-  async saveOptions(options: any) {
+  async saveOptions(options: UsernameGeneratorOptions) {
     await this.stateService.setUsernameGenerationOptions(options);
   }
 

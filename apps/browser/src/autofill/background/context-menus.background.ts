@@ -1,5 +1,5 @@
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
-import { BrowserApi } from "../../browser/browserApi";
+import { BrowserApi } from "../../platform/browser/browser-api";
 import { ContextMenuClickedHandler } from "../browser/context-menu-clicked-handler";
 
 export default class ContextMenusBackground {
@@ -30,6 +30,7 @@ export default class ContextMenusBackground {
             msg.data.commandToRetry.msg.data,
             msg.data.commandToRetry.sender.tab
           );
+          await BrowserApi.tabSendMessageData(sender.tab, "closeNotificationBar");
         }
       }
     );

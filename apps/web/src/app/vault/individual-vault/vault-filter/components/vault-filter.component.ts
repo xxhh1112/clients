@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Subject } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
 import { VaultFilterService } from "../services/abstractions/vault-filter.service";
@@ -32,7 +32,6 @@ import { OrganizationOptionsComponent } from "./organization-options.component";
 export class VaultFilterComponent implements OnInit, OnDestroy {
   filters?: VaultFilterList;
   @Input() activeFilter: VaultFilter = new VaultFilter();
-  @Output() onAddFolder = new EventEmitter<never>();
   @Output() onEditFolder = new EventEmitter<FolderFilter>();
 
   @Input() searchText = "";
@@ -142,10 +141,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     filter.selectedCollectionNode = collectionNode;
   };
 
-  addFolder = async (): Promise<void> => {
-    this.onAddFolder.emit();
-  };
-
   editFolder = async (folder: FolderFilter): Promise<void> => {
     this.onEditFolder.emit(folder);
   };
@@ -248,10 +243,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       edit: {
         text: "editFolder",
         action: this.editFolder,
-      },
-      add: {
-        text: "Add Folder",
-        action: this.addFolder,
       },
     };
     return folderFilterSection;

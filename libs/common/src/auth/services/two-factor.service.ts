@@ -1,5 +1,5 @@
-import { I18nService } from "../../abstractions/i18n.service";
-import { PlatformUtilsService } from "../../abstractions/platformUtils.service";
+import { I18nService } from "../../platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import {
   TwoFactorProviderDetails,
   TwoFactorService as TwoFactorServiceAbstraction,
@@ -55,7 +55,7 @@ export const TwoFactorProviders: Partial<Record<TwoFactorProviderType, TwoFactor
       description: null as string,
       priority: 4,
       sort: 5,
-      premium: true,
+      premium: false,
     },
   };
 

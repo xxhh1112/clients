@@ -4,11 +4,11 @@ import * as path from "path";
 import * as inquirer from "inquirer";
 import * as JSZip from "jszip";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionView } from "@bitwarden/common/admin-console/models/view/collection.view";
 import { NodeUtils } from "@bitwarden/common/misc/nodeUtils";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { Response } from "./models/response";
@@ -46,7 +46,7 @@ export class CliUtils {
     });
   }
 
-  static extract1PuxContent(input: string): Promise<string> {
+  static extractZipContent(input: string, filepath: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       let p: string = null;
       if (input != null && input !== "") {
@@ -65,7 +65,7 @@ export class CliUtils {
         }
         JSZip.loadAsync(data).then(
           (zip) => {
-            resolve(zip.file("export.data").async("string"));
+            resolve(zip.file(filepath).async("string"));
           },
           (reason) => {
             reject(reason);
@@ -74,6 +74,7 @@ export class CliUtils {
       });
     });
   }
+
   /**
    * Save the given data to a file and determine the target file if necessary.
    * If output is non-empty, it is used as target filename. Otherwise the target filename is
@@ -251,5 +252,21 @@ export class CliUtils {
 
   static convertBooleanOption(optionValue: any) {
     return optionValue || optionValue === "" ? true : false;
+  }
+
+  static convertNumberOption(optionValue: any, defaultValue: number) {
+    try {
+      if (optionValue != null) {
+        const numVal = parseInt(optionValue);
+        return !Number.isNaN(numVal) ? numVal : defaultValue;
+      }
+      return defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  }
+
+  static convertStringOption(optionValue: any, defaultValue: string) {
+    return optionValue != null ? String(optionValue) : defaultValue;
   }
 }

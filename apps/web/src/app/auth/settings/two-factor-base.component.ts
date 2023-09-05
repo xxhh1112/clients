@@ -1,16 +1,16 @@
 import { Directive, EventEmitter, Output } from "@angular/core";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { TwoFactorProviderRequest } from "@bitwarden/common/auth/models/request/two-factor-provider.request";
 import { AuthResponseBase } from "@bitwarden/common/auth/types/auth-response";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { DialogService } from "@bitwarden/components";
 
 @Directive()
 export abstract class TwoFactorBaseComponent {
@@ -32,7 +32,7 @@ export abstract class TwoFactorBaseComponent {
     protected platformUtilsService: PlatformUtilsService,
     protected logService: LogService,
     protected userVerificationService: UserVerificationService,
-    protected dialogService: DialogServiceAbstraction
+    protected dialogService: DialogService
   ) {}
 
   protected auth(authResponse: AuthResponseBase) {
@@ -54,7 +54,7 @@ export abstract class TwoFactorBaseComponent {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "disable" },
       content: { key: "twoStepDisableDesc" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {

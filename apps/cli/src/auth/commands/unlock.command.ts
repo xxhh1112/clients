@@ -1,14 +1,14 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
 import { HashPurpose } from "@bitwarden/common/enums";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { ConvertToKeyConnectorCommand } from "../../commands/convert-to-key-connector.command";
@@ -44,17 +44,17 @@ export class UnlockCommand {
     const email = await this.stateService.getEmail();
     const kdf = await this.stateService.getKdfType();
     const kdfConfig = await this.stateService.getKdfConfig();
-    const key = await this.cryptoService.makeKey(password, email, kdf, kdfConfig);
-    const storedKeyHash = await this.cryptoService.getKeyHash();
+    const masterKey = await this.cryptoService.makeMasterKey(password, email, kdf, kdfConfig);
+    const storedKeyHash = await this.cryptoService.getMasterKeyHash();
 
     let passwordValid = false;
-    if (key != null) {
+    if (masterKey != null) {
       if (storedKeyHash != null) {
-        passwordValid = await this.cryptoService.compareAndUpdateKeyHash(password, key);
+        passwordValid = await this.cryptoService.compareAndUpdateKeyHash(password, masterKey);
       } else {
-        const serverKeyHash = await this.cryptoService.hashPassword(
+        const serverKeyHash = await this.cryptoService.hashMasterKey(
           password,
-          key,
+          masterKey,
           HashPurpose.ServerAuthorization
         );
         const request = new SecretVerificationRequest();
@@ -62,12 +62,12 @@ export class UnlockCommand {
         try {
           await this.apiService.postAccountVerifyPassword(request);
           passwordValid = true;
-          const localKeyHash = await this.cryptoService.hashPassword(
+          const localKeyHash = await this.cryptoService.hashMasterKey(
             password,
-            key,
+            masterKey,
             HashPurpose.LocalAuthorization
           );
-          await this.cryptoService.setKeyHash(localKeyHash);
+          await this.cryptoService.setMasterKeyHash(localKeyHash);
         } catch {
           // Ignore
         }
@@ -75,7 +75,9 @@ export class UnlockCommand {
     }
 
     if (passwordValid) {
-      await this.cryptoService.setKey(key);
+      await this.cryptoService.setMasterKey(masterKey);
+      const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+      await this.cryptoService.setUserKey(userKey);
 
       if (await this.keyConnectorService.getConvertAccountRequired()) {
         const convertToKeyConnectorCommand = new ConvertToKeyConnectorCommand(

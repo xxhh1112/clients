@@ -3,9 +3,11 @@ import { OrganizationSsoRequest } from "../../../auth/models/request/organizatio
 import { SecretVerificationRequest } from "../../../auth/models/request/secret-verification.request";
 import { ApiKeyResponse } from "../../../auth/models/response/api-key.response";
 import { OrganizationSsoResponse } from "../../../auth/models/response/organization-sso.response";
+import { OrganizationSmSubscriptionUpdateRequest } from "../../../billing/models/request/organization-sm-subscription-update.request";
 import { OrganizationSubscriptionUpdateRequest } from "../../../billing/models/request/organization-subscription-update.request";
 import { OrganizationTaxInfoUpdateRequest } from "../../../billing/models/request/organization-tax-info-update.request";
 import { PaymentRequest } from "../../../billing/models/request/payment.request";
+import { SecretsManagerSubscribeRequest } from "../../../billing/models/request/sm-subscribe.request";
 import { BillingResponse } from "../../../billing/models/response/billing.response";
 import { OrganizationSubscriptionResponse } from "../../../billing/models/response/organization-subscription.response";
 import { PaymentResponse } from "../../../billing/models/response/payment.response";
@@ -16,7 +18,6 @@ import { StorageRequest } from "../../../models/request/storage.request";
 import { VerifyBankRequest } from "../../../models/request/verify-bank.request";
 import { ListResponse } from "../../../models/response/list.response";
 import { OrganizationApiKeyType } from "../../enums";
-import { OrganizationEnrollSecretsManagerRequest } from "../../models/request/organization/organization-enroll-secrets-manager.request";
 import { OrganizationCreateRequest } from "../../models/request/organization-create.request";
 import { OrganizationKeysRequest } from "../../models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "../../models/request/organization-update.request";
@@ -25,6 +26,7 @@ import { OrganizationApiKeyInformationResponse } from "../../models/response/org
 import { OrganizationAutoEnrollStatusResponse } from "../../models/response/organization-auto-enroll-status.response";
 import { OrganizationKeysResponse } from "../../models/response/organization-keys.response";
 import { OrganizationResponse } from "../../models/response/organization.response";
+import { ProfileOrganizationResponse } from "../../models/response/profile-organization.response";
 
 export class OrganizationApiServiceAbstraction {
   get: (id: string) => Promise<OrganizationResponse>;
@@ -37,7 +39,14 @@ export class OrganizationApiServiceAbstraction {
   save: (id: string, request: OrganizationUpdateRequest) => Promise<OrganizationResponse>;
   updatePayment: (id: string, request: PaymentRequest) => Promise<void>;
   upgrade: (id: string, request: OrganizationUpgradeRequest) => Promise<PaymentResponse>;
-  updateSubscription: (id: string, request: OrganizationSubscriptionUpdateRequest) => Promise<void>;
+  updatePasswordManagerSeats: (
+    id: string,
+    request: OrganizationSubscriptionUpdateRequest
+  ) => Promise<void>;
+  updateSecretsManagerSubscription: (
+    id: string,
+    request: OrganizationSmSubscriptionUpdateRequest
+  ) => Promise<void>;
   updateSeats: (id: string, request: SeatRequest) => Promise<PaymentResponse>;
   updateStorage: (id: string, request: StorageRequest) => Promise<PaymentResponse>;
   verifyBank: (id: string, request: VerifyBankRequest) => Promise<void>;
@@ -60,8 +69,8 @@ export class OrganizationApiServiceAbstraction {
   getSso: (id: string) => Promise<OrganizationSsoResponse>;
   updateSso: (id: string, request: OrganizationSsoRequest) => Promise<OrganizationSsoResponse>;
   selfHostedSyncLicense: (id: string) => Promise<void>;
-  updateEnrollSecretsManager: (
+  subscribeToSecretsManager: (
     id: string,
-    request: OrganizationEnrollSecretsManagerRequest
-  ) => Promise<void>;
+    request: SecretsManagerSubscribeRequest
+  ) => Promise<ProfileOrganizationResponse>;
 }

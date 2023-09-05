@@ -3,26 +3,30 @@ import {
   totpServiceFactory,
 } from "../../../auth/background/service-factories/totp-service.factory";
 import {
+  UserVerificationServiceInitOptions,
+  userVerificationServiceFactory,
+} from "../../../auth/background/service-factories/user-verification-service.factory";
+import {
   EventCollectionServiceInitOptions,
   eventCollectionServiceFactory,
-} from "../../../background/service_factories/event-collection-service.factory";
+} from "../../../background/service-factories/event-collection-service.factory";
+import {
+  settingsServiceFactory,
+  SettingsServiceInitOptions,
+} from "../../../background/service-factories/settings-service.factory";
 import {
   CachedServices,
   factory,
   FactoryOptions,
-} from "../../../background/service_factories/factory-options";
+} from "../../../platform/background/service-factories/factory-options";
 import {
   logServiceFactory,
   LogServiceInitOptions,
-} from "../../../background/service_factories/log-service.factory";
-import {
-  settingsServiceFactory,
-  SettingsServiceInitOptions,
-} from "../../../background/service_factories/settings-service.factory";
+} from "../../../platform/background/service-factories/log-service.factory";
 import {
   stateServiceFactory,
   StateServiceInitOptions,
-} from "../../../background/service_factories/state-service.factory";
+} from "../../../platform/background/service-factories/state-service.factory";
 import {
   cipherServiceFactory,
   CipherServiceInitOptions,
@@ -38,7 +42,8 @@ export type AutoFillServiceInitOptions = AutoFillServiceOptions &
   TotpServiceInitOptions &
   EventCollectionServiceInitOptions &
   LogServiceInitOptions &
-  SettingsServiceInitOptions;
+  SettingsServiceInitOptions &
+  UserVerificationServiceInitOptions;
 
 export function autofillServiceFactory(
   cache: { autofillService?: AbstractAutoFillService } & CachedServices,
@@ -55,7 +60,8 @@ export function autofillServiceFactory(
         await totpServiceFactory(cache, opts),
         await eventCollectionServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
-        await settingsServiceFactory(cache, opts)
+        await settingsServiceFactory(cache, opts),
+        await userVerificationServiceFactory(cache, opts)
       )
   );
 }
