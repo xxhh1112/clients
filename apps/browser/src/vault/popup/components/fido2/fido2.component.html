@@ -13,7 +13,7 @@
         "
       >
         <div class="auth-flow">
-          <p class="subtitle">{{ "LogInWithPasskey" | i18n }}</p>
+          <p class="subtitle">{{ pickCredentialSubTitleText | i18n }}</p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
@@ -25,7 +25,7 @@
           </div>
           <div class="box">
             <button type="submit" (click)="pick()" class="btn primary block">
-              <b [hidden]="loading">{{ "confirm" | i18n }}</b>
+              <span [hidden]="loading">{{ "confirm" | i18n }}</span>
               <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
             </button>
           </div>

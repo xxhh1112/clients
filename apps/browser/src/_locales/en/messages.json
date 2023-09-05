@@ -2464,6 +2464,9 @@
   "viewPasskey": {
     "message": "View passkey"
   },
+  "choosePasskey": {
+    "message": "Choose a passkey to login with"
+  },
   "useBrowserName": {
     "message": "Use $browserName$",
     "placeholders": {

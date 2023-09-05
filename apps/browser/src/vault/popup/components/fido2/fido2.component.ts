@@ -46,6 +46,10 @@ export class Fido2Component implements OnInit, OnDestroy {
 
   private message$ = new BehaviorSubject<BrowserFido2Message>(null);
 
+  get pickCredentialSubTitleText(): string {
+    return this.ciphers.length > 1 ? "choosePasskey" : "logInWithPasskey";
+  }
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
