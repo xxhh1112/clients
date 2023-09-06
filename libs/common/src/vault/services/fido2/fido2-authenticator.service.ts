@@ -1,5 +1,3 @@
-import { CBOR } from "cbor-redux";
-
 import { LogService } from "../../../platform/abstractions/log.service";
 import { Utils } from "../../../platform/misc/utils";
 import { CipherService } from "../../abstractions/cipher.service";
@@ -19,6 +17,7 @@ import { CipherType } from "../../enums/cipher-type";
 import { CipherView } from "../../models/view/cipher.view";
 import { Fido2KeyView } from "../../models/view/fido2-key.view";
 
+import { CBOR } from "./cbor";
 import { joseToDer } from "./ecdsa-utils";
 import { Fido2Utils } from "./fido2-utils";
 

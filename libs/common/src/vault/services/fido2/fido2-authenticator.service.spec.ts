@@ -1,6 +1,5 @@
 import { TextEncoder } from "util";
 
-import { CBOR } from "cbor-redux";
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { Utils } from "../../../platform/misc/utils";
@@ -21,6 +20,7 @@ import { CipherView } from "../../models/view/cipher.view";
 import { Fido2KeyView } from "../../models/view/fido2-key.view";
 import { LoginView } from "../../models/view/login.view";
 
+import { CBOR } from "./cbor";
 import { AAGUID, Fido2AuthenticatorService } from "./fido2-authenticator.service";
 import { Fido2Utils } from "./fido2-utils";
 
