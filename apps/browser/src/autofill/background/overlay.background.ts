@@ -304,7 +304,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
 
     await BrowserApi.tabSendMessageData(currentTab, "openAutofillOverlay", {
-      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      authStatus: await this.getAuthStatus(),
       focusFieldElement,
     });
   }
@@ -331,14 +331,17 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async getAuthStatus() {
-    const authStatus = await this.authService.getAuthStatus();
-    if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
-      this.userAuthStatus = authStatus;
+    const formerAuthStatus = this.userAuthStatus;
+    this.userAuthStatus = await this.authService.getAuthStatus();
+
+    if (
+      this.userAuthStatus !== formerAuthStatus &&
+      this.userAuthStatus === AuthenticationStatus.Unlocked
+    ) {
       this.updateAutofillOverlayButtonAuthStatus();
       await this.updateAutofillOverlayCiphers();
     }
 
-    this.userAuthStatus = authStatus;
     return this.userAuthStatus;
   }
 
@@ -516,7 +519,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     port.onMessage.addListener(this.handleOverlayElementPortMessage);
     port.postMessage({
       command: `initAutofillOverlay${isOverlayListPort ? "List" : "Button"}`,
-      authStatus: this.userAuthStatus || (await this.getAuthStatus()),
+      authStatus: await this.getAuthStatus(),
       styleSheetUrl: chrome.runtime.getURL(`overlay/${isOverlayListPort ? "list" : "button"}.css`),
       translations: this.getTranslations(),
       ciphers: isOverlayListPort ? this.getOverlayCipherData() : null,
