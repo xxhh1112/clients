@@ -145,9 +145,7 @@ export abstract class LogInStrategy {
           },
         },
         keys: accountKeys,
-        decryptionOptions: AccountDecryptionOptions.fromResponse(
-          tokenResponse.userDecryptionOptions
-        ),
+        decryptionOptions: AccountDecryptionOptions.fromResponse(tokenResponse),
         adminAuthRequest: adminAuthRequest?.toJSON(),
       })
     );
