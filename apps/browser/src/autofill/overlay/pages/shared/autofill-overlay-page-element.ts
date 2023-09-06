@@ -1,8 +1,8 @@
 import { EVENTS } from "../../../constants";
 import { RedirectFocusDirection } from "../../../utils/autofill-overlay.enum";
-import { WindowMessageHandlers } from "../../abstractions/autofill-overlay-page";
+import { WindowMessageHandlers } from "../../abstractions/autofill-overlay-page-element";
 
-class AutofillOverlayPage extends HTMLElement {
+class AutofillOverlayPageElement extends HTMLElement {
   protected shadowDom: ShadowRoot;
   protected messageOrigin: string;
   protected translations: Record<string, string>;
@@ -97,4 +97,4 @@ class AutofillOverlayPage extends HTMLElement {
   }
 }
 
-export default AutofillOverlayPage;
+export default AutofillOverlayPageElement;
