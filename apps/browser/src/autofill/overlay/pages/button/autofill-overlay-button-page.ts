@@ -9,12 +9,12 @@ import { buildSvgDomElement } from "../../../utils/utils";
 import {
   InitAutofillOverlayButtonMessage,
   OverlayButtonWindowMessageHandlers,
-} from "../../abstractions/button";
+} from "../../abstractions/autofill-overlay-button-page";
 import AutofillOverlayPage from "../shared/autofill-overlay-page";
 
 require("./button.scss");
 
-class AutofillOverlayButton extends AutofillOverlayPage {
+class AutofillOverlayButtonPage extends AutofillOverlayPage {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private buttonElement: HTMLButtonElement;
   private readonly logoIconElement: HTMLElement;
@@ -93,5 +93,5 @@ class AutofillOverlayButton extends AutofillOverlayPage {
 }
 
 (function () {
-  globalThis.customElements.define(AutofillOverlayElement.Button, AutofillOverlayButton);
+  globalThis.customElements.define(AutofillOverlayElement.Button, AutofillOverlayButtonPage);
 })();
