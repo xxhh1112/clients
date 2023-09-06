@@ -3,28 +3,23 @@ import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { EVENTS } from "../../../constants";
-import {
-  AutofillOverlayElement,
-  RedirectFocusDirection,
-} from "../../../utils/autofill-overlay.enum";
+import { AutofillOverlayElement } from "../../../utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
 import {
   InitAutofillOverlayButtonMessage,
   OverlayButtonWindowMessageHandlers,
 } from "../../abstractions/button";
+import AutofillOverlayPage from "../shared/autofill-overlay-page";
 
 require("./button.scss");
 
-class AutofillOverlayButton extends HTMLElement {
+class AutofillOverlayButton extends AutofillOverlayPage {
   private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
-  private shadowDom: ShadowRoot;
   private buttonElement: HTMLButtonElement;
-  private messageOrigin: string;
-  private translations: Record<string, string>;
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
-  private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
+  private readonly overlayButtonWindowMessageHandlers: OverlayButtonWindowMessageHandlers = {
     initAutofillOverlayButton: ({ message }) => this.initAutofillOverlayButton(message),
     checkAutofillOverlayButtonFocused: () => this.checkButtonFocused(),
     updateAutofillOverlayButtonAuthStatus: ({ message }) =>
@@ -34,8 +29,7 @@ class AutofillOverlayButton extends HTMLElement {
   constructor() {
     super();
 
-    this.setupGlobalListeners();
-    this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.setupGlobalListeners(this.overlayButtonWindowMessageHandlers);
 
     this.logoIconElement = buildSvgDomElement(logoIcon);
     this.logoIconElement.classList.add("overlay-button-svg-icon", "logo-icon");
@@ -49,13 +43,7 @@ class AutofillOverlayButton extends HTMLElement {
     styleSheetUrl,
     translations,
   }: InitAutofillOverlayButtonMessage) {
-    this.translations = translations;
-    globalThis.document.documentElement.setAttribute("lang", this.getTranslation("locale"));
-    globalThis.document.head.title = this.getTranslation("buttonPageTitle");
-
-    const linkElement = globalThis.document.createElement("link");
-    linkElement.setAttribute("rel", "stylesheet");
-    linkElement.setAttribute("href", styleSheetUrl);
+    const linkElement = this.initOverlayPage("button", styleSheetUrl, translations);
 
     this.buttonElement = globalThis.document.createElement("button");
     this.buttonElement.tabIndex = -1;
@@ -101,66 +89,6 @@ class AutofillOverlayButton extends HTMLElement {
     }
 
     this.postMessageToParent({ command: "closeAutofillOverlay" });
-  }
-
-  private getTranslation(key: string): string {
-    return this.translations[key] || "";
-  }
-
-  private postMessageToParent(message: { command: string; direction?: string }) {
-    if (!this.messageOrigin) {
-      return;
-    }
-
-    globalThis.parent.postMessage(message, this.messageOrigin);
-  }
-
-  private setupGlobalListeners() {
-    globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
-    globalThis.addEventListener(EVENTS.BLUR, this.handleWindowBlurEvent);
-    globalThis.document.addEventListener(EVENTS.KEYDOWN, this.handleDocumentKeyDownEvent);
-  }
-
-  private handleWindowMessage = (event: MessageEvent) => {
-    if (!this.messageOrigin) {
-      this.messageOrigin = event.origin;
-    }
-
-    const message = event?.data;
-    const command = message?.command;
-    const handler = this.windowMessageHandlers[command];
-    if (!handler) {
-      return;
-    }
-
-    handler({ message });
-  };
-
-  private handleWindowBlurEvent = () => {
-    this.postMessageToParent({ command: "overlayButtonBlurred" });
-  };
-
-  private handleDocumentKeyDownEvent = (event: KeyboardEvent) => {
-    const listenedForKeys = new Set(["Tab", "Escape"]);
-    if (!listenedForKeys.has(event.key)) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (event.key === "Tab") {
-      this.redirectOverlayFocusOutMessage(
-        event.shiftKey ? RedirectFocusDirection.Previous : RedirectFocusDirection.Next
-      );
-      return;
-    }
-
-    this.redirectOverlayFocusOutMessage(RedirectFocusDirection.Current);
-  };
-
-  private redirectOverlayFocusOutMessage(direction: string) {
-    this.postMessageToParent({ command: "redirectOverlayFocusOut", direction });
   }
 }
 

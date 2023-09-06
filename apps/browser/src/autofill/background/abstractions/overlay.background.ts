@@ -87,13 +87,14 @@ type OverlayButtonPortMessageHandlers = {
   [key: string]: CallableFunction;
   overlayButtonClicked: ({ port }: { port: chrome.runtime.Port }) => void;
   closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
-  overlayButtonBlurred: () => void;
+  overlayPageBlurred: () => void;
   redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
 };
 
 type OverlayListPortMessageHandlers = {
   [key: string]: CallableFunction;
   checkAutofillOverlayButtonFocused: () => void;
+  overlayPageBlurred: () => void;
   unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
   autofillSelectedListItem: ({
     message,
