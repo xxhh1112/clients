@@ -1,7 +1,12 @@
 <!-- TODO: Rewrite and refactor this component when implementing the new design -->
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
-    <div class="logo-image"></div>
+    <!-- <ng-container *ngIf=""> -->
+    <svg id="passkey-icon-wrapper" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+      <use xlink:href="../../../images/shield.svg#passkey-icon"></use>
+    </svg>
+    <!-- </ng-container> -->
+
     <ng-container *ngIf="data.showUnsupportedVerification">
       {{ "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" | i18n }}
     </ng-container>

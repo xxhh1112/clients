@@ -637,6 +637,13 @@ app-fido2 {
       }
     }
 
+    #passkey-icon-wrapper {
+      @include themify($themes) {
+        fill: red;
+        // fill: themed("brand-primary");
+      }
+    }
+
     .auth-flow {
       display: flex;
       align-items: flex-start;
