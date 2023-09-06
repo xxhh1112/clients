@@ -14,7 +14,6 @@ import {
 import { FactoryOptions, CachedServices, factory } from "./factory-options";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";
 
-
 type ConfigServiceFactoryOptions = FactoryOptions;
 
 export type ConfigServiceInitOptions = ConfigServiceFactoryOptions &
