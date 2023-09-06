@@ -1924,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1 Go de stockage chiffré pour les fichiers joints."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Options additionnelles d'authentification à deux facteurs telles que YubiKey, FIDO U2F et Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Options de connexion propriétaires à deux facteurs telles que YubiKey et Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Accès d'urgence"
@@ -2039,6 +2039,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Votre mode de paiement sera facturé pour tous les abonnements impayés."
   },
   "paymentChargedWithTrial": {
     "message": "Votre offre comprend un essai gratuit de 7 jours. Votre mode de paiement ne sera pas facturé avant la fin de la période d'essai. Vous pouvez annuler à tout moment."
@@ -3536,6 +3539,9 @@
   "vaultTimeoutDesc": {
     "message": "Choisissez quand votre coffre expirera et effectuera l'action sélectionnée."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Choisissez quand votre coffre sera déconnecté."
+  },
   "oneMinute": {
     "message": "1 minute"
   },
@@ -3842,29 +3848,11 @@
   "restoreSelected": {
     "message": "Restaurer la sélection"
   },
-  "restoreItem": {
-    "message": "Restaurer l'élément"
-  },
   "restoredItem": {
     "message": "Élément restauré"
   },
   "restoredItems": {
     "message": "Éléments restaurés"
-  },
-  "restoreItemConfirmation": {
-    "message": "Êtes-vous sûr de vouloir restaurer cet élément ?"
-  },
-  "restoreItems": {
-    "message": "Restaurer les éléments"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Vous avez sélectionné $COUNT$ élément(s) à restaurer. Êtes-vous sûr de vouloir restaurer tous ces éléments ?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Élément $ID$ restauré.",
@@ -4950,8 +4938,8 @@
   "disablePersonalVaultExport": {
     "message": "Supprimer l'exportation individuelle du coffre"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Empêche les utilisateurs d'exporter les données de leur coffre privé."
+  "disablePersonalVaultExportDescription": {
+    "message": "Ne pas autoriser les membres à exporter des données de leur coffre individuel."
   },
   "vaultExportDisabled": {
     "message": "Export du coffre supprimé"
@@ -5454,8 +5442,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Export du coffre de l'organisation"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus. Seules les informations sur les éléments du coffre seront exportées et n'incluront pas l'historique des mots de passe associés ou pièces jointes.",
+  "exportingIndividualVaultDescription": {
+    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus. Seules les informations sur les éléments du coffre seront exportées et n'incluront pas les pièces jointes associées.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -6853,28 +6841,60 @@
   "updateKdfSettings": {
     "message": "Mettre à jour les paramètres KDF"
   },
+  "loginInitiated": {
+    "message": "Connexion initiée"
+  },
+  "deviceApprovalRequired": {
+    "message": "L'approbation de l'appareil est requise. Sélectionnez une option d'approbation ci-dessous:"
+  },
+  "rememberThisDevice": {
+    "message": "Se souvenir de cet appareil"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Décocher si vous utilisez un appareil public"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approuver de votre autre appareil"
+  },
+  "requestAdminApproval": {
+    "message": "Demander l'approbation de l'administrateur"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approuver avec le mot de passe principal"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Chiffrement de l'appareil de confiance"
+  },
   "trustedDevices": {
     "message": "Appareils de confiance"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "Une fois authentifiés, les membres déchiffreront les données du coffre à l'aide d'une clé enregistrée sur leur appareil. La",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "single organization",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "d'organisation unique,",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "policy and ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "politique",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "account recovery administration",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO requise et",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
-    "message": "policy with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "la politique",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "la politique d'administration de la restauration du compte",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "avec inscription automatique sera activée quand cette option est utilisée.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ introuvable",
@@ -6963,6 +6983,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "La suppression des membres qui n'ont pas de mot de passe principal sans leur en définir un, peut restreindre l'accès à leur compte dans son intégralité."
   },
+  "approvedAuthRequest": {
+    "message": "Appareil approuvé pour $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Appareil refusé pour $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Approbation de l'appareil demandée."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Commencez votre essai gratuit de 7 jours de Bitwarden pour $ORG$",
     "placeholders": {
@@ -6983,6 +7024,30 @@
   },
   "selectedRegionFlag": {
     "message": "Drapeau de la région sélectionnée"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Compte créé avec succès !"
+  },
+  "adminApprovalRequested": {
+    "message": "Approbation de l'administrateur demandée"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Votre demande a été envoyée à votre administrateur."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Vous serez notifié une fois approuvé."
+  },
+  "troubleLoggingIn": {
+    "message": "Problème pour vous connecter ?"
+  },
+  "loginApproved": {
+    "message": "Connexion approuvée"
+  },
+  "userEmailMissing": {
+    "message": "Courriel de l'utilisateur manquant"
+  },
+  "deviceTrusted": {
+    "message": "Appareil de confiance"
   },
   "sendsNoItemsTitle": {
     "message": "Aucun Send actif",
@@ -7094,6 +7159,9 @@
   "maxServiceAccountCost": {
     "message": "Coût potentiel maximum du compte de service"
   },
+  "loggedInExclamation": {
+    "message": "Connecté !"
+  },
   "smBetaEndedDesc": {
     "message": "Le Secrets Manager Beta s'est terminé le $BETA_ENDING_DATE$.  Il vous reste $DAYS$ jours pour ajouter Secrets Manager à votre forfait payant et conserver votre accès à vos données de Secrets Manager.  Contactez Customer Success pour ajouter Secrets Manager à votre forfait.",
     "placeholders": {
@@ -7112,5 +7180,8 @@
   },
   "beta": {
     "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Vous avez déjà un compte ?"
   }
 }
