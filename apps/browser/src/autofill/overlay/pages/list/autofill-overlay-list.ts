@@ -10,12 +10,12 @@ import { buildSvgDomElement } from "../../../utils/utils";
 import {
   InitAutofillOverlayListMessage,
   OverlayListWindowMessageHandlers,
-} from "../../abstractions/autofill-overlay-list-page";
-import AutofillOverlayPage from "../shared/autofill-overlay-page";
+} from "../../abstractions/autofill-overlay-list";
+import AutofillOverlayPageElement from "../shared/autofill-overlay-page-element";
 
 require("./list.scss");
 
-class AutofillOverlayListPage extends AutofillOverlayPage {
+class AutofillOverlayList extends AutofillOverlayPageElement {
   private overlayListContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
   private eventHandlersMemo: { [key: string]: EventListener } = {};
@@ -399,5 +399,5 @@ class AutofillOverlayListPage extends AutofillOverlayPage {
 }
 
 (function () {
-  globalThis.customElements.define(AutofillOverlayElement.List, AutofillOverlayListPage);
+  globalThis.customElements.define(AutofillOverlayElement.List, AutofillOverlayList);
 })();
