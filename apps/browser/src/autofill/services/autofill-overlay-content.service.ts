@@ -27,7 +27,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
-  private autofillOverlayAppearance: number = AutofillOverlayAppearance.OnFieldFocus;
+  autofillOverlayAppearance: number;
   private focusableElements: FocusableElement[] = [];
   private isOverlayButtonVisible = false;
   private isOverlayListVisible = false;
@@ -50,16 +50,19 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   constructor() {
-    this.getOverlayAppearanceFromUserSettings();
     this.initOverlayOnDomContentLoaded();
   }
 
-  setupAutofillOverlayListenerOnField(
+  async setupAutofillOverlayListenerOnField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField
   ) {
     if (this.isIgnoredField(autofillFieldData)) {
       return;
+    }
+
+    if (!this.autofillOverlayAppearance) {
+      await this.getAutofillOverlayAppearance();
     }
 
     formFieldElement.addEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
@@ -78,12 +81,12 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     );
 
     if (this.getRootNodeActiveElement(formFieldElement) === formFieldElement) {
-      this.triggerFormFieldFocusedAction(formFieldElement);
+      await this.triggerFormFieldFocusedAction(formFieldElement);
       return;
     }
 
     if (!this.mostRecentlyFocusedField) {
-      this.updateMostRecentlyFocusedField(formFieldElement);
+      await this.updateMostRecentlyFocusedField(formFieldElement);
     }
   }
 
@@ -517,6 +520,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.observeCustomElements();
   }
 
+  private async getAutofillOverlayAppearance() {
+    const overlayAppearance = await sendExtensionMessage("getAutofillOverlayAppearance");
+    if (!overlayAppearance) {
+      this.autofillOverlayAppearance = AutofillOverlayAppearance.OnFieldFocus;
+      return;
+    }
+
+    this.autofillOverlayAppearance = overlayAppearance;
+  }
+
   private setOverlayRepositionEventListeners() {
     globalThis.document.body?.addEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
     globalThis.addEventListener(EVENTS.SCROLL, this.handleOverlayRepositionEvent);
@@ -562,24 +575,6 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (this.userInteractionEventTimeout) {
       clearTimeout(this.userInteractionEventTimeout);
     }
-  }
-
-  private async getOverlayAppearanceFromUserSettings() {
-    this.autofillOverlayAppearance = await new Promise((resolve) => {
-      chrome.storage.local.get("activeUserId", ({ activeUserId }: { activeUserId: string }) => {
-        if (!activeUserId) {
-          return;
-        }
-
-        chrome.storage.local.get(activeUserId, (obj: any) => {
-          if (!obj?.[activeUserId]?.settings?.autoFillOverlayAppearance) {
-            return;
-          }
-
-          resolve(obj[activeUserId].settings.autoFillOverlayAppearance);
-        });
-      });
-    });
   }
 
   private initOverlayOnDomContentLoaded() {

@@ -48,8 +48,19 @@ function buildSvgDomElement(svgString: string, ariaHidden: "true" | "false" = "t
   return domElement;
 }
 
-function sendExtensionMessage(command: string, options: Record<string, any> = {}) {
-  chrome.runtime.sendMessage(Object.assign({ command }, options));
+async function sendExtensionMessage(
+  command: string,
+  options: Record<string, any> = {}
+): Promise<any> {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage(Object.assign({ command }, options), (response) => {
+      if (chrome.runtime.lastError) {
+        return;
+      }
+
+      resolve(response);
+    });
+  });
 }
 
 function setElementStyles(

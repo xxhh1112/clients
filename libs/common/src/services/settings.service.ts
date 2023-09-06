@@ -78,6 +78,10 @@ export class SettingsService implements SettingsServiceAbstraction {
     return await this.stateService.getEnableAutoFillOverlay();
   }
 
+  async getAutoFillOverlayAppearance(): Promise<number> {
+    return await this.stateService.getAutoFillOverlayAppearance();
+  }
+
   async clear(userId?: string): Promise<void> {
     if (userId == null || userId == (await this.stateService.getUserId())) {
       this._settings.next({});

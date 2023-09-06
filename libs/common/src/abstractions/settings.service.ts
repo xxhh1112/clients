@@ -11,5 +11,6 @@ export abstract class SettingsService {
   setDisableFavicon: (value: boolean) => Promise<any>;
   getDisableFavicon: () => boolean;
   getEnableAutoFillOverlay: () => Promise<boolean>;
+  getAutoFillOverlayAppearance: () => Promise<number>;
   clear: (userId?: string) => Promise<void>;
 }

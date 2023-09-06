@@ -32,6 +32,7 @@ import {
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
+  private overlayAppearance: number;
   private overlayCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
@@ -45,6 +46,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     autofillOverlayElementClosed: ({ message }) =>
       this.overlayElementClosed(message.overlayElement),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
+    getAutofillOverlayAppearance: () => this.getOverlayAppearance(),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
     updateAutofillOverlayPosition: ({ message }) =>
@@ -84,10 +86,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     private i18nService: I18nService
   ) {
     this.iconsServerUrl = this.environmentService.getIconsUrl();
-    this.getAuthStatus().catch((error) => {
-      throw new Error(`Error getting auth status: ${error}`);
-    });
-    this.setupExtensionMessageListeners();
+    this.initOverlayBackground();
 
     // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THE USAGE OF THIS METHOD.
     this.overrideUserAutofillSettings();
@@ -119,6 +118,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
       command: "updateOverlayListCiphers",
       ciphers: this.getOverlayCipherData(),
     });
+  }
+
+  private async initOverlayBackground() {
+    this.setupExtensionMessageListeners();
+    await this.getOverlayAppearance();
+    await this.getAuthStatus();
   }
 
   private getOverlayCipherData(): OverlayCipherData[] {
@@ -330,6 +335,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return domain ? `${obscureName}@${domain}` : obscureName;
   }
 
+  private async getOverlayAppearance(): Promise<number> {
+    this.overlayAppearance = await this.settingsService.getAutoFillOverlayAppearance();
+
+    return this.overlayAppearance;
+  }
+
   private async getAuthStatus() {
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== this.userAuthStatus && authStatus === AuthenticationStatus.Unlocked) {
@@ -343,11 +354,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private updateAutofillOverlayButtonAuthStatus() {
-    if (!this.overlayButtonPort) {
-      return;
-    }
-
-    this.overlayButtonPort.postMessage({
+    this.overlayButtonPort?.postMessage({
       command: "updateAutofillOverlayButtonAuthStatus",
       authStatus: this.userAuthStatus,
     });
