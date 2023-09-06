@@ -1260,7 +1260,7 @@ export class CipherService implements CipherServiceAbstraction {
   async getCipherKeyEncryptionEnabled(): Promise<boolean> {
     return (
       flagEnabled("enableCipherKeyEncryption") &&
-      this.configService.checkServerMeetsVersionRequirement(CIPHER_KEY_ENC_MIN_SERVER_VER)
+      (await this.configService.checkServerMeetsVersionRequirement(CIPHER_KEY_ENC_MIN_SERVER_VER))
     );
   }
 }
