@@ -2406,5 +2406,8 @@
   "toggleCollapse": {
     "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
+  },
+  "aliasDomain": {
+    "message": "Alias domain"
   }
 }

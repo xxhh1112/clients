@@ -7184,6 +7184,9 @@
   "baseUrl": {
     "message": "Server URL"
   },
+  "aliasDomain": {
+    "message": "Alias domain"
+  },
   "alreadyHaveAccount": {
     "message": "Already have an account?"
   }
