@@ -4,27 +4,22 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 
 import { OverlayCipherData } from "../../../background/abstractions/overlay.background";
 import { EVENTS } from "../../../constants";
-import {
-  AutofillOverlayElement,
-  RedirectFocusDirection,
-} from "../../../utils/autofill-overlay.enum";
+import { AutofillOverlayElement } from "../../../utils/autofill-overlay.enum";
 import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
 import {
   InitAutofillOverlayListMessage,
   OverlayListWindowMessageHandlers,
 } from "../../abstractions/list";
+import AutofillOverlayPage from "../shared/autofill-overlay-page";
 
 require("./list.scss");
 
-class AutofillOverlayList extends HTMLElement {
-  private shadowDom: ShadowRoot;
-  private messageOrigin: string;
+class AutofillOverlayList extends AutofillOverlayPage {
   private overlayListContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
-  private translations: Record<string, string>;
   private eventHandlersMemo: { [key: string]: EventListener } = {};
-  private windowMessageHandlers: OverlayListWindowMessageHandlers = {
+  private overlayListWindowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
     updateOverlayListCiphers: ({ message }) => this.updateListItems(message.ciphers),
@@ -34,8 +29,7 @@ class AutofillOverlayList extends HTMLElement {
   constructor() {
     super();
 
-    this.setupGlobalListeners();
-    this.shadowDom = this.attachShadow({ mode: "closed" });
+    this.setupOverlayListGlobalListeners();
   }
 
   private async initAutofillOverlayList({
@@ -44,25 +38,7 @@ class AutofillOverlayList extends HTMLElement {
     authStatus,
     ciphers,
   }: InitAutofillOverlayListMessage) {
-    this.translations = translations;
-    globalThis.document.documentElement.setAttribute("lang", this.getTranslation("locale"));
-    globalThis.document.head.title = this.getTranslation("listPageTitle");
-
-    this.initShadowDom(styleSheetUrl);
-
-    if (authStatus === AuthenticationStatus.Unlocked) {
-      this.updateListItems(ciphers);
-      return;
-    }
-
-    this.buildLockedOverlay();
-  }
-
-  private initShadowDom(styleSheetUrl: string) {
-    this.shadowDom.innerHTML = "";
-    const linkElement = globalThis.document.createElement("link");
-    linkElement.setAttribute("rel", "stylesheet");
-    linkElement.setAttribute("href", styleSheetUrl);
+    const linkElement = this.initOverlayPage("button", styleSheetUrl, translations);
 
     this.overlayListContainer = globalThis.document.createElement("div");
     this.overlayListContainer.classList.add("overlay-list-container");
@@ -71,6 +47,13 @@ class AutofillOverlayList extends HTMLElement {
     this.resizeObserver.observe(this.overlayListContainer);
 
     this.shadowDom.append(linkElement, this.overlayListContainer);
+
+    if (authStatus === AuthenticationStatus.Unlocked) {
+      this.updateListItems(ciphers);
+      return;
+    }
+
+    this.buildLockedOverlay();
   }
 
   private resetOverlayListContainer() {
@@ -357,60 +340,10 @@ class AutofillOverlayList extends HTMLElement {
     firstCipherElement?.focus();
   }
 
-  private postMessageToParent(message: any) {
-    if (!this.messageOrigin) {
-      return;
-    }
+  private setupOverlayListGlobalListeners() {
+    this.setupGlobalListeners(this.overlayListWindowMessageHandlers);
 
-    globalThis.parent.postMessage(message, this.messageOrigin);
-  }
-
-  private setupGlobalListeners() {
-    globalThis.addEventListener(EVENTS.MESSAGE, this.handleWindowMessage);
-    globalThis.addEventListener(EVENTS.BLUR, this.handleWindowBlurEvent);
-    globalThis.document.addEventListener(EVENTS.KEYDOWN, this.handleDocumentKeyDownEvent);
     this.resizeObserver = new ResizeObserver(this.handleResizeObserver);
-  }
-
-  private handleWindowMessage = (event: MessageEvent) => {
-    if (!this.messageOrigin) {
-      this.messageOrigin = event.origin;
-    }
-
-    const message = event?.data;
-    const handler = this.windowMessageHandlers[message?.command];
-    if (!handler) {
-      return;
-    }
-
-    handler({ message });
-  };
-
-  private handleWindowBlurEvent = () => {
-    this.postMessageToParent({ command: "checkAutofillOverlayButtonFocused" });
-  };
-
-  private handleDocumentKeyDownEvent = (event: KeyboardEvent) => {
-    const listenedForKeys = new Set(["Tab", "Escape"]);
-    if (!listenedForKeys.has(event.key)) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (event.key === "Tab") {
-      this.redirectOverlayFocusOutMessage(
-        event.shiftKey ? RedirectFocusDirection.Previous : RedirectFocusDirection.Next
-      );
-      return;
-    }
-
-    this.redirectOverlayFocusOutMessage(RedirectFocusDirection.Current);
-  };
-
-  private redirectOverlayFocusOutMessage(direction: string) {
-    this.postMessageToParent({ command: "redirectOverlayFocusOut", direction });
   }
 
   private handleResizeObserver = (entries: ResizeObserverEntry[]) => {
@@ -425,10 +358,6 @@ class AutofillOverlayList extends HTMLElement {
       break;
     }
   };
-
-  private getTranslation(key: string): string {
-    return this.translations[key] || "";
-  }
 
   private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
     return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = eventHandler);
