@@ -2,6 +2,7 @@ import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
+import { OverlayCipherData } from "../../../background/abstractions/overlay.background";
 import { EVENTS } from "../../../constants";
 import {
   AutofillOverlayElement,
@@ -9,7 +10,10 @@ import {
 } from "../../../utils/autofill-overlay.enum";
 import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
-import { OverlayListWindowMessageHandlers } from "../../abstractions/list";
+import {
+  InitAutofillOverlayListMessage,
+  OverlayListWindowMessageHandlers,
+} from "../../abstractions/list";
 
 require("./list.scss");
 
@@ -23,26 +27,31 @@ class AutofillOverlayList extends HTMLElement {
   private windowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
-    updateOverlayListCiphers: ({ message }) => this.updateListItems(message),
+    updateOverlayListCiphers: ({ message }) => this.updateListItems(message.ciphers),
     focusOverlayList: () => this.focusOverlayList(),
   };
 
   constructor() {
     super();
 
-    this.shadowDom = this.attachShadow({ mode: "closed" });
     this.setupGlobalListeners();
+    this.shadowDom = this.attachShadow({ mode: "closed" });
   }
 
-  private async initAutofillOverlayList(message: any) {
-    this.translations = message.translations;
+  private async initAutofillOverlayList({
+    translations,
+    styleSheetUrl,
+    authStatus,
+    ciphers,
+  }: InitAutofillOverlayListMessage) {
+    this.translations = translations;
     globalThis.document.documentElement.setAttribute("lang", this.getTranslation("locale"));
     globalThis.document.head.title = this.getTranslation("listPageTitle");
 
-    this.initShadowDom(message.styleSheetUrl);
+    this.initShadowDom(styleSheetUrl);
 
-    if (message.authStatus === AuthenticationStatus.Unlocked) {
-      this.updateListItems(message);
+    if (authStatus === AuthenticationStatus.Unlocked) {
+      this.updateListItems(ciphers);
       return;
     }
 
@@ -99,8 +108,7 @@ class AutofillOverlayList extends HTMLElement {
     this.postMessageToParent({ command: "unlockVault" });
   };
 
-  private updateListItems(message: any) {
-    const ciphers = message.ciphers;
+  private updateListItems(ciphers: OverlayCipherData[]) {
     this.resetOverlayListContainer();
 
     if (!ciphers?.length) {

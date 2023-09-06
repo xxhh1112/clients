@@ -1,9 +1,30 @@
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+
+import { OverlayCipherData } from "../../background/abstractions/overlay.background";
+
+type OverlayListMessage = { command: string };
+
+type UpdateOverlayListCiphersMessage = OverlayListMessage & {
+  ciphers: OverlayCipherData[];
+};
+
+type InitAutofillOverlayListMessage = OverlayListMessage & {
+  authStatus: AuthenticationStatus;
+  styleSheetUrl: string;
+  translations: Record<string, string>;
+  ciphers?: OverlayCipherData[];
+};
+
 type OverlayListWindowMessageHandlers = {
   [key: string]: CallableFunction;
-  initAutofillOverlayList: ({ message }: { message: any }) => void;
+  initAutofillOverlayList: ({ message }: { message: InitAutofillOverlayListMessage }) => void;
   checkOverlayListFocused: () => void;
-  updateOverlayListCiphers: ({ message }: { message: any }) => void;
+  updateOverlayListCiphers: ({ message }: { message: UpdateOverlayListCiphersMessage }) => void;
   focusOverlayList: () => void;
 };
 
-export { OverlayListWindowMessageHandlers };
+export {
+  UpdateOverlayListCiphersMessage,
+  InitAutofillOverlayListMessage,
+  OverlayListWindowMessageHandlers,
+};
