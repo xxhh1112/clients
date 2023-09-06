@@ -29,7 +29,6 @@ import {
 } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
@@ -37,6 +36,7 @@ import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { DEFAULT_PBKDF2_ITERATIONS, EventType, KdfType } from "@bitwarden/common/enums";
 import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
 import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
@@ -58,7 +58,7 @@ import { CollectionData } from "@bitwarden/common/vault/models/data/collection.d
 import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { Icons } from "@bitwarden/components";
+import { DialogService, Icons } from "@bitwarden/components";
 
 import { UpdateKeyComponent } from "../../settings/update-key.component";
 import { CollectionDialogAction, openCollectionDialog } from "../components/collection-dialog";
@@ -153,7 +153,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private i18nService: I18nService,
     private modalService: ModalService,
-    private dialogService: DialogServiceAbstraction,
+    private dialogService: DialogService,
     private tokenService: TokenService,
     private cryptoService: CryptoService,
     private messagingService: MessagingService,
@@ -173,7 +173,8 @@ export class VaultComponent implements OnInit, OnDestroy {
     private eventCollectionService: EventCollectionService,
     private searchService: SearchService,
     private searchPipe: SearchPipe,
-    private configService: ConfigServiceAbstraction
+    private configService: ConfigServiceAbstraction,
+    private userVerificationService: UserVerificationService
   ) {}
 
   async ngOnInit() {
@@ -188,13 +189,15 @@ export class VaultComponent implements OnInit, OnDestroy {
       first(),
       switchMap(async (params: Params) => {
         this.showVerifyEmail = !(await this.tokenService.getEmailVerified());
-        this.showLowKdf = await this.isLowKdfIteration();
+        this.showLowKdf = (await this.userVerificationService.hasMasterPassword())
+          ? await this.isLowKdfIteration()
+          : false;
         await this.syncService.fullSync(false);
 
         const canAccessPremium = await this.stateService.getCanAccessPremium();
         this.showPremiumCallout =
           !this.showVerifyEmail && !canAccessPremium && !this.platformUtilsService.isSelfHost();
-        this.showUpdateKey = !(await this.cryptoService.hasEncKey());
+        this.showUpdateKey = !(await this.cryptoService.hasUserKey());
 
         const cipherId = getCipherIdFromParams(params);
         if (!cipherId) {
@@ -718,7 +721,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: permanent ? "permanentlyDeleteItem" : "deleteItem" },
       content: { key: permanent ? "permanentlyDeleteItemConfirmation" : "deleteItemConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
 
     if (!confirmed) {

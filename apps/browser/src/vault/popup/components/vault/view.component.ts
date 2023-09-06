@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { first } from "rxjs/operators";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/vault/components/view.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -25,6 +24,7 @@ import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/pa
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { DialogService } from "@bitwarden/components";
 
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
@@ -84,7 +84,7 @@ export class ViewComponent extends BaseViewComponent {
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     fileDownloadService: FileDownloadService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogService
   ) {
     super(
       cipherService,
@@ -170,8 +170,8 @@ export class ViewComponent extends BaseViewComponent {
 
     switch (this.loadAction) {
       case AUTOFILL_ID:
-        this.fillCipher();
-        return;
+        await this.fillCipher();
+        break;
       case COPY_USERNAME_ID:
         await this.copy(this.cipher.login.username, "username", "Username");
         break;
@@ -186,7 +186,7 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     if (this.inPopout && this.loadAction) {
-      this.close();
+      setTimeout(() => this.close(), 1000);
     }
   }
 
@@ -238,10 +238,6 @@ export class ViewComponent extends BaseViewComponent {
     const didAutofill = await this.doAutofill();
     if (didAutofill) {
       this.platformUtilsService.showToast("success", null, this.i18nService.t("autoFillSuccess"));
-
-      if (this.inPopout) {
-        this.close();
-      }
     }
   }
 

@@ -1924,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB šifrovaného úložiska pre prílohy."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Ďalšie možnosti dvojstupňového prihlásenia ako YubiKey, FIDO U2F a Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Núdzový prístup"
@@ -2039,6 +2039,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Všetky nezaplatené predplatné budú účtované prostredníctvom vášho spôsobu platby."
   },
   "paymentChargedWithTrial": {
     "message": "Váš plán ponúka 7-dňovú skúšobnú dobu zadarmo. Z vašej platobnej metódy nebude stiahnutý poplatok, kým sa neskončí skúšobná doba. Plán môžete kedykoľvek zrušiť."
@@ -3536,6 +3539,9 @@
   "vaultTimeoutDesc": {
     "message": "Vyberte kedy vyprší časový limit trezora a vykoná sa zvolená akcia."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Vyberte kedy bude odhlásenie z trezora."
+  },
   "oneMinute": {
     "message": "1 minúta"
   },
@@ -3842,29 +3848,11 @@
   "restoreSelected": {
     "message": "Obnoviť zvolené"
   },
-  "restoreItem": {
-    "message": "Obnoviť položku"
-  },
   "restoredItem": {
     "message": "Obnovená položka"
   },
   "restoredItems": {
     "message": "Obnovené položky"
-  },
-  "restoreItemConfirmation": {
-    "message": "Naozaj chcete obnoviť tieto položky?"
-  },
-  "restoreItems": {
-    "message": "Obnoviť položky"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Vybrali ste $COUNT$ položiek na obnovenie. Ste si istý, že chcete obnoviť všetky tieto položky?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Položka $ID$ obnovená.",
@@ -4950,8 +4938,8 @@
   "disablePersonalVaultExport": {
     "message": "Zakázať export osobného trezora"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Zakazuje používateľom exportovať údaje zo súkromného trezora."
+  "disablePersonalVaultExportDescription": {
+    "message": "Zakázať používateľom exportovať údaje zo súkromného trezora."
   },
   "vaultExportDisabled": {
     "message": "Export trezoru je zakázaný"
@@ -5454,8 +5442,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Exportovanie trezora organizácie"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Exportované budú iba položy osobného trezora spojené s $EMAIL$. Položky trezora organizácie nebudú zahrnuté.",
+  "exportingIndividualVaultDescription": {
+    "message": "Exportované budú iba položky súvisiace s $EMAIL$. Položky z trezora organizácie nebudú zahrnuté v exporte. Export bude obsahovať iba informácie z položiek v trezore, súvisiace prílohy nebudú súčasťou exportu.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -6853,28 +6841,60 @@
   "updateKdfSettings": {
     "message": "Aktualizovať nastavenia KDF"
   },
+  "loginInitiated": {
+    "message": "Iniciované prihlásenie"
+  },
+  "deviceApprovalRequired": {
+    "message": "Vyžaduje sa schválenie zariadenia. Vyberte možnosť schválenia nižšie:"
+  },
+  "rememberThisDevice": {
+    "message": "Zapamätať si toto zariadenie"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Odčiarknite, ak používate verejné zariadenie"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Schváliť z iného zariadenia"
+  },
+  "requestAdminApproval": {
+    "message": "Žiadosť o schválenie správcom"
+  },
+  "approveWithMasterPassword": {
+    "message": "Schváliť pomocou hlavného hesla"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Šifrovanie dôveryhodného zariadenia"
+  },
   "trustedDevices": {
     "message": "Dôveryhodné zariadenia"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "Po autentifikácii, členovia budú dešifrovať dáta v trezore za pomoci kľúča uloženého na ich zariadení.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "single organization",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "jedna organizácia",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "policy and ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "policy,",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "account recovery administration",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO required",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "policy, and",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "správa obnovy konta",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
     "message": "policy with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ nenájdené",
@@ -6963,6 +6983,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
   },
+  "approvedAuthRequest": {
+    "message": "Schválené zariadenie pre $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Zamietnuté zariadenie pre $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Požaduje sa schválenie zariadenia."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Začnite 7-dňovú skúšobnú dobu Bitwardenu zadarmo pre $ORG$",
     "placeholders": {
@@ -6983,6 +7024,30 @@
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Účet bol úspešne vytvorený!"
+  },
+  "adminApprovalRequested": {
+    "message": "Vyžaduje sa schválenie správcom"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Vaša žiadosť bola odoslaná správcovi."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Po schválení budete informovaný."
+  },
+  "troubleLoggingIn": {
+    "message": "Máte problémy s prihlásením?"
+  },
+  "loginApproved": {
+    "message": "Schválené prihlásenie"
+  },
+  "userEmailMissing": {
+    "message": "Chýba e-mail používateľa"
+  },
+  "deviceTrusted": {
+    "message": "Dôveryhodné zariadenie"
   },
   "sendsNoItemsTitle": {
     "message": "Žiadne aktívne Sendy",
@@ -7094,6 +7159,9 @@
   "maxServiceAccountCost": {
     "message": "Maximálna možná cena služobných kont"
   },
+  "loggedInExclamation": {
+    "message": "Prihlásený!"
+  },
   "smBetaEndedDesc": {
     "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
     "placeholders": {
@@ -7112,5 +7180,8 @@
   },
   "beta": {
     "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Už máte účet?"
   }
 }
