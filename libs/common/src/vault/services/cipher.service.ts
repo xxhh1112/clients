@@ -6,7 +6,7 @@ import { SettingsService } from "../../abstractions/settings.service";
 import { FieldType, UriMatchType } from "../../enums";
 import { ErrorResponse } from "../../models/response/error.response";
 import { View } from "../../models/view/view";
-import { ConfigApiServiceAbstraction } from "../../platform/abstractions/config/config-api.service.abstraction";
+import { ConfigServiceAbstraction as ConfigService } from "../../platform/abstractions/config/config.service.abstraction";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
@@ -51,7 +51,7 @@ import { CipherView } from "../models/view/cipher.view";
 import { FieldView } from "../models/view/field.view";
 import { PasswordHistoryView } from "../models/view/password-history.view";
 
-const CIPHER_KEY_ENC_MIN_SERVER_VER = "2023.9.0";
+const CIPHER_KEY_ENC_MIN_SERVER_VER = new SemVer("2023.9.0");
 
 export class CipherService implements CipherServiceAbstraction {
   private sortedCiphersCache: SortedCiphersCache = new SortedCiphersCache(
@@ -67,7 +67,7 @@ export class CipherService implements CipherServiceAbstraction {
     private stateService: StateService,
     private encryptService: EncryptService,
     private cipherFileUploadService: CipherFileUploadService,
-    private configApiService: ConfigApiServiceAbstraction
+    private configService: ConfigService
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -1258,8 +1258,9 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async getCipherKeyEncryptionEnabled(): Promise<boolean> {
-    const minVersion = new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER);
-    const serverVersion = new SemVer((await this.configApiService.get()).version);
-    return flagEnabled("enableCipherKeyEncryption") && serverVersion.compare(minVersion) > 0;
+    return (
+      flagEnabled("enableCipherKeyEncryption") &&
+      this.configService.checkServerMeetsVersionRequirement(CIPHER_KEY_ENC_MIN_SERVER_VER)
+    );
   }
 }

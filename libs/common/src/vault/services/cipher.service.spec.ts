@@ -5,7 +5,7 @@ import { ApiService } from "../../abstractions/api.service";
 import { SearchService } from "../../abstractions/search.service";
 import { SettingsService } from "../../abstractions/settings.service";
 import { UriMatchType, FieldType } from "../../enums";
-import { ConfigApiServiceAbstraction } from "../../platform/abstractions/config/config-api.service.abstraction";
+import { ConfigServiceAbstraction } from "../../platform/abstractions/config/config.service.abstraction";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
@@ -17,7 +17,6 @@ import {
   OrgKey,
   SymmetricCryptoKey,
 } from "../../platform/models/domain/symmetric-crypto-key";
-import { ServerConfigResponse } from "../../platform/models/response/server-config.response";
 import { ContainerService } from "../../platform/services/container.service";
 import { CipherFileUploadService } from "../abstractions/file-upload/cipher-file-upload.service";
 import { CipherRepromptType } from "../enums/cipher-reprompt-type";
@@ -33,8 +32,6 @@ import { CipherService } from "./cipher.service";
 
 const ENCRYPTED_TEXT = "This data has been encrypted";
 const ENCRYPTED_BYTES = mock<EncArrayBuffer>();
-const DATE_NOW = new Date();
-const UNSUPPORTED_VERSION = "2023.2.0";
 
 const cipherData: CipherData = {
   id: "id",
@@ -104,7 +101,7 @@ describe("Cipher Service", () => {
   const i18nService = mock<I18nService>();
   const searchService = mock<SearchService>();
   const encryptService = mock<EncryptService>();
-  const configApiService = mock<ConfigApiServiceAbstraction>();
+  const configService = mock<ConfigServiceAbstraction>();
 
   let cipherService: CipherService;
   let cipherObj: Cipher;
@@ -118,7 +115,7 @@ describe("Cipher Service", () => {
     mockReset(i18nService);
     mockReset(searchService);
     mockReset(encryptService);
-    mockReset(configApiService);
+    mockReset(configService);
 
     encryptService.encryptToBytes.mockReturnValue(Promise.resolve(ENCRYPTED_BYTES));
     encryptService.encrypt.mockReturnValue(Promise.resolve(new EncString(ENCRYPTED_TEXT)));
@@ -134,7 +131,7 @@ describe("Cipher Service", () => {
       stateService,
       encryptService,
       cipherFileUploadService,
-      configApiService
+      configService
     );
 
     cipherObj = new Cipher(cipherData);
@@ -150,9 +147,7 @@ describe("Cipher Service", () => {
         Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))
       );
 
-      configApiService.get.mockReturnValue(
-        Promise.resolve(new ServerConfigResponse({ version: UNSUPPORTED_VERSION }))
-      );
+      configService.checkServerMeetsVersionRequirement.mockReturnValue(Promise.resolve(false));
       process.env.FLAGS = JSON.stringify({
         enableCipherKeyEncryption: false,
       });
@@ -246,9 +241,7 @@ describe("Cipher Service", () => {
       cipherView.type = CipherType.Login;
 
       encryptService.decryptToBytes.mockReturnValue(Promise.resolve(makeStaticByteArray(64)));
-      configApiService.get.mockReturnValue(
-        Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
-      );
+      configService.checkServerMeetsVersionRequirement.mockReturnValue(Promise.resolve(true));
       cryptoService.makeCipherKey.mockReturnValue(
         Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)) as CipherKey)
       );
@@ -301,26 +294,6 @@ describe("Cipher Service", () => {
 
         expect(cipherService["encryptWithCipherKey"]).toHaveBeenCalled();
       });
-
-      it("is called when server version has hotfix suffix", async () => {
-        mockReset(configApiService);
-
-        process.env.FLAGS = JSON.stringify({
-          enableCipherKeyEncryption: true,
-        });
-
-        configApiService.get.mockReturnValue(
-          Promise.resolve(new ServerConfigResponse({ version: getVersion() }))
-        );
-        await cipherService.encrypt(cipherView);
-
-        expect(cipherService["encryptWithCipherKey"]).toHaveBeenCalled();
-      });
     });
   });
-
-  function getVersion(): string {
-    const year = DATE_NOW.getFullYear() + 1;
-    return year + "." + DATE_NOW.getMonth() + ".0";
-  }
 });

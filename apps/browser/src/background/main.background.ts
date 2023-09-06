@@ -414,6 +414,13 @@ export default class MainBackground {
 
     this.configApiService = new ConfigApiService(this.apiService, this.authService);
 
+    this.configService = new ConfigService(
+      this.stateService,
+      this.configApiService,
+      this.authService,
+      this.environmentService
+    );
+
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
@@ -423,7 +430,7 @@ export default class MainBackground {
       this.stateService,
       this.encryptService,
       this.cipherFileUploadService,
-      this.configApiService
+      this.configService
     );
     this.folderService = new BrowserFolderService(
       this.cryptoService,
@@ -538,12 +545,7 @@ export default class MainBackground {
       this.authService,
       this.messagingService
     );
-    this.configService = new ConfigService(
-      this.stateService,
-      this.configApiService,
-      this.authService,
-      this.environmentService
-    );
+
     this.browserPopoutWindowService = new BrowserPopoutWindowService();
 
     const systemUtilsServiceReloadCallback = () => {

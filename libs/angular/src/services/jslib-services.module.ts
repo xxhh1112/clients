@@ -272,7 +272,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         stateService: StateServiceAbstraction,
         encryptService: EncryptService,
         fileUploadService: CipherFileUploadServiceAbstraction,
-        configApiService: ConfigApiServiceAbstraction
+        configService: ConfigServiceAbstraction
       ) =>
         new CipherService(
           cryptoService,
@@ -283,7 +283,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
           stateService,
           encryptService,
           fileUploadService,
-          configApiService
+          configService
         ),
       deps: [
         CryptoServiceAbstraction,
@@ -294,7 +294,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         StateServiceAbstraction,
         EncryptService,
         CipherFileUploadServiceAbstraction,
-        ConfigApiServiceAbstraction,
+        ConfigServiceAbstraction,
       ],
     },
     {

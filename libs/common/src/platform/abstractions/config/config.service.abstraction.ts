@@ -1,4 +1,5 @@
 import { Observable } from "rxjs";
+import { SemVer } from "semver";
 
 import { FeatureFlag } from "../../../enums/feature-flag.enum";
 
@@ -11,4 +12,5 @@ export abstract class ConfigServiceAbstraction {
   getFeatureFlagString: (key: FeatureFlag, defaultValue?: string) => Promise<string>;
   getFeatureFlagNumber: (key: FeatureFlag, defaultValue?: number) => Promise<number>;
   getCloudRegion: (defaultValue?: string) => Promise<string>;
+  checkServerMeetsVersionRequirement: (minServerVersion: SemVer) => Promise<boolean>;
 }

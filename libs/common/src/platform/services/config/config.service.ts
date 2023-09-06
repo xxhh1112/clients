@@ -1,4 +1,5 @@
 import { BehaviorSubject, concatMap, from, timer } from "rxjs";
+import { SemVer } from "semver";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
@@ -75,6 +76,15 @@ export class ConfigService implements ConfigServiceAbstraction {
   async getCloudRegion(defaultValue = "US"): Promise<string> {
     const serverConfig = await this.buildServerConfig();
     return serverConfig.environment?.cloudRegion ?? defaultValue;
+  }
+
+  async checkServerMeetsVersionRequirement(minServerVersion: SemVer): Promise<boolean> {
+    const serverConfig = await this.buildServerConfig();
+    if (serverConfig == null) {
+      return false;
+    }
+    const serverVersion = new SemVer(serverConfig.version);
+    return serverVersion.compare(minServerVersion) > 0;
   }
 
   private async getFeatureFlag<T>(key: FeatureFlag, defaultValue: T): Promise<T> {
