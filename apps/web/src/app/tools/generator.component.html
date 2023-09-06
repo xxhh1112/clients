@@ -318,7 +318,7 @@
           (blur)="saveUsernameOptions()"
         />
       </div>
-      <div class="form-group col-4">
+      <div class="form-group col-4" *ngIf="isSelfHosted">
         <label for="anonaddy-baseUrl">{{ "baseUrl" | i18n }}</label>
         <input
           id="anonaddy-baseUrl"
