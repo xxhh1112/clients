@@ -9,7 +9,10 @@ import {
 } from "../../../utils/autofill-overlay.enum";
 import { logoIcon, logoLockedIcon } from "../../../utils/svg-icons";
 import { buildSvgDomElement } from "../../../utils/utils";
-import { OverlayButtonWindowMessageHandlers } from "../../abstractions/button";
+import {
+  InitAutofillOverlayButtonMessage,
+  OverlayButtonWindowMessageHandlers,
+} from "../../abstractions/button";
 
 require("./button.scss");
 
@@ -22,8 +25,7 @@ class AutofillOverlayButton extends HTMLElement {
   private readonly logoIconElement: HTMLElement;
   private readonly logoLockedIconElement: HTMLElement;
   private readonly windowMessageHandlers: OverlayButtonWindowMessageHandlers = {
-    initAutofillOverlayButton: ({ message }) =>
-      this.init(message.authStatus, message.styleSheetUrl, message.translations),
+    initAutofillOverlayButton: ({ message }) => this.initAutofillOverlayButton(message),
     checkAutofillOverlayButtonFocused: () => this.checkButtonFocused(),
     updateAutofillOverlayButtonAuthStatus: ({ message }) =>
       this.updateAuthStatus(message.authStatus),
@@ -42,11 +44,11 @@ class AutofillOverlayButton extends HTMLElement {
     this.logoLockedIconElement.classList.add("overlay-button-svg-icon", "logo-locked-icon");
   }
 
-  private async init(
-    authStatus: AuthenticationStatus,
-    styleSheetUrl: string,
-    translations: Record<string, string>
-  ) {
+  private async initAutofillOverlayButton({
+    authStatus,
+    styleSheetUrl,
+    translations,
+  }: InitAutofillOverlayButtonMessage) {
     this.translations = translations;
     globalThis.document.documentElement.setAttribute("lang", this.getTranslation("locale"));
     globalThis.document.head.title = this.getTranslation("buttonPageTitle");
