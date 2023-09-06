@@ -32,6 +32,7 @@ export class ProjectsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class ProjectsComponent implements OnInit {
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = params.organizationEnabled;
         return await this.getProjects();
       })
     );
@@ -63,6 +65,7 @@ export class ProjectsComponent implements OnInit {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         projectId: projectId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -72,6 +75,7 @@ export class ProjectsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

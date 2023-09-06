@@ -24,6 +24,7 @@ import {
 })
 export class NewMenuComponent implements OnInit, OnDestroy {
   private organizationId: string;
+  private organizationEnabled: boolean;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute, private dialogService: DialogService) {}
@@ -31,6 +32,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: any) => {
       this.organizationId = params.organizationId;
+      this.organizationEnabled = params.organizationEnabled;
     });
   }
 
@@ -44,6 +46,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -53,6 +56,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -62,6 +66,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

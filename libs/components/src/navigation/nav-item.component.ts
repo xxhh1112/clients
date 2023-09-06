@@ -33,6 +33,7 @@ export class NavItemComponent extends NavBaseComponent {
     this.rlaOptions.paths = val ? "exact" : "subset";
   }
 
+  @Input() showWarningIcon: boolean;
   /**
    * The design spec calls for the an outline to wrap the entire element when the template's anchor/button has :focus-visible.
    * Usually, we would use :focus-within for this. However, that matches when a child element has :focus instead of :focus-visible.

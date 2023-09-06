@@ -29,6 +29,7 @@ export class SecretsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +45,8 @@ export class SecretsComponent implements OnInit {
       combineLatestWith(this.route.params),
       switchMap(async ([_, params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = params.organizationEnabled;
+
         return await this.getSecrets();
       })
     );
@@ -63,6 +66,7 @@ export class SecretsComponent implements OnInit {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         secretId: secretId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -80,6 +84,7 @@ export class SecretsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

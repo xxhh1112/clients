@@ -33,7 +33,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private organizationId: string;
   private projectId: string;
-
+  private organizationEnabled: boolean;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -69,6 +69,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.organizationId = params.organizationId;
       this.projectId = params.projectId;
+      this.organizationEnabled = params.organizationEnabled;
     });
   }
 
@@ -83,6 +84,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         projectId: this.projectId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

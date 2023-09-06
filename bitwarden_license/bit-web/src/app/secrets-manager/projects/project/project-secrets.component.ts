@@ -31,6 +31,7 @@ export class ProjectSecretsComponent {
   private organizationId: string;
   private projectId: string;
   protected project$: Observable<ProjectView>;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,6 +61,7 @@ export class ProjectSecretsComponent {
       switchMap(async ([_, params]) => {
         this.organizationId = params.organizationId;
         this.projectId = params.projectId;
+        this.organizationEnabled = params.organizationEnabled;
         return await this.getSecretsByProject();
       })
     );
@@ -75,6 +77,7 @@ export class ProjectSecretsComponent {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         secretId: secretId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -93,6 +96,7 @@ export class ProjectSecretsComponent {
         organizationId: this.organizationId,
         operation: OperationType.Add,
         projectId: this.projectId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

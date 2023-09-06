@@ -30,6 +30,7 @@ export class ServiceAccountsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,7 @@ export class ServiceAccountsComponent implements OnInit {
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = params.organizationEnabled;
         return await this.getServiceAccounts();
       })
     );
@@ -56,6 +58,7 @@ export class ServiceAccountsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -66,6 +69,7 @@ export class ServiceAccountsComponent implements OnInit {
         organizationId: this.organizationId,
         serviceAccountId: serviceAccountId,
         operation: OperationType.Edit,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

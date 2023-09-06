@@ -6,6 +6,7 @@
   [route]="['../', activeOrganization.id]"
   [(open)]="open"
   [exactMatch]="true"
+  [showWarningIcon]="!activeOrganization.enabled"
 >
   <ng-container *ngIf="organizations$ | async as organizations">
     <bit-nav-item
@@ -16,6 +17,17 @@
       (mainContentClicked)="toggle()"
       [hideActiveStyles]="true"
     >
+    </bit-nav-item>
+  </ng-container>
+  <ng-container *ngIf="inactiveOrganizations$ | async as organizations">
+    <bit-nav-item
+      *ngFor="let org of organizations"
+      [text]="org.name"
+      [ariaLabel]="['organization' | i18n, org.name].join(' ')"
+      (mainContentClicked)="inactiveOrganizationError()"
+      [hideActiveStyles]="true"
+    >
+      <i slot="end" *ngIf="org.enabled == false" class="bwi bwi-exclamation-triangle"></i>
     </bit-nav-item>
   </ng-container>
   <bit-nav-item

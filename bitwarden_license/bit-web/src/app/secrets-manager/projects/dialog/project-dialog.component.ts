@@ -19,6 +19,7 @@ export interface ProjectOperation {
   organizationId: string;
   operation: OperationType;
   projectId?: string;
+  organizationEnabled: boolean;
 }
 
 @Component({
@@ -63,6 +64,15 @@ export class ProjectDialogComponent implements OnInit {
   }
 
   submit = async () => {
+    if (!this.data.organizationEnabled) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("secretsAccessSuspended")
+      );
+      return;
+    }
+
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {

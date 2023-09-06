@@ -9,6 +9,7 @@
   (mainContentClicked)="mainContentClicked.emit()"
   [ariaLabel]="ariaLabel"
   [exactMatch]="exactMatch"
+  [showWarningIcon]="showWarningIcon"
 >
   <ng-template #button>
     <button
@@ -29,6 +30,9 @@
   </ng-template>
 
   <!-- Show toggle to the left for trees otherwise to the right -->
+  <ng-container slot="end" *ngIf="showWarningIcon">
+    <i class="bwi bwi-exclamation-triangle mr-1 mt-1"></i>
+  </ng-container>
   <ng-container slot="start" *ngIf="variant === 'tree'">
     <ng-container *ngTemplateOutlet="button"></ng-container>
   </ng-container>

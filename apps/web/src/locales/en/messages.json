@@ -3575,6 +3575,9 @@
   "organizationIsDisabled": {
     "message": "Organization suspended"
   },
+  "secretsAccessSuspended": {
+    "message": "Secrets in suspended organizations cannot be accessed. Please contact your organization owner for assistance."
+  },
   "disabledOrganizationFilterError": {
     "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
   },
