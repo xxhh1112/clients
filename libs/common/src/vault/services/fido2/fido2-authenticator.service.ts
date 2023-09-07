@@ -380,6 +380,7 @@ async function createKeyView(
   fido2Key.counter = 0;
   fido2Key.rpName = params.rpEntity.name;
   fido2Key.userDisplayName = params.userEntity.displayName;
+  fido2Key.discoverable = params.requireResidentKey;
 
   return fido2Key;
 }

@@ -262,7 +262,7 @@ describe("FidoAuthenticatorService", () => {
 
       beforeEach(async () => {
         existingCipher = createCipherView({ type: CipherType.Login });
-        params = await createParams();
+        params = await createParams({ requireResidentKey: false });
         cipherService.get.mockImplementation(async (id) =>
           id === existingCipher.id ? ({ decrypt: () => existingCipher } as any) : undefined
         );
@@ -321,6 +321,7 @@ describe("FidoAuthenticatorService", () => {
                 userHandle: Fido2Utils.bufferToString(params.userEntity.id),
                 counter: 0,
                 userDisplayName: params.userEntity.displayName,
+                discoverable: false,
               }),
             }),
           })
@@ -797,6 +798,7 @@ function createCipherView(
   fido2KeyView.userHandle = fido2Key.userHandle ?? Fido2Utils.bufferToString(randomBytes(16));
   fido2KeyView.keyAlgorithm = fido2Key.keyAlgorithm ?? "ECDSA";
   fido2KeyView.keyCurve = fido2Key.keyCurve ?? "P-256";
+  fido2KeyView.discoverable = true;
   fido2KeyView.keyValue =
     fido2KeyView.keyValue ??
     "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTC-7XDZipXbaVBlnkjlBgO16ZmqBZWejK2iYo6lV0dehRANCAASOcM2WduNq1DriRYN7ZekvZz-bRhA-qNT4v0fbp5suUFJyWmgOQ0bybZcLXHaerK5Ep1JiSrQcewtQNgLtry7f";
