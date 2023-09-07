@@ -591,7 +591,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async makeCipherKey(): Promise<CipherKey> {
-    const randomBytes = await this.cryptoFunctionService.randomBytes(64);
+    const randomBytes = await this.cryptoFunctionService.aesGenerateKey(512);
     return new SymmetricCryptoKey(randomBytes) as CipherKey;
   }
 
