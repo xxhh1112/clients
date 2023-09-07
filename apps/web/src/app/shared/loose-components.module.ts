@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
-import { OrganizationCreateModule } from "../admin-console/organizations/create/organization-create.module";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
 import { EventsComponent as OrgEventsComponent } from "../admin-console/organizations/manage/events.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
@@ -52,14 +51,12 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
-import { SecretsManagerBillingModule } from "../billing/organizations/secrets-manager/sm-billing.module";
 import { AddCreditComponent } from "../billing/settings/add-credit.component";
 import { AdjustPaymentComponent } from "../billing/settings/adjust-payment.component";
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../billing/settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../billing/settings/billing-sync-key.component";
 import { LooseBillingComponentsModule } from "../billing/settings/loose-billing-components.module";
-import { OrganizationPlansComponent } from "../billing/settings/organization-plans.component";
 import { PaymentMethodComponent } from "../billing/settings/payment-method.component";
 import { SubscriptionComponent } from "../billing/settings/subscription.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
@@ -116,7 +113,6 @@ import { SharedModule } from "./shared.module";
 @NgModule({
   imports: [
     SharedModule,
-    OrganizationCreateModule,
     RegisterFormModule,
     ProductSwitcherModule,
     UserVerificationModule,
@@ -124,9 +120,6 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EnvironmentSelectorModule,
     AccountFingerprintComponent,
-
-    // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
-    SecretsManagerBillingModule,
 
     // WIP
     LooseBillingComponentsModule,
@@ -170,7 +163,6 @@ import { SharedModule } from "./shared.module";
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
-    OrganizationPlansComponent,
     OrgAttachmentsComponent,
     OrgCollectionsComponent,
     OrgEventsComponent,
@@ -272,7 +264,6 @@ import { SharedModule } from "./shared.module";
     OrganizationSwitcherComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
-    OrganizationPlansComponent,
     OrgAttachmentsComponent,
     OrgCollectionsComponent,
     OrgEventsComponent,
