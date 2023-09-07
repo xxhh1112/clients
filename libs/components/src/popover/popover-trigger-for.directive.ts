@@ -47,7 +47,6 @@ export class PopoverTriggerForDirective implements OnDestroy {
 
   get defaultPopoverConfig(): OverlayConfig {
     return {
-      panelClass: "bit-popover-panel",
       hasBackdrop: true,
       backdropClass: "cdk-overlay-transparent-backdrop",
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
