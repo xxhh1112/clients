@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { UserVerificationModule } from "../../auth/shared/components/user-verification";
 import { LooseComponentsModule, SharedModule } from "../../shared";
+import { LooseBillingComponentsModule } from "../settings/loose-billing-components.module";
 
 import { AdjustSubscription } from "./adjust-subscription.component";
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
@@ -22,6 +23,8 @@ import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
     OrganizationBillingRoutingModule,
     UserVerificationModule,
     SecretsManagerBillingModule,
+
+    LooseBillingComponentsModule,
   ],
   declarations: [
     AdjustSubscription,

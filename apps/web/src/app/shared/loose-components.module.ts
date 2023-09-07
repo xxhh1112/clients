@@ -58,9 +58,9 @@ import { AdjustPaymentComponent } from "../billing/settings/adjust-payment.compo
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../billing/settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../billing/settings/billing-sync-key.component";
+import { LooseBillingComponentsModule } from "../billing/settings/loose-billing-components.module";
 import { OrganizationPlansComponent } from "../billing/settings/organization-plans.component";
 import { PaymentMethodComponent } from "../billing/settings/payment-method.component";
-import { PaymentComponent } from "../billing/settings/payment.component";
 import { SubscriptionComponent } from "../billing/settings/subscription.component";
 import { TaxInfoComponent } from "../billing/settings/tax-info.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
@@ -128,6 +128,9 @@ import { SharedModule } from "./shared.module";
 
     // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
     SecretsManagerBillingModule,
+
+    // WIP
+    LooseBillingComponentsModule,
   ],
   declarations: [
     AcceptEmergencyComponent,
@@ -182,7 +185,6 @@ import { SharedModule } from "./shared.module";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordRepromptComponent,
-    PaymentComponent,
     PaymentMethodComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
@@ -286,7 +288,6 @@ import { SharedModule } from "./shared.module";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordRepromptComponent,
-    PaymentComponent,
     PaymentMethodComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
