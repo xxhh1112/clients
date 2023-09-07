@@ -62,7 +62,6 @@ import { LooseBillingComponentsModule } from "../billing/settings/loose-billing-
 import { OrganizationPlansComponent } from "../billing/settings/organization-plans.component";
 import { PaymentMethodComponent } from "../billing/settings/payment-method.component";
 import { SubscriptionComponent } from "../billing/settings/subscription.component";
-import { TaxInfoComponent } from "../billing/settings/tax-info.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
@@ -208,7 +207,6 @@ import { SharedModule } from "./shared.module";
     SponsoringOrgRowComponent,
     SsoComponent,
     SubscriptionComponent,
-    TaxInfoComponent,
     ToolsComponent,
     TwoFactorAuthenticatorComponent,
     TwoFactorComponent,
@@ -311,7 +309,6 @@ import { SharedModule } from "./shared.module";
     SponsoringOrgRowComponent,
     SsoComponent,
     SubscriptionComponent,
-    TaxInfoComponent,
     ToolsComponent,
     TwoFactorAuthenticatorComponent,
     TwoFactorComponent,

@@ -9,7 +9,7 @@ import { RegisterFormModule } from "../../auth/register-form/register-form.modul
 import { BillingComponent } from "../../billing/accounts/trial-initiation/billing.component";
 import { LooseBillingComponentsModule } from "../../billing/settings/loose-billing-components.module";
 import { EnvironmentSelectorModule } from "../../components/environment-selector/environment-selector.module";
-import { LooseComponentsModule, SharedModule } from "../../shared";
+import { SharedModule } from "../../shared";
 
 import { ConfirmationDetailsComponent } from "./confirmation-details.component";
 import { AbmEnterpriseContentComponent } from "./content/abm-enterprise-content.component";
@@ -38,7 +38,6 @@ import { VerticalStepperModule } from "./vertical-stepper/vertical-stepper.modul
     FormFieldModule,
     RegisterFormModule,
     OrganizationCreateModule,
-    LooseComponentsModule,
     EnvironmentSelectorModule,
 
     LooseBillingComponentsModule,
