@@ -38,7 +38,7 @@ export class BrowserApi {
   }
 
   static async removeWindow(windowId: number) {
-    await chrome.tabs.remove(windowId);
+    await chrome.windows.remove(windowId);
   }
 
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
