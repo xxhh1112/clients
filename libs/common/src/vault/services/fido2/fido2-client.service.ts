@@ -40,8 +40,13 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
   async createCredential(
     params: CreateCredentialParams,
+    tab: chrome.tabs.Tab,
     abortController = new AbortController()
   ): Promise<CreateCredentialResult> {
+    if (tab == null) {
+      return;
+    }
+
     const enableFido2VaultCredentials = await this.isFido2FeatureEnabled();
 
     if (!enableFido2VaultCredentials) {
@@ -150,6 +155,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     try {
       makeCredentialResult = await this.authenticator.makeCredential(
         makeCredentialParams,
+        tab,
         abortController
       );
     } catch (error) {
@@ -191,8 +197,13 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
   async assertCredential(
     params: AssertCredentialParams,
+    tab: chrome.tabs.Tab,
     abortController = new AbortController()
   ): Promise<AssertCredentialResult> {
+    if (tab == null) {
+      return;
+    }
+
     const enableFido2VaultCredentials = await this.isFido2FeatureEnabled();
 
     if (!enableFido2VaultCredentials) {
@@ -258,6 +269,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     try {
       getAssertionResult = await this.authenticator.getAssertion(
         getAssertionParams,
+        tab,
         abortController
       );
     } catch (error) {

@@ -31,6 +31,7 @@ describe("FidoAuthenticatorService", () => {
   let userInterface!: MockProxy<Fido2UserInterfaceService>;
   let userInterfaceSession!: MockProxy<Fido2UserInterfaceSession>;
   let authenticator!: Fido2AuthenticatorService;
+  let tab!: any;
 
   beforeEach(async () => {
     cipherService = mock<CipherService>();
@@ -38,6 +39,7 @@ describe("FidoAuthenticatorService", () => {
     userInterfaceSession = mock<Fido2UserInterfaceSession>();
     userInterface.newSession.mockResolvedValue(userInterfaceSession);
     authenticator = new Fido2AuthenticatorService(cipherService, userInterface);
+    tab = { id: 123, windowId: 456 };
   });
 
   describe("makeCredential", () => {
@@ -51,19 +53,19 @@ describe("FidoAuthenticatorService", () => {
       // Spec: Check if at least one of the specified combinations of PublicKeyCredentialType and cryptographic parameters in credTypesAndPubKeyAlgs is supported. If not, return an error code equivalent to "NotSupportedError" and terminate the operation.
       it("should throw error when input does not contain any supported algorithms", async () => {
         const result = async () =>
-          await authenticator.makeCredential(invalidParams.unsupportedAlgorithm);
+          await authenticator.makeCredential(invalidParams.unsupportedAlgorithm, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotSupported);
       });
 
       it("should throw error when requireResidentKey has invalid value", async () => {
-        const result = async () => await authenticator.makeCredential(invalidParams.invalidRk);
+        const result = async () => await authenticator.makeCredential(invalidParams.invalidRk, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
 
       it("should throw error when requireUserVerification has invalid value", async () => {
-        const result = async () => await authenticator.makeCredential(invalidParams.invalidUv);
+        const result = async () => await authenticator.makeCredential(invalidParams.invalidUv, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
@@ -76,7 +78,7 @@ describe("FidoAuthenticatorService", () => {
       it.skip("should throw error if requireUserVerification is set to true", async () => {
         const params = await createParams({ requireUserVerification: true });
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Constraint);
       });
@@ -90,7 +92,7 @@ describe("FidoAuthenticatorService", () => {
 
         for (const p of Object.values(invalidParams)) {
           try {
-            await authenticator.makeCredential(p);
+            await authenticator.makeCredential(p, tab);
             // eslint-disable-next-line no-empty
           } catch {}
         }
@@ -131,7 +133,7 @@ describe("FidoAuthenticatorService", () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         try {
-          await authenticator.makeCredential(params);
+          await authenticator.makeCredential(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -142,7 +144,7 @@ describe("FidoAuthenticatorService", () => {
       it("should throw error", async () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -153,7 +155,7 @@ describe("FidoAuthenticatorService", () => {
         excludedCipher.organizationId = "someOrganizationId";
 
         try {
-          await authenticator.makeCredential(params);
+          await authenticator.makeCredential(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -166,7 +168,7 @@ describe("FidoAuthenticatorService", () => {
 
         for (const p of Object.values(invalidParams)) {
           try {
-            await authenticator.makeCredential(p);
+            await authenticator.makeCredential(p, tab);
             // eslint-disable-next-line no-empty
           } catch {}
         }
@@ -205,7 +207,7 @@ describe("FidoAuthenticatorService", () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
         try {
-          await authenticator.makeCredential(params);
+          await authenticator.makeCredential(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -216,7 +218,7 @@ describe("FidoAuthenticatorService", () => {
       it("should throw error", async () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -227,7 +229,7 @@ describe("FidoAuthenticatorService", () => {
         excludedCipherView.organizationId = "someOrganizationId";
 
         try {
-          await authenticator.makeCredential(params);
+          await authenticator.makeCredential(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -240,7 +242,7 @@ describe("FidoAuthenticatorService", () => {
 
         for (const p of Object.values(invalidParams)) {
           try {
-            await authenticator.makeCredential(p);
+            await authenticator.makeCredential(p, tab);
             // eslint-disable-next-line no-empty
           } catch {}
         }
@@ -278,7 +280,7 @@ describe("FidoAuthenticatorService", () => {
             return cipher;
           });
 
-          await authenticator.makeCredential(params, new AbortController());
+          await authenticator.makeCredential(params, tab, new AbortController());
 
           expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
             {
@@ -303,7 +305,7 @@ describe("FidoAuthenticatorService", () => {
           return cipher;
         });
 
-        await authenticator.makeCredential(params);
+        await authenticator.makeCredential(params, tab);
 
         const saved = cipherService.encrypt.mock.lastCall?.[0];
         expect(saved).toEqual(
@@ -334,7 +336,7 @@ describe("FidoAuthenticatorService", () => {
           userVerified: false,
         });
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -349,7 +351,7 @@ describe("FidoAuthenticatorService", () => {
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
@@ -380,7 +382,7 @@ describe("FidoAuthenticatorService", () => {
             userVerified: userVerification,
           });
 
-          await authenticator.makeCredential(params, new AbortController());
+          await authenticator.makeCredential(params, tab, new AbortController());
 
           expect(userInterfaceSession.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
             {
@@ -401,7 +403,7 @@ describe("FidoAuthenticatorService", () => {
         });
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
 
-        await authenticator.makeCredential(params);
+        await authenticator.makeCredential(params, tab);
 
         const saved = cipherService.encrypt.mock.lastCall?.[0];
         expect(saved).toEqual(
@@ -435,7 +437,7 @@ describe("FidoAuthenticatorService", () => {
         });
         const params = await createParams();
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -450,7 +452,7 @@ describe("FidoAuthenticatorService", () => {
         cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
         cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
 
-        const result = async () => await authenticator.makeCredential(params);
+        const result = async () => await authenticator.makeCredential(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
@@ -504,7 +506,7 @@ describe("FidoAuthenticatorService", () => {
         });
 
         it("should return attestation object", async () => {
-          const result = await authenticator.makeCredential(params);
+          const result = await authenticator.makeCredential(params, tab);
 
           const attestationObject = CBOR.decode(
             Fido2Utils.bufferSourceToUint8Array(result.attestationObject).buffer
@@ -606,7 +608,7 @@ describe("FidoAuthenticatorService", () => {
 
     describe("invalid input parameters", () => {
       it("should throw error when requireUserVerification has invalid value", async () => {
-        const result = async () => await authenticator.getAssertion(invalidParams.invalidUv);
+        const result = async () => await authenticator.getAssertion(invalidParams.invalidUv, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
       });
@@ -619,7 +621,7 @@ describe("FidoAuthenticatorService", () => {
       it.skip("should throw error if requireUserVerification is set to true", async () => {
         const params = await createParams({ requireUserVerification: true });
 
-        const result = async () => await authenticator.getAssertion(params);
+        const result = async () => await authenticator.getAssertion(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Constraint);
       });
@@ -648,7 +650,7 @@ describe("FidoAuthenticatorService", () => {
         userInterfaceSession.informCredentialNotFound.mockResolvedValue();
 
         try {
-          await authenticator.getAssertion(params);
+          await authenticator.getAssertion(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -663,7 +665,7 @@ describe("FidoAuthenticatorService", () => {
         userInterfaceSession.informCredentialNotFound.mockResolvedValue();
 
         try {
-          await authenticator.getAssertion(params);
+          await authenticator.getAssertion(params, tab);
           // eslint-disable-next-line no-empty
         } catch {}
 
@@ -684,7 +686,7 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error", async () => {
-        const result = async () => await authenticator.getAssertion(params);
+        const result = async () => await authenticator.getAssertion(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -726,7 +728,7 @@ describe("FidoAuthenticatorService", () => {
             userVerified: userVerification,
           });
 
-          await authenticator.getAssertion(params);
+          await authenticator.getAssertion(params, tab);
 
           expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
             cipherIds: ciphers.map((c) => c.id),
@@ -742,7 +744,7 @@ describe("FidoAuthenticatorService", () => {
           userVerified: false,
         });
 
-        const result = async () => await authenticator.getAssertion(params);
+        const result = async () => await authenticator.getAssertion(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
       });
@@ -808,7 +810,7 @@ describe("FidoAuthenticatorService", () => {
           const encrypted = Symbol();
           cipherService.encrypt.mockResolvedValue(encrypted as any);
 
-          await authenticator.getAssertion(params);
+          await authenticator.getAssertion(params, tab);
 
           expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
           if (residentKey) {
@@ -835,7 +837,7 @@ describe("FidoAuthenticatorService", () => {
         });
 
         it("should return an assertion result", async () => {
-          const result = await authenticator.getAssertion(params);
+          const result = await authenticator.getAssertion(params, tab);
 
           const encAuthData = result.authenticatorData;
           const rpIdHash = encAuthData.slice(0, 32);
@@ -876,7 +878,7 @@ describe("FidoAuthenticatorService", () => {
 
           for (let i = 0; i < 10; ++i) {
             await init(); // Reset inputs
-            const result = await authenticator.getAssertion(params);
+            const result = await authenticator.getAssertion(params, tab);
 
             const counter = result.authenticatorData.slice(33, 37);
             expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // double check that the counter doesn't change
@@ -893,7 +895,7 @@ describe("FidoAuthenticatorService", () => {
         it("should throw unkown error if creation fails", async () => {
           cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
 
-          const result = async () => await authenticator.getAssertion(params);
+          const result = async () => await authenticator.getAssertion(params, tab);
 
           await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
         });

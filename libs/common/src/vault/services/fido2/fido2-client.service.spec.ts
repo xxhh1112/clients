@@ -24,21 +24,32 @@ describe("FidoAuthenticatorService", () => {
   let authenticator!: MockProxy<Fido2AuthenticatorService>;
   let configService!: MockProxy<ConfigServiceAbstraction>;
   let client!: Fido2ClientService;
+  let tab!: any;
 
   beforeEach(async () => {
     authenticator = mock<Fido2AuthenticatorService>();
     configService = mock<ConfigServiceAbstraction>();
     client = new Fido2ClientService(authenticator, configService);
     configService.getFeatureFlagBool.mockResolvedValue(true);
+    tab = { id: 123, windowId: 456 };
   });
 
   describe("createCredential", () => {
     describe("input parameters validation", () => {
+      // Spec: If tab is null, should not call makeCredential
+      it("should not call makeCredential if tab is null", async () => {
+        const params = createParams({ sameOriginWithAncestors: false });
+
+        await client.createCredential(params, null);
+
+        expect(authenticator.makeCredential).not.toHaveBeenCalled();
+      });
+
       // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
       it("should throw error if sameOriginWithAncestors is false", async () => {
         const params = createParams({ sameOriginWithAncestors: false });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotAllowedError" });
@@ -49,7 +60,7 @@ describe("FidoAuthenticatorService", () => {
       it("should throw error if user.id is too small", async () => {
         const params = createParams({ user: { id: "", displayName: "name" } });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         await expect(result).rejects.toBeInstanceOf(TypeError);
       });
@@ -63,7 +74,7 @@ describe("FidoAuthenticatorService", () => {
           },
         });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         await expect(result).rejects.toBeInstanceOf(TypeError);
       });
@@ -78,7 +89,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "invalid-domain-name",
         });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -92,7 +103,7 @@ describe("FidoAuthenticatorService", () => {
           rp: { id: "bitwarden.com", name: "Bitwraden" },
         });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -105,7 +116,7 @@ describe("FidoAuthenticatorService", () => {
           rp: { id: "bitwarden.com", name: "Bitwraden" },
         });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -121,7 +132,7 @@ describe("FidoAuthenticatorService", () => {
           ],
         });
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotSupportedError" });
@@ -136,7 +147,7 @@ describe("FidoAuthenticatorService", () => {
         const abortController = new AbortController();
         abortController.abort();
 
-        const result = async () => await client.createCredential(params, abortController);
+        const result = async () => await client.createCredential(params, tab, abortController);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "AbortError" });
@@ -151,7 +162,7 @@ describe("FidoAuthenticatorService", () => {
         });
         authenticator.makeCredential.mockResolvedValue(createAuthenticatorMakeResult());
 
-        await client.createCredential(params);
+        await client.createCredential(params, tab);
 
         expect(authenticator.makeCredential).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -164,6 +175,7 @@ describe("FidoAuthenticatorService", () => {
               displayName: params.user.displayName,
             }),
           }),
+          tab,
           expect.anything()
         );
       });
@@ -175,7 +187,7 @@ describe("FidoAuthenticatorService", () => {
           new Fido2AutenticatorError(Fido2AutenticatorErrorCode.InvalidState)
         );
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "InvalidStateError" });
@@ -187,7 +199,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams();
         authenticator.makeCredential.mockRejectedValue(new Error("unknown error"));
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotAllowedError" });
@@ -198,7 +210,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams();
         configService.getFeatureFlagBool.mockResolvedValue(false);
 
-        const result = async () => await client.createCredential(params);
+        const result = async () => await client.createCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toThrow(FallbackRequestedError);
@@ -255,7 +267,7 @@ describe("FidoAuthenticatorService", () => {
           origin: "invalid-domain-name",
         });
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -269,7 +281,7 @@ describe("FidoAuthenticatorService", () => {
           rpId: "bitwarden.com",
         });
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -282,7 +294,7 @@ describe("FidoAuthenticatorService", () => {
           rpId: "bitwarden.com",
         });
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
@@ -297,7 +309,7 @@ describe("FidoAuthenticatorService", () => {
         const abortController = new AbortController();
         abortController.abort();
 
-        const result = async () => await client.assertCredential(params, abortController);
+        const result = async () => await client.assertCredential(params, tab, abortController);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "AbortError" });
@@ -306,6 +318,15 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("assert credential", () => {
+      // Spec: If tab is null, should not call getAssertion
+      it("should not call getAssertion if tab is null", async () => {
+        const params = createParams();
+
+        await client.assertCredential(params, null);
+
+        expect(authenticator.makeCredential).not.toHaveBeenCalled();
+      });
+
       // Spec: If any authenticator returns an error status equivalent to "InvalidStateError", Return a DOMException whose name is "InvalidStateError" and terminate this algorithm.
       it("should throw error if authenticator throws InvalidState", async () => {
         const params = createParams();
@@ -313,7 +334,7 @@ describe("FidoAuthenticatorService", () => {
           new Fido2AutenticatorError(Fido2AutenticatorErrorCode.InvalidState)
         );
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "InvalidStateError" });
@@ -325,7 +346,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams();
         authenticator.getAssertion.mockRejectedValue(new Error("unknown error"));
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotAllowedError" });
@@ -336,7 +357,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams();
         configService.getFeatureFlagBool.mockResolvedValue(false);
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toThrow(FallbackRequestedError);
@@ -356,7 +377,7 @@ describe("FidoAuthenticatorService", () => {
         });
         authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
 
-        await client.assertCredential(params);
+        await client.assertCredential(params, tab);
 
         expect(authenticator.getAssertion).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -374,6 +395,7 @@ describe("FidoAuthenticatorService", () => {
               }),
             ],
           }),
+          tab,
           expect.anything()
         );
       });
@@ -387,7 +409,7 @@ describe("FidoAuthenticatorService", () => {
         });
         authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
 
-        await client.assertCredential(params);
+        await client.assertCredential(params, tab);
 
         expect(authenticator.getAssertion).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -395,6 +417,7 @@ describe("FidoAuthenticatorService", () => {
             rpId: RpId,
             allowCredentialDescriptorList: [],
           }),
+          tab,
           expect.anything()
         );
       });

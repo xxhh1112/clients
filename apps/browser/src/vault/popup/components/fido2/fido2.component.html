@@ -68,7 +68,7 @@
         </div>
       </ng-container>
     </ng-container>
-    <a *ngIf="data.fallbackSupported" (click)="abort(true)">
+    <a [routerLink]="[]" *ngIf="data.fallbackSupported" (click)="abort(true)">
       {{ "useBrowserName" | i18n }} browser
     </a>
   </div>

@@ -10,6 +10,14 @@ interface BrowserPopoutWindowService {
     }
   ): Promise<void>;
   closePasswordRepromptPrompt(): Promise<void>;
+  openFido2Popout(
+    senderWindowId: number,
+    promptData: {
+      sessionId: string;
+      senderTabId: number;
+    }
+  ): Promise<void>;
+  closeFido2Popout(): Promise<void>;
 }
 
 export { BrowserPopoutWindowService };

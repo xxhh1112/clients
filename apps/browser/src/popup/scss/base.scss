@@ -656,6 +656,10 @@ app-fido2 {
         overflow-y: auto;
       }
 
+      .box-content {
+        max-height: 145px;
+      }
+
       .box-content-row {
         display: flex;
         justify-content: center;

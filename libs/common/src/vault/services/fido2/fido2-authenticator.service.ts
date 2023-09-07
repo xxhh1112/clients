@@ -41,10 +41,12 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ) {}
   async makeCredential(
     params: Fido2AuthenticatorMakeCredentialsParams,
+    tab: any,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
     const userInterfaceSession = await this.userInterface.newSession(
       params.fallbackSupported,
+      tab,
       abortController
     );
 
@@ -212,13 +214,14 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
   async getAssertion(
     params: Fido2AuthenticatorGetAssertionParams,
+    tab: any,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorGetAssertionResult> {
     const userInterfaceSession = await this.userInterface.newSession(
       params.fallbackSupported,
+      tab,
       abortController
     );
-
     try {
       if (
         params.requireUserVerification != undefined &&

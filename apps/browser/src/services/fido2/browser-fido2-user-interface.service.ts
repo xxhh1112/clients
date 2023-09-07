@@ -20,7 +20,8 @@ import {
 } from "@bitwarden/common/vault/abstractions/fido2/fido2-user-interface.service.abstraction";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { Popout, PopupUtilsService } from "../../popup/services/popup-utils.service";
+import { BrowserPopoutWindowService } from "../../platform/popup/abstractions/browser-popout-window.service";
+import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
 
@@ -97,15 +98,21 @@ export type BrowserFido2Message = { sessionId: string } & (
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  constructor(private popupUtilsService: PopupUtilsService) {}
+  constructor(
+    private popupUtilsService: PopupUtilsService,
+    private browserPopoutWindowService: BrowserPopoutWindowService
+  ) {}
 
   async newSession(
     fallbackSupported: boolean,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ): Promise<Fido2UserInterfaceSession> {
     return await BrowserFido2UserInterfaceSession.create(
       this.popupUtilsService,
+      this.browserPopoutWindowService,
       fallbackSupported,
+      tab,
       abortController
     );
   }
@@ -114,12 +121,16 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSession {
   static async create(
     popupUtilsService: PopupUtilsService,
+    browserPopoutWindowService: BrowserPopoutWindowService,
     fallbackSupported: boolean,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ): Promise<BrowserFido2UserInterfaceSession> {
     return new BrowserFido2UserInterfaceSession(
       popupUtilsService,
+      browserPopoutWindowService,
       fallbackSupported,
+      tab,
       abortController
     );
   }
@@ -134,11 +145,12 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   );
   private connected$ = new BehaviorSubject(false);
   private destroy$ = new Subject<void>();
-  private popout?: Popout;
 
   private constructor(
     private readonly popupUtilsService: PopupUtilsService,
+    private readonly browserPopoutWindowService: BrowserPopoutWindowService,
     private readonly fallbackSupported: boolean,
+    private readonly tab: chrome.tabs.Tab,
     readonly abortController = new AbortController(),
     readonly sessionId = Utils.newGuid()
   ) {
@@ -273,7 +285,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   }
 
   async close() {
-    this.popupUtilsService.closePopOut(this.popout);
+    this.browserPopoutWindowService.closeFido2Popout();
     this.closed = true;
     this.destroy$.next();
     this.destroy$.complete();
@@ -309,17 +321,16 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     if (this.closed) {
       throw new Error("Cannot re-open closed session");
     }
-
-    const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
     // create promise first to avoid race condition where the popout opens before we start listening
     const connectPromise = firstValueFrom(
       this.connected$.pipe(filter((connected) => connected === true))
     );
-    this.popout = await this.popupUtilsService.popOut(
-      null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
-      { center: true }
-    );
+
+    await this.browserPopoutWindowService.openFido2Popout(this.tab.windowId, {
+      sessionId: this.sessionId,
+      senderTabId: this.tab.id,
+    });
+
     await connectPromise;
   }
 }

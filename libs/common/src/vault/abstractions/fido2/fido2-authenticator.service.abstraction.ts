@@ -6,6 +6,7 @@ export abstract class Fido2AuthenticatorService {
    **/
   makeCredential: (
     params: Fido2AuthenticatorMakeCredentialsParams,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ) => Promise<Fido2AuthenticatorMakeCredentialResult>;
 
@@ -14,6 +15,7 @@ export abstract class Fido2AuthenticatorService {
    */
   getAssertion: (
     params: Fido2AuthenticatorGetAssertionParams,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ) => Promise<Fido2AuthenticatorGetAssertionResult>;
 }
