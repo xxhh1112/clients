@@ -606,7 +606,7 @@
     "message": "登录或者创建一个账户来访问您的安全密码库。"
   },
   "loginWithDevice": {
-    "message": "设备登录"
+    "message": "使用设备登录"
   },
   "loginWithDeviceEnabledNote": {
     "message": "设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？"
@@ -1306,7 +1306,7 @@
     "message": "选择一个集合"
   },
   "importTargetHint": {
-    "message": "如果您希望将导入的文件内容移至 $DESTINATION$，请选中此选项",
+    "message": "如果您希望将导入的文件内容移动到某个 $DESTINATION$，请选择此选项",
     "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
     "placeholders": {
       "destination": {
@@ -1924,8 +1924,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB 文件附件加密存储。"
   },
-  "premiumSignUpTwoStep": {
-    "message": "额外的两步登录选项，如 YubiKey、FIDO U2F 和 Duo。"
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "紧急访问"
@@ -2039,6 +2039,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "任何未付费订阅都将通过您的付款方式收取费用。"
   },
   "paymentChargedWithTrial": {
     "message": "您的计划包含了 7 天的免费试用期。在试用期结束前，不会从您的付款方式中扣款。您可以随时取消。"
@@ -2448,7 +2451,7 @@
     "message": "组织已创建"
   },
   "organizationReadyToGo": {
-    "message": "你的组织准备好了！"
+    "message": "您的新组织已准备就绪！"
   },
   "organizationUpgraded": {
     "message": "组织已升级"
@@ -3535,6 +3538,9 @@
   },
   "vaultTimeoutDesc": {
     "message": "选择您的密码库何时执行密码库超时动作。"
+  },
+  "vaultTimeoutLogoutDesc": {
+    "message": "选择您的密码库何时注销。"
   },
   "oneMinute": {
     "message": "1 分钟"
@@ -5419,7 +5425,7 @@
     "message": "如果实体 ID 不是一个 URL，则必填。"
   },
   "openIdOptionalCustomizations": {
-    "message": "定制（可选）"
+    "message": "自定义（可选）"
   },
   "openIdAuthorityRequired": {
     "message": "如果授权无效，则必填。"
@@ -5428,7 +5434,7 @@
     "message": "使用逗号分隔。"
   },
   "sessionTimeout": {
-    "message": "您的会话已超时。请返回并尝试重新登录。"
+    "message": "您的会话已超时。请返回然后尝试重新登录。"
   },
   "exportingPersonalVaultTitle": {
     "message": "正在导出个人密码库"
@@ -5818,7 +5824,7 @@
     "message": "正在获取选项..."
   },
   "multiSelectNotFound": {
-    "message": "未找到任何项目"
+    "message": "未找到任何条目"
   },
   "multiSelectClearAll": {
     "message": "清除全部"
@@ -6835,28 +6841,60 @@
   "updateKdfSettings": {
     "message": "更新 KDF 设置"
   },
+  "loginInitiated": {
+    "message": "登录已发起"
+  },
+  "deviceApprovalRequired": {
+    "message": "需要设备批准。请在下面选择一个批准选项："
+  },
+  "rememberThisDevice": {
+    "message": "记住此设备"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "若使用公共设备，请取消勾选"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "从您的其他设备批准"
+  },
+  "requestAdminApproval": {
+    "message": "请求管理员批准"
+  },
+  "approveWithMasterPassword": {
+    "message": "使用主密码批准"
+  },
+  "trustedDeviceEncryption": {
+    "message": "受信任的设备加密"
+  },
   "trustedDevices": {
     "message": "受信任的设备"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
+  "memberDecryptionOptionTdeDescriptionPartOne": {
     "message": "验证后，成员将使用存储在他们设备上的密钥解密密码库数据。使用此选项后，",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
     "message": "单一组织",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "策略和具有自动注册的",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "策略，",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "要求 SSO",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "策略以及具有自动注册的",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
     "message": "账户恢复管理",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
+  "memberDecryptionOptionTdeDescriptionPartFour": {
     "message": "策略将被开启。",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ 未找到",
@@ -6901,7 +6939,7 @@
     "message": "设备信息"
   },
   "time": {
-    "message": "Time"
+    "message": "时间"
   },
   "denyAllRequests": {
     "message": "拒绝所有请求"
@@ -6945,6 +6983,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "移除没有为其设置主密码的成员可能会限制对他们的完整账户的访问权限。"
   },
+  "approvedAuthRequest": {
+    "message": "批准了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "拒绝了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "请求了设备批准。"
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "为 $ORG$ 开始您的 Bitwarden 7 天免费试用",
     "placeholders": {
@@ -6955,16 +7014,40 @@
     }
   },
   "next": {
-    "message": "Next"
+    "message": "下一步"
   },
   "usFlag": {
-    "message": "US 标志"
+    "message": "美国旗帜"
   },
   "euFlag": {
-    "message": "EU 标志"
+    "message": "欧盟旗帜"
   },
   "selectedRegionFlag": {
-    "message": "选定的区域标志"
+    "message": "选择的区域旗帜"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "账户已成功创建！"
+  },
+  "adminApprovalRequested": {
+    "message": "已请求管理员批准"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "您的请求已发送给您的管理员。"
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "批准后，您将收到通知。"
+  },
+  "troubleLoggingIn": {
+    "message": "登录遇到问题？"
+  },
+  "loginApproved": {
+    "message": "登录已批准"
+  },
+  "userEmailMissing": {
+    "message": "缺少用户电子邮件"
+  },
+  "deviceTrusted": {
+    "message": "设备已信任"
   },
   "sendsNoItemsTitle": {
     "message": "没有活跃的 Send",
@@ -6993,13 +7076,13 @@
     "message": "免费的 2 人组织"
   },
   "unlimitedSecrets": {
-    "message": "无限制的机密"
+    "message": "不限数量的机密"
   },
   "unlimitedProjects": {
-    "message": "无限制的工程"
+    "message": "不限数量的工程"
   },
   "projectsIncluded": {
-    "message": "包含了 $COUNT$ 个工程",
+    "message": "包含 $COUNT$ 个工程",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7008,7 +7091,7 @@
     }
   },
   "serviceAccountsIncluded": {
-    "message": "包含了 $COUNT$ 个服务账户",
+    "message": "包含 $COUNT$ 个服务账户",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7075,6 +7158,9 @@
   },
   "maxServiceAccountCost": {
     "message": "最大潜在服务账户费用"
+  },
+  "loggedInExclamation": {
+    "message": "已登录！"
   },
   "smBetaEndedDesc": {
     "message": "机密管理器 Beta 版将于 $BETA_ENDING_DATE$ 结束。您还剩余 $DAYS$ 天时间将机密管理器添加到您的付费订阅中，以保持对其数据的访问权限。联系客户成功团队将机密管理器添加到您的订阅中。",
