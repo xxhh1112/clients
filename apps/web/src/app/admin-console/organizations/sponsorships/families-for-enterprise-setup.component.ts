@@ -15,7 +15,7 @@ import { ValidationService } from "@bitwarden/common/platform/abstractions/valid
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
-import { OrganizationPlansComponent } from "../../../billing/settings/organization-plans.component";
+import { OrganizationPlansComponent } from "../../../billing/shared/organization-plans.component";
 import {
   DeleteOrganizationDialogResult,
   openDeleteOrganizationDialog,

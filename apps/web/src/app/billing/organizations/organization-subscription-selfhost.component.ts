@@ -20,7 +20,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import {
   BillingSyncKeyComponent,
   BillingSyncKeyModalData,
-} from "../../billing/settings/billing-sync-key.component";
+} from "../individual/billing-sync-key.component";
 
 enum LicenseOptions {
   SYNC = 0,

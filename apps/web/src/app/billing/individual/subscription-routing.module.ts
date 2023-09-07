@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { BillingHistoryViewComponent } from "../../billing/settings/billing-history-view.component";
-import { PaymentMethodComponent } from "../../billing/settings/payment-method.component";
-import { UserSubscriptionComponent } from "../../billing/settings/user-subscription.component";
 import { PremiumComponent } from "../../vault/settings/premium.component";
+import { PaymentMethodComponent } from "../shared/payment-method.component";
+import { UserSubscriptionComponent } from "../shared/user-subscription.component";
 
+import { BillingHistoryViewComponent } from "./billing-history-view.component";
 import { SubscriptionComponent } from "./subscription.component";
 
 const routes: Routes = [

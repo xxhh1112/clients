@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 
 import { ProductType } from "@bitwarden/common/enums";
 
-import { OrganizationPlansComponent } from "../../settings/organization-plans.component";
+import { OrganizationPlansComponent } from "../../shared/organization-plans.component";
 
 @Component({
   selector: "app-billing",

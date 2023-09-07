@@ -7,10 +7,10 @@ import { UpdateLicenseComponent } from "../../settings/update-license.component"
 import { SharedModule } from "../../shared";
 import { PremiumComponent } from "../../vault/settings/premium.component";
 import { SecretsManagerBillingModule } from "../organizations/secrets-manager/sm-billing.module";
-import { AddCreditComponent } from "../settings/add-credit.component";
-import { AdjustStorageComponent } from "../settings/adjust-storage.component";
 
+import { AddCreditComponent } from "./add-credit.component";
 import { AdjustPaymentComponent } from "./adjust-payment.component";
+import { AdjustStorageComponent } from "./adjust-storage.component";
 import { OrganizationPlansComponent } from "./organization-plans.component";
 import { PaymentMethodComponent } from "./payment-method.component";
 import { PaymentComponent } from "./payment.component";
@@ -41,4 +41,4 @@ import { UserSubscriptionComponent } from "./user-subscription.component";
     UpdateLicenseComponent,
   ],
 })
-export class LooseBillingComponentsModule {}
+export class BillingSharedModule {}

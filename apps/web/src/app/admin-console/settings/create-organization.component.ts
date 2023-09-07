@@ -5,7 +5,7 @@ import { first } from "rxjs/operators";
 import { PlanType } from "@bitwarden/common/billing/enums";
 import { ProductType } from "@bitwarden/common/enums";
 
-import { OrganizationPlansComponent } from "../../billing/settings/organization-plans.component";
+import { OrganizationPlansComponent } from "../../billing/shared/organization-plans.component";
 
 @Component({
   selector: "app-create-organization",
