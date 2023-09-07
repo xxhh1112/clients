@@ -9,8 +9,6 @@ export class Fido2KeyData {
   rpId: string;
   userHandle: string;
   counter: string;
-
-  // Extras
   rpName: string;
   userDisplayName: string;
 

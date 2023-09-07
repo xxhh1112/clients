@@ -55,69 +55,66 @@ export class PopupUtilsService {
     }
   }
 
-  popOut(win: Window, href: string = null, options: { center?: boolean } = {}): Promise<Popout> {
-    return new Promise((resolve, reject) => {
-      if (href === null) {
-        href = win.location.href;
-      }
+  async popOut(
+    win: Window,
+    href: string = null,
+    options: { center?: boolean } = {}
+  ): Promise<Popout> {
+    if (href === null) {
+      href = win.location.href;
+    }
 
-      if (typeof chrome !== "undefined" && chrome.windows && chrome.windows.create) {
-        if (href.indexOf("?uilocation=") > -1) {
-          href = href
-            .replace("uilocation=popup", "uilocation=popout")
-            .replace("uilocation=tab", "uilocation=popout")
-            .replace("uilocation=sidebar", "uilocation=popout");
-        } else {
-          const hrefParts = href.split("#");
-          href =
-            hrefParts[0] + "?uilocation=popout" + (hrefParts.length > 0 ? "#" + hrefParts[1] : "");
-        }
-
-        const bodyRect = document.querySelector("body").getBoundingClientRect();
-        const width = Math.round(bodyRect.width ? bodyRect.width + 60 : 375);
-        const height = Math.round(bodyRect.height || 600);
-        const top = options.center ? Math.round((screen.height - height) / 2) : undefined;
-        const left = options.center ? Math.round((screen.width - width) / 2) : undefined;
-        chrome.windows.create(
-          {
-            url: href,
-            type: "popup",
-            width,
-            height,
-            top,
-            left,
-          },
-          (window) => resolve({ type: "window", window })
-        );
-
-        if (win && this.inPopup(win)) {
-          BrowserApi.closePopup(win);
-        }
-      } else if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.create) {
+    if (chrome?.windows?.create != null) {
+      if (href.indexOf("?uilocation=") > -1) {
         href = href
-          .replace("uilocation=popup", "uilocation=tab")
-          .replace("uilocation=popout", "uilocation=tab")
-          .replace("uilocation=sidebar", "uilocation=tab");
-        chrome.tabs.create(
-          {
-            url: href,
-          },
-          (tab) => resolve({ type: "tab", tab })
-        );
+          .replace("uilocation=popup", "uilocation=popout")
+          .replace("uilocation=tab", "uilocation=popout")
+          .replace("uilocation=sidebar", "uilocation=popout");
       } else {
-        reject(new Error("Cannot open tab or window"));
+        const hrefParts = href.split("#");
+        href =
+          hrefParts[0] + "?uilocation=popout" + (hrefParts.length > 0 ? "#" + hrefParts[1] : "");
       }
-    });
+
+      const bodyRect = document.querySelector("body").getBoundingClientRect();
+      const width = Math.round(bodyRect.width ? bodyRect.width + 60 : 375);
+      const height = Math.round(bodyRect.height || 600);
+      const top = options.center ? Math.round((screen.height - height) / 2) : undefined;
+      const left = options.center ? Math.round((screen.width - width) / 2) : undefined;
+      const window = await BrowserApi.createWindow({
+        url: href,
+        type: "popup",
+        width,
+        height,
+        top,
+        left,
+      });
+
+      if (win && this.inPopup(win)) {
+        BrowserApi.closePopup(win);
+      }
+
+      return { type: "window", window };
+    } else if (chrome?.tabs?.create != null) {
+      href = href
+        .replace("uilocation=popup", "uilocation=tab")
+        .replace("uilocation=popout", "uilocation=tab")
+        .replace("uilocation=sidebar", "uilocation=tab");
+
+      const tab = await BrowserApi.createNewTab(href);
+      return { type: "tab", tab };
+    } else {
+      throw new Error("Cannot open tab or window");
+    }
   }
 
   closePopOut(popout: Popout): Promise<void> {
-    return new Promise((resolve) => {
-      if (popout.type === "window") {
-        chrome.windows.remove(popout.window.id, resolve);
-      } else {
-        chrome.tabs.remove(popout.tab.id, resolve);
-      }
-    });
+    switch (popout.type) {
+      case "window":
+        return BrowserApi.removeWindow(popout.window.id);
+      case "tab":
+        return BrowserApi.removeTab(popout.tab.id);
+    }
   }
 
   /**
