@@ -11,6 +11,7 @@ export class Fido2KeyApi extends BaseResponse {
   counter: string;
   rpName: string;
   userDisplayName: string;
+  discoverable: string;
 
   constructor(data: any = null) {
     super(data);
@@ -28,5 +29,6 @@ export class Fido2KeyApi extends BaseResponse {
     this.counter = this.getResponseProperty("Counter");
     this.rpName = this.getResponseProperty("RpName");
     this.userDisplayName = this.getResponseProperty("UserDisplayName");
+    this.discoverable = this.getResponseProperty("discoverable");
   }
 }

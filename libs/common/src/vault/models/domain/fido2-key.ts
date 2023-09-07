@@ -17,6 +17,7 @@ export class Fido2Key extends Domain {
   counter: EncString;
   rpName: EncString;
   userDisplayName: EncString;
+  discoverable: EncString;
 
   constructor(obj?: Fido2KeyData) {
     super();
@@ -38,6 +39,7 @@ export class Fido2Key extends Domain {
         counter: null,
         rpName: null,
         userDisplayName: null,
+        discoverable: null,
       },
       []
     );
@@ -56,6 +58,7 @@ export class Fido2Key extends Domain {
         userHandle: null,
         rpName: null,
         userDisplayName: null,
+        discoverable: null,
       },
       orgId,
       encKey
@@ -71,6 +74,16 @@ export class Fido2Key extends Domain {
     );
     // Counter will end up as NaN if this fails
     view.counter = parseInt(counter);
+
+    const { discoverable } = await this.decryptObj(
+      { discoverable: "" },
+      {
+        discoverable: null,
+      },
+      orgId,
+      encKey
+    );
+    view.discoverable = discoverable === "true";
 
     return view;
   }
@@ -88,6 +101,7 @@ export class Fido2Key extends Domain {
       counter: null,
       rpName: null,
       userDisplayName: null,
+      discoverable: null,
     });
     return i;
   }
@@ -107,6 +121,7 @@ export class Fido2Key extends Domain {
     const counter = EncString.fromJSON(obj.counter);
     const rpName = EncString.fromJSON(obj.rpName);
     const userDisplayName = EncString.fromJSON(obj.userDisplayName);
+    const discoverable = EncString.fromJSON(obj.discoverable);
 
     return Object.assign(new Fido2Key(), obj, {
       credentialId,
@@ -119,6 +134,7 @@ export class Fido2Key extends Domain {
       counter,
       rpName,
       userDisplayName,
+      discoverable,
     });
   }
 }
