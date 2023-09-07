@@ -12,7 +12,7 @@ describe("Fido2Key", () => {
       const fido2Key = new Fido2Key(data);
 
       expect(fido2Key).toEqual({
-        nonDiscoverableId: null,
+        credentialId: null,
         keyType: null,
         keyAlgorithm: null,
         keyCurve: null,
@@ -27,7 +27,7 @@ describe("Fido2Key", () => {
 
     it("returns all fields as EncStrings when given full Fido2KeyData", () => {
       const data: Fido2KeyData = {
-        nonDiscoverableId: "nonDiscoverableId",
+        credentialId: "credentialId",
         keyType: "public-key",
         keyAlgorithm: "ECDSA",
         keyCurve: "P-256",
@@ -41,7 +41,7 @@ describe("Fido2Key", () => {
       const fido2Key = new Fido2Key(data);
 
       expect(fido2Key).toEqual({
-        nonDiscoverableId: { encryptedString: "nonDiscoverableId", encryptionType: 0 },
+        credentialId: { encryptedString: "credentialId", encryptionType: 0 },
         keyType: { encryptedString: "public-key", encryptionType: 0 },
         keyAlgorithm: { encryptedString: "ECDSA", encryptionType: 0 },
         keyCurve: { encryptedString: "P-256", encryptionType: 0 },
@@ -58,7 +58,7 @@ describe("Fido2Key", () => {
       const fido2Key = new Fido2Key();
 
       expect(fido2Key).toEqual({
-        nonDiscoverableId: null,
+        credentialId: null,
       });
     });
   });
@@ -66,7 +66,7 @@ describe("Fido2Key", () => {
   describe("decrypt", () => {
     it("decrypts and populates all fields when populated with EncStrings", async () => {
       const fido2Key = new Fido2Key();
-      fido2Key.nonDiscoverableId = mockEnc("nonDiscoverableId");
+      fido2Key.credentialId = mockEnc("credentialId");
       fido2Key.keyType = mockEnc("keyType");
       fido2Key.keyAlgorithm = mockEnc("keyAlgorithm");
       fido2Key.keyCurve = mockEnc("keyCurve");
@@ -80,7 +80,7 @@ describe("Fido2Key", () => {
       const fido2KeyView = await fido2Key.decrypt(null);
 
       expect(fido2KeyView).toEqual({
-        nonDiscoverableId: "nonDiscoverableId",
+        credentialId: "credentialId",
         keyType: "keyType",
         keyAlgorithm: "keyAlgorithm",
         keyCurve: "keyCurve",
@@ -97,7 +97,7 @@ describe("Fido2Key", () => {
   describe("toFido2KeyData", () => {
     it("encodes to data object when converted from Fido2KeyData and back", () => {
       const data: Fido2KeyData = {
-        nonDiscoverableId: "nonDiscoverableId",
+        credentialId: "credentialId",
         keyType: "public-key",
         keyAlgorithm: "ECDSA",
         keyCurve: "P-256",
@@ -119,7 +119,7 @@ describe("Fido2Key", () => {
   describe("fromJSON", () => {
     it("recreates equivalent object when converted to JSON and back", () => {
       const fido2Key = new Fido2Key();
-      fido2Key.nonDiscoverableId = createEncryptedEncString("nonDiscoverableId");
+      fido2Key.credentialId = createEncryptedEncString("credentialId");
       fido2Key.keyType = createEncryptedEncString("keyType");
       fido2Key.keyAlgorithm = createEncryptedEncString("keyAlgorithm");
       fido2Key.keyCurve = createEncryptedEncString("keyCurve");

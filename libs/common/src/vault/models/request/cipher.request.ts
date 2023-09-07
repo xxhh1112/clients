@@ -66,9 +66,9 @@ export class CipherRequest {
 
         if (cipher.login.fido2Key != null) {
           this.login.fido2Key = new Fido2KeyApi();
-          this.login.fido2Key.nonDiscoverableId =
-            cipher.login.fido2Key.nonDiscoverableId != null
-              ? cipher.login.fido2Key.nonDiscoverableId.encryptedString
+          this.login.fido2Key.credentialId =
+            cipher.login.fido2Key.credentialId != null
+              ? cipher.login.fido2Key.credentialId.encryptedString
               : null;
           this.login.fido2Key.keyType =
             cipher.login.fido2Key.keyType != null
@@ -167,9 +167,9 @@ export class CipherRequest {
         break;
       case CipherType.Fido2Key:
         this.fido2Key = new Fido2KeyApi();
-        this.fido2Key.nonDiscoverableId =
-          cipher.fido2Key.nonDiscoverableId != null
-            ? cipher.fido2Key.nonDiscoverableId.encryptedString
+        this.fido2Key.credentialId =
+          cipher.fido2Key.credentialId != null
+            ? cipher.fido2Key.credentialId.encryptedString
             : null;
         this.fido2Key.keyType =
           cipher.fido2Key.keyType != null

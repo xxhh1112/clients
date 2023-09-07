@@ -6,7 +6,7 @@ import { Fido2Key as Fido2KeyDomain } from "./../../vault/models/domain/fido2-ke
 export class Fido2KeyExport {
   static template(): Fido2KeyExport {
     const req = new Fido2KeyExport();
-    req.nonDiscoverableId = "keyId";
+    req.credentialId = "keyId";
     req.keyType = "keyType";
     req.keyAlgorithm = "keyAlgorithm";
     req.keyCurve = "keyCurve";
@@ -20,7 +20,7 @@ export class Fido2KeyExport {
   }
 
   static toView(req: Fido2KeyExport, view = new Fido2KeyView()) {
-    view.nonDiscoverableId = req.nonDiscoverableId;
+    view.credentialId = req.credentialId;
     view.keyType = req.keyType as "public-key";
     view.keyAlgorithm = req.keyAlgorithm as "ECDSA";
     view.keyCurve = req.keyCurve as "P-256";
@@ -34,8 +34,7 @@ export class Fido2KeyExport {
   }
 
   static toDomain(req: Fido2KeyExport, domain = new Fido2KeyDomain()) {
-    domain.nonDiscoverableId =
-      req.nonDiscoverableId != null ? new EncString(req.nonDiscoverableId) : null;
+    domain.credentialId = req.credentialId != null ? new EncString(req.credentialId) : null;
     domain.keyType = req.keyType != null ? new EncString(req.keyType) : null;
     domain.keyAlgorithm = req.keyAlgorithm != null ? new EncString(req.keyAlgorithm) : null;
     domain.keyCurve = req.keyCurve != null ? new EncString(req.keyCurve) : null;
@@ -49,7 +48,7 @@ export class Fido2KeyExport {
     return domain;
   }
 
-  nonDiscoverableId: string;
+  credentialId: string;
   keyType: string;
   keyAlgorithm: string;
   keyCurve: string;
@@ -66,7 +65,7 @@ export class Fido2KeyExport {
     }
 
     if (o instanceof Fido2KeyView) {
-      this.nonDiscoverableId = o.nonDiscoverableId;
+      this.credentialId = o.credentialId;
       this.keyType = o.keyType;
       this.keyAlgorithm = o.keyAlgorithm;
       this.keyCurve = o.keyCurve;
@@ -77,7 +76,7 @@ export class Fido2KeyExport {
       this.rpName = o.rpName;
       this.userDisplayName = o.userDisplayName;
     } else {
-      this.nonDiscoverableId = o.nonDiscoverableId?.encryptedString;
+      this.credentialId = o.credentialId?.encryptedString;
       this.keyType = o.keyType?.encryptedString;
       this.keyAlgorithm = o.keyAlgorithm?.encryptedString;
       this.keyCurve = o.keyCurve?.encryptedString;
