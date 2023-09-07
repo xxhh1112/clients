@@ -23,25 +23,21 @@ import {
 import { BrowserStateService } from "../../platform/services/abstractions/browser-state.service";
 
 export const ROOT_ID = "root";
-
 export const AUTOFILL_ID = "autofill";
 export const AUTOFILL_IDENTITY_ID = "autofill-identity";
 export const AUTOFILL_CARD_ID = "autofill-card";
 export const CREATE_IDENTITY_ID = "create-identity";
 export const CREATE_CARD_ID = "create-card";
+export const CREATE_LOGIN_ID = "create-login";
 export const COPY_USERNAME_ID = "copy-username";
 export const COPY_PASSWORD_ID = "copy-password";
 export const COPY_VERIFICATIONCODE_ID = "copy-totp";
 export const COPY_IDENTIFIER_ID = "copy-identifier";
-
 const SEPARATOR_ID = "separator";
 export const GENERATE_PASSWORD_ID = "generate-password";
-
 export const NOOP_COMMAND_SUFFIX = "noop";
-export const NONE_LOGIN_SUFFIX = "none";
 
 export class MainContextMenuHandler {
-  //
   private initRunning = false;
 
   create: (options: chrome.contextMenus.CreateProperties) => Promise<void>;
@@ -125,7 +121,7 @@ export class MainContextMenuHandler {
       await create({
         id: AUTOFILL_ID,
         parentId: ROOT_ID,
-        title: this.i18nService.t("autoFill"),
+        title: this.i18nService.t("autoFillLogin"),
       });
 
       await create({
@@ -157,15 +153,13 @@ export class MainContextMenuHandler {
       await create({
         id: AUTOFILL_IDENTITY_ID,
         parentId: ROOT_ID,
-        // @TODO i18n
-        title: "Auto-fill identity",
+        title: this.i18nService.t("autoFillIdentity"),
       });
 
       await create({
         id: AUTOFILL_CARD_ID,
         parentId: ROOT_ID,
-        // @TODO i18n
-        title: "Auto-fill card",
+        title: this.i18nService.t("autoFillCard"),
       });
 
       await create({
@@ -225,6 +219,7 @@ export class MainContextMenuHandler {
 
       const createChildItem = async (parent: string) => {
         const menuItemId = `${parent}_${id}`;
+
         return await this.create({
           type: "normal",
           id: menuItemId,
@@ -250,11 +245,11 @@ export class MainContextMenuHandler {
         await createChildItem(COPY_VERIFICATIONCODE_ID);
       }
 
-      if ((!cipher || cipher?.type === CipherType.Card) && id !== NONE_LOGIN_SUFFIX) {
+      if ((!cipher || cipher?.type === CipherType.Card) && id !== CREATE_LOGIN_ID) {
         await createChildItem(AUTOFILL_CARD_ID);
       }
 
-      if ((!cipher || cipher.type === CipherType.Identity) && id !== NONE_LOGIN_SUFFIX) {
+      if ((!cipher || cipher.type === CipherType.Identity) && id !== CREATE_LOGIN_ID) {
         await createChildItem(AUTOFILL_IDENTITY_ID);
       }
     } catch (error) {
@@ -276,7 +271,23 @@ export class MainContextMenuHandler {
     }
   }
 
+  async noCards() {
+    await this.create({
+      id: `${AUTOFILL_CARD_ID}_${CREATE_CARD_ID}`,
+      parentId: AUTOFILL_CARD_ID,
+      title: this.i18nService.t("addCardMenu"),
+    });
+  }
+
+  async noIdentities() {
+    await this.create({
+      id: `${AUTOFILL_IDENTITY_ID}_${CREATE_IDENTITY_ID}`,
+      parentId: AUTOFILL_IDENTITY_ID,
+      title: this.i18nService.t("addIdentityMenu"),
+    });
+  }
+
   async noLogins() {
-    await this.loadOptions(this.i18nService.t("noMatchingLogins"), NONE_LOGIN_SUFFIX);
+    await this.loadOptions(this.i18nService.t("addLoginMenu"), CREATE_LOGIN_ID);
   }
 }

@@ -19,13 +19,7 @@ import {
   CipherServiceInitOptions,
 } from "../../vault/background/service_factories/cipher-service.factory";
 
-import {
-  AUTOFILL_IDENTITY_ID,
-  AUTOFILL_CARD_ID,
-  CREATE_IDENTITY_ID,
-  CREATE_CARD_ID,
-  MainContextMenuHandler,
-} from "./main-context-menu-handler";
+import { MainContextMenuHandler } from "./main-context-menu-handler";
 
 type AutofillCipherTypeId = CipherType.Login | CipherType.Card | CipherType.Identity;
 
@@ -190,21 +184,11 @@ export class CipherContextMenuHandler {
     }
 
     if (groupedCiphers[CipherType.Identity].length === 0) {
-      await this.mainContextMenuHandler.create({
-        id: CREATE_IDENTITY_ID,
-        parentId: AUTOFILL_IDENTITY_ID,
-        // @TODO i18n
-        title: "Add identity",
-      });
+      await this.mainContextMenuHandler.noIdentities();
     }
 
     if (groupedCiphers[CipherType.Card].length === 0) {
-      await this.mainContextMenuHandler.create({
-        id: CREATE_CARD_ID,
-        parentId: AUTOFILL_CARD_ID,
-        // @TODO i18n
-        title: "Add card",
-      });
+      await this.mainContextMenuHandler.noCards();
     }
 
     for (const cipher of ciphers) {

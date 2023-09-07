@@ -38,12 +38,12 @@ import {
   AUTOFILL_CARD_ID,
   CREATE_IDENTITY_ID,
   CREATE_CARD_ID,
+  CREATE_LOGIN_ID,
   COPY_IDENTIFIER_ID,
   COPY_PASSWORD_ID,
   COPY_USERNAME_ID,
   COPY_VERIFICATIONCODE_ID,
   GENERATE_PASSWORD_ID,
-  NONE_LOGIN_SUFFIX,
   NOOP_COMMAND_SUFFIX,
 } from "./main-context-menu-handler";
 
@@ -192,15 +192,15 @@ export class ContextMenuClickedHandler {
 
     // NOTE: We don't actually use the first part of this ID, we further switch based on the parentMenuItemId
     // I would really love to not add it but that is a departure from how it currently works.
-    const cipherId = (info.menuItemId as string).split("_")[1]; // We create all the ids, we can guarantee they are strings
+    const menuItemId = (info.menuItemId as string).split("_")[1]; // We create all the ids, we can guarantee they are strings
     let cipher: CipherView | undefined;
-    const isCreateCipherAction = [CREATE_IDENTITY_ID, CREATE_CARD_ID].includes(
-      info.menuItemId as string
+    const isCreateCipherAction = [CREATE_LOGIN_ID, CREATE_IDENTITY_ID, CREATE_CARD_ID].includes(
+      menuItemId as string
     );
 
-    if (cipherId === NONE_LOGIN_SUFFIX || isCreateCipherAction) {
+    if (isCreateCipherAction) {
       // pass; defer to logic below
-    } else if (cipherId === NOOP_COMMAND_SUFFIX) {
+    } else if (menuItemId === NOOP_COMMAND_SUFFIX) {
       const additionalCiphersToGet =
         info.parentMenuItemId === AUTOFILL_IDENTITY_ID
           ? [CipherType.Identity]
@@ -220,7 +220,7 @@ export class ContextMenuClickedHandler {
       cipher = ciphers.find((c) => c.reprompt === CipherRepromptType.None);
     } else {
       const ciphers = await this.cipherService.getAllDecrypted();
-      cipher = ciphers.find((c) => c.id === cipherId);
+      cipher = ciphers.find((c) => c.id === menuItemId);
     }
 
     if (!cipher && !isCreateCipherAction) {
@@ -231,16 +231,23 @@ export class ContextMenuClickedHandler {
       case AUTOFILL_ID:
       case AUTOFILL_IDENTITY_ID:
       case AUTOFILL_CARD_ID:
-        if (info.menuItemId === CREATE_IDENTITY_ID) {
+        if (menuItemId === CREATE_IDENTITY_ID) {
           await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
             cipherType: CipherType.Identity,
           });
           break;
         }
 
-        if (info.menuItemId === CREATE_CARD_ID) {
+        if (menuItemId === CREATE_CARD_ID) {
           await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
             cipherType: CipherType.Card,
+          });
+          break;
+        }
+
+        if (menuItemId === CREATE_LOGIN_ID) {
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Login,
           });
           break;
         }
@@ -257,9 +264,23 @@ export class ContextMenuClickedHandler {
 
         break;
       case COPY_USERNAME_ID:
+        if (menuItemId === CREATE_LOGIN_ID) {
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Login,
+          });
+          break;
+        }
+
         this.copyToClipboard({ text: cipher.login.username, tab: tab });
         break;
       case COPY_PASSWORD_ID:
+        if (menuItemId === CREATE_LOGIN_ID) {
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Login,
+          });
+          break;
+        }
+
         if (await this.isPasswordRepromptRequired(cipher)) {
           await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
             cipherId: cipher.id,
@@ -272,6 +293,13 @@ export class ContextMenuClickedHandler {
 
         break;
       case COPY_VERIFICATIONCODE_ID:
+        if (menuItemId === CREATE_LOGIN_ID) {
+          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
+            cipherType: CipherType.Login,
+          });
+          break;
+        }
+
         if (await this.isPasswordRepromptRequired(cipher)) {
           await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
             cipherId: cipher.id,

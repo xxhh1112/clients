@@ -88,8 +88,14 @@
   "copySecurityCode": {
     "message": "Copy security code"
   },
-  "autoFill": {
-    "message": "Auto-fill"
+  "autoFillLogin": {
+    "message": "Auto-fill login"
+  },
+  "autoFillCard": {
+    "message": "Auto-fill card"
+  },
+  "autoFillIdentity": {
+    "message": "Auto-fill identity"
   },
   "generatePasswordCopied": {
     "message": "Generate password (copied)"
@@ -97,8 +103,14 @@
   "copyElementIdentifier": {
     "message": "Copy custom field name"
   },
-  "noMatchingLogins": {
-    "message": "No matching logins"
+  "addLoginMenu": {
+    "message": "Add login"
+  },
+  "addCardMenu": {
+    "message": "Add card"
+  },
+  "addIdentityMenu": {
+    "message": "Add identity"
   },
   "unlockVaultMenu": {
     "message": "Unlock your vault"

@@ -166,12 +166,12 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     if (this.popupUtilsService.inTab(window)) {
       this.popupUtilsService.disableCloseTabWarning();
-      this.messagingService.send("closeTab", { delay: 1000 });
+      this.messagingService.send("closeTab", { delay: 500 });
       return true;
     }
 
     if (this.inPopout) {
-      setTimeout(() => this.close(), 1000);
+      setTimeout(() => this.close(), 500);
       return true;
     }
 
@@ -221,12 +221,10 @@ export class AddEditComponent extends BaseAddEditComponent {
   }
 
   close() {
-    if (this.senderTabId) {
+    if (this.senderTabId && this.inPopout) {
       BrowserApi.focusTab(this.senderTabId);
-    }
-
-    if (this.inPopout) {
       window.close();
+
       return;
     }
 
