@@ -20,6 +20,7 @@ import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
+import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
 import { LoginWithDeviceComponent } from "../auth/popup/login-with-device.component";
 import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
@@ -32,7 +33,6 @@ import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendListComponent } from "../tools/popup/send/components/send-list.component";
-import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/popup/send/efflux-dates.component";
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
@@ -121,6 +121,7 @@ import "../platform/popup/locales";
     LockComponent,
     LoginComponent,
     LoginWithDeviceComponent,
+    LoginDecryptionOptionsComponent,
     OptionsComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -131,7 +132,6 @@ import "../platform/popup/locales";
     PrivateModeWarningComponent,
     RegisterComponent,
     SendAddEditComponent,
-    SendEffluxDatesComponent,
     SendGroupingsComponent,
     SendListComponent,
     SendTypeComponent,

@@ -1,6 +1,6 @@
 import { ApiService } from "../../../abstractions/api.service";
 import { SettingsService } from "../../../abstractions/settings.service";
-import { InternalOrganizationService } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
+import { InternalOrganizationServiceAbstraction } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "../../../admin-console/abstractions/provider.service";
 import { OrganizationData } from "../../../admin-console/models/data/organization.data";
@@ -55,7 +55,7 @@ export class SyncService implements SyncServiceAbstraction {
     private stateService: StateService,
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
-    private organizationService: InternalOrganizationService,
+    private organizationService: InternalOrganizationServiceAbstraction,
     private sendApiService: SendApiService,
     private logoutCallback: (expired: boolean) => Promise<void>
   ) {}
@@ -303,8 +303,8 @@ export class SyncService implements SyncServiceAbstraction {
       throw new Error("Stamp has changed");
     }
 
-    await this.cryptoService.setEncKey(response.key);
-    await this.cryptoService.setEncPrivateKey(response.privateKey);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
+    await this.cryptoService.setPrivateKey(response.privateKey);
     await this.cryptoService.setProviderKeys(response.providers);
     await this.cryptoService.setOrgKeys(response.organizations, response.providerOrganizations);
     await this.stateService.setAvatarColor(response.avatarColor);
