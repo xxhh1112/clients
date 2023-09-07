@@ -49,12 +49,10 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
-import { AddCreditComponent } from "../billing/settings/add-credit.component";
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../billing/settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../billing/settings/billing-sync-key.component";
 import { SubscriptionComponent } from "../billing/settings/subscription.component";
-import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { FooterComponent } from "../layouts/footer.component";
@@ -77,7 +75,6 @@ import { SecurityKeysComponent } from "../settings/security-keys.component";
 import { SecurityComponent } from "../settings/security.component";
 import { SettingsComponent } from "../settings/settings.component";
 import { UpdateKeyComponent } from "../settings/update-key.component";
-import { UpdateLicenseComponent } from "../settings/update-license.component";
 import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.component";
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
@@ -120,7 +117,6 @@ import { SharedModule } from "./shared.module";
     AcceptOrganizationComponent,
     AccessComponent,
     AccountComponent,
-    AddCreditComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
     AddEditCustomFieldsComponent,
@@ -195,13 +191,11 @@ import { SharedModule } from "./shared.module";
     TwoFactorWebAuthnComponent,
     TwoFactorYubiKeyComponent,
     UpdateKeyComponent,
-    UpdateLicenseComponent,
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
     BillingHistoryComponent,
     BillingHistoryViewComponent,
     UserLayoutComponent,
-    UserSubscriptionComponent,
     VaultTimeoutInputComponent,
     VerifyEmailComponent,
     VerifyEmailTokenComponent,
@@ -215,7 +209,6 @@ import { SharedModule } from "./shared.module";
     AcceptOrganizationComponent,
     AccessComponent,
     AccountComponent,
-    AddCreditComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
     AddEditCustomFieldsComponent,
@@ -290,13 +283,11 @@ import { SharedModule } from "./shared.module";
     TwoFactorWebAuthnComponent,
     TwoFactorYubiKeyComponent,
     UpdateKeyComponent,
-    UpdateLicenseComponent,
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
     BillingHistoryComponent,
     BillingHistoryViewComponent,
     UserLayoutComponent,
-    UserSubscriptionComponent,
     VaultTimeoutInputComponent,
     VerifyEmailComponent,
     VerifyEmailTokenComponent,
