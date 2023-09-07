@@ -4,6 +4,7 @@ import { UserVerificationModule } from "../../auth/shared/components/user-verifi
 import { LooseComponentsModule, SharedModule } from "../../shared";
 import { LooseBillingComponentsModule } from "../settings/loose-billing-components.module";
 
+import { AdjustStorageComponent } from "./adjust-storage.component";
 import { AdjustSubscription } from "./adjust-subscription.component";
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
 import { ChangePlanComponent } from "./change-plan.component";
@@ -36,6 +37,7 @@ import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
     OrganizationSubscriptionSelfhostComponent,
     OrganizationSubscriptionCloudComponent,
     SubscriptionHiddenComponent,
+    AdjustStorageComponent,
   ],
 })
 export class OrganizationBillingModule {}

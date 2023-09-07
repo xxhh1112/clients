@@ -5,7 +5,6 @@ import { OrganizationLayoutComponent } from "../admin-console/organizations/layo
 import { EventsComponent as OrgEventsComponent } from "../admin-console/organizations/manage/events.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
 import { AcceptFamilySponsorshipComponent } from "../admin-console/organizations/sponsorships/accept-family-sponsorship.component";
-import { FamiliesForEnterpriseSetupComponent } from "../admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
 import { ExposedPasswordsReportComponent as OrgExposedPasswordsReportComponent } from "../admin-console/organizations/tools/exposed-passwords-report.component";
 import { InactiveTwoFactorReportComponent as OrgInactiveTwoFactorReportComponent } from "../admin-console/organizations/tools/inactive-two-factor-report.component";
 import { ReusedPasswordsReportComponent as OrgReusedPasswordsReportComponent } from "../admin-console/organizations/tools/reused-passwords-report.component";
@@ -13,7 +12,6 @@ import { ToolsComponent as OrgToolsComponent } from "../admin-console/organizati
 import { UnsecuredWebsitesReportComponent as OrgUnsecuredWebsitesReportComponent } from "../admin-console/organizations/tools/unsecured-websites-report.component";
 import { WeakPasswordsReportComponent as OrgWeakPasswordsReportComponent } from "../admin-console/organizations/tools/weak-passwords-report.component";
 import { ProvidersComponent } from "../admin-console/providers/providers.component";
-import { CreateOrganizationComponent } from "../admin-console/settings/create-organization.component";
 import { SponsoredFamiliesComponent } from "../admin-console/settings/sponsored-families.component";
 import { SponsoringOrgRowComponent } from "../admin-console/settings/sponsoring-org-row.component";
 import { AcceptEmergencyComponent } from "../auth/accept-emergency.component";
@@ -52,12 +50,9 @@ import { UpdateTempPasswordComponent } from "../auth/update-temp-password.compon
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
 import { AddCreditComponent } from "../billing/settings/add-credit.component";
-import { AdjustPaymentComponent } from "../billing/settings/adjust-payment.component";
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
 import { BillingHistoryComponent } from "../billing/settings/billing-history.component";
 import { BillingSyncKeyComponent } from "../billing/settings/billing-sync-key.component";
-import { LooseBillingComponentsModule } from "../billing/settings/loose-billing-components.module";
-import { PaymentMethodComponent } from "../billing/settings/payment-method.component";
 import { SubscriptionComponent } from "../billing/settings/subscription.component";
 import { UserSubscriptionComponent } from "../billing/settings/user-subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
@@ -68,7 +63,6 @@ import { NavbarComponent } from "../layouts/navbar.component";
 import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { AccountComponent } from "../settings/account.component";
-import { AdjustStorageComponent } from "../settings/adjust-storage.component";
 import { ApiKeyComponent } from "../settings/api-key.component";
 import { ChangeAvatarComponent } from "../settings/change-avatar.component";
 import { ChangeEmailComponent } from "../settings/change-email.component";
@@ -102,7 +96,6 @@ import { ShareComponent } from "../vault/individual-vault/share.component";
 import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-edit.component";
 import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
 import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-vault/collections.component";
-import { PremiumComponent } from "../vault/settings/premium.component";
 
 import { EnvironmentSelectorModule } from "./../components/environment-selector/environment-selector.module";
 import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
@@ -120,9 +113,6 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EnvironmentSelectorModule,
     AccountFingerprintComponent,
-
-    // WIP
-    LooseBillingComponentsModule,
   ],
   declarations: [
     AcceptEmergencyComponent,
@@ -134,15 +124,12 @@ import { SharedModule } from "./shared.module";
     AddEditComponent,
     AddEditCustomFieldsComponent,
     AddEditCustomFieldsComponent,
-    AdjustPaymentComponent,
-    AdjustStorageComponent,
     ApiKeyComponent,
     AttachmentsComponent,
     BillingSyncKeyComponent,
     ChangeEmailComponent,
     ChangePasswordComponent,
     CollectionsComponent,
-    CreateOrganizationComponent,
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
@@ -153,7 +140,6 @@ import { SharedModule } from "./shared.module";
     EmergencyAccessTakeoverComponent,
     EmergencyAccessViewComponent,
     EmergencyAddEditComponent,
-    FamiliesForEnterpriseSetupComponent,
     FolderAddEditComponent,
     FooterComponent,
     FrontendLayoutComponent,
@@ -176,10 +162,8 @@ import { SharedModule } from "./shared.module";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordRepromptComponent,
-    PaymentMethodComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
-    PremiumComponent,
     ProfileComponent,
     ChangeAvatarComponent,
     ProvidersComponent,
@@ -235,14 +219,11 @@ import { SharedModule } from "./shared.module";
     AddEditComponent,
     AddEditCustomFieldsComponent,
     AddEditCustomFieldsComponent,
-    AdjustPaymentComponent,
-    AdjustStorageComponent,
     ApiKeyComponent,
     AttachmentsComponent,
     ChangeEmailComponent,
     ChangePasswordComponent,
     CollectionsComponent,
-    CreateOrganizationComponent,
     DeauthorizeSessionsComponent,
     DeleteAccountComponent,
     DomainRulesComponent,
@@ -254,7 +235,6 @@ import { SharedModule } from "./shared.module";
     EmergencyAccessTakeoverComponent,
     EmergencyAccessViewComponent,
     EmergencyAddEditComponent,
-    FamiliesForEnterpriseSetupComponent,
     FolderAddEditComponent,
     FooterComponent,
     FrontendLayoutComponent,
@@ -277,10 +257,8 @@ import { SharedModule } from "./shared.module";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordRepromptComponent,
-    PaymentMethodComponent,
     PreferencesComponent,
     PremiumBadgeComponent,
-    PremiumComponent,
     ProfileComponent,
     ChangeAvatarComponent,
     ProvidersComponent,
