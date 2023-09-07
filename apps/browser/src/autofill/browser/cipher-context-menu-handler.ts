@@ -211,11 +211,7 @@ export class CipherContextMenuHandler {
     }
 
     if (cipher.type === CipherType.Card && cipher.card?.subTitle) {
-      title = cipher.card.subTitle;
-    }
-
-    if (cipher.type === CipherType.Identity && cipher.identity?.fullName) {
-      title = cipher.identity.fullName;
+      title += ` ${cipher.card.subTitle}`;
     }
 
     await this.mainContextMenuHandler.loadOptions(title, cipher.id, cipher);
