@@ -24,7 +24,7 @@ const DefaultOptions: UsernameGeneratorOptions = {
   catchallType: "random",
   forwardedService: "",
   forwardedAnonAddyDomain: "anonaddy.me",
-  forwardedAnonAddyBaseUrl: "https://app.anonaddy.com",
+  forwardedAnonAddyBaseUrl: "https://app.addy.io",
   forwardedForwardEmailDomain: "hideaddress.net",
 };
 

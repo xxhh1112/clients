@@ -6,13 +6,13 @@ import { ForwarderOptions } from "./forwarder-options";
 export class AnonAddyForwarder implements Forwarder {
   async generate(apiService: ApiService, options: ForwarderOptions): Promise<string> {
     if (options.apiKey == null || options.apiKey === "") {
-      throw "Invalid AnonAddy API token.";
+      throw "Invalid addy.io API token.";
     }
     if (options.anonaddy?.domain == null || options.anonaddy.domain === "") {
-      throw "Invalid AnonAddy domain.";
+      throw "Invalid addy.io domain.";
     }
     if (options.anonaddy?.baseUrl == null || options.anonaddy.baseUrl === "") {
-      throw "Invalid AnonAddy url.";
+      throw "Invalid addy.io url.";
     }
 
     const requestInit: RequestInit = {
@@ -39,11 +39,11 @@ export class AnonAddyForwarder implements Forwarder {
       return json?.data?.email;
     }
     if (response.status === 401) {
-      throw "Invalid AnonAddy API token.";
+      throw "Invalid addy.io API token.";
     }
     if (response?.statusText != null) {
-      throw "AnonAddy error:\n" + response.statusText;
+      throw "addy.io error:\n" + response.statusText;
     }
-    throw "Unknown AnonAddy error occurred.";
+    throw "Unknown addy.io error occurred.";
   }
 }
