@@ -1,5 +1,11 @@
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+
+import { IconButtonModule } from "../icon-button";
+import { SharedModule } from "../shared/shared.module";
+import { I18nMockService } from "../utils/i18n-mock.service";
+
 import { PopoverTriggerForDirective } from "./popover-trigger-for.directive";
 import { PopoverModule } from "./popover.module";
 
@@ -7,7 +13,17 @@ export default {
   title: "Component Library/Popover",
   decorators: [
     moduleMetadata({
-      imports: [PopoverModule],
+      imports: [PopoverModule, IconButtonModule, SharedModule],
+      providers: [
+        {
+          provide: I18nService,
+          useFactory: () => {
+            return new I18nMockService({
+              close: "Close",
+            });
+          },
+        },
+      ],
     }),
   ],
   parameters: {
