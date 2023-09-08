@@ -64,6 +64,7 @@ export type BrowserFido2Message = { sessionId: string } & (
     }
   | {
       type: "ConfirmNewCredentialResponse";
+      cipherId: string;
       userVerified: boolean;
     }
   | {

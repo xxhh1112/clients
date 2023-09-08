@@ -10,7 +10,7 @@
       <ng-container
         *ngIf="
           data.message.type == 'PickCredentialRequest' ||
-          data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
+          data.message.type == 'ConfirmNewCredentialRequest'
         "
       >
         A site is asking for authentication, please choose one of the following credentials to use:
@@ -23,15 +23,6 @@
             ></app-cipher-row>
           </div>
         </div>
-      </ng-container>
-      <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
-        A site wants to create the following passkey in your vault
-        <div class="box list">
-          <div class="box-content">
-            <app-cipher-row [cipher]="ciphers[0]"></app-cipher-row>
-          </div>
-        </div>
-        <button type="button" class="btn btn-outline-secondary" (click)="confirm()">Create</button>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
         A passkey already exists in Bitwarden for this account
