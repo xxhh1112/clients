@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { PaymentMethodComponent } from "../shared/payment-method.component";
 
-
 import { BillingHistoryViewComponent } from "./billing-history-view.component";
 import { PremiumComponent } from "./premium.component";
 import { SubscriptionComponent } from "./subscription.component";

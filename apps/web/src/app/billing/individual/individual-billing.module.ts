@@ -17,6 +17,5 @@ import { UserSubscriptionComponent } from "./user-subscription.component";
     UserSubscriptionComponent,
     PremiumComponent,
   ],
-  exports: [],
 })
 export class IndividualBillingModule {}
