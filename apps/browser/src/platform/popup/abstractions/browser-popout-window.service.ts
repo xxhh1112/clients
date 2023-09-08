@@ -16,6 +16,7 @@ interface BrowserPopoutWindowService {
     promptData: {
       cipherType: CipherType;
       senderTabId: number;
+      uri: string;
     }
   ): Promise<void>;
   closePasswordRepromptPrompt(): Promise<void>;

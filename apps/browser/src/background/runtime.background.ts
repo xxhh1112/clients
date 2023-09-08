@@ -132,6 +132,7 @@ export default class RuntimeBackground {
           await this.browserPopoutWindowService.openCipherCreation(sender.tab?.windowId, {
             cipherType,
             senderTabId: sender.tab.id,
+            uri: sender.tab.url,
           });
         } else {
           const addEditCipherUrl = isNewCipher

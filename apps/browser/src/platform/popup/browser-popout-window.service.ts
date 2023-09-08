@@ -52,16 +52,19 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     {
       cipherType,
       senderTabId,
+      uri,
     }: {
       cipherType: CipherType;
       senderTabId: number;
+      uri: string;
     }
   ) {
     const promptWindowPath =
       "popup/index.html#/edit-cipher" +
       "?uilocation=popout" +
       `&type=${cipherType}` +
-      `&senderTabId=${senderTabId}`;
+      `&senderTabId=${senderTabId}` +
+      `&uri=${uri}`;
 
     await this.openSingleActionPopout(senderWindowId, promptWindowPath, "cipherCreation");
   }
