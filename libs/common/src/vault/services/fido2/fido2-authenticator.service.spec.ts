@@ -256,7 +256,7 @@ describe("FidoAuthenticatorService", () => {
       );
     });
 
-    describe("creation of discoverable credential", () => {
+    describe("credential creation", () => {
       let existingCipher: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -586,7 +586,7 @@ describe("FidoAuthenticatorService", () => {
             { credentialId: credentialIds[0], rpId: RpId }
           ),
           await createCipherView(
-            { type: CipherType.Fido2Key },
+            { type: CipherType.Login },
             { credentialId: credentialIds[1], rpId: RpId }
           ),
         ];
@@ -631,157 +631,128 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    for (const residentKey of [true, false]) {
-      describe(`assertion of ${
-        residentKey ? "discoverable" : "non-discoverable"
-      } credential`, () => {
-        let keyPair: CryptoKeyPair;
-        let credentialIds: string[];
-        let selectedCredentialId: string;
-        let ciphers: CipherView[];
-        let fido2Keys: Fido2KeyView[];
-        let params: Fido2AuthenticatorGetAssertionParams;
+    describe("assertion of credential", () => {
+      let keyPair: CryptoKeyPair;
+      let credentialIds: string[];
+      let selectedCredentialId: string;
+      let ciphers: CipherView[];
+      let fido2Keys: Fido2KeyView[];
+      let params: Fido2AuthenticatorGetAssertionParams;
 
-        const init = async () => {
-          keyPair = await createKeyPair();
-          credentialIds = [Utils.newGuid(), Utils.newGuid()];
-          const keyValue = Fido2Utils.bufferToString(
-            await crypto.subtle.exportKey("pkcs8", keyPair.privateKey)
-          );
-          if (residentKey) {
-            ciphers = credentialIds.map((id) =>
-              createCipherView(
-                { type: CipherType.Fido2Key },
-                { credentialId: id, rpId: RpId, counter: 9000, keyValue }
-              )
-            );
-            fido2Keys = ciphers.map((c) => c.fido2Key);
-            selectedCredentialId = credentialIds[0];
-            params = await createParams({
-              allowCredentialDescriptorList: undefined,
-              rpId: RpId,
-            });
-          } else {
-            ciphers = credentialIds.map((id) =>
-              createCipherView(
-                { type: CipherType.Login },
-                { credentialId: id, rpId: RpId, counter: 9000 }
-              )
-            );
-            fido2Keys = ciphers.map((c) => c.login.fido2Key);
-            selectedCredentialId = credentialIds[0];
-            params = await createParams({
-              allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
-                id: guidToRawFormat(credentialId),
-                type: "public-key",
-              })),
-              rpId: RpId,
-            });
-          }
-          cipherService.getAllDecrypted.mockResolvedValue(ciphers);
-          userInterfaceSession.pickCredential.mockResolvedValue({
-            cipherId: ciphers[0].id,
-            userVerified: false,
-          });
-        };
-        beforeEach(init);
-
-        /** Spec: Increment the credential associated signature counter */
-        it("should increment counter", async () => {
-          const encrypted = Symbol();
-          cipherService.encrypt.mockResolvedValue(encrypted as any);
-
-          await authenticator.getAssertion(params);
-
-          expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
-          if (residentKey) {
-            expect(cipherService.encrypt).toHaveBeenCalledWith(
-              expect.objectContaining({
-                id: ciphers[0].id,
-                fido2Key: expect.objectContaining({
-                  counter: 9001,
-                }),
-              })
-            );
-          } else {
-            expect(cipherService.encrypt).toHaveBeenCalledWith(
-              expect.objectContaining({
-                id: ciphers[0].id,
-                login: expect.objectContaining({
-                  fido2Key: expect.objectContaining({
-                    counter: 9001,
-                  }),
-                }),
-              })
-            );
-          }
+      const init = async () => {
+        keyPair = await createKeyPair();
+        credentialIds = [Utils.newGuid(), Utils.newGuid()];
+        const keyValue = Fido2Utils.bufferToString(
+          await crypto.subtle.exportKey("pkcs8", keyPair.privateKey)
+        );
+        ciphers = credentialIds.map((id) =>
+          createCipherView(
+            { type: CipherType.Login },
+            { credentialId: id, rpId: RpId, counter: 9000, keyValue }
+          )
+        );
+        fido2Keys = ciphers.map((c) => c.login.fido2Key);
+        selectedCredentialId = credentialIds[0];
+        params = await createParams({
+          allowCredentialDescriptorList: credentialIds.map((credentialId) => ({
+            id: guidToRawFormat(credentialId),
+            type: "public-key",
+          })),
+          rpId: RpId,
         });
+        cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+        userInterfaceSession.pickCredential.mockResolvedValue({
+          cipherId: ciphers[0].id,
+          userVerified: false,
+        });
+      };
+      beforeEach(init);
 
-        it("should return an assertion result", async () => {
+      /** Spec: Increment the credential associated signature counter */
+      it("should increment counter", async () => {
+        const encrypted = Symbol();
+        cipherService.encrypt.mockResolvedValue(encrypted as any);
+
+        await authenticator.getAssertion(params);
+
+        expect(cipherService.updateWithServer).toHaveBeenCalledWith(encrypted);
+
+        expect(cipherService.encrypt).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: ciphers[0].id,
+            login: expect.objectContaining({
+              fido2Key: expect.objectContaining({
+                counter: 9001,
+              }),
+            }),
+          })
+        );
+      });
+
+      it("should return an assertion result", async () => {
+        const result = await authenticator.getAssertion(params);
+
+        const encAuthData = result.authenticatorData;
+        const rpIdHash = encAuthData.slice(0, 32);
+        const flags = encAuthData.slice(32, 33);
+        const counter = encAuthData.slice(33, 37);
+
+        expect(result.selectedCredential.id).toEqual(guidToRawFormat(selectedCredentialId));
+        expect(result.selectedCredential.userHandle).toEqual(
+          Fido2Utils.stringToBuffer(fido2Keys[0].userHandle)
+        );
+        expect(rpIdHash).toEqual(
+          new Uint8Array([
+            0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
+            0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
+            0xd0, 0x5c, 0x3d, 0xc3,
+          ])
+        );
+        expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
+        expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // 9001 in hex
+
+        // Verify signature
+        // TODO: Cannot verify signature because it has been converted into DER format
+        // const sigBase = new Uint8Array([
+        //   ...result.authenticatorData,
+        //   ...Fido2Utils.bufferSourceToUint8Array(params.hash),
+        // ]);
+        // const isValidSignature = await crypto.subtle.verify(
+        //   { name: "ECDSA", hash: { name: "SHA-256" } },
+        //   keyPair.publicKey,
+        //   result.signature,
+        //   sigBase
+        // );
+        // expect(isValidSignature).toBe(true);
+      });
+
+      it("should always generate unique signatures even if the input is the same", async () => {
+        const signatures = new Set();
+
+        for (let i = 0; i < 10; ++i) {
+          await init(); // Reset inputs
           const result = await authenticator.getAssertion(params);
 
-          const encAuthData = result.authenticatorData;
-          const rpIdHash = encAuthData.slice(0, 32);
-          const flags = encAuthData.slice(32, 33);
-          const counter = encAuthData.slice(33, 37);
+          const counter = result.authenticatorData.slice(33, 37);
+          expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // double check that the counter doesn't change
 
-          expect(result.selectedCredential.id).toEqual(guidToRawFormat(selectedCredentialId));
-          expect(result.selectedCredential.userHandle).toEqual(
-            Fido2Utils.stringToBuffer(fido2Keys[0].userHandle)
-          );
-          expect(rpIdHash).toEqual(
-            new Uint8Array([
-              0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
-              0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
-              0xd0, 0x5c, 0x3d, 0xc3,
-            ])
-          );
-          expect(flags).toEqual(new Uint8Array([0b00000001])); // UP = true
-          expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // 9001 in hex
-
-          // Verify signature
-          // TODO: Cannot verify signature because it has been converted into DER format
-          // const sigBase = new Uint8Array([
-          //   ...result.authenticatorData,
-          //   ...Fido2Utils.bufferSourceToUint8Array(params.hash),
-          // ]);
-          // const isValidSignature = await crypto.subtle.verify(
-          //   { name: "ECDSA", hash: { name: "SHA-256" } },
-          //   keyPair.publicKey,
-          //   result.signature,
-          //   sigBase
-          // );
-          // expect(isValidSignature).toBe(true);
-        });
-
-        it("should always generate unique signatures even if the input is the same", async () => {
-          const signatures = new Set();
-
-          for (let i = 0; i < 10; ++i) {
-            await init(); // Reset inputs
-            const result = await authenticator.getAssertion(params);
-
-            const counter = result.authenticatorData.slice(33, 37);
-            expect(counter).toEqual(new Uint8Array([0, 0, 0x23, 0x29])); // double check that the counter doesn't change
-
-            const signature = Fido2Utils.bufferToString(result.signature);
-            if (signatures.has(signature)) {
-              throw new Error("Found duplicate signature");
-            }
-            signatures.add(signature);
+          const signature = Fido2Utils.bufferToString(result.signature);
+          if (signatures.has(signature)) {
+            throw new Error("Found duplicate signature");
           }
-        });
-
-        /** Spec: If any error occurred while generating the assertion signature, return an error code equivalent to "UnknownError" and terminate the operation. */
-        it("should throw unkown error if creation fails", async () => {
-          cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
-
-          const result = async () => await authenticator.getAssertion(params);
-
-          await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
-        });
+          signatures.add(signature);
+        }
       });
-    }
+
+      /** Spec: If any error occurred while generating the assertion signature, return an error code equivalent to "UnknownError" and terminate the operation. */
+      it("should throw unkown error if creation fails", async () => {
+        cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
+
+        const result = async () => await authenticator.getAssertion(params);
+
+        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
+      });
+    });
 
     async function createParams(
       params: Partial<Fido2AuthenticatorGetAssertionParams> = {}

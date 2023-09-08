@@ -329,14 +329,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
-        (!cipher.isDeleted &&
-          cipher.type === CipherType.Login &&
-          cipher.login.fido2Key != undefined &&
-          cipher.login.fido2Key.rpId === rpId &&
-          ids.includes(cipher.login.fido2Key.credentialId)) ||
-        (cipher.type === CipherType.Fido2Key &&
-          cipher.fido2Key.rpId === rpId &&
-          ids.includes(cipher.fido2Key.credentialId))
+        !cipher.isDeleted &&
+        cipher.type === CipherType.Login &&
+        cipher.login.fido2Key != undefined &&
+        cipher.login.fido2Key.rpId === rpId &&
+        ids.includes(cipher.login.fido2Key.credentialId)
     );
   }
 
@@ -344,7 +341,10 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
-        !cipher.isDeleted && cipher.type === CipherType.Fido2Key && cipher.fido2Key.rpId === rpId
+        !cipher.isDeleted &&
+        cipher.type === CipherType.Login &&
+        cipher.login.fido2Key != undefined &&
+        cipher.login.fido2Key.rpId === rpId
     );
   }
 }
