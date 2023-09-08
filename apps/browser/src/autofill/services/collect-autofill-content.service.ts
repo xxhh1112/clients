@@ -25,6 +25,8 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private autofillFormElements: AutofillFormElements = new Map();
   private autofillFieldElements: AutofillFieldElements = new Map();
   private mutationObserver: MutationObserver;
+  private updateAutofillElementsAfterMutationTimeout: NodeJS.Timeout;
+  private readonly updateAfterMutationTimeoutDelay = 1000;
 
   constructor(
     domElementVisibilityService: DomElementVisibilityService,
@@ -925,27 +927,38 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       const mutation = mutations[mutationsIndex];
       if (
         mutation.type === "childList" &&
-        (this.isAutofillElementNodeMutated(mutation.removedNodes) ||
+        (this.isAutofillElementNodeMutated(mutation.removedNodes, true) ||
           this.isAutofillElementNodeMutated(mutation.addedNodes))
       ) {
         this.domRecentlyMutated = true;
         this.noFieldsFound = false;
-        return;
+        continue;
       }
 
       if (mutation.type === "attributes") {
         this.handleAutofillElementAttributeMutation(mutation);
       }
     }
+
+    if (this.domRecentlyMutated) {
+      this.updateAutofillElementsAfterMutation();
+    }
   };
 
   /**
    * Checks if the passed nodes either contain or are autofill elements.
    * @param {NodeList} nodes
+   * @param {boolean} isRemovingNodes
    * @returns {boolean}
    * @private
    */
-  private isAutofillElementNodeMutated(nodes: NodeList): boolean {
+  private isAutofillElementNodeMutated(nodes: NodeList, isRemovingNodes = false): boolean {
+    if (!nodes.length) {
+      return false;
+    }
+
+    let isElementMutated = false;
+    const mutatedElements = [];
     for (let index = 0; index < nodes.length; index++) {
       const node = nodes[index];
       if (!(node instanceof HTMLElement)) {
@@ -953,7 +966,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       }
 
       if (node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)) {
-        return true;
+        isElementMutated = true;
+        mutatedElements.push(node);
+        continue;
       }
 
       const childNodes = this.queryAllTreeWalkerNodes(
@@ -961,11 +976,57 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         (node: Node) => node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)
       ) as HTMLElement[];
       if (childNodes.length) {
-        return true;
+        isElementMutated = true;
+        mutatedElements.push(...childNodes);
       }
     }
 
-    return false;
+    if (isRemovingNodes) {
+      for (let elementIndex = 0; elementIndex < mutatedElements.length; elementIndex++) {
+        this.deleteCachedAutofillElement(
+          mutatedElements[elementIndex] as
+            | ElementWithOpId<HTMLFormElement>
+            | ElementWithOpId<FormFieldElement>
+        );
+      }
+    }
+
+    return isElementMutated;
+  }
+
+  /**
+   * Deletes any cached autofill elements that have been
+   * removed from the DOM.
+   * @param {ElementWithOpId<HTMLFormElement> | ElementWithOpId<FormFieldElement>} element
+   * @private
+   */
+  private deleteCachedAutofillElement(
+    element: ElementWithOpId<HTMLFormElement> | ElementWithOpId<FormFieldElement>
+  ) {
+    if (element instanceof HTMLFormElement && this.autofillFormElements.has(element)) {
+      this.autofillFormElements.delete(element);
+      return;
+    }
+
+    if (this.autofillFieldElements.has(element)) {
+      this.autofillFieldElements.delete(element);
+    }
+  }
+
+  /**
+   * Updates the autofill elements after a DOM mutation has occurred.
+   * Is debounced to prevent excessive updates.
+   * @private
+   */
+  private updateAutofillElementsAfterMutation() {
+    if (this.updateAutofillElementsAfterMutationTimeout) {
+      clearTimeout(this.updateAutofillElementsAfterMutationTimeout);
+    }
+
+    this.updateAutofillElementsAfterMutationTimeout = setTimeout(
+      this.getPageDetails.bind(this),
+      this.updateAfterMutationTimeoutDelay
+    );
   }
 
   /**
@@ -1098,7 +1159,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   * Gets teh attribute value for the passed element, and returns it. If the dataTarget
+   * Gets the attribute value for the passed element, and returns it. If the dataTarget
    * and dataTargetKey are passed, it will set the value of the dataTarget[dataTargetKey].
    * @param UpdateAutofillDataAttributeParams
    * @returns {string}

@@ -65,6 +65,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       await this.getAutofillOverlayAppearance();
     }
 
+    this.removeCachedFormFieldEventListeners(formFieldElement);
+
     formFieldElement.addEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
     formFieldElement.addEventListener(EVENTS.KEYUP, this.handleFormFieldKeyupEvent);
     formFieldElement.addEventListener(
@@ -188,9 +190,31 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     redirectFocusElement?.focus();
   }
 
+  private removeCachedFormFieldEventListeners(formFieldElement: ElementWithOpId<FormFieldElement>) {
+    const handlers = [EVENTS.INPUT, EVENTS.CLICK, EVENTS.FOCUS];
+    for (let index = 0; index < handlers.length; index++) {
+      const event = handlers[index];
+      const memoIndex = this.getFormFieldHandlerMemoIndex(formFieldElement, event);
+      const existingHandler = this.eventHandlersMemo[memoIndex];
+      if (!existingHandler) {
+        return;
+      }
+
+      formFieldElement.removeEventListener(event, existingHandler);
+      delete this.eventHandlersMemo[memoIndex];
+    }
+  }
+
   private useEventHandlersMemo = (eventHandler: EventListener, memoIndex: string) => {
     return this.eventHandlersMemo[memoIndex] || (this.eventHandlersMemo[memoIndex] = eventHandler);
   };
+
+  private getFormFieldHandlerMemoIndex(
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+    event: string
+  ) {
+    return `${formFieldElement.opid}-${formFieldElement.id}-${event}-handler`;
+  }
 
   private handleFormFieldBlurEvent = () => {
     this.isFieldCurrentlyFocused = false;
@@ -228,7 +252,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   ) => {
     return this.useEventHandlersMemo(
       () => this.triggerFormFieldInput(formFieldElement, autofillFieldData),
-      `${formFieldElement.opid}-${formFieldElement.id}-input-handler`
+      this.getFormFieldHandlerMemoIndex(formFieldElement, EVENTS.INPUT)
     );
   };
 
@@ -273,7 +297,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private handleFormFieldClickEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
     return this.useEventHandlersMemo(
       () => this.triggerFormFieldClickedAction(formFieldElement),
-      `${formFieldElement.opid}-${formFieldElement.id}-click-handler`
+      this.getFormFieldHandlerMemoIndex(formFieldElement, EVENTS.CLICK)
     );
   };
 
@@ -288,7 +312,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private handleFormFieldFocusEvent = (formFieldElement: ElementWithOpId<FormFieldElement>) => {
     return this.useEventHandlersMemo(
       () => this.triggerFormFieldFocusedAction(formFieldElement),
-      `${formFieldElement.opid}-${formFieldElement.id}-focus-handler`
+      this.getFormFieldHandlerMemoIndex(formFieldElement, EVENTS.FOCUS)
     );
   };
 

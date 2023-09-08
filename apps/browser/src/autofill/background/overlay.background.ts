@@ -129,9 +129,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   private getOverlayCipherData(): OverlayCipherData[] {
     const isFaviconDisabled = this.settingsService.getDisableFavicon();
+    const overlayCiphersArray = Array.from(this.overlayCiphers);
+    const overlayCipherData = [];
     let cipherIconData: WebsiteIconData;
 
-    return Array.from(this.overlayCiphers).map(([overlayCipherId, cipher]) => {
+    for (let cipherIndex = 0; cipherIndex < overlayCiphersArray.length; cipherIndex++) {
+      const [overlayCipherId, cipher] = overlayCiphersArray[cipherIndex];
       if (!cipherIconData) {
         cipherIconData = WebsiteIconService.buildCipherIconData(
           this.iconsServerUrl,
@@ -140,7 +143,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
         );
       }
 
-      return {
+      overlayCipherData.push({
         id: overlayCipherId,
         name: cipher.name,
         type: cipher.type,
@@ -155,8 +158,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
           cipher.type === CipherType.Card
             ? { brand: cipher.card.brand, partialNumber: `*${cipher.card.number?.slice(-4)}` }
             : null,
-      };
-    });
+      });
+    }
+
+    return overlayCipherData;
   }
 
   private storePageDetails(
