@@ -19,6 +19,7 @@ import { SponsoredFamiliesComponent } from "../admin-console/settings/sponsored-
 import { SponsoringOrgRowComponent } from "../admin-console/settings/sponsoring-org-row.component";
 import { AcceptEmergencyComponent } from "../auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "../auth/accept-organization.component";
+import { CardComponent } from "../auth/card.component";
 import { HintComponent } from "../auth/hint.component";
 import { LockComponent } from "../auth/lock.component";
 import { RecoverDeleteComponent } from "../auth/recover-delete.component";
@@ -127,6 +128,7 @@ import { SharedModule } from "./shared.module";
 
     // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
     SecretsManagerBillingModule,
+    CardComponent,
   ],
   declarations: [
     AcceptEmergencyComponent,

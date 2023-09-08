@@ -9,6 +9,7 @@ import { RegisterFormModule } from "../../auth/register-form/register-form.modul
 import { BillingComponent } from "../../billing/accounts/trial-initiation/billing.component";
 import { EnvironmentSelectorModule } from "../../components/environment-selector/environment-selector.module";
 import { LooseComponentsModule, SharedModule } from "../../shared";
+import { CardComponent } from "../card.component";
 
 import { ConfirmationDetailsComponent } from "./confirmation-details.component";
 import { AbmEnterpriseContentComponent } from "./content/abm-enterprise-content.component";
@@ -39,6 +40,7 @@ import { VerticalStepperModule } from "./vertical-stepper/vertical-stepper.modul
     OrganizationCreateModule,
     LooseComponentsModule,
     EnvironmentSelectorModule,
+    CardComponent,
   ],
   declarations: [
     TrialInitiationComponent,
