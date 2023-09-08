@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "Oturum açarken ek bir adım talep ederek hesabınızı güvenceye alabilirsiniz."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Üyeler için Bitwarden iki aşamalı giriş seçeneklerini ",
+  "twoStepLoginTeamsDesc": {
+    "message": "Kuruluşunuz için iki adımlı oturum açmayı etkinleştirin."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Bitwarden'ı kullanarak üyeler için İki Adımlı Giriş seçeneklerini zorunlu kılın ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "Dosya ekleri için 1 GB şifrelenmiş depolama."
   },
-  "premiumSignUpTwoStep": {
-    "message": "YubiKey, FIDO U2F ve Duo gibi iki aşamalı giriş seçenekleri."
+  "premiumSignUpTwoStepOptions": {
+    "message": "YubiKey ve Duo gibi marka bazlı iki aşamalı giriş seçenekleri."
   },
   "premiumSignUpEmergency": {
     "message": "Acil durum erişimi"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Paketiniz 7 günlük ücretsiz deneme süresiyle geliyor. Deneme süresi bitene kadar sizden ücret alınmayacak. İstediğiniz zaman aboneliğinizi iptal edebilirsiniz."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "İleri"
-  },
-  "usFlag": {
-    "message": "ABD bayrağı"
-  },
-  "euFlag": {
-    "message": "AB bayrağı"
   },
   "selectedRegionFlag": {
     "message": "Seçilen bölgenin bayrağı"

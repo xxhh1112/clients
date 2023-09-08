@@ -795,8 +795,8 @@
   "ppremiumSignUpStorage": {
     "message": "1 ג'יגה של מקום אחסון עבור קבצים מצורפים."
   },
-  "ppremiumSignUpTwoStep": {
-    "message": "אפשרויות כניסה דו שלבית מתקדמות כמו YubiKey, FIDO U2F, וגם Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "ppremiumSignUpReports": {
     "message": "היגיינת סיסמאות, מצב בריאות החשבון, ודיווחים מעודכנים על פרצות חדשות בכדי לשמור על הכספת שלך בטוחה."
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Server version"
   },
-  "selfHosted": {
-    "message": "Self-hosted"
+  "selfHostedServer": {
+    "message": "self-hosted"
   },
   "thirdParty": {
     "message": "Third-party"

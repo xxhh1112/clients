@@ -342,6 +342,18 @@ describe("FidoAuthenticatorService", () => {
         const rejects = expect(result).rejects;
         await rejects.toThrow(FallbackRequestedError);
       });
+
+      // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
+      it("should throw error if sameOriginWithAncestors is false", async () => {
+        const params = createParams();
+        params.sameOriginWithAncestors = false; // Simulating the falsey value
+
+        const result = async () => await client.assertCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotAllowedError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
     });
 
     describe("assert non-discoverable credential", () => {

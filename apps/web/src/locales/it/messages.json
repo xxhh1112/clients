@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "Proteggi il tuo account richiedendo un passaggio aggiuntivo all'accesso."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Forza le opzioni di verifica in due passaggi di Bitwarden per i membri usando la ",
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB di spazio di archiviazione criptato per gli allegati."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Più opzioni di verifica in due passaggi come YubiKey, FIDO U2F, e Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Opzioni di verifica in due passaggi proprietarie come YubiKey e Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Accesso di emergenza"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Eventuali abbonamenti non pagati saranno addebitati sul tuo metodo di pagamento."
   },
   "paymentChargedWithTrial": {
     "message": "Il tuo piano include una prova gratis di 7 giorni. Il tuo metodo di pagamento non sarà addebitato fino alla fine del periodo di prova. Puoi cancellarlo in qualsiasi momento."
@@ -7013,12 +7019,6 @@
   "next": {
     "message": "Avanti"
   },
-  "usFlag": {
-    "message": "Bandiera degli Stati Uniti"
-  },
-  "euFlag": {
-    "message": "Bandiera dell'Europa"
-  },
   "selectedRegionFlag": {
     "message": "Bandiera della regione selezionata"
   },
@@ -7160,7 +7160,7 @@
     "message": "Accesso effettuato!"
   },
   "smBetaEndedDesc": {
-    "message": "La beta del Gestore dei Segreti è terminata in $BETA_ENDING_DATE$. Ti rimangono $DAYS$ giorni per aggiungere il Gestore dei Segreti al tuo abbonamento a pagamento e mantenere l'accesso ai dati del Gestore dei Segreti. Contatta il Successo del Cliente per aggiungere il Gestore dei Segreti al tuo abbonamento.",
+    "message": "La beta del Gestore dei Segreti è terminata in $BETA_ENDING_DATE$. Ti rimangono $DAYS$ giorni per aggiungere il Gestore dei Segreti al tuo abbonamento a pagamento e mantenere l'accesso ai dati del Gestore dei Segreti. Contatta l'assistenza per aggiungere il Gestore dei Segreti al tuo abbonamento.",
     "placeholders": {
       "beta_ending_date": {
         "content": "$1",

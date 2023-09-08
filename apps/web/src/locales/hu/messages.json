@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "A fiók biztosítása kiegészítő lépéssel bejelentkezéskor."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Ezt egy nagyobb mondat részeként használjuk fel,és hivatkozásokat tartalmaznak. A teljes mondat így fog szólni: \"Kétlépcsős bejelentkezési opciók érvényesítése a tagok számára a kétlépcsős bejelentkezési szabályzat használatával.\".",
+  "twoStepLoginTeamsDesc": {
+    "message": "A kétlépcsős bejelentkezés engedélyezése a szervezethez."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "A Bitwarden kétlépcsős bejelentkezési opcióinak kényszerítése a tagoknál:",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB titkosított tárhely a fájlmellékleteknek."
   },
-  "premiumSignUpTwoStep": {
-    "message": "További olyan kétlépcsős bejelentkezési opciók mint a YubiKey, FIDO U2F és Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Sürgősségi hozzáférés"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "A fizetési mód minden ki nem fizetett előfizetésért megterhelésre kerül."
   },
   "paymentChargedWithTrial": {
     "message": "A jelenlegi csomag 7 napos ingyenes próbaidőszakot tartalmaz. A fizetési módot az időszak végéig nem terheljük. A csomag bármikor lemondható."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Következő"
-  },
-  "usFlag": {
-    "message": "USA zászló"
-  },
-  "euFlag": {
-    "message": "EU zászló"
   },
   "selectedRegionFlag": {
     "message": "Kiválasztott régió zászló"
