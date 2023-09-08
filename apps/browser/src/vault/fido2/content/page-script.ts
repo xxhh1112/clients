@@ -54,6 +54,14 @@ const browserCredentials = {
 
 const messenger = Messenger.forDOMCommunication(window);
 
+function isSameOriginWithAncestors() {
+  try {
+    return window.self === window.top;
+  } catch {
+    return false;
+  }
+}
+
 navigator.credentials.create = async (
   options?: CredentialCreationOptions,
   abortController?: AbortController
@@ -64,14 +72,15 @@ navigator.credentials.create = async (
     (options?.publicKey?.authenticatorSelection.authenticatorAttachment !== "platform" &&
       browserNativeWebauthnSupport);
   try {
+    const isNotIframe = isSameOriginWithAncestors();
+
     const response = await messenger.request(
       {
         type: MessageType.CredentialCreationRequest,
-        // TODO: Fix sameOriginWithAncestors!
         data: WebauthnUtils.mapCredentialCreationOptions(
           options,
           window.location.origin,
-          true,
+          isNotIframe,
           fallbackSupported
         ),
       },
@@ -99,6 +108,8 @@ navigator.credentials.get = async (
   const fallbackSupported = browserNativeWebauthnSupport;
 
   try {
+    const isNotIframe = isSameOriginWithAncestors();
+
     if (options?.mediation && options.mediation !== "optional") {
       throw new FallbackRequestedError();
     }
@@ -106,11 +117,10 @@ navigator.credentials.get = async (
     const response = await messenger.request(
       {
         type: MessageType.CredentialGetRequest,
-        // TODO: Fix sameOriginWithAncestors!
         data: WebauthnUtils.mapCredentialRequestOptions(
           options,
           window.location.origin,
-          true,
+          isNotIframe,
           fallbackSupported
         ),
       },
