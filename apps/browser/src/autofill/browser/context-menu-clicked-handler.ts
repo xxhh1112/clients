@@ -148,18 +148,16 @@ export class ContextMenuClickedHandler {
     );
   }
 
-  async run(info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) {
+  async run(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
+    if (!tab) {
+      return;
+    }
+
     switch (info.menuItemId) {
       case GENERATE_PASSWORD_ID:
-        if (!tab) {
-          return;
-        }
         await this.generatePasswordToClipboard(tab);
         break;
       case COPY_IDENTIFIER_ID:
-        if (!tab) {
-          return;
-        }
         this.copyToClipboard({ text: await this.getIdentifier(tab, info), tab: tab });
         break;
       default:

@@ -168,10 +168,18 @@ export class CipherContextMenuHandler {
     ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
 
     const groupedCiphers = ciphers.reduce(
-      (acc, cipher) => ({
-        ...acc,
-        [cipher.type]: [...acc[cipher.type as AutofillCipherTypeId], cipher],
-      }),
+      (acc, cipher) => {
+        if (!cipher?.type) {
+          return acc;
+        }
+
+        const existingCiphersOfType = acc[cipher.type as AutofillCipherTypeId] || [];
+
+        return {
+          ...acc,
+          [cipher.type]: [...existingCiphersOfType, cipher],
+        };
+      },
       {
         [CipherType.Login]: [],
         [CipherType.Card]: [],

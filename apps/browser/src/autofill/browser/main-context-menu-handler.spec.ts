@@ -60,7 +60,7 @@ describe("context-menu", () => {
 
       const createdMenu = await sut.init();
       expect(createdMenu).toBeTruthy();
-      expect(createSpy).toHaveBeenCalledTimes(7);
+      expect(createSpy).toHaveBeenCalledTimes(10);
     });
 
     it("has menu enabled and has premium", async () => {
@@ -70,7 +70,7 @@ describe("context-menu", () => {
 
       const createdMenu = await sut.init();
       expect(createdMenu).toBeTruthy();
-      expect(createSpy).toHaveBeenCalledTimes(8);
+      expect(createSpy).toHaveBeenCalledTimes(11);
     });
   });
 
@@ -128,12 +128,12 @@ describe("context-menu", () => {
       expect(createSpy).toHaveBeenCalledTimes(4);
     });
 
-    it("creates noop item for no cipher", async () => {
+    it("creates a login/unlock item for each context menu action option when user is not authenticated", async () => {
       stateService.getCanAccessPremium.mockResolvedValue(true);
 
       await sut.loadOptions("TEST_TITLE", "NOOP");
 
-      expect(createSpy).toHaveBeenCalledTimes(4);
+      expect(createSpy).toHaveBeenCalledTimes(6);
     });
   });
 });
