@@ -17,10 +17,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
-import {
-  BillingSyncKeyComponent,
-  BillingSyncKeyModalData,
-} from "../individual/billing-sync-key.component";
+import { BillingSyncKeyComponent, BillingSyncKeyModalData } from "./billing-sync-key.component";
 
 enum LicenseOptions {
   SYNC = 0,

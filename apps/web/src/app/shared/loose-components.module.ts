@@ -49,7 +49,6 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
-import { BillingSyncKeyComponent } from "../billing/individual/billing-sync-key.component";
 import { SubscriptionComponent } from "../billing/individual/subscription.component";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
@@ -119,7 +118,6 @@ import { SharedModule } from "./shared.module";
     AddEditCustomFieldsComponent,
     ApiKeyComponent,
     AttachmentsComponent,
-    BillingSyncKeyComponent,
     ChangeEmailComponent,
     ChangePasswordComponent,
     CollectionsComponent,

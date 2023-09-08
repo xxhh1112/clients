@@ -6,6 +6,7 @@ import { BillingSharedModule } from "../shared/billing-shared.module";
 
 import { AdjustSubscription } from "./adjust-subscription.component";
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { BillingSyncKeyComponent } from "./billing-sync-key.component";
 import { ChangePlanComponent } from "./change-plan.component";
 import { DownloadLicenseComponent } from "./download-license.component";
 import { OrgBillingHistoryViewComponent } from "./organization-billing-history-view.component";
@@ -35,6 +36,7 @@ import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
     OrganizationSubscriptionSelfhostComponent,
     OrganizationSubscriptionCloudComponent,
     SubscriptionHiddenComponent,
+    BillingSyncKeyComponent,
   ],
 })
 export class OrganizationBillingModule {}
