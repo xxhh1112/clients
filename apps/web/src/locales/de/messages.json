@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "Sichern Sie Ihr Konto mit Zwei-Faktor-Authentifizierung."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Zwei-Faktor-Authentifizierung für deine Organisation aktivieren."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Erzwinge eine Zwei-Faktor-Authentifizierung in Bitwarden für Mitglieder durch Verwendung der ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB verschlüsselter Speicherplatz für Dateianhänge."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Zusätzliche Zwei-Faktor-Authentifizierungsmöglichkeiten wie z.B. YubiKey, FIDO U2F und Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietäre Optionen für die Zwei-Faktor Authentifizierung wie YubiKey und Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Notfallzugriff"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Deine Zahlungsmethode wird für alle unbezahlten Abonnements belastet."
   },
   "paymentChargedWithTrial": {
     "message": "Dein Tarif beinhaltet eine kostenlose 7-Tage-Testversion. Deine Zahlungsart wird nicht belastet, bis die Testphase abgelaufen ist. Du erhältst pro $INTERVAL$ eine Rechnung. Eine Kündigung ist zu jeder Zeit möglich."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Weiter"
-  },
-  "usFlag": {
-    "message": "US-Flagge"
-  },
-  "euFlag": {
-    "message": "EU-Flagge"
   },
   "selectedRegionFlag": {
     "message": "Flagge der ausgewählten Region"

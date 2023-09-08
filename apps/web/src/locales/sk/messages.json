@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "Zabezpečte svoj účet požadovaním ďalšieho kroku pri prihlasovaní."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Povoľte dvojstupňové prihlásenie pre vašu organizáciu."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Vynútiť Bitwarden dvojstupňové prihlásenie pre členov použitím ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB šifrovaného úložiska pre prílohy."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Ďalšie možnosti dvojstupňového prihlásenia ako YubiKey, FIDO U2F a Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietárne možnosti dvojstupňového prihlásenia ako napríklad YubiKey a Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Núdzový prístup"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Všetky nezaplatené predplatné budú účtované prostredníctvom vášho spôsobu platby."
   },
   "paymentChargedWithTrial": {
     "message": "Váš plán ponúka 7-dňovú skúšobnú dobu zadarmo. Z vašej platobnej metódy nebude stiahnutý poplatok, kým sa neskončí skúšobná doba. Plán môžete kedykoľvek zrušiť."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Ďalej"
-  },
-  "usFlag": {
-    "message": "Vlajka USA"
-  },
-  "euFlag": {
-    "message": "Vlajka EU"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"

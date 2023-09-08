@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "로그인할 때 추가 단계를 요구하여 계정을 보호하십시오."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1GB의 암호화된 파일 저장소."
   },
-  "premiumSignUpTwoStep": {
-    "message": "YubiKey나 FIDO U2F, Duo 등의 추가적인 2단계 인증 옵션."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "긴급 접근"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "귀하의 플랜은 7일 무료 평가판입니다. 평가 기간이 만료될 때까지 카드에서 대금이 지불되지 않습니다. 이후 정기적으로 매 $INTERVAL$ 청구됩니다. 언제든지 취소할 수 있습니다."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Next"
-  },
-  "usFlag": {
-    "message": "US flag"
-  },
-  "euFlag": {
-    "message": "EU flag"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"
