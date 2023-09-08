@@ -13,27 +13,25 @@ import { OrganizationBillingRoutingModule } from "./organization-billing-routing
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";
 import { OrganizationSubscriptionCloudComponent } from "./organization-subscription-cloud.component";
 import { OrganizationSubscriptionSelfhostComponent } from "./organization-subscription-selfhost.component";
-import { SecretsManagerBillingModule } from "./secrets-manager/sm-billing.module";
+import { SecretsManagerAdjustSubscriptionComponent } from "./sm-adjust-subscription.component";
+import { SecretsManagerSubscribeStandaloneComponent } from "./sm-subscribe-standalone.component";
 import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
 
 @NgModule({
-  imports: [
-    OrganizationBillingRoutingModule,
-    UserVerificationModule,
-    SecretsManagerBillingModule,
-    BillingSharedModule,
-  ],
+  imports: [OrganizationBillingRoutingModule, UserVerificationModule, BillingSharedModule],
   declarations: [
     AdjustSubscription,
     BillingSyncApiKeyComponent,
+    BillingSyncKeyComponent,
     ChangePlanComponent,
     DownloadLicenseComponent,
     OrganizationBillingTabComponent,
-    OrgBillingHistoryViewComponent,
-    OrganizationSubscriptionSelfhostComponent,
     OrganizationSubscriptionCloudComponent,
+    OrganizationSubscriptionSelfhostComponent,
+    OrgBillingHistoryViewComponent,
+    SecretsManagerAdjustSubscriptionComponent,
+    SecretsManagerSubscribeStandaloneComponent,
     SubscriptionHiddenComponent,
-    BillingSyncKeyComponent,
   ],
 })
 export class OrganizationBillingModule {}
