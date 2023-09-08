@@ -1,7 +1,7 @@
 import { E_ALREADY_LOCKED } from "./errors";
 import { MutexInterface } from "./mutex.interface";
 import { SemaphoreInterface } from "./semaphore.interface";
-import { withTimeout } from "./withTimeout";
+import { withTimeout } from "./with-timeout";
 
 export function tryAcquire(mutex: MutexInterface, alreadyAcquiredError?: Error): MutexInterface;
 export function tryAcquire(
