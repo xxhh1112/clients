@@ -379,8 +379,6 @@ export class SettingsComponent implements OnInit {
           .authenticateBiometric()
           .then((result) => {
             this.form.controls.biometric.setValue(result);
-
-            awaitDesktopDialogRef.close(false);
             if (!result) {
               this.platformUtilsService.showToast(
                 "error",
@@ -402,6 +400,9 @@ export class SettingsComponent implements OnInit {
               cancelButtonText: null,
               type: "danger",
             });
+          })
+          .finally(() => {
+            awaitDesktopDialogRef.close(false);
           }),
       ]);
     } else {
