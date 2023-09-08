@@ -6,10 +6,8 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
-import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { TwoFactorProviders } from "@bitwarden/common/auth/services/two-factor.service";
-import { ProductType } from "@bitwarden/common/enums";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
@@ -38,7 +36,6 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   webAuthnModalRef: ViewContainerRef;
 
   organizationId: string;
-  organization: Organization;
   providers: any[] = [];
   canAccessPremium: boolean;
   showPolicyWarning = false;
@@ -48,7 +45,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
 
   tabbedHeader = true;
 
-  protected destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
   private twoFactorAuthPolicyAppliesToActiveUser: boolean;
 
   constructor(
@@ -205,15 +202,11 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
     this.evaluatePolicies();
   }
 
-  private evaluatePolicies() {
+  private async evaluatePolicies() {
     if (this.organizationId == null && this.providers.filter((p) => p.enabled).length === 1) {
       this.showPolicyWarning = this.twoFactorAuthPolicyAppliesToActiveUser;
     } else {
       this.showPolicyWarning = false;
     }
-  }
-
-  get isEnterpriseOrg() {
-    return this.organization?.planProductType === ProductType.Enterprise;
   }
 }

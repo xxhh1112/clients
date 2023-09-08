@@ -1425,10 +1425,7 @@
   "twoStepLoginDesc": {
     "message": "Sichern Sie Ihr Konto mit Zwei-Faktor-Authentifizierung."
   },
-  "twoStepLoginTeamsDesc": {
-    "message": "Zwei-Faktor-Authentifizierung für deine Organisation aktivieren."
-  },
-  "twoStepLoginEnterpriseDescStart": {
+  "twoStepLoginOrganizationDescStart": {
     "message": "Erzwinge eine Zwei-Faktor-Authentifizierung in Bitwarden für Mitglieder durch Verwendung der ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1928,7 +1925,7 @@
     "message": "1 GB verschlüsselter Speicherplatz für Dateianhänge."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietäre Optionen für die Zwei-Faktor Authentifizierung wie YubiKey und Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Notfallzugriff"
@@ -7018,6 +7015,12 @@
   },
   "next": {
     "message": "Weiter"
+  },
+  "usFlag": {
+    "message": "US-Flagge"
+  },
+  "euFlag": {
+    "message": "EU-Flagge"
   },
   "selectedRegionFlag": {
     "message": "Flagge der ausgewählten Region"

@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Phiên bản máy chủ"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Tự lưu trữ"
   },
   "thirdParty": {
     "message": "Bên thứ ba"

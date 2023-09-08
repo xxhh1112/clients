@@ -174,7 +174,7 @@ export class Organization {
   }
 
   get canViewAllCollections() {
-    return this.canEditAnyCollection || this.canDeleteAnyCollection;
+    return this.canCreateNewCollections || this.canEditAnyCollection || this.canDeleteAnyCollection;
   }
 
   get canEditAssignedCollections() {

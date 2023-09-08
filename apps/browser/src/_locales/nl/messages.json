@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Serverversie"
   },
-  "selfHostedServer": {
-    "message": "zelfgehost"
+  "selfHosted": {
+    "message": "Zelfgehost"
   },
   "thirdParty": {
     "message": "van derden"

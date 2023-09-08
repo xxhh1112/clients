@@ -208,10 +208,10 @@
     "message": "संकालन"
   },
   "syncVaultNow": {
-    "message": "तिजोरी संकालन आता करा"
+    "message": "Sync vault now"
   },
   "lastSync": {
-    "message": "शेवटचे संकालन:"
+    "message": "Last sync:"
   },
   "passGen": {
     "message": "पासवर्ड जनित्र"
@@ -279,7 +279,7 @@
     "message": "Avoid ambiguous characters"
   },
   "searchVault": {
-    "message": "तिजोरीत शोधा"
+    "message": "Search vault"
   },
   "edit": {
     "message": "Edit"
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Server version"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Self-hosted"
   },
   "thirdParty": {
     "message": "Third-party"

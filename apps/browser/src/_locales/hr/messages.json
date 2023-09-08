@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Verzija poslužitelja"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Vlastiti poslužitelj"
   },
   "thirdParty": {
     "message": "Third-party"

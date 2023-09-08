@@ -3,28 +3,28 @@
     "message": "Bitwarden"
   },
   "filters": {
-    "message": "फिल्‍टरहरु"
+    "message": "Filters"
   },
   "allItems": {
-    "message": "सबै सामाग्रिहरु"
+    "message": "All items"
   },
   "favorites": {
-    "message": "मनपर्नेहरू"
+    "message": "Favorites"
   },
   "types": {
-    "message": "प्रकार"
+    "message": "Types"
   },
   "typeLogin": {
-    "message": "लगइन"
+    "message": "Login"
   },
   "typeCard": {
-    "message": "कार्ड"
+    "message": "Card"
   },
   "typeIdentity": {
-    "message": "पहिचान"
+    "message": "Identity"
   },
   "typeSecureNote": {
-    "message": "सुरक्षित नोट"
+    "message": "Secure note"
   },
   "folders": {
     "message": "Folders"
@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Self-hosted"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."

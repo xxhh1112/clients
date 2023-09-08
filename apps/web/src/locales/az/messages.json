@@ -815,7 +815,7 @@
     "message": "Təsdiqləmə kodu olan e-poçtu yenidən göndər"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Başqa bir iki addımlı giriş üsulu istifadə edin"
+    "message": "Başqa bir iki mərhələli giriş metodu istifadə edin"
   },
   "insertYubiKey": {
     "message": "\"YubiKey\"i kompüterinizin USB portuna taxın, daha sonra düyməsinə toxunun."
@@ -827,13 +827,13 @@
     "message": "Giriş edilə bilmir"
   },
   "noTwoStepProviders": {
-    "message": "Bu hesabda iki addımlı giriş tənzimləməsi var, ancaq, konfiqurasiya edilmiş iki addımlı provayderlərin heç biri bu veb brauzer tərəfindən dəstəklənmir."
+    "message": "Bu hesabın iki mərhələli giriş özəlliyi fəaldır, ancaq, konfiqurasiya edilmiş iki mərhələli provayderlərin heç biri bu brauzer tərəfindən dəstəklənmir."
   },
   "noTwoStepProviders2": {
     "message": "Zəhmət olmasa (Chrome kimi) dəstəklənən bir veb brauzer istifadə edin və/və ya veb brauzerlərə (kimlik təsdiqləyici tətbiq kimi) daha yaxşı dəstəklənən provayderlər əlavə edin."
   },
   "twoStepOptions": {
-    "message": "İki addımlı giriş seçimləri"
+    "message": "İki mərhələli giriş seçimləri"
   },
   "recoveryCodeDesc": {
     "message": "İki mərhələli təsdiqləmə provayderlərinə müraciəti itirmisiniz? Bərpa kodunuzu istifadə edərək hesabınızdakı bütün iki mərhələli provayderləri sıradan çıxara bilərsiniz."
@@ -1417,26 +1417,23 @@
     "message": "Domenlər güncəlləndi"
   },
   "twoStepLogin": {
-    "message": "İki addımlı giriş"
+    "message": "İki mərhələli giriş"
   },
   "twoStepLoginEnforcement": {
-    "message": "İki addımlı Giriş Məcburiyyəti"
+    "message": "İki addımlı girişə məcbur et"
   },
   "twoStepLoginDesc": {
     "message": "Giriş edərkən əlavə bir addım tələb edərək hesabınızı qoruyun."
   },
-  "twoStepLoginTeamsDesc": {
-    "message": "Enable two-step login for your organization."
-  },
-  "twoStepLoginEnterpriseDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Bitwarden iki addım giriş seçimlərini aşağıdakıları istifadə edərək üzvlər üçün tətbiq et ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "İki addımlı Giriş Siyasəti"
+    "message": "İki mərhələli giriş siyasəti"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "Duo üzərindən İki addımlı Girişi tətbiq etmək üçün aşağıdakı seçimləri istifadə edin."
+    "message": "Duo üzərindən iki mərhələli girişi tətbiq etmək üçün aşağıdakı seçimləri istifadə edin."
   },
   "twoStepLoginOrganizationSsoDesc": {
     "message": "SSO quraşdırması etmisinizsə və ya etmək planınız varsa, İki mərhələli giriş, artıq Kimlik Provayderiniz vasitəsilə tətbiq edilmiş ola bilər."
@@ -1928,7 +1925,7 @@
     "message": "Fayl qoşmaları üçün 1 GB şifrələnmiş saxlama sahəsi."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "YubiKey və Duo kimi mülkiyyətçi iki addımlı giriş seçimləri."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Fövqəladə vəziyyət müraciəti"
@@ -7018,6 +7015,12 @@
   },
   "next": {
     "message": "Növbəti"
+  },
+  "usFlag": {
+    "message": "US bayrağı"
+  },
+  "euFlag": {
+    "message": "EU bayrağı"
   },
   "selectedRegionFlag": {
     "message": "Seçilmiş bölgə bayrağı"

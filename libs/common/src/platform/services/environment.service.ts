@@ -1,4 +1,4 @@
-import { concatMap, Observable, ReplaySubject } from "rxjs";
+import { concatMap, Observable, Subject } from "rxjs";
 
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import {
@@ -9,7 +9,7 @@ import {
 import { StateService } from "../abstractions/state.service";
 
 export class EnvironmentService implements EnvironmentServiceAbstraction {
-  private readonly urlsSubject = new ReplaySubject<void>(1);
+  private readonly urlsSubject = new Subject<void>();
   urls: Observable<void> = this.urlsSubject.asObservable();
   selectedRegion?: Region;
   initialized = false;

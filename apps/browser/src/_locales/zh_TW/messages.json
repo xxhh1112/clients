@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "伺服器版本"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "自我裝載"
   },
   "thirdParty": {
     "message": "第三方"

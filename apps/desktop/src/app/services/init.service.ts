@@ -11,7 +11,6 @@ import { EnvironmentService as EnvironmentServiceAbstraction } from "@bitwarden/
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
-import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
@@ -36,8 +35,7 @@ export class InitService {
     private cryptoService: CryptoServiceAbstraction,
     private nativeMessagingService: NativeMessagingService,
     private themingService: AbstractThemingService,
-    private encryptService: EncryptService,
-    private configService: ConfigService
+    private encryptService: EncryptService
   ) {}
 
   init() {
@@ -73,8 +71,6 @@ export class InitService {
 
       const containerService = new ContainerService(this.cryptoService, this.encryptService);
       containerService.attachToGlobal(this.win);
-
-      this.configService.init();
     };
   }
 }

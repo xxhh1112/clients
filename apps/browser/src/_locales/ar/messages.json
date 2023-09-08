@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "إصدار الخادم"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "استضافة ذاتية"
   },
   "thirdParty": {
     "message": "Third-party"

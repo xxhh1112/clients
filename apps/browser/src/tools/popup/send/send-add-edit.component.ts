@@ -1,6 +1,5 @@
 import { DatePipe, Location } from "@angular/common";
 import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -48,8 +47,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     private popupUtilsService: PopupUtilsService,
     logService: LogService,
     sendApiService: SendApiService,
-    dialogService: DialogService,
-    formBuilder: FormBuilder
+    dialogService: DialogService
   ) {
     super(
       i18nService,
@@ -62,8 +60,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
       logService,
       stateService,
       sendApiService,
-      dialogService,
-      formBuilder
+      dialogService
     );
   }
 

@@ -1425,10 +1425,7 @@
   "twoStepLoginDesc": {
     "message": "Заштитите свој налог захтевањем додатног корака приликом пријављивања."
   },
-  "twoStepLoginTeamsDesc": {
-    "message": "Омогућите пријаву у два корака за вашу организацију."
-  },
-  "twoStepLoginEnterpriseDescStart": {
+  "twoStepLoginOrganizationDescStart": {
     "message": "Примени Bitwarden опције за пријаву у два корака за чланове користећи ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1928,7 +1925,7 @@
     "message": "1ГБ шифровано складиште за прилоге."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Приоритарне опције пријаве у два корака као што су YubiKey и Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Улаз у хитним случајевима"
@@ -2044,7 +2041,7 @@
     }
   },
   "paymentChargedWithUnpaidSubscription": {
-    "message": "Ваш начин плаћања ће бити наплаћен за све неплаћене претплате."
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Ваш план долази са бесплатним 7-дневним пробним периодом. Начин плаћања неће бити наплаћен док се пробно време не заврши. Наплата ће се вршити периодично, сваки $INTERVAL$. Можете отказати било када."
@@ -7018,6 +7015,12 @@
   },
   "next": {
     "message": "Следеће"
+  },
+  "usFlag": {
+    "message": "Америчка застава"
+  },
+  "euFlag": {
+    "message": "ЕУ застава"
   },
   "selectedRegionFlag": {
     "message": "Одабрана застава"

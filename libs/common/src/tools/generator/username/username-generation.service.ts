@@ -13,10 +13,9 @@ import {
   ForwarderOptions,
   SimpleLoginForwarder,
 } from "./email-forwarders";
-import { UsernameGeneratorOptions } from "./username-generation-options";
 import { UsernameGenerationServiceAbstraction } from "./username-generation.service.abstraction";
 
-const DefaultOptions: UsernameGeneratorOptions = {
+const DefaultOptions = {
   type: "word",
   wordCapitalize: true,
   wordIncludeNumber: true,
@@ -34,7 +33,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     private apiService: ApiService
   ) {}
 
-  generateUsername(options: UsernameGeneratorOptions): Promise<string> {
+  generateUsername(options: any): Promise<string> {
     if (options.type === "catchall") {
       return this.generateCatchall(options);
     } else if (options.type === "subaddress") {
@@ -46,7 +45,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     }
   }
 
-  async generateWord(options: UsernameGeneratorOptions): Promise<string> {
+  async generateWord(options: any): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.wordCapitalize == null) {
@@ -68,7 +67,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return word;
   }
 
-  async generateSubaddress(options: UsernameGeneratorOptions): Promise<string> {
+  async generateSubaddress(options: any): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     const subaddressEmail = o.subaddressEmail;
@@ -95,7 +94,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return emailBeginning + "+" + subaddressString + "@" + emailEnding;
   }
 
-  async generateCatchall(options: UsernameGeneratorOptions): Promise<string> {
+  async generateCatchall(options: any): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.catchallDomain == null || o.catchallDomain === "") {
@@ -114,7 +113,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return startString + "@" + o.catchallDomain;
   }
 
-  async generateForwarded(options: UsernameGeneratorOptions): Promise<string> {
+  async generateForwarded(options: any): Promise<string> {
     const o = Object.assign({}, DefaultOptions, options);
 
     if (o.forwardedService == null) {
@@ -153,7 +152,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return forwarder.generate(this.apiService, forwarderOptions);
   }
 
-  async getOptions(): Promise<UsernameGeneratorOptions> {
+  async getOptions(): Promise<any> {
     let options = await this.stateService.getUsernameGenerationOptions();
     if (options == null) {
       options = Object.assign({}, DefaultOptions);
@@ -164,7 +163,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     return options;
   }
 
-  async saveOptions(options: UsernameGeneratorOptions) {
+  async saveOptions(options: any) {
     await this.stateService.setUsernameGenerationOptions(options);
   }
 

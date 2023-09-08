@@ -1,7 +1,5 @@
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog";
 import { DatePipe } from "@angular/common";
-import { Component, Inject } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { Component } from "@angular/core";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/tools/send/add-edit.component";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -21,7 +19,6 @@ import { DialogService } from "@bitwarden/components";
 })
 export class AddEditComponent extends BaseAddEditComponent {
   override componentName = "app-send-add-edit";
-  protected selectedFile: File;
 
   constructor(
     i18nService: I18nService,
@@ -34,10 +31,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     policyService: PolicyService,
     logService: LogService,
     sendApiService: SendApiService,
-    dialogService: DialogService,
-    formBuilder: FormBuilder,
-    protected dialogRef: DialogRef,
-    @Inject(DIALOG_DATA) params: { sendId: string }
+    dialogService: DialogService
   ) {
     super(
       i18nService,
@@ -50,11 +44,8 @@ export class AddEditComponent extends BaseAddEditComponent {
       logService,
       stateService,
       sendApiService,
-      dialogService,
-      formBuilder
+      dialogService
     );
-
-    this.sendId = params.sendId;
   }
 
   async copyLinkToClipboard(link: string): Promise<void | boolean> {
@@ -64,29 +55,4 @@ export class AddEditComponent extends BaseAddEditComponent {
       window.setTimeout(() => resolve(super.copyLinkToClipboard(link)), 500);
     });
   }
-
-  protected setSelectedFile(event: Event) {
-    const fileInputEl = <HTMLInputElement>event.target;
-    const file = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
-    this.selectedFile = file;
-  }
-
-  submitAndClose = async () => {
-    this.formGroup.markAllAsTouched();
-    if (this.formGroup.invalid) {
-      return;
-    }
-
-    const success = await this.submit();
-    if (success) {
-      this.dialogRef.close();
-    }
-  };
-
-  deleteAndClose = async () => {
-    const success = await this.delete();
-    if (success) {
-      this.dialogRef.close();
-    }
-  };
 }

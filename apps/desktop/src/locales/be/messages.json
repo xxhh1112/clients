@@ -1078,7 +1078,7 @@
     "message": "1 ГБ зашыфраванага сховішча для далучаных файлаў."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Прапрыетарныя варыянты двухэтапнага ўваходу, такія як YubiKey, FIDO U2F і Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpReports": {
     "message": "Гігіена пароляў, здароўе ўліковага запісу і справаздачы аб уцечках даных для забеспячэння бяспекі вашага сховішча."
@@ -1493,7 +1493,7 @@
     "message": "Для таго, каб аднавіць доступ да сховішча, патрабуецца паўторная аўтарызацыя."
   },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
-    "message": "Наладзіць метад разблакіроўкі для змянення дзеяння часу чакання вашага сховішча."
+    "message": "Set up an unlock method to change your vault timeout action."
   },
   "lock": {
     "message": "Заблакіраваць",
@@ -2110,7 +2110,7 @@
     "message": "Увайсці з іншай прылады"
   },
   "loginInitiated": {
-    "message": "Ініцыяваны ўваход"
+    "message": "Login initiated"
   },
   "notificationSentDevice": {
     "message": "Апавяшчэнне было адпраўлена на вашу прыладу."
@@ -2250,31 +2250,31 @@
     "message": "Рэкамендаваныя налады абнаўлення"
   },
   "deviceApprovalRequired": {
-    "message": "Патрабуецца ўхваленне прылады. Выберыце параметры ўхвалення ніжэй:"
+    "message": "Device approval required. Select an approval option below:"
   },
   "rememberThisDevice": {
-    "message": "Запомніць гэту прыладу"
+    "message": "Remember this device"
   },
   "uncheckIfPublicDevice": {
-    "message": "Здыміце пазнаку, калі выкарыстоўваеце агульнадаступную прыладу"
+    "message": "Uncheck if using a public device"
   },
   "approveFromYourOtherDevice": {
-    "message": "Ухваліць з іншай вашай прылады"
+    "message": "Approve from your other device"
   },
   "requestAdminApproval": {
-    "message": "Запытаць ухваленне адміністратара"
+    "message": "Request admin approval"
   },
   "approveWithMasterPassword": {
-    "message": "Ухваліць з дапамогай асноўнага пароля"
+    "message": "Approve with master password"
   },
   "region": {
-    "message": "Рэгіён"
+    "message": "Region"
   },
   "ssoIdentifierRequired": {
-    "message": "Неабходны ідэнтыфікатар SSO арганізацыі."
+    "message": "Organization SSO identifier is required."
   },
   "eu": {
-    "message": "ЕС",
+    "message": "EU",
     "description": "European Union"
   },
   "loggingInOn": {
@@ -2286,47 +2286,47 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Уласнае размяшчэнне"
   },
   "accessDenied": {
     "message": "Доступ забаронены. У вас не дастаткова правоў для прагляду гэтай старонкі."
   },
   "accountSuccessfullyCreated": {
-    "message": "Уліковы запіс паспяхова створаны!"
+    "message": "Account successfully created!"
   },
   "adminApprovalRequested": {
-    "message": "Патрабуецца ўхваленне адміністратара"
+    "message": "Admin approval requested"
   },
   "adminApprovalRequestSentToAdmins": {
-    "message": "Ваш запыт адпраўлены адміністратару."
+    "message": "Your request has been sent to your admin."
   },
   "youWillBeNotifiedOnceApproved": {
-    "message": "Вы атрымаеце апавяшчэння пасля яго ўхвалення."
+    "message": "You will be notified once approved."
   },
   "troubleLoggingIn": {
-    "message": "Праблемы з уваходам?"
+    "message": "Trouble logging in?"
   },
   "loginApproved": {
-    "message": "Уваход ухвалены"
+    "message": "Login approved"
   },
   "userEmailMissing": {
-    "message": "Адсутнічае электронная пошта карыстальніка"
+    "message": "User email missing"
   },
   "deviceTrusted": {
-    "message": "Давераная прылада"
+    "message": "Device trusted"
   },
   "inputRequired": {
-    "message": "Неабходны ўвод даных."
+    "message": "Input is required."
   },
   "required": {
-    "message": "патрабуецца"
+    "message": "required"
   },
   "search": {
-    "message": "Пошук"
+    "message": "Search"
   },
   "inputMinLength": {
-    "message": "Даўжыня ўведзеных даных павінна складаць прынамсі $COUNT$ сімв.",
+    "message": "Input must be at least $COUNT$ characters long.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2335,7 +2335,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Даўжыня ўведзеных даных не можа перавышаць наступную колькасць сімвалаў: $COUNT$",
+    "message": "Input must not exceed $COUNT$ characters in length.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2344,7 +2344,7 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "Наступныя сімвалы забаронены: $CHARACTERS$",
+    "message": "The following characters are not allowed: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
@@ -2353,7 +2353,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Мінімальная даўжыня сімвалаў значэння, якое будзе ўводзіцца: $MIN$.",
+    "message": "Input value must be at least $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -2362,7 +2362,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Максімальная даўжыня сімвалаў значэння, якое будзе ўводзіцца: $MAX$.",
+    "message": "Input value must not exceed $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -2371,17 +2371,17 @@
     }
   },
   "multipleInputEmails": {
-    "message": "1 або некалькі адрасоў электроннай пошты з'яўляюцца памылковымі"
+    "message": "1 or more emails are invalid"
   },
   "inputTrimValidator": {
-    "message": "Уведзенае значэнне не павінна змяшчаць толькі прабелы.",
+    "message": "Input must not contain only whitespace.",
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "inputEmail": {
-    "message": "Уведзеныя даныя не з'яўляюцца адрасам электроннай пошты."
+    "message": "Input is not an email address."
   },
   "fieldsNeedAttention": {
-    "message": "Колькасць палёў, якія патрабуюць вашай увагі: $COUNT$",
+    "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2390,22 +2390,22 @@
     }
   },
   "selectPlaceholder": {
-    "message": "-- Выбраць --"
+    "message": "-- Select --"
   },
   "multiSelectPlaceholder": {
-    "message": "- Увядзіце для фільтрацыі -"
+    "message": "-- Type to filter --"
   },
   "multiSelectLoading": {
-    "message": "Атрыманне параметраў..."
+    "message": "Retrieving options..."
   },
   "multiSelectNotFound": {
-    "message": "Элементаў не знойдзена"
+    "message": "No items found"
   },
   "multiSelectClearAll": {
-    "message": "Ачысціць усё"
+    "message": "Clear all"
   },
   "plusNMore": {
-    "message": "+ яшчэ $QUANTITY$",
+    "message": "+ $QUANTITY$ more",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2414,6 +2414,6 @@
     }
   },
   "submenu": {
-    "message": "Падменю"
+    "message": "Submenu"
   }
 }

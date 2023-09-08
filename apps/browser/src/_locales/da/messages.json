@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Server version"
   },
-  "selfHostedServer": {
-    "message": "selv-hostet"
+  "selfHosted": {
+    "message": "Selv-hostet"
   },
   "thirdParty": {
     "message": "Tredjepart"
