@@ -2011,6 +2011,55 @@ describe("CollectAutofillContentService", () => {
     });
   });
 
+  describe("deleteCachedAutofillElement", () => {
+    it("removes the autofill form element from the map of elements", () => {
+      const formElement = document.createElement("form") as ElementWithOpId<HTMLFormElement>;
+      const autofillForm: AutofillForm = {
+        opid: "1234",
+        htmlName: "formEl",
+        htmlID: "formEl-id",
+        htmlAction: "https://example.com",
+        htmlMethod: "POST",
+      };
+      collectAutofillContentService["autofillFormElements"] = new Map([
+        [formElement, autofillForm],
+      ]);
+
+      collectAutofillContentService["deleteCachedAutofillElement"](formElement);
+
+      expect(collectAutofillContentService["autofillFormElements"].size).toEqual(0);
+    });
+
+    it("removes the autofill field element form the map of elements", () => {
+      const fieldElement = document.createElement("input") as ElementWithOpId<HTMLInputElement>;
+      const autofillField: AutofillField = {
+        elementNumber: 0,
+        htmlClass: "",
+        tabindex: "",
+        title: "",
+        viewable: false,
+        opid: "1234",
+        htmlName: "username",
+        htmlID: "username-id",
+        htmlType: "text",
+        htmlAutocomplete: "username",
+        htmlAutofocus: false,
+        htmlDisabled: false,
+        htmlMaxLength: 999,
+        htmlReadonly: false,
+        htmlRequired: false,
+        htmlValue: "jsmith",
+      };
+      collectAutofillContentService["autofillFieldElements"] = new Map([
+        [fieldElement, autofillField],
+      ]);
+
+      collectAutofillContentService["deleteCachedAutofillElement"](fieldElement);
+
+      expect(collectAutofillContentService["autofillFieldElements"].size).toEqual(0);
+    });
+  });
+
   describe("handleAutofillElementAttributeMutation", () => {
     it("returns early if the target node is not an HTMLElement instance", () => {
       const mutationRecord: MutationRecord = {
