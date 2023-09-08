@@ -20,10 +20,13 @@ import {
   DeleteOrganizationDialogResult,
   openDeleteOrganizationDialog,
 } from "../settings/components";
+import { BillingSharedModule } from "../../../billing/shared/billing-shared.module";
+import { SharedModule } from "../../../shared";
 
 @Component({
-  selector: "families-for-enterprise-setup",
   templateUrl: "families-for-enterprise-setup.component.html",
+  standalone: true,
+  imports: [SharedModule, BillingSharedModule],
 })
 export class FamiliesForEnterpriseSetupComponent implements OnInit, OnDestroy {
   @ViewChild(OrganizationPlansComponent, { static: false })

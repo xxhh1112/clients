@@ -1,9 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
-import { FamiliesForEnterpriseSetupComponent } from "../../admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
-import { CreateOrganizationComponent } from "../../admin-console/settings/create-organization.component";
-import { UpdateLicenseComponent } from "../../settings/update-license.component";
+import { UpdateLicenseComponent } from "./update-license.component";
 import { SharedModule } from "../../shared";
 import { SecretsManagerBillingModule } from "../organizations/secrets-manager/sm-billing.module";
 
@@ -19,26 +17,23 @@ import { TaxInfoComponent } from "./tax-info.component";
 @NgModule({
   imports: [SharedModule, SecretsManagerBillingModule, OrganizationCreateModule],
   declarations: [
-    PaymentComponent,
-    TaxInfoComponent,
-    OrganizationPlansComponent,
-    AdjustStorageComponent,
-    UpdateLicenseComponent,
-    BillingHistoryComponent,
-
-    AdjustPaymentComponent,
-    FamiliesForEnterpriseSetupComponent,
-    CreateOrganizationComponent,
-    PaymentMethodComponent,
     AddCreditComponent,
+    AdjustPaymentComponent,
+    AdjustStorageComponent,
+    BillingHistoryComponent,
+    OrganizationPlansComponent,
+    PaymentComponent,
+    PaymentMethodComponent,
+    TaxInfoComponent,
+    UpdateLicenseComponent,
   ],
   exports: [
+    AdjustStorageComponent,
+    BillingHistoryComponent,
+    OrganizationPlansComponent,
     PaymentComponent,
     TaxInfoComponent,
-    OrganizationPlansComponent,
-    AdjustStorageComponent,
     UpdateLicenseComponent,
-    BillingHistoryComponent,
   ],
 })
 export class BillingSharedModule {}
