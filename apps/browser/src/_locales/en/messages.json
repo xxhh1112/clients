@@ -88,6 +88,9 @@
   "copySecurityCode": {
     "message": "Copy security code"
   },
+  "autoFill": {
+    "message": "Auto-fill"
+  },
   "autoFillLogin": {
     "message": "Auto-fill login"
   },
@@ -102,6 +105,15 @@
   },
   "copyElementIdentifier": {
     "message": "Copy custom field name"
+  },
+  "noMatchingLogins": {
+    "message": "No matching logins"
+  },
+  "noCards": {
+    "message": "No cards"
+  },
+  "noIdentities": {
+    "message": "No identities"
   },
   "addLoginMenu": {
     "message": "Add login"
