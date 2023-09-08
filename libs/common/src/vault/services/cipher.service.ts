@@ -6,7 +6,7 @@ import { SettingsService } from "../../abstractions/settings.service";
 import { FieldType, UriMatchType } from "../../enums";
 import { ErrorResponse } from "../../models/response/error.response";
 import { View } from "../../models/view/view";
-import { ConfigApiServiceAbstraction } from "../../platform/abstractions/config/config-api.service.abstraction";
+import { ConfigServiceAbstraction } from "../../platform/abstractions/config/config.service.abstraction";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
@@ -67,7 +67,7 @@ export class CipherService implements CipherServiceAbstraction {
     private stateService: StateService,
     private encryptService: EncryptService,
     private cipherFileUploadService: CipherFileUploadService,
-    private configApiService: ConfigApiServiceAbstraction
+    private configService: ConfigServiceAbstraction
   ) {}
 
   async getDecryptedCipherCache(): Promise<CipherView[]> {
@@ -1258,8 +1258,11 @@ export class CipherService implements CipherServiceAbstraction {
   }
 
   async getCipherKeyEncryptionEnabled(): Promise<boolean> {
-    const minVersion = new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER);
-    const serverVersion = new SemVer((await this.configApiService.get()).version);
-    return flagEnabled("enableCipherKeyEncryption") && serverVersion.compare(minVersion) > 0;
+    return (
+      flagEnabled("enableCipherKeyEncryption") &&
+      (await this.configService.checkServerMeetsVersionRequirement(
+        new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER)
+      ))
+    );
   }
 }

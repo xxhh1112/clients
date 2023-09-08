@@ -10,6 +10,7 @@ import {
   merge,
   timer,
 } from "rxjs";
+import { SemVer } from "semver";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
@@ -102,5 +103,24 @@ export class ConfigService implements ConfigServiceAbstraction {
 
     await this.stateService.setServerConfig(data);
     this.environmentService.setCloudWebVaultUrl(data.environment?.cloudRegion);
+  }
+
+  /**
+   * Verifies whether the server version meets the minimum required version
+   * @param minimumRequiredServerVersion The minimum version required
+   * @returns True if the server version is greater than or equal to the minimum required version
+   */
+  async checkServerMeetsVersionRequirement(minimumRequiredServerVersion: SemVer): Promise<boolean> {
+    return firstValueFrom(
+      this.serverConfig$.pipe(
+        map((serverConfig) => {
+          if (serverConfig == null) {
+            return false;
+          }
+          const serverVersion = new SemVer(serverConfig.version);
+          return serverVersion.compare(minimumRequiredServerVersion) >= 0;
+        })
+      )
+    );
   }
 }

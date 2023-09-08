@@ -26,12 +26,14 @@ import { UserVerificationApiService } from "@bitwarden/common/auth/services/user
 import { UserVerificationService } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
 import { ClientType, KeySuffixOptions, LogLevelType } from "@bitwarden/common/enums";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config-api.service.abstraction";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { BroadcasterService } from "@bitwarden/common/platform/services/broadcaster.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
+import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
@@ -150,6 +152,7 @@ export class Main {
   deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction;
   authRequestCryptoService: AuthRequestCryptoServiceAbstraction;
   configApiService: ConfigApiServiceAbstraction;
+  configService: ConfigServiceAbstraction;
 
   constructor() {
     let p = null;
@@ -334,6 +337,14 @@ export class Main {
 
     this.configApiService = new ConfigApiService(this.apiService, this.authService);
 
+    this.configService = new ConfigService(
+      this.stateService,
+      this.configApiService,
+      this.authService,
+      this.environmentService,
+      true
+    );
+
     this.cipherService = new CipherService(
       this.cryptoService,
       this.settingsService,
@@ -343,7 +354,7 @@ export class Main {
       this.stateService,
       this.encryptService,
       this.cipherFileUploadService,
-      this.configApiService
+      this.configService
     );
 
     this.folderService = new FolderService(
