@@ -11,6 +11,8 @@ import { SecretsManagerBillingModule } from "../organizations/secrets-manager/sm
 import { AddCreditComponent } from "./add-credit.component";
 import { AdjustPaymentComponent } from "./adjust-payment.component";
 import { AdjustStorageComponent } from "./adjust-storage.component";
+import { BillingHistoryViewComponent } from "./billing-history-view.component";
+import { BillingHistoryComponent } from "./billing-history.component";
 import { OrganizationPlansComponent } from "./organization-plans.component";
 import { PaymentMethodComponent } from "./payment-method.component";
 import { PaymentComponent } from "./payment.component";
@@ -23,15 +25,18 @@ import { UserSubscriptionComponent } from "./user-subscription.component";
     PaymentComponent,
     TaxInfoComponent,
     OrganizationPlansComponent,
+    AdjustStorageComponent,
+    UpdateLicenseComponent,
+    BillingHistoryComponent,
+
     AdjustPaymentComponent,
     FamiliesForEnterpriseSetupComponent,
     CreateOrganizationComponent,
     PremiumComponent,
     PaymentMethodComponent,
-    AdjustStorageComponent,
     AddCreditComponent,
     UserSubscriptionComponent,
-    UpdateLicenseComponent,
+    BillingHistoryViewComponent,
   ],
   exports: [
     PaymentComponent,
@@ -39,6 +44,7 @@ import { UserSubscriptionComponent } from "./user-subscription.component";
     OrganizationPlansComponent,
     AdjustStorageComponent,
     UpdateLicenseComponent,
+    BillingHistoryComponent,
   ],
 })
 export class BillingSharedModule {}

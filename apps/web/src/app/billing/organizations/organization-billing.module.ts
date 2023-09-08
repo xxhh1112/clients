@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { UserVerificationModule } from "../../auth/shared/components/user-verification";
-import { LooseComponentsModule, SharedModule } from "../../shared";
+import { SharedModule } from "../../shared";
 import { BillingSharedModule } from "../shared/billing-shared.module";
 
 import { AdjustSubscription } from "./adjust-subscription.component";
@@ -19,7 +19,6 @@ import { SubscriptionHiddenComponent } from "./subscription-hidden.component";
 @NgModule({
   imports: [
     SharedModule,
-    LooseComponentsModule,
     OrganizationBillingRoutingModule,
     UserVerificationModule,
     SecretsManagerBillingModule,
