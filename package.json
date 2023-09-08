@@ -168,7 +168,6 @@
     "bootstrap": "4.6.0",
     "braintree-web-drop-in": "1.40.0",
     "bufferutil": "4.0.7",
-    "cbor-redux": "^0.4.0",
     "chalk": "4.1.2",
     "commander": "7.2.0",
     "core-js": "3.32.0",

@@ -32,13 +32,11 @@ export class Utils {
   static regexpEmojiPresentation =
     /(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])/g;
   static readonly validHosts: string[] = ["localhost"];
+  static readonly originalMinimumPasswordLength = 8;
   static readonly minimumPasswordLength = 12;
   static readonly DomainMatchBlacklist = new Map<string, Set<string>>([
     ["google.com", new Set(["script.google.com"])],
   ]);
-
-  /** Used by guidToStandardFormat */
-  private static byteToHex: string[] = [];
 
   static init() {
     if (Utils.inited) {
@@ -62,10 +60,6 @@ export class Utils {
     } else {
       // If it's not browser or node then it must be a service worker
       Utils.global = self;
-    }
-
-    for (let i = 0; i < 256; ++i) {
-      Utils.byteToHex.push((i + 0x100).toString(16).substring(1));
     }
   }
 
@@ -583,97 +577,6 @@ export class Utils {
     }
 
     return null;
-  }
-
-  /*
-  License for: guidToRawFormat, guidToStandardFormat
-  Source: https://github.com/uuidjs/uuid/
-  The MIT License (MIT)
-  Copyright (c) 2010-2020 Robert Kieffer and other contributors
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-
-  /** Convert standard format (XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX) UUID to raw 16 byte array. */
-  static guidToRawFormat(guid: string) {
-    if (!Utils.isGuid(guid)) {
-      throw TypeError("GUID parameter is invalid");
-    }
-
-    let v;
-    const arr = new Uint8Array(16);
-
-    // Parse ########-....-....-....-............
-    arr[0] = (v = parseInt(guid.slice(0, 8), 16)) >>> 24;
-    arr[1] = (v >>> 16) & 0xff;
-    arr[2] = (v >>> 8) & 0xff;
-    arr[3] = v & 0xff;
-
-    // Parse ........-####-....-....-............
-    arr[4] = (v = parseInt(guid.slice(9, 13), 16)) >>> 8;
-    arr[5] = v & 0xff;
-
-    // Parse ........-....-####-....-............
-    arr[6] = (v = parseInt(guid.slice(14, 18), 16)) >>> 8;
-    arr[7] = v & 0xff;
-
-    // Parse ........-....-....-####-............
-    arr[8] = (v = parseInt(guid.slice(19, 23), 16)) >>> 8;
-    arr[9] = v & 0xff;
-
-    // Parse ........-....-....-....-############
-    // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
-    arr[10] = ((v = parseInt(guid.slice(24, 36), 16)) / 0x10000000000) & 0xff;
-    arr[11] = (v / 0x100000000) & 0xff;
-    arr[12] = (v >>> 24) & 0xff;
-    arr[13] = (v >>> 16) & 0xff;
-    arr[14] = (v >>> 8) & 0xff;
-    arr[15] = v & 0xff;
-
-    return arr;
-  }
-
-  /** Convert raw 16 byte array to standard format (XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX) UUID. */
-  static guidToStandardFormat(bufferSource: BufferSource) {
-    const arr =
-      bufferSource instanceof ArrayBuffer
-        ? new Uint8Array(bufferSource)
-        : new Uint8Array(bufferSource.buffer);
-    // Note: Be careful editing this code!  It's been tuned for performance
-    // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-    const guid = (
-      Utils.byteToHex[arr[0]] +
-      Utils.byteToHex[arr[1]] +
-      Utils.byteToHex[arr[2]] +
-      Utils.byteToHex[arr[3]] +
-      "-" +
-      Utils.byteToHex[arr[4]] +
-      Utils.byteToHex[arr[5]] +
-      "-" +
-      Utils.byteToHex[arr[6]] +
-      Utils.byteToHex[arr[7]] +
-      "-" +
-      Utils.byteToHex[arr[8]] +
-      Utils.byteToHex[arr[9]] +
-      "-" +
-      Utils.byteToHex[arr[10]] +
-      Utils.byteToHex[arr[11]] +
-      Utils.byteToHex[arr[12]] +
-      Utils.byteToHex[arr[13]] +
-      Utils.byteToHex[arr[14]] +
-      Utils.byteToHex[arr[15]]
-    ).toLowerCase();
-
-    // Consistency check for valid UUID.  If this throws, it's likely due to one
-    // of the following:
-    // - One or more input array values don't map to a hex octet (leading to
-    // "undefined" in the uuid)
-    // - Invalid input values for the RFC `version` or `variant` fields
-    if (!Utils.isGuid(guid)) {
-      throw TypeError("Converted GUID is invalid");
-    }
-
-    return guid;
   }
 }
 

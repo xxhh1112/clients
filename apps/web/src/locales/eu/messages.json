@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "Ziurtatu zure kontua saioa hastean beste urrats bat egitea eskatuz."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Behartu kideei Bitwardenen saioa hasteko bi urratseko aukera, hau erabiliz",
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "Eranskinentzako 1GB-eko zifratutako biltegia."
   },
-  "premiumSignUpTwoStep": {
-    "message": "YubiKey, FIDO U2F eta Duo bezalako bi urratseko saio hasierarako aukera gehigarriak."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Larrialdietarako sarbidea"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Zure planak 7 eguneko doako probaldia du. Zure ordainketa ez da kobratuko probaldia amaitu arte. Edozein unetan utz dezakezu bertan behera."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Next"
-  },
-  "usFlag": {
-    "message": "US flag"
-  },
-  "euFlag": {
-    "message": "EU flag"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"

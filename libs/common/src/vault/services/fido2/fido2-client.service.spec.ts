@@ -17,6 +17,7 @@ import {
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
 import { Fido2ClientService } from "./fido2-client.service";
 import { Fido2Utils } from "./fido2-utils";
+import { guidToRawFormat } from "./guid-utils";
 
 const RpId = "bitwarden.com";
 
@@ -247,7 +248,7 @@ describe("FidoAuthenticatorService", () => {
 
     function createAuthenticatorMakeResult(): Fido2AuthenticatorMakeCredentialResult {
       return {
-        credentialId: Utils.guidToRawFormat(Utils.newGuid()),
+        credentialId: guidToRawFormat(Utils.newGuid()),
         attestationObject: randomBytes(128),
         authData: randomBytes(64),
         publicKeyAlgorithm: -7,
@@ -362,13 +363,25 @@ describe("FidoAuthenticatorService", () => {
         const rejects = expect(result).rejects;
         await rejects.toThrow(FallbackRequestedError);
       });
+
+      // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
+      it("should throw error if sameOriginWithAncestors is false", async () => {
+        const params = createParams();
+        params.sameOriginWithAncestors = false; // Simulating the falsey value
+
+        const result = async () => await client.assertCredential(params);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotAllowedError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
     });
 
     describe("assert non-discoverable credential", () => {
       it("should call authenticator.assertCredential", async () => {
         const allowedCredentialIds = [
-          Fido2Utils.bufferToString(Utils.guidToRawFormat(Utils.newGuid())),
-          Fido2Utils.bufferToString(Utils.guidToRawFormat(Utils.newGuid())),
+          Fido2Utils.bufferToString(guidToRawFormat(Utils.newGuid())),
+          Fido2Utils.bufferToString(guidToRawFormat(Utils.newGuid())),
           Fido2Utils.bufferToString(Utils.fromByteStringToArray("not-a-guid")),
         ];
         const params = createParams({

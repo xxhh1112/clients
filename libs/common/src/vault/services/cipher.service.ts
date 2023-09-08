@@ -526,7 +526,7 @@ export class CipherService implements CipherServiceAbstraction {
 
   async createWithServer(cipher: Cipher, orgAdmin?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (orgAdmin) {
+    if (orgAdmin && cipher.organizationId != null) {
       const request = new CipherCreateRequest(cipher);
       response = await this.apiService.postCipherAdmin(request);
     } else if (cipher.collectionIds != null) {
@@ -1095,7 +1095,7 @@ export class CipherService implements CipherServiceAbstraction {
             model.login.fido2Key,
             cipher.login.fido2Key,
             {
-              nonDiscoverableId: null,
+              credentialId: null,
               keyType: null,
               keyAlgorithm: null,
               keyCurve: null,
@@ -1103,7 +1103,7 @@ export class CipherService implements CipherServiceAbstraction {
               rpId: null,
               rpName: null,
               userHandle: null,
-              userName: null,
+              userDisplayName: null,
               origin: null,
             },
             key
@@ -1168,6 +1168,7 @@ export class CipherService implements CipherServiceAbstraction {
           model.fido2Key,
           cipher.fido2Key,
           {
+            credentialId: null,
             keyType: null,
             keyAlgorithm: null,
             keyCurve: null,
@@ -1175,7 +1176,7 @@ export class CipherService implements CipherServiceAbstraction {
             rpId: null,
             rpName: null,
             userHandle: null,
-            userName: null,
+            userDisplayName: null,
             origin: null,
           },
           key

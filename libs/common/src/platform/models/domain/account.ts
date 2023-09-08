@@ -11,10 +11,15 @@ import { EnvironmentUrls } from "../../../auth/models/domain/environment-urls";
 import { ForceResetPasswordReason } from "../../../auth/models/domain/force-reset-password-reason";
 import { KeyConnectorUserDecryptionOption } from "../../../auth/models/domain/user-decryption-options/key-connector-user-decryption-option";
 import { TrustedDeviceUserDecryptionOption } from "../../../auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
-import { UserDecryptionOptionsResponse } from "../../../auth/models/response/user-decryption-options/user-decryption-options.response";
+import { IdentityTokenResponse } from "../../../auth/models/response/identity-token.response";
 import { KdfType, UriMatchType } from "../../../enums";
 import { EventData } from "../../../models/data/event.data";
-import { GeneratedPasswordHistory } from "../../../tools/generator/password";
+import { GeneratorOptions } from "../../../tools/generator/generator-options";
+import {
+  GeneratedPasswordHistory,
+  PasswordGeneratorOptions,
+} from "../../../tools/generator/password";
+import { UsernameGeneratorOptions } from "../../../tools/generator/username/username-generation-options";
 import { SendData } from "../../../tools/send/models/data/send.data";
 import { SendView } from "../../../tools/send/models/view/send.view";
 import { DeepJsonify } from "../../../types/deep-jsonify";
@@ -235,9 +240,9 @@ export class AccountSettings {
   equivalentDomains?: any;
   minimizeOnCopyToClipboard?: boolean;
   neverDomains?: { [id: string]: any };
-  passwordGenerationOptions?: any;
-  usernameGenerationOptions?: any;
-  generatorOptions?: any;
+  passwordGenerationOptions?: PasswordGeneratorOptions;
+  usernameGenerationOptions?: UsernameGeneratorOptions;
+  generatorOptions?: GeneratorOptions;
   pinKeyEncryptedUserKey?: EncryptedString;
   pinKeyEncryptedUserKeyEphemeral?: EncryptedString;
   protectedPin?: string;
@@ -311,28 +316,46 @@ export class AccountDecryptionOptions {
   //   return this.keyConnectorOption !== null && this.keyConnectorOption !== undefined;
   // }
 
-  static fromResponse(response: UserDecryptionOptionsResponse): AccountDecryptionOptions {
+  static fromResponse(response: IdentityTokenResponse): AccountDecryptionOptions {
     if (response == null) {
       return null;
     }
 
     const accountDecryptionOptions = new AccountDecryptionOptions();
-    accountDecryptionOptions.hasMasterPassword = response.hasMasterPassword;
 
-    if (response.trustedDeviceOption) {
-      accountDecryptionOptions.trustedDeviceOption = new TrustedDeviceUserDecryptionOption(
-        response.trustedDeviceOption.hasAdminApproval,
-        response.trustedDeviceOption.hasLoginApprovingDevice,
-        response.trustedDeviceOption.hasManageResetPasswordPermission
-      );
+    if (response.userDecryptionOptions) {
+      // If the response has userDecryptionOptions, this means it's on a post-TDE server version and can interrogate
+      // the new decryption options.
+      const responseOptions = response.userDecryptionOptions;
+      accountDecryptionOptions.hasMasterPassword = responseOptions.hasMasterPassword;
+
+      if (responseOptions.trustedDeviceOption) {
+        accountDecryptionOptions.trustedDeviceOption = new TrustedDeviceUserDecryptionOption(
+          responseOptions.trustedDeviceOption.hasAdminApproval,
+          responseOptions.trustedDeviceOption.hasLoginApprovingDevice,
+          responseOptions.trustedDeviceOption.hasManageResetPasswordPermission
+        );
+      }
+
+      if (responseOptions.keyConnectorOption) {
+        accountDecryptionOptions.keyConnectorOption = new KeyConnectorUserDecryptionOption(
+          responseOptions.keyConnectorOption.keyConnectorUrl
+        );
+      }
+    } else {
+      // If the response does not have userDecryptionOptions, this means it's on a pre-TDE server version and so
+      // we must base our decryption options on the presence of the keyConnectorUrl.
+      // Note that the presence of keyConnectorUrl implies that the user does not have a master password, as in pre-TDE
+      // server versions, a master password short-circuited the addition of the keyConnectorUrl to the response.
+      // TODO: remove this check after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3537)
+      const usingKeyConnector = response.keyConnectorUrl != null;
+      accountDecryptionOptions.hasMasterPassword = !usingKeyConnector;
+      if (usingKeyConnector) {
+        accountDecryptionOptions.keyConnectorOption = new KeyConnectorUserDecryptionOption(
+          response.keyConnectorUrl
+        );
+      }
     }
-
-    if (response.keyConnectorOption) {
-      accountDecryptionOptions.keyConnectorOption = new KeyConnectorUserDecryptionOption(
-        response.keyConnectorOption.keyConnectorUrl
-      );
-    }
-
     return accountDecryptionOptions;
   }
 

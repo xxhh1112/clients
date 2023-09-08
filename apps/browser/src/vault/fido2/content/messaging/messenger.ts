@@ -24,10 +24,16 @@ type Handler = (
 
 export class Messenger {
   static forDOMCommunication(window: Window) {
+    const windowOrigin = window.location.origin;
+
     return new Messenger({
-      postMessage: window.postMessage.bind(window),
+      postMessage: (message) => window.postMessage(message, windowOrigin),
       messages$: new Observable((subscriber) => {
         const eventListener = (event: MessageEvent<MessageWithMetadata>) => {
+          if (event.origin !== windowOrigin) {
+            return;
+          }
+
           subscriber.next(event.data);
         };
 

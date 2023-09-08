@@ -836,14 +836,14 @@
         <ng-container *ngIf="cipher.type === cipherType.Fido2Key">
           <div class="row">
             <div class="col-6 form-group">
-              <label for="fido2keyUsername">{{ "username" | i18n }}</label>
+              <label for="fido2KeyUserDisplayName">{{ "username" | i18n }}</label>
               <div class="input-group">
                 <input
-                  id="fido2keyUsername"
+                  id="fido2KeyUserDisplayName"
                   class="form-control"
                   type="text"
-                  name="Fido2key.Username"
-                  [(ngModel)]="cipher.fido2Key.userName"
+                  name="Fido2key.UserDisplayName"
+                  [(ngModel)]="cipher.fido2Key.userDisplayName"
                   appInputVerbatim
                   [disabled]="cipher.isDeleted || viewOnly"
                   [readonly]="!cipher.edit && editMode"
@@ -853,7 +853,7 @@
                     type="button"
                     class="btn btn-outline-secondary"
                     appA11yTitle="{{ 'copyUsername' | i18n }}"
-                    (click)="copy(cipher.fido2Key.userName, 'username', 'Username')"
+                    (click)="copy(cipher.fido2Key.userDisplayName, 'username', 'Username')"
                   >
                     <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
                   </button>

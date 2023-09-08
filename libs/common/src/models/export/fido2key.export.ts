@@ -6,7 +6,7 @@ import { Fido2Key as Fido2KeyDomain } from "./../../vault/models/domain/fido2-ke
 export class Fido2KeyExport {
   static template(): Fido2KeyExport {
     const req = new Fido2KeyExport();
-    req.nonDiscoverableId = "keyId";
+    req.credentialId = "keyId";
     req.keyType = "keyType";
     req.keyAlgorithm = "keyAlgorithm";
     req.keyCurve = "keyCurve";
@@ -15,12 +15,12 @@ export class Fido2KeyExport {
     req.userHandle = "userHandle";
     req.counter = "counter";
     req.rpName = "rpName";
-    req.userName = "userName";
+    req.userDisplayName = "userDisplayName";
     return req;
   }
 
   static toView(req: Fido2KeyExport, view = new Fido2KeyView()) {
-    view.nonDiscoverableId = req.nonDiscoverableId;
+    view.credentialId = req.credentialId;
     view.keyType = req.keyType as "public-key";
     view.keyAlgorithm = req.keyAlgorithm as "ECDSA";
     view.keyCurve = req.keyCurve as "P-256";
@@ -29,13 +29,12 @@ export class Fido2KeyExport {
     view.userHandle = req.userHandle;
     view.counter = parseInt(req.counter);
     view.rpName = req.rpName;
-    view.userName = req.userName;
+    view.userDisplayName = req.userDisplayName;
     return view;
   }
 
   static toDomain(req: Fido2KeyExport, domain = new Fido2KeyDomain()) {
-    domain.nonDiscoverableId =
-      req.nonDiscoverableId != null ? new EncString(req.nonDiscoverableId) : null;
+    domain.credentialId = req.credentialId != null ? new EncString(req.credentialId) : null;
     domain.keyType = req.keyType != null ? new EncString(req.keyType) : null;
     domain.keyAlgorithm = req.keyAlgorithm != null ? new EncString(req.keyAlgorithm) : null;
     domain.keyCurve = req.keyCurve != null ? new EncString(req.keyCurve) : null;
@@ -44,11 +43,12 @@ export class Fido2KeyExport {
     domain.userHandle = req.userHandle != null ? new EncString(req.userHandle) : null;
     domain.counter = req.counter != null ? new EncString(req.counter) : null;
     domain.rpName = req.rpName != null ? new EncString(req.rpName) : null;
-    domain.userName = req.userName != null ? new EncString(req.userName) : null;
+    domain.userDisplayName =
+      req.userDisplayName != null ? new EncString(req.userDisplayName) : null;
     return domain;
   }
 
-  nonDiscoverableId: string;
+  credentialId: string;
   keyType: string;
   keyAlgorithm: string;
   keyCurve: string;
@@ -57,7 +57,7 @@ export class Fido2KeyExport {
   userHandle: string;
   counter: string;
   rpName: string;
-  userName: string;
+  userDisplayName: string;
 
   constructor(o?: Fido2KeyView | Fido2KeyDomain) {
     if (o == null) {
@@ -65,7 +65,7 @@ export class Fido2KeyExport {
     }
 
     if (o instanceof Fido2KeyView) {
-      this.nonDiscoverableId = o.nonDiscoverableId;
+      this.credentialId = o.credentialId;
       this.keyType = o.keyType;
       this.keyAlgorithm = o.keyAlgorithm;
       this.keyCurve = o.keyCurve;
@@ -74,9 +74,9 @@ export class Fido2KeyExport {
       this.userHandle = o.userHandle;
       this.counter = String(o.counter);
       this.rpName = o.rpName;
-      this.userName = o.userName;
+      this.userDisplayName = o.userDisplayName;
     } else {
-      this.nonDiscoverableId = o.nonDiscoverableId?.encryptedString;
+      this.credentialId = o.credentialId?.encryptedString;
       this.keyType = o.keyType?.encryptedString;
       this.keyAlgorithm = o.keyAlgorithm?.encryptedString;
       this.keyCurve = o.keyCurve?.encryptedString;
@@ -85,7 +85,7 @@ export class Fido2KeyExport {
       this.userHandle = o.userHandle?.encryptedString;
       this.counter = o.counter?.encryptedString;
       this.rpName = o.rpName?.encryptedString;
-      this.userName = o.userName?.encryptedString;
+      this.userDisplayName = o.userDisplayName?.encryptedString;
     }
   }
 }

@@ -211,6 +211,13 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new FallbackRequestedError();
     }
 
+    if (!params.sameOriginWithAncestors) {
+      this.logService?.warning(
+        `[Fido2Client] Invalid 'sameOriginWithAncestors' value: ${params.sameOriginWithAncestors}`
+      );
+      throw new DOMException("Invalid 'sameOriginWithAncestors' value", "NotAllowedError");
+    }
+
     const { domain: effectiveDomain } = parse(params.origin, { allowPrivateDomains: true });
     if (effectiveDomain == undefined) {
       this.logService?.warning(`[Fido2Client] Invalid origin: ${params.origin}`);

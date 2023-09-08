@@ -1,3 +1,5 @@
+import { FallbackRequestedError } from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
+
 import { WebauthnUtils } from "../../../browser/webauthn-utils";
 
 import { MessageType } from "./messaging/message";
@@ -52,6 +54,14 @@ const browserCredentials = {
 
 const messenger = Messenger.forDOMCommunication(window);
 
+function isSameOriginWithAncestors() {
+  try {
+    return window.self === window.top;
+  } catch {
+    return false;
+  }
+}
+
 navigator.credentials.create = async (
   options?: CredentialCreationOptions,
   abortController?: AbortController
@@ -62,14 +72,15 @@ navigator.credentials.create = async (
     (options?.publicKey?.authenticatorSelection.authenticatorAttachment !== "platform" &&
       browserNativeWebauthnSupport);
   try {
+    const isNotIframe = isSameOriginWithAncestors();
+
     const response = await messenger.request(
       {
         type: MessageType.CredentialCreationRequest,
-        // TODO: Fix sameOriginWithAncestors!
         data: WebauthnUtils.mapCredentialCreationOptions(
           options,
           window.location.origin,
-          true,
+          isNotIframe,
           fallbackSupported
         ),
       },
@@ -95,15 +106,21 @@ navigator.credentials.get = async (
   abortController?: AbortController
 ): Promise<Credential> => {
   const fallbackSupported = browserNativeWebauthnSupport;
+
   try {
+    const isNotIframe = isSameOriginWithAncestors();
+
+    if (options?.mediation && options.mediation !== "optional") {
+      throw new FallbackRequestedError();
+    }
+
     const response = await messenger.request(
       {
         type: MessageType.CredentialGetRequest,
-        // TODO: Fix sameOriginWithAncestors!
         data: WebauthnUtils.mapCredentialRequestOptions(
           options,
           window.location.origin,
-          true,
+          isNotIframe,
           fallbackSupported
         ),
       },

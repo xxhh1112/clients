@@ -113,7 +113,7 @@ describe("Login DTO", () => {
         passwordRevisionDate: passwordRevisionDate.toISOString(),
         totp: "myTotp" as EncryptedString,
         fido2Key: {
-          nonDiscoverableId: "keyId" as EncryptedString,
+          credentialId: "keyId" as EncryptedString,
           keyType: "keyType" as EncryptedString,
           keyAlgorithm: "keyAlgorithm" as EncryptedString,
           keyCurve: "keyCurve" as EncryptedString,
@@ -122,8 +122,7 @@ describe("Login DTO", () => {
           userHandle: "userHandle" as EncryptedString,
           counter: "counter" as EncryptedString,
           rpName: "rpName" as EncryptedString,
-          userName: "userName" as EncryptedString,
-          origin: "origin" as EncryptedString,
+          userDisplayName: "userDisplayName" as EncryptedString,
         },
       });
 
@@ -134,7 +133,7 @@ describe("Login DTO", () => {
         passwordRevisionDate: passwordRevisionDate,
         totp: "myTotp_fromJSON",
         fido2Key: {
-          nonDiscoverableId: "keyId_fromJSON",
+          credentialId: "keyId_fromJSON",
           keyType: "keyType_fromJSON",
           keyAlgorithm: "keyAlgorithm_fromJSON",
           keyCurve: "keyCurve_fromJSON",
@@ -143,8 +142,7 @@ describe("Login DTO", () => {
           userHandle: "userHandle_fromJSON",
           counter: "counter_fromJSON",
           rpName: "rpName_fromJSON",
-          userName: "userName_fromJSON",
-          origin: "origin_fromJSON",
+          userDisplayName: "userDisplayName_fromJSON",
         },
       });
       expect(actual).toBeInstanceOf(Login);

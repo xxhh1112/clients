@@ -84,7 +84,7 @@ export class LoginView extends ItemView {
     const fido2Key = obj.fido2Key == null ? null : Fido2KeyView.fromJSON(obj.fido2Key);
 
     return Object.assign(new LoginView(), obj, {
-      passwordRevisionDate: passwordRevisionDate,
+      passwordRevisionDate,
       uris,
       fido2Key,
     });

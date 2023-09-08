@@ -1,7 +1,7 @@
 import { BaseResponse } from "../../models/response/base.response";
 
 export class Fido2KeyApi extends BaseResponse {
-  nonDiscoverableId: string;
+  credentialId: string;
   keyType: "public-key";
   keyAlgorithm: "ECDSA";
   keyCurve: "P-256";
@@ -9,10 +9,8 @@ export class Fido2KeyApi extends BaseResponse {
   rpId: string;
   userHandle: string;
   counter: string;
-
-  // Extras
   rpName: string;
-  userName: string;
+  userDisplayName: string;
 
   constructor(data: any = null) {
     super(data);
@@ -20,7 +18,7 @@ export class Fido2KeyApi extends BaseResponse {
       return;
     }
 
-    this.nonDiscoverableId = this.getResponseProperty("NonDiscoverableId");
+    this.credentialId = this.getResponseProperty("CredentialId");
     this.keyType = this.getResponseProperty("KeyType");
     this.keyAlgorithm = this.getResponseProperty("KeyAlgorithm");
     this.keyCurve = this.getResponseProperty("KeyCurve");
@@ -29,6 +27,6 @@ export class Fido2KeyApi extends BaseResponse {
     this.userHandle = this.getResponseProperty("UserHandle");
     this.counter = this.getResponseProperty("Counter");
     this.rpName = this.getResponseProperty("RpName");
-    this.userName = this.getResponseProperty("UserName");
+    this.userDisplayName = this.getResponseProperty("UserDisplayName");
   }
 }
