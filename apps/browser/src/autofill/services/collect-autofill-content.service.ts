@@ -983,6 +983,12 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     return isElementMutated;
   }
 
+  /**
+   * Deletes any cached autofill elements that have been
+   * removed from the DOM.
+   * @param {ElementWithOpId<HTMLFormElement> | ElementWithOpId<FormFieldElement>} element
+   * @private
+   */
   private deleteCachedAutofillElement(
     element: ElementWithOpId<HTMLFormElement> | ElementWithOpId<FormFieldElement>
   ) {
@@ -996,6 +1002,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     }
   }
 
+  /**
+   * Updates the autofill elements after a DOM mutation has occurred.
+   * Is debounced to prevent excessive updates.
+   * @private
+   */
   private updateAutofillElementsAfterMutation() {
     if (this.updateAutofillElementsAfterMutationTimeout) {
       clearTimeout(this.updateAutofillElementsAfterMutationTimeout);
@@ -1137,7 +1148,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   }
 
   /**
-   * Gets teh attribute value for the passed element, and returns it. If the dataTarget
+   * Gets the attribute value for the passed element, and returns it. If the dataTarget
    * and dataTargetKey are passed, it will set the value of the dataTarget[dataTargetKey].
    * @param UpdateAutofillDataAttributeParams
    * @returns {string}
