@@ -215,7 +215,7 @@ const routes: Routes = [
             path: "subscription",
             loadChildren: () =>
               import("./billing/individual/individual-billing.module").then(
-                (m) => m.BillingSharedModule
+                (m) => m.IndividualBillingModule
               ),
           },
           {
