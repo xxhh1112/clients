@@ -5,8 +5,7 @@ import { first } from "rxjs/operators";
 import { PlanType } from "@bitwarden/common/billing/enums";
 import { ProductType } from "@bitwarden/common/enums";
 
-import { BillingSharedModule } from "../../billing/shared/billing-shared.module";
-import { OrganizationPlansComponent } from "../../billing/shared/organization-plans.component";
+import { BillingSharedModule, OrganizationPlansComponent } from "../../billing/shared";
 import { SharedModule } from "../../shared";
 
 @Component({

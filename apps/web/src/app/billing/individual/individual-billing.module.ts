@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { SharedModule } from "../../shared";
-import { BillingSharedModule } from "../shared/billing-shared.module";
+import { BillingSharedModule } from "../shared";
 
 import { BillingHistoryViewComponent } from "./billing-history-view.component";
 import { PremiumComponent } from "./premium.component";

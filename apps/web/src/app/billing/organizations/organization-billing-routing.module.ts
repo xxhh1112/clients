@@ -6,7 +6,7 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 
 import { OrganizationPermissionsGuard } from "../../admin-console/organizations/guards/org-permissions.guard";
 import { WebPlatformUtilsService } from "../../core/web-platform-utils.service";
-import { PaymentMethodComponent } from "../shared/payment-method.component";
+import { PaymentMethodComponent } from "../shared";
 
 import { OrgBillingHistoryViewComponent } from "./organization-billing-history-view.component";
 import { OrganizationBillingTabComponent } from "./organization-billing-tab.component";

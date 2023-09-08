@@ -7,7 +7,7 @@ import { FormFieldModule } from "@bitwarden/components";
 import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
 import { RegisterFormModule } from "../../auth/register-form/register-form.module";
 import { BillingComponent } from "../../billing/accounts/trial-initiation/billing.component";
-import { BillingSharedModule } from "../../billing/shared/billing-shared.module";
+import { BillingSharedModule } from "../../billing/shared";
 import { EnvironmentSelectorModule } from "../../components/environment-selector/environment-selector.module";
 import { SharedModule } from "../../shared";
 

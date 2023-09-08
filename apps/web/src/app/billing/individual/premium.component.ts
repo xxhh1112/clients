@@ -11,8 +11,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { PaymentComponent } from "../shared/payment.component";
-import { TaxInfoComponent } from "../shared/tax-info.component";
+import { PaymentComponent, TaxInfoComponent } from "../shared";
 
 @Component({
   templateUrl: "premium.component.html",

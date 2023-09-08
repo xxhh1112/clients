@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { BillingSharedModule } from "@bitwarden/web-vault/app/billing/shared/billing-shared.module";
+import { BillingSharedModule } from "@bitwarden/web-vault/app/billing/shared";
 import { OssModule } from "@bitwarden/web-vault/app/oss.module";
 
 import { AddOrganizationComponent } from "./clients/add-organization.component";

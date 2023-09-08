@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { PaymentMethodComponent } from "../shared/payment-method.component";
+import { PaymentMethodComponent } from "../shared";
 
 import { BillingHistoryViewComponent } from "./billing-history-view.component";
 import { PremiumComponent } from "./premium.component";
