@@ -39,6 +39,7 @@ import {
   AbstractStorageService,
 } from "../abstractions/storage.service";
 import { StateFactory } from "../factories/state-factory";
+import { Mutex } from "../misc/mutex";
 import { Utils } from "../misc/utils";
 import { ServerConfigData } from "../models/data/server-config.data";
 import {
@@ -84,6 +85,8 @@ export class StateService<
   TAccount extends Account = Account
 > implements StateServiceAbstraction<TAccount>
 {
+  private mutex = new Mutex();
+
   protected accountsSubject = new BehaviorSubject<{ [userId: string]: TAccount }>({});
   accounts$ = this.accountsSubject.asObservable();
 
@@ -2934,6 +2937,20 @@ export class StateService<
 
   protected useDisk(storageLocation: StorageLocation) {
     return storageLocation === StorageLocation.Disk || storageLocation === StorageLocation.Both;
+  }
+
+  protected async updateAccount(
+    options: StorageOptions | undefined,
+    callback: (account: TAccount) => Promise<void>
+  ) {
+    const release = await this.mutex.acquire();
+    try {
+      const account = await this.getAccount(options);
+      await callback(account);
+      await this.saveAccount(account, options);
+    } finally {
+      release();
+    }
   }
 
   protected async saveAccount(
