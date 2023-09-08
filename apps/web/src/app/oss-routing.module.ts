@@ -37,7 +37,6 @@ import { UpdatePasswordComponent } from "./auth/update-password.component";
 import { UpdateTempPasswordComponent } from "./auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "./auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "./auth/verify-recover-delete.component";
-import { SubscriptionRoutingModule } from "./billing/individual/subscription-routing.module";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
 import { ReportsModule } from "./reports";
@@ -214,7 +213,10 @@ const routes: Routes = [
           },
           {
             path: "subscription",
-            loadChildren: () => SubscriptionRoutingModule,
+            loadChildren: () =>
+              import("./billing/individual/individual-billing.module").then(
+                (m) => m.BillingSharedModule
+              ),
           },
           {
             path: "emergency-access",
