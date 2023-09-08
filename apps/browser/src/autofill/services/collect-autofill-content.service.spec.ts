@@ -1972,7 +1972,8 @@ describe("CollectAutofillContentService", () => {
       expect(collectAutofillContentService["domRecentlyMutated"]).toEqual(true);
       expect(collectAutofillContentService["noFieldsFound"]).toEqual(false);
       expect(collectAutofillContentService["isAutofillElementNodeMutated"]).toBeCalledWith(
-        removedNodes
+        removedNodes,
+        true
       );
       expect(collectAutofillContentService["isAutofillElementNodeMutated"]).toBeCalledWith(
         addedNodes

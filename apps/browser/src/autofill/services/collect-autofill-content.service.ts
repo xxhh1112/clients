@@ -23,6 +23,8 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private autofillFormElements: AutofillFormElements = new Map();
   private autofillFieldElements: AutofillFieldElements = new Map();
   private mutationObserver: MutationObserver;
+  private updateAutofillElementsAfterMutationTimeout: NodeJS.Timeout;
+  private readonly updateAfterMutationTimeoutDelay = 1000;
 
   constructor(domElementVisibilityService: DomElementVisibilityService) {
     this.domElementVisibilityService = domElementVisibilityService;
@@ -210,9 +212,11 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   private getFormattedAutofillFormsData(): Record<string, AutofillForm> {
     const autofillForms: Record<string, AutofillForm> = {};
-    this.autofillFormElements.forEach(
-      (autofillForm, formElement) => (autofillForms[formElement.opid] = autofillForm)
-    );
+    const autofillFormElements = Array.from(this.autofillFormElements);
+    for (let index = 0; index < autofillFormElements.length; index++) {
+      const [formElement, autofillForm] = autofillFormElements[index];
+      autofillForms[formElement.opid] = autofillForm;
+    }
 
     return autofillForms;
   }
@@ -414,10 +418,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private getFormattedAutofillFieldsData(): AutofillField[] {
-    const formFieldElements: AutofillField[] = [];
-    this.autofillFieldElements.forEach((autofillField) => formFieldElements.push(autofillField));
-
-    return formFieldElements;
+    return Array.from(this.autofillFieldElements.values());
   }
 
   /**
@@ -432,13 +433,14 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   private createAutofillFieldLabelTag(element: FillableFormFieldElement): string {
     const labelElementsSet: Set<HTMLElement> = new Set(element.labels);
-
     if (labelElementsSet.size) {
       return this.createLabelElementsTag(labelElementsSet);
     }
 
     const labelElements: NodeListOf<HTMLLabelElement> | null = this.queryElementLabels(element);
-    labelElements?.forEach((labelElement) => labelElementsSet.add(labelElement));
+    for (let labelIndex = 0; labelIndex < labelElements?.length; labelIndex++) {
+      labelElementsSet.add(labelElements[labelIndex]);
+    }
 
     let currentElement: HTMLElement | null = element;
     while (currentElement && currentElement !== document.documentElement) {
@@ -914,27 +916,38 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       const mutation = mutations[mutationsIndex];
       if (
         mutation.type === "childList" &&
-        (this.isAutofillElementNodeMutated(mutation.removedNodes) ||
+        (this.isAutofillElementNodeMutated(mutation.removedNodes, true) ||
           this.isAutofillElementNodeMutated(mutation.addedNodes))
       ) {
         this.domRecentlyMutated = true;
         this.noFieldsFound = false;
-        return;
+        continue;
       }
 
       if (mutation.type === "attributes") {
         this.handleAutofillElementAttributeMutation(mutation);
       }
     }
+
+    if (this.domRecentlyMutated) {
+      this.updateAutofillElementsAfterMutation();
+    }
   };
 
   /**
    * Checks if the passed nodes either contain or are autofill elements.
    * @param {NodeList} nodes
+   * @param {boolean} isRemovingNodes
    * @returns {boolean}
    * @private
    */
-  private isAutofillElementNodeMutated(nodes: NodeList): boolean {
+  private isAutofillElementNodeMutated(nodes: NodeList, isRemovingNodes = false): boolean {
+    if (!nodes.length) {
+      return false;
+    }
+
+    let isElementMutated = false;
+    const mutatedElements = [];
     for (let index = 0; index < nodes.length; index++) {
       const node = nodes[index];
       if (!(node instanceof HTMLElement)) {
@@ -942,7 +955,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       }
 
       if (node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)) {
-        return true;
+        isElementMutated = true;
+        mutatedElements.push(node);
+        continue;
       }
 
       const childNodes = this.queryAllTreeWalkerNodes(
@@ -950,11 +965,46 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         (node: Node) => node instanceof HTMLFormElement || this.isNodeFormFieldElement(node)
       ) as HTMLElement[];
       if (childNodes.length) {
-        return true;
+        isElementMutated = true;
+        mutatedElements.push(...childNodes);
       }
     }
 
-    return false;
+    if (isRemovingNodes) {
+      for (let elementIndex = 0; elementIndex < mutatedElements.length; elementIndex++) {
+        this.deleteCachedAutofillElement(
+          mutatedElements[elementIndex] as
+            | ElementWithOpId<HTMLFormElement>
+            | ElementWithOpId<FormFieldElement>
+        );
+      }
+    }
+
+    return isElementMutated;
+  }
+
+  private deleteCachedAutofillElement(
+    element: ElementWithOpId<HTMLFormElement> | ElementWithOpId<FormFieldElement>
+  ) {
+    if (element instanceof HTMLFormElement && this.autofillFormElements.has(element)) {
+      this.autofillFormElements.delete(element);
+      return;
+    }
+
+    if (this.autofillFieldElements.has(element)) {
+      this.autofillFieldElements.delete(element);
+    }
+  }
+
+  private updateAutofillElementsAfterMutation() {
+    if (this.updateAutofillElementsAfterMutationTimeout) {
+      clearTimeout(this.updateAutofillElementsAfterMutationTimeout);
+    }
+
+    this.updateAutofillElementsAfterMutationTimeout = setTimeout(
+      this.getPageDetails.bind(this),
+      this.updateAfterMutationTimeoutDelay
+    );
   }
 
   /**
