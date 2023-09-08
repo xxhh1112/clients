@@ -643,7 +643,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
       useClass: SyncNotifierService,
     },
     {
-      provide: ConfigServiceAbstraction,
+      provide: ConfigService,
       useClass: ConfigService,
       deps: [
         StateServiceAbstraction,
@@ -651,6 +651,10 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         AuthServiceAbstraction,
         EnvironmentServiceAbstraction,
       ],
+    },
+    {
+      provide: ConfigServiceAbstraction,
+      useExisting: ConfigService,
     },
     {
       provide: ConfigApiServiceAbstraction,
