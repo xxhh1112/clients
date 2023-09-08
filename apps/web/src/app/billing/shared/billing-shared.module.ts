@@ -15,7 +15,7 @@ import { TaxInfoComponent } from "./tax-info.component";
 import { UpdateLicenseComponent } from "./update-license.component";
 
 @NgModule({
-  imports: [SharedModule, SecretsManagerBillingModule, OrganizationCreateModule],
+  imports: [OrganizationCreateModule, SecretsManagerBillingModule, SharedModule],
   declarations: [
     AddCreditComponent,
     AdjustPaymentComponent,
@@ -32,6 +32,7 @@ import { UpdateLicenseComponent } from "./update-license.component";
     BillingHistoryComponent,
     OrganizationPlansComponent,
     PaymentComponent,
+    SharedModule,
     TaxInfoComponent,
     UpdateLicenseComponent,
   ],

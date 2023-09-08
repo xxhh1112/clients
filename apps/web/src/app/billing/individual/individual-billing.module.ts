@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "../../shared";
 import { BillingSharedModule } from "../shared";
 
 import { BillingHistoryViewComponent } from "./billing-history-view.component";
@@ -10,7 +9,7 @@ import { SubscriptionComponent } from "./subscription.component";
 import { UserSubscriptionComponent } from "./user-subscription.component";
 
 @NgModule({
-  imports: [SharedModule, SubscriptionRoutingModule, BillingSharedModule],
+  imports: [SubscriptionRoutingModule, BillingSharedModule],
   declarations: [
     SubscriptionComponent,
     BillingHistoryViewComponent,
