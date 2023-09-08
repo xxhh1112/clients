@@ -202,7 +202,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     credentialName,
     userName,
     userVerification,
-  }: NewCredentialParams): Promise<{ confirmed: boolean; userVerified: boolean }> {
+  }: NewCredentialParams): Promise<{ cipherId: string; userVerified: boolean }> {
     const data: BrowserFido2Message = {
       type: "ConfirmNewCredentialRequest",
       sessionId: this.sessionId,
@@ -215,7 +215,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     await this.send(data);
     const response = await this.receive("ConfirmNewCredentialResponse");
 
-    return { confirmed: true, userVerified: response.userVerified };
+    return { cipherId: response.cipherId, userVerified: response.userVerified };
   }
 
   async informExcludedCredential(existingCipherIds: string[]): Promise<void> {
