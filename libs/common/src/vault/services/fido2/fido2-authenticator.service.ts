@@ -97,90 +97,45 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       let keyPair: CryptoKeyPair;
       let userVerified = false;
       let credentialId: string;
-      if (params.requireResidentKey) {
-        const response = await userInterfaceSession.confirmNewCredential(
-          {
-            credentialName: params.rpEntity.name,
-            userName: params.userEntity.displayName,
-            userVerification: params.requireUserVerification,
-          },
-          abortController
+      const response = await userInterfaceSession.confirmNewCredential(
+        {
+          credentialName: params.rpEntity.name,
+          userName: params.userEntity.displayName,
+          userVerification: params.requireUserVerification,
+        },
+        abortController
+      );
+      const cipherId = response.cipherId;
+      userVerified = response.userVerified;
+
+      if (cipherId === undefined) {
+        this.logService?.warning(
+          `[Fido2Authenticator] Aborting because user confirmation was not recieved.`
         );
-        const userConfirmation = response.confirmed;
-        userVerified = response.userVerified;
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+      }
 
-        if (!userConfirmation) {
-          this.logService?.warning(
-            `[Fido2Authenticator] Aborting because user confirmation was not recieved.`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-        }
-
-        if (params.requireUserVerification && !userVerified) {
-          this.logService?.warning(
-            `[Fido2Authenticator] Aborting because user verification was not successful.`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-        }
-
-        try {
-          keyPair = await createKeyPair();
-
-          cipher = new CipherView();
-          cipher.type = CipherType.Fido2Key;
-          cipher.name = params.rpEntity.name;
-          cipher.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
-          const encrypted = await this.cipherService.encrypt(cipher);
-          await this.cipherService.createWithServer(encrypted); // encrypted.id is assigned inside here
-          cipher.id = encrypted.id;
-          credentialId = cipher.fido2Key.credentialId;
-        } catch (error) {
-          this.logService?.error(
-            `[Fido2Authenticator] Aborting because of unknown error when creating discoverable credential: ${error}`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-        }
-      } else {
-        const response = await userInterfaceSession.confirmNewNonDiscoverableCredential(
-          {
-            credentialName: params.rpEntity.name,
-            userName: params.userEntity.displayName,
-            userVerification: params.requireUserVerification,
-          },
-          abortController
+      if (params.requireUserVerification && !userVerified) {
+        this.logService?.warning(
+          `[Fido2Authenticator] Aborting because user verification was unsuccessful.`
         );
-        const cipherId = response.cipherId;
-        userVerified = response.userVerified;
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
+      }
 
-        if (cipherId === undefined) {
-          this.logService?.warning(
-            `[Fido2Authenticator] Aborting because user confirmation was not recieved.`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-        }
+      try {
+        keyPair = await createKeyPair();
 
-        if (params.requireUserVerification && !userVerified) {
-          this.logService?.warning(
-            `[Fido2Authenticator] Aborting because user verification was unsuccessful.`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
-        }
-
-        try {
-          keyPair = await createKeyPair();
-
-          const encrypted = await this.cipherService.get(cipherId);
-          cipher = await encrypted.decrypt();
-          cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
-          const reencrypted = await this.cipherService.encrypt(cipher);
-          await this.cipherService.updateWithServer(reencrypted);
-          credentialId = cipher.login.fido2Key.credentialId;
-        } catch (error) {
-          this.logService?.error(
-            `[Fido2Authenticator] Aborting because of unknown error when creating non-discoverable credential: ${error}`
-          );
-          throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
-        }
+        const encrypted = await this.cipherService.get(cipherId);
+        cipher = await encrypted.decrypt();
+        cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
+        const reencrypted = await this.cipherService.encrypt(cipher);
+        await this.cipherService.updateWithServer(reencrypted);
+        credentialId = cipher.login.fido2Key.credentialId;
+      } catch (error) {
+        this.logService?.error(
+          `[Fido2Authenticator] Aborting because of unknown error when creating credential: ${error}`
+        );
+        throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.Unknown);
       }
 
       const authData = await generateAuthData({

@@ -84,7 +84,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should not request confirmation from user", async () => {
         userInterfaceSession.confirmNewCredential.mockResolvedValue({
-          confirmed: true,
+          cipherId: "75280e7e-a72e-4d6c-bf1e-d37238352f9b",
           userVerified: false,
         });
         const invalidParams = await createInvalidParams();
@@ -257,109 +257,6 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("creation of discoverable credential", () => {
-      let params: Fido2AuthenticatorMakeCredentialsParams;
-
-      beforeEach(async () => {
-        params = await createParams({ requireResidentKey: true });
-        cipherService.getAllDecrypted.mockResolvedValue([]);
-      });
-
-      /**
-       * Spec: Collect an authorization gesture confirming user consent for creating a new credential. The prompt for the authorization gesture is shown by the authenticator if it has its own output capability. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name and userEntity.displayName, if possible.
-       * If requireUserVerification is true, the authorization gesture MUST include user verification.
-       * Deviation: Only `rpEntity.name` and `userEntity.name` is shown.
-       * */
-      for (const userVerification of [true, false]) {
-        it(`should request confirmation from user when user verification is ${userVerification}`, async () => {
-          params.requireUserVerification = userVerification;
-          userInterfaceSession.confirmNewCredential.mockResolvedValue({
-            confirmed: true,
-            userVerified: userVerification,
-          });
-          cipherService.encrypt.mockResolvedValue({} as unknown as Cipher);
-          cipherService.createWithServer.mockImplementation(async (cipher) => {
-            cipher.id = Utils.newGuid();
-            return cipher;
-          });
-
-          await authenticator.makeCredential(params, new AbortController());
-
-          expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
-            {
-              credentialName: params.rpEntity.name,
-              userName: params.userEntity.displayName,
-              userVerification,
-            } as NewCredentialParams,
-            expect.anything()
-          );
-        });
-      }
-
-      it("should save credential to vault if request confirmed by user", async () => {
-        const encryptedCipher = {};
-        userInterfaceSession.confirmNewCredential.mockResolvedValue({
-          confirmed: true,
-          userVerified: false,
-        });
-        cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
-        cipherService.createWithServer.mockImplementation(async (cipher) => {
-          cipher.id = Utils.newGuid();
-          return cipher;
-        });
-
-        await authenticator.makeCredential(params);
-
-        const saved = cipherService.encrypt.mock.lastCall?.[0];
-        expect(saved).toEqual(
-          expect.objectContaining({
-            type: CipherType.Fido2Key,
-            name: params.rpEntity.name,
-
-            fido2Key: expect.objectContaining({
-              credentialId: expect.anything(),
-              keyType: "public-key",
-              keyAlgorithm: "ECDSA",
-              keyCurve: "P-256",
-              rpId: params.rpEntity.id,
-              rpName: params.rpEntity.name,
-              userHandle: Fido2Utils.bufferToString(params.userEntity.id),
-              counter: 0,
-              userDisplayName: params.userEntity.displayName,
-            }),
-          })
-        );
-        expect(cipherService.createWithServer).toHaveBeenCalledWith(encryptedCipher);
-      });
-
-      /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
-      it("should throw error if user denies creation request", async () => {
-        userInterfaceSession.confirmNewCredential.mockResolvedValue({
-          confirmed: false,
-          userVerified: false,
-        });
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
-      });
-
-      /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
-      it("should throw unkown error if creation fails", async () => {
-        const encryptedCipher = {};
-        userInterfaceSession.confirmNewCredential.mockResolvedValue({
-          confirmed: true,
-          userVerified: false,
-        });
-        cipherService.encrypt.mockResolvedValue(encryptedCipher as unknown as Cipher);
-        cipherService.createWithServer.mockRejectedValue(new Error("Internal error"));
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.Unknown);
-      });
-    });
-
-    describe("creation of non-discoverable credential", () => {
       let existingCipher: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -379,14 +276,14 @@ describe("FidoAuthenticatorService", () => {
       for (const userVerification of [true, false]) {
         it(`should request confirmation from user when user verification is ${userVerification}`, async () => {
           params.requireUserVerification = userVerification;
-          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+          userInterfaceSession.confirmNewCredential.mockResolvedValue({
             cipherId: existingCipher.id,
             userVerified: userVerification,
           });
 
           await authenticator.makeCredential(params, new AbortController());
 
-          expect(userInterfaceSession.confirmNewNonDiscoverableCredential).toHaveBeenCalledWith(
+          expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
             {
               credentialName: params.rpEntity.name,
               userName: params.userEntity.displayName,
@@ -399,7 +296,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should save credential to vault if request confirmed by user", async () => {
         const encryptedCipher = Symbol();
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
           cipherId: existingCipher.id,
           userVerified: false,
         });
@@ -433,7 +330,7 @@ describe("FidoAuthenticatorService", () => {
 
       /** Spec: If the user does not consent or if user verification fails, return an error code equivalent to "NotAllowedError" and terminate the operation. */
       it("should throw error if user denies creation request", async () => {
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
           cipherId: undefined,
           userVerified: false,
         });
@@ -447,7 +344,7 @@ describe("FidoAuthenticatorService", () => {
       /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
       it("should throw unkown error if creation fails", async () => {
         const encryptedCipher = Symbol();
-        userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
           cipherId: existingCipher.id,
           userVerified: false,
         });
@@ -460,86 +357,74 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
-    for (const requireResidentKey of [true, false]) {
-      describe(`attestation of new ${
-        requireResidentKey ? "discoverable" : "non-discoverable"
-      } credential`, () => {
-        const cipherId = "75280e7e-a72e-4d6c-bf1e-d37238352f9b";
-        const credentialId = "52217b91-73f1-4fea-b3f2-54a7959fd5aa";
-        const credentialIdBytes = new Uint8Array([
-          0x52, 0x21, 0x7b, 0x91, 0x73, 0xf1, 0x4f, 0xea, 0xb3, 0xf2, 0x54, 0xa7, 0x95, 0x9f, 0xd5,
-          0xaa,
-        ]);
-        let params: Fido2AuthenticatorMakeCredentialsParams;
+    describe(`attestation of new credential`, () => {
+      const cipherId = "75280e7e-a72e-4d6c-bf1e-d37238352f9b";
+      const credentialId = "52217b91-73f1-4fea-b3f2-54a7959fd5aa";
+      const credentialIdBytes = new Uint8Array([
+        0x52, 0x21, 0x7b, 0x91, 0x73, 0xf1, 0x4f, 0xea, 0xb3, 0xf2, 0x54, 0xa7, 0x95, 0x9f, 0xd5,
+        0xaa,
+      ]);
+      let params: Fido2AuthenticatorMakeCredentialsParams;
 
-        beforeEach(async () => {
-          const cipher = createCipherView({ id: cipherId, type: CipherType.Login });
-          params = await createParams({ requireResidentKey });
-          userInterfaceSession.confirmNewNonDiscoverableCredential.mockResolvedValue({
-            cipherId,
-            userVerified: false,
-          });
-          userInterfaceSession.confirmNewCredential.mockResolvedValue({
-            confirmed: true,
-            userVerified: false,
-          });
-          cipherService.get.mockImplementation(async (cipherId) =>
-            cipherId === cipher.id ? ({ decrypt: () => cipher } as any) : undefined
-          );
-          cipherService.getAllDecrypted.mockResolvedValue([await cipher]);
-          cipherService.encrypt.mockImplementation(async (cipher) => {
-            if (!requireResidentKey) {
-              cipher.login.fido2Key.credentialId = credentialId; // Replace id for testability
-            } else {
-              cipher.fido2Key.credentialId = credentialId;
-            }
-            return {} as any;
-          });
-          cipherService.createWithServer.mockImplementation(async (cipher) => {
-            cipher.id = cipherId;
-            return cipher;
-          });
-          cipherService.updateWithServer.mockImplementation(async (cipher) => {
-            cipher.id = cipherId;
-            return cipher;
-          });
+      beforeEach(async () => {
+        const cipher = createCipherView({ id: cipherId, type: CipherType.Login });
+        params = await createParams();
+        userInterfaceSession.confirmNewCredential.mockResolvedValue({
+          cipherId,
+          userVerified: false,
         });
-
-        it("should return attestation object", async () => {
-          const result = await authenticator.makeCredential(params);
-
-          const attestationObject = CBOR.decode(
-            Fido2Utils.bufferSourceToUint8Array(result.attestationObject).buffer
-          );
-
-          const encAuthData: Uint8Array = attestationObject.authData;
-          const rpIdHash = encAuthData.slice(0, 32);
-          const flags = encAuthData.slice(32, 33);
-          const counter = encAuthData.slice(33, 37);
-          const aaguid = encAuthData.slice(37, 53);
-          const credentialIdLength = encAuthData.slice(53, 55);
-          const credentialId = encAuthData.slice(55, 71);
-          // Unsure how to test public key
-          // const publicKey = encAuthData.slice(87);
-
-          expect(encAuthData.length).toBe(71 + 77);
-          expect(attestationObject.fmt).toBe("none");
-          expect(attestationObject.attStmt).toEqual({});
-          expect(rpIdHash).toEqual(
-            new Uint8Array([
-              0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
-              0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
-              0xd0, 0x5c, 0x3d, 0xc3,
-            ])
-          );
-          expect(flags).toEqual(new Uint8Array([0b01000001])); // UP = true, AD = true
-          expect(counter).toEqual(new Uint8Array([0, 0, 0, 0])); // 0 because of new counter
-          expect(aaguid).toEqual(AAGUID);
-          expect(credentialIdLength).toEqual(new Uint8Array([0, 16])); // 16 bytes because we're using GUIDs
-          expect(credentialId).toEqual(credentialIdBytes);
+        cipherService.get.mockImplementation(async (cipherId) =>
+          cipherId === cipher.id ? ({ decrypt: () => cipher } as any) : undefined
+        );
+        cipherService.getAllDecrypted.mockResolvedValue([await cipher]);
+        cipherService.encrypt.mockImplementation(async (cipher) => {
+          cipher.login.fido2Key.credentialId = credentialId; // Replace id for testability
+          return {} as any;
+        });
+        cipherService.createWithServer.mockImplementation(async (cipher) => {
+          cipher.id = cipherId;
+          return cipher;
+        });
+        cipherService.updateWithServer.mockImplementation(async (cipher) => {
+          cipher.id = cipherId;
+          return cipher;
         });
       });
-    }
+
+      it("should return attestation object", async () => {
+        const result = await authenticator.makeCredential(params);
+
+        const attestationObject = CBOR.decode(
+          Fido2Utils.bufferSourceToUint8Array(result.attestationObject).buffer
+        );
+
+        const encAuthData: Uint8Array = attestationObject.authData;
+        const rpIdHash = encAuthData.slice(0, 32);
+        const flags = encAuthData.slice(32, 33);
+        const counter = encAuthData.slice(33, 37);
+        const aaguid = encAuthData.slice(37, 53);
+        const credentialIdLength = encAuthData.slice(53, 55);
+        const credentialId = encAuthData.slice(55, 71);
+        // Unsure how to test public key
+        // const publicKey = encAuthData.slice(87);
+
+        expect(encAuthData.length).toBe(71 + 77);
+        expect(attestationObject.fmt).toBe("none");
+        expect(attestationObject.attStmt).toEqual({});
+        expect(rpIdHash).toEqual(
+          new Uint8Array([
+            0x22, 0x6b, 0xb3, 0x92, 0x02, 0xff, 0xf9, 0x22, 0xdc, 0x74, 0x05, 0xcd, 0x28, 0xa8,
+            0x34, 0x5a, 0xc4, 0xf2, 0x64, 0x51, 0xd7, 0x3d, 0x0b, 0x40, 0xef, 0xf3, 0x1d, 0xc1,
+            0xd0, 0x5c, 0x3d, 0xc3,
+          ])
+        );
+        expect(flags).toEqual(new Uint8Array([0b01000001])); // UP = true, AD = true
+        expect(counter).toEqual(new Uint8Array([0, 0, 0, 0])); // 0 because of new counter
+        expect(aaguid).toEqual(AAGUID);
+        expect(credentialIdLength).toEqual(new Uint8Array([0, 16])); // 16 bytes because we're using GUIDs
+        expect(credentialId).toEqual(credentialIdBytes);
+      });
+    });
 
     async function createParams(
       params: Partial<Fido2AuthenticatorMakeCredentialsParams> = {}
