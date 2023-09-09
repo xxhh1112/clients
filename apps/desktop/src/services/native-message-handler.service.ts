@@ -91,11 +91,11 @@ export class NativeMessageHandlerService {
       // Ask for confirmation from user
       this.messagingService.send("setFocus");
 
-      const submitted = await firstValueFrom(
+      const nativeMessagingVerified = await firstValueFrom(
         VerifyNativeMessagingDialogComponent.open(this.dialogService, { applicationName }).closed
       );
 
-      if (submitted !== true) {
+      if (nativeMessagingVerified !== true) {
         this.sendResponse({
           messageId: messageId,
           version: NativeMessagingVersion.Latest,
