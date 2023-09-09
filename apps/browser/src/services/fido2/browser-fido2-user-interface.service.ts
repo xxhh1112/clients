@@ -65,17 +65,6 @@ export type BrowserFido2Message = { sessionId: string } & (
     }
   | {
       type: "ConfirmNewCredentialResponse";
-      userVerified: boolean;
-    }
-  | {
-      type: "ConfirmNewNonDiscoverableCredentialRequest";
-      credentialName: string;
-      userName: string;
-      userVerification: boolean;
-      fallbackSupported: boolean;
-    }
-  | {
-      type: "ConfirmNewNonDiscoverableCredentialResponse";
       cipherId: string;
       userVerified: boolean;
     }
@@ -225,7 +214,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     credentialName,
     userName,
     userVerification,
-  }: NewCredentialParams): Promise<{ confirmed: boolean; userVerified: boolean }> {
+  }: NewCredentialParams): Promise<{ cipherId: string; userVerified: boolean }> {
     const data: BrowserFido2Message = {
       type: "ConfirmNewCredentialRequest",
       sessionId: this.sessionId,
@@ -237,26 +226,6 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
 
     await this.send(data);
     const response = await this.receive("ConfirmNewCredentialResponse");
-
-    return { confirmed: true, userVerified: response.userVerified };
-  }
-
-  async confirmNewNonDiscoverableCredential({
-    credentialName,
-    userName,
-    userVerification,
-  }: NewCredentialParams): Promise<{ cipherId: string; userVerified: boolean }> {
-    const data: BrowserFido2Message = {
-      type: "ConfirmNewNonDiscoverableCredentialRequest",
-      sessionId: this.sessionId,
-      credentialName,
-      userName,
-      userVerification,
-      fallbackSupported: this.fallbackSupported,
-    };
-
-    await this.send(data);
-    const response = await this.receive("ConfirmNewNonDiscoverableCredentialResponse");
 
     return { cipherId: response.cipherId, userVerified: response.userVerified };
   }

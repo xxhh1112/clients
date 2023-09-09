@@ -16,7 +16,6 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { Fido2KeyView } from "@bitwarden/common/vault/models/view/fido2-key.view";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import {
@@ -86,22 +85,15 @@ export class Fido2Component implements OnInit, OnDestroy {
       filter((message) => message != undefined),
       concatMap(async (message) => {
         if (message.type === "ConfirmNewCredentialRequest") {
-          const cipher = new CipherView();
-          cipher.name = message.credentialName;
-          cipher.type = CipherType.Fido2Key;
-          cipher.fido2Key = new Fido2KeyView();
-          cipher.fido2Key.userDisplayName = message.userName;
-          this.ciphers = [cipher];
+          this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
+            (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
+          );
         } else if (message.type === "PickCredentialRequest") {
           this.ciphers = await Promise.all(
             message.cipherIds.map(async (cipherId) => {
               const cipher = await this.cipherService.get(cipherId);
               return cipher.decrypt();
             })
-          );
-        } else if (message.type === "ConfirmNewNonDiscoverableCredentialRequest") {
-          this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
-            (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
           );
         } else if (message.type === "InformExcludedCredentialRequest") {
           this.ciphers = await Promise.all(
@@ -147,7 +139,7 @@ export class Fido2Component implements OnInit, OnDestroy {
         type: "PickCredentialResponse",
         userVerified,
       });
-    } else if (data?.type === "ConfirmNewNonDiscoverableCredentialRequest") {
+    } else if (data?.type === "ConfirmNewCredentialRequest") {
       let userVerified = false;
       if (data.userVerification) {
         userVerified = await this.passwordRepromptService.showPasswordPrompt();
@@ -156,7 +148,7 @@ export class Fido2Component implements OnInit, OnDestroy {
       this.send({
         sessionId: this.sessionId,
         cipherId: cipher.id,
-        type: "ConfirmNewNonDiscoverableCredentialResponse",
+        type: "ConfirmNewCredentialResponse",
         userVerified,
       });
     }
@@ -166,25 +158,6 @@ export class Fido2Component implements OnInit, OnDestroy {
 
   selectedPasskey(item: CipherView) {
     this.selectedItem = item;
-  }
-
-  async confirm() {
-    const data = this.message$.value;
-    if (data.type !== "ConfirmNewCredentialRequest") {
-      return;
-    }
-
-    let userVerified = false;
-    if (data.userVerification) {
-      userVerified = await this.passwordRepromptService.showPasswordPrompt();
-    }
-
-    this.send({
-      sessionId: this.sessionId,
-      type: "ConfirmNewCredentialResponse",
-      userVerified,
-    });
-    this.loading = true;
   }
 
   viewPasskey() {

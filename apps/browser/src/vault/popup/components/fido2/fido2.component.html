@@ -9,7 +9,7 @@
       <ng-container
         *ngIf="
           data.message.type == 'PickCredentialRequest' ||
-          data.message.type == 'ConfirmNewNonDiscoverableCredentialRequest'
+          data.message.type == 'ConfirmNewCredentialRequest'
         "
       >
         <div class="auth-flow">
@@ -29,20 +29,6 @@
               <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
             </button>
           </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
-        <div class="auth-flow">
-          <p class="subtitle">{{ "SavePasskeyInBitwarden" | i18n }}</p>
-          <div class="box list">
-            <div class="box-content">
-              <app-fido2-cipher-row [cipher]="ciphers[0]"></app-fido2-cipher-row>
-            </div>
-          </div>
-          <button type="button" class="btn primary block" (click)="confirm()">
-            <span [hidden]="loading">{{ "savePasskey" | i18n }}</span>
-            <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
-          </button>
         </div>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
