@@ -31,7 +31,7 @@ describe("FidoAuthenticatorService", () => {
     authenticator = mock<Fido2AuthenticatorService>();
     configService = mock<ConfigServiceAbstraction>();
     client = new Fido2ClientService(authenticator, configService);
-    configService.getFeatureFlagBool.mockResolvedValue(true);
+    configService.getFeatureFlag.mockResolvedValue(true);
     tab = { id: 123, windowId: 456 };
   });
 
@@ -209,7 +209,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
         const params = createParams();
-        configService.getFeatureFlagBool.mockResolvedValue(false);
+        configService.getFeatureFlag.mockResolvedValue(false);
 
         const result = async () => await client.createCredential(params, tab);
 
@@ -356,7 +356,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
         const params = createParams();
-        configService.getFeatureFlagBool.mockResolvedValue(false);
+        configService.getFeatureFlag.mockResolvedValue(false);
 
         const result = async () => await client.assertCredential(params, tab);
 
@@ -369,7 +369,7 @@ describe("FidoAuthenticatorService", () => {
         const params = createParams();
         params.sameOriginWithAncestors = false; // Simulating the falsey value
 
-        const result = async () => await client.assertCredential(params);
+        const result = async () => await client.assertCredential(params, tab);
 
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "NotAllowedError" });
