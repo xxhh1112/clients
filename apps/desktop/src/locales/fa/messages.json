@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "خود میزبان"
   },
   "accessDenied": {
     "message": "دسترسی رد شد. شما اجازه مشاهده این صفحه را ندارید."

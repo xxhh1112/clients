@@ -525,7 +525,7 @@ export class CipherService implements CipherServiceAbstraction {
 
   async createWithServer(cipher: Cipher, orgAdmin?: boolean): Promise<any> {
     let response: CipherResponse;
-    if (orgAdmin && cipher.organizationId != null) {
+    if (orgAdmin) {
       const request = new CipherCreateRequest(cipher);
       response = await this.apiService.postCipherAdmin(request);
     } else if (cipher.collectionIds != null) {

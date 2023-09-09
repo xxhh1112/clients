@@ -339,7 +339,7 @@
     "message": "Άλλες"
   },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
-    "message": "Ρυθμίστε μια μέθοδο ξεκλειδώματος για να αλλάξετε την ενέργεια χρονικού ορίου θησαυ/κιου."
+    "message": "Set up an unlock method to change your vault timeout action."
   },
   "rateExtension": {
     "message": "Βαθμολογήστε την επέκταση"
@@ -796,7 +796,7 @@
     "message": "1 GB κρυπτογραφημένο αποθηκευτικό χώρο για συνημμένα αρχεία."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Πρόσθετες επιλογές σύνδεσης δύο βημάτων, όπως το YubiKey και το Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Ασφάλεια κωδικών, υγεία λογαριασμού και αναφορές παραβίασης δεδομένων για να διατηρήσετε ασφαλές το vault σας."
@@ -1438,7 +1438,7 @@
     "message": "Αναζήτηση Κάδου"
   },
   "permanentlyDeleteItem": {
-    "message": "Οριστική διαγραφή αντικειμένου"
+    "message": "Μόνιμη Διαγραφή Αντικειμένου"
   },
   "permanentlyDeleteItemConfirmation": {
     "message": "Είστε βέβαιοι ότι θέλετε να διαγράψετε μόνιμα αυτό το στοιχείο;"
@@ -1471,13 +1471,13 @@
     "message": "Προειδοποίηση: Αυτή είναι μια μη ασφαλή σελίδα HTTP και οποιαδήποτε πληροφορία υποβάλλετε μπορεί να γίνει ορατή και επεμβάσιμη από άλλους. Αυτή η σύνδεση αποθηκεύτηκε αρχικά σε μια ασφαλή (HTTPS) σελίδα."
   },
   "insecurePageWarningFillPrompt": {
-    "message": "Θέλετε ακόμα να συμπληρώσετε αυτή τη σύνδεση;"
+    "message": "Do you still wish to fill this login?"
   },
   "autofillIframeWarning": {
     "message": "Η φόρμα φιλοξενείται από διαφορετικό τομέα (domain) από το λινκ (uri) της αποθηκευμένης σύνδεσης σας (login). Επιλέξτε OK για αυτόματη συμπλήρωση, ή Ακύρωση για να σταματήσετε."
   },
   "autofillIframeWarningTip": {
-    "message": "Για να αποτρέψετε αυτή την προειδοποίηση στο μέλλον, αποθηκεύστε αυτό το URI, $HOSTNAME$, στο στοιχείο σύνδεσης Bitwarden σας για αυτόν τον ιστότοπο.",
+    "message": "To prevent this warning in the future, save this URI, $HOSTNAME$, to your Bitwarden login item for this site.",
     "placeholders": {
       "hostname": {
         "content": "$1",
@@ -1486,13 +1486,13 @@
     }
   },
   "setMasterPassword": {
-    "message": "Καθορισμός κύριου κωδικού"
+    "message": "Ορισμός Κύριου Κωδικού"
   },
   "currentMasterPass": {
     "message": "Τρέχων Κύριος Κωδικός"
   },
   "newMasterPass": {
-    "message": "Νέος κύριος κωδικός"
+    "message": "Νέος Κύριος Κωδικός"
   },
   "confirmNewMasterPass": {
     "message": "Επιβεβαίωση Νέου Κύριου Κωδικού"
@@ -1606,10 +1606,10 @@
     "message": "Τα βιομετρικά στοιχεία του προγράμματος περιήγησης δεν υποστηρίζονται σε αυτήν τη συσκευή."
   },
   "biometricsFailedTitle": {
-    "message": "Ο βιομετρικός έλεγχος απέτυχε"
+    "message": "Biometrics failed"
   },
   "biometricsFailedDesc": {
-    "message": "Τα βιομετρικά δεν μπόρεσαν να ολοκληρωθούν, σκεφτείτε να χρησιμοποιήσετε έναν κύριο κωδικό πρόσβασης ή να αποσυνδεθείτε. Αν αυτό εξακολουθεί να συμβαίνει, παρακαλώ επικοινωνήστε με την υποστήριξη της Bitwarden."
+    "message": "Biometrics cannot be completed, consider using a master password or logging out. If this persists, please contact Bitwarden support."
   },
   "nativeMessaginPermissionErrorTitle": {
     "message": "Δεν Έχει Χορηγηθεί Άδεια"
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Έκδοση διακομιστή"
   },
-  "selfHostedServer": {
-    "message": "αυτο-φιλοξενούμενο"
+  "selfHosted": {
+    "message": "Αυτο-φιλοξενείται"
   },
   "thirdParty": {
     "message": "Τρίτο μέρος"
@@ -2153,7 +2153,7 @@
     "message": "Μια ειδοποίηση έχει σταλεί στη συσκευή σας."
   },
   "loginInitiated": {
-    "message": "Η σύνδεση ξεκίνησε"
+    "message": "Login initiated"
   },
   "exposedMasterPassword": {
     "message": "Εκτεθειμένος Κύριος Κωδικός Πρόσβασης"
@@ -2240,28 +2240,28 @@
     "message": "Ανοίγει σε νέο παράθυρο"
   },
   "deviceApprovalRequired": {
-    "message": "Απαιτείται έγκριση συσκευής. Επιλέξτε μια επιλογή έγκρισης παρακάτω:"
+    "message": "Device approval required. Select an approval option below:"
   },
   "rememberThisDevice": {
-    "message": "Απομνημόνευση αυτής της συσκευής"
+    "message": "Remember this device"
   },
   "uncheckIfPublicDevice": {
-    "message": "Αποεπιλέξτε αν γίνεται χρήση δημόσιας συσκευής"
+    "message": "Uncheck if using a public device"
   },
   "approveFromYourOtherDevice": {
-    "message": "Έγκριση από άλλη συσκευή σας"
+    "message": "Approve from your other device"
   },
   "requestAdminApproval": {
-    "message": "Αίτηση έγκρισης διαχειριστή"
+    "message": "Request admin approval"
   },
   "approveWithMasterPassword": {
-    "message": "Έγκριση με τον κύριο κωδικό"
+    "message": "Approve with master password"
   },
   "ssoIdentifierRequired": {
-    "message": "Απαιτείται αναγνωριστικό οργανισμού SSO."
+    "message": "Organization SSO identifier is required."
   },
   "eu": {
-    "message": "ΕΕ",
+    "message": "EU",
     "description": "European Union"
   },
   "usDomain": {
@@ -2274,46 +2274,46 @@
     "message": "Δεν επιτρέπεται η πρόσβαση. Δεν έχετε άδεια για να δείτε αυτή τη σελίδα."
   },
   "general": {
-    "message": "Γενικά"
+    "message": "General"
   },
   "display": {
-    "message": "Εμφάνιση"
+    "message": "Display"
   },
   "accountSuccessfullyCreated": {
-    "message": "Επιτυχής δημιουργία λογαριασμού!"
+    "message": "Account successfully created!"
   },
   "adminApprovalRequested": {
-    "message": "Ζητήθηκε έγκριση διαχειριστή"
+    "message": "Admin approval requested"
   },
   "adminApprovalRequestSentToAdmins": {
-    "message": "Το αίτημά σας εστάλη στον διαχειριστή σας."
+    "message": "Your request has been sent to your admin."
   },
   "youWillBeNotifiedOnceApproved": {
-    "message": "Θα ειδοποιηθείτε μόλις εγκριθεί."
+    "message": "You will be notified once approved."
   },
   "troubleLoggingIn": {
-    "message": "Δεν μπορείτε να συνδεθείτε;"
+    "message": "Trouble logging in?"
   },
   "loginApproved": {
-    "message": "Η σύνδεση εγκρίθηκε"
+    "message": "Login approved"
   },
   "userEmailMissing": {
-    "message": "Το email του χρήστη απουσιάζει"
+    "message": "User email missing"
   },
   "deviceTrusted": {
-    "message": "Αξιόπιστη συσκευή"
+    "message": "Device trusted"
   },
   "inputRequired": {
-    "message": "Απαιτείται εισαγωγή."
+    "message": "Input is required."
   },
   "required": {
-    "message": "απαιτείται"
+    "message": "required"
   },
   "search": {
-    "message": "Αναζήτηση"
+    "message": "Search"
   },
   "inputMinLength": {
-    "message": "Η καταχώρηση πρέπει να είναι τουλάχιστον $COUNT$ χαρακτήρες.",
+    "message": "Input must be at least $COUNT$ characters long.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2322,7 +2322,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Η καταχώρηση δεν πρέπει να υπερβαίνει τους $COUNT$ χαρακτήρες σε μήκος.",
+    "message": "Input must not exceed $COUNT$ characters in length.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2331,7 +2331,7 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "Οι ακόλουθοι χαρακτήρες δεν επιτρέπονται: $CHARACTERS$",
+    "message": "The following characters are not allowed: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
@@ -2340,7 +2340,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Η τιμή καταχώρησης πρέπει να είναι τουλάχιστον $MIN$",
+    "message": "Input value must be at least $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -2349,7 +2349,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Η τιμή καταχώρησης δεν πρέπει να υπερβαίνει το $MAX$.",
+    "message": "Input value must not exceed $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -2358,17 +2358,17 @@
     }
   },
   "multipleInputEmails": {
-    "message": "1 ή περισσότερα email δεν είναι έγκυρα"
+    "message": "1 or more emails are invalid"
   },
   "inputTrimValidator": {
-    "message": "Η καταχώρηση δεν πρέπει να περιέχει μόνο κενά.",
+    "message": "Input must not contain only whitespace.",
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "inputEmail": {
-    "message": "Η καταχώρηση δεν είναι διεύθυνση email."
+    "message": "Input is not an email address."
   },
   "fieldsNeedAttention": {
-    "message": "$COUNT$ Το/α παραπάνω πεδίo/α χρειάζονται την προσοχή σας.",
+    "message": "$COUNT$ field(s) above need your attention.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2377,22 +2377,22 @@
     }
   },
   "selectPlaceholder": {
-    "message": "-- Επιλογή --"
+    "message": "-- Select --"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Πληκτρολογήστε για φιλτράρισμα --"
+    "message": "-- Type to filter --"
   },
   "multiSelectLoading": {
-    "message": "Ανάκτηση επιλογών..."
+    "message": "Retrieving options..."
   },
   "multiSelectNotFound": {
-    "message": "Δεν βρέθηκαν αντικείμενα"
+    "message": "No items found"
   },
   "multiSelectClearAll": {
-    "message": "Εκκαθάριση όλων"
+    "message": "Clear all"
   },
   "plusNMore": {
-    "message": "+ $QUANTITY$ περισσότερα",
+    "message": "+ $QUANTITY$ more",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2401,10 +2401,10 @@
     }
   },
   "submenu": {
-    "message": "Υπομενού"
+    "message": "Submenu"
   },
   "toggleCollapse": {
-    "message": "Εναλλαγή σύμπτυξης",
+    "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
   }
 }

@@ -796,7 +796,7 @@
     "message": "1 Gt salattua tallennustilaa tiedostoliitteille."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Omisteiset kaksivaiheisen kirjautumisen vaihtoehdot, kuten YubiKey ja Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Salasanahygienian, tilin terveyden ja tietovuotojen raportointitoiminnot pitävät holvisi turvassa."
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Palvelimen versio"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Itse ylläpidetty"
   },
   "thirdParty": {
     "message": "Ulkopuolinen taho"
@@ -2246,7 +2246,7 @@
     "message": "Muista tämä laite"
   },
   "uncheckIfPublicDevice": {
-    "message": "Poista valinta julkisilla laitteilla"
+    "message": "Poista käytöstä julkisilla laitteilla"
   },
   "approveFromYourOtherDevice": {
     "message": "Hyväksy muilta laitteiltasi"
@@ -2286,7 +2286,7 @@
     "message": "Hyväksyntää pyydetty ylläpidolta"
   },
   "adminApprovalRequestSentToAdmins": {
-    "message": "Pyyntösi on välitetty ylläpidollesi."
+    "message": "Pyyntösi on välitetty ylläpidolle."
   },
   "youWillBeNotifiedOnceApproved": {
     "message": "Saat ilmoituksen kun se on hyväksytty."

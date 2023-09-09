@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Версія сервера"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Уласнае размяшчэнне"
   },
   "thirdParty": {
     "message": "Іншы пастаўшчык"

@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Serverversion"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Lokalt installerad"
   },
   "thirdParty": {
     "message": "Tredje part"

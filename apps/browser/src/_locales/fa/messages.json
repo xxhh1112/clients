@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "نسخه سرور"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "خود میزبان"
   },
   "thirdParty": {
     "message": "شخص ثالث"

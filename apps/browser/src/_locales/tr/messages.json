@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Sunucu sürümü"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Barındırılan"
   },
   "thirdParty": {
     "message": "Üçüncü taraf"

@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Serveri versioon"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Enda majutatud"
   },
   "thirdParty": {
     "message": "Kolmanda osapoole"

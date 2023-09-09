@@ -1078,7 +1078,7 @@
     "message": "1 GB titkosított fájlmelléklet tárhely."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Saját kétlépcsős bejelentkezési lehetőségek mint a YubiKey és a Duo."
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpReports": {
     "message": "Jelszó higiénia, felhasználói fiók biztonsága, és adatszivárgási jelentések a széf biztonsága érdekében."
@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Saját kiszolgáló"
   },
   "accessDenied": {
     "message": "A hozzáférés megtagadásra került. Nincs jogosultság az oldal megtekintésére."

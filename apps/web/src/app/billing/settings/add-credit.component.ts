@@ -7,7 +7,6 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -80,7 +79,7 @@ export class AddCreditComponent implements OnInit {
       this.email = this.subject;
       this.ppButtonCustomField = "user_id:" + this.userId;
     }
-    this.region = await firstValueFrom(this.configService.cloudRegion$);
+    this.region = await this.configService.getCloudRegion();
     this.ppButtonCustomField += ",account_credit:1";
     this.ppButtonCustomField += `,region:${this.region}`;
     this.returnUrl = window.location.href;

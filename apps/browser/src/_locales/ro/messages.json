@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Versiune server"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Autogăzduit"
   },
   "thirdParty": {
     "message": "Parte terță"

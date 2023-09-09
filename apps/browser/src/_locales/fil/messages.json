@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Bersyon ng server"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Auto-hosted"
   },
   "thirdParty": {
     "message": "Ika-tatlong-partido"

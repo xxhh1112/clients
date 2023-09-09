@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import {
   OrganizationUserAcceptInitRequest,
@@ -44,8 +43,7 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     private logService: LogService,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
-    private messagingService: MessagingService,
-    private apiService: ApiService
+    private messagingService: MessagingService
   ) {
     super(router, platformUtilsService, i18nService, route, stateService);
   }
@@ -69,7 +67,6 @@ export class AcceptOrganizationComponent extends BaseAcceptComponent {
     }
 
     await this.actionPromise;
-    await this.apiService.refreshIdentityToken();
     await this.stateService.setOrganizationInvitation(null);
     this.platformUtilService.showToast(
       "success",

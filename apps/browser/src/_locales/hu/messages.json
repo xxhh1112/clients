@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Szerver verzió"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "Saját kiszolgáló"
   },
   "thirdParty": {
     "message": "Harmadik fél"

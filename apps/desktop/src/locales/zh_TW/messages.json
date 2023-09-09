@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHostedServer": {
-    "message": "self-hosted"
+  "selfHosted": {
+    "message": "自建"
   },
   "accessDenied": {
     "message": "拒絕存取。您沒有檢視此頁面的權限。"

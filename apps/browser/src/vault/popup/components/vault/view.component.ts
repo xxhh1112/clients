@@ -179,7 +179,7 @@ export class ViewComponent extends BaseViewComponent {
         await this.copy(this.cipher.login.password, "password", "Password");
         break;
       case COPY_VERIFICATIONCODE_ID:
-        await this.copy(this.totpCode, "verificationCodeTotp", "TOTP");
+        await this.copy(this.cipher.login.totp, "verificationCodeTotp", "TOTP");
         break;
       default:
         break;
@@ -302,8 +302,11 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   close() {
-    if (this.inPopout && this.senderTabId) {
+    if (this.senderTabId) {
       BrowserApi.focusTab(this.senderTabId);
+    }
+
+    if (this.inPopout) {
       window.close();
       return;
     }

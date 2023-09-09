@@ -376,7 +376,7 @@ describe("TwoFactorComponent", () => {
 
       describe("Trusted Device Encryption scenarios", () => {
         beforeEach(() => {
-          mockConfigService.getFeatureFlag.mockResolvedValue(true);
+          mockConfigService.getFeatureFlagBool.mockResolvedValue(true);
         });
 
         describe("Given Trusted Device Encryption is enabled and user needs to set a master password", () => {
