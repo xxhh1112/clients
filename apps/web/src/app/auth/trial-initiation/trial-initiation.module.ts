@@ -6,9 +6,10 @@ import { FormFieldModule } from "@bitwarden/components";
 
 import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
 import { RegisterFormModule } from "../../auth/register-form/register-form.module";
+import { PaymentComponent, TaxInfoComponent } from "../../billing";
 import { BillingComponent } from "../../billing/accounts/trial-initiation/billing.component";
-import { BillingSharedModule } from "../../billing/shared";
 import { EnvironmentSelectorModule } from "../../components/environment-selector/environment-selector.module";
+import { SharedModule } from "../../shared";
 
 import { ConfirmationDetailsComponent } from "./confirmation-details.component";
 import { AbmEnterpriseContentComponent } from "./content/abm-enterprise-content.component";
@@ -31,13 +32,15 @@ import { VerticalStepperModule } from "./vertical-stepper/vertical-stepper.modul
 
 @NgModule({
   imports: [
+    SharedModule,
     CdkStepperModule,
     VerticalStepperModule,
     FormFieldModule,
     RegisterFormModule,
     OrganizationCreateModule,
     EnvironmentSelectorModule,
-    BillingSharedModule,
+    PaymentComponent,
+    TaxInfoComponent,
   ],
   declarations: [
     TrialInitiationComponent,

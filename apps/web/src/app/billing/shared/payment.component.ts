@@ -6,9 +6,13 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PaymentMethodType } from "@bitwarden/common/billing/enums";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 
+import { BillingSharedModule } from "./billing-shared.module";
+
 @Component({
   selector: "app-payment",
   templateUrl: "payment.component.html",
+  standalone: true,
+  imports: [BillingSharedModule],
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   @Input() showMethods = true;

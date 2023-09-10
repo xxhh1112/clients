@@ -15,7 +15,8 @@ import { ValidationService } from "@bitwarden/common/platform/abstractions/valid
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
-import { BillingSharedModule, OrganizationPlansComponent } from "../../../billing/shared";
+import { OrganizationPlansComponent } from "../../../billing";
+import { SharedModule } from "../../../shared";
 import {
   DeleteOrganizationDialogResult,
   openDeleteOrganizationDialog,
@@ -24,7 +25,7 @@ import {
 @Component({
   templateUrl: "families-for-enterprise-setup.component.html",
   standalone: true,
-  imports: [BillingSharedModule],
+  imports: [SharedModule, OrganizationPlansComponent],
 })
 export class FamiliesForEnterpriseSetupComponent implements OnInit, OnDestroy {
   @ViewChild(OrganizationPlansComponent, { static: false })
