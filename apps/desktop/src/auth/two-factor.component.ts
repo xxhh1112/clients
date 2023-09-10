@@ -15,6 +15,7 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { TwoFactorOptionsComponent } from "./two-factor-options.component";
@@ -44,6 +45,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
+    stateService: StateService,
     configService: ConfigServiceAbstraction,
     @Inject(WINDOW) protected win: Window
   ) {
@@ -60,6 +62,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       twoFactorService,
       appIdService,
       loginService,
+      stateService,
       configService
     );
     super.onSuccessfulLogin = async () => {
