@@ -27,7 +27,6 @@ import {
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
 
 @Component({
-  selector: "app-org-subscription-cloud",
   templateUrl: "organization-subscription-cloud.component.html",
 })
 export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy {

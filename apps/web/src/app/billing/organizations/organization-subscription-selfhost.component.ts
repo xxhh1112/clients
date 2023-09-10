@@ -25,7 +25,6 @@ enum LicenseOptions {
 }
 
 @Component({
-  selector: "app-org-subscription-selfhost",
   templateUrl: "organization-subscription-selfhost.component.html",
 })
 export class OrganizationSubscriptionSelfhostComponent implements OnInit, OnDestroy {
