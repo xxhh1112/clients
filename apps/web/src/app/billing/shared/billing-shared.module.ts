@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 
-import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
 import { SharedModule } from "../../shared";
 
 import { AddCreditComponent } from "./add-credit.component";
@@ -14,7 +13,7 @@ import { TaxInfoComponent } from "./tax-info.component";
 import { UpdateLicenseComponent } from "./update-license.component";
 
 @NgModule({
-  imports: [OrganizationCreateModule, SharedModule, PaymentComponent, TaxInfoComponent],
+  imports: [SharedModule, PaymentComponent, TaxInfoComponent],
   declarations: [
     AddCreditComponent,
     AdjustPaymentComponent,
@@ -25,7 +24,6 @@ import { UpdateLicenseComponent } from "./update-license.component";
     UpdateLicenseComponent,
   ],
   exports: [
-    OrganizationCreateModule,
     SharedModule,
     PaymentComponent,
     TaxInfoComponent,
