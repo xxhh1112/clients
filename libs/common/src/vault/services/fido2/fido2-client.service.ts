@@ -35,7 +35,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
   ) {}
 
   async isFido2FeatureEnabled(): Promise<boolean> {
-    return await this.configService.getFeatureFlagBool(FeatureFlag.Fido2VaultCredentials);
+    return await this.configService.getFeatureFlag<boolean>(FeatureFlag.Fido2VaultCredentials);
   }
 
   async createCredential(

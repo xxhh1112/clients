@@ -30,7 +30,7 @@ describe("FidoAuthenticatorService", () => {
     authenticator = mock<Fido2AuthenticatorService>();
     configService = mock<ConfigServiceAbstraction>();
     client = new Fido2ClientService(authenticator, configService);
-    configService.getFeatureFlagBool.mockResolvedValue(true);
+    configService.getFeatureFlag.mockResolvedValue(true);
   });
 
   describe("createCredential", () => {
@@ -197,7 +197,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
         const params = createParams();
-        configService.getFeatureFlagBool.mockResolvedValue(false);
+        configService.getFeatureFlag.mockResolvedValue(false);
 
         const result = async () => await client.createCredential(params);
 
@@ -335,7 +335,7 @@ describe("FidoAuthenticatorService", () => {
 
       it("should throw FallbackRequestedError if feature flag is not enabled", async () => {
         const params = createParams();
-        configService.getFeatureFlagBool.mockResolvedValue(false);
+        configService.getFeatureFlag.mockResolvedValue(false);
 
         const result = async () => await client.assertCredential(params);
 
