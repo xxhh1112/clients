@@ -9,7 +9,7 @@ import { TaxInfoResponse } from "@bitwarden/common/billing/models/response/tax-i
 import { TaxRateResponse } from "@bitwarden/common/billing/models/response/tax-rate.response";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 
-import { BillingSharedModule } from "./billing-shared.module";
+import { SharedModule } from "../../shared";
 
 type TaxInfoView = Omit<TaxInfoResponse, "taxIdType"> & {
   includeTaxId: boolean;
@@ -20,7 +20,7 @@ type TaxInfoView = Omit<TaxInfoResponse, "taxIdType"> & {
   selector: "app-tax-info",
   templateUrl: "tax-info.component.html",
   standalone: true,
-  imports: [BillingSharedModule],
+  imports: [SharedModule],
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TaxInfoComponent {
