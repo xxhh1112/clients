@@ -22,6 +22,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
   private domRecentlyMutated = true;
   private autofillFormElements: AutofillFormElements = new Map();
   private autofillFieldElements: AutofillFieldElements = new Map();
+  private currentLocationHref = "";
   private mutationObserver: MutationObserver;
   private updateAutofillElementsAfterMutationTimeout: NodeJS.Timeout;
   private readonly updateAfterMutationTimeoutDelay = 1000;
@@ -39,6 +40,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
     if (!this.mutationObserver) {
+      this.currentLocationHref = globalThis.location.href;
       this.setupMutationObserver();
     }
 
@@ -912,6 +914,12 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private handleMutationObserverMutation = (mutations: MutationRecord[]) => {
+    if (this.currentLocationHref !== globalThis.location.href) {
+      this.handleWindowLocationMutation();
+
+      return;
+    }
+
     for (let mutationsIndex = 0; mutationsIndex < mutations.length; mutationsIndex++) {
       const mutation = mutations[mutationsIndex];
       if (
@@ -933,6 +941,23 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       this.updateAutofillElementsAfterMutation();
     }
   };
+
+  /**
+   * Handles a mutation to the window location. Clears the autofill elements
+   * and updates the autofill elements after a timeout.
+   * @private
+   */
+  private handleWindowLocationMutation() {
+    this.currentLocationHref = globalThis.location.href;
+
+    this.domRecentlyMutated = true;
+    this.noFieldsFound = false;
+
+    this.autofillFormElements.clear();
+    this.autofillFieldElements.clear();
+
+    this.updateAutofillElementsAfterMutation();
+  }
 
   /**
    * Checks if the passed nodes either contain or are autofill elements.
