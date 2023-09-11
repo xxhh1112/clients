@@ -13,7 +13,6 @@ import { CipherView } from "../view/cipher.view";
 
 import { Attachment } from "./attachment";
 import { Card } from "./card";
-import { Fido2Key } from "./fido2-key";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";
@@ -39,7 +38,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
   identity: Identity;
   card: Card;
   secureNote: SecureNote;
-  fido2Key: Fido2Key;
   attachments: Attachment[];
   fields: Field[];
   passwordHistory: Password[];
@@ -96,9 +94,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         this.identity = new Identity(obj.identity);
         break;
-      case CipherType.Fido2Key:
-        this.fido2Key = new Fido2Key(obj.fido2Key);
-        break;
       default:
         break;
     }
@@ -147,9 +142,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
         break;
       case CipherType.Identity:
         model.identity = await this.identity.decrypt(this.organizationId, encKey);
-        break;
-      case CipherType.Fido2Key:
-        model.fido2Key = await this.fido2Key.decrypt(this.organizationId, encKey);
         break;
       default:
         break;
@@ -236,9 +228,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         c.identity = this.identity.toIdentityData();
         break;
-      case CipherType.Fido2Key:
-        c.fido2Key = this.fido2Key.toFido2KeyData();
-        break;
       default:
         break;
     }
@@ -291,9 +280,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
         break;
       case CipherType.SecureNote:
         domain.secureNote = SecureNote.fromJSON(obj.secureNote);
-        break;
-      case CipherType.Fido2Key:
-        domain.fido2Key = Fido2Key.fromJSON(obj.fido2Key);
         break;
       default:
         break;

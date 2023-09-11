@@ -23,7 +23,6 @@ export class CipherRequest {
   secureNote: SecureNoteApi;
   card: CardApi;
   identity: IdentityApi;
-  fido2Key: Fido2KeyApi;
   fields: FieldApi[];
   passwordHistory: PasswordHistoryRequest[];
   // Deprecated, remove at some point and rename attachments2 to attachments
@@ -167,43 +166,6 @@ export class CipherRequest {
         this.identity.licenseNumber =
           cipher.identity.licenseNumber != null
             ? cipher.identity.licenseNumber.encryptedString
-            : null;
-        break;
-      case CipherType.Fido2Key:
-        this.fido2Key = new Fido2KeyApi();
-        this.fido2Key.credentialId =
-          cipher.fido2Key.credentialId != null
-            ? cipher.fido2Key.credentialId.encryptedString
-            : null;
-        this.fido2Key.keyType =
-          cipher.fido2Key.keyType != null
-            ? (cipher.fido2Key.keyType.encryptedString as "public-key")
-            : null;
-        this.fido2Key.keyAlgorithm =
-          cipher.fido2Key.keyAlgorithm != null
-            ? (cipher.fido2Key.keyAlgorithm.encryptedString as "ECDSA")
-            : null;
-        this.fido2Key.keyCurve =
-          cipher.fido2Key.keyCurve != null
-            ? (cipher.fido2Key.keyCurve.encryptedString as "P-256")
-            : null;
-        this.fido2Key.keyValue =
-          cipher.fido2Key.keyValue != null ? cipher.fido2Key.keyValue.encryptedString : null;
-        this.fido2Key.rpId =
-          cipher.fido2Key.rpId != null ? cipher.fido2Key.rpId.encryptedString : null;
-        this.fido2Key.rpName =
-          cipher.fido2Key.rpName != null ? cipher.fido2Key.rpName.encryptedString : null;
-        this.fido2Key.counter =
-          cipher.fido2Key.counter != null ? cipher.fido2Key.counter.encryptedString : null;
-        this.fido2Key.userHandle =
-          cipher.fido2Key.userHandle != null ? cipher.fido2Key.userHandle.encryptedString : null;
-        this.fido2Key.userDisplayName =
-          cipher.fido2Key.userDisplayName != null
-            ? cipher.fido2Key.userDisplayName.encryptedString
-            : null;
-        this.fido2Key.discoverable =
-          cipher.fido2Key.discoverable != null
-            ? cipher.fido2Key.discoverable.encryptedString
             : null;
         break;
       default:

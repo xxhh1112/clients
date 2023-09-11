@@ -422,7 +422,7 @@ describe("FidoAuthenticatorService", () => {
        * Spec: If requireUserVerification is true and the authenticator cannot perform user verification, return an error code equivalent to "ConstraintError" and terminate the operation.
        * Deviation: User verification is checked before checking for excluded credentials
        **/
-      /** TODO: This test should only be activated if we disable support for user verification */
+      /** NOTE: This test should only be activated if we disable support for user verification */
       it.skip("should throw error if requireUserVerification is set to true", async () => {
         const params = await createParams({ requireUserVerification: true });
 
@@ -741,7 +741,7 @@ function createCipherView(
 ): CipherView {
   const cipher = new CipherView();
   cipher.id = data.id ?? Utils.newGuid();
-  cipher.type = data.type ?? CipherType.Fido2Key;
+  cipher.type = CipherType.Login;
   cipher.localData = {};
 
   const fido2KeyView = new Fido2KeyView();

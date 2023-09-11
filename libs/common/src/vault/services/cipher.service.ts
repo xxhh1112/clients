@@ -1166,34 +1166,6 @@ export class CipherService implements CipherServiceAbstraction {
           key
         );
         return;
-      case CipherType.Fido2Key:
-        cipher.fido2Key = new Fido2Key();
-        await this.encryptObjProperty(
-          model.fido2Key,
-          cipher.fido2Key,
-          {
-            credentialId: null,
-            keyType: null,
-            keyAlgorithm: null,
-            keyCurve: null,
-            keyValue: null,
-            rpId: null,
-            rpName: null,
-            userHandle: null,
-            userDisplayName: null,
-            origin: null,
-          },
-          key
-        );
-        cipher.fido2Key.counter = await this.cryptoService.encrypt(
-          String(model.fido2Key.counter),
-          key
-        );
-        cipher.fido2Key.discoverable = await this.cryptoService.encrypt(
-          String(model.fido2Key.discoverable),
-          key
-        );
-        break;
       default:
         throw new Error("Unknown cipher type.");
     }
