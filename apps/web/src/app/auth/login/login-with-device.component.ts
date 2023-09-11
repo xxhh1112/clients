@@ -8,12 +8,14 @@ import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
@@ -45,7 +47,8 @@ export class LoginWithDeviceComponent
     stateService: StateService,
     loginService: LoginService,
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    authReqCryptoService: AuthRequestCryptoServiceAbstraction
+    authReqCryptoService: AuthRequestCryptoServiceAbstraction,
+    private messagingService: MessagingService
   ) {
     super(
       router,
@@ -66,5 +69,13 @@ export class LoginWithDeviceComponent
       deviceTrustCryptoService,
       authReqCryptoService
     );
+  }
+
+  async handleApprovedAdminAuthRequest(
+    adminAuthReqResponse: AuthRequestResponse,
+    privateKey: ArrayBuffer
+  ) {
+    this.messagingService.send("setFullWidth");
+    super.handleApprovedAdminAuthRequest(adminAuthReqResponse, privateKey);
   }
 }
