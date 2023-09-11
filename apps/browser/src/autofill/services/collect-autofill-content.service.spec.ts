@@ -2060,6 +2060,24 @@ describe("CollectAutofillContentService", () => {
     });
   });
 
+  describe("handleWindowLocationMutation", () => {
+    it("will set the current location to the global location href, set the dom recently mutated flag and the no fields found flag, clear out the autofill form and field maps, and update the autofill elements after mutation", () => {
+      collectAutofillContentService["currentLocationHref"] = "https://example.com/login";
+      collectAutofillContentService["domRecentlyMutated"] = false;
+      collectAutofillContentService["noFieldsFound"] = true;
+      jest.spyOn(collectAutofillContentService as any, "updateAutofillElementsAfterMutation");
+
+      collectAutofillContentService["handleWindowLocationMutation"]();
+
+      expect(collectAutofillContentService["currentLocationHref"]).toEqual(window.location.href);
+      expect(collectAutofillContentService["domRecentlyMutated"]).toEqual(true);
+      expect(collectAutofillContentService["noFieldsFound"]).toEqual(false);
+      expect(collectAutofillContentService["updateAutofillElementsAfterMutation"]).toBeCalled();
+      expect(collectAutofillContentService["autofillFormElements"].size).toEqual(0);
+      expect(collectAutofillContentService["autofillFieldElements"].size).toEqual(0);
+    });
+  });
+
   describe("handleAutofillElementAttributeMutation", () => {
     it("returns early if the target node is not an HTMLElement instance", () => {
       const mutationRecord: MutationRecord = {
