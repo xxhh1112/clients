@@ -188,8 +188,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       let cipherOptions: CipherView[];
-
-      // eslint-disable-next-line no-empty
       if (params.allowCredentialDescriptorList?.length > 0) {
         cipherOptions = await this.findCredentialsById(
           params.allowCredentialDescriptorList,
@@ -344,7 +342,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         !cipher.isDeleted &&
         cipher.type === CipherType.Login &&
         cipher.login.fido2Key != undefined &&
-        cipher.login.fido2Key.rpId === rpId
+        cipher.login.fido2Key.rpId === rpId &&
+        cipher.login.fido2Key.discoverable
     );
   }
 }

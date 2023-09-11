@@ -584,11 +584,11 @@ describe("FidoAuthenticatorService", () => {
         ciphers = [
           await createCipherView(
             { type: CipherType.Login },
-            { credentialId: credentialIds[0], rpId: RpId }
+            { credentialId: credentialIds[0], rpId: RpId, discoverable: false }
           ),
           await createCipherView(
             { type: CipherType.Login },
-            { credentialId: credentialIds[1], rpId: RpId }
+            { credentialId: credentialIds[1], rpId: RpId, discoverable: true }
           ),
         ];
         params = await createParams({
@@ -599,6 +599,36 @@ describe("FidoAuthenticatorService", () => {
           rpId: RpId,
         });
         cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+      });
+
+      it("should ask for all credentials in list when `params` contains allowedCredentials list", async () => {
+        userInterfaceSession.pickCredential.mockResolvedValue({
+          cipherId: ciphers[0].id,
+          userVerified: false,
+        });
+
+        await authenticator.getAssertion(params);
+
+        expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
+          cipherIds: ciphers.map((c) => c.id),
+          userVerification: false,
+        });
+      });
+
+      it("should only ask for discoverable credentials matched by rpId when params does not contains allowedCredentials list", async () => {
+        params.allowCredentialDescriptorList = undefined;
+        const discoverableCiphers = ciphers.filter((c) => c.login.fido2Key.discoverable);
+        userInterfaceSession.pickCredential.mockResolvedValue({
+          cipherId: discoverableCiphers[0].id,
+          userVerified: false,
+        });
+
+        await authenticator.getAssertion(params);
+
+        expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
+          cipherIds: [discoverableCiphers[0].id],
+          userVerification: false,
+        });
       });
 
       for (const userVerification of [true, false]) {
@@ -798,7 +828,7 @@ function createCipherView(
   fido2KeyView.userHandle = fido2Key.userHandle ?? Fido2Utils.bufferToString(randomBytes(16));
   fido2KeyView.keyAlgorithm = fido2Key.keyAlgorithm ?? "ECDSA";
   fido2KeyView.keyCurve = fido2Key.keyCurve ?? "P-256";
-  fido2KeyView.discoverable = true;
+  fido2KeyView.discoverable = fido2Key.discoverable ?? true;
   fido2KeyView.keyValue =
     fido2KeyView.keyValue ??
     "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTC-7XDZipXbaVBlnkjlBgO16ZmqBZWejK2iYo6lV0dehRANCAASOcM2WduNq1DriRYN7ZekvZz-bRhA-qNT4v0fbp5suUFJyWmgOQ0bybZcLXHaerK5Ep1JiSrQcewtQNgLtry7f";
