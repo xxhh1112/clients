@@ -104,6 +104,10 @@ export class CipherRequest {
             cipher.login.fido2Key.userDisplayName != null
               ? cipher.login.fido2Key.userDisplayName.encryptedString
               : null;
+          this.login.fido2Key.discoverable =
+            cipher.login.fido2Key.discoverable != null
+              ? cipher.login.fido2Key.discoverable.encryptedString
+              : null;
         }
         break;
       case CipherType.SecureNote:
@@ -196,6 +200,10 @@ export class CipherRequest {
         this.fido2Key.userDisplayName =
           cipher.fido2Key.userDisplayName != null
             ? cipher.fido2Key.userDisplayName.encryptedString
+            : null;
+        this.fido2Key.discoverable =
+          cipher.fido2Key.discoverable != null
+            ? cipher.fido2Key.discoverable.encryptedString
             : null;
         break;
       default:

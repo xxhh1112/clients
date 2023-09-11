@@ -1112,6 +1112,10 @@ export class CipherService implements CipherServiceAbstraction {
             String(model.login.fido2Key.counter),
             key
           );
+          cipher.login.fido2Key.discoverable = await this.cryptoService.encrypt(
+            String(model.login.fido2Key.discoverable),
+            key
+          );
         }
         return;
       case CipherType.SecureNote:
@@ -1183,6 +1187,10 @@ export class CipherService implements CipherServiceAbstraction {
         );
         cipher.fido2Key.counter = await this.cryptoService.encrypt(
           String(model.fido2Key.counter),
+          key
+        );
+        cipher.fido2Key.discoverable = await this.cryptoService.encrypt(
+          String(model.fido2Key.discoverable),
           key
         );
         break;

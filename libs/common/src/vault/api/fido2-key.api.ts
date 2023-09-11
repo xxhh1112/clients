@@ -29,6 +29,6 @@ export class Fido2KeyApi extends BaseResponse {
     this.counter = this.getResponseProperty("Counter");
     this.rpName = this.getResponseProperty("RpName");
     this.userDisplayName = this.getResponseProperty("UserDisplayName");
-    this.discoverable = this.getResponseProperty("discoverable");
+    this.discoverable = this.getResponseProperty("Discoverable");
   }
 }
