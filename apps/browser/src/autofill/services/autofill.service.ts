@@ -279,6 +279,10 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     if (await this.isPasswordRepromptRequired(cipher, tab)) {
+      if (fromCommand) {
+        this.cipherService.updateLastUsedIndexForUrl(tab.url);
+      }
+
       return null;
     }
 
@@ -306,7 +310,7 @@ export default class AutofillService implements AutofillServiceInterface {
   async isPasswordRepromptRequired(cipher: CipherView, tab: chrome.tabs.Tab): Promise<boolean> {
     const userHasMasterPasswordAndKeyHash =
       await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
-    if (cipher.reprompt !== CipherRepromptType.None && userHasMasterPasswordAndKeyHash) {
+    if (cipher.reprompt === CipherRepromptType.Password && userHasMasterPasswordAndKeyHash) {
       await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
         cipherId: cipher.id,
         action: "autofill",
