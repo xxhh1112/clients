@@ -101,7 +101,7 @@ describe("FidoAuthenticatorService", () => {
 
     describe.skip("when extensions parameter is present", () => undefined);
 
-    describe("vault contains excluded non-discoverable credential", () => {
+    describe("vault contains excluded credential", () => {
       let excludedCipher: CipherView;
       let params: Fido2AuthenticatorMakeCredentialsParams;
 
@@ -152,83 +152,6 @@ describe("FidoAuthenticatorService", () => {
       it("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
         userInterfaceSession.informExcludedCredential.mockResolvedValue();
         excludedCipher.organizationId = "someOrganizationId";
-
-        try {
-          await authenticator.makeCredential(params);
-          // eslint-disable-next-line no-empty
-        } catch {}
-
-        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
-      });
-
-      it("should not inform user of duplication when input data does not pass checks", async () => {
-        userInterfaceSession.informExcludedCredential.mockResolvedValue();
-        const invalidParams = await createInvalidParams();
-
-        for (const p of Object.values(invalidParams)) {
-          try {
-            await authenticator.makeCredential(p);
-            // eslint-disable-next-line no-empty
-          } catch {}
-        }
-        expect(userInterfaceSession.informExcludedCredential).not.toHaveBeenCalled();
-      });
-
-      it.todo(
-        "should not throw error if the excluded credential has been marked as deleted in the vault"
-      );
-    });
-
-    describe("vault contains excluded discoverable credential", () => {
-      let excludedCipherView: CipherView;
-      let params: Fido2AuthenticatorMakeCredentialsParams;
-
-      beforeEach(async () => {
-        excludedCipherView = createCipherView();
-        params = await createParams({
-          excludeCredentialDescriptorList: [
-            {
-              id: guidToRawFormat(excludedCipherView.fido2Key.credentialId),
-              type: "public-key",
-            },
-          ],
-        });
-        cipherService.get.mockImplementation(async (id) =>
-          id === excludedCipherView.id
-            ? ({ decrypt: async () => excludedCipherView } as any)
-            : undefined
-        );
-        cipherService.getAllDecrypted.mockResolvedValue([excludedCipherView]);
-      });
-
-      /**
-       * Spec: collect an authorization gesture confirming user consent for creating a new credential.
-       * Deviation: Consent is not asked and the user is simply informed of the situation.
-       **/
-      it("should inform user", async () => {
-        userInterfaceSession.informExcludedCredential.mockResolvedValue();
-
-        try {
-          await authenticator.makeCredential(params);
-          // eslint-disable-next-line no-empty
-        } catch {}
-
-        expect(userInterfaceSession.informExcludedCredential).toHaveBeenCalled();
-      });
-
-      /** Spec: return an error code equivalent to "NotAllowedError" and terminate the operation. */
-      it("should throw error", async () => {
-        userInterfaceSession.informExcludedCredential.mockResolvedValue();
-
-        const result = async () => await authenticator.makeCredential(params);
-
-        await expect(result).rejects.toThrowError(Fido2AutenticatorErrorCode.NotAllowed);
-      });
-
-      /** Devation: Organization ciphers are not checked against excluded credentials, even if the user has access to them. */
-      it("should not inform user of duplication when the excluded credential belongs to an organization", async () => {
-        userInterfaceSession.informExcludedCredential.mockResolvedValue();
-        excludedCipherView.organizationId = "someOrganizationId";
 
         try {
           await authenticator.makeCredential(params);
