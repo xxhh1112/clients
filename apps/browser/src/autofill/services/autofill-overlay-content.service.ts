@@ -477,6 +477,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     if (
       autofillFieldData.readonly ||
       autofillFieldData.disabled ||
+      !autofillFieldData.viewable ||
       ignoredFieldTypes.has(autofillFieldData.type) ||
       this.keywordsFoundInFieldData(autofillFieldData, ["search", "captcha"])
     ) {
