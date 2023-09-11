@@ -18,8 +18,8 @@ export default {
             return new I18nMockService({
               masterPasswordPolicyInEffect:
                 "One or more organization policies require your master password to meet the following requirements:",
-              policyInEffectMinLength: "Minimum length of $LENGTH$",
-              policyInEffectMinComplexity: "Minimum complexity score of $SCORE$",
+              policyInEffectMinLength: "Minimum length of __$1__",
+              policyInEffectMinComplexity: "Minimum complexity score of __$1__",
               policyInEffectUppercase: "Contain one or more uppercase characters",
               policyInEffectLowercase: "Contain one or more lowercase characters",
               policyInEffectNumbers: "Contain one or more numbers",
