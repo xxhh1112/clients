@@ -124,8 +124,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     });
   }
 
-  async pick() {
-    const cipher = this.selectedItem;
+  async pick(cipher: CipherView) {
     const data = this.message$.value;
     if (data?.type === "PickCredentialRequest") {
       let userVerified = false;

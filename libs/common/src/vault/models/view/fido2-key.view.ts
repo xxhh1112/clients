@@ -13,6 +13,7 @@ export class Fido2KeyView extends ItemView {
   counter: number;
   rpName: string;
   userDisplayName: string;
+  discoverable: boolean;
 
   get subTitle(): string {
     return this.userDisplayName;

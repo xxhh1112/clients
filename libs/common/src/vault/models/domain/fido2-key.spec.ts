@@ -22,6 +22,7 @@ describe("Fido2Key", () => {
         rpName: null,
         userDisplayName: null,
         counter: null,
+        discoverable: null,
       });
     });
 
@@ -37,6 +38,7 @@ describe("Fido2Key", () => {
         counter: "counter",
         rpName: "rpName",
         userDisplayName: "userDisplayName",
+        discoverable: "discoverable",
       };
       const fido2Key = new Fido2Key(data);
 
@@ -51,6 +53,7 @@ describe("Fido2Key", () => {
         counter: { encryptedString: "counter", encryptionType: 0 },
         rpName: { encryptedString: "rpName", encryptionType: 0 },
         userDisplayName: { encryptedString: "userDisplayName", encryptionType: 0 },
+        discoverable: { encryptedString: "discoverable", encryptionType: 0 },
       });
     });
 
@@ -76,6 +79,7 @@ describe("Fido2Key", () => {
       fido2Key.counter = mockEnc("2");
       fido2Key.rpName = mockEnc("rpName");
       fido2Key.userDisplayName = mockEnc("userDisplayName");
+      fido2Key.discoverable = mockEnc("true");
 
       const fido2KeyView = await fido2Key.decrypt(null);
 
@@ -90,6 +94,7 @@ describe("Fido2Key", () => {
         rpName: "rpName",
         userDisplayName: "userDisplayName",
         counter: 2,
+        discoverable: true,
       });
     });
   });
@@ -104,9 +109,10 @@ describe("Fido2Key", () => {
         keyValue: "keyValue",
         rpId: "rpId",
         userHandle: "userHandle",
-        counter: "counter",
+        counter: "2",
         rpName: "rpName",
         userDisplayName: "userDisplayName",
+        discoverable: "true",
       };
 
       const fido2Key = new Fido2Key(data);
@@ -129,6 +135,7 @@ describe("Fido2Key", () => {
       fido2Key.counter = createEncryptedEncString("2");
       fido2Key.rpName = createEncryptedEncString("rpName");
       fido2Key.userDisplayName = createEncryptedEncString("userDisplayName");
+      fido2Key.discoverable = createEncryptedEncString("discoverable");
 
       const json = JSON.stringify(fido2Key);
       const result = Fido2Key.fromJSON(JSON.parse(json));
