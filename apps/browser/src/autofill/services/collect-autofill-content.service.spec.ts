@@ -2025,6 +2025,32 @@ describe("CollectAutofillContentService", () => {
       expect(collectAutofillContentService["isAutofillElementNodeMutated"]).not.toBeCalled();
       expect(collectAutofillContentService["handleAutofillElementAttributeMutation"]).toBeCalled();
     });
+
+    it("will handle window location mutations", () => {
+      const mutationRecord: MutationRecord = {
+        type: "attributes",
+        addedNodes: null,
+        attributeName: "value",
+        attributeNamespace: null,
+        nextSibling: null,
+        oldValue: null,
+        previousSibling: null,
+        removedNodes: null,
+        target: document.body,
+      };
+      collectAutofillContentService["currentLocationHref"] = "https://someotherurl.com";
+      jest.spyOn(collectAutofillContentService as any, "handleWindowLocationMutation");
+      jest.spyOn(collectAutofillContentService as any, "isAutofillElementNodeMutated");
+      jest.spyOn(collectAutofillContentService as any, "handleAutofillElementAttributeMutation");
+
+      collectAutofillContentService["handleMutationObserverMutation"]([mutationRecord]);
+
+      expect(collectAutofillContentService["handleWindowLocationMutation"]).toBeCalled();
+      expect(collectAutofillContentService["isAutofillElementNodeMutated"]).not.toBeCalled();
+      expect(
+        collectAutofillContentService["handleAutofillElementAttributeMutation"]
+      ).not.toBeCalled();
+    });
   });
 
   describe("deleteCachedAutofillElement", () => {
