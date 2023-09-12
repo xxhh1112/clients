@@ -26,8 +26,8 @@
       {{ autofillKeyboardHelperText }}
     </div>
   </div>
-  <ng-container *ngIf="serverConfig$ | async as serverConfig">
-    <div class="box" *ngIf="this.serverConfig.isAutoFillOverlayActive()">
+  <ng-container *ngIf="isAutoFillOverlayFlagEnabled">
+    <div class="box">
       <div class="box-content">
         <div class="box-content-row box-content-row-checkbox" appBoxRow>
           <label for="autofill-overlay">{{ "enableAutoFillOverlay" | i18n }}</label>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-    <div class="box" *ngIf="this.serverConfig.isAutoFillOverlayActive() && enableAutoFillOverlay">
+    <div class="box" *ngIf="enableAutoFillOverlay">
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
           <label for="autofill-overlay-appearance">{{ "autofillOverlayAppearance" | i18n }}</label>

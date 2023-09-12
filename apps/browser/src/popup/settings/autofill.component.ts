@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { UriMatchType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
-import { ServerConfig } from "@bitwarden/common/platform/abstractions/config/server-config";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -16,7 +16,7 @@ import { BrowserApi } from "../../platform/browser/browser-api";
   templateUrl: "autofill.component.html",
 })
 export class AutofillComponent implements OnInit {
-  serverConfig$: Observable<ServerConfig>;
+  isAutoFillOverlayFlagEnabled = false;
   enableAutoFillOverlay = false;
   autoFillOverlayAppearance: number;
   autoFillOverlayAppearanceOptions: any[];
@@ -31,9 +31,9 @@ export class AutofillComponent implements OnInit {
     private stateService: StateService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    configService: ConfigServiceAbstraction
+    private configService: ConfigServiceAbstraction,
+    private settingsService: SettingsService
   ) {
-    this.serverConfig$ = configService.serverConfig$;
     this.autoFillOverlayAppearanceOptions = [
       {
         name: i18nService.t("autofillOverlayAppearanceOnFieldFocus"),
@@ -59,9 +59,12 @@ export class AutofillComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.enableAutoFillOverlay = await this.stateService.getEnableAutoFillOverlay();
+    this.isAutoFillOverlayFlagEnabled = await this.configService.getFeatureFlag<boolean>(
+      FeatureFlag.AutofillOverlay
+    );
+    this.enableAutoFillOverlay = await this.settingsService.getEnableAutoFillOverlay();
     this.autoFillOverlayAppearance =
-      (await this.stateService.getAutoFillOverlayAppearance()) ||
+      (await this.settingsService.getAutoFillOverlayAppearance()) ||
       AutofillOverlayAppearance.OnFieldFocus;
 
     this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
@@ -76,11 +79,11 @@ export class AutofillComponent implements OnInit {
   }
 
   async updateAutoFillOverlay() {
-    await this.stateService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
+    await this.settingsService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
   }
 
   async updateAutoFillOverlayAppearance() {
-    await this.stateService.setAutoFillOverlayAppearance(this.autoFillOverlayAppearance);
+    await this.settingsService.setAutoFillOverlayAppearance(this.autoFillOverlayAppearance);
   }
 
   async updateAutoFillOnPageLoad() {
