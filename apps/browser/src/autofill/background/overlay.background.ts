@@ -61,18 +61,18 @@ class OverlayBackground implements OverlayBackgroundInterface {
     closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
     overlayPageBlurred: () => this.checkOverlayListFocused(),
     redirectOverlayFocusOut: ({ message, port }) =>
-      this.redirectOverlayFocusOut(message, port.sender),
+      this.redirectOverlayFocusOut(message.direction, port.sender),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
     checkAutofillOverlayButtonFocused: () => this.checkAutofillOverlayButtonFocused(),
     overlayPageBlurred: () => this.checkAutofillOverlayButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port.sender),
     autofillSelectedListItem: ({ message, port }) =>
-      this.autofillOverlayListItem(message, port.sender),
+      this.autofillOverlayListItem(message.overlayCipherId, port.sender),
     addNewVaultItem: ({ port }) => this.getNewVaultItemDetails(port.sender),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
     redirectOverlayFocusOut: ({ message, port }) =>
-      this.redirectOverlayFocusOut(message, port.sender),
+      this.redirectOverlayFocusOut(message.direction, port.sender),
   };
 
   constructor(
@@ -178,14 +178,14 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async autofillOverlayListItem(
-    message: OverlayBackgroundExtensionMessage,
+    overlayCipherId: string,
     sender: chrome.runtime.MessageSender
   ) {
-    if (!message.overlayCipherId) {
+    if (!overlayCipherId) {
       return;
     }
 
-    const cipher = this.overlayCiphers.get(message.overlayCipherId);
+    const cipher = this.overlayCiphers.get(overlayCipherId);
 
     if (await this.autofillService.isPasswordRepromptRequired(cipher, sender.tab)) {
       return;
@@ -198,7 +198,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       allowTotpAutofill: true,
     });
 
-    this.overlayCiphers = new Map([[message.overlayCipherId, cipher], ...this.overlayCiphers]);
+    this.overlayCiphers = new Map([[overlayCipherId, cipher], ...this.overlayCiphers]);
   }
 
   private checkOverlayFocused() {
@@ -443,10 +443,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return this.overlayPageTranslations;
   }
 
-  private redirectOverlayFocusOut(message: any, sender: chrome.runtime.MessageSender) {
-    BrowserApi.tabSendMessageData(sender.tab, "redirectOverlayFocusOut", {
-      direction: message.direction,
-    });
+  private redirectOverlayFocusOut(direction: string, sender: chrome.runtime.MessageSender) {
+    BrowserApi.tabSendMessageData(sender.tab, "redirectOverlayFocusOut", { direction });
   }
 
   private getNewVaultItemDetails(sender: chrome.runtime.MessageSender) {

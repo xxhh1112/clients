@@ -20,6 +20,7 @@ type OverlayBackgroundExtensionMessage = {
   details?: AutofillPageDetails;
   overlayCipherId?: string;
   overlayElement?: string;
+  direction?: string;
 } & OverlayAddNewItemMessage;
 
 type FocusedFieldData = {
@@ -88,7 +89,13 @@ type OverlayButtonPortMessageHandlers = {
   overlayButtonClicked: ({ port }: { port: chrome.runtime.Port }) => void;
   closeAutofillOverlay: ({ port }: { port: chrome.runtime.Port }) => void;
   overlayPageBlurred: () => void;
-  redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
+  redirectOverlayFocusOut: ({
+    message,
+    port,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+    port: chrome.runtime.Port;
+  }) => void;
 };
 
 type OverlayListPortMessageHandlers = {
@@ -100,7 +107,7 @@ type OverlayListPortMessageHandlers = {
     message,
     port,
   }: {
-    message: any;
+    message: OverlayBackgroundExtensionMessage;
     port: chrome.runtime.Port;
   }) => void;
   addNewVaultItem: ({ port }: { port: chrome.runtime.Port }) => void;
