@@ -21,6 +21,14 @@ type OverlayBackgroundExtensionMessage = {
   overlayCipherId?: string;
   overlayElement?: string;
   direction?: string;
+  display?: string;
+  data?: {
+    commandToRetry?: {
+      msg?: {
+        command?: string;
+      };
+    };
+  };
 } & OverlayAddNewItemMessage;
 
 type FocusedFieldData = {
@@ -74,16 +82,11 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: OverlayBackgroundExtensionMessage;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  unlockCompleted: ({
-    message,
-    sender,
-  }: {
-    message: OverlayBackgroundExtensionMessage;
-    sender: chrome.runtime.MessageSender;
-  }) => void;
+  unlockCompleted: ({ message }: { message: OverlayBackgroundExtensionMessage }) => void;
   addEditCipherSubmitted: () => void;
   deletedCipher: () => void;
 };
+
 type OverlayButtonPortMessageHandlers = {
   [key: string]: CallableFunction;
   overlayButtonClicked: ({ port }: { port: chrome.runtime.Port }) => void;
@@ -111,8 +114,20 @@ type OverlayListPortMessageHandlers = {
     port: chrome.runtime.Port;
   }) => void;
   addNewVaultItem: ({ port }: { port: chrome.runtime.Port }) => void;
-  viewSelectedCipher: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
-  redirectOverlayFocusOut: ({ message, port }: { message: any; port: chrome.runtime.Port }) => void;
+  viewSelectedCipher: ({
+    message,
+    port,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+    port: chrome.runtime.Port;
+  }) => void;
+  redirectOverlayFocusOut: ({
+    message,
+    port,
+  }: {
+    message: OverlayBackgroundExtensionMessage;
+    port: chrome.runtime.Port;
+  }) => void;
 };
 
 interface OverlayBackground {

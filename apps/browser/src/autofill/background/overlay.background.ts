@@ -42,37 +42,32 @@ class OverlayBackground implements OverlayBackgroundInterface {
   private readonly iconsServerUrl: string;
   private readonly extensionMessageHandlers: OverlayBackgroundExtensionMessageHandlers = {
     openAutofillOverlay: () => this.openOverlay(),
-    autofillOverlayElementClosed: ({ message }) =>
-      this.overlayElementClosed(message.overlayElement),
+    autofillOverlayElementClosed: ({ message }) => this.overlayElementClosed(message),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
-    updateAutofillOverlayPosition: ({ message }) =>
-      this.updateOverlayPosition(message.overlayElement),
+    updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
     updateAutofillOverlayHidden: ({ message }) => this.updateOverlayHidden(message),
-    updateFocusedFieldData: ({ message }) => this.updateFocusedFieldData(message),
+    updateFocusedFieldData: ({ message }) => this.setFocusedFieldData(message),
     collectPageDetailsResponse: ({ message, sender }) => this.storePageDetails(message, sender),
-    unlockCompleted: ({ message, sender }) => this.unlockCompleted(message, sender),
+    unlockCompleted: ({ message }) => this.unlockCompleted(message),
     addEditCipherSubmitted: () => this.updateAutofillOverlayCiphers(),
     deletedCipher: () => this.updateAutofillOverlayCiphers(),
   };
   private readonly overlayButtonPortMessageHandlers: OverlayButtonPortMessageHandlers = {
-    overlayButtonClicked: ({ port }) => this.handleOverlayButtonClicked(port.sender),
-    closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port.sender),
+    overlayButtonClicked: ({ port }) => this.handleOverlayButtonClicked(port),
+    closeAutofillOverlay: ({ port }) => this.closeAutofillOverlay(port),
     overlayPageBlurred: () => this.checkOverlayListFocused(),
-    redirectOverlayFocusOut: ({ message, port }) =>
-      this.redirectOverlayFocusOut(message.direction, port.sender),
+    redirectOverlayFocusOut: ({ message, port }) => this.redirectOverlayFocusOut(message, port),
   };
   private readonly overlayListPortMessageHandlers: OverlayListPortMessageHandlers = {
     checkAutofillOverlayButtonFocused: () => this.checkAutofillOverlayButtonFocused(),
     overlayPageBlurred: () => this.checkAutofillOverlayButtonFocused(),
-    unlockVault: ({ port }) => this.unlockVault(port.sender),
-    autofillSelectedListItem: ({ message, port }) =>
-      this.autofillOverlayListItem(message.overlayCipherId, port.sender),
-    addNewVaultItem: ({ port }) => this.getNewVaultItemDetails(port.sender),
-    viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port.sender),
-    redirectOverlayFocusOut: ({ message, port }) =>
-      this.redirectOverlayFocusOut(message.direction, port.sender),
+    unlockVault: ({ port }) => this.unlockVault(port),
+    autofillSelectedListItem: ({ message, port }) => this.autofillOverlayListItem(message, port),
+    addNewVaultItem: ({ port }) => this.getNewVaultItemDetails(port),
+    viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
+    redirectOverlayFocusOut: ({ message, port }) => this.redirectOverlayFocusOut(message, port),
   };
 
   constructor(
@@ -178,8 +173,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async autofillOverlayListItem(
-    overlayCipherId: string,
-    sender: chrome.runtime.MessageSender
+    { overlayCipherId }: OverlayBackgroundExtensionMessage,
+    { sender }: chrome.runtime.Port
   ) {
     if (!overlayCipherId) {
       return;
@@ -219,11 +214,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort?.postMessage({ command: "checkOverlayListFocused" });
   }
 
-  private closeAutofillOverlay(sender: chrome.runtime.MessageSender) {
+  private closeAutofillOverlay({ sender }: chrome.runtime.Port) {
     BrowserApi.tabSendMessage(sender.tab, { command: "closeAutofillOverlay" });
   }
 
-  private overlayElementClosed(overlayElement: string) {
+  private overlayElementClosed({ overlayElement }: OverlayBackgroundExtensionMessage) {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.disconnect();
       this.overlayButtonPort = null;
@@ -235,7 +230,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort = null;
   }
 
-  private updateOverlayPosition(overlayElement: string) {
+  private updateOverlayPosition({ overlayElement }: { overlayElement?: string }) {
+    if (!overlayElement) {
+      return;
+    }
+
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.postMessage({
         command: "updateIframePosition",
@@ -287,18 +286,18 @@ class OverlayBackground implements OverlayBackgroundInterface {
     };
   }
 
-  private updateFocusedFieldData(message: any) {
-    this.focusedFieldData = message.focusedFieldData;
+  private setFocusedFieldData({ focusedFieldData }: OverlayBackgroundExtensionMessage) {
+    this.focusedFieldData = focusedFieldData;
   }
 
-  private updateOverlayHidden(message: any) {
-    if (!message.display) {
+  private updateOverlayHidden({ display }: OverlayBackgroundExtensionMessage) {
+    if (!display) {
       return;
     }
 
     const portMessage = {
       command: "updateOverlayHidden",
-      display: message.display,
+      display,
     };
 
     this.overlayButtonPort?.postMessage(portMessage);
@@ -361,28 +360,21 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
-  private handleOverlayButtonClicked(sender: chrome.runtime.MessageSender) {
+  private handleOverlayButtonClicked(port: chrome.runtime.Port) {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
-      this.unlockVault(sender);
+      this.unlockVault(port);
       return;
     }
 
     this.openOverlay();
   }
 
-  private async unlockVault(sender?: chrome.runtime.MessageSender) {
-    if (!sender) {
-      return;
-    }
+  private async unlockVault(port: chrome.runtime.Port) {
+    const { sender } = port;
 
-    this.closeAutofillOverlay(sender);
+    this.closeAutofillOverlay(port);
     const retryMessage: LockedVaultPendingNotificationsItem = {
-      commandToRetry: {
-        msg: {
-          command: "openAutofillOverlay",
-        },
-        sender: sender,
-      },
+      commandToRetry: { msg: { command: "openAutofillOverlay" }, sender },
       target: "overlay.background",
     };
     await BrowserApi.tabSendMessageData(
@@ -393,8 +385,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin", { skipNotification: true });
   }
 
-  private async viewSelectedCipher(message: any, sender: chrome.runtime.MessageSender) {
-    const cipher = this.overlayCiphers.get(message.overlayCipherId);
+  private async viewSelectedCipher(
+    { overlayCipherId }: OverlayBackgroundExtensionMessage,
+    { sender }: chrome.runtime.Port
+  ) {
+    const cipher = this.overlayCiphers.get(overlayCipherId);
     if (!cipher) {
       return;
     }
@@ -413,7 +408,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort.postMessage({ command: "focusOverlayList" });
   }
 
-  private async unlockCompleted(message: any, sender: chrome.runtime.MessageSender) {
+  private async unlockCompleted(message: OverlayBackgroundExtensionMessage) {
     await this.getAuthStatus();
 
     if (message.data?.commandToRetry?.msg?.command === "openAutofillOverlay") {
@@ -443,11 +438,18 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return this.overlayPageTranslations;
   }
 
-  private redirectOverlayFocusOut(direction: string, sender: chrome.runtime.MessageSender) {
+  private redirectOverlayFocusOut(
+    { direction }: OverlayBackgroundExtensionMessage,
+    { sender }: chrome.runtime.Port
+  ) {
+    if (!direction) {
+      return;
+    }
+
     BrowserApi.tabSendMessageData(sender.tab, "redirectOverlayFocusOut", { direction });
   }
 
-  private getNewVaultItemDetails(sender: chrome.runtime.MessageSender) {
+  private getNewVaultItemDetails({ sender }: chrome.runtime.Port) {
     BrowserApi.tabSendMessage(sender.tab, { command: "addNewVaultItemFromOverlay" });
   }
 
@@ -527,9 +529,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
       translations: this.getTranslations(),
       ciphers: isOverlayListPort ? this.getOverlayCipherData() : null,
     });
-    this.updateOverlayPosition(
-      isOverlayListPort ? AutofillOverlayElement.List : AutofillOverlayElement.Button
-    );
+    this.updateOverlayPosition({
+      overlayElement: isOverlayListPort
+        ? AutofillOverlayElement.List
+        : AutofillOverlayElement.Button,
+    });
   };
 
   private handleOverlayElementPortMessage = (message: any, port: chrome.runtime.Port) => {
