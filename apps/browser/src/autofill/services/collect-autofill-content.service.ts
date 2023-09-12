@@ -46,7 +46,6 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    */
   async getPageDetails(): Promise<AutofillPageDetails> {
     if (!this.mutationObserver) {
-      this.currentLocationHref = globalThis.location.href;
       this.setupMutationObserver();
     }
 
@@ -912,6 +911,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
    * @private
    */
   private setupMutationObserver() {
+    this.currentLocationHref = globalThis.location.href;
     this.mutationObserver = new MutationObserver(this.handleMutationObserverMutation);
     this.mutationObserver.observe(document.documentElement, {
       attributes: true,
