@@ -664,7 +664,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private handleBodyElementMutationObserverUpdate = () => {
-    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+    if (
+      (!this.overlayButtonElement && !this.overlayListElement) ||
+      this.isTriggeringExcessiveMutationObserverIterations()
+    ) {
       return;
     }
 
@@ -701,10 +704,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private handleDocumentElementMutationObserverUpdate = (mutationRecords: MutationRecord[]) => {
-    // TODO - Think about this decision. This is a heavy handed approach to solve the question of "What if someone attempts to overlay our element using an element within the `<html>` tag?"
-    // There might be better ways to handle this, and given that we are directly modifying the DOM for a third party website, this isn't entirely desirable to do.
-
-    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+    if (
+      (!this.overlayButtonElement && !this.overlayListElement) ||
+      this.isTriggeringExcessiveMutationObserverIterations()
+    ) {
       return;
     }
 

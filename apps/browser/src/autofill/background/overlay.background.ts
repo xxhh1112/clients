@@ -292,10 +292,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    const portMessage = {
-      command: "updateOverlayHidden",
-      display,
-    };
+    const portMessage = { command: "updateOverlayHidden", display: { display } };
 
     this.overlayButtonPort?.postMessage(portMessage);
     this.overlayListPort?.postMessage(portMessage);
