@@ -17,6 +17,7 @@ import { PopoverComponent } from "./popover.component";
 @Directive({
   selector: "[bitPopoverTriggerFor]",
   standalone: true,
+  exportAs: "popoverTrigger",
 })
 export class PopoverTriggerForDirective implements OnDestroy {
   @HostBinding("attr.aria-expanded")
@@ -103,5 +104,9 @@ export class PopoverTriggerForDirective implements OnDestroy {
   private disposeAll() {
     this.closedEventsSub?.unsubscribe();
     this.overlayRef?.dispose();
+  }
+
+  close() {
+    this.destroyPopover();
   }
 }

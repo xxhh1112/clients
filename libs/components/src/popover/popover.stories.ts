@@ -2,6 +2,7 @@ import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
+import { ButtonModule } from "../button";
 import { IconButtonModule } from "../icon-button";
 import { SharedModule } from "../shared/shared.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
@@ -13,7 +14,7 @@ export default {
   title: "Component Library/Popover",
   decorators: [
     moduleMetadata({
-      imports: [PopoverModule, IconButtonModule, SharedModule],
+      imports: [PopoverModule, ButtonModule, IconButtonModule, SharedModule],
       providers: [
         {
           provide: I18nService,
@@ -66,6 +67,7 @@ const popoverContent = `
       <li>Esse labore veniam tempora</li>
       <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
     </ul>
+    <button bitButton class="tw-mt-3" (click)="triggerRef.close()">Close</button>
   </bit-popover>
 `;
 
@@ -78,6 +80,7 @@ export const Default: Story = {
           type="button"
           class="tw-border-none tw-bg-transparent tw-text-primary-500"
           [bitPopoverTriggerFor]="myPopover"
+          #triggerRef="popoverTrigger"
         >
           <i class="bwi bwi-question-circle"></i>
         </button>
