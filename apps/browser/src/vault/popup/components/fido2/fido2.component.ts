@@ -21,7 +21,7 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
-} from "../../../../services/fido2/browser-fido2-user-interface.service";
+} from "../../../fido2/browser-fido2-user-interface.service";
 
 interface ViewData {
   message: BrowserFido2Message;
