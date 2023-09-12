@@ -4,7 +4,6 @@ import { CipherResponse } from "../response/cipher.response";
 
 import { AttachmentData } from "./attachment.data";
 import { CardData } from "./card.data";
-import { Fido2KeyData } from "./fido2-key.data";
 import { FieldData } from "./field.data";
 import { IdentityData } from "./identity.data";
 import { LoginData } from "./login.data";
@@ -27,7 +26,6 @@ export class CipherData {
   secureNote?: SecureNoteData;
   card?: CardData;
   identity?: IdentityData;
-  fido2Key?: Fido2KeyData;
   fields?: FieldData[];
   attachments?: AttachmentData[];
   passwordHistory?: PasswordHistoryData[];
@@ -60,8 +58,6 @@ export class CipherData {
     switch (this.type) {
       case CipherType.Login:
         this.login = new LoginData(response.login);
-        this.fido2Key =
-          response.fido2Key != undefined ? new Fido2KeyData(response.fido2Key) : undefined;
         break;
       case CipherType.SecureNote:
         this.secureNote = new SecureNoteData(response.secureNote);
@@ -71,9 +67,6 @@ export class CipherData {
         break;
       case CipherType.Identity:
         this.identity = new IdentityData(response.identity);
-        break;
-      case CipherType.Fido2Key:
-        this.fido2Key = new Fido2KeyData(response.fido2Key);
         break;
       default:
         break;

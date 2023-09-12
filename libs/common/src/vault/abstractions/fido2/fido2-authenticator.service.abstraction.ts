@@ -81,7 +81,7 @@ export interface Fido2AuthenticatorMakeCredentialsParams {
   };
   /** A Boolean value that indicates that individually-identifying attestation MAY be returned by the authenticator. */
   enterpriseAttestationPossible?: boolean; // Ignored by bitwarden at the moment
-  /** The effective resident key requirement for credential creation, a Boolean value determined by the client. */
+  /** The effective resident key requirement for credential creation, a Boolean value determined by the client. Resident is synonymous with discoverable. */
   requireResidentKey: boolean;
   requireUserVerification: boolean;
   /** Forwarded to user interface */

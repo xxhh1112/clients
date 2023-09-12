@@ -4,7 +4,6 @@ import { IdentityApi } from "../../../models/api/identity.api";
 import { LoginApi } from "../../../models/api/login.api";
 import { SecureNoteApi } from "../../../models/api/secure-note.api";
 import { BaseResponse } from "../../../models/response/base.response";
-import { Fido2KeyApi } from "../../api/fido2-key.api";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 
 import { AttachmentResponse } from "./attachment.response";
@@ -22,7 +21,6 @@ export class CipherResponse extends BaseResponse {
   card: CardApi;
   identity: IdentityApi;
   secureNote: SecureNoteApi;
-  fido2Key: Fido2KeyApi;
   favorite: boolean;
   edit: boolean;
   viewPassword: boolean;
@@ -74,11 +72,6 @@ export class CipherResponse extends BaseResponse {
     const secureNote = this.getResponseProperty("SecureNote");
     if (secureNote != null) {
       this.secureNote = new SecureNoteApi(secureNote);
-    }
-
-    const fido2Key = this.getResponseProperty("Fido2Key");
-    if (fido2Key != null) {
-      this.fido2Key = new Fido2KeyApi(fido2Key);
     }
 
     const fields = this.getResponseProperty("Fields");
