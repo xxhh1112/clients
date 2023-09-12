@@ -90,7 +90,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.initOverlayBackground();
 
     // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THE USAGE OF THIS METHOD.
-    this.overrideUserAutofillSettings();
+    // this.overrideUserAutofillSettings();
   }
 
   removePageDetails(tabId: number) {
@@ -568,6 +568,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   // If we approach using this API, we need to ensure that it is strictly an opt-in experience and
   // convey why a user might want to disable autofill in their browser.
   // Also worth noting that this API is only available in Chrome.
+  /**
   private overrideUserAutofillSettings() {
     if (
       !chrome?.privacy?.services?.autofillAddressEnabled ||
@@ -595,6 +596,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       }
     });
   }
+  **/
 }
 
 export default OverlayBackground;
