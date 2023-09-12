@@ -1244,6 +1244,20 @@ describe("CollectAutofillContentService", () => {
 
       expect(labels).toEqual(document.querySelectorAll("label[for='username']"));
     });
+
+    it("removes any new lines generated for the query selector", () => {
+      document.body.innerHTML = `
+        <label for="username-
+        id">Username</label>
+        <input type="text" id="username-
+        id">
+      `;
+      const element = document.querySelector("input") as FillableFormFieldElement;
+
+      const labels = collectAutofillContentService["queryElementLabels"](element);
+
+      expect(labels).toEqual(document.querySelectorAll("label[for='username-id']"));
+    });
   });
 
   describe("createLabelElementsTag", () => {

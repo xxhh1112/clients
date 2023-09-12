@@ -498,7 +498,9 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       return null;
     }
 
-    return (element.getRootNode() as Document | ShadowRoot).querySelectorAll(labelQuerySelectors);
+    return (element.getRootNode() as Document | ShadowRoot).querySelectorAll(
+      labelQuerySelectors.replace(/\n/g, "")
+    );
   }
 
   /**
