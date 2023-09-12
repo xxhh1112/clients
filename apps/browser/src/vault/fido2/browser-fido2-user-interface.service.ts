@@ -4,10 +4,14 @@ import {
   filter,
   firstValueFrom,
   fromEvent,
+  merge,
   Observable,
   Subject,
+  switchMap,
   take,
   takeUntil,
+  throwError,
+  fromEventPattern,
 } from "rxjs";
 
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -121,6 +125,8 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   private messages$ = (BrowserApi.messageListener$() as Observable<BrowserFido2Message>).pipe(
     filter((msg) => msg.sessionId === this.sessionId)
   );
+  private windowClosed$: Observable<number>;
+  private tabClosed$: Observable<number>;
   private connected$ = new BehaviorSubject(false);
   private destroy$ = new Subject<void>();
   private popout?: Popout;
@@ -162,11 +168,19 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       .subscribe((msg) => {
         if (msg.type === "AbortResponse") {
           this.close();
-          this.abortController.abort(
-            msg.fallbackRequested ? UserRequestedFallbackAbortReason : undefined
-          );
+          this.abort(msg.fallbackRequested);
         }
       });
+
+    this.windowClosed$ = fromEventPattern(
+      (handler: any) => chrome.windows.onRemoved.addListener(handler),
+      (handler: any) => chrome.windows.onRemoved.removeListener(handler)
+    );
+
+    this.tabClosed$ = fromEventPattern(
+      (handler: any) => chrome.tabs.onRemoved.addListener(handler),
+      (handler: any) => chrome.tabs.onRemoved.removeListener(handler)
+    );
 
     BrowserFido2UserInterfaceSession.sendMessage({
       type: "NewSessionCreatedRequest",
@@ -230,6 +244,10 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     await this.receive("AbortResponse");
   }
 
+  async ensureUnlockedVault(): Promise<void> {
+    await this.connect();
+  }
+
   async informCredentialNotFound(): Promise<void> {
     const data: BrowserFido2Message = {
       type: "InformCredentialNotFoundRequest",
@@ -246,6 +264,10 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     this.closed = true;
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private async abort(fallback = false) {
+    this.abortController.abort(fallback ? UserRequestedFallbackAbortReason : undefined);
   }
 
   private async send(msg: BrowserFido2Message): Promise<void> {
@@ -279,16 +301,51 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       throw new Error("Cannot re-open closed session");
     }
 
-    const queryParams = new URLSearchParams({ sessionId: this.sessionId }).toString();
     // create promise first to avoid race condition where the popout opens before we start listening
     const connectPromise = firstValueFrom(
-      this.connected$.pipe(filter((connected) => connected === true))
+      merge(
+        this.connected$.pipe(filter((connected) => connected === true)),
+        fromEvent(this.abortController.signal, "abort").pipe(
+          switchMap(() => throwError(() => new SessionClosedError()))
+        )
+      )
     );
-    this.popout = await this.popupUtilsService.popOut(
+
+    this.popout = await this.generatePopOut();
+
+    if (this.popout.type === "window") {
+      const popoutWindow = this.popout;
+      this.windowClosed$
+        .pipe(
+          filter((windowId) => popoutWindow.window.id === windowId),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(() => {
+          this.close();
+          this.abort();
+        });
+    } else if (this.popout.type === "tab") {
+      const popoutTab = this.popout;
+      this.tabClosed$
+        .pipe(
+          filter((tabId) => popoutTab.tab.id === tabId),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(() => {
+          this.close();
+          this.abort();
+        });
+    }
+
+    await connectPromise;
+  }
+
+  private async generatePopOut() {
+    const queryParams = new URLSearchParams({ sessionId: this.sessionId });
+    return this.popupUtilsService.popOut(
       null,
-      `popup/index.html?uilocation=popout#/fido2?${queryParams}`,
+      `popup/index.html?uilocation=popout#/fido2?${queryParams.toString()}`,
       { center: true }
     );
-    await connectPromise;
   }
 }

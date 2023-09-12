@@ -22,6 +22,7 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserRouterService } from "../../platform/popup/services/browser-router.service";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BroadcasterSubscriptionId = "TwoFactorComponent";
@@ -52,6 +53,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     loginService: LoginService,
     configService: ConfigServiceAbstraction,
     private dialogService: DialogService,
+    private routerService: BrowserRouterService,
     @Inject(WINDOW) protected win: Window
   ) {
     super(
@@ -83,6 +85,17 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     };
 
     super.successRoute = "/tabs/vault";
+
+    super.onSuccessfulLoginNavigate = async () => {
+      const previousUrl = this.routerService.getPreviousUrl();
+
+      if (previousUrl) {
+        this.router.navigateByUrl(previousUrl);
+      } else {
+        this.router.navigate([this.successRoute]);
+      }
+    };
+
     // FIXME: Chromium 110 has broken WebAuthn support in extensions via an iframe
     this.webAuthnNewTab = true;
   }

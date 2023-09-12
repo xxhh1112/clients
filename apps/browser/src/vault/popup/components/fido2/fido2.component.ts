@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -154,7 +154,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     window.close();
   }
 
-  @HostListener("window:unload")
   unload(fallback = false) {
     this.send({
       sessionId: this.sessionId,

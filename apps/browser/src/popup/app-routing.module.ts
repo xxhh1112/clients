@@ -11,6 +11,7 @@ import {
 import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
+import { fido2AuthGuard } from "../auth/guards/fido2-auth.guard";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
@@ -72,17 +73,19 @@ const routes: Routes = [
     path: "home",
     component: HomeComponent,
     canActivate: [UnauthGuard],
-    data: { state: "home" },
+    data: { state: "home", doNotSaveUrl: true },
   },
   {
     path: "fido2",
     component: Fido2Component,
+    canActivate: [fido2AuthGuard],
+    data: { state: "fido2" },
   },
   {
     path: "login",
     component: LoginComponent,
     canActivate: [UnauthGuard],
-    data: { state: "login" },
+    data: { state: "login", doNotSaveUrl: true },
   },
   {
     path: "login-with-device",
@@ -100,13 +103,13 @@ const routes: Routes = [
     path: "lock",
     component: LockComponent,
     canActivate: [lockGuard()],
-    data: { state: "lock" },
+    data: { state: "lock", doNotSaveUrl: true },
   },
   {
     path: "2fa",
     component: TwoFactorComponent,
     canActivate: [UnauthGuard],
-    data: { state: "2fa" },
+    data: { state: "2fa", doNotSaveUrl: true },
   },
   {
     path: "2fa-options",
