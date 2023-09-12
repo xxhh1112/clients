@@ -1979,6 +1979,7 @@ describe("CollectAutofillContentService", () => {
       };
       collectAutofillContentService["domRecentlyMutated"] = false;
       collectAutofillContentService["noFieldsFound"] = true;
+      collectAutofillContentService["currentLocationHref"] = window.location.href;
       jest.spyOn(collectAutofillContentService as any, "isAutofillElementNodeMutated");
 
       collectAutofillContentService["handleMutationObserverMutation"]([mutationRecord]);
@@ -2008,6 +2009,7 @@ describe("CollectAutofillContentService", () => {
       };
       collectAutofillContentService["domRecentlyMutated"] = false;
       collectAutofillContentService["noFieldsFound"] = true;
+      collectAutofillContentService["currentLocationHref"] = window.location.href;
       jest.spyOn(collectAutofillContentService as any, "isAutofillElementNodeMutated");
       jest.spyOn(collectAutofillContentService as any, "handleAutofillElementAttributeMutation");
 
