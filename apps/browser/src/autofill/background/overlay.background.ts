@@ -84,9 +84,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
       throw new Error(`Error getting auth status: ${error}`);
     });
     this.setupExtensionMessageListeners();
-
-    // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THE USAGE OF THIS METHOD.
-    // this.overrideUserAutofillSettings();
   }
 
   removePageDetails(tabId: number) {
@@ -454,26 +451,23 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async addNewVaultItem(
-    message: OverlayAddNewItemMessage,
+    { login }: OverlayAddNewItemMessage,
     sender: chrome.runtime.MessageSender
   ) {
-    if (!message.login) {
+    if (!login) {
       return;
     }
 
     const uriView = new LoginUriView();
-    uriView.uri = message.login.uri;
+    uriView.uri = login.uri;
 
     const loginView = new LoginView();
     loginView.uris = [uriView];
-    loginView.username = message.login.username || "";
-    loginView.password = message.login.password || "";
+    loginView.username = login.username || "";
+    loginView.password = login.password || "";
 
     const cipherView = new CipherView();
-    cipherView.name = (Utils.getHostname(message.login.uri) || message.login.hostname).replace(
-      /^www\./,
-      ""
-    );
+    cipherView.name = (Utils.getHostname(login.uri) || login.hostname).replace(/^www\./, "");
     cipherView.folderId = null;
     cipherView.type = CipherType.Login;
     cipherView.login = loginView;
@@ -494,7 +488,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private handleExtensionMessage = (
-    message: any,
+    message: OverlayBackgroundExtensionMessage,
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: any) => void
   ) => {
@@ -536,7 +530,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   };
 
-  private handleOverlayElementPortMessage = (message: any, port: chrome.runtime.Port) => {
+  private handleOverlayElementPortMessage = (
+    message: OverlayBackgroundExtensionMessage,
+    port: chrome.runtime.Port
+  ) => {
     const command = message?.command;
     let handler: CallableFunction | undefined;
 
@@ -554,43 +551,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
     handler({ message, port });
   };
-
-  // TODO: CG - ENSURE THAT THE ENGINEERING TEAM HAS A DISCUSSION ABOUT THE IMPLICATIONS OF THIS MODIFICATION.
-  // Other password managers leverage this privacy API to force autofill settings to be disabled.
-  // This helps with the user experience when using a third party password manager.
-  // However, it overrides the users settings and can be considered a privacy concern.
-  // If we approach using this API, we need to ensure that it is strictly an opt-in experience and
-  // convey why a user might want to disable autofill in their browser.
-  // Also worth noting that this API is only available in Chrome.
-  /**
-  private overrideUserAutofillSettings() {
-    if (
-      !chrome?.privacy?.services?.autofillAddressEnabled ||
-      !chrome.privacy.services.autofillCreditCardEnabled
-    ) {
-      return;
-    }
-
-    chrome.privacy.services.autofillAddressEnabled.get({}, (details) => {
-      const { levelOfControl, value } = details;
-      if (
-        levelOfControl === "controllable_by_this_extension" ||
-        (levelOfControl === "controlled_by_this_extension" && value === true)
-      ) {
-        chrome.privacy.services.autofillAddressEnabled.set({ value: false });
-      }
-    });
-    chrome.privacy.services.autofillCreditCardEnabled.get({}, function (details) {
-      const { levelOfControl, value } = details;
-      if (
-        levelOfControl === "controllable_by_this_extension" ||
-        (levelOfControl === "controlled_by_this_extension" && value === true)
-      ) {
-        chrome.privacy.services.autofillCreditCardEnabled.set({ value: false });
-      }
-    });
-  }
-  **/
 }
 
 export default OverlayBackground;
