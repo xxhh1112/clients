@@ -20,7 +20,7 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
-    openAutofillOverlay: ({ message }) => this.openAutofillOverlay(message.data.focusFieldElement),
+    openAutofillOverlay: ({ message }) => this.openAutofillOverlay(message),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
@@ -99,8 +99,8 @@ class AutofillInit implements AutofillInitInterface {
     }, 225);
   }
 
-  private openAutofillOverlay(focusFieldElement: boolean) {
-    this.autofillOverlayContentService.openAutofillOverlay(focusFieldElement);
+  private openAutofillOverlay({ data }: AutofillExtensionMessage) {
+    this.autofillOverlayContentService.openAutofillOverlay(data.focusFieldElement);
   }
 
   private blurAndRemoveOverlay() {
