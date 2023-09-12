@@ -67,7 +67,8 @@
     "clipboardWrite",
     "idle",
     "alarms",
-    "scripting"
+    "scripting",
+    "privacy"
   ],
   "optional_permissions": ["nativeMessaging"],
   "host_permissions": ["http://*/*", "https://*/*"],
