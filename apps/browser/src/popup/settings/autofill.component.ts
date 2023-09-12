@@ -78,7 +78,7 @@ export class AutofillComponent implements OnInit {
     await this.setAutofillKeyboardHelperText(command);
   }
 
-  async updateAutoFillOverlay() {
+  async updateEnableAutoFillOverlay() {
     await this.settingsService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
   }
 
