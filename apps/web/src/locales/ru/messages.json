@@ -1,19 +1,9 @@
 {
-  "pageTitle": {
-    "message": "Веб-хранилище $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Какой это тип элемента?"
   },
   "name": {
-    "message": "Имя"
+    "message": "Название"
   },
   "uri": {
     "message": "URI"
@@ -618,7 +608,7 @@
   "loginWithDevice": {
     "message": "Войти с помощью устройства"
   },
-  "loginWithDeviceEnabledInfo": {
+  "loginWithDeviceEnabledNote": {
     "message": "Вход с устройства должен быть настроен в настройках мобильного приложения Bitwarden. Нужен другой вариант?"
   },
   "loginWithMasterPassword": {
@@ -707,7 +697,7 @@
     }
   },
   "masterPassDoesntMatch": {
-    "message": "Мастер-пароли не совпадают."
+    "message": "Мастер-пароль не совпадает."
   },
   "newAccountCreated": {
     "message": "Ваш аккаунт создан! Теперь вы можете войти в систему."
@@ -721,11 +711,17 @@
   "unexpectedError": {
     "message": "Произошла непредвиденная ошибка."
   },
+  "expirationDateError": {
+    "message": "Выберите дату истечения срока действия в будущем."
+  },
   "emailAddress": {
     "message": "Адрес email"
   },
   "yourVaultIsLocked": {
     "message": "Ваше хранилище заблокировано. Для продолжения введите мастер-пароль."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Разблокировать"
@@ -958,6 +954,9 @@
   "copyVerificationCode": {
     "message": "Скопировать код подтверждения"
   },
+  "copyUuid": {
+    "message": "Скопировать UUID"
+  },
   "warning": {
     "message": "Предупреждение"
   },
@@ -983,7 +982,7 @@
     "message": "Экспорт"
   },
   "exportVault": {
-    "message": "Экспортировать хранилище"
+    "message": "Экспорт хранилища"
   },
   "exportSecrets": {
     "message": "Экспорт секретов"
@@ -1294,11 +1293,36 @@
   "importEncKeyError": {
     "message": "Ошибка при расшифровке экспортированного файла. Ваш ключ шифрования не совпадает с ключом шифрования, используемым для экспорта данных."
   },
+  "importDestination": {
+    "message": "Направление импорта"
+  },
+  "learnAboutImportOptions": {
+    "message": "Узнайте о возможностях импорта"
+  },
+  "selectImportFolder": {
+    "message": "Выбрать папку"
+  },
+  "selectImportCollection": {
+    "message": "Выбрать коллекцию"
+  },
+  "importTargetHint": {
+    "message": "Выберите эту опцию, если хотите, чтобы содержимое импортированного файла было перемещено в папку $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Файл содержит неназначенные элементы."
+  },
   "selectFormat": {
-    "message": "Выберите формат файла импорта"
+    "message": "Выберите формат импортируемого файла"
   },
   "selectImportFile": {
-    "message": "Выберите файл импорта"
+    "message": "Выберите импортируемый файл"
   },
   "chooseFile": {
     "message": "Выбрать файл"
@@ -1401,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "Защитите свою учетную запись, при помощи дополнительного шага при авторизации."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Включить двухэтапную аутентификацию для вашей организации."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Применить параметры двухэтапной аутентификации Bitwarden для пользователей, используя ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1900,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 ГБ зашифрованного хранилища для вложенных файлов."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Дополнительные варианты двухэтапной аутентификации, такие как YubiKey, FIDO U2F и Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Проприетарные варианты двухэтапной аутентификации, такие как YubiKey или Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Экстренный доступ"
@@ -2015,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "За любые неоплаченные подписки будет взиматься плата с вашего способа оплаты."
   },
   "paymentChargedWithTrial": {
     "message": "Ваш план включает семидневную бесплатную пробную версию. Ваш метод оплаты не будет использован до окончания пробной версии. Оплата будет выполняться каждый $INTERVAL$. Вы можете отказаться в любое время."
@@ -2644,6 +2674,12 @@
   },
   "webVault": {
     "message": "Веб-хранилище"
+  },
+  "bitWebVault": {
+    "message": "Веб-хранилище Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "Менеджер секретов Bitwarden"
   },
   "loggedIn": {
     "message": "Выполнен вход"
@@ -3323,6 +3359,9 @@
   "limitSubscriptionDesc": {
     "message": "Установите лимит мест для вашей подписки. По достижении этого лимита вы не сможете приглашать новых членов."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Установите лимит мест для вашей подписки на Менеджер секретов. По достижении этого лимита вы не сможете приглашать новых членов."
+  },
   "maxSeatLimit": {
     "message": "Предел мест (необязательно)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3503,6 +3542,9 @@
   "vaultTimeoutDesc": {
     "message": "Выберите тайм-аут для хранилища и действие, которое необходимо предпринять."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Выберите, когда сеанс хранилища будет завершен."
+  },
   "oneMinute": {
     "message": "1 минута"
   },
@@ -3591,8 +3633,8 @@
   "attachmentsNeedFix": {
     "message": "К этому элементу прикреплены старые вложения, которые необходимо исправить."
   },
-  "attachmentFixDesc": {
-    "message": "Это старое вложение необходимо исправить. Нажмите, чтобы узнать больше."
+  "attachmentFixDescription": {
+    "message": "Вложение использует устаревшее шифрование. Выберите 'Исправить' дня загрузки, повторного шифрования и выгрузки вложения."
   },
   "fix": {
     "message": "Исправить",
@@ -3610,7 +3652,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "Убедитесь, что ваше хранилище разблокировано и фраза отпечатка пальца совпадает на другом устройстве."
+    "message": "Убедитесь, что ваше хранилище разблокировано и фраза отпечатка совпадает на другом устройстве."
   },
   "fingerprintPhraseHeader": {
     "message": "Фраза отпечатка"
@@ -3809,29 +3851,11 @@
   "restoreSelected": {
     "message": "Восстановить выбранные"
   },
-  "restoreItem": {
-    "message": "Восстановить элемент"
-  },
   "restoredItem": {
     "message": "Элемент восстановлен"
   },
   "restoredItems": {
     "message": "Элементы восстановлены"
-  },
-  "restoreItemConfirmation": {
-    "message": "Вы уверены, что хотите восстановить этот элемент?"
-  },
-  "restoreItems": {
-    "message": "Восстановить элементы"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Выбрано элементов для восстановления: $COUNT$. Вы действительно хотите восстановить эти элементы?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Элемент $ID$ восстановлен.",
@@ -4375,8 +4399,8 @@
   "manageUsers": {
     "message": "Управлять пользователями"
   },
-  "manageResetPassword": {
-    "message": "Управлять сбросом пароля"
+  "manageAccountRecovery": {
+    "message": "Управление восстановлением аккаунта"
   },
   "disableRequiredError": {
     "message": "Перед отключением этой политики необходимо вручную отключить политику $POLICYNAME$.",
@@ -4594,20 +4618,17 @@
   "accountRecoveryPolicy": {
     "message": "Управление восстановлением аккаунта"
   },
-  "accountRecoveryPolicyDescription": {
-    "message": "Восстановление аккаунтов пользователей при утере мастер-пароля или доверенных устройств. Восстановление осуществляется на основе метода шифрования аккаунта."
+  "accountRecoveryPolicyDesc": {
+    "message": "На основе метода шифрования вы можете восстановить учетные записи, если мастер-пароли или доверенные устройства будут забыты или утеряны."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Пользователи организации должны зарегистрироваться самостоятельно или быть зарегистрированными автоматически, чтобы администраторы могли сбросить их мастер-пароль."
+  "accountRecoveryPolicyWarning": {
+    "message": "Существующие аккаунты с мастер-паролями потребуют от участников самостоятельной регистрации, перед восстановлением администраторами их учетных записей. Автоматическая регистрация включит восстановление учетных записей для новых участников."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "Перед активацией этой политики необходимо включить политику Единого входа (SSO)."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматическое регистрация"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Все пользователи будут автоматически зарегистрированы на сброс пароля, после того как их приглашение будет принято, и им не будет разрешено отказаться от его выполнения."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Пользователи, уже входящие в организацию, не смогут зарегистрироваться на сброс пароля задним числом. Они должны будут зарегистрироваться самостоятельно, чтобы администраторы могли сбросить их мастер-пароль."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Автоматически регистрировать новых пользователей"
@@ -4708,8 +4729,8 @@
   "error": {
     "message": "Ошибка"
   },
-  "resetPasswordManageUsers": {
-    "message": "Для управления пользователями необходимо также предоставить разрешение на управление сбросом пароля"
+  "accountRecoveryManageUsers": {
+    "message": "Для управления пользователями также необходимо предоставить разрешение на управление восстановлением аккаунта"
   },
   "setupProvider": {
     "message": "Настройка поставщика"
@@ -4846,7 +4867,7 @@
     "message": "Мастер-пароль не соответствует требованиям политики этой организации. Чтобы присоединиться к организации, нужно обновить мастер-пароль. Текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущая сессия будет завершена и потребуется повторная авторизация. Сессии на других устройствах могут оставаться активными в течение часа."
+    "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа."
   },
   "maximumVaultTimeout": {
     "message": "Тайм-аут хранилища"
@@ -4920,8 +4941,8 @@
   "disablePersonalVaultExport": {
     "message": "Удалить экспорт личного хранилища"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Не разрешать пользователям экспортировать данные своего личного хранилища."
+  "disablePersonalVaultExportDescription": {
+    "message": "Запретить пользователям экспортировать данные из их собственного хранилища."
   },
   "vaultExportDisabled": {
     "message": "Экспорт хранилища отключен"
@@ -5224,7 +5245,7 @@
     "message": "Использовать",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "требуемую политику аутентификации с единым входом",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
@@ -5263,10 +5284,10 @@
     "message": "SSO отключен"
   },
   "enabledKeyConnector": {
-    "message": "Соединитель ключей включен"
+    "message": "Соединитель ключей активирован"
   },
   "disabledKeyConnector": {
-    "message": "Соединитель ключей отключен"
+    "message": "Соединитель ключей деактивирован"
   },
   "keyConnectorWarning": {
     "message": "После того как участники начнут использовать соединитель ключей, ваша организация не сможет вернуться к расшифровке посредством мастер-пароля. Продолжайте только в том случае, если вам удобно развертывать и управлять сервером ключей."
@@ -5424,8 +5445,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Экспорт хранилища организации"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Будут экспортированы только отдельные элементы хранилища, связанные с $EMAIL$. Элементы хранилища организации включены не будут. Экспортируется только информация об элементах хранилища, не включая связанную историю паролей или вложений.",
+  "exportingIndividualVaultDescription": {
+    "message": "Будут экспортированы только отдельные элементы хранилища, связанные с $EMAIL$. Элементы хранилища организации включены не будут. Экспортируется только информация об элементах хранилища, не включая связанные вложения.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5433,8 +5454,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Личные элементы хранилища и элементы из других организаций включены не будут.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Элементы из личных хранилищ и из других организаций включены не будут.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5623,7 +5644,7 @@
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimEnabledCheckboxDescHelpText": {
-    "message": "Установите предпочтительного поставщика идентификационных данных, настроив URL и ключ API SCIM",
+    "message": "Установить предпочтительного поставщика идентификационных данных, настроив URL и ключ API SCIM",
     "description": "the text, 'SCIM', is an acronymn and should not be translated."
   },
   "scimApiKeyHelperText": {
@@ -6620,14 +6641,14 @@
   "changeKdfLoggedOutWarning": {
     "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
   },
-  "secretsManagerBeta": {
-    "message": "Менеджер секретов Beta"
-  },
   "secretsManager": {
     "message": "Менеджер секретов"
   },
+  "secretsManagerBeta": {
+    "message": "Менеджер секретов Beta"
+  },
   "secretsManagerAccessDescription": {
-    "message": "Activate user access to Secrets Manager."
+    "message": "Активировать доступ пользователей к менеджеру секретов."
   },
   "userAccessSecretsManagerGA": {
     "message": "Этот пользователь может получить доступ к менеджеру секретов"
@@ -6757,7 +6778,7 @@
     "message": "Удалить доступ"
   },
   "checkForBreaches": {
-    "message": "Проверьте известные случаи утечки данных для этого пароля"
+    "message": "Проверять известные случаи утечки данных для этого пароля"
   },
   "exposedMasterPassword": {
     "message": "Мастер-пароль скомпрометирован"
@@ -6806,16 +6827,11 @@
   "enforceOnLoginDesc": {
     "message": "Требовать от существующих пользователей смены паролей"
   },
-  "region": {
-    "message": "Регион"
+  "usDomain": {
+    "message": "bitwarden.com"
   },
-  "eu": {
-    "message": "Европа",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "США",
-    "description": "United States"
+  "euDomain": {
+    "message": "bitwarden.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "У вас недостаточно прав для удаления этого проекта",
@@ -6828,20 +6844,60 @@
   "updateKdfSettings": {
     "message": "Обновить параметры KDF"
   },
+  "loginInitiated": {
+    "message": "Вход инициирован"
+  },
+  "deviceApprovalRequired": {
+    "message": "Требуется одобрение устройства. Выберите вариант ниже:"
+  },
+  "rememberThisDevice": {
+    "message": "Запомнить это устройство"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Снимите флажок, если используете общедоступное устройство"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Одобрить с другого устройства"
+  },
+  "requestAdminApproval": {
+    "message": "Запросить одобрение администратора"
+  },
+  "approveWithMasterPassword": {
+    "message": "Одобрить с мастер-паролем"
+  },
   "trustedDeviceEncryption": {
     "message": "Шифрование доверенного устройства"
   },
-  "memberDecryptionTdeDescriptionStart": {
-    "message": "После аутентификации участники расшифровывают данные хранилища с помощью ключа, хранящегося на их устройстве.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "trustedDevices": {
+    "message": "Доверенные устройства"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "Политика администрирования восстановления аккаунтов",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "После аутентификации данные хранилища пользователей станут расшифровываться с помощью ключа, хранящегося на их устройстве. При",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "с автоматической регистрацией включается при использовании этой опции.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "использовании данной опции будут включены политика единой организации,",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "политика",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "и политика",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "администрирования восстановления аккаунтов",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "с автоматической регистрацией.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ не найден",
@@ -6859,18 +6915,18 @@
     "message": "Пользователь обновил пароль, выданный через восстановление аккаунта."
   },
   "activatedAccessToSecretsManager": {
-    "message": "Activated access to Secrets Manager",
+    "message": "Активирован доступ к менеджеру секретов",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
   "activateAccess": {
-    "message": "Activate access"
+    "message": "Активировать доступ"
   },
   "bulkEnableSecretsManagerDescription": {
     "message": "Предоставить следующим пользователям доступ к менеджеру секретов. Роль, предоставленная в менеджере паролей, будет применяться и к менеджеру секретов.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
   "activateSecretsManager": {
-    "message": "Activate Secrets Manager"
+    "message": "Активировать менеджер секретов"
   },
   "yourOrganizationsFingerprint": {
     "message": "Фраза отпечатка вашей организации",
@@ -6930,6 +6986,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Удаление участников у которых не установлен мастер-пароль может ограничить доступ к их основным аккаунтам."
   },
+  "approvedAuthRequest": {
+    "message": "Одобренное устройство для $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Отклоненное устройство для $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Запрошено одобрение устройства."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Начните 7-дневную бесплатную пробную версию Bitwarden для $ORG$",
     "placeholders": {
@@ -6942,13 +7019,166 @@
   "next": {
     "message": "Далее"
   },
-  "usFlag": {
-    "message": "Флаг США"
-  },
-  "euFlag": {
-    "message": "Флаг ЕС"
-  },
   "selectedRegionFlag": {
     "message": "Флаг выбранного региона"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Аккаунт успешно создан!"
+  },
+  "adminApprovalRequested": {
+    "message": "Запрошено одобрение администратора"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Ваш запрос был отправлен администратору."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Вас уведомят об одобрении."
+  },
+  "troubleLoggingIn": {
+    "message": "Не удалось войти?"
+  },
+  "loginApproved": {
+    "message": "Вход одобрен"
+  },
+  "userEmailMissing": {
+    "message": "Отсутствует email пользователя"
+  },
+  "deviceTrusted": {
+    "message": "Доверенное устройство"
+  },
+  "sendsNoItemsTitle": {
+    "message": "Нет активных Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Используйте Send для безопасного обмена зашифрованной информацией с кем угодно.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Пригласить пользователей"
+  },
+  "secretsManagerForPlan": {
+    "message": "Менеджер секретов для $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "Командам инженеров и DevOps для управления секретами на протяжении всего жизненного цикла разработки ПО."
+  },
+  "free2PersonOrganization": {
+    "message": "Бесплатные организации из 2 человек"
+  },
+  "unlimitedSecrets": {
+    "message": "Неограниченные секреты"
+  },
+  "unlimitedProjects": {
+    "message": "Неограниченные проекты"
+  },
+  "projectsIncluded": {
+    "message": "Включено $COUNT$ проектов",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "Включено $COUNT$ сервисных аккаунтов",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ в месяц за дополнительные сервисные аккаунты",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Добавить Менеджер секретов"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Добавить Менеджер секретов к этому тарифному плану, чтобы сохранить доступ к секретам, созданным ранее."
+  },
+  "additionalServiceAccounts": {
+    "message": "Дополнительные сервисные аккаунты"
+  },
+  "includedServiceAccounts": {
+    "message": "Ваш план включает в себя $COUNT$ сервисных аккаунтов.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "Вы можете добавить дополнительные сервисные аккаунты за $COST$ в месяц.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Стоимость плана Менеджер паролей"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Стоимость плана Менеджер секретов"
+  },
+  "passwordManager": {
+    "message": "Менеджер паролей"
+  },
+  "freeOrganization": {
+    "message": "Бесплатная организация"
+  },
+  "limitServiceAccounts": {
+    "message": "Лимит сервисных аккаунтов (опционально)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Установите лимит для сервисных аккаунтов. По достижении этого лимита создание новых сервисных аккаунтов будет невозможным."
+  },
+  "serviceAccountLimit": {
+    "message": "Лимит сервисного аккаунта (опционально)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Максимальная потенциальная стоимость сервисного аккаунта"
+  },
+  "loggedInExclamation": {
+    "message": "Вход выполнен!"
+  },
+  "smBetaEndedDesc": {
+    "message": "Бета-версия Менеджера секретов завершилась $BETA_ENDING_DATE$. У вас осталось $DAYS$ дней, чтобы добавить его к своей платной подписке и сохранить доступ к данным. Чтобы добавить Менеджер секретов к подписке, обратитесь в службу поддержки клиентов.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Окончание бета-версии"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Уже зарегистрированы?"
   }
 }

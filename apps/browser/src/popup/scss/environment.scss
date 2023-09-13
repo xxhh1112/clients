@@ -90,20 +90,6 @@ html.browser_safari {
       background-color: themed("listItemBackgroundHoverColor") !important;
     }
   }
-
-  img {
-    margin-bottom: -2px;
-    width: 22px;
-    height: 14px;
-  }
-
-  .img-us {
-    content: url("../images/us-flag.png");
-  }
-
-  .img-eu {
-    content: url("../images/eu-flag.png");
-  }
 }
 
 .environment-selector-padding {

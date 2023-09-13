@@ -90,7 +90,6 @@ export class Main {
       null,
       this.memoryStorageService,
       this.logService,
-      null,
       new StateFactory(GlobalState, Account),
       false // Do not use disk caching because this will get out of sync with the renderer service
     );
@@ -98,6 +97,7 @@ export class Main {
     this.windowMain = new WindowMain(
       this.stateService,
       this.logService,
+      this.storageService,
       (arg) => this.processDeepLink(arg),
       (win) => this.trayMain.setupWindowListeners(win)
     );

@@ -42,7 +42,7 @@ export class EnvironmentSelectorComponent implements OnInit, OnDestroy {
   showingModal = false;
   selectedEnvironment: Region;
   ServerEnvironmentType = Region;
-  overlayPostition: ConnectedPosition[] = [
+  overlayPosition: ConnectedPosition[] = [
     {
       originX: "start",
       originY: "bottom",
@@ -89,7 +89,7 @@ export class EnvironmentSelectorComponent implements OnInit, OnDestroy {
 
   async updateEnvironmentInfo() {
     this.selectedEnvironment = this.environmentService.selectedRegion;
-    this.euServerFlagEnabled = await this.configService.getFeatureFlagBool(
+    this.euServerFlagEnabled = await this.configService.getFeatureFlag<boolean>(
       FeatureFlag.DisplayEuEnvironmentFlag
     );
   }
