@@ -17,7 +17,9 @@ export abstract class ConfigServiceAbstraction {
     key: FeatureFlag,
     defaultValue?: T
   ) => Promise<T>;
-  checkServerMeetsVersionRequirement: (minimumRequiredServerVersion: SemVer) => Promise<boolean>;
+  checkServerMeetsVersionRequirement$: (
+    minimumRequiredServerVersion: SemVer
+  ) => Observable<boolean>;
 
   /**
    * Force ConfigService to fetch an updated config from the server and emit it from serverConfig$

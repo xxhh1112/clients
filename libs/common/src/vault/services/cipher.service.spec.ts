@@ -1,4 +1,5 @@
 import { mock, mockReset } from "jest-mock-extended";
+import { of } from "rxjs";
 
 import { makeStaticByteArray } from "../../../spec/utils";
 import { ApiService } from "../../abstractions/api.service";
@@ -147,7 +148,7 @@ describe("Cipher Service", () => {
         Promise.resolve<any>(new SymmetricCryptoKey(new Uint8Array(32)))
       );
 
-      configService.checkServerMeetsVersionRequirement.mockReturnValue(Promise.resolve(false));
+      configService.checkServerMeetsVersionRequirement$.mockReturnValue(of(false));
       process.env.FLAGS = JSON.stringify({
         enableCipherKeyEncryption: false,
       });
@@ -252,7 +253,7 @@ describe("Cipher Service", () => {
       cipherView.type = CipherType.Login;
 
       encryptService.decryptToBytes.mockReturnValue(Promise.resolve(makeStaticByteArray(64)));
-      configService.checkServerMeetsVersionRequirement.mockReturnValue(Promise.resolve(true));
+      configService.checkServerMeetsVersionRequirement$.mockReturnValue(of(true));
       cryptoService.makeCipherKey.mockReturnValue(
         Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)) as CipherKey)
       );

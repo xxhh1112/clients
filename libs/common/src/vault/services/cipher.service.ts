@@ -1,3 +1,4 @@
+import { firstValueFrom } from "rxjs";
 import { SemVer } from "semver";
 
 import { ApiService } from "../../abstractions/api.service";
@@ -1260,8 +1261,10 @@ export class CipherService implements CipherServiceAbstraction {
   async getCipherKeyEncryptionEnabled(): Promise<boolean> {
     return (
       flagEnabled("enableCipherKeyEncryption") &&
-      (await this.configService.checkServerMeetsVersionRequirement(
-        new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER)
+      (await firstValueFrom(
+        this.configService.checkServerMeetsVersionRequirement$(
+          new SemVer(CIPHER_KEY_ENC_MIN_SERVER_VER)
+        )
       ))
     );
   }

@@ -110,17 +110,15 @@ export class ConfigService implements ConfigServiceAbstraction {
    * @param minimumRequiredServerVersion The minimum version required
    * @returns True if the server version is greater than or equal to the minimum required version
    */
-  async checkServerMeetsVersionRequirement(minimumRequiredServerVersion: SemVer): Promise<boolean> {
-    return firstValueFrom(
-      this.serverConfig$.pipe(
-        map((serverConfig) => {
-          if (serverConfig == null) {
-            return false;
-          }
-          const serverVersion = new SemVer(serverConfig.version);
-          return serverVersion.compare(minimumRequiredServerVersion) >= 0;
-        })
-      )
+  checkServerMeetsVersionRequirement$(minimumRequiredServerVersion: SemVer) {
+    return this.serverConfig$.pipe(
+      map((serverConfig) => {
+        if (serverConfig == null) {
+          return false;
+        }
+        const serverVersion = new SemVer(serverConfig.version);
+        return serverVersion.compare(minimumRequiredServerVersion) >= 0;
+      })
     );
   }
 }
