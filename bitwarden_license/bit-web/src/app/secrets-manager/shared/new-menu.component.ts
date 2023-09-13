@@ -36,9 +36,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: any) => {
       this.organizationId = params.organizationId;
-
-      const org = this.organizationService.get(this.organizationId);
-      this.organizationEnabled = org.enabled;
+      this.organizationEnabled = this.organizationService.get(params.organizationId)?.enabled;
     });
   }
 

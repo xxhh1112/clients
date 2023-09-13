@@ -71,9 +71,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.organizationId = params.organizationId;
       this.projectId = params.projectId;
-
-      const org = this.organizationService.get(this.organizationId);
-      this.organizationEnabled = org.enabled;
+      this.organizationEnabled = this.organizationService.get(params.organizationId)?.enabled;
     });
   }
 

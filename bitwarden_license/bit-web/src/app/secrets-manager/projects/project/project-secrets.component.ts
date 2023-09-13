@@ -61,10 +61,9 @@ export class ProjectSecretsComponent {
       startWith(null),
       combineLatestWith(this.route.params, currentProjectEdited),
       switchMap(async ([_, params]) => {
-        const org = this.organizationService.get(this.organizationId);
         this.organizationId = params.organizationId;
-        this.organizationEnabled = org.enabled;
         this.projectId = params.projectId;
+        this.organizationEnabled = this.organizationService.get(params.organizationId)?.enabled;
         return await this.getSecretsByProject();
       })
     );

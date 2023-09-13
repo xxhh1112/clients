@@ -51,9 +51,7 @@ export class ProjectsComponent implements OnInit {
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
-
-        const org = await this.organizationService.get(this.organizationId);
-        this.organizationEnabled = org.enabled;
+        this.organizationEnabled = this.organizationService.get(params.organizationId)?.enabled;
 
         return await this.getProjects();
       })
