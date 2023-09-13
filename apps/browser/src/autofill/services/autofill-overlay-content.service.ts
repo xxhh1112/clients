@@ -1,6 +1,8 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
-import { tabbable, FocusableElement } from "tabbable";
+import { FocusableElement, tabbable } from "tabbable";
+
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { FocusedFieldData } from "../background/abstractions/overlay.background";
 import { EVENTS } from "../constants";
@@ -23,6 +25,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
+  private authStatus: AuthenticationStatus;
+  private isOverlayCiphersPopulated = false;
   private focusableElements: FocusableElement[] = [];
   private isOverlayButtonVisible = false;
   private isOverlayListVisible = false;
@@ -46,6 +50,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   constructor() {
     this.initOverlayOnDomContentLoaded();
+  }
+
+  setIsOverlayCiphersPopulated(isOverlayCiphersPopulated: boolean) {
+    this.isOverlayCiphersPopulated = isOverlayCiphersPopulated;
   }
 
   setupAutofillOverlayListenerOnField(
@@ -83,13 +91,17 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  openAutofillOverlay(focusFieldElement?: boolean) {
+  openAutofillOverlay(isFocusingFieldElement?: boolean, authStatus?: AuthenticationStatus) {
     if (!this.mostRecentlyFocusedField) {
       return;
     }
 
-    if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
+    if (isFocusingFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.focusMostRecentOverlayField();
+    }
+
+    if (typeof authStatus !== "undefined") {
+      this.authStatus = authStatus;
     }
 
     this.updateOverlayElementsPosition();
@@ -254,7 +266,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.storeModifiedFormElement(formFieldElement, autofillFieldData);
 
-    if (formFieldElement.value) {
+    if (formFieldElement.value && (this.isOverlayCiphersPopulated || !this.isUserAuthed())) {
       this.removeAutofillOverlayList();
       return;
     }
@@ -314,7 +326,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const initiallyFocusedField = this.mostRecentlyFocusedField;
     await this.updateMostRecentlyFocusedField(formFieldElement);
 
-    if (!(formFieldElement as HTMLInputElement).value) {
+    if (
+      !(formFieldElement as HTMLInputElement).value ||
+      (!this.isOverlayCiphersPopulated && this.isUserAuthed())
+    ) {
       sendExtensionMessage("openAutofillOverlay");
       return;
     }
@@ -324,6 +339,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     this.updateOverlayButtonPosition();
+  }
+
+  private isUserAuthed() {
+    return this.authStatus === AuthenticationStatus.Unlocked;
   }
 
   private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {

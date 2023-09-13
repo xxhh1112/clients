@@ -24,6 +24,7 @@ class AutofillInit implements AutofillInitInterface {
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
+    updateIsOverlayCiphersPopulated: ({ message }) => this.updateIsOverlayCiphersPopulated(message),
     promptForLogin: () => this.blurAndRemoveOverlay(),
     passwordReprompt: () => this.blurAndRemoveOverlay(),
   };
@@ -100,7 +101,8 @@ class AutofillInit implements AutofillInitInterface {
   }
 
   private openAutofillOverlay({ data }: AutofillExtensionMessage) {
-    this.autofillOverlayContentService.openAutofillOverlay(data.focusFieldElement);
+    const { isFocusingFieldElement, authStatus } = data;
+    this.autofillOverlayContentService.openAutofillOverlay(isFocusingFieldElement, authStatus);
   }
 
   private blurAndRemoveOverlay() {
@@ -125,8 +127,14 @@ class AutofillInit implements AutofillInitInterface {
     this.autofillOverlayContentService.addNewVaultItem();
   }
 
-  private redirectOverlayFocusOut(message: any) {
-    this.autofillOverlayContentService.redirectOverlayFocusOut(message?.data?.direction);
+  private redirectOverlayFocusOut({ data }: AutofillExtensionMessage) {
+    this.autofillOverlayContentService.redirectOverlayFocusOut(data?.direction);
+  }
+
+  private updateIsOverlayCiphersPopulated({ data }: AutofillExtensionMessage) {
+    this.autofillOverlayContentService.setIsOverlayCiphersPopulated(
+      Boolean(data?.isOverlayCiphersPopulated)
+    );
   }
 
   /**

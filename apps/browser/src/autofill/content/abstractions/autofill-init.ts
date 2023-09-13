@@ -10,7 +10,9 @@ type AutofillExtensionMessage = {
   ciphers?: any;
   data?: {
     authStatus?: AuthenticationStatus;
-    focusFieldElement?: boolean;
+    isFocusingFieldElement?: boolean;
+    isOverlayCiphersPopulated?: boolean;
+    direction?: string;
   };
 };
 
@@ -22,7 +24,8 @@ type AutofillExtensionMessageHandlers = {
   openAutofillOverlay: (message: { message: AutofillExtensionMessage }) => void;
   closeAutofillOverlay: () => void;
   addNewVaultItemFromOverlay: () => void;
-  redirectOverlayFocusOut: ({ message }: { message: any }) => void;
+  redirectOverlayFocusOut: ({ message }: { message: AutofillExtensionMessage }) => void;
+  updateIsOverlayCiphersPopulated: ({ message }: { message: AutofillExtensionMessage }) => void;
   promptForLogin: () => void;
   passwordReprompt: () => void;
 };

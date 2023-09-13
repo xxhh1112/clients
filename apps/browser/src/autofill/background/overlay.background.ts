@@ -30,7 +30,7 @@ import {
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
-  private overlayCiphers: Map<string, CipherView> = new Map();
+  private overlayLoginCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
   private overlayButtonPort: chrome.runtime.Port;
@@ -98,23 +98,24 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    this.overlayCiphers = new Map();
-    const ciphers = (await this.cipherService.getAllDecryptedForUrl(currentTab.url)).sort((a, b) =>
-      this.cipherService.sortCiphersByLastUsedThenName(a, b)
+    this.overlayLoginCiphers = new Map();
+    const ciphersViews = (await this.cipherService.getAllDecryptedForUrl(currentTab.url)).sort(
+      (a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b)
     );
-    for (let cipherIndex = 0; cipherIndex < ciphers.length; cipherIndex++) {
-      this.overlayCiphers.set(`overlay-cipher-${cipherIndex}`, ciphers[cipherIndex]);
+    for (let cipherIndex = 0; cipherIndex < ciphersViews.length; cipherIndex++) {
+      this.overlayLoginCiphers.set(`overlay-cipher-${cipherIndex}`, ciphersViews[cipherIndex]);
     }
 
-    this.overlayListPort?.postMessage({
-      command: "updateOverlayListCiphers",
-      ciphers: this.getOverlayCipherData(),
+    const ciphers = this.getOverlayCipherData();
+    this.overlayListPort?.postMessage({ command: "updateOverlayListCiphers", ciphers });
+    await BrowserApi.tabSendMessageData(currentTab, "updateIsOverlayCiphersPopulated", {
+      isOverlayCiphersPopulated: Boolean(ciphers.length),
     });
   }
 
   private getOverlayCipherData(): OverlayCipherData[] {
     const isFaviconDisabled = this.settingsService.getDisableFavicon();
-    const overlayCiphersArray = Array.from(this.overlayCiphers);
+    const overlayCiphersArray = Array.from(this.overlayLoginCiphers);
     const overlayCipherData = [];
     let cipherIconData: WebsiteIconData;
 
@@ -175,7 +176,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    const cipher = this.overlayCiphers.get(overlayCipherId);
+    const cipher = this.overlayLoginCiphers.get(overlayCipherId);
 
     if (await this.autofillService.isPasswordRepromptRequired(cipher, sender.tab)) {
       return;
@@ -188,7 +189,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       allowTotpAutofill: true,
     });
 
-    this.overlayCiphers = new Map([[overlayCipherId, cipher], ...this.overlayCiphers]);
+    this.overlayLoginCiphers = new Map([[overlayCipherId, cipher], ...this.overlayLoginCiphers]);
   }
 
   private checkOverlayFocused() {
@@ -296,12 +297,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort?.postMessage(portMessage);
   }
 
-  private async openOverlay(focusFieldElement = false) {
+  private async openOverlay(isFocusingFieldElement = false) {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
 
     await BrowserApi.tabSendMessageData(currentTab, "openAutofillOverlay", {
+      isFocusingFieldElement,
       authStatus: await this.getAuthStatus(),
-      focusFieldElement,
     });
   }
 
@@ -381,7 +382,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     { overlayCipherId }: OverlayBackgroundExtensionMessage,
     { sender }: chrome.runtime.Port
   ) {
-    const cipher = this.overlayCiphers.get(overlayCipherId);
+    const cipher = this.overlayLoginCiphers.get(overlayCipherId);
     if (!cipher) {
       return;
     }
