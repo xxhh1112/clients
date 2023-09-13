@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "Protege tu cuenta requiriendo un paso adicional a la hora de acceder."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Forzar opciones de inicio de sesión en dos pasos de Bitwarden para los miembros mediante el uso del ",
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB de almacenamiento de archivos cifrados."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Opciones adicionales de inicio de sesión de dos pasos como YubiKey, Fido U2F y Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Opciones de inicio de sesión con autenticación de dos pasos propietarios como YubiKey y Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Acceso de emergencia"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Your plan comes with a free 7 day trial. Your card will not be charged until the trial has ended and on a recurring basis each $INTERVAL$. You may cancel at any time."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Siguiente"
-  },
-  "usFlag": {
-    "message": "Bandera de EE.UU."
-  },
-  "euFlag": {
-    "message": "Bandera de EU"
   },
   "selectedRegionFlag": {
     "message": "Región seleccionada"

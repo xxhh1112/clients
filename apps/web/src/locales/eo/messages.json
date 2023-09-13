@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "Sekurigu vian konton postulante plian paŝon kiam vi ensalutas."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB ĉifrita stokado por dosieraj aldonaĵoj."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Pliaj du-paŝaj ensalutaj opcioj kiel YubiKey, FIDO U2F kaj Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Kriza Aliro"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Via plano venas kun senpaga 7-taga provado. Via pagmaniero ne estos ŝargita ĝis la proceso finiĝos. Fakturado okazos ĉiufoje $INTERVAL$. Vi rajtas nuligi iam ajn."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Next"
-  },
-  "usFlag": {
-    "message": "US flag"
-  },
-  "euFlag": {
-    "message": "EU flag"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"

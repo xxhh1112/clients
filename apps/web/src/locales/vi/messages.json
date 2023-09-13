@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "Bảo mật tài khoản bằng các phương pháp sau khi đăng nhập."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB encrypted storage for file attachments."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Additional two-step login options such as YubiKey, FIDO U2F, and Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Emergency access"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
   },
   "paymentChargedWithTrial": {
     "message": "Gói của bạn đi kèm với 7 ngày dùng thử miễn phí. Phương thức thanh toán của bạn sẽ không bị tính phí cho đến khi hết thời gian dùng thử. Việc thanh toán sẽ thực hiện định kỳ mỗi $INTERVAL$. Bạn có thể hủy bỏ bất cứ lúc nào."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Next"
-  },
-  "usFlag": {
-    "message": "US flag"
-  },
-  "euFlag": {
-    "message": "EU flag"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"
