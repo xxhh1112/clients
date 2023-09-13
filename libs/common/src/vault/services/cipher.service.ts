@@ -96,62 +96,14 @@ export class CipherService implements CipherServiceAbstraction {
     key?: SymmetricCryptoKey,
     originalCipher: Cipher = null
   ): Promise<Cipher> {
-    // Adjust password history
     if (model.id != null) {
       if (originalCipher == null) {
         originalCipher = await this.get(model.id);
       }
       if (originalCipher != null) {
-        const existingCipher = await originalCipher.decrypt(
-          await this.getKeyForCipherKeyDecryption(originalCipher)
-        );
-        model.passwordHistory = existingCipher.passwordHistory || [];
-        if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
-          if (
-            existingCipher.login.password != null &&
-            existingCipher.login.password !== "" &&
-            existingCipher.login.password !== model.login.password
-          ) {
-            const ph = new PasswordHistoryView();
-            ph.password = existingCipher.login.password;
-            ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
-            model.passwordHistory.splice(0, 0, ph);
-          } else {
-            model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
-          }
-        }
-        if (existingCipher.hasFields) {
-          const existingHiddenFields = existingCipher.fields.filter(
-            (f) =>
-              f.type === FieldType.Hidden &&
-              f.name != null &&
-              f.name !== "" &&
-              f.value != null &&
-              f.value !== ""
-          );
-          const hiddenFields =
-            model.fields == null
-              ? []
-              : model.fields.filter(
-                  (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
-                );
-          existingHiddenFields.forEach((ef) => {
-            const matchedField = hiddenFields.find((f) => f.name === ef.name);
-            if (matchedField == null || matchedField.value !== ef.value) {
-              const ph = new PasswordHistoryView();
-              ph.password = ef.name + ": " + ef.value;
-              ph.lastUsedDate = new Date();
-              model.passwordHistory.splice(0, 0, ph);
-            }
-          });
-        }
+        await this.updateExistingCipherFromModel(model, originalCipher);
       }
-      if (model.passwordHistory != null && model.passwordHistory.length === 0) {
-        model.passwordHistory = null;
-      } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
-        // only save last 5 history
-        model.passwordHistory = model.passwordHistory.slice(0, 5);
-      }
+      this.adjustPasswordHistoryLength(model);
     }
 
     const cipher = new Cipher();
@@ -174,10 +126,13 @@ export class CipherService implements CipherServiceAbstraction {
 
     if (await this.getCipherKeyEncryptionEnabled()) {
       cipher.key = originalCipher?.key ?? null;
-      return this.encryptWithCipherKey(model, cipher);
+      return this.encryptCipherWithCipherKey(model, cipher, key);
+    } else {
+      // We want to ensure that the cipher key is null if cipher key encryption is disabled
+      // so that decryption uses the proper key.
+      cipher.key = null;
+      return this.encryptCipher(model, cipher, key);
     }
-
-    return this.encryptCipher(model, cipher, key);
   }
 
   async encryptAttachments(
@@ -979,6 +934,64 @@ export class CipherService implements CipherServiceAbstraction {
 
   // Helpers
 
+  private async updateExistingCipherFromModel(
+    model: CipherView,
+    originalCipher: Cipher
+  ): Promise<void> {
+    const existingCipher = await originalCipher.decrypt(
+      await this.getKeyForCipherKeyDecryption(originalCipher)
+    );
+    model.passwordHistory = existingCipher.passwordHistory || [];
+    if (model.type === CipherType.Login && existingCipher.type === CipherType.Login) {
+      if (
+        existingCipher.login.password != null &&
+        existingCipher.login.password !== "" &&
+        existingCipher.login.password !== model.login.password
+      ) {
+        const ph = new PasswordHistoryView();
+        ph.password = existingCipher.login.password;
+        ph.lastUsedDate = model.login.passwordRevisionDate = new Date();
+        model.passwordHistory.splice(0, 0, ph);
+      } else {
+        model.login.passwordRevisionDate = existingCipher.login.passwordRevisionDate;
+      }
+    }
+    if (existingCipher.hasFields) {
+      const existingHiddenFields = existingCipher.fields.filter(
+        (f) =>
+          f.type === FieldType.Hidden &&
+          f.name != null &&
+          f.name !== "" &&
+          f.value != null &&
+          f.value !== ""
+      );
+      const hiddenFields =
+        model.fields == null
+          ? []
+          : model.fields.filter(
+              (f) => f.type === FieldType.Hidden && f.name != null && f.name !== ""
+            );
+      existingHiddenFields.forEach((ef) => {
+        const matchedField = hiddenFields.find((f) => f.name === ef.name);
+        if (matchedField == null || matchedField.value !== ef.value) {
+          const ph = new PasswordHistoryView();
+          ph.password = ef.name + ": " + ef.value;
+          ph.lastUsedDate = new Date();
+          model.passwordHistory.splice(0, 0, ph);
+        }
+      });
+    }
+  }
+
+  private adjustPasswordHistoryLength(model: CipherView) {
+    if (model.passwordHistory != null && model.passwordHistory.length === 0) {
+      model.passwordHistory = null;
+    } else if (model.passwordHistory != null && model.passwordHistory.length > 5) {
+      // only save last 5 history
+      model.passwordHistory = model.passwordHistory.slice(0, 5);
+    }
+  }
+
   private async shareAttachmentWithServer(
     attachmentView: AttachmentView,
     cipherId: string,
@@ -1208,26 +1221,6 @@ export class CipherService implements CipherServiceAbstraction {
     this.sortedCiphersCache.clear();
   }
 
-  private async encryptWithCipherKey(model: CipherView, cipher: Cipher): Promise<Cipher> {
-    let enckey: SymmetricCryptoKey;
-    if (cipher.key == null) {
-      enckey = await this.cryptoService.makeCipherKey();
-      cipher.key = await this.encryptService.encrypt(
-        enckey.key,
-        await this.getKeyForCipherKeyDecryption(cipher)
-      );
-    } else {
-      enckey = new SymmetricCryptoKey(
-        await this.encryptService.decryptToBytes(
-          cipher.key,
-          await this.getKeyForCipherKeyDecryption(cipher)
-        )
-      );
-    }
-
-    return this.encryptCipher(model, cipher, enckey);
-  }
-
   private async encryptCipher(
     model: CipherView,
     cipher: Cipher,
@@ -1258,7 +1251,35 @@ export class CipherService implements CipherServiceAbstraction {
     return cipher;
   }
 
-  async getCipherKeyEncryptionEnabled(): Promise<boolean> {
+  private async encryptCipherWithCipherKey(
+    model: CipherView,
+    cipher: Cipher,
+    key: SymmetricCryptoKey
+  ): Promise<Cipher> {
+    // First, we get the key for cipher key encryption, in its decrypted form
+    let decryptedCipherKey: SymmetricCryptoKey;
+    if (cipher.key == null) {
+      decryptedCipherKey = await this.cryptoService.makeCipherKey();
+    } else {
+      const keyForCipherKeyDecryption = await this.getKeyForCipherKeyDecryption(cipher);
+      decryptedCipherKey = new SymmetricCryptoKey(
+        await this.encryptService.decryptToBytes(cipher.key, keyForCipherKeyDecryption)
+      );
+    }
+
+    // Then, we have to encrypt the cipher key itself with the proper key
+    // If a key is provided as a parameter, we use it, otherwise we use the user key from state.
+    // The key is provided as a parameter during operations in which the key is changing (e.g. rotation)
+    const keyForCipherKeyEncryption = key ?? (await this.getKeyForCipherKeyDecryption(cipher));
+    cipher.key = await this.encryptService.encrypt(
+      decryptedCipherKey.key,
+      keyForCipherKeyEncryption
+    );
+
+    return this.encryptCipher(model, cipher, decryptedCipherKey);
+  }
+
+  private async getCipherKeyEncryptionEnabled(): Promise<boolean> {
     return (
       flagEnabled("enableCipherKeyEncryption") &&
       (await firstValueFrom(
