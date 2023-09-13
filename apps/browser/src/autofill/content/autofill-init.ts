@@ -20,11 +20,11 @@ class AutofillInit implements AutofillInitInterface {
     collectPageDetails: ({ message }) => this.collectPageDetails(message),
     collectPageDetailsImmediately: ({ message }) => this.collectPageDetails(message, true),
     fillForm: ({ message }) => this.fillForm(message.fillScript),
-    openAutofillOverlay: ({ message }) =>
-      this.openAutofillOverlay(message.data?.focusFieldElement, message.data?.isOpeningFullOverlay),
+    openAutofillOverlay: ({ message }) => this.openAutofillOverlay(message),
     closeAutofillOverlay: () => this.removeAutofillOverlay(),
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
+    updateIsOverlayCiphersPopulated: ({ message }) => this.updateIsOverlayCiphersPopulated(message),
     promptForLogin: () => this.blurAndRemoveOverlay(),
     passwordReprompt: () => this.blurAndRemoveOverlay(),
   };
@@ -113,12 +113,17 @@ class AutofillInit implements AutofillInitInterface {
     this.autofillOverlayContentService.isCurrentlyFilling = isCurrentlyFilling;
   }
 
-  private openAutofillOverlay(focusFieldElement: boolean, isOpeningFullOverlay: boolean) {
+  private openAutofillOverlay({ data }: AutofillExtensionMessage) {
     if (!this.autofillOverlayContentService) {
       return;
     }
 
-    this.autofillOverlayContentService.openAutofillOverlay(focusFieldElement, isOpeningFullOverlay);
+    const { isFocusingFieldElement, isOpeningFullOverlay, authStatus } = data;
+    this.autofillOverlayContentService.openAutofillOverlay(
+      isFocusingFieldElement,
+      isOpeningFullOverlay,
+      authStatus
+    );
   }
 
   private blurAndRemoveOverlay() {
@@ -154,12 +159,22 @@ class AutofillInit implements AutofillInitInterface {
     this.autofillOverlayContentService.addNewVaultItem();
   }
 
-  private redirectOverlayFocusOut(message: any) {
+  private redirectOverlayFocusOut({ data }: AutofillExtensionMessage) {
     if (!this.autofillOverlayContentService) {
       return;
     }
 
-    this.autofillOverlayContentService.redirectOverlayFocusOut(message?.data?.direction);
+    this.autofillOverlayContentService.redirectOverlayFocusOut(data?.direction);
+  }
+
+  private updateIsOverlayCiphersPopulated({ data }: AutofillExtensionMessage) {
+    if (!this.autofillOverlayContentService) {
+      return;
+    }
+
+    this.autofillOverlayContentService.setIsOverlayCiphersPopulated(
+      Boolean(data?.isOverlayCiphersPopulated)
+    );
   }
 
   /**

@@ -1,11 +1,21 @@
+type AutofillOverlayIframeExtensionMessage = {
+  command: string;
+  position?: Partial<CSSStyleDeclaration>;
+  display?: Partial<CSSStyleDeclaration>;
+};
+
 type BackgroundPortMessageHandlers = {
   [key: string]: CallableFunction;
-  updateIframePosition: ({ message }: { message: any }) => void;
-  updateOverlayHidden: ({ message }: { message: any }) => void;
+  updateIframePosition: ({ message }: { message: AutofillOverlayIframeExtensionMessage }) => void;
+  updateOverlayHidden: ({ message }: { message: AutofillOverlayIframeExtensionMessage }) => void;
 };
 
 interface AutofillOverlayIframeService {
   initOverlayIframe(initStyles: Partial<CSSStyleDeclaration>, ariaAlert?: string): void;
 }
 
-export { BackgroundPortMessageHandlers, AutofillOverlayIframeService };
+export {
+  AutofillOverlayIframeExtensionMessage,
+  BackgroundPortMessageHandlers,
+  AutofillOverlayIframeService,
+};

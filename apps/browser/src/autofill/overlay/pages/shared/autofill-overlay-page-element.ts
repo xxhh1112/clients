@@ -1,6 +1,9 @@
 import { EVENTS } from "../../../constants";
 import { RedirectFocusDirection } from "../../../utils/autofill-overlay.enum";
-import { WindowMessageHandlers } from "../../abstractions/autofill-overlay-page-element";
+import {
+  AutofillOverlayPageElementWindowMessage,
+  WindowMessageHandlers,
+} from "../../abstractions/autofill-overlay-page-element";
 
 class AutofillOverlayPageElement extends HTMLElement {
   protected shadowDom: ShadowRoot;
@@ -31,7 +34,7 @@ class AutofillOverlayPageElement extends HTMLElement {
     return linkElement;
   }
 
-  protected postMessageToParent(message: any) {
+  protected postMessageToParent(message: AutofillOverlayPageElementWindowMessage) {
     if (!this.messageOrigin) {
       return;
     }

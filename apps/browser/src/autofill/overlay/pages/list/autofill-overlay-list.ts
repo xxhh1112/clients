@@ -244,7 +244,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
     }
 
     if (cipher.icon?.icon) {
-      cipherIcon.classList.add(`cipher-icon ${cipher.icon.icon}`);
+      cipherIcon.classList.add("cipher-icon", "bwi", cipher.icon.icon);
       return cipherIcon;
     }
 

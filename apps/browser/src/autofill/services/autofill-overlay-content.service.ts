@@ -1,6 +1,8 @@
 import "@webcomponents/custom-elements";
 import "lit/polyfill-support.js";
-import { tabbable, FocusableElement } from "tabbable";
+import { FocusableElement, tabbable } from "tabbable";
+
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { FocusedFieldData } from "../background/abstractions/overlay.background";
 import { EVENTS } from "../constants";
@@ -28,6 +30,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
   autofillOverlayAppearance: number;
+  private authStatus: AuthenticationStatus;
+  private isOverlayCiphersPopulated = false;
   private focusableElements: FocusableElement[] = [];
   private isOverlayButtonVisible = false;
   private isOverlayListVisible = false;
@@ -51,6 +55,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
   constructor() {
     this.initOverlayOnDomContentLoaded();
+  }
+
+  setIsOverlayCiphersPopulated(isOverlayCiphersPopulated: boolean) {
+    this.isOverlayCiphersPopulated = isOverlayCiphersPopulated;
   }
 
   async setupAutofillOverlayListenerOnField(
@@ -92,13 +100,21 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
   }
 
-  openAutofillOverlay(focusFieldElement?: boolean, isOpeningFullOverlay?: boolean) {
+  openAutofillOverlay(
+    isFocusingFieldElement?: boolean,
+    isOpeningFullOverlay?: boolean,
+    authStatus?: AuthenticationStatus
+  ) {
     if (!this.mostRecentlyFocusedField) {
       return;
     }
 
-    if (focusFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
+    if (isFocusingFieldElement && !this.recentlyFocusedFieldIsCurrentlyFocused()) {
       this.focusMostRecentOverlayField();
+    }
+
+    if (typeof authStatus !== "undefined") {
+      this.authStatus = authStatus;
     }
 
     if (
@@ -228,6 +244,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
+    if (eventCode === "Enter") {
+      this.handleOverlayRepositionEvent();
+      return;
+    }
+
     if (eventCode === "ArrowDown") {
       event.preventDefault();
       event.stopPropagation();
@@ -266,7 +287,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
 
     this.storeModifiedFormElement(formFieldElement, autofillFieldData);
 
-    if (formFieldElement.value) {
+    if (formFieldElement.value && (this.isOverlayCiphersPopulated || !this.isUserAuthed())) {
       this.removeAutofillOverlayList();
       return;
     }
@@ -334,12 +355,16 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       this.removeAutofillOverlayList();
     }
 
-    if (!formElementHasValue) {
+    if (!formElementHasValue || (!this.isOverlayCiphersPopulated && this.isUserAuthed())) {
       sendExtensionMessage("openAutofillOverlay");
       return;
     }
 
     this.updateOverlayButtonPosition();
+  }
+
+  private isUserAuthed() {
+    return this.authStatus === AuthenticationStatus.Unlocked;
   }
 
   private keywordsFoundInFieldData(autofillFieldData: AutofillField, keywords: string[]) {
@@ -695,7 +720,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   }
 
   private handleBodyElementMutationObserverUpdate = () => {
-    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+    if (
+      (!this.overlayButtonElement && !this.overlayListElement) ||
+      this.isTriggeringExcessiveMutationObserverIterations()
+    ) {
       return;
     }
 
@@ -732,10 +760,10 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   };
 
   private handleDocumentElementMutationObserverUpdate = (mutationRecords: MutationRecord[]) => {
-    // TODO - Think about this decision. This is a heavy handed approach to solve the question of "What if someone attempts to overlay our element using an element within the `<html>` tag?"
-    // There might be better ways to handle this, and given that we are directly modifying the DOM for a third party website, this isn't entirely desirable to do.
-
-    if (this.isTriggeringExcessiveMutationObserverIterations()) {
+    if (
+      (!this.overlayButtonElement && !this.overlayListElement) ||
+      this.isTriggeringExcessiveMutationObserverIterations()
+    ) {
       return;
     }
 

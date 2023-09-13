@@ -3,6 +3,7 @@ import { setElementStyles } from "../../utils/utils";
 import {
   BackgroundPortMessageHandlers,
   AutofillOverlayIframeService as AutofillOverlayIframeServiceInterface,
+  AutofillOverlayIframeExtensionMessage,
 } from "../abstractions/autofill-overlay-iframe.service";
 
 class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterface {
@@ -30,8 +31,7 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
   };
   private readonly backgroundPortMessageHandlers: BackgroundPortMessageHandlers = {
     updateIframePosition: ({ message }) => this.updateIframePosition(message.position),
-    updateOverlayHidden: ({ message }) =>
-      this.updateElementStyles(this.iframe, { display: message.display }),
+    updateOverlayHidden: ({ message }) => this.updateElementStyles(this.iframe, message.display),
   };
 
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
@@ -117,7 +117,10 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
     this.port = null;
   };
 
-  private handlePortMessage = (message: any, port: chrome.runtime.Port) => {
+  private handlePortMessage = (
+    message: AutofillOverlayIframeExtensionMessage,
+    port: chrome.runtime.Port
+  ) => {
     if (port.name !== this.portName || !this.iframe.contentWindow) {
       return;
     }

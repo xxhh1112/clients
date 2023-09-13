@@ -177,6 +177,11 @@ body {
       height: auto;
       flex-shrink: 0;
     }
+
+    &.bwi {
+      font-size: 2.6rem;
+      color: $color-blue;
+    }
   }
 
   .cipher-details {

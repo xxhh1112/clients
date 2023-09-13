@@ -320,7 +320,10 @@ export default class NotificationBackground {
     }
   }
 
-  private async unlockVault(message: any, tab: chrome.tabs.Tab) {
+  private async unlockVault(
+    message: { data?: { skipNotification?: boolean } },
+    tab: chrome.tabs.Tab
+  ) {
     if (message.data?.skipNotification) {
       return;
     }

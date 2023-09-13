@@ -3,4 +3,11 @@ import { OverlayListWindowMessageHandlers } from "./autofill-overlay-list";
 
 type WindowMessageHandlers = OverlayButtonWindowMessageHandlers | OverlayListWindowMessageHandlers;
 
-export { WindowMessageHandlers };
+type AutofillOverlayPageElementWindowMessage = {
+  [key: string]: any;
+  command: string;
+  overlayCipherId?: string;
+  height?: number;
+};
+
+export { WindowMessageHandlers, AutofillOverlayPageElementWindowMessage };
