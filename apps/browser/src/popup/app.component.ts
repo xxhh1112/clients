@@ -80,11 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
       window.onkeypress = () => this.recordActivity();
     });
 
-    (window as any).bitwardenPopupMainMessageListener = (
-      msg: any,
-      sender: any,
-      sendResponse: any
-    ) => {
+    (window as any).bitwardenPopupMainMessageListener = (msg: any, sender: any) => {
       if (msg.command === "doneLoggingOut") {
         this.ngZone.run(async () => {
           this.authService.logOut(async () => {
