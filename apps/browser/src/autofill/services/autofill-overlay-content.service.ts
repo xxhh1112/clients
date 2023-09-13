@@ -211,6 +211,11 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
+    if (eventCode === "Enter") {
+      this.handleOverlayRepositionEvent();
+      return;
+    }
+
     if (eventCode === "ArrowDown") {
       event.preventDefault();
       event.stopPropagation();
