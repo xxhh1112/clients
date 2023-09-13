@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   BehaviorSubject,
@@ -21,7 +21,7 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
-} from "../../../../services/fido2/browser-fido2-user-interface.service";
+} from "../../../fido2/browser-fido2-user-interface.service";
 
 interface ViewData {
   message: BrowserFido2Message;
@@ -124,8 +124,9 @@ export class Fido2Component implements OnInit, OnDestroy {
     });
   }
 
-  async pick(cipher: CipherView) {
+  async pick() {
     const data = this.message$.value;
+    const cipher = this.selectedItem;
     if (data?.type === "PickCredentialRequest") {
       let userVerified = false;
       if (data.userVerification) {
@@ -169,7 +170,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     window.close();
   }
 
-  @HostListener("window:unload")
   unload(fallback = false) {
     this.send({
       sessionId: this.sessionId,

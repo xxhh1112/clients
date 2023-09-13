@@ -174,9 +174,7 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       .subscribe((msg) => {
         if (msg.type === "AbortResponse") {
           this.close();
-          this.abortController.abort(
-            msg.fallbackRequested ? UserRequestedFallbackAbortReason : undefined
-          );
+          this.abort(msg.fallbackRequested);
         }
       });
 
@@ -242,6 +240,10 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
     await this.receive("AbortResponse");
   }
 
+  async ensureUnlockedVault(): Promise<void> {
+    await this.connect();
+  }
+
   async informCredentialNotFound(): Promise<void> {
     const data: BrowserFido2Message = {
       type: "InformCredentialNotFoundRequest",
@@ -254,10 +256,14 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   }
 
   async close() {
-    this.browserPopoutWindowService.closeFido2Popout();
+    await this.browserPopoutWindowService.closeFido2Popout();
     this.closed = true;
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private async abort(fallback = false) {
+    this.abortController.abort(fallback ? UserRequestedFallbackAbortReason : undefined);
   }
 
   private async send(msg: BrowserFido2Message): Promise<void> {

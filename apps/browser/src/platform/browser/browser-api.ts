@@ -249,8 +249,12 @@ export class BrowserApi {
 
   static messageListener$() {
     return new Observable<unknown>((subscriber) => {
-      const handler = (message: unknown) => subscriber.next(message);
-      chrome.runtime.onMessage.addListener(handler);
+      const handler = (message: unknown) => {
+        subscriber.next(message);
+      };
+
+      BrowserApi.messageListener("message", handler);
+
       return () => chrome.runtime.onMessage.removeListener(handler);
     });
   }

@@ -140,8 +140,8 @@ import { LocalBackedSessionStorageService } from "../platform/services/local-bac
 import { PopupUtilsService } from "../popup/services/popup-utils.service";
 import { BrowserSendService } from "../services/browser-send.service";
 import { BrowserSettingsService } from "../services/browser-settings.service";
-import { BrowserFido2UserInterfaceService } from "../services/fido2/browser-fido2-user-interface.service";
 import VaultTimeoutService from "../services/vault-timeout/vault-timeout.service";
+import { BrowserFido2UserInterfaceService } from "../vault/fido2/browser-fido2-user-interface.service";
 import { BrowserFolderService } from "../vault/services/browser-folder.service";
 import { VaultFilterService } from "../vault/services/vault-filter.service";
 
@@ -563,6 +563,7 @@ export default class MainBackground {
     this.fido2AuthenticatorService = new Fido2AuthenticatorService(
       this.cipherService,
       this.fido2UserInterfaceService,
+      this.syncService,
       this.logService
     );
     this.fido2ClientService = new Fido2ClientService(

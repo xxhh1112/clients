@@ -29,6 +29,7 @@ export abstract class Fido2UserInterfaceSession {
     params: NewCredentialParams,
     abortController?: AbortController
   ) => Promise<{ cipherId: string; userVerified: boolean }>;
+  ensureUnlockedVault: () => Promise<void>;
   informExcludedCredential: (
     existingCipherIds: string[],
     abortController?: AbortController
