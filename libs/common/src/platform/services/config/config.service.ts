@@ -62,7 +62,7 @@ export class ConfigService implements ConfigServiceAbstraction {
         delayWhen((data) => this.saveConfig(data)),
         catchError((e: unknown) => {
           // fall back to stored ServerConfig (if any)
-          this.logService.error("Unable to fetch ServerConfig: " + e.message);
+          this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
           return from(this.stateService.getServerConfig());
         }),
         map((data) => (data == null ? null : new ServerConfig(data)))
