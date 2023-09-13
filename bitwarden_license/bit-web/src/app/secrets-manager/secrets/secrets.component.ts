@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
@@ -36,7 +37,8 @@ export class SecretsComponent implements OnInit {
     private secretService: SecretService,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private organizationService: OrganizationService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,9 @@ export class SecretsComponent implements OnInit {
       combineLatestWith(this.route.params),
       switchMap(async ([_, params]) => {
         this.organizationId = params.organizationId;
-        this.organizationEnabled = params.organizationEnabled;
+
+        const org = this.organizationService.get(this.organizationId);
+        this.organizationEnabled = org.enabled;
 
         return await this.getSecrets();
       })

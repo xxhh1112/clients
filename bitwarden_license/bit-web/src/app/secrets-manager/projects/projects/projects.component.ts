@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, lastValueFrom, Observable, startWith, switchMap } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
@@ -38,7 +39,8 @@ export class ProjectsComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private accessPolicyService: AccessPolicyService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private organizationService: OrganizationService
   ) {}
 
   ngOnInit() {
@@ -49,7 +51,10 @@ export class ProjectsComponent implements OnInit {
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
-        this.organizationEnabled = params.organizationEnabled;
+
+        const org = await this.organizationService.get(this.organizationId);
+        this.organizationEnabled = org.enabled;
+
         return await this.getProjects();
       })
     );
@@ -64,8 +69,8 @@ export class ProjectsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
-        projectId: projectId,
         organizationEnabled: this.organizationEnabled,
+        projectId: projectId,
       },
     });
   }

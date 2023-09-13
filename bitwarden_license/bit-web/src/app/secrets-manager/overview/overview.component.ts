@@ -210,8 +210,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
-        projectId: projectId,
         organizationEnabled: this.organizationEnabled,
+        projectId: projectId,
       },
     });
   }

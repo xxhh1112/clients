@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, combineLatestWith, filter, Observable, startWith, switchMap } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
@@ -39,7 +40,8 @@ export class ProjectSecretsComponent {
     private secretService: SecretService,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private organizationService: OrganizationService
   ) {}
 
   ngOnInit() {
@@ -59,9 +61,10 @@ export class ProjectSecretsComponent {
       startWith(null),
       combineLatestWith(this.route.params, currentProjectEdited),
       switchMap(async ([_, params]) => {
+        const org = this.organizationService.get(this.organizationId);
         this.organizationId = params.organizationId;
+        this.organizationEnabled = org.enabled;
         this.projectId = params.projectId;
-        this.organizationEnabled = params.organizationEnabled;
         return await this.getSecretsByProject();
       })
     );

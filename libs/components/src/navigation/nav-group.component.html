@@ -30,14 +30,14 @@
   </ng-template>
 
   <!-- Show toggle to the left for trees otherwise to the right -->
-  <ng-container slot="end" *ngIf="showWarningIcon">
-    <i class="bwi bwi-exclamation-triangle mr-1 mt-1"></i>
-  </ng-container>
   <ng-container slot="start" *ngIf="variant === 'tree'">
     <ng-container *ngTemplateOutlet="button"></ng-container>
   </ng-container>
-  <ng-container slot="end" *ngIf="variant !== 'tree'">
-    <ng-container *ngTemplateOutlet="button"></ng-container>
+  <ng-container slot="end">
+    <ng-content select="[slot=end]"></ng-content>
+    <ng-container *ngIf="variant !== 'tree'">
+      <ng-container *ngTemplateOutlet="button"></ng-container>
+    </ng-container>
   </ng-container>
 </bit-nav-item>
 

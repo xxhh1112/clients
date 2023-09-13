@@ -18,8 +18,8 @@ export enum OperationType {
 export interface ProjectOperation {
   organizationId: string;
   operation: OperationType;
-  projectId?: string;
   organizationEnabled: boolean;
+  projectId?: string;
 }
 
 @Component({

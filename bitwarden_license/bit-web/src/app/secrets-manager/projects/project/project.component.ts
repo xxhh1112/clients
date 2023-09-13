@@ -12,6 +12,7 @@ import {
   takeUntil,
 } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
@@ -42,7 +43,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private organizationService: OrganizationService
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +71,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.organizationId = params.organizationId;
       this.projectId = params.projectId;
-      this.organizationEnabled = params.organizationEnabled;
+
+      const org = this.organizationService.get(this.organizationId);
+      this.organizationEnabled = org.enabled;
     });
   }
 
@@ -83,8 +87,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
-        projectId: this.projectId,
         organizationEnabled: this.organizationEnabled,
+        projectId: this.projectId,
       },
     });
   }
