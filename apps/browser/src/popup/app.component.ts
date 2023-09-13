@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
       window.onkeypress = () => this.recordActivity();
     });
 
-    (window as any).bitwardenPopupMainMessageListener = async (
+    (window as any).bitwardenPopupMainMessageListener = (
       msg: any,
       sender: any,
       sendResponse: any
@@ -107,16 +107,18 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate(["home"]);
         });
       } else if (msg.command === "locked") {
-        if (msg.userId == null || msg.userId === (await this.stateService.getUserId())) {
-          this.ngZone.run(() => {
-            this.router.navigate(["lock"]);
-          });
-        }
+        this.stateService.getUserId().then((userId) => {
+          if (msg.userId == null || msg.userId === userId) {
+            this.ngZone.run(() => {
+              this.router.navigate(["lock"]);
+            });
+          }
+        });
       } else if (msg.command === "showDialog") {
-        await this.showDialog(msg);
+        this.showDialog(msg);
       } else if (msg.command === "showNativeMessagingFinterprintDialog") {
         // TODO: Should be refactored to live in another service.
-        await this.showNativeMessagingFingerprintDialog(msg);
+        this.showNativeMessagingFingerprintDialog(msg);
       } else if (msg.command === "showToast") {
         this.ngZone.run(() => {
           this.showToast(msg);
