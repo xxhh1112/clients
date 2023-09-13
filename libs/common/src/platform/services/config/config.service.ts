@@ -72,10 +72,6 @@ export class ConfigService implements ConfigServiceAbstraction {
     this.inited = true;
   }
 
-  /**
-   * @param key The FeatureFlag enum
-   * @param defaultValue The default value to use if the feature flag has no value (defaults to `undefined`)
-   */
   getFeatureFlag$<T extends FeatureFlagValue>(key: FeatureFlag, defaultValue?: T) {
     return this.serverConfig$.pipe(
       map((serverConfig) => {
@@ -88,11 +84,6 @@ export class ConfigService implements ConfigServiceAbstraction {
     );
   }
 
-  /**
-   * @deprecated Use the getFeatureFlag$ method to get an observable instead
-   * @param key The FeatureFlag enum
-   * @param defaultValue The default value to use if the feature flag has no value (defaults to `undefined`)
-   */
   async getFeatureFlag<T extends FeatureFlagValue>(key: FeatureFlag, defaultValue?: T) {
     return await firstValueFrom(this.getFeatureFlag$(key, defaultValue));
   }
