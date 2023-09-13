@@ -83,6 +83,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.initOverlayBackground();
   }
 
+  /**
+   * Removes cached page details for a tab
+   * based on the passed tabId.
+   * @param {number} tabId
+   */
   removePageDetails(tabId: number) {
     delete this.pageDetailsForTab[tabId];
   }
