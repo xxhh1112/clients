@@ -17,6 +17,24 @@ export class BrowserApi {
     return chrome.runtime.getManifest().manifest_version;
   }
 
+  static getWindow(windowId?: number): Promise<chrome.windows.Window> | void {
+    if (!windowId) {
+      return;
+    }
+
+    return new Promise((resolve) =>
+      chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
+    );
+  }
+
+  static async createWindow(options: chrome.windows.CreateData): Promise<chrome.windows.Window> {
+    return new Promise((resolve) =>
+      chrome.windows.create(options, (window) => {
+        resolve(window);
+      })
+    );
+  }
+
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
     return await BrowserApi.tabsQueryFirst({
       active: true,
@@ -24,11 +42,20 @@ export class BrowserApi {
     });
   }
 
-  static async getTab(tabId: number) {
-    if (tabId == null) {
+  static async getTab(tabId: number): Promise<chrome.tabs.Tab> | null {
+    if (!tabId) {
       return null;
     }
-    return await chrome.tabs.get(tabId);
+
+    if (BrowserApi.manifestVersion === 3) {
+      return await chrome.tabs.get(tabId);
+    }
+
+    return new Promise((resolve) =>
+      chrome.tabs.get(tabId, (tab) => {
+        resolve(tab);
+      })
+    );
   }
 
   static async getTabFromCurrentWindow(): Promise<chrome.tabs.Tab> | null {
@@ -105,6 +132,10 @@ export class BrowserApi {
     chrome.tabs.sendMessage<TabMessage, T>(tabId, message, options, responseCallback);
   }
 
+  static async removeTab(tabId: number) {
+    await chrome.tabs.remove(tabId);
+  }
+
   static async getPrivateModeWindows(): Promise<browser.windows.Window[]> {
     return (await browser.windows.getAll()).filter((win) => win.incognito);
   }
@@ -165,7 +196,7 @@ export class BrowserApi {
     }
 
     const tabToClose = tabs[tabs.length - 1];
-    chrome.tabs.remove(tabToClose.id);
+    BrowserApi.removeTab(tabToClose.id);
   }
 
   private static registeredMessageListeners: any[] = [];
@@ -276,5 +307,32 @@ export class BrowserApi {
       return null;
     }
     return win.opr?.sidebarAction || browser.sidebarAction;
+  }
+
+  /**
+   * Extension API helper method used to execute a script in a tab.
+   * @see https://developer.chrome.com/docs/extensions/reference/tabs/#method-executeScript
+   * @param {number} tabId
+   * @param {chrome.tabs.InjectDetails} details
+   * @returns {Promise<unknown>}
+   */
+  static executeScriptInTab(tabId: number, details: chrome.tabs.InjectDetails) {
+    if (BrowserApi.manifestVersion === 3) {
+      return chrome.scripting.executeScript({
+        target: {
+          tabId: tabId,
+          allFrames: details.allFrames,
+          frameIds: details.frameId ? [details.frameId] : null,
+        },
+        files: details.file ? [details.file] : null,
+        injectImmediately: details.runAt === "document_start",
+      });
+    }
+
+    return new Promise((resolve) => {
+      chrome.tabs.executeScript(tabId, details, (result) => {
+        resolve(result);
+      });
+    });
   }
 }
