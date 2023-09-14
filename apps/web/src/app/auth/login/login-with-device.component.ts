@@ -8,7 +8,6 @@ import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -69,13 +68,8 @@ export class LoginWithDeviceComponent
       deviceTrustCryptoService,
       authReqCryptoService
     );
-  }
-
-  async handleApprovedAdminAuthRequest(
-    adminAuthReqResponse: AuthRequestResponse,
-    privateKey: ArrayBuffer
-  ) {
-    this.messagingService.send("setFullWidth");
-    super.handleApprovedAdminAuthRequest(adminAuthReqResponse, privateKey);
+    super.onSuccessfulLogin = async () => {
+      this.messagingService.send("setFullWidth");
+    };
   }
 }
