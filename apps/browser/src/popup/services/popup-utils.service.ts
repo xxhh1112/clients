@@ -220,9 +220,9 @@ export class PopupUtilsService {
     windowInfo: chrome.windows.CreateData
   ): Promise<boolean> {
     let isPopoutOpen = false;
+    let singleActionPopoutFound = false;
     const extensionUrl = chrome.runtime.getURL("popup/index.html");
     const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
-    let firstTabFound = false;
     if (tabs.length === 0) {
       return isPopoutOpen;
     }
@@ -234,7 +234,7 @@ export class PopupUtilsService {
       }
 
       isPopoutOpen = true;
-      if (!firstTabFound) {
+      if (!singleActionPopoutFound) {
         await BrowserApi.updateWindowProperties(tab.windowId, {
           focused: true,
           width: windowInfo.width,
@@ -242,7 +242,7 @@ export class PopupUtilsService {
           top: windowInfo.top,
           left: windowInfo.left,
         });
-        firstTabFound = true;
+        singleActionPopoutFound = true;
         continue;
       }
 
