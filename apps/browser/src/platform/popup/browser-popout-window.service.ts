@@ -11,7 +11,7 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     height: 800,
   };
 
-  async openUnlockPrompt(senderWindowId: number) {
+  async openUnlockPopout(senderWindowId: number) {
     await this.openSingleActionPopout(
       senderWindowId,
       "popup/index.html?uilocation=popout",
@@ -19,11 +19,11 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     );
   }
 
-  async closeUnlockPrompt() {
+  async closeUnlockPopout() {
     await this.closeSingleActionPopout("unlockPrompt");
   }
 
-  async openPasswordRepromptPrompt(
+  async openPasswordRepromptPopout(
     senderWindowId: number,
     {
       cipherId,

@@ -138,7 +138,7 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     this.setFocus();
 
-    if (this.popupUtilsService.inTab(window)) {
+    if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.enableCloseTabWarning();
     }
   }
@@ -156,9 +156,9 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inTab(window)) {
+    if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.disableCloseTabWarning();
-      this.messagingService.send("closeTab", { delay: 1000 });
+      await this.popupUtilsService.closeAddEditCipherPopout(1000);
       return true;
     }
 
@@ -194,8 +194,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inTab(window)) {
-      this.messagingService.send("closeTab");
+    if (this.popupUtilsService.inPopout(window)) {
+      this.popupUtilsService.closeAddEditCipherPopout();
       return;
     }
 

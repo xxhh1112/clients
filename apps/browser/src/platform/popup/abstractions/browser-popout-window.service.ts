@@ -1,7 +1,7 @@
 interface BrowserPopoutWindowService {
-  openUnlockPrompt(senderWindowId: number): Promise<void>;
-  closeUnlockPrompt(): Promise<void>;
-  openPasswordRepromptPrompt(
+  openUnlockPopout(senderWindowId: number): Promise<void>;
+  closeUnlockPopout(): Promise<void>;
+  openPasswordRepromptPopout(
     senderWindowId: number,
     promptData: {
       action: string;

@@ -50,37 +50,24 @@ export class PopupUtilsService {
       href = win.location.href;
     }
 
-    if (typeof chrome !== "undefined" && chrome.windows && chrome.windows.create) {
-      if (href.indexOf("?uilocation=") > -1) {
-        href = href
-          .replace("uilocation=popup", "uilocation=popout")
-          .replace("uilocation=tab", "uilocation=popout")
-          .replace("uilocation=sidebar", "uilocation=popout");
-      } else {
-        const hrefParts = href.split("#");
-        href =
-          hrefParts[0] + "?uilocation=popout" + (hrefParts.length > 0 ? "#" + hrefParts[1] : "");
-      }
+    if (!chrome?.windows?.create) {
+      return;
+    }
 
-      const bodyRect = document.querySelector("body").getBoundingClientRect();
-      chrome.windows.create({
-        url: href,
-        type: "popup",
-        width: Math.round(bodyRect.width ? bodyRect.width + 60 : 375),
-        height: Math.round(bodyRect.height || 600),
-      });
-
-      if (this.inPopup(win)) {
-        BrowserApi.closePopup(win);
-      }
-    } else if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.create) {
+    if (href.indexOf("?uilocation=") > -1) {
       href = href
-        .replace("uilocation=popup", "uilocation=tab")
-        .replace("uilocation=popout", "uilocation=tab")
-        .replace("uilocation=sidebar", "uilocation=tab");
-      chrome.tabs.create({
-        url: href,
-      });
+        .replace("uilocation=popup", "uilocation=popout")
+        .replace("uilocation=tab", "uilocation=popout")
+        .replace("uilocation=sidebar", "uilocation=popout");
+    } else {
+      const hrefParts = href.split("#");
+      href = hrefParts[0] + "?uilocation=popout" + (hrefParts.length > 0 ? "#" + hrefParts[1] : "");
+    }
+
+    this.openPopoutWindow(href);
+
+    if (this.inPopup(win)) {
+      BrowserApi.closePopup(win);
     }
   }
 
@@ -114,5 +101,171 @@ export class PopupUtilsService {
    */
   disableCloseTabWarning() {
     this.unloadSubscription?.unsubscribe();
+  }
+
+  async openPopoutWindow(
+    popupWindowUrl: string,
+    options?: {
+      senderWindowId?: number;
+      singleActionPopoutKey?: string;
+      windowOptionsOverrides?: Partial<chrome.windows.CreateData>;
+    }
+  ) {
+    const { senderWindowId, singleActionPopoutKey, windowOptionsOverrides } = options;
+    const defaultPopoutWindowOptions: chrome.windows.CreateData = {
+      type: "normal",
+      focused: true,
+      width: 500,
+      height: 800,
+      ...windowOptionsOverrides,
+    };
+    const offsetRight = 15;
+    const offsetTop = 90;
+    const popupWidth = defaultPopoutWindowOptions.width;
+    const senderWindow = await BrowserApi.getWindow(senderWindowId);
+    const url = chrome.extension.getURL(popupWindowUrl);
+    const parsedUrl = new URL(url);
+    parsedUrl.searchParams.set("uilocation", "popout");
+    if (singleActionPopoutKey) {
+      parsedUrl.searchParams.set("singleActionPopout", singleActionPopoutKey);
+    }
+    const windowOptions = {
+      ...defaultPopoutWindowOptions,
+      url: parsedUrl.toString(),
+      left: senderWindow.left + senderWindow.width - popupWidth - offsetRight,
+      top: senderWindow.top + offsetTop,
+    };
+
+    if (
+      singleActionPopoutKey &&
+      (await this.isFocusingSingleActionPopout(url, singleActionPopoutKey, windowOptions))
+    ) {
+      return;
+    }
+
+    return await BrowserApi.createWindow(windowOptions);
+  }
+
+  async isFocusingSingleActionPopout(
+    url: string,
+    popoutKey: string,
+    windowInfo: chrome.windows.CreateData
+  ): Promise<boolean> {
+    let isPopoutOpen = false;
+    const tabs = await BrowserApi.tabsQuery({ url: `${url}*` });
+    if (tabs.length === 0) {
+      return isPopoutOpen;
+    }
+
+    for (let index = 0; index < tabs.length; index++) {
+      const tab = tabs[index];
+      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
+        continue;
+      }
+
+      isPopoutOpen = true;
+      if (index === 0) {
+        await BrowserApi.updateWindowProperties(tab.windowId, {
+          focused: true,
+          width: windowInfo.width,
+          height: windowInfo.height,
+          top: windowInfo.top,
+          left: windowInfo.left,
+        });
+        continue;
+      }
+
+      BrowserApi.removeTab(tab.id);
+    }
+
+    return isPopoutOpen;
+  }
+
+  async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
+    const url = chrome.extension.getURL("popup/index.html");
+    const tabs = await BrowserApi.tabsQuery({ url: `${url}*` });
+    for (const tab of tabs) {
+      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
+        continue;
+      }
+
+      setTimeout(() => {
+        BrowserApi.removeTab(tab.id);
+      }, delayClose);
+    }
+  }
+
+  async openUnlockPopout(senderWindowId: number) {
+    await this.openPopoutWindow("popup/index.html?uilocation=popout", {
+      singleActionPopoutKey: "unlockPrompt",
+      senderWindowId,
+    });
+  }
+
+  async closeUnlockPopout() {
+    await this.closeSingleActionPopout("unlockPrompt");
+  }
+
+  async openPasswordRepromptPopout(
+    senderWindowId: number,
+    {
+      cipherId,
+      senderTabId,
+      action,
+    }: {
+      cipherId: string;
+      senderTabId: number;
+      action: string;
+    }
+  ) {
+    const promptWindowPath =
+      "popup/index.html#/view-cipher" +
+      "?uilocation=popout" +
+      `&cipherId=${cipherId}` +
+      `&senderTabId=${senderTabId}` +
+      `&action=${action}`;
+
+    await this.openPopoutWindow(promptWindowPath, {
+      singleActionPopoutKey: "passwordReprompt",
+      senderWindowId,
+    });
+  }
+
+  async openAddEditCipherPopout(cipherId: number, senderWindowId: number): Promise<void> {
+    const addEditCipherUrl =
+      cipherId == null
+        ? "popup/index.html#/edit-cipher"
+        : `popup/index.html#/edit-cipher?cipherId=${cipherId}`;
+
+    await this.openPopoutWindow(addEditCipherUrl, {
+      singleActionPopoutKey: "addEditCipher",
+      senderWindowId,
+    });
+  }
+
+  async closeAddEditCipherPopout(delayClose = 0) {
+    await this.closeSingleActionPopout("addEditCipher", delayClose);
+  }
+
+  async openTwoFactorAuthPopout(message: { data: string; remember: string }) {
+    const { data, remember } = message;
+    const params =
+      `webAuthnResponse=${encodeURIComponent(data)};` + `remember=${encodeURIComponent(remember)}`;
+    const twoFactorUrl = `popup/index.html#/2fa;${params}`;
+
+    await this.openPopoutWindow(twoFactorUrl, { singleActionPopoutKey: "twoFactorAuth" });
+  }
+
+  async closeTwoFactorAuthPopout() {
+    await this.closeSingleActionPopout("twoFactorAuth");
+  }
+
+  async openAuthResultPopout(message: { code: string; state: string }) {
+    const { code, state } = message;
+    const authResultUrl = `popup/index.html?uilocation=popout#/sso?code=${encodeURIComponent(
+      code
+    )}&state=${encodeURIComponent(state)}`;
+
+    await this.openPopoutWindow(authResultUrl, { singleActionPopoutKey: "ssoAuthResult" });
   }
 }

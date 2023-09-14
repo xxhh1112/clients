@@ -9,9 +9,9 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
-import { BrowserPopoutWindowService } from "../platform/popup/abstractions/browser-popout-window.service";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
+import { PopupUtilsService } from "../popup/services/popup-utils.service";
 
 import MainBackground from "./main.background";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
@@ -33,7 +33,7 @@ export default class RuntimeBackground {
     private messagingService: MessagingService,
     private logService: LogService,
     private configService: ConfigServiceAbstraction,
-    private browserPopoutWindowService: BrowserPopoutWindowService
+    private popupUtilsService: PopupUtilsService
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -71,7 +71,7 @@ export default class RuntimeBackground {
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
           item = this.lockedVaultPendingNotifications.pop();
-          await this.browserPopoutWindowService.closeUnlockPrompt();
+          await this.popupUtilsService.closeUnlockPopout();
         }
 
         await this.main.refreshBadge();
@@ -111,30 +111,19 @@ export default class RuntimeBackground {
         break;
       case "promptForLogin":
       case "bgReopenPromptForLogin":
-        await this.browserPopoutWindowService.openUnlockPrompt(sender.tab?.windowId);
+        await this.popupUtilsService.openUnlockPopout(sender.tab?.windowId);
         break;
       case "passwordReprompt":
         if (cipherId) {
-          await this.browserPopoutWindowService.openPasswordRepromptPrompt(sender.tab?.windowId, {
+          await this.popupUtilsService.openPasswordRepromptPopout(sender.tab?.windowId, {
             cipherId: cipherId,
             senderTabId: sender.tab.id,
             action: msg.data?.action,
           });
         }
         break;
-      case "openAddEditCipher": {
-        const addEditCipherUrl =
-          cipherId == null
-            ? "popup/index.html#/edit-cipher"
-            : "popup/index.html#/edit-cipher?cipherId=" + cipherId;
-
-        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
-        break;
-      }
-      case "closeTab":
-        setTimeout(() => {
-          BrowserApi.closeBitwardenExtensionTab();
-        }, msg.delay ?? 0);
+      case "openAddEditCipher":
+        await this.popupUtilsService.openAddEditCipherPopout(cipherId, sender.tab?.windowId);
         break;
       case "triggerAutofillScriptInjection":
         await this.autofillService.injectAutofillScripts(
@@ -195,12 +184,7 @@ export default class RuntimeBackground {
         }
 
         try {
-          BrowserApi.createNewTab(
-            "popup/index.html?uilocation=popout#/sso?code=" +
-              encodeURIComponent(msg.code) +
-              "&state=" +
-              encodeURIComponent(msg.state)
-          );
+          await this.popupUtilsService.openAuthResultPopout(msg);
         } catch {
           this.logService.error("Unable to open sso popout tab");
         }
@@ -213,10 +197,7 @@ export default class RuntimeBackground {
           return;
         }
 
-        const params =
-          `webAuthnResponse=${encodeURIComponent(msg.data)};` +
-          `remember=${encodeURIComponent(msg.remember)}`;
-        BrowserApi.openBitwardenExtensionTab(`popup/index.html#/2fa;${params}`, false);
+        await this.popupUtilsService.openTwoFactorAuthPopout(msg);
         break;
       }
       case "reloadPopup":
