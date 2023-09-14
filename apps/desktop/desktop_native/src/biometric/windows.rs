@@ -7,8 +7,7 @@ use rand::RngCore;
 use retry::delay::Fixed;
 use sha2::{Digest, Sha256};
 use windows::{
-    h,
-    core::{factory, HSTRING},
+    core::{factory, h, s, HSTRING},
     Foundation::IAsyncOperation,
     Security::{
         Credentials::{
@@ -202,7 +201,7 @@ fn focus_security_prompt() -> Result<()> {
         retry::OperationResult::Retry(())
     }
 
-    let class_name = windows::s!("Credential Dialog Xaml Host");
+    let class_name = s!("Credential Dialog Xaml Host");
     retry::retry_with_index(Fixed::from_millis(500), |current_try| {
         if current_try > 3 {
             return retry::OperationResult::Err(());
@@ -241,7 +240,9 @@ fn set_focus(window: HWND) {
 impl KeyMaterial {
     fn digest_material(&self) -> String {
         match self.client_key_part_b64.as_deref() {
-            Some(client_key_part_b64) => format!("{}|{}", self.os_key_part_b64, client_key_part_b64),
+            Some(client_key_part_b64) => {
+                format!("{}|{}", self.os_key_part_b64, client_key_part_b64)
+            }
             None => self.os_key_part_b64.clone(),
         }
     }
@@ -419,7 +420,14 @@ mod tests {
         let mut key_material = key_material();
         key_material.client_key_part_b64 = None;
         let result = key_material.derive_key().unwrap();
-        assert_eq!(result, [81, 100, 62, 172, 151, 119, 182, 58, 123, 38, 129, 116, 209, 253, 66, 118, 218, 237, 236, 155, 201, 234, 11, 198, 229, 171, 246, 144, 71, 188, 84, 246].into());
+        assert_eq!(
+            result,
+            [
+                81, 100, 62, 172, 151, 119, 182, 58, 123, 38, 129, 116, 209, 253, 66, 118, 218,
+                237, 236, 155, 201, 234, 11, 198, 229, 171, 246, 144, 71, 188, 84, 246
+            ]
+            .into()
+        );
     }
 
     #[test]
