@@ -6,7 +6,6 @@ import {
   defer,
   delayWhen,
   firstValueFrom,
-  from,
   map,
   merge,
   timer,
@@ -57,7 +56,7 @@ export class ConfigService implements ConfigServiceAbstraction {
       catchError((e: unknown) => {
         // fall back to stored ServerConfig (if any)
         this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
-        return from(this.stateService.getServerConfig());
+        return this.stateService.getServerConfig();
       }),
       map((data: ServerConfigData) => (data == null ? null : new ServerConfig(data)))
     );
