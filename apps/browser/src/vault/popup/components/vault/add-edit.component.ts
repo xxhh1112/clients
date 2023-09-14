@@ -156,7 +156,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inPopout(window)) {
+    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
       this.popupUtilsService.disableCloseTabWarning();
       await this.popupUtilsService.closeAddEditCipherPopout(1000);
       return true;
@@ -194,7 +194,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inPopout(window)) {
+    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
       this.popupUtilsService.closeAddEditCipherPopout();
       return;
     }
