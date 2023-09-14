@@ -17,11 +17,21 @@ export class BrowserApi {
     return chrome.runtime.getManifest().manifest_version;
   }
 
-  static getWindow(windowId?: number): Promise<chrome.windows.Window> | void {
+  static async getWindow(windowId?: number): Promise<chrome.windows.Window> {
     if (!windowId) {
-      return;
+      return BrowserApi.getCurrentWindow();
     }
 
+    return await BrowserApi.getWindowById(windowId);
+  }
+
+  static async getCurrentWindow(): Promise<chrome.windows.Window> {
+    return new Promise((resolve) =>
+      chrome.windows.getCurrent({ populate: true }, (window) => resolve(window))
+    );
+  }
+
+  static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
     return new Promise((resolve) =>
       chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
     );
@@ -33,6 +43,21 @@ export class BrowserApi {
         resolve(window);
       })
     );
+  }
+
+  static async updateWindowProperties(
+    windowId: number,
+    options: chrome.windows.UpdateInfo
+  ): Promise<void> {
+    return new Promise((resolve) =>
+      chrome.windows.update(windowId, options, () => {
+        resolve();
+      })
+    );
+  }
+
+  static async focusWindow(windowId: number) {
+    await BrowserApi.updateWindowProperties(windowId, { focused: true });
   }
 
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
@@ -164,39 +189,6 @@ export class BrowserApi {
     return new Promise((resolve) =>
       chrome.tabs.create({ url: url, active: active }, (tab) => resolve(tab))
     );
-  }
-
-  static async focusWindow(windowId: number) {
-    await chrome.windows.update(windowId, { focused: true });
-  }
-
-  static async openBitwardenExtensionTab(relativeUrl: string, active = true) {
-    let url = relativeUrl;
-    if (!relativeUrl.includes("uilocation=tab")) {
-      const fullUrl = chrome.extension.getURL(relativeUrl);
-      const parsedUrl = new URL(fullUrl);
-      parsedUrl.searchParams.set("uilocation", "tab");
-      url = parsedUrl.toString();
-    }
-
-    const createdTab = await this.createNewTab(url, active);
-    this.focusWindow(createdTab.windowId);
-  }
-
-  static async closeBitwardenExtensionTab() {
-    const tabs = await BrowserApi.tabsQuery({
-      active: true,
-      title: "Bitwarden",
-      windowType: "normal",
-      currentWindow: true,
-    });
-
-    if (tabs.length === 0) {
-      return;
-    }
-
-    const tabToClose = tabs[tabs.length - 1];
-    BrowserApi.removeTab(tabToClose.id);
   }
 
   private static registeredMessageListeners: any[] = [];

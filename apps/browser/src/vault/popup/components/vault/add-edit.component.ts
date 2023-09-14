@@ -8,6 +8,7 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import BrowserPopoutType from "@bitwarden/common/enums/browser-popout-type.enum";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -138,7 +139,7 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     this.setFocus();
 
-    if (this.popupUtilsService.inTab(window)) {
+    if (this.popupUtilsService.inPopout(window)) {
       this.popupUtilsService.enableCloseTabWarning();
     }
   }
@@ -156,10 +157,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
+    if (this.popupUtilsService.inSingleActionPopout(window, BrowserPopoutType.AddEditCipher)) {
       this.popupUtilsService.disableCloseTabWarning();
       this.messagingService.send("addEditCipherSubmitted");
-      this.messagingService.send("closeAddEditCipher", { delay: 1000 });
+      await this.popupUtilsService.closeAddEditCipherPopout(1000);
       return true;
     }
 
@@ -195,8 +196,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
-      this.messagingService.send("closeAddEditCipher");
+    if (this.popupUtilsService.inSingleActionPopout(window, BrowserPopoutType.AddEditCipher)) {
+      this.popupUtilsService.closeAddEditCipherPopout();
       return;
     }
 
