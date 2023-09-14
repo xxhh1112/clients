@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
 
+import BrowserPopoutType from "@bitwarden/common/enums/browser-popout-type.enum";
+
 import { BrowserApi } from "../../platform/browser/browser-api";
 
 @Injectable()
@@ -96,13 +98,13 @@ export class PopupUtilsService {
 
   async openUnlockPopout(senderWindowId: number) {
     await this.openPopout("popup/index.html?uilocation=popout", {
-      singleActionPopoutKey: "unlockPrompt",
+      singleActionPopoutKey: BrowserPopoutType.UnlockVault,
       senderWindowId,
     });
   }
 
   async closeUnlockPopout() {
-    await this.closeSingleActionPopout("unlockPrompt");
+    await this.closeSingleActionPopout(BrowserPopoutType.UnlockVault);
   }
 
   async openPasswordRepromptPopout(
@@ -125,7 +127,7 @@ export class PopupUtilsService {
       `&action=${action}`;
 
     await this.openPopout(promptWindowPath, {
-      singleActionPopoutKey: "passwordReprompt",
+      singleActionPopoutKey: BrowserPopoutType.PasswordReprompt,
       senderWindowId,
     });
   }
@@ -137,13 +139,13 @@ export class PopupUtilsService {
         : `popup/index.html#/edit-cipher?cipherId=${cipherId}`;
 
     await this.openPopout(addEditCipherUrl, {
-      singleActionPopoutKey: "addEditCipher",
+      singleActionPopoutKey: BrowserPopoutType.AddEditCipher,
       senderWindowId,
     });
   }
 
   async closeAddEditCipherPopout(delayClose = 0) {
-    await this.closeSingleActionPopout("addEditCipher", delayClose);
+    await this.closeSingleActionPopout(BrowserPopoutType.AddEditCipher, delayClose);
   }
 
   async openTwoFactorAuthPopout(message: { data: string; remember: string }) {
@@ -152,11 +154,11 @@ export class PopupUtilsService {
       `webAuthnResponse=${encodeURIComponent(data)};` + `remember=${encodeURIComponent(remember)}`;
     const twoFactorUrl = `popup/index.html#/2fa;${params}`;
 
-    await this.openPopout(twoFactorUrl, { singleActionPopoutKey: "twoFactorAuth" });
+    await this.openPopout(twoFactorUrl, { singleActionPopoutKey: BrowserPopoutType.TwoFactorAuth });
   }
 
   async closeTwoFactorAuthPopout() {
-    await this.closeSingleActionPopout("twoFactorAuth");
+    await this.closeSingleActionPopout(BrowserPopoutType.TwoFactorAuth);
   }
 
   async openAuthResultPopout(message: { code: string; state: string }) {
@@ -165,7 +167,9 @@ export class PopupUtilsService {
       code
     )}&state=${encodeURIComponent(state)}`;
 
-    await this.openPopout(authResultUrl, { singleActionPopoutKey: "ssoAuthResult" });
+    await this.openPopout(authResultUrl, {
+      singleActionPopoutKey: BrowserPopoutType.SsoAuthResult,
+    });
   }
 
   private async openPopout(
