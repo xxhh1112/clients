@@ -1,0 +1,76 @@
+import { Meta, moduleMetadata, StoryObj } from "@storybook/angular";
+
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+
+import { I18nMockService } from "../utils/i18n-mock.service";
+
+import { I18nComponent } from "./i18n.component";
+import { I18nModule } from "./i18n.module";
+
+export default {
+  title: "Component Library/I18n Templates",
+  component: I18nComponent,
+  decorators: [
+    moduleMetadata({
+      imports: [I18nModule],
+      providers: [
+        {
+          provide: I18nService,
+          useFactory: () => {
+            return new I18nMockService({
+              basicExample: `
+              This is an example with <0>link</0> tags and <1>bold</1> tags. The entire sentence
+              can be <2>translated as a whole</2> and re-arranged according to each language's grammar rules.`,
+              otherExample: `
+              This is another example with <1>bold</1> tags to show that tag order does not matter
+              and the <0>link</0> tags are after.`,
+            });
+          },
+        },
+      ],
+    }),
+  ],
+  args: {},
+  parameters: {},
+} as Meta;
+
+type Story = StoryObj<I18nComponent>;
+
+export const Basic: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+<bit-i18n key="basicExample">
+  <a *bit-i18n-tag="let text" href="javascript:;">{{ text }}</a>
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+  <a *bit-i18n-tag="let text" href="https://localization.blog/2022/05/16/i18n-best-practices-keep-it-together/">
+    <strong>{{ text }}</strong>
+  </a>
+</bit-i18n>
+    `,
+  }),
+};
+
+export const AttributeSelector: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+<p bit-i18n key="otherExample">
+  <a *bit-i18n-tag="let text" href="javascript:;">{{ text }}</a>
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+</p>
+    `,
+  }),
+};
+
+export const MissingTemplate: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+<p bit-i18n key="basicExample">
+  <a *bit-i18n-tag="let text" href="javascript:;">{{ text }}</a>
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+</p>
+    `,
+  }),
+};
