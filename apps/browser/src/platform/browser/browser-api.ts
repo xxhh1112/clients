@@ -25,13 +25,13 @@ export class BrowserApi {
     return await BrowserApi.getWindowById(windowId);
   }
 
-  private static async getCurrentWindow(): Promise<chrome.windows.Window> {
+  static async getCurrentWindow(): Promise<chrome.windows.Window> {
     return new Promise((resolve) =>
       chrome.windows.getCurrent({ populate: true }, (window) => resolve(window))
     );
   }
 
-  private static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
+  static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
     return new Promise((resolve) =>
       chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
     );
