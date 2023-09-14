@@ -12,6 +12,7 @@ import {
   EnvironmentServiceInitOptions,
 } from "./environment-service.factory";
 import { FactoryOptions, CachedServices, factory } from "./factory-options";
+import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import { stateServiceFactory, StateServiceInitOptions } from "./state-service.factory";
 
 type ConfigServiceFactoryOptions = FactoryOptions & {
@@ -24,7 +25,8 @@ export type ConfigServiceInitOptions = ConfigServiceFactoryOptions &
   StateServiceInitOptions &
   ConfigApiServiceInitOptions &
   AuthServiceInitOptions &
-  EnvironmentServiceInitOptions;
+  EnvironmentServiceInitOptions &
+  LogServiceInitOptions;
 
 export function configServiceFactory(
   cache: { configService?: ConfigServiceAbstraction } & CachedServices,
@@ -40,6 +42,7 @@ export function configServiceFactory(
         await configApiServiceFactory(cache, opts),
         await authServiceFactory(cache, opts),
         await environmentServiceFactory(cache, opts),
+        await logServiceFactory(cache, opts),
         opts.configServiceOptions?.subscribe ?? true
       )
   );
