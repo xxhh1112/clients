@@ -650,6 +650,7 @@ import { AbstractThemingService } from "./theming/theming.service.abstraction";
         ConfigApiServiceAbstraction,
         AuthServiceAbstraction,
         EnvironmentServiceAbstraction,
+        LogService,
       ],
     },
     {
