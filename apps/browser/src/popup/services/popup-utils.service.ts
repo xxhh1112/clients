@@ -8,6 +8,8 @@ import { BrowserApi } from "../../platform/browser/browser-api";
 @Injectable()
 export class PopupUtilsService {
   private unloadSubscription: Subscription;
+  private isOpeningPopout = false;
+  private openPopoutDebounce: NodeJS.Timeout;
 
   constructor(private privateMode: boolean = false) {}
 
@@ -57,7 +59,12 @@ export class PopupUtilsService {
   popOut(win: Window, href: string = null): void {
     const popoutUrl = href || win.location.href;
     const parsedUrl = new URL(popoutUrl);
-    this.openPopout(`${parsedUrl.pathname}${parsedUrl.hash}`);
+    let hashRoute = parsedUrl.hash;
+    if (hashRoute.startsWith("#/tabs/current")) {
+      hashRoute = "#/tabs/vault";
+    }
+
+    this.openPopout(`${parsedUrl.pathname}${hashRoute}`);
 
     if (this.inPopup(win)) {
       BrowserApi.closePopup(win);
@@ -180,6 +187,10 @@ export class PopupUtilsService {
       windowOptionsOverrides?: Partial<chrome.windows.CreateData>;
     } = {}
   ) {
+    if (this.isDebouncingOpenPopout()) {
+      return;
+    }
+
     const { senderWindowId, singleActionPopoutKey, windowOptionsOverrides } = options;
     const defaultPopoutWindowOptions: chrome.windows.CreateData = {
       type: "normal",
@@ -213,6 +224,21 @@ export class PopupUtilsService {
     }
 
     return await BrowserApi.createWindow(windowOptions);
+  }
+
+  private isDebouncingOpenPopout() {
+    if (this.isOpeningPopout) {
+      return true;
+    }
+
+    this.isOpeningPopout = true;
+    clearTimeout(this.openPopoutDebounce);
+
+    this.openPopoutDebounce = setTimeout(() => {
+      this.isOpeningPopout = false;
+    }, 100);
+
+    return false;
   }
 
   private async isSingleActionPopoutOpen(
