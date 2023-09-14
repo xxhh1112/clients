@@ -24,6 +24,7 @@ export default {
               otherExample: `
               This is another example with <1>bold</1> tags to show that tag order does not matter
               and the <0>link</0> tags are after.`,
+              argExample: (arg1: string) => `This is an example with <0>link</0> tags and ${arg1}.`,
             });
           },
         },
@@ -56,6 +57,18 @@ export const AttributeSelector: Story = {
     props: args,
     template: `
 <p bit-i18n key="otherExample">
+  <a *bit-i18n-tag="let text" href="javascript:;">{{ text }}</a>
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+</p>
+    `,
+  }),
+};
+
+export const ArgsExample: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+<p bit-i18n key="argExample" [args]="['passed args']">
   <a *bit-i18n-tag="let text" href="javascript:;">{{ text }}</a>
   <strong *bit-i18n-tag="let text">{{ text }}</strong>
 </p>

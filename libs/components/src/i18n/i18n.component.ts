@@ -53,6 +53,12 @@ export class I18nComponent implements AfterContentInit {
   @Input("key")
   translationKey: string;
 
+  /**
+   * Optional arguments to pass to the translation function.
+   */
+  @Input()
+  args: (string | number)[] = [];
+
   @ContentChildren(I18nTagDirective)
   templateTags: QueryList<I18nTagDirective>;
 
@@ -61,7 +67,14 @@ export class I18nComponent implements AfterContentInit {
   constructor(private i18nService: I18nService) {}
 
   ngAfterContentInit() {
-    this.translationParts = this.parseTranslatedString(this.i18nService.t(this.translationKey));
+    const translatedText = this.i18nService.t(
+      this.translationKey,
+      this.args[0],
+      this.args[1],
+      this.args[2]
+    );
+
+    this.translationParts = this.parseTranslatedString(translatedText);
     // Assign any templateRefs to the translation parts
     this.templateTags.forEach((tag, index) => {
       this.translationParts.forEach((part) => {

@@ -32,12 +32,12 @@ will be rendered as is.
     The entire sentence can be <2>translated as a whole</2> and re-arranged according to each language's grammar rules."
 -->
 <bit-i18n key="basicExample">
-  <a *bit-i18n-tag="let text" routerLink="./">{{ text }}</a>
   <!-- <0></0> -->
-  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+  <a *bit-i18n-tag="let text" routerLink="./">{{ text }}</a>
   <!-- <1></1> -->
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+  <!-- <2></2> -->
   <a *bit-i18n-tag="let text" href="#">
-    <!-- <2></2> -->
     <strong>{{ text }}</strong>
   </a>
 </bit-i18n>
@@ -80,10 +80,30 @@ rendered as is.
    The entire sentence can be <2>translated as a whole</2> and re-arranged according to each language's grammar rules."
 -->
 <bit-i18n key="basicExample">
-  <a *bit-i18n-tag="let text" routerLink="./">{{ text }}</a>
   <!-- <0></0> -->
-  <strong *bit-i18n-tag="let text">{{ text }}</strong>
+  <a *bit-i18n-tag="let text" routerLink="./">{{ text }}</a>
   <!-- <1></1> -->
+  <strong *bit-i18n-tag="let text">{{ text }}</strong>
   <!-- Missing template for <2></2> -->
+</bit-i18n>
+```
+
+## Missing Template Example
+
+You can also pass arguments to the `i18nService.t()` method via the `[args]` input attribute;
+
+<Story of={stories.ArgsExample} />
+
+<br />
+
+### Source
+
+```html
+<!-- argExample in messages.json
+   `This is an example with <0>link</0> tags and $SOME_ARG$.`
+-->
+<bit-i18n key="argExample" [args]="['passed args']">
+  <!-- <0></0> -->
+  <a *bit-i18n-tag="let text" routerLink="./">{{ text }}</a>
 </bit-i18n>
 ```
