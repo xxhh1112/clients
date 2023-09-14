@@ -36,7 +36,6 @@ import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config-api.service.abstraction";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
@@ -44,10 +43,12 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { FileUploadService } from "@bitwarden/common/platform/abstractions/file-upload/file-upload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
+import {
+  LogService,
+  LogService as LogServiceAbstraction,
+} from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateMigrationService } from "@bitwarden/common/platform/abstractions/state-migration.service";
 import {
   StateService as BaseStateServiceAbstraction,
   StateService,
@@ -58,6 +59,7 @@ import {
 } from "@bitwarden/common/platform/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
@@ -443,35 +445,22 @@ function getBgService<T>(service: keyof MainBackground) {
       useFactory: getBgService<AbstractStorageService>("memoryStorageService"),
     },
     {
-      provide: StateMigrationService,
-      useFactory: getBgService<StateMigrationService>("stateMigrationService"),
-      deps: [],
-    },
-    {
       provide: StateServiceAbstraction,
       useFactory: (
         storageService: AbstractStorageService,
         secureStorageService: AbstractStorageService,
         memoryStorageService: AbstractMemoryStorageService,
-        logService: LogServiceAbstraction,
-        stateMigrationService: StateMigrationService
+        logService: LogServiceAbstraction
       ) => {
         return new BrowserStateService(
           storageService,
           secureStorageService,
           memoryStorageService,
           logService,
-          stateMigrationService,
           new StateFactory(GlobalState, Account)
         );
       },
-      deps: [
-        AbstractStorageService,
-        SECURE_STORAGE,
-        MEMORY_STORAGE,
-        LogServiceAbstraction,
-        StateMigrationService,
-      ],
+      deps: [AbstractStorageService, SECURE_STORAGE, MEMORY_STORAGE, LogServiceAbstraction],
     },
     {
       provide: UsernameGenerationServiceAbstraction,
@@ -509,13 +498,14 @@ function getBgService<T>(service: keyof MainBackground) {
       deps: [StateServiceAbstraction, PlatformUtilsService],
     },
     {
-      provide: ConfigServiceAbstraction,
+      provide: ConfigService,
       useClass: BrowserConfigService,
       deps: [
         StateServiceAbstraction,
         ConfigApiServiceAbstraction,
         AuthServiceAbstraction,
         EnvironmentService,
+        LogService,
       ],
     },
   ],

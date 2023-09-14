@@ -77,17 +77,54 @@ export class SsoLogInStrategy extends LogInStrategy {
   }
 
   protected override async setMasterKey(tokenResponse: IdentityTokenResponse) {
-    // TODO: discuss how this is no longer true with TDE
-    // eventually we’ll need to support migration of existing TDE users to Key Connector
-    const newSsoUser = tokenResponse.key == null;
-
-    if (tokenResponse.keyConnectorUrl != null) {
-      if (!newSsoUser) {
-        await this.keyConnectorService.setMasterKeyFromUrl(tokenResponse.keyConnectorUrl);
-      } else {
+    // The only way we can be setting a master key at this point is if we are using Key Connector.
+    // First, check to make sure that we should do so based on the token response.
+    if (this.shouldSetMasterKeyFromKeyConnector(tokenResponse)) {
+      // If we're here, we know that the user should use Key Connector (they have a KeyConnectorUrl) and does not have a master password.
+      // We can now check the key on the token response to see whether they are a brand new user or an existing user.
+      // The presence of a masterKeyEncryptedUserKey indicates that the user has already been provisioned in Key Connector.
+      const newSsoUser = tokenResponse.key == null;
+      if (newSsoUser) {
         await this.keyConnectorService.convertNewSsoUserToKeyConnector(tokenResponse, this.orgId);
+      } else {
+        const keyConnectorUrl = this.getKeyConnectorUrl(tokenResponse);
+        await this.keyConnectorService.setMasterKeyFromUrl(keyConnectorUrl);
       }
     }
+  }
+
+  /**
+   * Determines if it is possible set the `masterKey` from Key Connector.
+   * @param tokenResponse
+   * @returns `true` if the master key can be set from Key Connector, `false` otherwise
+   */
+  private shouldSetMasterKeyFromKeyConnector(tokenResponse: IdentityTokenResponse): boolean {
+    const userDecryptionOptions = tokenResponse?.userDecryptionOptions;
+
+    if (userDecryptionOptions != null) {
+      const userHasMasterPassword = userDecryptionOptions.hasMasterPassword;
+      const userHasKeyConnectorUrl =
+        userDecryptionOptions.keyConnectorOption?.keyConnectorUrl != null;
+
+      // In order for us to set the master key from Key Connector, we need to have a Key Connector URL
+      // and the user must not have a master password.
+      return userHasKeyConnectorUrl && !userHasMasterPassword;
+    } else {
+      // In pre-TDE versions of the server, the userDecryptionOptions will not be present.
+      // In this case, we can determine if the user has a master password and has a Key Connector URL by
+      // just checking the keyConnectorUrl property. This is because the server short-circuits on the response
+      // and will not pass back the URL in the response if the user has a master password.
+      // TODO: remove compatibility check after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3537)
+      return tokenResponse.keyConnectorUrl != null;
+    }
+  }
+
+  private getKeyConnectorUrl(tokenResponse: IdentityTokenResponse): string {
+    // TODO: remove tokenResponse.keyConnectorUrl reference after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3537)
+    const userDecryptionOptions = tokenResponse?.userDecryptionOptions;
+    return (
+      tokenResponse.keyConnectorUrl ?? userDecryptionOptions?.keyConnectorOption?.keyConnectorUrl
+    );
   }
 
   // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
@@ -117,9 +154,8 @@ export class SsoLogInStrategy extends LogInStrategy {
         await this.trySetUserKeyWithDeviceKey(tokenResponse);
       }
     } else if (
-      // TODO: remove tokenResponse.keyConnectorUrl when it's deprecated
       masterKeyEncryptedUserKey != null &&
-      (tokenResponse.keyConnectorUrl || userDecryptionOptions?.keyConnectorOption?.keyConnectorUrl)
+      this.getKeyConnectorUrl(tokenResponse) != null
     ) {
       // Key connector enabled for user
       await this.trySetUserKeyWithMasterKey();
@@ -208,12 +244,15 @@ export class SsoLogInStrategy extends LogInStrategy {
   private async trySetUserKeyWithMasterKey(): Promise<void> {
     const masterKey = await this.cryptoService.getMasterKey();
 
+    // There is a scenario in which the master key is not set here. That will occur if the user
+    // has a master password and is using Key Connector. In that case, we cannot set the master key
+    // because the user hasn't entered their master password yet.
+    // Instead, we'll return here and let the migration to Key Connector handle setting the master key.
     if (!masterKey) {
-      throw new Error("Master key not found");
+      return;
     }
 
     const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
-
     await this.cryptoService.setUserKey(userKey);
   }
 
