@@ -103,87 +103,9 @@ export class PopupUtilsService {
     this.unloadSubscription?.unsubscribe();
   }
 
-  async openPopoutWindow(
-    popupWindowUrl: string,
-    options?: {
-      senderWindowId?: number;
-      singleActionPopoutKey?: string;
-      windowOptionsOverrides?: Partial<chrome.windows.CreateData>;
-    }
-  ) {
-    const { senderWindowId, singleActionPopoutKey, windowOptionsOverrides } = options;
-    const defaultPopoutWindowOptions: chrome.windows.CreateData = {
-      type: "normal",
-      focused: true,
-      width: 500,
-      height: 800,
-      ...windowOptionsOverrides,
-    };
-    const offsetRight = 15;
-    const offsetTop = 90;
-    const popupWidth = defaultPopoutWindowOptions.width;
-    const senderWindow = await BrowserApi.getWindow(senderWindowId);
-    const url = chrome.extension.getURL(popupWindowUrl);
-    const parsedUrl = new URL(url);
-    parsedUrl.searchParams.set("uilocation", "popout");
-    if (singleActionPopoutKey) {
-      parsedUrl.searchParams.set("singleActionPopout", singleActionPopoutKey);
-    }
-    const windowOptions = {
-      ...defaultPopoutWindowOptions,
-      url: parsedUrl.toString(),
-      left: senderWindow.left + senderWindow.width - popupWidth - offsetRight,
-      top: senderWindow.top + offsetTop,
-    };
-
-    if (
-      singleActionPopoutKey &&
-      (await this.isFocusingSingleActionPopout(url, singleActionPopoutKey, windowOptions))
-    ) {
-      return;
-    }
-
-    return await BrowserApi.createWindow(windowOptions);
-  }
-
-  async isFocusingSingleActionPopout(
-    url: string,
-    popoutKey: string,
-    windowInfo: chrome.windows.CreateData
-  ): Promise<boolean> {
-    let isPopoutOpen = false;
-    const tabs = await BrowserApi.tabsQuery({ url: `${url}*` });
-    if (tabs.length === 0) {
-      return isPopoutOpen;
-    }
-
-    for (let index = 0; index < tabs.length; index++) {
-      const tab = tabs[index];
-      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
-        continue;
-      }
-
-      isPopoutOpen = true;
-      if (index === 0) {
-        await BrowserApi.updateWindowProperties(tab.windowId, {
-          focused: true,
-          width: windowInfo.width,
-          height: windowInfo.height,
-          top: windowInfo.top,
-          left: windowInfo.left,
-        });
-        continue;
-      }
-
-      BrowserApi.removeTab(tab.id);
-    }
-
-    return isPopoutOpen;
-  }
-
   async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
-    const url = chrome.extension.getURL("popup/index.html");
-    const tabs = await BrowserApi.tabsQuery({ url: `${url}*` });
+    const extensionUrl = chrome.extension.getURL("popup/index.html");
+    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
     for (const tab of tabs) {
       if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
         continue;
@@ -267,5 +189,83 @@ export class PopupUtilsService {
     )}&state=${encodeURIComponent(state)}`;
 
     await this.openPopoutWindow(authResultUrl, { singleActionPopoutKey: "ssoAuthResult" });
+  }
+
+  private async openPopoutWindow(
+    popupWindowUrl: string,
+    options?: {
+      senderWindowId?: number;
+      singleActionPopoutKey?: string;
+      windowOptionsOverrides?: Partial<chrome.windows.CreateData>;
+    }
+  ) {
+    const { senderWindowId, singleActionPopoutKey, windowOptionsOverrides } = options;
+    const defaultPopoutWindowOptions: chrome.windows.CreateData = {
+      type: "normal",
+      focused: true,
+      width: 500,
+      height: 800,
+      ...windowOptionsOverrides,
+    };
+    const offsetRight = 15;
+    const offsetTop = 90;
+    const popupWidth = defaultPopoutWindowOptions.width;
+    const senderWindow = await BrowserApi.getWindow(senderWindowId);
+    const url = chrome.extension.getURL(popupWindowUrl);
+    const parsedUrl = new URL(url);
+    parsedUrl.searchParams.set("uilocation", "popout");
+    if (singleActionPopoutKey) {
+      parsedUrl.searchParams.set("singleActionPopout", singleActionPopoutKey);
+    }
+    const windowOptions = {
+      ...defaultPopoutWindowOptions,
+      url: parsedUrl.toString(),
+      left: senderWindow.left + senderWindow.width - popupWidth - offsetRight,
+      top: senderWindow.top + offsetTop,
+    };
+
+    if (
+      singleActionPopoutKey &&
+      (await this.isFocusingSingleActionPopout(singleActionPopoutKey, windowOptions))
+    ) {
+      return;
+    }
+
+    return await BrowserApi.createWindow(windowOptions);
+  }
+
+  private async isFocusingSingleActionPopout(
+    popoutKey: string,
+    windowInfo: chrome.windows.CreateData
+  ): Promise<boolean> {
+    let isPopoutOpen = false;
+    const extensionUrl = chrome.runtime.getURL("popup/index.html");
+    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
+    if (tabs.length === 0) {
+      return isPopoutOpen;
+    }
+
+    for (let index = 0; index < tabs.length; index++) {
+      const tab = tabs[index];
+      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
+        continue;
+      }
+
+      isPopoutOpen = true;
+      if (index === 0) {
+        await BrowserApi.updateWindowProperties(tab.windowId, {
+          focused: true,
+          width: windowInfo.width,
+          height: windowInfo.height,
+          top: windowInfo.top,
+          left: windowInfo.left,
+        });
+        continue;
+      }
+
+      BrowserApi.removeTab(tab.id);
+    }
+
+    return isPopoutOpen;
   }
 }
