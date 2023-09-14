@@ -79,6 +79,28 @@ describe("ConfigService", () => {
     configService.triggerServerConfigFetch();
   });
 
+  it("Stream does not error out if fetch fails", (done) => {
+    const storedConfigData = serverConfigDataFactory("storedConfig");
+    stateService.getServerConfig.mockResolvedValueOnce(storedConfigData);
+
+    const configService = configServiceFactory();
+
+    configService.serverConfig$.pipe(skip(1), take(1)).subscribe((config) => {
+      try {
+        expect(config.gitHash).toEqual("server1");
+        done();
+      } catch (e) {
+        done(e);
+      }
+    });
+
+    configApiService.get.mockRejectedValueOnce(new Error("Unable to fetch"));
+    configService.triggerServerConfigFetch();
+
+    configApiService.get.mockResolvedValueOnce(serverConfigResponseFactory("server1"));
+    configService.triggerServerConfigFetch();
+  });
+
   describe("Fetches config from server", () => {
     beforeEach(() => {
       stateService.getServerConfig.mockResolvedValueOnce(null);
