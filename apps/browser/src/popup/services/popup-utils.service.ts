@@ -192,7 +192,7 @@ export class PopupUtilsService {
     const offsetTop = 90;
     const popupWidth = defaultPopoutWindowOptions.width;
     const senderWindow = await BrowserApi.getWindow(senderWindowId);
-    const url = chrome.extension.getURL(popupWindowUrl);
+    const url = chrome.runtime.getURL(popupWindowUrl);
     const parsedUrl = new URL(url);
     parsedUrl.searchParams.set("uilocation", "popout");
     if (singleActionPopoutKey) {
@@ -253,7 +253,7 @@ export class PopupUtilsService {
   }
 
   async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
-    const extensionUrl = chrome.extension.getURL("popup/index.html");
+    const extensionUrl = chrome.runtime.getURL("popup/index.html");
     const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
     for (const tab of tabs) {
       if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
