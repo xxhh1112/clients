@@ -1,15 +1,4 @@
-import {
-  ReplaySubject,
-  Subject,
-  catchError,
-  concatMap,
-  delayWhen,
-  firstValueFrom,
-  from,
-  map,
-  merge,
-  timer,
-} from "rxjs";
+import { ReplaySubject, Subject, concatMap, firstValueFrom, map, merge, timer } from "rxjs";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
@@ -57,13 +46,16 @@ export class ConfigService implements ConfigServiceAbstraction {
       this._forceFetchConfig // manual
     )
       .pipe(
-        concatMap(() => this.configApiService.get()),
-        map((response) => new ServerConfigData(response)),
-        delayWhen((data) => this.saveConfig(data)),
-        catchError((e: unknown) => {
-          // fall back to stored ServerConfig (if any)
-          this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
-          return from(this.stateService.getServerConfig());
+        concatMap(async () => {
+          try {
+            const configResponse = await this.configApiService.get();
+            const configData = new ServerConfigData(configResponse);
+            await this.saveConfig(configData);
+            return configData;
+          } catch (e) {
+            this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
+            return this.stateService.getServerConfig();
+          }
         }),
         map((data) => (data == null ? null : new ServerConfig(data)))
       )
