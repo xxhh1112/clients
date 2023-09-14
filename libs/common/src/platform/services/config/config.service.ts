@@ -3,6 +3,7 @@ import {
   Subject,
   catchError,
   concatMap,
+  defer,
   delayWhen,
   firstValueFrom,
   from,
@@ -50,24 +51,25 @@ export class ConfigService implements ConfigServiceAbstraction {
       return;
     }
 
+    const fetchFromServer$ = defer(() => this.configApiService.get()).pipe(
+      map((response) => new ServerConfigData(response)),
+      delayWhen((data) => this.saveConfig(data)),
+      catchError((e: unknown) => {
+        // fall back to stored ServerConfig (if any)
+        this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
+        return from(this.stateService.getServerConfig());
+      }),
+      map((data: ServerConfigData) => (data == null ? null : new ServerConfig(data)))
+    );
+
     // If you need to fetch a new config when an event occurs, add an observable that emits on that event here
     merge(
       timer(ONE_HOUR_IN_MILLISECONDS, ONE_HOUR_IN_MILLISECONDS), // after 1 hour, then every hour
       this.environmentService.urls, // when environment URLs change (including when app is started)
       this._forceFetchConfig // manual
     )
-      .pipe(
-        concatMap(() => this.configApiService.get()),
-        map((response) => new ServerConfigData(response)),
-        delayWhen((data) => this.saveConfig(data)),
-        catchError((e: unknown) => {
-          // fall back to stored ServerConfig (if any)
-          this.logService.error("Unable to fetch ServerConfig: " + (e as Error)?.message);
-          return from(this.stateService.getServerConfig());
-        }),
-        map((data) => (data == null ? null : new ServerConfig(data)))
-      )
-      .subscribe((config) => this._serverConfig.next(config));
+      .pipe(concatMap(() => fetchFromServer$))
+      .subscribe((config: ServerConfig) => this._serverConfig.next(config));
 
     this.inited = true;
   }
