@@ -341,6 +341,7 @@ export class Main {
       this.configApiService,
       this.authService,
       this.environmentService,
+      this.logService,
       true
     );
 
