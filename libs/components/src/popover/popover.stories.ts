@@ -67,7 +67,7 @@ const popoverContent = `
       <li>Esse labore veniam tempora</li>
       <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
     </ul>
-    <button bitButton class="tw-mt-3" (click)="triggerRef.close()">Close</button>
+    <button bitButton class="tw-mt-3" (click)="triggerRef.closePopover()">Close</button>
   </bit-popover>
 `;
 
@@ -86,6 +86,68 @@ export const Default: Story = {
         </button>
       </div>
       ${popoverContent}
+      `,
+  }),
+};
+
+export const WalkthroughMode: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-walkthrough-wrapper>
+        <div class="tw-flex tw-justify-between tw-mt-32" #test>
+          <button
+            type="button"
+            class="tw-border-none tw-bg-transparent tw-text-primary-500"
+            [bitPopoverTriggerFor]="myPopover1"
+            #popTrigger
+
+          >
+            <i class="bwi bwi-question-circle"></i>
+          </button>
+          <button
+            type="button"
+            class="tw-border-none tw-bg-transparent tw-text-primary-500"
+            [bitPopoverTriggerFor]="myPopover2"
+          >
+            <i class="bwi bwi-question-circle"></i>
+          </button>
+          <button
+            type="button"
+            class="tw-border-none tw-bg-transparent tw-text-primary-500"
+            [bitPopoverTriggerFor]="myPopover3"
+          >
+            <i class="bwi bwi-question-circle"></i>
+          </button>
+        </div>
+
+        <bit-popover [header]="'Example Header'" #myPopover1>
+          <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
+          <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
+            <li>Dolor sit amet consectetur</li>
+            <li>Esse labore veniam tempora</li>
+            <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
+          </ul>
+        </bit-popover>
+
+        <bit-popover [header]="'Example Header'" #myPopover2>
+          <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
+          <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
+            <li>Dolor sit amet consectetur</li>
+            <li>Esse labore veniam tempora</li>
+            <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
+          </ul>
+        </bit-popover>
+
+        <bit-popover [header]="'Example Header'" #myPopover3>
+          <div>Lorem ipsum dolor <a href="#">adipisicing elit</a>.</div>
+          <ul class="tw-mt-2 tw-mb-0 tw-pl-4">
+            <li>Dolor sit amet consectetur</li>
+            <li>Esse labore veniam tempora</li>
+            <li>Adipisicing elit ipsum <a href="#">iustolaborum</a></li>
+          </ul>
+        </bit-popover>
+      </bit-walkthrough-wrapper>
       `,
   }),
 };
