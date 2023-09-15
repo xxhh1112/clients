@@ -167,7 +167,7 @@ export class CipherContextMenuHandler {
     ]);
     ciphers.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
 
-    const groupedCiphers = ciphers.reduce(
+    const groupedCiphers: Record<AutofillCipherTypeId, CipherView[]> = ciphers.reduce(
       (acc, cipher) => {
         if (!cipher?.type) {
           return acc;
@@ -207,7 +207,7 @@ export class CipherContextMenuHandler {
   private async updateForCipher(cipher: CipherView) {
     if (
       cipher == null ||
-      ![CipherType.Login, CipherType.Card, CipherType.Identity].includes(cipher.type)
+      !new Set([CipherType.Login, CipherType.Card, CipherType.Identity]).has(cipher.type)
     ) {
       return;
     }
