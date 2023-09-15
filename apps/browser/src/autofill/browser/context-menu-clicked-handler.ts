@@ -31,21 +31,21 @@ import {
 import { autofillServiceFactory } from "../background/service_factories/autofill-service.factory";
 import { copyToClipboard, GeneratePasswordToClipboardCommand } from "../clipboard";
 import { AutofillTabCommand } from "../commands/autofill-tab-command";
-
 import {
+  AUTOFILL_CARD_ID,
   AUTOFILL_ID,
   AUTOFILL_IDENTITY_ID,
-  AUTOFILL_CARD_ID,
-  CREATE_IDENTITY_ID,
-  CREATE_CARD_ID,
-  CREATE_LOGIN_ID,
   COPY_IDENTIFIER_ID,
   COPY_PASSWORD_ID,
   COPY_USERNAME_ID,
   COPY_VERIFICATIONCODE_ID,
+  CREATE_CARD_ID,
+  CREATE_IDENTITY_ID,
+  CREATE_LOGIN_ID,
   GENERATE_PASSWORD_ID,
   NOOP_COMMAND_SUFFIX,
-} from "./main-context-menu-handler";
+} from "../constants";
+import { AutofillCipherTypeId } from "../types";
 
 export type CopyToClipboardOptions = { text: string; tab: chrome.tabs.Tab };
 export type CopyToClipboardAction = (options: CopyToClipboardOptions) => void;
@@ -228,24 +228,12 @@ export class ContextMenuClickedHandler {
     switch (info.parentMenuItemId) {
       case AUTOFILL_ID:
       case AUTOFILL_IDENTITY_ID:
-      case AUTOFILL_CARD_ID:
-        if (menuItemId === CREATE_IDENTITY_ID) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Identity,
-          });
-          break;
-        }
+      case AUTOFILL_CARD_ID: {
+        const cipherType = this.getCipherCreationType(menuItemId);
 
-        if (menuItemId === CREATE_CARD_ID) {
+        if (cipherType) {
           await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Card,
-          });
-          break;
-        }
-
-        if (menuItemId === CREATE_LOGIN_ID) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Login,
+            cipherType,
           });
           break;
         }
@@ -261,6 +249,7 @@ export class ContextMenuClickedHandler {
         }
 
         break;
+      }
       case COPY_USERNAME_ID:
         if (menuItemId === CREATE_LOGIN_ID) {
           await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
@@ -319,6 +308,16 @@ export class ContextMenuClickedHandler {
       cipher.reprompt === CipherRepromptType.Password &&
       (await this.userVerificationService.hasMasterPasswordAndMasterKeyHash())
     );
+  }
+
+  private getCipherCreationType(menuItemId?: string): AutofillCipherTypeId | null {
+    return menuItemId === CREATE_IDENTITY_ID
+      ? CipherType.Identity
+      : menuItemId === CREATE_CARD_ID
+      ? CipherType.Card
+      : menuItemId === CREATE_LOGIN_ID
+      ? CipherType.Login
+      : null;
   }
 
   private async getIdentifier(tab: chrome.tabs.Tab, info: chrome.contextMenus.OnClickData) {

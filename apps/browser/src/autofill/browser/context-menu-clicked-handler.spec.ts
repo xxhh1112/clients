@@ -11,20 +11,21 @@ import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import {
-  CopyToClipboardAction,
-  ContextMenuClickedHandler,
-  CopyToClipboardOptions,
-  GeneratePasswordToClipboardAction,
-  AutofillAction,
-} from "./context-menu-clicked-handler";
-import {
   AUTOFILL_ID,
   COPY_PASSWORD_ID,
   COPY_USERNAME_ID,
   COPY_VERIFICATIONCODE_ID,
   GENERATE_PASSWORD_ID,
   NOOP_COMMAND_SUFFIX,
-} from "./main-context-menu-handler";
+} from "../constants";
+
+import {
+  CopyToClipboardAction,
+  ContextMenuClickedHandler,
+  CopyToClipboardOptions,
+  GeneratePasswordToClipboardAction,
+  AutofillAction,
+} from "./context-menu-clicked-handler";
 
 describe("ContextMenuClickedHandler", () => {
   const createData = (

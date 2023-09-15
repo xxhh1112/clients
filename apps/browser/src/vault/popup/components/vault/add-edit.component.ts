@@ -170,7 +170,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       return true;
     }
 
-    if (this.inPopout) {
+    if (this.senderTabId && this.inPopout) {
       setTimeout(() => this.close(), 500);
       return true;
     }
@@ -207,7 +207,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.inPopout) {
+    if (this.senderTabId && this.inPopout) {
       this.close();
       return;
     }
@@ -220,15 +220,12 @@ export class AddEditComponent extends BaseAddEditComponent {
     this.location.back();
   }
 
+  // Used for closing single-action views
   close() {
-    if (this.senderTabId && this.inPopout) {
-      BrowserApi.focusTab(this.senderTabId);
-      window.close();
+    BrowserApi.focusTab(this.senderTabId);
+    window.close();
 
-      return;
-    }
-
-    this.location.back();
+    return;
   }
 
   async generateUsername(): Promise<boolean> {

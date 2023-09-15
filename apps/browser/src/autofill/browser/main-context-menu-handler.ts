@@ -21,21 +21,22 @@ import {
   StateServiceInitOptions,
 } from "../../platform/background/service-factories/state-service.factory";
 import { BrowserStateService } from "../../platform/services/abstractions/browser-state.service";
-
-export const ROOT_ID = "root";
-export const AUTOFILL_ID = "autofill";
-export const AUTOFILL_IDENTITY_ID = "autofill-identity";
-export const AUTOFILL_CARD_ID = "autofill-card";
-export const CREATE_IDENTITY_ID = "create-identity";
-export const CREATE_CARD_ID = "create-card";
-export const CREATE_LOGIN_ID = "create-login";
-export const COPY_USERNAME_ID = "copy-username";
-export const COPY_PASSWORD_ID = "copy-password";
-export const COPY_VERIFICATIONCODE_ID = "copy-totp";
-export const COPY_IDENTIFIER_ID = "copy-identifier";
-const SEPARATOR_ID = "separator";
-export const GENERATE_PASSWORD_ID = "generate-password";
-export const NOOP_COMMAND_SUFFIX = "noop";
+import {
+  AUTOFILL_CARD_ID,
+  AUTOFILL_ID,
+  AUTOFILL_IDENTITY_ID,
+  COPY_IDENTIFIER_ID,
+  COPY_PASSWORD_ID,
+  COPY_USERNAME_ID,
+  COPY_VERIFICATIONCODE_ID,
+  CREATE_CARD_ID,
+  CREATE_IDENTITY_ID,
+  CREATE_LOGIN_ID,
+  GENERATE_PASSWORD_ID,
+  NOOP_COMMAND_SUFFIX,
+  ROOT_ID,
+  SEPARATOR_ID,
+} from "../constants";
 
 export class MainContextMenuHandler {
   private initRunning = false;
@@ -288,7 +289,7 @@ export class MainContextMenuHandler {
     });
 
     await this.create({
-      id: `${AUTOFILL_CARD_ID}_${SEPARATOR_ID}` + 1,
+      id: `${AUTOFILL_CARD_ID}_${SEPARATOR_ID}`,
       parentId: AUTOFILL_CARD_ID,
       type: "separator",
     });
@@ -311,7 +312,7 @@ export class MainContextMenuHandler {
     });
 
     await this.create({
-      id: `${AUTOFILL_IDENTITY_ID}_${SEPARATOR_ID}` + 1,
+      id: `${AUTOFILL_IDENTITY_ID}_${SEPARATOR_ID}`,
       parentId: AUTOFILL_IDENTITY_ID,
       type: "separator",
     });
