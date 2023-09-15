@@ -2,6 +2,7 @@ export interface NewCredentialParams {
   credentialName: string;
   userName: string;
   userVerification: boolean;
+  discoverable: boolean;
 }
 
 export interface PickCredentialParams {

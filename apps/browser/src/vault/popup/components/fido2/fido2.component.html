@@ -1,7 +1,29 @@
 <!-- TODO: Rewrite and refactor this component when implementing the new design -->
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
-    <div class="logo-image"></div>
+    <div class="auth-header">
+      <div class="left">
+        <!-- <div class="logo-image"></div> -->
+      </div>
+      <div class="search">
+        <input
+          type="{{ searchTypeSearch ? 'search' : 'text' }}"
+          placeholder="{{ 'searchVault' | i18n }}"
+          id="search"
+          [(ngModel)]="searchText"
+          (input)="search(200)"
+          autocomplete="off"
+          appAutofocus
+        />
+        <i class="bwi bwi-search" aria-hidden="true"></i>
+      </div>
+      <div class="right">
+        <button type="button" (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+          <i class="bwi bwi-plus bwi-lg bwi-fw" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
     <ng-container *ngIf="data.showUnsupportedVerification">
       {{ "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" | i18n }}
     </ng-container>
@@ -13,19 +35,35 @@
         "
       >
         <div class="auth-flow">
-          <p class="subtitle">{{ pickCredentialSubTitleText | i18n }}</p>
+          <p class="subtitle">
+            {{
+              (displayedCiphers.length > 0
+                ? getCredentialSubTitleText(data.message.type)
+                : "noMatchingPasskeyLogin"
+              ) | i18n
+            }}
+          </p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
-                *ngFor="let cipher of ciphers"
-                [cipher]="cipher"
+                *ngFor="let cipherItem of displayedCiphers; let i = index"
+                [cipher]="cipherItem"
+                [rowIndex]="i"
+                title="{{ 'fido2Item' | i18n }}"
                 (onSelected)="selectedPasskey($event)"
               ></app-fido2-cipher-row>
             </div>
           </div>
           <div class="box">
-            <button type="submit" (click)="pick()" class="btn primary block">
-              <span [hidden]="loading">{{ "confirm" | i18n }}</span>
+            <button type="submit" (click)="submit()" class="btn primary block">
+              <span [hidden]="loading">
+                {{
+                  (displayedCiphers.length > 0
+                    ? getCredentialButtonText(data.message.type)
+                    : "savePasskeyNewLogin"
+                  ) | i18n
+                }}
+              </span>
               <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
             </button>
           </div>
@@ -33,17 +71,17 @@
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
         <div class="auth-flow">
-          <p class="subtitle">{{ "passkeyAlreadyExistsInBitwardenForThisAccount" | i18n }}</p>
+          <p class="subtitle">{{ "passkeyAlreadyExists" | i18n }}</p>
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
-                *ngFor="let cipher of ciphers"
-                [cipher]="cipher"
+                *ngFor="let cipherItem of displayedCiphers"
+                [cipher]="cipherItem"
               ></app-fido2-cipher-row>
             </div>
           </div>
           <button type="button" class="btn primary block" (click)="viewPasskey()">
-            <span [hidden]="loading">{{ "viewPasskey" | i18n }}</span>
+            <span [hidden]="loading">{{ "viewItem" | i18n }}</span>
             <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
           </button>
         </div>
