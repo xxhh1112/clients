@@ -11,7 +11,6 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
@@ -100,15 +99,6 @@ export class ShareComponent implements OnInit, OnDestroy {
     const orgName =
       orgs.find((o) => o.id === this.organizationId)?.name ?? this.i18nService.t("organization");
 
-    if (await this.checkFido2KeyExistsInOrg(cipherView, this.organizationId)) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("duplicatePasskey")
-      );
-      return;
-    }
-
     try {
       this.formPromise = this.cipherService
         .shareWithServer(cipherView, this.organizationId, selectedCollectionIds)
@@ -136,28 +126,6 @@ export class ShareComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return false;
-  }
-
-  private async checkFido2KeyExistsInOrg(cipher: CipherView, orgId: string): Promise<boolean> {
-    if (cipher.type === CipherType.Fido2Key || cipher.login?.fido2Keys[0]) {
-      //Determine if Fido2Key object is disvoverable or non discoverable
-      const newFido2Key = cipher.login?.fido2Keys[0] || cipher.fido2Key;
-
-      const ciphers = await this.cipherService.getAllDecrypted();
-      const exisitingOrgCiphers = ciphers.filter((c) => c.organizationId === orgId);
-
-      return exisitingOrgCiphers.some((c) => {
-        const existingFido2key = c.login?.fido2Keys[0] || c.fido2Key;
-
-        return (
-          !c.isDeleted &&
-          existingFido2key.rpId === newFido2Key.rpId &&
-          existingFido2key.userHandle === newFido2Key.userHandle
-        );
-      });
-    }
-
     return false;
   }
 }
