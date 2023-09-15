@@ -255,14 +255,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async launchCipher(cipher: CipherView) {
-    let launchUri: string;
-    if (cipher.type === CipherType.Login && cipher.login.canLaunch) {
-      launchUri = cipher.login.launchUri;
-    } else if (cipher.type === CipherType.Fido2Key && cipher.fido2Key.canLaunch) {
-      launchUri = cipher.fido2Key.launchUri;
-    }
-
-    if (!launchUri) {
+    if (cipher.type !== CipherType.Login || !cipher.login.canLaunch) {
       return;
     }
 
@@ -271,7 +264,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     this.preventSelected = true;
     await this.cipherService.updateLastLaunchedDate(cipher.id);
-    BrowserApi.createNewTab(launchUri);
+    BrowserApi.createNewTab(cipher.login.launchUri);
     if (this.popupUtils.inPopup(window)) {
       BrowserApi.closePopup(window);
     }
@@ -360,10 +353,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.typeCounts = typeCounts;
     this.folderCounts = folderCounts;
     this.collectionCounts = collectionCounts;
-  }
-
-  getTypeCountsSum(typeCounts: Map<CipherType, number>, ...types: CipherType[]): number {
-    return types.reduce((sum, type) => sum + (typeCounts.get(type) || 0), 0);
   }
 
   showSearching() {

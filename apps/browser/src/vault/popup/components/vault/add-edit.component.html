@@ -138,7 +138,7 @@
             <div class="box-content">
               <div class="box-content-row text-muted">
                 <span class="row-label">{{ "typePasskey" | i18n }}</span>
-                {{ "passkeyTwoStepLogin" | i18n }}
+                {{ "dateCreated" | i18n }} {{ cipher.creationDate | date : "short" }}
               </div>
             </div>
           </div>
@@ -473,39 +473,6 @@
               [(ngModel)]="cipher.identity.country"
               [readonly]="!cipher.edit && editMode"
             />
-          </div>
-        </div>
-        <!-- Fido2Key -->
-        <div *ngIf="cipher.type === cipherType.Fido2Key">
-          <div class="box-content-row" appBoxRow>
-            <label for="fido2KeyUserDisplayName">{{ "username" | i18n }}</label>
-            <input
-              id="fido2KeyUserDisplayName"
-              type="text"
-              name="Fido2Key.UserDisplayName"
-              [(ngModel)]="cipher.fido2Key.userDisplayName"
-              appInputVerbatim
-              [readonly]="!cipher.edit && editMode"
-            />
-          </div>
-          <div class="box-content-row text-muted" appBoxRow>
-            <span class="row-label">{{ "typePasskey" | i18n }}</span>
-            {{ "dateCreated" | i18n }} {{ cipher.creationDate | date : "short" }}
-          </div>
-
-          <div class="box" *ngIf="cipher.fido2Key.canLaunch">
-            <div class="box-content">
-              <div class="box-content-row" appBoxRow>
-                <label for="fido2KeyApplication">{{ "application" | i18n }}</label>
-                <input
-                  class="text-muted"
-                  id="fido2KeyApplication"
-                  type="text"
-                  [value]="cipher.fido2Key.rpId"
-                  readonly
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>

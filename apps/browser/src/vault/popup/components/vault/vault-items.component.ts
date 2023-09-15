@@ -99,7 +99,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
         this.type = parseInt(params.type, null);
         switch (this.type) {
           case CipherType.Login:
-          case CipherType.Fido2Key:
             this.groupingTitle = this.i18nService.t("logins");
             break;
           case CipherType.Card:
@@ -210,15 +209,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   }
 
   async launchCipher(cipher: CipherView) {
-    let launchUri: string;
-
-    if (cipher.type === CipherType.Login && cipher.login.canLaunch) {
-      launchUri = cipher.login.launchUri;
-    } else if (cipher.type === CipherType.Fido2Key && cipher.fido2Key.canLaunch) {
-      launchUri = cipher.fido2Key.launchUri;
-    }
-
-    if (!launchUri) {
+    if (cipher.type !== CipherType.Login || !cipher.login.canLaunch) {
       return;
     }
 
@@ -227,7 +218,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
     this.preventSelected = true;
     await this.cipherService.updateLastLaunchedDate(cipher.id);
-    BrowserApi.createNewTab(launchUri);
+    BrowserApi.createNewTab(cipher.login.launchUri);
     if (this.popupUtils.inPopup(window)) {
       BrowserApi.closePopup(window);
     }
@@ -273,12 +264,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
         cipherPassesFilter = cipher.isDeleted;
       }
       if (this.type != null && cipherPassesFilter) {
-        //Fido2Key's should also be included in the Login type
-        if (this.type === CipherType.Login) {
-          cipherPassesFilter = cipher.type === this.type || cipher.type === CipherType.Fido2Key;
-        } else {
-          cipherPassesFilter = cipher.type === this.type;
-        }
+        cipherPassesFilter = cipher.type === this.type;
       }
       if (this.folderId != null && this.folderId != "none" && cipherPassesFilter) {
         cipherPassesFilter = cipher.folderId === this.folderId;

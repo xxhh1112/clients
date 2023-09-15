@@ -11,7 +11,6 @@ import { Cipher } from "../domain/cipher";
 
 import { AttachmentView } from "./attachment.view";
 import { CardView } from "./card.view";
-import { Fido2KeyView } from "./fido2-key.view";
 import { FieldView } from "./field.view";
 import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
@@ -36,7 +35,6 @@ export class CipherView implements View, InitializerMetadata {
   identity = new IdentityView();
   card = new CardView();
   secureNote = new SecureNoteView();
-  fido2Key = new Fido2KeyView();
   attachments: AttachmentView[] = null;
   fields: FieldView[] = null;
   passwordHistory: PasswordHistoryView[] = null;

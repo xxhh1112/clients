@@ -45,13 +45,7 @@ export class VaultFilter {
         cipherPassesFilter = cipher.isDeleted;
       }
       if (this.cipherType != null && cipherPassesFilter) {
-        // Fido2Key's should also be included in the Login type
-        if (this.cipherType === CipherType.Login) {
-          cipherPassesFilter =
-            cipher.type === this.cipherType || cipher.type === CipherType.Fido2Key;
-        } else {
-          cipherPassesFilter = cipher.type === this.cipherType;
-        }
+        cipherPassesFilter = cipher.type === this.cipherType;
       }
       if (this.selectedFolder && this.selectedFolderId == null && cipherPassesFilter) {
         cipherPassesFilter = cipher.folderId == null;
