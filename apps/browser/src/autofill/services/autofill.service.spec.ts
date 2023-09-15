@@ -733,13 +733,15 @@ describe("AutofillService", () => {
         jest
           .spyOn(userVerificationService, "hasMasterPasswordAndMasterKeyHash")
           .mockResolvedValueOnce(true);
-        jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
+        jest
+          .spyOn(autofillService as any, "openVaultItemPasswordRepromptPopout")
+          .mockImplementation();
 
         const result = await autofillService.doAutoFillOnTab(pageDetails, tab, true);
 
         expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
         expect(userVerificationService.hasMasterPasswordAndMasterKeyHash).toHaveBeenCalled();
-        expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(tab, "passwordReprompt", {
+        expect(autofillService["openVaultItemPasswordRepromptPopout"]).toHaveBeenCalledWith(tab, {
           cipherId: cipher.id,
           action: "autofill",
         });

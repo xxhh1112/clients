@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
 
-import BrowserPopoutType from "@bitwarden/common/enums/browser-popout-type.enum";
-
 import { BrowserApi } from "../../platform/browser/browser-api";
+import PopoutWindow from "../../platform/popup/popout-window";
 
 @Injectable()
 export class PopupUtilsService {
@@ -64,7 +63,7 @@ export class PopupUtilsService {
       hashRoute = "#/tabs/vault";
     }
 
-    this.openPopout(`${parsedUrl.pathname}${hashRoute}`);
+    PopoutWindow.open(`${parsedUrl.pathname}${hashRoute}`);
 
     if (this.inPopup(win)) {
       BrowserApi.closePopup(win);
@@ -101,194 +100,5 @@ export class PopupUtilsService {
    */
   disableCloseTabWarning() {
     this.unloadSubscription?.unsubscribe();
-  }
-
-  async openUnlockPopout(senderWindowId: number) {
-    await this.openPopout("popup/index.html?uilocation=popout", {
-      singleActionPopoutKey: BrowserPopoutType.UnlockVault,
-      senderWindowId,
-    });
-  }
-
-  async closeUnlockPopout() {
-    await this.closeSingleActionPopout(BrowserPopoutType.UnlockVault);
-  }
-
-  async openPasswordRepromptPopout(
-    senderWindowId: number,
-    {
-      cipherId,
-      senderTabId,
-      action,
-    }: {
-      cipherId: string;
-      senderTabId: number;
-      action: string;
-    }
-  ) {
-    const promptWindowPath =
-      "popup/index.html#/view-cipher" +
-      "?uilocation=popout" +
-      `&cipherId=${cipherId}` +
-      `&senderTabId=${senderTabId}` +
-      `&action=${action}`;
-
-    await this.openPopout(promptWindowPath, {
-      singleActionPopoutKey: BrowserPopoutType.PasswordReprompt,
-      senderWindowId,
-    });
-  }
-
-  async openAddEditCipherPopout(cipherId: number, senderWindowId: number): Promise<void> {
-    const addEditCipherUrl =
-      cipherId == null
-        ? "popup/index.html#/edit-cipher"
-        : `popup/index.html#/edit-cipher?cipherId=${cipherId}`;
-
-    await this.openPopout(addEditCipherUrl, {
-      singleActionPopoutKey: BrowserPopoutType.AddEditCipher,
-      senderWindowId,
-    });
-  }
-
-  async closeAddEditCipherPopout(delayClose = 0) {
-    await this.closeSingleActionPopout(BrowserPopoutType.AddEditCipher, delayClose);
-  }
-
-  async openTwoFactorAuthPopout(message: { data: string; remember: string }) {
-    const { data, remember } = message;
-    const params =
-      `webAuthnResponse=${encodeURIComponent(data)};` + `remember=${encodeURIComponent(remember)}`;
-    const twoFactorUrl = `popup/index.html#/2fa;${params}`;
-
-    await this.openPopout(twoFactorUrl, { singleActionPopoutKey: BrowserPopoutType.TwoFactorAuth });
-  }
-
-  async closeTwoFactorAuthPopout() {
-    await this.closeSingleActionPopout(BrowserPopoutType.TwoFactorAuth);
-  }
-
-  async openAuthResultPopout(message: { code: string; state: string }) {
-    const { code, state } = message;
-    const authResultUrl = `popup/index.html?uilocation=popout#/sso?code=${encodeURIComponent(
-      code
-    )}&state=${encodeURIComponent(state)}`;
-
-    await this.openPopout(authResultUrl, {
-      singleActionPopoutKey: BrowserPopoutType.SsoAuthResult,
-    });
-  }
-
-  private async openPopout(
-    popupWindowUrl: string,
-    options: {
-      senderWindowId?: number;
-      singleActionPopoutKey?: string;
-      windowOptionsOverrides?: Partial<chrome.windows.CreateData>;
-    } = {}
-  ) {
-    if (this.isDebouncingOpenPopout()) {
-      return;
-    }
-
-    const { senderWindowId, singleActionPopoutKey, windowOptionsOverrides } = options;
-    const defaultPopoutWindowOptions: chrome.windows.CreateData = {
-      type: "normal",
-      focused: true,
-      width: 500,
-      height: 800,
-      ...windowOptionsOverrides,
-    };
-    const offsetRight = 15;
-    const offsetTop = 90;
-    const popupWidth = defaultPopoutWindowOptions.width;
-    const senderWindow = await BrowserApi.getWindow(senderWindowId);
-    const url = chrome.runtime.getURL(popupWindowUrl);
-    const parsedUrl = new URL(url);
-    parsedUrl.searchParams.set("uilocation", "popout");
-    if (singleActionPopoutKey) {
-      parsedUrl.searchParams.set("singleActionPopout", singleActionPopoutKey);
-    }
-    const windowOptions = {
-      ...defaultPopoutWindowOptions,
-      url: parsedUrl.toString(),
-      left: senderWindow.left + senderWindow.width - popupWidth - offsetRight,
-      top: senderWindow.top + offsetTop,
-    };
-
-    if (
-      singleActionPopoutKey &&
-      (await this.isSingleActionPopoutOpen(singleActionPopoutKey, windowOptions))
-    ) {
-      return;
-    }
-
-    return await BrowserApi.createWindow(windowOptions);
-  }
-
-  private isDebouncingOpenPopout() {
-    if (this.isOpeningPopout) {
-      return true;
-    }
-
-    this.isOpeningPopout = true;
-    clearTimeout(this.openPopoutDebounce);
-
-    this.openPopoutDebounce = setTimeout(() => {
-      this.isOpeningPopout = false;
-    }, 100);
-
-    return false;
-  }
-
-  private async isSingleActionPopoutOpen(
-    popoutKey: string,
-    windowInfo: chrome.windows.CreateData
-  ): Promise<boolean> {
-    let isPopoutOpen = false;
-    let singleActionPopoutFound = false;
-    const extensionUrl = chrome.runtime.getURL("popup/index.html");
-    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
-    if (tabs.length === 0) {
-      return isPopoutOpen;
-    }
-
-    for (let index = 0; index < tabs.length; index++) {
-      const tab = tabs[index];
-      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
-        continue;
-      }
-
-      isPopoutOpen = true;
-      if (!singleActionPopoutFound) {
-        await BrowserApi.updateWindowProperties(tab.windowId, {
-          focused: true,
-          width: windowInfo.width,
-          height: windowInfo.height,
-          top: windowInfo.top,
-          left: windowInfo.left,
-        });
-        singleActionPopoutFound = true;
-        continue;
-      }
-
-      BrowserApi.removeTab(tab.id);
-    }
-
-    return isPopoutOpen;
-  }
-
-  async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
-    const extensionUrl = chrome.runtime.getURL("popup/index.html");
-    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
-    for (const tab of tabs) {
-      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
-        continue;
-      }
-
-      setTimeout(() => {
-        BrowserApi.removeTab(tab.id);
-      }, delayClose);
-    }
   }
 }

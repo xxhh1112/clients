@@ -7,11 +7,15 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
+import {
+  closeUnlockPopout,
+  openSsoAuthResultPopout,
+  openTwoFactorAuthPopout,
+} from "../auth/popup/utils/auth-popout-window";
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
-import { PopupUtilsService } from "../popup/services/popup-utils.service";
 
 import MainBackground from "./main.background";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
@@ -32,8 +36,7 @@ export default class RuntimeBackground {
     private environmentService: BrowserEnvironmentService,
     private messagingService: MessagingService,
     private logService: LogService,
-    private configService: ConfigServiceAbstraction,
-    private popupUtilsService: PopupUtilsService
+    private configService: ConfigServiceAbstraction
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -62,8 +65,6 @@ export default class RuntimeBackground {
   }
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
-    const cipherId = msg.data?.cipherId;
-
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -71,7 +72,7 @@ export default class RuntimeBackground {
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
           item = this.lockedVaultPendingNotifications.pop();
-          await this.popupUtilsService.closeUnlockPopout();
+          await closeUnlockPopout();
         }
 
         await this.main.refreshBadge();
@@ -108,22 +109,6 @@ export default class RuntimeBackground {
         break;
       case "openPopup":
         await this.main.openPopup();
-        break;
-      case "promptForLogin":
-      case "bgReopenPromptForLogin":
-        await this.popupUtilsService.openUnlockPopout(sender.tab?.windowId);
-        break;
-      case "passwordReprompt":
-        if (cipherId) {
-          await this.popupUtilsService.openPasswordRepromptPopout(sender.tab?.windowId, {
-            cipherId: cipherId,
-            senderTabId: sender.tab.id,
-            action: msg.data?.action,
-          });
-        }
-        break;
-      case "openAddEditCipher":
-        await this.popupUtilsService.openAddEditCipherPopout(cipherId, sender.tab?.windowId);
         break;
       case "triggerAutofillScriptInjection":
         await this.autofillService.injectAutofillScripts(
@@ -184,7 +169,7 @@ export default class RuntimeBackground {
         }
 
         try {
-          await this.popupUtilsService.openAuthResultPopout(msg);
+          await openSsoAuthResultPopout(msg);
         } catch {
           this.logService.error("Unable to open sso popout tab");
         }
@@ -197,7 +182,7 @@ export default class RuntimeBackground {
           return;
         }
 
-        await this.popupUtilsService.openTwoFactorAuthPopout(msg);
+        await openTwoFactorAuthPopout(msg);
         break;
       }
       case "reloadPopup":
