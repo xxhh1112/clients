@@ -81,23 +81,23 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
     senderWindowId: number,
     popupWindowURL: string,
     singleActionPopoutKey: string,
-    customDimensions: { width?: number; height?: number } = {}
+    options: chrome.windows.CreateData = {}
   ) {
     const senderWindow = senderWindowId && (await BrowserApi.getWindow(senderWindowId));
     const url = chrome.extension.getURL(popupWindowURL);
     const offsetRight = 15;
     const offsetTop = 90;
-    // Use custom dimensions if provided, otherwise use default
-    const popupWidth = customDimensions.width || this.defaultPopoutWindowOptions.width;
+    /// Use overrides in `options` if provided, otherwise use default
+    const popupWidth = options?.width || this.defaultPopoutWindowOptions.width;
     const windowOptions = senderWindow
       ? {
           ...this.defaultPopoutWindowOptions,
-          ...customDimensions,
-          url,
           left: senderWindow.left + senderWindow.width - popupWidth - offsetRight,
           top: senderWindow.top + offsetTop,
+          ...options,
+          url,
         }
-      : { ...this.defaultPopoutWindowOptions, ...customDimensions, url };
+      : { ...this.defaultPopoutWindowOptions, url, ...options };
 
     const popupWindow = await BrowserApi.createWindow(windowOptions);
 
