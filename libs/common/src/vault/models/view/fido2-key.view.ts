@@ -19,14 +19,6 @@ export class Fido2KeyView extends ItemView {
     return this.userDisplayName;
   }
 
-  get canLaunch(): boolean {
-    return this.rpId != null;
-  }
-
-  get launchUri(): string {
-    return this.canLaunch ? `https://${this.rpId}` : null;
-  }
-
   static fromJSON(obj: Partial<Jsonify<Fido2KeyView>>): Fido2KeyView {
     return Object.assign(new Fido2KeyView(), obj);
   }
