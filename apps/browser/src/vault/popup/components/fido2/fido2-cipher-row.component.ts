@@ -15,7 +15,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
   templateUrl: "fido2-cipher-row.component.html",
 })
 export class Fido2CipherRowComponent implements AfterViewInit {
-  @ViewChild("buttonRow") cipherRow: ElementRef;
+  @ViewChild("cipherRow") cipherRow: ElementRef;
 
   @Output() onSelected = new EventEmitter<CipherView>();
   @Input() cipher: CipherView;

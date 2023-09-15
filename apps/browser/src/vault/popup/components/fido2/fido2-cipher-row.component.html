@@ -4,11 +4,12 @@
   class="virtual-scroll-item"
   [ngClass]="{ 'override-last': !last }"
 >
-  <div class="box-content-row box-content-row-flex" (click)="selectCipher(cipher)">
+  <div class="box-content-row box-content-row-flex">
     <button
       type="button"
+      (click)="selectCipher(cipher)"
       tabindex="0"
-      #buttonRow
+      #cipherRow
       id="fido2CipherRow-{{ rowIndex }}"
       appStopClick
       title="{{ title }} - {{ cipher.name }}"
