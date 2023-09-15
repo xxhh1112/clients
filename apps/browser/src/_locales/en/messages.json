@@ -2449,11 +2449,14 @@
   "savePasskeyInBitwarden": {
     "message": "Save passkey in Bitwarden?"
   },
-  "passkeyAlreadyExistsInBitwardenForThisAccount": {
-    "message": "A passkey already exists in Bitwarden for this account"
+  "passkeyAlreadyExists": {
+    "message": "A passkey already exists for this application."
   },
   "noPasskeysFoundForThisApplication": {
     "message": "No passkeys found for this application."
+  },
+  "noMatchingPasskeyLogin": {
+    "message": "You do not have a matching login for this site."
   },
   "confirm": {
     "message": "Confirm"
@@ -2461,11 +2464,20 @@
   "savePasskey": {
     "message": "Save passkey"
   },
-  "viewPasskey": {
-    "message": "View passkey"
+  "savePasskeyNewLogin": {
+    "message": "Save passkey as new login"
   },
   "choosePasskey": {
-    "message": "Choose a passkey to login with"
+    "message": "Choose a login to save this passkey to"
+  },
+  "fido2Item": {
+    "message": "Fido2 Item"
+  },
+  "overwritePasskey": {
+    "message": "Overwrite passkey?"
+  },
+  "overwritePasskeyAlert": {
+    "message": "This item already contains a passkey. Are you sure you want to overwrite the current passkey?"
   },
   "useBrowserName": {
     "message": "Use $browserName$",
