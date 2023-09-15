@@ -131,10 +131,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
         const encrypted = await this.cipherService.get(cipherId);
         cipher = await encrypted.decrypt();
-        cipher.login.fido2Key = fido2Key = await createKeyView(params, keyPair.privateKey);
+        fido2Key = await createKeyView(params, keyPair.privateKey);
+        cipher.login.fido2Keys = [fido2Key];
         const reencrypted = await this.cipherService.encrypt(cipher);
         await this.cipherService.updateWithServer(reencrypted);
-        credentialId = cipher.login.fido2Key.credentialId;
+        credentialId = fido2Key.credentialId;
       } catch (error) {
         this.logService?.error(
           `[Fido2Authenticator] Aborting because of unknown error when creating credential: ${error}`
@@ -233,10 +234,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       try {
-        const selectedFido2Key =
-          selectedCipher.type === CipherType.Login
-            ? selectedCipher.login.fido2Key
-            : selectedCipher.fido2Key;
+        const selectedFido2Key = selectedCipher.login.fido2Keys[0];
         const selectedCredentialId = selectedFido2Key.credentialId;
 
         ++selectedFido2Key.counter;
@@ -310,8 +308,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
           !cipher.isDeleted &&
           cipher.organizationId == undefined &&
           cipher.type === CipherType.Login &&
-          cipher.login.fido2Key != undefined &&
-          ids.includes(cipher.login.fido2Key.credentialId)
+          cipher.login.fido2Keys.length > 0 &&
+          ids.includes(cipher.login.fido2Keys[0].credentialId)
       )
       .map((cipher) => cipher.id);
   }
@@ -343,9 +341,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       (cipher) =>
         !cipher.isDeleted &&
         cipher.type === CipherType.Login &&
-        cipher.login.fido2Key != undefined &&
-        cipher.login.fido2Key.rpId === rpId &&
-        ids.includes(cipher.login.fido2Key.credentialId)
+        cipher.login.fido2Keys.length > 0 &&
+        cipher.login.fido2Keys[0].rpId === rpId &&
+        ids.includes(cipher.login.fido2Keys[0].credentialId)
     );
   }
 
@@ -360,9 +358,9 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       (cipher) =>
         !cipher.isDeleted &&
         cipher.type === CipherType.Login &&
-        cipher.login.fido2Key != undefined &&
-        cipher.login.fido2Key.rpId === rpId &&
-        cipher.login.fido2Key.discoverable
+        cipher.login.fido2Keys.length > 0 &&
+        cipher.login.fido2Keys[0].rpId === rpId &&
+        cipher.login.fido2Keys[0].discoverable
     );
   }
 }

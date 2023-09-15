@@ -16,7 +16,7 @@ export class Login extends Domain {
   passwordRevisionDate?: Date;
   totp: EncString;
   autofillOnPageLoad: boolean;
-  fido2Key: Fido2Key;
+  fido2Keys: Fido2Key[] = [];
 
   constructor(obj?: LoginData) {
     super();
@@ -45,8 +45,8 @@ export class Login extends Domain {
       });
     }
 
-    if (obj.fido2Key) {
-      this.fido2Key = new Fido2Key(obj.fido2Key);
+    if (obj.fido2Keys) {
+      this.fido2Keys = obj.fido2Keys.map((key) => new Fido2Key(key));
     }
   }
 
@@ -70,8 +70,8 @@ export class Login extends Domain {
       }
     }
 
-    if (this.fido2Key != null) {
-      view.fido2Key = await this.fido2Key.decrypt(orgId, encKey);
+    if (this.fido2Keys != null) {
+      view.fido2Keys = await Promise.all(this.fido2Keys.map((key) => key.decrypt(orgId, encKey)));
     }
 
     return view;
@@ -95,9 +95,7 @@ export class Login extends Domain {
       });
     }
 
-    if (this.fido2Key != null) {
-      l.fido2Key = this.fido2Key.toFido2KeyData();
-    }
+    l.fido2Keys = this.fido2Keys.map((key) => key.toFido2KeyData());
 
     return l;
   }
@@ -113,7 +111,7 @@ export class Login extends Domain {
     const passwordRevisionDate =
       obj.passwordRevisionDate == null ? null : new Date(obj.passwordRevisionDate);
     const uris = obj.uris?.map((uri: any) => LoginUri.fromJSON(uri));
-    const fido2Key = obj.fido2Key == null ? null : Fido2Key.fromJSON(obj.fido2Key);
+    const fido2Keys = obj.fido2Keys?.map((key) => Fido2Key.fromJSON(key)) ?? [];
 
     return Object.assign(new Login(), obj, {
       username,
@@ -121,7 +119,7 @@ export class Login extends Domain {
       totp,
       passwordRevisionDate,
       uris,
-      fido2Key,
+      fido2Keys,
     });
   }
 }

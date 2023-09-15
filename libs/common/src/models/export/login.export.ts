@@ -12,7 +12,7 @@ export class LoginExport {
     req.username = "jdoe";
     req.password = "myp@ssword123";
     req.totp = "JBSWY3DPEHPK3PXP";
-    req.fido2Key = Fido2KeyExport.template();
+    req.fido2Keys = [Fido2KeyExport.template()];
     return req;
   }
 
@@ -23,8 +23,8 @@ export class LoginExport {
     view.username = req.username;
     view.password = req.password;
     view.totp = req.totp;
-    if (req.fido2Key != null) {
-      view.fido2Key = Fido2KeyExport.toView(req.fido2Key);
+    if (req.fido2Keys != null) {
+      view.fido2Keys = req.fido2Keys.map((key) => Fido2KeyExport.toView(key));
     }
     return view;
   }
@@ -44,7 +44,7 @@ export class LoginExport {
   username: string;
   password: string;
   totp: string;
-  fido2Key: Fido2KeyExport = null;
+  fido2Keys: Fido2KeyExport[] = [];
 
   constructor(o?: LoginView | LoginDomain) {
     if (o == null) {
@@ -59,8 +59,8 @@ export class LoginExport {
       }
     }
 
-    if (o.fido2Key != null) {
-      this.fido2Key = new Fido2KeyExport(o.fido2Key);
+    if (o.fido2Keys != null) {
+      this.fido2Keys = o.fido2Keys.map((key) => new Fido2KeyExport(key));
     }
 
     if (o instanceof LoginView) {
