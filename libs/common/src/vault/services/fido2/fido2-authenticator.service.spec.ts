@@ -763,12 +763,8 @@ function createCipherView(
     fido2KeyView.keyValue ??
     "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgTC-7XDZipXbaVBlnkjlBgO16ZmqBZWejK2iYo6lV0dehRANCAASOcM2WduNq1DriRYN7ZekvZz-bRhA-qNT4v0fbp5suUFJyWmgOQ0bybZcLXHaerK5Ep1JiSrQcewtQNgLtry7f";
 
-  if (cipher.type === CipherType.Login) {
-    cipher.login = new LoginView();
-    cipher.login.fido2Keys = [fido2KeyView];
-  } else {
-    cipher.fido2Key = fido2KeyView;
-  }
+  cipher.login = new LoginView();
+  cipher.login.fido2Keys = [fido2KeyView];
 
   return cipher;
 }
