@@ -19,7 +19,7 @@ export class LoginView extends ItemView {
   totp: string = null;
   uris: LoginUriView[] = null;
   autofillOnPageLoad: boolean = null;
-  fido2Key?: Fido2KeyView;
+  fido2Keys: Fido2KeyView[] = [];
 
   constructor(l?: Login) {
     super();
@@ -81,12 +81,12 @@ export class LoginView extends ItemView {
     const passwordRevisionDate =
       obj.passwordRevisionDate == null ? null : new Date(obj.passwordRevisionDate);
     const uris = obj.uris?.map((uri: any) => LoginUriView.fromJSON(uri));
-    const fido2Key = obj.fido2Key == null ? null : Fido2KeyView.fromJSON(obj.fido2Key);
+    const fido2Keys = obj.fido2Keys?.map((key) => Fido2KeyView.fromJSON(key)) ?? [];
 
     return Object.assign(new LoginView(), obj, {
       passwordRevisionDate,
       uris,
-      fido2Key,
+      fido2Keys,
     });
   }
 }

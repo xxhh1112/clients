@@ -76,6 +76,7 @@ describe("Cipher DTO", () => {
           passwordRevisionDate: "2022-01-31T12:00:00.000Z",
           totp: "EncryptedString",
           autofillOnPageLoad: false,
+          fido2Keys: [],
         },
         passwordHistory: [
           { password: "EncryptedString", lastUsedDate: "2022-01-31T12:00:00.000Z" },
@@ -143,6 +144,7 @@ describe("Cipher DTO", () => {
           password: { encryptedString: "EncryptedString", encryptionType: 0 },
           totp: { encryptedString: "EncryptedString", encryptionType: 0 },
           uris: [{ match: 0, uri: { encryptedString: "EncryptedString", encryptionType: 0 } }],
+          fido2Keys: [],
         },
         attachments: [
           {

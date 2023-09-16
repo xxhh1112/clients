@@ -119,7 +119,7 @@
             </div>
           </div>
           <!--Passkey-->
-          <div class="box-content-row text-muted" *ngIf="cipher.login.fido2Key">
+          <div class="box-content-row text-muted" *ngIf="cipher.login.fido2Keys[0]">
             <span class="row-label">{{ "typePasskey" | i18n }}</span>
             {{ "passkeyTwoStepLogin" | i18n }}
           </div>
