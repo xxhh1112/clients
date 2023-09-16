@@ -166,9 +166,8 @@ export class VaultItemsComponent {
 
   protected canClone(vaultItem: VaultItem) {
     return (
-      ((vaultItem.cipher.organizationId && this.cloneableOrganizationCiphers) ||
-        vaultItem.cipher.organizationId == null) &&
-      !vaultItem.cipher.fido2Key?.rpId
+      (vaultItem.cipher.organizationId && this.cloneableOrganizationCiphers) ||
+      vaultItem.cipher.organizationId == null
     );
   }
 

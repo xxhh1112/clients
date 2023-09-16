@@ -201,7 +201,7 @@
                     class="form-control"
                     type="text"
                     name="Login.Fido2key"
-                    [value]="'passkeyTwoStepLogin' | i18n"
+                    [value]="('dateCreated' | i18n) + ' ' + (cipher.creationDate | date : 'short')"
                     appInputVerbatim
                     disabled
                     readonly
@@ -829,89 +829,6 @@
                 [disabled]="cipher.isDeleted || viewOnly"
                 [readonly]="!cipher.edit && editMode"
               />
-            </div>
-          </div>
-        </ng-container>
-        <!-- Fido2Key -->
-        <ng-container *ngIf="cipher.type === cipherType.Fido2Key">
-          <div class="row">
-            <div class="col-6 form-group">
-              <label for="fido2KeyUserDisplayName">{{ "username" | i18n }}</label>
-              <div class="input-group">
-                <input
-                  id="fido2KeyUserDisplayName"
-                  class="form-control"
-                  type="text"
-                  name="Fido2key.UserDisplayName"
-                  [(ngModel)]="cipher.fido2Key.userDisplayName"
-                  appInputVerbatim
-                  [disabled]="cipher.isDeleted || viewOnly"
-                  [readonly]="!cipher.edit && editMode"
-                />
-                <div class="input-group-append" *ngIf="!cipher.isDeleted">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    appA11yTitle="{{ 'copyUsername' | i18n }}"
-                    (click)="copy(cipher.fido2Key.userDisplayName, 'username', 'Username')"
-                  >
-                    <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-6 form-group">
-              <label for="fido2keyCreationDate">{{ "typePasskey" | i18n }}</label>
-              <div class="input-group">
-                <input
-                  id="fido2keyCreationDate"
-                  class="form-control"
-                  type="text"
-                  name="Fido2key.CreationDate"
-                  [value]="('dateCreated' | i18n) + ' ' + (cipher.creationDate | date : 'short')"
-                  appInputVerbatim
-                  disabled
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12 form-group">
-              <label for="fido2keyApplication">{{ "application" | i18n }}</label>
-              <div class="input-group">
-                <input
-                  class="form-control"
-                  id="fido2keyApplication"
-                  type="text"
-                  name="Fido2key.Application"
-                  [value]="cipher.fido2Key.rpId"
-                  disabled
-                  readonly
-                  appInputVerbatim
-                />
-                <div class="input-group-append">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    appA11yTitle="{{ 'launch' | i18n }}"
-                    (click)="launch(cipher.fido2Key)"
-                  >
-                    <i class="bwi bwi-lg bwi-share-square" aria-hidden="true"></i>
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    appA11yTitle="{{ 'copyUri' | i18n }}"
-                    (click)="copy(cipher.fido2Key.launchUri, 'uri', 'URI')"
-                  >
-                    <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
-                  </button>
-                </div>
-              </div>
-              <small class="form-text text-muted">{{ "passkeyEditInformation" | i18n }}</small>
             </div>
           </div>
         </ng-container>
