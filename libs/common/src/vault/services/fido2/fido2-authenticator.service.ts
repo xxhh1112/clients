@@ -43,7 +43,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   ) {}
   async makeCredential(
     params: Fido2AuthenticatorMakeCredentialsParams,
-    tab: any,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorMakeCredentialResult> {
     const userInterfaceSession = await this.userInterface.newSession(
@@ -108,7 +108,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
           credentialName: params.rpEntity.name,
           userName: params.userEntity.displayName,
           userVerification: params.requireUserVerification,
-          discoverable: params.requireResidentKey,
         },
         abortController
       );
@@ -175,7 +174,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
 
   async getAssertion(
     params: Fido2AuthenticatorGetAssertionParams,
-    tab: any,
+    tab: chrome.tabs.Tab,
     abortController?: AbortController
   ): Promise<Fido2AuthenticatorGetAssertionResult> {
     const userInterfaceSession = await this.userInterface.newSession(
