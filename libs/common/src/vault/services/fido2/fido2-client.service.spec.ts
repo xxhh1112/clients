@@ -37,13 +37,15 @@ describe("FidoAuthenticatorService", () => {
 
   describe("createCredential", () => {
     describe("input parameters validation", () => {
-      // Spec: If tab is null, should not call makeCredential
-      it("should not call makeCredential if tab is null", async () => {
+      // Spec: If tab is null, return a "NotAllowedError" DOMException.
+      it("should throw error if tab is null", async () => {
         const params = createParams({ sameOriginWithAncestors: false });
 
-        await client.createCredential(params, null);
+        const result = async () => await client.createCredential(params, null);
 
-        expect(authenticator.makeCredential).not.toHaveBeenCalled();
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotAllowedError" });
+        await rejects.toBeInstanceOf(DOMException);
       });
 
       // Spec: If sameOriginWithAncestors is false, return a "NotAllowedError" DOMException.
@@ -262,6 +264,17 @@ describe("FidoAuthenticatorService", () => {
       // Not sure how to check this, or if it matters.
       it.todo("should throw error if origin is an opaque origin");
 
+      // Spec: If tab is null, return a "NotAllowedError" DOMException.
+      it("should throw error if tab is null", async () => {
+        const params = createParams({ sameOriginWithAncestors: false });
+
+        const result = async () => await client.assertCredential(params, null);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "NotAllowedError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
       // Spec: Let effectiveDomain be the callerOrigin’s effective domain. If effective domain is not a valid domain, then return a DOMException whose name is "SecurityError" and terminate this algorithm.
       it("should throw error if origin is not a valid domain name", async () => {
         const params = createParams({
@@ -319,15 +332,6 @@ describe("FidoAuthenticatorService", () => {
     });
 
     describe("assert credential", () => {
-      // Spec: If tab is null, should not call getAssertion
-      it("should not call getAssertion if tab is null", async () => {
-        const params = createParams();
-
-        await client.assertCredential(params, null);
-
-        expect(authenticator.makeCredential).not.toHaveBeenCalled();
-      });
-
       // Spec: If any authenticator returns an error status equivalent to "InvalidStateError", Return a DOMException whose name is "InvalidStateError" and terminate this algorithm.
       it("should throw error if authenticator throws InvalidState", async () => {
         const params = createParams();
