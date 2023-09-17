@@ -195,7 +195,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     } else if (data?.type === "ConfirmNewCredentialRequest") {
       let userVerified = false;
 
-      if (this.cipher.login.fido2Key) {
+      if (this.cipher.login.fido2Keys.length > 0) {
         const confirmed = await this.dialogService.openSimpleDialog({
           title: { key: "overwritePasskey" },
           content: { key: "overwritePasskeyAlert" },
