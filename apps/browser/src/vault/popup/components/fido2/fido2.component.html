@@ -43,30 +43,48 @@
               ) | i18n
             }}
           </p>
-          <div class="box list">
-            <div class="box-content">
-              <app-fido2-cipher-row
-                *ngFor="let cipherItem of displayedCiphers; let i = index"
-                [cipher]="cipherItem"
-                [rowIndex]="i"
-                title="{{ 'fido2Item' | i18n }}"
-                (onSelected)="selectedPasskey($event)"
-              ></app-fido2-cipher-row>
+          <!-- Display when ciphers exist -->
+          <ng-container *ngIf="displayedCiphers.length > 0">
+            <div class="box list">
+              <div class="box-content">
+                <app-fido2-cipher-row
+                  *ngFor="let cipherItem of displayedCiphers; let i = index"
+                  [cipher]="cipherItem"
+                  [rowIndex]="i"
+                  title="{{ 'fido2Item' | i18n }}"
+                  (onSelected)="selectedPasskey($event)"
+                ></app-fido2-cipher-row>
+              </div>
             </div>
-          </div>
-          <div class="box">
-            <button type="submit" (click)="submit()" class="btn primary block">
-              <span [hidden]="loading">
-                {{
-                  (displayedCiphers.length > 0
-                    ? getCredentialButtonText(data.message.type)
-                    : "savePasskeyNewLogin"
-                  ) | i18n
-                }}
-              </span>
-              <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
-            </button>
-          </div>
+
+            <div class="box">
+              <button type="submit" (click)="submit()" class="btn primary block">
+                <span [hidden]="loading">
+                  {{ getCredentialButtonText(data.message.type) | i18n }}
+                </span>
+                <i
+                  class="bwi bwi-spinner bwi-lg bwi-spin"
+                  [hidden]="!loading"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!displayedCiphers.length">
+            <div class="box">
+              <button type="submit" (click)="saveNewLogin()" class="btn primary block">
+                <span [hidden]="loading">
+                  {{ "savePasskeyNewLogin" | i18n }}
+                </span>
+                <i
+                  class="bwi bwi-spinner bwi-lg bwi-spin"
+                  [hidden]="!loading"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">

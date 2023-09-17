@@ -219,7 +219,27 @@ export class Fido2Component implements OnInit, OnDestroy {
         userVerified = await this.passwordRepromptService.showPasswordPrompt();
       }
 
-      if (!this.cipher) {
+      this.send({
+        sessionId: this.sessionId,
+        cipherId: this.cipher.id,
+        type: "ConfirmNewCredentialResponse",
+        userVerified,
+      });
+    }
+
+    this.loading = true;
+  }
+
+  //TODO: Confirm if search field should allowed when a passkey already exists
+  async saveNewLogin() {
+    const data = this.message$.value;
+    if (data?.type === "ConfirmNewCredentialRequest") {
+      let userVerified = false;
+      if (data.userVerification) {
+        userVerified = await this.passwordRepromptService.showPasswordPrompt();
+      }
+
+      if (userVerified) {
         await this.createNewCipher();
       }
 
