@@ -62,6 +62,7 @@ export class Fido2Component implements OnInit, OnDestroy {
 
   protected data$: Observable<ViewData>;
   protected sessionId?: string;
+  protected senderTabId?: string;
   protected ciphers?: CipherView[] = [];
   protected displayedCiphers?: CipherView[] = [];
   protected loading = false;
@@ -84,9 +85,12 @@ export class Fido2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
 
-    const sessionId$ = this.activatedRoute.queryParamMap.pipe(
+    const queryParams$ = this.activatedRoute.queryParamMap.pipe(
       take(1),
-      map((queryParamMap) => queryParamMap.get("sessionId"))
+      map((queryParamMap) => ({
+        sessionId: queryParamMap.get("sessionId"),
+        senderTabId: queryParamMap.get("senderTabId"),
+      }))
     );
 
     // TODO: Remove on Andreas ngZone monkey patch has been merged
@@ -96,15 +100,19 @@ export class Fido2Component implements OnInit, OnDestroy {
       return () => chrome.runtime.onMessage.removeListener(handler);
     }) as Observable<BrowserFido2Message>;
 
-    combineLatest([sessionId$, messageListener$])
+    combineLatest([queryParams$, messageListener$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([sessionId, message]) => {
-        this.sessionId = sessionId;
-        if (message.type === "NewSessionCreatedRequest" && message.sessionId !== sessionId) {
+      .subscribe(([queryParams, message]) => {
+        this.sessionId = queryParams.sessionId;
+        this.senderTabId = queryParams.senderTabId;
+        if (
+          message.type === "NewSessionCreatedRequest" &&
+          message.sessionId !== queryParams.sessionId
+        ) {
           return this.abort(false);
         }
 
-        if (message.sessionId !== sessionId) {
+        if (message.sessionId !== queryParams.sessionId) {
           return;
         }
 
@@ -170,9 +178,9 @@ export class Fido2Component implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     );
 
-    sessionId$.pipe(takeUntil(this.destroy$)).subscribe((sessionId) => {
+    queryParams$.pipe(takeUntil(this.destroy$)).subscribe((queryParams) => {
       this.send({
-        sessionId: sessionId,
+        sessionId: queryParams.sessionId,
         type: "ConnectResponse",
       });
     });
@@ -240,7 +248,11 @@ export class Fido2Component implements OnInit, OnDestroy {
 
   viewPasskey() {
     this.router.navigate(["/view-cipher"], {
-      queryParams: { cipherId: this.cipher.id, uilocation: "popout" },
+      queryParams: {
+        cipherId: this.cipher.id,
+        uilocation: "popout",
+        senderTabId: this.senderTabId,
+      },
     });
   }
 
