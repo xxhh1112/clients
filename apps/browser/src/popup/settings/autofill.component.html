@@ -45,6 +45,19 @@
       </div>
     </div>
   </ng-container>
+  <div class="box tw-mt-4" *ngIf="canOverrideBrowserAutofillSetting">
+    <div class="box-content">
+      <div class="box-content-row box-content-row-checkbox" appBoxRow>
+        <label for="overrideBrowserAutofill">{{ "overrideBrowserAutoFillSettings" | i18n }}</label>
+        <input
+          id="overrideBrowserAutofill"
+          type="checkbox"
+          (change)="updateDefaultBrowserAutofillDisabled()"
+          [(ngModel)]="defaultBrowserAutofillDisabled"
+        />
+      </div>
+    </div>
+  </div>
   <div class="box tw-mt-4">
     <div class="box-content">
       <div class="box-content-row box-content-row-checkbox" appBoxRow>
