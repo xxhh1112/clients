@@ -31,8 +31,7 @@ async function openVaultItemPasswordRepromptPopout(
   const { cipherId, action } = cipherOptions;
   const promptWindowPath =
     "popup/index.html#/view-cipher" +
-    "?uilocation=popout" +
-    `&cipherId=${cipherId}` +
+    `?cipherId=${cipherId}` +
     `&senderTabId=${senderTab.id}` +
     `&action=${action}`;
 
