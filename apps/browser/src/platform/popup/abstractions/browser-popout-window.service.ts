@@ -14,9 +14,17 @@ interface BrowserPopoutWindowService {
   openCipherCreation(
     senderWindowId: number,
     promptData: {
-      cipherType: CipherType;
+      cipherType?: CipherType;
       senderTabId: number;
-      uri: string;
+      senderTabURI: string;
+    }
+  ): Promise<void>;
+  openCipherEdit(
+    senderWindowId: number,
+    promptData: {
+      cipherId: string;
+      senderTabId: number;
+      senderTabURI: string;
     }
   ): Promise<void>;
   closePasswordRepromptPrompt(): Promise<void>;

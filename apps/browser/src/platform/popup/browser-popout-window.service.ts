@@ -50,13 +50,13 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
   async openCipherCreation(
     senderWindowId: number,
     {
-      cipherType,
+      cipherType = CipherType.Login,
       senderTabId,
-      uri,
+      senderTabURI,
     }: {
-      cipherType: CipherType;
+      cipherType?: CipherType;
       senderTabId: number;
-      uri: string;
+      senderTabURI: string;
     }
   ) {
     const promptWindowPath =
@@ -64,9 +64,31 @@ class BrowserPopoutWindowService implements BrowserPopupWindowServiceInterface {
       "?uilocation=popout" +
       `&type=${cipherType}` +
       `&senderTabId=${senderTabId}` +
-      `&uri=${uri}`;
+      `&uri=${senderTabURI}`;
 
     await this.openSingleActionPopout(senderWindowId, promptWindowPath, "cipherCreation");
+  }
+
+  async openCipherEdit(
+    senderWindowId: number,
+    {
+      cipherId,
+      senderTabId,
+      senderTabURI,
+    }: {
+      cipherId: string;
+      senderTabId: number;
+      senderTabURI: string;
+    }
+  ) {
+    const promptWindowPath =
+      "popup/index.html#/edit-cipher" +
+      "?uilocation=popout" +
+      `&cipherId=${cipherId}` +
+      `&senderTabId=${senderTabId}` +
+      `&uri=${senderTabURI}`;
+
+    await this.openSingleActionPopout(senderWindowId, promptWindowPath, "cipherEdit");
   }
 
   async closePasswordRepromptPrompt() {

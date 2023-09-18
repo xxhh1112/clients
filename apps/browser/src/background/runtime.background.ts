@@ -126,21 +126,26 @@ export default class RuntimeBackground {
       case "openAddEditCipher": {
         const isNewCipher = !cipherId;
         const cipherType = msg.data?.cipherType;
-        const openPopout = cipherType && isNewCipher;
+        const senderTab = sender.tab;
 
-        if (openPopout) {
-          await this.browserPopoutWindowService.openCipherCreation(sender.tab?.windowId, {
+        if (!senderTab) {
+          break;
+        }
+
+        if (isNewCipher) {
+          await this.browserPopoutWindowService.openCipherCreation(senderTab.windowId, {
             cipherType,
-            senderTabId: sender.tab.id,
-            uri: sender.tab.url,
+            senderTabId: senderTab.id,
+            senderTabURI: senderTab.url,
           });
         } else {
-          const addEditCipherUrl = isNewCipher
-            ? "popup/index.html#/edit-cipher"
-            : "popup/index.html#/edit-cipher?cipherId=" + cipherId;
-
-          BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true);
+          await this.browserPopoutWindowService.openCipherEdit(senderTab.windowId, {
+            cipherId,
+            senderTabId: senderTab.id,
+            senderTabURI: senderTab.url,
+          });
         }
+
         break;
       }
       case "closeTab":
