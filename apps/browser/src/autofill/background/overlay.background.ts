@@ -35,7 +35,7 @@ import {
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
-  private overlayAppearance: number;
+  private overlayVisibility: number;
   private overlayLoginCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
@@ -48,7 +48,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     openAutofillOverlay: () => this.openOverlay(false),
     autofillOverlayElementClosed: ({ message }) => this.overlayElementClosed(message),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
-    getAutofillOverlayAppearance: () => this.getOverlayAppearance(),
+    getAutofillOverlayVisibility: () => this.getOverlayVisibility(),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
     updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
@@ -119,7 +119,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   private async initOverlayBackground() {
     this.setupExtensionMessageListeners();
-    await this.getOverlayAppearance();
+    await this.getOverlayVisibility();
     await this.getAuthStatus();
   }
 
@@ -338,10 +338,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return domain ? `${obscureName}@${domain}` : obscureName;
   }
 
-  private async getOverlayAppearance(): Promise<number> {
-    this.overlayAppearance = await this.settingsService.getAutoFillOverlayAppearance();
+  private async getOverlayVisibility(): Promise<number> {
+    this.overlayVisibility = await this.settingsService.getAutoFillOverlayVisibility();
 
-    return this.overlayAppearance;
+    return this.overlayVisibility;
   }
 
   private async getAuthStatus() {

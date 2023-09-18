@@ -13,7 +13,7 @@ import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../
 import {
   AutofillOverlayElement,
   RedirectFocusDirection,
-  AutofillOverlayAppearance,
+  AutofillOverlayVisibility,
 } from "../utils/autofill-overlay.enum";
 import {
   generateRandomCustomElementName,
@@ -29,7 +29,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   isFieldCurrentlyFocused = false;
   isCurrentlyFilling = false;
   userFilledFields: Record<string, FillableFormFieldElement> = {};
-  autofillOverlayAppearance: number;
+  autofillOverlayVisibility: number;
   private authStatus: AuthenticationStatus;
   private isOverlayCiphersPopulated = false;
   private focusableElements: FocusableElement[] = [];
@@ -69,8 +69,8 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    if (!this.autofillOverlayAppearance) {
-      await this.getAutofillOverlayAppearance();
+    if (!this.autofillOverlayVisibility) {
+      await this.getAutofillOverlayVisibility();
     }
 
     this.removeCachedFormFieldEventListeners(formFieldElement);
@@ -118,7 +118,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     }
 
     if (
-      this.autofillOverlayAppearance === AutofillOverlayAppearance.OnButtonClick &&
+      this.autofillOverlayVisibility === AutofillOverlayVisibility.OnButtonClick &&
       !isOpeningFullOverlay
     ) {
       this.updateOverlayButtonPosition();
@@ -349,7 +349,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     const formElementHasValue = Boolean((formFieldElement as HTMLInputElement).value);
 
     if (
-      this.autofillOverlayAppearance === AutofillOverlayAppearance.OnButtonClick ||
+      this.autofillOverlayVisibility === AutofillOverlayVisibility.OnButtonClick ||
       (formElementHasValue && initiallyFocusedField !== this.mostRecentlyFocusedField)
     ) {
       this.removeAutofillOverlayList();
@@ -570,14 +570,14 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
     this.observeCustomElements();
   }
 
-  private async getAutofillOverlayAppearance() {
-    const overlayAppearance = await sendExtensionMessage("getAutofillOverlayAppearance");
-    if (!overlayAppearance) {
-      this.autofillOverlayAppearance = AutofillOverlayAppearance.OnFieldFocus;
+  private async getAutofillOverlayVisibility() {
+    const overlayVisibility = await sendExtensionMessage("getAutofillOverlayVisibility");
+    if (!overlayVisibility) {
+      this.autofillOverlayVisibility = AutofillOverlayVisibility.OnFieldFocus;
       return;
     }
 
-    this.autofillOverlayAppearance = overlayAppearance;
+    this.autofillOverlayVisibility = overlayVisibility;
   }
 
   private setOverlayRepositionEventListeners() {

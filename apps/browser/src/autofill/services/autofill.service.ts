@@ -16,6 +16,7 @@ import { openVaultItemPasswordRepromptPopout } from "../../vault/popup/utils/vau
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import { AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
 
 import {
   AutoFillOptions,
@@ -63,7 +64,8 @@ export default class AutofillService implements AutofillServiceInterface {
     let mainAutofillScript = "autofill.js";
 
     const isUsingAutofillOverlay =
-      autofillOverlay && (await this.settingsService.getEnableAutoFillOverlay());
+      autofillOverlay &&
+      (await this.settingsService.getAutoFillOverlayVisibility()) !== AutofillOverlayVisibility.Off;
 
     if (autofillV2) {
       mainAutofillScript = isUsingAutofillOverlay

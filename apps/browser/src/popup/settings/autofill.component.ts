@@ -8,7 +8,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
-import { AutofillOverlayAppearance } from "../../autofill/utils/autofill-overlay.enum";
+import { AutofillOverlayVisibility } from "../../autofill/utils/autofill-overlay.enum";
 import { BrowserApi } from "../../platform/browser/browser-api";
 
 @Component({
@@ -17,9 +17,8 @@ import { BrowserApi } from "../../platform/browser/browser-api";
 })
 export class AutofillComponent implements OnInit {
   isAutoFillOverlayFlagEnabled = false;
-  enableAutoFillOverlay = false;
-  autoFillOverlayAppearance: number;
-  autoFillOverlayAppearanceOptions: any[];
+  autoFillOverlayVisibility: number;
+  autoFillOverlayVisibilityOptions: any[];
   enableAutoFillOnPageLoad = false;
   autoFillOnPageLoadDefault = false;
   autoFillOnPageLoadOptions: any[];
@@ -34,14 +33,18 @@ export class AutofillComponent implements OnInit {
     private configService: ConfigServiceAbstraction,
     private settingsService: SettingsService
   ) {
-    this.autoFillOverlayAppearanceOptions = [
+    this.autoFillOverlayVisibilityOptions = [
       {
-        name: i18nService.t("autofillOverlayAppearanceOnFieldFocus"),
-        value: AutofillOverlayAppearance.OnFieldFocus,
+        name: i18nService.t("autofillOverlayVisibilityOff"),
+        value: AutofillOverlayVisibility.Off,
       },
       {
-        name: i18nService.t("autofillOverlayAppearanceOnButtonClick"),
-        value: AutofillOverlayAppearance.OnButtonClick,
+        name: i18nService.t("autofillOverlayVisibilityOnFieldFocus"),
+        value: AutofillOverlayVisibility.OnFieldFocus,
+      },
+      {
+        name: i18nService.t("autofillOverlayVisibilityOnButtonClick"),
+        value: AutofillOverlayVisibility.OnButtonClick,
       },
     ];
     this.autoFillOnPageLoadOptions = [
@@ -62,10 +65,8 @@ export class AutofillComponent implements OnInit {
     this.isAutoFillOverlayFlagEnabled = await this.configService.getFeatureFlag<boolean>(
       FeatureFlag.AutofillOverlay
     );
-    this.enableAutoFillOverlay = await this.settingsService.getEnableAutoFillOverlay();
-    this.autoFillOverlayAppearance =
-      (await this.settingsService.getAutoFillOverlayAppearance()) ||
-      AutofillOverlayAppearance.OnFieldFocus;
+    this.autoFillOverlayVisibility =
+      (await this.settingsService.getAutoFillOverlayVisibility()) || AutofillOverlayVisibility.Off;
 
     this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
     this.autoFillOnPageLoadDefault =
@@ -78,12 +79,8 @@ export class AutofillComponent implements OnInit {
     await this.setAutofillKeyboardHelperText(command);
   }
 
-  async updateEnableAutoFillOverlay() {
-    await this.settingsService.setEnableAutoFillOverlay(this.enableAutoFillOverlay);
-  }
-
-  async updateAutoFillOverlayAppearance() {
-    await this.settingsService.setAutoFillOverlayAppearance(this.autoFillOverlayAppearance);
+  async updateAutoFillOverlayVisibility() {
+    await this.settingsService.setAutoFillOverlayVisibility(this.autoFillOverlayVisibility);
   }
 
   async updateAutoFillOnPageLoad() {

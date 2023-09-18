@@ -1,7 +1,7 @@
 import { BehaviorSubject, concatMap } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
-import { AutofillOverlayAppearance } from "../../../../../apps/browser/src/autofill/utils/autofill-overlay.enum";
+import { AutofillOverlayVisibility } from "../../../../../apps/browser/src/autofill/utils/autofill-overlay.enum";
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
 import { OrganizationData } from "../../admin-console/models/data/organization.data";
 import { PolicyData } from "../../admin-console/models/data/policy.data";
@@ -1489,36 +1489,18 @@ export class StateService<
     );
   }
 
-  async getEnableAutoFillOverlay(options?: StorageOptions): Promise<boolean> {
+  async getAutoFillOverlayVisibility(options?: StorageOptions): Promise<number> {
     return (
       (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.settings?.enableAutoFillOverlay ?? false
+        ?.settings?.autoFillOverlayVisibility ?? AutofillOverlayVisibility.OnFieldFocus
     );
   }
 
-  async setEnableAutoFillOverlay(value: boolean, options?: StorageOptions): Promise<void> {
+  async setAutoFillOverlayVisibility(value: number, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    account.settings.enableAutoFillOverlay = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-  }
-
-  async getAutoFillOverlayAppearance(options?: StorageOptions): Promise<number> {
-    return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.settings?.autoFillOverlayAppearance ?? AutofillOverlayAppearance.OnFieldFocus
-    );
-  }
-
-  async setAutoFillOverlayAppearance(value: number, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions())
-    );
-    account.settings.autoFillOverlayAppearance = value;
+    account.settings.autoFillOverlayVisibility = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions())

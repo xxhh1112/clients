@@ -35,6 +35,7 @@ import { triggerTestFailure } from "../jest/testing-utils";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import { AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
 
 import {
   AutoFillOptions,
@@ -116,8 +117,8 @@ describe("AutofillService", () => {
 
     it("will inject the bootstrap-autofill-overlay script if the enableAutofillOverlay flag is set and the user has the autofill overlay enabled", async () => {
       jest
-        .spyOn(autofillService["settingsService"], "getEnableAutoFillOverlay")
-        .mockResolvedValue(true);
+        .spyOn(autofillService["settingsService"], "getAutoFillOverlayVisibility")
+        .mockResolvedValue(AutofillOverlayVisibility.OnFieldFocus);
 
       await autofillService.injectAutofillScripts(sender, true, true);
 
@@ -137,8 +138,8 @@ describe("AutofillService", () => {
 
     it("will inject the bootstrap-autofill script if the enableAutofillOverlay flag is set but the user does not have the autofill overlay enabled", async () => {
       jest
-        .spyOn(autofillService["settingsService"], "getEnableAutoFillOverlay")
-        .mockResolvedValue(false);
+        .spyOn(autofillService["settingsService"], "getAutoFillOverlayVisibility")
+        .mockResolvedValue(AutofillOverlayVisibility.Off);
 
       await autofillService.injectAutofillScripts(sender, true, true);
 
