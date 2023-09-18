@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   BehaviorSubject,
@@ -77,7 +77,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private settingsService: SettingsService,
     private searchService: SearchService,
-    private ngZone: NgZone,
     private logService: LogService,
     private dialogService: DialogService
   ) {}
@@ -93,14 +92,7 @@ export class Fido2Component implements OnInit, OnDestroy {
       }))
     );
 
-    // TODO: Remove on Andreas ngZone monkey patch has been merged
-    const messageListener$ = new Observable<unknown>((subscriber) => {
-      const handler = (message: unknown) => this.ngZone.run(() => subscriber.next(message)); // <-- the magic is here
-      chrome.runtime.onMessage.addListener(handler);
-      return () => chrome.runtime.onMessage.removeListener(handler);
-    }) as Observable<BrowserFido2Message>;
-
-    combineLatest([queryParams$, messageListener$])
+    combineLatest([queryParams$, BrowserApi.messageListener$() as Observable<BrowserFido2Message>])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([queryParams, message]) => {
         this.sessionId = queryParams.sessionId;
