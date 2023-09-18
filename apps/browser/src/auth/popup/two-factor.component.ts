@@ -24,6 +24,8 @@ import { DialogService } from "@bitwarden/components";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
+import { closeTwoFactorAuthPopout } from "./utils/auth-popout-window";
+
 const BroadcasterSubscriptionId = "TwoFactorComponent";
 
 @Component({
@@ -142,7 +144,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
           // We don't need this window anymore because the intent is for the user to be left
           // on the web vault screen which tells them to continue in the browser extension (sidebar or popup)
-          await this.popupUtilsService.closeTwoFactorAuthPopout();
+          await closeTwoFactorAuthPopout();
         };
       }
     });

@@ -8,7 +8,6 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import BrowserPopoutType from "@bitwarden/common/enums/browser-popout-type.enum";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -25,6 +24,7 @@ import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import { VaultPopoutType, closeAddEditVaultItemPopout } from "../../utils/vault-popout-window";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -157,10 +157,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inSingleActionPopout(window, BrowserPopoutType.AddEditCipher)) {
+    if (this.popupUtilsService.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
       this.popupUtilsService.disableCloseTabWarning();
       this.messagingService.send("addEditCipherSubmitted");
-      await this.popupUtilsService.closeAddEditCipherPopout(1000);
+      await closeAddEditVaultItemPopout(1000);
       return true;
     }
 
@@ -196,8 +196,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inSingleActionPopout(window, BrowserPopoutType.AddEditCipher)) {
-      this.popupUtilsService.closeAddEditCipherPopout();
+    if (this.popupUtilsService.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
+      closeAddEditVaultItemPopout();
       return;
     }
 

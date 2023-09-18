@@ -13,8 +13,13 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
+import { openUnlockPopout } from "../../auth/popup/utils/auth-popout-window";
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import {
+  openViewVaultItemPopout,
+  openAddEditVaultItemPopout,
+} from "../../vault/popup/utils/vault-popout-window";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 import { AutofillOverlayElement, AutofillOverlayPort } from "../utils/autofill-overlay.enum";
 
@@ -383,7 +388,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       "addToLockedVaultPendingNotifications",
       retryMessage
     );
-    await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin", { skipNotification: true });
+    await openUnlockPopout(sender.tab, { skipNotification: true });
   }
 
   private async viewSelectedCipher(
@@ -395,7 +400,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
+    await openViewVaultItemPopout(sender.tab, {
       cipherId: cipher.id,
       action: "show-autofill-button",
     });
@@ -481,9 +486,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       collectionIds: cipherView.collectionIds,
     });
 
-    await BrowserApi.tabSendMessageData(sender.tab, "openAddEditCipher", {
-      cipherId: cipherView.id,
-    });
+    await openAddEditVaultItemPopout(sender.tab.windowId, cipherView.id);
   }
 
   private setupExtensionMessageListeners() {

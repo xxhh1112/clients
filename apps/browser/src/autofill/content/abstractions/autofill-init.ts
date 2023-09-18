@@ -27,8 +27,8 @@ type AutofillExtensionMessageHandlers = {
   addNewVaultItemFromOverlay: () => void;
   redirectOverlayFocusOut: ({ message }: { message: AutofillExtensionMessage }) => void;
   updateIsOverlayCiphersPopulated: ({ message }: { message: AutofillExtensionMessage }) => void;
-  promptForLogin: () => void;
-  passwordReprompt: () => void;
+  bgUnlockPopoutOpened: () => void;
+  bgVaultItemRepromptOpened: () => void;
 };
 
 interface AutofillInit {
