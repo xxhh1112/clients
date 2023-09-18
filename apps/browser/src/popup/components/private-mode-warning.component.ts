@@ -10,6 +10,6 @@ export class PrivateModeWarningComponent implements OnInit {
   showWarning = false;
 
   ngOnInit() {
-    this.showWarning = BrowserPopupUtils.inBrowserPrivateMode();
+    this.showWarning = BrowserPopupUtils.inPrivateMode();
   }
 }

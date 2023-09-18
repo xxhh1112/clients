@@ -114,7 +114,7 @@ import { PopupCloseWarningService } from "./popup-close-warning.service";
 import { PopupSearchService } from "./popup-search.service";
 
 const needsBackgroundInit = BrowserPopupUtils.backgroundInitializationRequired();
-const isPrivateMode = BrowserPopupUtils.inBrowserPrivateMode();
+const isPrivateMode = BrowserPopupUtils.inPrivateMode();
 const mainBackground: MainBackground = needsBackgroundInit
   ? createLocalBgService()
   : BrowserApi.getBackgroundPage().bitwardenMain;
