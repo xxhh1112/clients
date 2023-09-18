@@ -10,7 +10,6 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import BrowserPopoutType from "@bitwarden/common/enums/browser-popout-type.enum";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
@@ -30,6 +29,7 @@ import { DialogService } from "@bitwarden/components";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import { closeViewVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
@@ -308,11 +308,11 @@ export class ViewComponent extends BaseViewComponent {
 
   close() {
     if (
-      this.popupUtilsService.inSingleActionPopout(window, BrowserPopoutType.ViewCipher) &&
+      this.popupUtilsService.inSingleActionPopout(window, VaultPopoutType.viewVaultItem) &&
       this.senderTabId
     ) {
       BrowserApi.focusTab(this.senderTabId);
-      this.popupUtilsService.closeViewCipherPopout();
+      closeViewVaultItemPopout(`${VaultPopoutType.viewVaultItem}_${this.cipher.id}`);
       return;
     }
 

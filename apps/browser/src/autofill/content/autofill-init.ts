@@ -25,8 +25,8 @@ class AutofillInit implements AutofillInitInterface {
     addNewVaultItemFromOverlay: () => this.addNewVaultItemFromOverlay(),
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
     updateIsOverlayCiphersPopulated: ({ message }) => this.updateIsOverlayCiphersPopulated(message),
-    promptForLogin: () => this.blurAndRemoveOverlay(),
-    passwordReprompt: () => this.blurAndRemoveOverlay(),
+    bgUnlockPopoutOpened: () => this.blurAndRemoveOverlay(),
+    bgVaultItemRepromptOpened: () => this.blurAndRemoveOverlay(),
   };
 
   /**
