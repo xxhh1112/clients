@@ -48,9 +48,10 @@
             <div class="box list">
               <div class="box-content">
                 <app-fido2-cipher-row
-                  *ngFor="let cipherItem of displayedCiphers; let i = index"
+                  *ngFor="let cipherItem of displayedCiphers; let isFirst = first"
                   [cipher]="cipherItem"
-                  [rowIndex]="i"
+                  [isFirst]="isFirst"
+                  [isSearching]="searchPending"
                   title="{{ 'fido2Item' | i18n }}"
                   (onSelected)="selectedPasskey($event)"
                 ></app-fido2-cipher-row>

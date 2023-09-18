@@ -340,6 +340,7 @@ export class Fido2Component implements OnInit, OnDestroy {
           null,
           this.ciphers
         );
+        this.selectedPasskey(this.displayedCiphers[0]);
       }
       this.searchPending = false;
     }, timeout);

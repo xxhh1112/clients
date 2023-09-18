@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -14,22 +6,15 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
   selector: "app-fido2-cipher-row",
   templateUrl: "fido2-cipher-row.component.html",
 })
-export class Fido2CipherRowComponent implements AfterViewInit {
-  @ViewChild("cipherRow") cipherRow: ElementRef;
-
+export class Fido2CipherRowComponent {
   @Output() onSelected = new EventEmitter<CipherView>();
   @Input() cipher: CipherView;
   @Input() last: boolean;
   @Input() title: string;
-  @Input() rowIndex: number;
+  @Input() isFirst: boolean;
+  @Input() isSearching: boolean;
 
   selectCipher(c: CipherView) {
     this.onSelected.emit(c);
-  }
-
-  ngAfterViewInit(): void {
-    if (this.cipherRow.nativeElement.id === "fido2CipherRow-0") {
-      this.cipherRow.nativeElement.focus();
-    }
   }
 }

@@ -9,11 +9,11 @@
       type="button"
       (click)="selectCipher(cipher)"
       tabindex="0"
-      #cipherRow
-      id="fido2CipherRow-{{ rowIndex }}"
       appStopClick
       title="{{ title }} - {{ cipher.name }}"
       class="row-main"
+      [appFocusOnLoad]="isFirst"
+      [isSearching]="isSearching"
     >
       <app-vault-icon [cipher]="cipher"></app-vault-icon>
       <div class="row-main-content">
