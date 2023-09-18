@@ -313,7 +313,7 @@ export default class AutofillService implements AutofillServiceInterface {
     fromCommand: boolean
   ): Promise<string | null> {
     if (!pageDetails[0]?.details?.fields?.length) {
-      return;
+      return null;
     }
 
     const tab = await this.getActiveTab();
