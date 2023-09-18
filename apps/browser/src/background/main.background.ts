@@ -551,6 +551,7 @@ export default class MainBackground {
       this.configApiService,
       this.authService,
       this.environmentService,
+      this.logService,
       true
     );
     this.browserPopoutWindowService = new BrowserPopoutWindowService();
