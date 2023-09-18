@@ -84,6 +84,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       await userInterfaceSession.ensureUnlockedVault();
+      await this.syncService.fullSync(false);
 
       const existingCipherIds = await this.findExcludedCredentials(
         params.excludeCredentialDescriptorList
@@ -194,6 +195,8 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       let cipherOptions: CipherView[];
 
       await userInterfaceSession.ensureUnlockedVault();
+      await this.syncService.fullSync(false);
+
       if (params.allowCredentialDescriptorList?.length > 0) {
         cipherOptions = await this.findCredentialsById(
           params.allowCredentialDescriptorList,
@@ -296,11 +299,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       return [];
     }
 
-    //ensure full sync has completed before getting the ciphers
-    if ((await this.syncService.getLastSync()) == null) {
-      await this.syncService.fullSync(false);
-    }
-
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers
       .filter(
@@ -331,11 +329,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       return [];
     }
 
-    //ensure full sync has completed before getting the ciphers
-    if ((await this.syncService.getLastSync()) == null) {
-      await this.syncService.fullSync(false);
-    }
-
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
@@ -348,11 +341,6 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
   }
 
   private async findCredentialsByRp(rpId: string): Promise<CipherView[]> {
-    //ensure full sync has completed before getting the ciphers
-    if ((await this.syncService.getLastSync()) == null) {
-      await this.syncService.fullSync(false);
-    }
-
     const ciphers = await this.cipherService.getAllDecrypted();
     return ciphers.filter(
       (cipher) =>
