@@ -4225,4 +4225,24 @@ describe("AutofillService", () => {
       expect(result).toBe(false);
     });
   });
+
+  describe("isDebouncingPasswordRepromptPopout", () => {
+    it("returns false and sets up the debounce if a master password reprompt window is not currently opening", () => {
+      jest.spyOn(globalThis, "setTimeout");
+
+      const result = autofillService["isDebouncingPasswordRepromptPopout"]();
+
+      expect(result).toBe(false);
+      expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+      expect(autofillService["currentlyOpeningPasswordRepromptPopout"]).toBe(true);
+    });
+
+    it("returns true if a master password reprompt window is currently opening", () => {
+      autofillService["currentlyOpeningPasswordRepromptPopout"] = true;
+
+      const result = autofillService["isDebouncingPasswordRepromptPopout"]();
+
+      expect(result).toBe(true);
+    });
+  });
 });
