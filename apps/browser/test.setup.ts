@@ -43,6 +43,13 @@ const scripting = {
   executeScript: jest.fn(),
 };
 
+const windows = {
+  create: jest.fn(),
+  get: jest.fn(),
+  getCurrent: jest.fn(),
+  update: jest.fn(),
+};
+
 // set chrome
 global.chrome = {
   i18n,
@@ -51,4 +58,5 @@ global.chrome = {
   contextMenus,
   tabs,
   scripting,
+  windows,
 } as any;
