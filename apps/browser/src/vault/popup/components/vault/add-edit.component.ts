@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { first } from "rxjs/operators";
+import { first, takeUntil } from "rxjs/operators";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/vault/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -35,6 +35,9 @@ export class AddEditComponent extends BaseAddEditComponent {
   showAttachments = true;
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
+  inPopout = false;
+  senderTabId?: number;
+  uilocation?: "popout" | "popup" | "sidebar" | "tab";
 
   constructor(
     cipherService: CipherService,
@@ -78,6 +81,13 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   async ngOnInit() {
     await super.ngOnInit();
+
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.senderTabId = parseInt(value?.senderTabId, 10) || undefined;
+      this.uilocation = value?.uilocation;
+    });
+
+    this.inPopout = this.uilocation === "popout" || this.popupUtilsService.inPopout(window);
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
@@ -196,6 +206,12 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     if (this.popupUtilsService.inTab(window)) {
       this.messagingService.send("closeTab");
+      return;
+    }
+
+    if (this.inPopout && this.senderTabId) {
+      BrowserApi.focusTab(this.senderTabId);
+      window.close();
       return;
     }
 

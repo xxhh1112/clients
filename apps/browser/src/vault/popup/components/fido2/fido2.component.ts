@@ -279,8 +279,10 @@ export class Fido2Component implements OnInit, OnDestroy {
   addCipher() {
     this.router.navigate(["/add-cipher"], {
       queryParams: {
-        name: this.hostname,
+        name: Utils.getHostname(this.url),
         uri: this.url,
+        uilocation: "popout",
+        senderTabId: this.senderTabId,
       },
     });
   }
