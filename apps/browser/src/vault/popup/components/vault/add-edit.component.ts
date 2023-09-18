@@ -28,7 +28,7 @@ import { PopupCloseWarningService } from "../../../../popup/services/popup-close
 import {
   VaultPopoutType,
   closeAddEditVaultItemPopout,
-  openCurrentVaultPagePopout,
+  openCurrentPagePopout,
 } from "../../utils/vault-popout-window";
 
 @Component({
@@ -184,7 +184,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         .createUrlTree(["/attachments"], { queryParams: { cipherId: this.cipher.id } })
         .toString();
       const currentBaseUrl = window.location.href.replace(this.router.url, "");
-      openCurrentVaultPagePopout(window, currentBaseUrl + destinationUrl);
+      openCurrentPagePopout(window, currentBaseUrl + destinationUrl);
     } else {
       this.router.navigate(["/attachments"], { queryParams: { cipherId: this.cipher.id } });
     }

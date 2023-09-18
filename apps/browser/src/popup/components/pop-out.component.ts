@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
-import { openCurrentVaultPagePopout } from "../../vault/popup/utils/vault-popout-window";
+import { openCurrentPagePopout } from "../../vault/popup/utils/vault-popout-window";
 
 @Component({
   selector: "app-pop-out",
@@ -26,6 +26,6 @@ export class PopOutComponent implements OnInit {
   }
 
   expand() {
-    openCurrentVaultPagePopout(window);
+    openCurrentPagePopout(window);
   }
 }

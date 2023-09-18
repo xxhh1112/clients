@@ -6,7 +6,7 @@ const VaultPopoutType = {
   addEditVaultItem: "vault_AddEditVaultItem",
 } as const;
 
-async function openCurrentVaultPagePopout(win: Window, href: string = null) {
+async function openCurrentPagePopout(win: Window, href: string = null) {
   const popoutUrl = href || win.location.href;
   const parsedUrl = new URL(popoutUrl);
   let hashRoute = parsedUrl.hash;
@@ -61,7 +61,7 @@ async function closeAddEditVaultItemPopout(delayClose = 0) {
 
 export {
   VaultPopoutType,
-  openCurrentVaultPagePopout,
+  openCurrentPagePopout,
   openVaultItemPasswordRepromptPopout,
   openAddEditVaultItemPopout,
   closeAddEditVaultItemPopout,

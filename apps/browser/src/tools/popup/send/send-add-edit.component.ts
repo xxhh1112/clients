@@ -17,7 +17,7 @@ import { DialogService } from "@bitwarden/components";
 
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
-import { openCurrentVaultPagePopout } from "../../../vault/popup/utils/vault-popout-window";
+import { openCurrentPagePopout } from "../../../vault/popup/utils/vault-popout-window";
 
 @Component({
   selector: "app-send-add-edit",
@@ -96,7 +96,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
   }
 
   popOutWindow() {
-    openCurrentVaultPagePopout(window);
+    openCurrentPagePopout(window);
   }
 
   async ngOnInit() {
