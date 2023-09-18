@@ -78,7 +78,7 @@ class BrowserPopupUtils {
    * Identifies if the popup is loading in private mode.
    * @returns {boolean}
    */
-  static loadingInPrivateMode() {
+  static inBrowserPrivateMode() {
     return BrowserPopupUtils.backgroundInitializationRequired() && BrowserApi.manifestVersion !== 3;
   }
 

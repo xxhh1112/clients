@@ -120,25 +120,25 @@ describe("BrowserPopupUtils", () => {
     });
   });
 
-  describe("loadingInPrivateMode", () => {
+  describe("inBrowserPrivateMode", () => {
     it("returns false if the background requires initialization", () => {
       jest.spyOn(BrowserPopupUtils, "backgroundInitializationRequired").mockReturnValue(false);
 
-      expect(BrowserPopupUtils.loadingInPrivateMode()).toBe(false);
+      expect(BrowserPopupUtils.inBrowserPrivateMode()).toBe(false);
     });
 
     it("returns false if the manifest version is for version 3", () => {
       jest.spyOn(BrowserPopupUtils, "backgroundInitializationRequired").mockReturnValue(true);
       jest.spyOn(BrowserApi, "manifestVersion", "get").mockReturnValue(3);
 
-      expect(BrowserPopupUtils.loadingInPrivateMode()).toBe(false);
+      expect(BrowserPopupUtils.inBrowserPrivateMode()).toBe(false);
     });
 
     it("returns true if the background does not require initalization and the manifest version is version 2", () => {
       jest.spyOn(BrowserPopupUtils, "backgroundInitializationRequired").mockReturnValue(true);
       jest.spyOn(BrowserApi, "manifestVersion", "get").mockReturnValue(2);
 
-      expect(BrowserPopupUtils.loadingInPrivateMode()).toBe(true);
+      expect(BrowserPopupUtils.inBrowserPrivateMode()).toBe(true);
     });
   });
 
