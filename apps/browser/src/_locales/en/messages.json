@@ -978,7 +978,7 @@
   "environmentSaved": {
     "message": "Environment URLs saved"
   },
-  "enableAutoFillOverlay": {
+  "showAutoFillMenuOnFormFields": {
     "message": "Show auto-fill menu on form fields",
     "description": "Represents the message for allowing the user to enable the auto-fill overlay"
   },
