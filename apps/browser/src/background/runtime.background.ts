@@ -192,7 +192,7 @@ export default class RuntimeBackground {
             break;
           }
           case "autofill_card": {
-            await this.autofillService.doAutoFillNonLoginActiveTab(
+            await this.autofillService.doAutoFillActiveTab(
               [
                 {
                   frameId: sender.frameId,
@@ -200,13 +200,13 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              CipherType.Card,
-              false
+              false,
+              CipherType.Card
             );
             break;
           }
           case "autofill_identity": {
-            await this.autofillService.doAutoFillNonLoginActiveTab(
+            await this.autofillService.doAutoFillActiveTab(
               [
                 {
                   frameId: sender.frameId,
@@ -214,8 +214,8 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              CipherType.Identity,
-              false
+              false,
+              CipherType.Identity
             );
             break;
           }

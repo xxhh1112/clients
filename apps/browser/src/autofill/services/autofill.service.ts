@@ -302,16 +302,28 @@ export default class AutofillService implements AutofillServiceInterface {
     return totpCode;
   }
 
-  async doAutoFillNonLoginActiveTab(
+  /**
+   * Autofill the active tab with the next cipher from the cache
+   * @param {PageDetail[]} pageDetails The data scraped from the page
+   * @param {boolean} fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
+   * @returns {Promise<string | null>} The TOTP code of the successfully autofilled login, if any
+   */
+  async doAutoFillActiveTab(
     pageDetails: PageDetail[],
-    cipherType: CipherType,
-    fromCommand: boolean
-  ): Promise<string> {
+    fromCommand: boolean,
+    cipherType?: CipherType
+  ): Promise<string | null> {
     const tab = await this.getActiveTab();
+
     if (!tab || !tab.url) {
-      return;
+      return null;
     }
 
+    if (!cipherType || cipherType === CipherType.Login) {
+      return await this.doAutoFillOnTab(pageDetails, tab, fromCommand);
+    }
+
+    // Cipher is a non-login type
     const ciphers = (
       (await this.cipherService.getAllDecryptedForUrl(tab.url, [cipherType])) || []
     ).filter(({ type }) => type === cipherType);
@@ -333,24 +345,6 @@ export default class AutofillService implements AutofillServiceInterface {
       allowUntrustedIframe: fromCommand,
       allowTotpAutofill: false,
     });
-  }
-
-  /**
-   * Autofill the active tab with the next login item from the cache
-   * @param {PageDetail[]} pageDetails The data scraped from the page
-   * @param {boolean} fromCommand Whether the autofill is triggered by a keyboard shortcut (`true`) or autofill on page load (`false`)
-   * @returns {Promise<string | null>} The TOTP code of the successfully autofilled login, if any
-   */
-  async doAutoFillActiveTab(
-    pageDetails: PageDetail[],
-    fromCommand: boolean
-  ): Promise<string | null> {
-    const tab = await this.getActiveTab();
-    if (!tab || !tab.url) {
-      return null;
-    }
-
-    return await this.doAutoFillOnTab(pageDetails, tab, fromCommand);
   }
 
   /**

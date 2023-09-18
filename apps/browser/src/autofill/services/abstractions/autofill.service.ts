@@ -56,10 +56,9 @@ export abstract class AutofillService {
     tab: chrome.tabs.Tab,
     fromCommand: boolean
   ) => Promise<string | null>;
-  doAutoFillNonLoginActiveTab: (
+  doAutoFillActiveTab: (
     pageDetails: PageDetail[],
-    cipherType: CipherType,
-    fromCommand: boolean
-  ) => Promise<string>;
-  doAutoFillActiveTab: (pageDetails: PageDetail[], fromCommand: boolean) => Promise<string | null>;
+    fromCommand: boolean,
+    cipherType?: CipherType
+  ) => Promise<string | null>;
 }
