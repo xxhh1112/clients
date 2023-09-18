@@ -19,7 +19,6 @@ import { DialogService } from "@bitwarden/components";
 import { BrowserSendComponentState } from "../../../models/browserSendComponentState";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
-import { PopupCloseWarningService } from "../../../popup/services/popup-close-warning.service";
 
 const ComponentId = "SendComponent";
 
@@ -44,7 +43,6 @@ export class SendGroupingsComponent extends BaseSendComponent {
     ngZone: NgZone,
     policyService: PolicyService,
     searchService: SearchService,
-    private popupCloseWarningService: PopupCloseWarningService,
     private stateService: BrowserStateService,
     private router: Router,
     private syncService: SyncService,

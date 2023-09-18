@@ -9,14 +9,11 @@ import { ConfigService } from "@bitwarden/common/platform/services/config/config
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { BrowserStateService as StateServiceAbstraction } from "../../platform/services/abstractions/browser-state.service";
 
-import { PopupCloseWarningService } from "./popup-close-warning.service";
-
 @Injectable()
 export class InitService {
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private popupUtilsService: PopupCloseWarningService,
     private stateService: StateServiceAbstraction,
     private logService: LogServiceAbstraction,
     private themingService: AbstractThemingService,

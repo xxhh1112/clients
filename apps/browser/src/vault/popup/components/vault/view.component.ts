@@ -29,7 +29,6 @@ import { DialogService } from "@bitwarden/components";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
-import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
@@ -80,7 +79,6 @@ export class ViewComponent extends BaseViewComponent {
     eventCollectionService: EventCollectionService,
     private autofillService: AutofillService,
     private messagingService: MessagingService,
-    private popupUtilsService: PopupCloseWarningService,
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,

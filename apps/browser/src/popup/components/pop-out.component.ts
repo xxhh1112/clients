@@ -4,7 +4,6 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { openCurrentVaultPagePopout } from "../../vault/popup/utils/vault-popout-window";
-import { PopupCloseWarningService } from "../services/popup-close-warning.service";
 
 @Component({
   selector: "app-pop-out",
@@ -13,10 +12,7 @@ import { PopupCloseWarningService } from "../services/popup-close-warning.servic
 export class PopOutComponent implements OnInit {
   @Input() show = true;
 
-  constructor(
-    private platformUtilsService: PlatformUtilsService,
-    private popupUtilsService: PopupCloseWarningService
-  ) {}
+  constructor(private platformUtilsService: PlatformUtilsService) {}
 
   ngOnInit() {
     if (this.show) {

@@ -21,7 +21,6 @@ import { BrowserGroupingsComponentState } from "../../../../models/browserGroupi
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../../platform/services/abstractions/browser-state.service";
-import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
 const ComponentId = "VaultComponent";
@@ -81,7 +80,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private broadcasterService: BroadcasterService,
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private popupUtils: PopupCloseWarningService,
     private syncService: SyncService,
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,

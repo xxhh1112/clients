@@ -37,7 +37,6 @@ import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErro
 import { BrowserApi } from "../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { SetPinComponent } from "../components/set-pin.component";
-import { PopupCloseWarningService } from "../services/popup-close-warning.service";
 
 import { AboutComponent } from "./about.component";
 import { AwaitDesktopDialogComponent } from "./await-desktop-dialog.component";
@@ -96,7 +95,6 @@ export class SettingsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private cryptoService: CryptoService,
     private stateService: StateService,
-    private popupUtilsService: PopupCloseWarningService,
     private modalService: ModalService,
     private userVerificationService: UserVerificationService,
     private dialogService: DialogService,

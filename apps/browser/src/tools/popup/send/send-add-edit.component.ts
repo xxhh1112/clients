@@ -17,7 +17,6 @@ import { DialogService } from "@bitwarden/components";
 
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
-import { PopupCloseWarningService } from "../../../popup/services/popup-close-warning.service";
 import { openCurrentVaultPagePopout } from "../../../vault/popup/utils/vault-popout-window";
 
 @Component({
@@ -47,7 +46,6 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private popupUtilsService: PopupCloseWarningService,
     logService: LogService,
     sendApiService: SendApiService,
     dialogService: DialogService,

@@ -23,7 +23,6 @@ import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
-import { PopupCloseWarningService } from "../../popup/services/popup-close-warning.service";
 import { openCurrentVaultPagePopout } from "../../vault/popup/utils/vault-popout-window";
 
 import { closeTwoFactorAuthPopout } from "./utils/auth-popout-window";
@@ -35,8 +34,6 @@ const BroadcasterSubscriptionId = "TwoFactorComponent";
   templateUrl: "two-factor.component.html",
 })
 export class TwoFactorComponent extends BaseTwoFactorComponent {
-  showNewWindowMessage = false;
-
   constructor(
     authService: AuthService,
     router: Router,
@@ -46,7 +43,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     private syncService: SyncService,
     environmentService: EnvironmentService,
     private broadcasterService: BroadcasterService,
-    private popupUtilsService: PopupCloseWarningService,
     stateService: StateService,
     route: ActivatedRoute,
     private messagingService: MessagingService,

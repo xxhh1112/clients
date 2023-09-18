@@ -13,7 +13,6 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
@@ -23,7 +22,6 @@ import { BrowserComponentState } from "../../../../models/browserComponentState"
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../../platform/services/abstractions/browser-state.service";
-import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
 const ComponentId = "VaultItemsComponent";
@@ -62,9 +60,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private broadcasterService: BroadcasterService,
     private changeDetectorRef: ChangeDetectorRef,
     private stateService: BrowserStateService,
-    private popupUtils: PopupCloseWarningService,
     private i18nService: I18nService,
-    private folderService: FolderService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
     cipherService: CipherService,

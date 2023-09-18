@@ -20,7 +20,6 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
-import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
@@ -56,7 +55,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private cipherService: CipherService,
-    private popupUtilsService: PopupCloseWarningService,
     private autofillService: AutofillService,
     private i18nService: I18nService,
     private router: Router,
