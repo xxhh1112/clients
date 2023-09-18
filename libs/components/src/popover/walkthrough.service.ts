@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, QueryList } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 
 import { PopoverTriggerForDirective } from "./popover-trigger-for.directive";
 
@@ -6,39 +6,40 @@ import { PopoverTriggerForDirective } from "./popover-trigger-for.directive";
   providedIn: "root",
 })
 export class WalkthroughService implements OnDestroy {
-  triggers: QueryList<PopoverTriggerForDirective>;
-  currentTriggerIndex = 0;
+  isWalkthrough = false;
+  triggers: PopoverTriggerForDirective[] | null;
 
-  get triggerEls() {
-    return this.triggers.toArray();
-  }
-
-  get numTriggers() {
-    return this.triggers.length;
+  get indexOfCurrentlyOpen() {
+    const index = this.triggers.findIndex((trigger) => trigger.isOpen);
+    return index === -1 ? 0 : index;
   }
 
   ngOnDestroy() {
+    this.isWalkthrough = false;
     this.triggers = null;
-    this.currentTriggerIndex = 0;
   }
 
   next() {
-    this.triggerEls[this.currentTriggerIndex].closePopover();
-    this.currentTriggerIndex++;
-    this.triggerEls[this.currentTriggerIndex].openPopover();
+    const currentIndex = this.indexOfCurrentlyOpen;
+    const nextIndex = currentIndex + 1;
+
+    this.triggers[currentIndex].closePopover();
+    this.triggers[nextIndex].openPopover();
   }
 
   back() {
-    this.triggerEls[this.currentTriggerIndex].closePopover();
-    this.currentTriggerIndex--;
-    this.triggerEls[this.currentTriggerIndex].openPopover();
+    const currentIndex = this.indexOfCurrentlyOpen;
+    const previousIndex = currentIndex - 1;
+
+    this.triggers[currentIndex].closePopover();
+    this.triggers[previousIndex].openPopover();
   }
 
   isFirst() {
-    return this.currentTriggerIndex === 0;
+    return this.indexOfCurrentlyOpen === 0;
   }
 
   isLast() {
-    return this.currentTriggerIndex === this.triggers.length - 1;
+    return this.indexOfCurrentlyOpen === this.triggers.length - 1;
   }
 }

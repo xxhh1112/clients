@@ -1,5 +1,5 @@
 import { A11yModule } from "@angular/cdk/a11y";
-import { AfterContentInit, Component, ContentChildren, QueryList } from "@angular/core";
+import { AfterContentInit, Component, ContentChildren, OnInit, QueryList } from "@angular/core";
 
 import { IconButtonModule } from "../icon-button/icon-button.module";
 import { SharedModule } from "../shared/shared.module";
@@ -13,13 +13,17 @@ import { WalkthroughService } from "./walkthrough.service";
   imports: [A11yModule, IconButtonModule, SharedModule],
   templateUrl: "./walkthrough-wrapper.component.html",
 })
-export class WalkthroughWrapperComponent implements AfterContentInit {
+export class WalkthroughWrapperComponent implements OnInit, AfterContentInit {
   @ContentChildren(PopoverTriggerForDirective, { descendants: true })
   triggers: QueryList<PopoverTriggerForDirective>;
 
   constructor(private walkthroughService: WalkthroughService) {}
 
+  ngOnInit() {
+    this.walkthroughService.isWalkthrough = true;
+  }
+
   ngAfterContentInit() {
-    this.walkthroughService.triggers = this.triggers;
+    this.walkthroughService.triggers = this.triggers.toArray();
   }
 }

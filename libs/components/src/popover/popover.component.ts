@@ -21,6 +21,10 @@ export class PopoverComponent {
 
   constructor(private walkthroughService: WalkthroughService) {}
 
+  get isWalkthrough() {
+    return this.walkthroughService.isWalkthrough;
+  }
+
   get showNextBtn() {
     return !this.walkthroughService.isLast();
   }
