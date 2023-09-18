@@ -90,6 +90,17 @@
             </td>
             <td>{{ i.quantity * i.amount | currency : "$" }} /{{ i.interval | i18n }}</td>
           </tr>
+          <tr>
+            <td colspan="2">
+              <small>
+                {{ "accurateInvoicing" | i18n }}
+                <a routerLink="/settings/subscription/billing-history">
+                  {{ "billingHistory" | i18n }}
+                </a>
+                {{ "page" | i18n }}
+              </small>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
