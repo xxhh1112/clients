@@ -81,7 +81,7 @@
                 {{ i.quantity * i.amount | currency : "$" }} /{{ i.interval | i18n }}
               </td>
             </tr>
-            <tr bitRow>
+            <tr bitRow *ngIf="discount && discount.active">
               <td bitCell colspan="2">
                 <small>
                   {{ "accurateInvoicing" | i18n }}
