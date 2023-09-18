@@ -37,7 +37,7 @@ async function openVaultItemPasswordRepromptPopout(
     `&action=${action}`;
 
   await BrowserPopupUtils.openPopout(promptWindowPath, {
-    singleActionKey: VaultPopoutType.vaultItemPasswordReprompt,
+    singleActionKey: `${VaultPopoutType.vaultItemPasswordReprompt}_${cipherId}`,
     senderWindowId: senderTab.windowId,
     forceCloseExistingWindows: true,
   });
