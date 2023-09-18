@@ -7,8 +7,6 @@ import PopoutWindow from "../../platform/popup/popout-window";
 @Injectable()
 export class PopupUtilsService {
   private unloadSubscription: Subscription;
-  private isOpeningPopout = false;
-  private openPopoutDebounce: NodeJS.Timeout;
 
   constructor(private privateMode: boolean = false) {}
 

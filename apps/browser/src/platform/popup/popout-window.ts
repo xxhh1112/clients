@@ -6,10 +6,11 @@ class PopoutWindow {
     options: {
       senderWindowId?: number;
       singleActionKey?: string;
+      forceCloseExistingWindows?: boolean;
       windowOptions?: Partial<chrome.windows.CreateData>;
     } = {}
   ) {
-    const { senderWindowId, singleActionKey, windowOptions } = options;
+    const { senderWindowId, singleActionKey, forceCloseExistingWindows, windowOptions } = options;
     const defaultPopoutWindowOptions: chrome.windows.CreateData = {
       type: "normal",
       focused: true,
@@ -33,7 +34,14 @@ class PopoutWindow {
       url: parsedUrl.toString(),
     };
 
-    if (await PopoutWindow.isSingleActionPopoutOpen(singleActionKey, popoutWindowOptions)) {
+    if (
+      (await PopoutWindow.isSingleActionPopoutOpen(
+        singleActionKey,
+        popoutWindowOptions,
+        forceCloseExistingWindows
+      )) &&
+      !forceCloseExistingWindows
+    ) {
       return;
     }
 
@@ -42,7 +50,8 @@ class PopoutWindow {
 
   private static async isSingleActionPopoutOpen(
     popoutKey: string | undefined,
-    windowInfo: chrome.windows.CreateData
+    windowInfo: chrome.windows.CreateData,
+    forceCloseExistingWindows = false
   ) {
     let isPopoutOpen = false;
     let singleActionPopoutFound = false;
@@ -63,7 +72,7 @@ class PopoutWindow {
       }
 
       isPopoutOpen = true;
-      if (!singleActionPopoutFound) {
+      if (!forceCloseExistingWindows && !singleActionPopoutFound) {
         await BrowserApi.updateWindowProperties(tab.windowId, {
           focused: true,
           width: windowInfo.width,

@@ -23,6 +23,7 @@ async function openVaultItemPasswordRepromptPopout(
   await PopoutWindow.open(promptWindowPath, {
     singleActionKey: VaultPopoutType.vaultItemPasswordReprompt,
     senderWindowId: senderTab.windowId,
+    forceCloseExistingWindows: true,
   });
 }
 
