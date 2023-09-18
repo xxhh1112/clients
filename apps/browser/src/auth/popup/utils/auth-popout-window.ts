@@ -1,5 +1,5 @@
 import { BrowserApi } from "../../../platform/browser/browser-api";
-import PopoutWindow from "../../../platform/popup/popout-window";
+import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 
 const AuthPopoutType = {
   unlockExtension: "auth_unlockExtension",
@@ -8,7 +8,7 @@ const AuthPopoutType = {
 } as const;
 
 async function openUnlockPopout(senderTab: chrome.tabs.Tab) {
-  await PopoutWindow.open("popup/index.html?uilocation=popout", {
+  await BrowserPopupUtils.openPopout("popup/index.html?uilocation=popout", {
     singleActionKey: AuthPopoutType.unlockExtension,
     senderWindowId: senderTab.windowId,
   });
@@ -16,7 +16,7 @@ async function openUnlockPopout(senderTab: chrome.tabs.Tab) {
 }
 
 async function closeUnlockPopout() {
-  await PopoutWindow.closeSingleAction(AuthPopoutType.unlockExtension);
+  await BrowserPopupUtils.closeSingleActionPopout(AuthPopoutType.unlockExtension);
 }
 
 async function openSsoAuthResultPopout(resultData: { code: string; state: string }) {
@@ -25,7 +25,7 @@ async function openSsoAuthResultPopout(resultData: { code: string; state: string
     code
   )}&state=${encodeURIComponent(state)}`;
 
-  await PopoutWindow.open(authResultUrl, {
+  await BrowserPopupUtils.openPopout(authResultUrl, {
     singleActionKey: AuthPopoutType.ssoAuthResult,
   });
 }
@@ -36,11 +36,13 @@ async function openTwoFactorAuthPopout(twoFactorAuthData: { data: string; rememb
     `webAuthnResponse=${encodeURIComponent(data)};` + `remember=${encodeURIComponent(remember)}`;
   const twoFactorUrl = `popup/index.html#/2fa;${params}`;
 
-  await PopoutWindow.open(twoFactorUrl, { singleActionKey: AuthPopoutType.twoFactorAuth });
+  await BrowserPopupUtils.openPopout(twoFactorUrl, {
+    singleActionKey: AuthPopoutType.twoFactorAuth,
+  });
 }
 
 async function closeTwoFactorAuthPopout() {
-  await PopoutWindow.closeSingleAction(AuthPopoutType.twoFactorAuth);
+  await BrowserPopupUtils.closeSingleActionPopout(AuthPopoutType.twoFactorAuth);
 }
 
 export {

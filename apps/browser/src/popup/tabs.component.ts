@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
-import { PopupUtilsService } from "./services/popup-utils.service";
+import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
+
+import { PopupCloseWarningService } from "./services/popup-close-warning.service";
 
 @Component({
   selector: "app-tabs",
@@ -9,9 +11,9 @@ import { PopupUtilsService } from "./services/popup-utils.service";
 export class TabsComponent implements OnInit {
   showCurrentTab = true;
 
-  constructor(private popupUtilsService: PopupUtilsService) {}
+  constructor(private popupUtilsService: PopupCloseWarningService) {}
 
   ngOnInit() {
-    this.showCurrentTab = !this.popupUtilsService.inPopout(window);
+    this.showCurrentTab = !BrowserPopupUtils.inPopout(window);
   }
 }

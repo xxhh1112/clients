@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from "@angular/core";
 
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
-import { PopupUtilsService } from "../services/popup-utils.service";
+import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
+import { openCurrentVaultPagePopout } from "../../vault/popup/utils/vault-popout-window";
+import { PopupCloseWarningService } from "../services/popup-close-warning.service";
 
 @Component({
   selector: "app-pop-out",
@@ -13,14 +15,14 @@ export class PopOutComponent implements OnInit {
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
-    private popupUtilsService: PopupUtilsService
+    private popupUtilsService: PopupCloseWarningService
   ) {}
 
   ngOnInit() {
     if (this.show) {
       if (
-        (this.popupUtilsService.inSidebar(window) && this.platformUtilsService.isFirefox()) ||
-        this.popupUtilsService.inPopout(window)
+        (BrowserPopupUtils.inSidebar(window) && this.platformUtilsService.isFirefox()) ||
+        BrowserPopupUtils.inPopout(window)
       ) {
         this.show = false;
       }
@@ -28,6 +30,6 @@ export class PopOutComponent implements OnInit {
   }
 
   expand() {
-    this.popupUtilsService.popOut(window);
+    openCurrentVaultPagePopout(window);
   }
 }

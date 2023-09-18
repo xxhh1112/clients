@@ -22,7 +22,9 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { PopupUtilsService } from "../../popup/services/popup-utils.service";
+import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
+import { PopupCloseWarningService } from "../../popup/services/popup-close-warning.service";
+import { openCurrentVaultPagePopout } from "../../vault/popup/utils/vault-popout-window";
 
 import { closeTwoFactorAuthPopout } from "./utils/auth-popout-window";
 
@@ -44,7 +46,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     private syncService: SyncService,
     environmentService: EnvironmentService,
     private broadcasterService: BroadcasterService,
-    private popupUtilsService: PopupUtilsService,
+    private popupUtilsService: PopupCloseWarningService,
     stateService: StateService,
     route: ActivatedRoute,
     private messagingService: MessagingService,
@@ -117,7 +119,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
     if (
       this.selectedProviderType === TwoFactorProviderType.Email &&
-      this.popupUtilsService.inPopup(window)
+      BrowserPopupUtils.inPopup(window)
     ) {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "warning" },
@@ -125,7 +127,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
         type: "warning",
       });
       if (confirmed) {
-        this.popupUtilsService.popOut(window);
+        openCurrentVaultPagePopout(window);
       }
     }
 

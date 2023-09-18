@@ -15,8 +15,10 @@ import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.s
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
+import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
-import { PopupUtilsService } from "../../../popup/services/popup-utils.service";
+import { PopupCloseWarningService } from "../../../popup/services/popup-close-warning.service";
+import { openCurrentVaultPagePopout } from "../../../vault/popup/utils/vault-popout-window";
 
 @Component({
   selector: "app-send-add-edit",
@@ -45,7 +47,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private popupUtilsService: PopupUtilsService,
+    private popupUtilsService: PopupCloseWarningService,
     logService: LogService,
     sendApiService: SendApiService,
     dialogService: DialogService,
@@ -96,14 +98,14 @@ export class SendAddEditComponent extends BaseAddEditComponent {
   }
 
   popOutWindow() {
-    this.popupUtilsService.popOut(window);
+    openCurrentVaultPagePopout(window);
   }
 
   async ngOnInit() {
     // File visibility
     this.isFirefox = this.platformUtilsService.isFirefox();
-    this.inPopout = this.popupUtilsService.inPopout(window);
-    this.inSidebar = this.popupUtilsService.inSidebar(window);
+    this.inPopout = BrowserPopupUtils.inPopout(window);
+    this.inSidebar = BrowserPopupUtils.inSidebar(window);
     this.isLinux = window?.navigator?.userAgent.indexOf("Linux") !== -1;
     this.isUnsupportedMac =
       this.platformUtilsService.isChrome() && window?.navigator?.appVersion.includes("Mac OS X 11");

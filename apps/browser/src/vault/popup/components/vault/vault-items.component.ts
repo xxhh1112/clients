@@ -21,8 +21,9 @@ import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { BrowserComponentState } from "../../../../models/browserComponentState";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
+import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../../platform/services/abstractions/browser-state.service";
-import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
 const ComponentId = "VaultItemsComponent";
@@ -61,7 +62,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private broadcasterService: BroadcasterService,
     private changeDetectorRef: ChangeDetectorRef,
     private stateService: BrowserStateService,
-    private popupUtils: PopupUtilsService,
+    private popupUtils: PopupCloseWarningService,
     private i18nService: I18nService,
     private folderService: FolderService,
     private collectionService: CollectionService,
@@ -157,7 +158,11 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       if (this.applySavedState && this.state != null) {
         window.setTimeout(
           () =>
-            this.popupUtils.setContentScrollY(window, this.state.scrollY, this.scrollingContainer),
+            BrowserPopupUtils.setContentScrollY(
+              window,
+              this.state.scrollY,
+              this.scrollingContainer
+            ),
           0
         );
       }
@@ -219,7 +224,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     this.preventSelected = true;
     await this.cipherService.updateLastLaunchedDate(cipher.id);
     BrowserApi.createNewTab(cipher.login.launchUri);
-    if (this.popupUtils.inPopup(window)) {
+    if (BrowserPopupUtils.inPopup(window)) {
       BrowserApi.closePopup(window);
     }
   }
@@ -288,7 +293,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
 
   private async saveState() {
     this.state = {
-      scrollY: this.popupUtils.getContentScrollY(window, this.scrollingContainer),
+      scrollY: BrowserPopupUtils.getContentScrollY(window, this.scrollingContainer),
       searchText: this.searchText,
     };
     await this.stateService.setBrowserVaultItemsComponentState(this.state);

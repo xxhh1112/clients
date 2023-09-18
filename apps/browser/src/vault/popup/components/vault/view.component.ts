@@ -28,7 +28,8 @@ import { DialogService } from "@bitwarden/components";
 
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
-import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
+import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
@@ -79,7 +80,7 @@ export class ViewComponent extends BaseViewComponent {
     eventCollectionService: EventCollectionService,
     private autofillService: AutofillService,
     private messagingService: MessagingService,
-    private popupUtilsService: PopupUtilsService,
+    private popupUtilsService: PopupCloseWarningService,
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
@@ -116,7 +117,7 @@ export class ViewComponent extends BaseViewComponent {
       this.uilocation = value?.uilocation;
     });
 
-    this.inPopout = this.uilocation === "popout" || this.popupUtilsService.inPopout(window);
+    this.inPopout = this.uilocation === "popout" || BrowserPopupUtils.inPopout(window);
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {

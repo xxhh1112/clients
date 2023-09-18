@@ -1,9 +1,25 @@
-import PopoutWindow from "../../../platform/popup/popout-window";
+import { BrowserApi } from "../../../platform/browser/browser-api";
+import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 
 const VaultPopoutType = {
   vaultItemPasswordReprompt: "vault_PasswordReprompt",
   addEditVaultItem: "vault_AddEditVaultItem",
 } as const;
+
+async function openCurrentVaultPagePopout(win: Window, href: string = null) {
+  const popoutUrl = href || win.location.href;
+  const parsedUrl = new URL(popoutUrl);
+  let hashRoute = parsedUrl.hash;
+  if (hashRoute.startsWith("#/tabs/current")) {
+    hashRoute = "#/tabs/vault";
+  }
+
+  await BrowserPopupUtils.openPopout(`${parsedUrl.pathname}${hashRoute}`);
+
+  if (BrowserPopupUtils.inPopup(win)) {
+    BrowserApi.closePopup(win);
+  }
+}
 
 async function openVaultItemPasswordRepromptPopout(
   senderTab: chrome.tabs.Tab,
@@ -20,7 +36,7 @@ async function openVaultItemPasswordRepromptPopout(
     `&senderTabId=${senderTab.id}` +
     `&action=${action}`;
 
-  await PopoutWindow.open(promptWindowPath, {
+  await BrowserPopupUtils.openPopout(promptWindowPath, {
     singleActionKey: VaultPopoutType.vaultItemPasswordReprompt,
     senderWindowId: senderTab.windowId,
     forceCloseExistingWindows: true,
@@ -33,18 +49,19 @@ async function openAddEditVaultItemPopout(senderWindowId: number, cipherId?: str
       ? "popup/index.html#/edit-cipher"
       : `popup/index.html#/edit-cipher?cipherId=${cipherId}`;
 
-  await PopoutWindow.open(addEditCipherUrl, {
+  await BrowserPopupUtils.openPopout(addEditCipherUrl, {
     singleActionKey: VaultPopoutType.addEditVaultItem,
     senderWindowId,
   });
 }
 
 async function closeAddEditVaultItemPopout(delayClose = 0) {
-  await PopoutWindow.closeSingleAction(VaultPopoutType.addEditVaultItem, delayClose);
+  await BrowserPopupUtils.closeSingleActionPopout(VaultPopoutType.addEditVaultItem, delayClose);
 }
 
 export {
   VaultPopoutType,
+  openCurrentVaultPagePopout,
   openVaultItemPasswordRepromptPopout,
   openAddEditVaultItemPopout,
   closeAddEditVaultItemPopout,

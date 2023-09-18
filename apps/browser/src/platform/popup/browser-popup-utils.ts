@@ -1,7 +1,47 @@
 import { BrowserApi } from "../browser/browser-api";
 
-class PopoutWindow {
-  static async open(
+class BrowserPopupUtils {
+  static inSidebar(win: Window): boolean {
+    return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "sidebar");
+  }
+
+  static inPopout(win: Window): boolean {
+    return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "popout");
+  }
+
+  static inSingleActionPopout(win: Window, popoutKey: string): boolean {
+    return BrowserPopupUtils.urlContainsSearchParams(win, "singleActionPopout", popoutKey);
+  }
+
+  static inPopup(win: Window): boolean {
+    return (
+      win.location.search === "" ||
+      win.location.search.indexOf("uilocation=") === -1 ||
+      win.location.search.indexOf("uilocation=popup") > -1
+    );
+  }
+
+  static getContentScrollY(win: Window, scrollingContainer = "main"): number {
+    const content = win.document.getElementsByTagName(scrollingContainer)[0];
+    return content.scrollTop;
+  }
+
+  static setContentScrollY(win: Window, scrollY: number, scrollingContainer = "main"): void {
+    if (scrollY != null) {
+      const content = win.document.getElementsByTagName(scrollingContainer)[0];
+      content.scrollTop = scrollY;
+    }
+  }
+
+  static backgroundInitializationRequired() {
+    return BrowserApi.getBackgroundPage() === null;
+  }
+
+  static loadingInPrivateMode() {
+    return BrowserPopupUtils.backgroundInitializationRequired() && BrowserApi.manifestVersion !== 3;
+  }
+
+  static async openPopout(
     url: string,
     options: {
       senderWindowId?: number;
@@ -35,7 +75,7 @@ class PopoutWindow {
     };
 
     if (
-      (await PopoutWindow.isSingleActionPopoutOpen(
+      (await BrowserPopupUtils.isSingleActionPopoutOpen(
         singleActionKey,
         popoutWindowOptions,
         forceCloseExistingWindows
@@ -46,6 +86,18 @@ class PopoutWindow {
     }
 
     return await BrowserApi.createWindow(popoutWindowOptions);
+  }
+
+  static async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
+    const extensionUrl = chrome.runtime.getURL("popup/index.html");
+    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
+    for (const tab of tabs) {
+      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
+        continue;
+      }
+
+      setTimeout(() => BrowserApi.removeTab(tab.id), delayClose);
+    }
   }
 
   private static async isSingleActionPopoutOpen(
@@ -90,17 +142,16 @@ class PopoutWindow {
     return isPopoutOpen;
   }
 
-  static async closeSingleAction(popoutKey: string, delayClose = 0): Promise<void> {
-    const extensionUrl = chrome.runtime.getURL("popup/index.html");
-    const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
-    for (const tab of tabs) {
-      if (!tab.url.includes(`singleActionPopout=${popoutKey}`)) {
-        continue;
-      }
-
-      setTimeout(() => BrowserApi.removeTab(tab.id), delayClose);
-    }
+  private static urlContainsSearchParams(
+    win: Window,
+    searchParam: string,
+    searchValue: string
+  ): boolean {
+    return (
+      win.location.search !== "" &&
+      win.location.search.indexOf(`${searchParam}=${searchValue}`) > -1
+    );
   }
 }
 
-export default PopoutWindow;
+export default BrowserPopupUtils;
