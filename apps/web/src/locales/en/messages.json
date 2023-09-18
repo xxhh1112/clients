@@ -3926,8 +3926,9 @@
   "ssoIdentifier": {
     "message": "SSO identifier"
   },
-  "ssoIdentifierHint": {
-    "message": "Provide this ID to your members to login with SSO."
+  "ssoIdentifierHintDesc": {
+    "message": "Provide this ID to your members to login with SSO. To bypass this step, set up <0>Domain verification</0>",
+    "description": "The contents of <0></0> will be used to create a link to the 'Domain verification' page."
   },
   "unlinkSso": {
     "message": "Unlink SSO"
