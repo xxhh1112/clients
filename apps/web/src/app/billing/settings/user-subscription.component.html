@@ -90,7 +90,7 @@
             </td>
             <td>{{ i.quantity * i.amount | currency : "$" }} /{{ i.interval | i18n }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="discount != null && discount.active">
             <td colspan="2">
               <small>
                 {{ "accurateInvoicing" | i18n }}
