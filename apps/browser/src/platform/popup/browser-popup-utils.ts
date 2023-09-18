@@ -1,18 +1,39 @@
 import { BrowserApi } from "../browser/browser-api";
 
 class BrowserPopupUtils {
+  /**
+   * Identifies if the popup is within the sidebar.
+   * @param {Window} win
+   * @returns {boolean}
+   */
   static inSidebar(win: Window): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "sidebar");
   }
 
+  /**
+   * Identifies if the popup is within the popout.
+   * @param {Window} win
+   * @returns {boolean}
+   */
   static inPopout(win: Window): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "popout");
   }
 
+  /**
+   * Identifies if the popup is within the single action popout.
+   * @param {Window} win
+   * @param {string} popoutKey
+   * @returns {boolean}
+   */
   static inSingleActionPopout(win: Window, popoutKey: string): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "singleActionPopout", popoutKey);
   }
 
+  /**
+   * Identifies if the popup is within the popup.
+   * @param {Window} win
+   * @returns {boolean}
+   */
   static inPopup(win: Window): boolean {
     return (
       win.location.search === "" ||
@@ -21,11 +42,23 @@ class BrowserPopupUtils {
     );
   }
 
+  /**
+   * Gets the scroll position of the popup.
+   * @param {Window} win
+   * @param {string} scrollingContainer
+   * @returns {number}
+   */
   static getContentScrollY(win: Window, scrollingContainer = "main"): number {
     const content = win.document.getElementsByTagName(scrollingContainer)[0];
     return content.scrollTop;
   }
 
+  /**
+   * Sets the scroll position of the popup.
+   * @param {Window} win
+   * @param {number} scrollY
+   * @param {string} scrollingContainer
+   */
   static setContentScrollY(win: Window, scrollY: number, scrollingContainer = "main"): void {
     if (scrollY != null) {
       const content = win.document.getElementsByTagName(scrollingContainer)[0];
@@ -33,16 +66,30 @@ class BrowserPopupUtils {
     }
   }
 
+  /**
+   * Identifies if the background page needs to be initialized.
+   * @returns {boolean}
+   */
   static backgroundInitializationRequired() {
     return BrowserApi.getBackgroundPage() === null;
   }
 
+  /**
+   * Identifies if the popup is loading in private mode.
+   * @returns {boolean}
+   */
   static loadingInPrivateMode() {
     return BrowserPopupUtils.backgroundInitializationRequired() && BrowserApi.manifestVersion !== 3;
   }
 
+  /**
+   * Opens a popout window of any extension page. If the popout window is already open, it will be focused.
+   * @param {string} extensionUrlPath
+   * @param {{senderWindowId?: number, singleActionKey?: string, forceCloseExistingWindows?: boolean, windowOptions?: Partial<chrome.windows.CreateData>}} options
+   * @returns {Promise<chrome.windows.Window>}
+   */
   static async openPopout(
-    url: string,
+    extensionUrlPath: string,
     options: {
       senderWindowId?: number;
       singleActionKey?: string;
@@ -61,7 +108,7 @@ class BrowserPopupUtils {
     const offsetTop = 90;
     const popupWidth = defaultPopoutWindowOptions.width;
     const senderWindow = await BrowserApi.getWindow(senderWindowId);
-    const parsedUrl = new URL(chrome.runtime.getURL(url));
+    const parsedUrl = new URL(chrome.runtime.getURL(extensionUrlPath));
     parsedUrl.searchParams.set("uilocation", "popout");
     if (singleActionKey) {
       parsedUrl.searchParams.set("singleActionPopout", singleActionKey);
@@ -88,6 +135,12 @@ class BrowserPopupUtils {
     return await BrowserApi.createWindow(popoutWindowOptions);
   }
 
+  /**
+   * Closes the single action popout window.
+   * @param {string} popoutKey
+   * @param {number} delayClose
+   * @returns {Promise<void>}
+   */
   static async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
     const extensionUrl = chrome.runtime.getURL("popup/index.html");
     const tabs = await BrowserApi.tabsQuery({ url: `${extensionUrl}*` });
@@ -100,6 +153,16 @@ class BrowserPopupUtils {
     }
   }
 
+  /**
+   * Identifies if a single action window is open based on the passed popoutKey.
+   * Will focus the existing window, and close any other windows that might exist
+   * with the same popout key.
+   * @param {string | undefined} popoutKey
+   * @param {chrome.windows.CreateData} windowInfo
+   * @param {boolean} forceCloseExistingWindows
+   * @returns {Promise<boolean>}
+   * @private
+   */
   private static async isSingleActionPopoutOpen(
     popoutKey: string | undefined,
     windowInfo: chrome.windows.CreateData,
@@ -142,6 +205,14 @@ class BrowserPopupUtils {
     return isPopoutOpen;
   }
 
+  /**
+   * Identifies if the url contains the specified search param and value.
+   * @param {Window} win
+   * @param {string} searchParam
+   * @param {string} searchValue
+   * @returns {boolean}
+   * @private
+   */
   private static urlContainsSearchParams(
     win: Window,
     searchParam: string,

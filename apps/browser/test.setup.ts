@@ -23,6 +23,7 @@ const runtime = {
   },
   sendMessage: jest.fn(),
   getManifest: jest.fn(),
+  getURL: jest.fn((path) => `chrome-extension://id/${path}`),
 };
 
 const contextMenus = {
@@ -37,6 +38,8 @@ const i18n = {
 const tabs = {
   executeScript: jest.fn(),
   sendMessage: jest.fn(),
+  query: jest.fn(),
+  remove: jest.fn(),
 };
 
 const scripting = {
