@@ -324,12 +324,11 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     // Cipher is a non-login type
-    const ciphers = (
+    const cipher: CipherView = (
       (await this.cipherService.getAllDecryptedForUrl(tab.url, [cipherType])) || []
-    ).filter(({ type }) => type === cipherType);
-    const cipher: CipherView = ciphers[0] || null;
+    ).find(({ type }) => type === cipherType);
 
-    if (cipher == null || cipher.reprompt !== CipherRepromptType.None) {
+    if (!cipher || cipher.reprompt !== CipherRepromptType.None) {
       return null;
     }
 

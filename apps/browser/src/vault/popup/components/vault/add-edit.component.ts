@@ -166,12 +166,12 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     if (this.popupUtilsService.inTab(window)) {
       this.popupUtilsService.disableCloseTabWarning();
-      this.messagingService.send("closeTab", { delay: 500 });
+      this.messagingService.send("closeTab", { delay: 1000 });
       return true;
     }
 
     if (this.senderTabId && this.inPopout) {
-      setTimeout(() => this.close(), 500);
+      setTimeout(() => this.close(), 1000);
       return true;
     }
 
