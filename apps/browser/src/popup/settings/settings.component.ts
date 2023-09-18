@@ -35,8 +35,8 @@ import { DialogService } from "@bitwarden/components";
 
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { SetPinComponent } from "../components/set-pin.component";
-import { PopupUtilsService } from "../services/popup-utils.service";
 
 import { AboutComponent } from "./about.component";
 import { AwaitDesktopDialogComponent } from "./await-desktop-dialog.component";
@@ -95,7 +95,6 @@ export class SettingsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private cryptoService: CryptoService,
     private stateService: StateService,
-    private popupUtilsService: PopupUtilsService,
     private modalService: ModalService,
     private userVerificationService: UserVerificationService,
     private dialogService: DialogService,
@@ -335,7 +334,7 @@ export class SettingsComponent implements OnInit {
         // eslint-disable-next-line
         console.error(e);
 
-        if (this.platformUtilsService.isFirefox() && this.popupUtilsService.inSidebar(window)) {
+        if (this.platformUtilsService.isFirefox() && BrowserPopupUtils.inSidebar(window)) {
           await this.dialogService.openSimpleDialog({
             title: { key: "nativeMessaginPermissionSidebarTitle" },
             content: { key: "nativeMessaginPermissionSidebarDesc" },
@@ -482,7 +481,7 @@ export class SettingsComponent implements OnInit {
   }
 
   about() {
-    this.modalService.open(AboutComponent);
+    this.dialogService.open(AboutComponent);
   }
 
   async fingerprint() {

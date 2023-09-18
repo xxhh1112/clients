@@ -1828,6 +1828,11 @@ export default class AutofillService implements AutofillServiceInterface {
     return field.tagName === "span";
   }
 
+  /**
+   * Handles debouncing the opening of the master password reprompt popout.
+   * @returns {boolean}
+   * @private
+   */
   private isDebouncingPasswordRepromptPopout() {
     if (this.currentlyOpeningPasswordRepromptPopout) {
       return true;
