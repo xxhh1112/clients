@@ -7171,5 +7171,11 @@
   },
   "alreadyHaveAccount": {
     "message": "Already have an account?"
+  },
+  "accurateInvoicing": {
+    "message": "For more accurate invoicing, visit the "
+  },
+  "page": {
+    "message": "page."
   }
 }
