@@ -164,7 +164,7 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
 
     this.unobserveIframe();
 
-    setElementStyles(customElement, styles, "important");
+    setElementStyles(customElement, styles, true);
     this.iframeStyles = { ...this.iframeStyles, ...styles };
 
     this.observeIframe();

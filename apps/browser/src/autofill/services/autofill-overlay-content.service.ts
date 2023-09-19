@@ -565,7 +565,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
   private updateCustomElementDefaultStyles(element: HTMLElement) {
     this.unobserveCustomElements();
 
-    setElementStyles(element, this.customElementDefaultStyles, "important");
+    setElementStyles(element, this.customElementDefaultStyles, true);
 
     this.observeCustomElements();
   }
