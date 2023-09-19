@@ -3,8 +3,7 @@ import { BrowserApi } from "../browser/browser-api";
 class BrowserPopupUtils {
   /**
    * Identifies if the popup is within the sidebar.
-   * @param {Window} win
-   * @returns {boolean}
+   * @param win The passed window object.
    */
   static inSidebar(win: Window): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "sidebar");
@@ -12,8 +11,7 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the popup is within the popout.
-   * @param {Window} win
-   * @returns {boolean}
+   * @param win The passed window object.
    */
   static inPopout(win: Window): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "uilocation", "popout");
@@ -21,9 +19,8 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the popup is within the single action popout.
-   * @param {Window} win
-   * @param {string} popoutKey
-   * @returns {boolean}
+   * @param win The passed window object.
+   * @param popoutKey The single action popout key used to identify the popout.
    */
   static inSingleActionPopout(win: Window, popoutKey: string): boolean {
     return BrowserPopupUtils.urlContainsSearchParams(win, "singleActionPopout", popoutKey);
@@ -31,8 +28,7 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the popup is within the popup.
-   * @param {Window} win
-   * @returns {boolean}
+   * @param win The passed window object.
    */
   static inPopup(win: Window): boolean {
     return (
@@ -44,9 +40,8 @@ class BrowserPopupUtils {
 
   /**
    * Gets the scroll position of the popup.
-   * @param {Window} win
-   * @param {string} scrollingContainer
-   * @returns {number}
+   * @param win The passed window object.
+   * @param scrollingContainer Element tag name of the scrolling container.
    */
   static getContentScrollY(win: Window, scrollingContainer = "main"): number {
     const content = win.document.getElementsByTagName(scrollingContainer)[0];
@@ -55,9 +50,9 @@ class BrowserPopupUtils {
 
   /**
    * Sets the scroll position of the popup.
-   * @param {Window} win
-   * @param {number} scrollY
-   * @param {string} scrollingContainer
+   * @param win The passed window object.
+   * @param scrollY The amount to scroll the popup.
+   * @param scrollingContainer Element tag name of the container to scroll.
    */
   static setContentScrollY(win: Window, scrollY: number, scrollingContainer = "main"): void {
     if (scrollY != null) {
@@ -68,7 +63,6 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the background page needs to be initialized.
-   * @returns {boolean}
    */
   static backgroundInitializationRequired() {
     return BrowserApi.getBackgroundPage() === null;
@@ -76,7 +70,6 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the popup is loading in private mode.
-   * @returns {boolean}
    */
   static inPrivateMode() {
     return BrowserPopupUtils.backgroundInitializationRequired() && BrowserApi.manifestVersion !== 3;
@@ -84,9 +77,8 @@ class BrowserPopupUtils {
 
   /**
    * Opens a popout window of any extension page. If the popout window is already open, it will be focused.
-   * @param {string} extensionUrlPath
-   * @param {{senderWindowId?: number, singleActionKey?: string, forceCloseExistingWindows?: boolean, windowOptions?: Partial<chrome.windows.CreateData>}} options
-   * @returns {Promise<chrome.windows.Window>}
+   * @param extensionUrlPath A relative path to the extension page. Example: "popup/index.html#/tabs/vault"
+   * @param options Options for the popout window that overrides the default options.
    */
   static async openPopout(
     extensionUrlPath: string,
@@ -137,9 +129,8 @@ class BrowserPopupUtils {
 
   /**
    * Closes the single action popout window.
-   * @param {string} popoutKey
-   * @param {number} delayClose
-   * @returns {Promise<void>}
+   * @param popoutKey The single action popout key used to identify the popout.
+   * @param delayClose The amount of time to wait before closing the popout. Defaults to 0.
    */
   static async closeSingleActionPopout(popoutKey: string, delayClose = 0): Promise<void> {
     const extensionUrl = chrome.runtime.getURL("popup/index.html");
@@ -154,13 +145,34 @@ class BrowserPopupUtils {
   }
 
   /**
+   * Opens a popout window for the current page.
+   * If the current page is set for the current tab, then the
+   * popout window will be set for the vault items listing tab.
+   * @param win The passed window object.
+   * @param href The href to open in the popout window.
+   */
+  static async openCurrentPagePopout(win: Window, href: string = null) {
+    const popoutUrl = href || win.location.href;
+    const parsedUrl = new URL(popoutUrl);
+    let hashRoute = parsedUrl.hash;
+    if (hashRoute.startsWith("#/tabs/current")) {
+      hashRoute = "#/tabs/vault";
+    }
+
+    await BrowserPopupUtils.openPopout(`${parsedUrl.pathname}${hashRoute}`);
+
+    if (BrowserPopupUtils.inPopup(win)) {
+      BrowserApi.closePopup(win);
+    }
+  }
+
+  /**
    * Identifies if a single action window is open based on the passed popoutKey.
    * Will focus the existing window, and close any other windows that might exist
    * with the same popout key.
-   * @param {string | undefined} popoutKey
-   * @param {chrome.windows.CreateData} windowInfo
-   * @param {boolean} forceCloseExistingWindows
-   * @returns {Promise<boolean>}
+   * @param popoutKey The single action popout key used to identify the popout.
+   * @param windowInfo The window info to use to update the existing window.
+   * @param forceCloseExistingWindows Identifies if the existing windows should be closed.
    * @private
    */
   private static async isSingleActionPopoutOpen(
@@ -207,10 +219,9 @@ class BrowserPopupUtils {
 
   /**
    * Identifies if the url contains the specified search param and value.
-   * @param {Window} win
-   * @param {string} searchParam
-   * @param {string} searchValue
-   * @returns {boolean}
+   * @param win The passed window object.
+   * @param searchParam The search param to identify.
+   * @param searchValue The search value to identify.
    * @private
    */
   private static urlContainsSearchParams(
