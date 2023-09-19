@@ -96,8 +96,9 @@
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
-                *ngFor="let cipherItem of displayedCiphers"
+                *ngFor="let cipherItem of displayedCiphers; let isFirst = first"
                 [cipher]="cipherItem"
+                [isFirst]="isFirst"
               ></app-fido2-cipher-row>
             </div>
           </div>

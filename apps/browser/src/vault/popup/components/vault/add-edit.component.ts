@@ -24,6 +24,7 @@ import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-user-interface.service";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -38,6 +39,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   inPopout = false;
   senderTabId?: number;
   uilocation?: "popout" | "popup" | "sidebar" | "tab";
+  // uniquely identifies a passkey's popout window
+  sessionId?: string;
 
   constructor(
     cipherService: CipherService,
@@ -85,6 +88,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.senderTabId = parseInt(value?.senderTabId, 10) || undefined;
       this.uilocation = value?.uilocation;
+      this.sessionId = value?.sessionId;
     });
 
     this.inPopout = this.uilocation === "popout" || this.popupUtilsService.inPopout(window);
@@ -166,6 +170,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
+    if (this.inPopout && this.sessionId) {
+      this.abortFido2Popout();
+    }
+
     if (this.popupUtilsService.inTab(window)) {
       this.popupUtilsService.disableCloseTabWarning();
       this.messagingService.send("closeTab", { delay: 1000 });
@@ -204,18 +212,41 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
+    // Would be refactored after rework is done on the windows popout service
+    if (this.inPopout && this.sessionId) {
+      this.abortFido2Popout();
+    }
+
     if (this.popupUtilsService.inTab(window)) {
       this.messagingService.send("closeTab");
       return;
     }
 
     if (this.inPopout && this.senderTabId) {
-      BrowserApi.focusTab(this.senderTabId);
-      window.close();
+      this.close();
       return;
     }
 
     this.location.back();
+  }
+
+  // Used for closing single-action views
+  close() {
+    BrowserApi.focusTab(this.senderTabId);
+    window.close();
+
+    return;
+  }
+
+  // Used for aborting Fido2 popout
+  abortFido2Popout() {
+    BrowserFido2UserInterfaceSession.sendMessage({
+      sessionId: this.sessionId,
+      type: "AbortResponse",
+      fallbackRequested: false,
+    });
+
+    return;
   }
 
   async generateUsername(): Promise<boolean> {
