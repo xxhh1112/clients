@@ -154,8 +154,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
       .policyAppliesToActiveUser$(PolicyType.SendOptions, (p) => p.data.disableHideEmail)
       .pipe(takeUntil(this.destroy$))
       .subscribe((policyAppliesToActiveUser) => {
-        if ((this.disableHideEmail = policyAppliesToActiveUser)) {
+        if (
+          (this.disableHideEmail = policyAppliesToActiveUser) &&
+          !this.formGroup.controls.hideEmail.value
+        ) {
           this.formGroup.controls.hideEmail.disable();
+        } else {
+          this.formGroup.controls.hideEmail.enable();
         }
       });
 
@@ -207,9 +212,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
         this.send = await send.decrypt();
         this.type = this.send.type;
         this.updateFormValues();
-        if (this.send.hideEmail) {
-          this.formGroup.controls.hideEmail.enable();
-        }
       } else {
         this.send = new SendView();
         this.send.type = this.type;
@@ -425,6 +427,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
         "yyyy-MM-ddTHH:mm"
       ),
     });
+
+    if (this.send.hideEmail) {
+      this.formGroup.controls.hideEmail.enable();
+    }
   }
 
   private async handleCopyLinkToClipboard() {
