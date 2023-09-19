@@ -91,12 +91,18 @@ class OverlayBackground implements OverlayBackgroundInterface {
   /**
    * Removes cached page details for a tab
    * based on the passed tabId.
-   * @param {number} tabId
+   *
+   * @param tabId - Used to reference the page details of a specific tab
    */
   removePageDetails(tabId: number) {
     delete this.pageDetailsForTab[tabId];
   }
 
+  /**
+   * Updates the overlay list's ciphers and sends the updated list to the overlay list iframe.
+   * Queries all ciphers for the given url, and sorts them by last used. Will not update the
+   * list of ciphers if the extension is not unlocked.
+   */
   async updateAutofillOverlayCiphers() {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
       return;

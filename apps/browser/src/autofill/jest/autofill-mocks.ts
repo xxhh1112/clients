@@ -6,7 +6,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript, { FillScript } from "../models/autofill-script";
-import { GenerateFillScriptOptions } from "../services/abstractions/autofill.service";
+import { GenerateFillScriptOptions, PageDetail } from "../services/abstractions/autofill.service";
 
 function createAutofillFieldMock(customFields = {}): AutofillField {
   return {
@@ -34,6 +34,15 @@ function createAutofillFieldMock(customFields = {}): AutofillField {
     selectInfo: "",
     maxLength: 0,
     tagName: "input",
+    ...customFields,
+  };
+}
+
+function createPageDetailMock(customFields = {}): PageDetail {
+  return {
+    frameId: 0,
+    tab: createChromeTabMock(),
+    details: createAutofillPageDetailsMock(),
     ...customFields,
   };
 }
@@ -124,6 +133,7 @@ function createAutofillScriptMock(
 
 export {
   createAutofillFieldMock,
+  createPageDetailMock,
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createGenerateFillScriptOptionsMock,
