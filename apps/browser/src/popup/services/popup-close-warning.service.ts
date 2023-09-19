@@ -9,7 +9,7 @@ export class PopupCloseWarningService {
    * Enables a pop-up warning before the user exits the window/tab, or navigates away.
    * This warns the user that they may lose unsaved data if they leave the page.
    * (Note: navigating within the Angular app will not trigger it because it's an SPA.)
-   * Make sure you call `disableTabCloseWarning` when it is no longer relevant.
+   * Make sure you call `PopupCloseWarningService.disable` when it is no longer relevant.
    */
   enable() {
     this.disable();
@@ -31,7 +31,7 @@ export class PopupCloseWarningService {
   }
 
   /**
-   * Disables the warning enabled by enableCloseTabWarning.
+   * Disables the warning enabled by PopupCloseWarningService.enable.
    */
   disable() {
     this.unloadSubscription?.unsubscribe();
