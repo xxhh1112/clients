@@ -19,7 +19,8 @@ export class BrowserApi {
 
   /**
    * Gets the current window or the window with the given id.
-   * @param windowId The id of the window to get. If not provided, the current window is returned.
+   *
+   * @param windowId - The id of the window to get. If not provided, the current window is returned.
    */
   static async getWindow(windowId?: number): Promise<chrome.windows.Window> {
     if (!windowId) {
@@ -38,7 +39,8 @@ export class BrowserApi {
 
   /**
    * Gets the window with the given id.
-   * @param windowId The id of the window to get.
+   *
+   * @param windowId - The id of the window to get.
    */
   static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
     return new Promise((resolve) => chrome.windows.get(windowId, { populate: true }, resolve));
@@ -54,8 +56,9 @@ export class BrowserApi {
 
   /**
    * Updates the properties of the window with the given id.
-   * @param windowId The id of the window to update.
-   * @param options The window properties to update.
+   *
+   * @param windowId - The id of the window to update.
+   * @param options - The window properties to update.
    */
   static async updateWindowProperties(
     windowId: number,
@@ -70,7 +73,8 @@ export class BrowserApi {
 
   /**
    * Focuses the window with the given id.
-   * @param windowId The id of the window to focus.
+   *
+   * @param windowId - The id of the window to focus.
    */
   static async focusWindow(windowId: number) {
     await BrowserApi.updateWindowProperties(windowId, { focused: true });
