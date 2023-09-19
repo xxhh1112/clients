@@ -5,12 +5,7 @@
       <div class="left">
         <div class="logo-image"></div>
       </div>
-      <ng-container
-        *ngIf="
-          data.message.type != 'PickCredentialRequest' &&
-          data.message.type != 'InformExcludedCredentialRequest'
-        "
-      >
+      <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
         <div class="search">
           <input
             type="{{ searchTypeSearch ? 'search' : 'text' }}"
@@ -116,10 +111,17 @@
         <div class="auth-flow">
           <p class="subtitle">{{ "noPasskeysFoundForThisApplication" | i18n }}</p>
         </div>
+        <button type="button" class="btn primary block" (click)="abort(false)">
+          <span [hidden]="loading">{{ "close" | i18n }}</span>
+          <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!loading" aria-hidden="true"></i>
+        </button>
       </ng-container>
     </ng-container>
-    <a [routerLink]="[]" *ngIf="data.fallbackSupported" (click)="abort(true)">
-      {{ "useBrowserName" | i18n }} browser
-    </a>
+
+    <div class="footer-link">
+      <a [routerLink]="[]" *ngIf="data.fallbackSupported" (click)="abort(true)">
+        {{ "useBrowserName" | i18n }} browser
+      </a>
+    </div>
   </div>
 </ng-container>

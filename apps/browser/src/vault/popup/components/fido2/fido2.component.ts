@@ -256,7 +256,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   getCredentialButtonText(messageType: string): string {
-    return messageType == "ConfirmNewCredentialRequest" ? "savePasskey" : "choosePasskey";
+    return messageType == "ConfirmNewCredentialRequest" ? "savePasskey" : "confirm";
   }
 
   selectedPasskey(item: CipherView) {
