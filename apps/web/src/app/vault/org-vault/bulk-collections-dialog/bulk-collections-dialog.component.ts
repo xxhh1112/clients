@@ -3,13 +3,13 @@ import { Component, Inject, OnDestroy } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { combineLatest, of, Subject, switchMap, takeUntil } from "rxjs";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
+import { DialogService } from "@bitwarden/components";
 
 import { GroupService, GroupView } from "../../../admin-console/organizations/core";
 import {
@@ -120,10 +120,7 @@ export class BulkCollectionsDialogComponent implements OnDestroy {
     this.dialogRef.close(BulkCollectionsDialogResult.Saved);
   };
 
-  static open(
-    dialogService: DialogServiceAbstraction,
-    config: DialogConfig<BulkCollectionsDialogParams>
-  ) {
+  static open(dialogService: DialogService, config: DialogConfig<BulkCollectionsDialogParams>) {
     return dialogService.open<BulkCollectionsDialogResult, BulkCollectionsDialogParams>(
       BulkCollectionsDialogComponent,
       config
