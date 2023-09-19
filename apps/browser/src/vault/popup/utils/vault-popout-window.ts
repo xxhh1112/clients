@@ -54,7 +54,7 @@ async function openVaultItemPasswordRepromptPopout(
     forceCloseExistingWindows: true,
     ...cipherOptions,
   });
-  await BrowserApi.tabSendMessageData(senderTab, "bgVaultItemRepromptOpened");
+  await BrowserApi.tabSendMessageData(senderTab, "bgVaultItemRepromptPopoutOpened");
 }
 
 /**
