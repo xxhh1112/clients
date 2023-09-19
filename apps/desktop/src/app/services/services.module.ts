@@ -4,7 +4,6 @@ import {
   SECURE_STORAGE,
   STATE_FACTORY,
   STATE_SERVICE_USE_CACHE,
-  CLIENT_TYPE,
   LOCALES_DIRECTORY,
   SYSTEM_LANGUAGE,
   MEMORY_STORAGE,
@@ -15,7 +14,6 @@ import { PolicyService as PolicyServiceAbstraction } from "@bitwarden/common/adm
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { LoginService as LoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/login.service";
 import { LoginService } from "@bitwarden/common/auth/services/login.service";
-import { ClientType } from "@bitwarden/common/enums";
 import { BroadcasterService as BroadcasterServiceAbstraction } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -28,7 +26,6 @@ import {
 } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateMigrationService as StateMigrationServiceAbstraction } from "@bitwarden/common/platform/abstractions/state-migration.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/platform/abstractions/system.service";
@@ -84,10 +81,6 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
       useValue: new StateFactory(GlobalState, Account),
     },
     {
-      provide: CLIENT_TYPE,
-      useValue: ClientType.Desktop,
-    },
-    {
       provide: RELOAD_CALLBACK,
       useValue: null,
     },
@@ -95,12 +88,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
     {
       provide: PlatformUtilsServiceAbstraction,
       useClass: ElectronPlatformUtilsService,
-      deps: [
-        I18nServiceAbstraction,
-        MessagingServiceAbstraction,
-        CLIENT_TYPE,
-        StateServiceAbstraction,
-      ],
+      deps: [I18nServiceAbstraction, MessagingServiceAbstraction],
     },
     {
       provide: I18nServiceAbstraction,
@@ -134,7 +122,6 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         SECURE_STORAGE,
         MEMORY_STORAGE,
         LogService,
-        StateMigrationServiceAbstraction,
         STATE_FACTORY,
         STATE_SERVICE_USE_CACHE,
       ],
@@ -171,6 +158,7 @@ const RELOAD_CALLBACK = new InjectionToken<() => any>("RELOAD_CALLBACK");
         MessagingServiceAbstraction,
         I18nServiceAbstraction,
         EncryptedMessageHandlerService,
+        DialogService,
       ],
     },
     {

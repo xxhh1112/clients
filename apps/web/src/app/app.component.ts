@@ -5,13 +5,12 @@ import { NavigationEnd, Router } from "@angular/router";
 import * as jq from "jquery";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { Subject, takeUntil } from "rxjs";
-import Swal from "sweetalert2";
 
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
@@ -138,7 +137,7 @@ export class AppComponent implements OnDestroy, OnInit {
           case "syncStarted":
             break;
           case "syncCompleted":
-            await this.configService.fetchServerConfig();
+            this.configService.triggerServerConfigFetch();
             break;
           case "upgradeOrganization": {
             const upgradeConfirmed = await this.dialogService.openSimpleDialog({
@@ -204,10 +203,6 @@ export class AppComponent implements OnDestroy, OnInit {
         for (const modal of modals) {
           (jq(modal) as any).modal("hide");
         }
-
-        if (document.querySelector(".swal-modal") != null) {
-          Swal.close(undefined);
-        }
       }
     });
 
@@ -258,7 +253,6 @@ export class AppComponent implements OnDestroy, OnInit {
       }
 
       await this.stateService.clean({ userId: userId });
-      Swal.close();
       if (redirect) {
         this.router.navigate(["/"]);
       }

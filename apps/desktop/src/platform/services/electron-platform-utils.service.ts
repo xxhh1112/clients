@@ -9,11 +9,7 @@ import { BiometricMessage, BiometricStorageAction } from "../../types/biometric-
 import { isMacAppStore } from "../../utils";
 
 export class ElectronPlatformUtilsService implements PlatformUtilsService {
-  constructor(
-    protected i18nService: I18nService,
-    private messagingService: MessagingService,
-    private clientType: ClientType.Desktop | ClientType.DirectoryConnector
-  ) {}
+  constructor(protected i18nService: I18nService, private messagingService: MessagingService) {}
 
   getDevice(): DeviceType {
     return ipc.platform.deviceType;
@@ -25,7 +21,7 @@ export class ElectronPlatformUtilsService implements PlatformUtilsService {
   }
 
   getClientType() {
-    return this.clientType;
+    return ClientType.Desktop;
   }
 
   isFirefox(): boolean {
