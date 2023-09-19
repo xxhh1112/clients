@@ -146,7 +146,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
   private handleDebouncedScrollEvent = () => {
     this.cipherListScrollIsDebounced = false;
 
-    if (globalThis.scrollY + globalThis.innerHeight >= this.ciphersList.clientHeight - 150) {
+    if (globalThis.scrollY + globalThis.innerHeight >= this.ciphersList.clientHeight - 200) {
       this.loadPageOfCiphers();
     }
   };
