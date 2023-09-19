@@ -157,6 +157,8 @@ class BrowserPopupUtils {
    * Opens a popout window for the current page.
    * If the current page is set for the current tab, then the
    * popout window will be set for the vault items listing tab.
+   * @param win The passed window object.
+   * @param href The passed href to open.
    */
   static async openCurrentPagePopout(win: Window, href: string = null) {
     const popoutUrl = href || win.location.href;

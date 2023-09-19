@@ -158,8 +158,11 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (BrowserPopupUtils.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
+    if (BrowserPopupUtils.inPopout(window)) {
       this.popupCloseWarningService.disable();
+    }
+
+    if (BrowserPopupUtils.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
       await closeAddEditVaultItemPopout(1000);
       return true;
     }

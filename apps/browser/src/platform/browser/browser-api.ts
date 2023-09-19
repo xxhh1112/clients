@@ -35,9 +35,7 @@ export class BrowserApi {
    * @returns {Promise<chrome.windows.Window>}
    */
   static async getCurrentWindow(): Promise<chrome.windows.Window> {
-    return new Promise((resolve) =>
-      chrome.windows.getCurrent({ populate: true }, (window) => resolve(window))
-    );
+    return new Promise((resolve) => chrome.windows.getCurrent({ populate: true }, resolve));
   }
 
   /**
@@ -46,9 +44,7 @@ export class BrowserApi {
    * @returns {Promise<chrome.windows.Window>}
    */
   static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
-    return new Promise((resolve) =>
-      chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
-    );
+    return new Promise((resolve) => chrome.windows.get(windowId, { populate: true }, resolve));
   }
 
   static async createWindow(options: chrome.windows.CreateData): Promise<chrome.windows.Window> {
