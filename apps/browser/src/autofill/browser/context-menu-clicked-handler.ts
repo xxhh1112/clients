@@ -214,8 +214,7 @@ export class ContextMenuClickedHandler {
         additionalCiphersToGet
       );
 
-      // If the user's only cipher for the url has reprompt enabled, this will result in no autofill with no feedback
-      cipher = ciphers.find(({ reprompt }) => reprompt === CipherRepromptType.None);
+      cipher = ciphers[0];
     } else {
       const ciphers = await this.cipherService.getAllDecrypted();
       cipher = ciphers.find(({ id }) => id === menuItemId);
