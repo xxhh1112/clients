@@ -140,15 +140,15 @@ export class ShareComponent implements OnInit, OnDestroy {
   }
 
   private async checkFido2KeyExistsInOrg(cipher: CipherView, orgId: string): Promise<boolean> {
-    if (cipher.type === CipherType.Fido2Key || cipher.login?.fido2Key) {
+    if (cipher.type === CipherType.Fido2Key || cipher.login?.fido2Keys[0]) {
       //Determine if Fido2Key object is disvoverable or non discoverable
-      const newFido2Key = cipher.login?.fido2Key || cipher.fido2Key;
+      const newFido2Key = cipher.login?.fido2Keys[0] || cipher.fido2Key;
 
       const ciphers = await this.cipherService.getAllDecrypted();
       const exisitingOrgCiphers = ciphers.filter((c) => c.organizationId === orgId);
 
       return exisitingOrgCiphers.some((c) => {
-        const existingFido2key = c.login?.fido2Key || c.fido2Key;
+        const existingFido2key = c.login?.fido2Keys[0] || c.fido2Key;
 
         return (
           !c.isDeleted &&

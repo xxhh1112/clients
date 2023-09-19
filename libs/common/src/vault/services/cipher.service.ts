@@ -1089,32 +1089,34 @@ export class CipherService implements CipherServiceAbstraction {
           }
         }
 
-        if (model.login.fido2Key != null) {
-          cipher.login.fido2Key = new Fido2Key();
-          await this.encryptObjProperty(
-            model.login.fido2Key,
-            cipher.login.fido2Key,
-            {
-              credentialId: null,
-              keyType: null,
-              keyAlgorithm: null,
-              keyCurve: null,
-              keyValue: null,
-              rpId: null,
-              rpName: null,
-              userHandle: null,
-              userDisplayName: null,
-              origin: null,
-            },
-            key
-          );
-          cipher.login.fido2Key.counter = await this.cryptoService.encrypt(
-            String(model.login.fido2Key.counter),
-            key
-          );
-          cipher.login.fido2Key.discoverable = await this.cryptoService.encrypt(
-            String(model.login.fido2Key.discoverable),
-            key
+        if (model.login.fido2Keys != null) {
+          cipher.login.fido2Keys = await Promise.all(
+            model.login.fido2Keys.map(async (viewKey) => {
+              const domainKey = new Fido2Key();
+              await this.encryptObjProperty(
+                viewKey,
+                domainKey,
+                {
+                  credentialId: null,
+                  keyType: null,
+                  keyAlgorithm: null,
+                  keyCurve: null,
+                  keyValue: null,
+                  rpId: null,
+                  rpName: null,
+                  userHandle: null,
+                  userDisplayName: null,
+                  origin: null,
+                },
+                key
+              );
+              domainKey.counter = await this.cryptoService.encrypt(String(viewKey.counter), key);
+              domainKey.discoverable = await this.cryptoService.encrypt(
+                String(viewKey.discoverable),
+                key
+              );
+              return domainKey;
+            })
           );
         }
         return;

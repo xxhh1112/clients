@@ -10,7 +10,7 @@ export class LoginData {
   passwordRevisionDate: string;
   totp: string;
   autofillOnPageLoad: boolean;
-  fido2Key?: Fido2KeyData;
+  fido2Keys?: Fido2KeyData[];
 
   constructor(data?: LoginApi) {
     if (data == null) {
@@ -27,8 +27,8 @@ export class LoginData {
       this.uris = data.uris.map((u) => new LoginUriData(u));
     }
 
-    if (data.fido2Key) {
-      this.fido2Key = new Fido2KeyData(data.fido2Key);
+    if (data.fido2Keys) {
+      this.fido2Keys = data.fido2Keys?.map((key) => new Fido2KeyData(key));
     }
   }
 }

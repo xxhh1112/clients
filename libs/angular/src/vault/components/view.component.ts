@@ -155,7 +155,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async clone() {
-    if (this.cipher.login?.fido2Key) {
+    if (this.cipher.login?.fido2Keys.length > 0) {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "passkeyNotCopied" },
         content: { key: "passkeyNotCopiedAlert" },

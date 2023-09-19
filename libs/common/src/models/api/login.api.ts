@@ -1,3 +1,5 @@
+import { JsonObject } from "type-fest";
+
 import { Fido2KeyApi } from "../../vault/api/fido2-key.api";
 import { BaseResponse } from "../response/base.response";
 
@@ -10,7 +12,7 @@ export class LoginApi extends BaseResponse {
   passwordRevisionDate: string;
   totp: string;
   autofillOnPageLoad: boolean;
-  fido2Key?: Fido2KeyApi;
+  fido2Keys?: Fido2KeyApi[];
 
   constructor(data: any = null) {
     super(data);
@@ -28,9 +30,9 @@ export class LoginApi extends BaseResponse {
       this.uris = uris.map((u: any) => new LoginUriApi(u));
     }
 
-    const fido2Key = this.getResponseProperty("Fido2Key");
-    if (fido2Key != null) {
-      this.fido2Key = new Fido2KeyApi(fido2Key);
+    const fido2Keys = this.getResponseProperty("Fido2Keys");
+    if (fido2Keys != null) {
+      this.fido2Keys = fido2Keys.map((key: JsonObject) => new Fido2KeyApi(key));
     }
   }
 }

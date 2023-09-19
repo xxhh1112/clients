@@ -134,7 +134,7 @@
           </div>
 
           <!--Passkey-->
-          <div class="box" *ngIf="cipher.login.fido2Key && !cloneMode">
+          <div class="box" *ngIf="cipher.login.fido2Keys[0] && !cloneMode">
             <div class="box-content">
               <div class="box-content-row text-muted">
                 <span class="row-label">{{ "typePasskey" | i18n }}</span>
