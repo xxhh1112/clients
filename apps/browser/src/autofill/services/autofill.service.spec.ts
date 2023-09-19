@@ -35,6 +35,7 @@ import { triggerTestFailure } from "../jest/testing-utils";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import { AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
 
 import {
   AutoFillOptions,
@@ -116,8 +117,8 @@ describe("AutofillService", () => {
 
     it("will inject the bootstrap-autofill-overlay script if the enableAutofillOverlay flag is set and the user has the autofill overlay enabled", async () => {
       jest
-        .spyOn(autofillService["settingsService"], "getEnableAutoFillOverlay")
-        .mockResolvedValue(true);
+        .spyOn(autofillService["settingsService"], "getAutoFillOverlayVisibility")
+        .mockResolvedValue(AutofillOverlayVisibility.OnFieldFocus);
 
       await autofillService.injectAutofillScripts(sender, true, true);
 
@@ -137,8 +138,8 @@ describe("AutofillService", () => {
 
     it("will inject the bootstrap-autofill script if the enableAutofillOverlay flag is set but the user does not have the autofill overlay enabled", async () => {
       jest
-        .spyOn(autofillService["settingsService"], "getEnableAutoFillOverlay")
-        .mockResolvedValue(false);
+        .spyOn(autofillService["settingsService"], "getAutoFillOverlayVisibility")
+        .mockResolvedValue(AutofillOverlayVisibility.Off);
 
       await autofillService.injectAutofillScripts(sender, true, true);
 
@@ -772,13 +773,15 @@ describe("AutofillService", () => {
         jest
           .spyOn(userVerificationService, "hasMasterPasswordAndMasterKeyHash")
           .mockResolvedValueOnce(true);
-        jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
+        jest
+          .spyOn(autofillService as any, "openVaultItemPasswordRepromptPopout")
+          .mockImplementation();
 
         const result = await autofillService.doAutoFillOnTab(pageDetails, tab, true);
 
         expect(cipherService.getNextCipherForUrl).toHaveBeenCalledWith(tab.url);
         expect(userVerificationService.hasMasterPasswordAndMasterKeyHash).toHaveBeenCalled();
-        expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(tab, "passwordReprompt", {
+        expect(autofillService["openVaultItemPasswordRepromptPopout"]).toHaveBeenCalledWith(tab, {
           cipherId: cipher.id,
           action: "autofill",
         });
@@ -4260,6 +4263,26 @@ describe("AutofillService", () => {
       const result = AutofillService.forCustomFieldsOnly(field);
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe("isDebouncingPasswordRepromptPopout", () => {
+    it("returns false and sets up the debounce if a master password reprompt window is not currently opening", () => {
+      jest.spyOn(globalThis, "setTimeout");
+
+      const result = autofillService["isDebouncingPasswordRepromptPopout"]();
+
+      expect(result).toBe(false);
+      expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
+      expect(autofillService["currentlyOpeningPasswordRepromptPopout"]).toBe(true);
+    });
+
+    it("returns true if a master password reprompt window is currently opening", () => {
+      autofillService["currentlyOpeningPasswordRepromptPopout"] = true;
+
+      const result = autofillService["isDebouncingPasswordRepromptPopout"]();
+
+      expect(result).toBe(true);
     });
   });
 });

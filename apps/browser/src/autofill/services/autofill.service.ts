@@ -12,9 +12,11 @@ import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserStateService } from "../../platform/services/abstractions/browser-state.service";
+import { openVaultItemPasswordRepromptPopout } from "../../vault/popup/utils/vault-popout-window";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
 import AutofillScript from "../models/autofill-script";
+import { AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
 
 import {
   AutoFillOptions,
@@ -30,6 +32,10 @@ import {
 } from "./autofill-constants";
 
 export default class AutofillService implements AutofillServiceInterface {
+  private openVaultItemPasswordRepromptPopout = openVaultItemPasswordRepromptPopout;
+  private openPasswordRepromptPopoutDebounce: NodeJS.Timeout;
+  private currentlyOpeningPasswordRepromptPopout = false;
+
   constructor(
     private cipherService: CipherService,
     private stateService: BrowserStateService,
@@ -58,7 +64,8 @@ export default class AutofillService implements AutofillServiceInterface {
     let mainAutofillScript = "autofill.js";
 
     const isUsingAutofillOverlay =
-      autofillOverlay && (await this.settingsService.getEnableAutoFillOverlay());
+      autofillOverlay &&
+      (await this.settingsService.getAutoFillOverlayVisibility()) !== AutofillOverlayVisibility.Off;
 
     if (autofillV2) {
       mainAutofillScript = isUsingAutofillOverlay
@@ -278,7 +285,10 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    if (await this.isPasswordRepromptRequired(cipher, tab)) {
+    if (
+      (await this.isPasswordRepromptRequired(cipher, tab)) &&
+      !this.isDebouncingPasswordRepromptPopout()
+    ) {
       if (fromCommand) {
         this.cipherService.updateLastUsedIndexForUrl(tab.url);
       }
@@ -311,7 +321,7 @@ export default class AutofillService implements AutofillServiceInterface {
     const userHasMasterPasswordAndKeyHash =
       await this.userVerificationService.hasMasterPasswordAndMasterKeyHash();
     if (cipher.reprompt === CipherRepromptType.Password && userHasMasterPasswordAndKeyHash) {
-      await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+      await this.openVaultItemPasswordRepromptPopout(tab, {
         cipherId: cipher.id,
         action: "autofill",
       });
@@ -332,6 +342,10 @@ export default class AutofillService implements AutofillServiceInterface {
     pageDetails: PageDetail[],
     fromCommand: boolean
   ): Promise<string | null> {
+    if (!pageDetails[0]?.details?.fields?.length) {
+      return;
+    }
+
     const tab = await this.getActiveTab();
     if (!tab || !tab.url) {
       return null;
@@ -1812,5 +1826,25 @@ export default class AutofillService implements AutofillServiceInterface {
    */
   static forCustomFieldsOnly(field: AutofillField): boolean {
     return field.tagName === "span";
+  }
+
+  /**
+   * Handles debouncing the opening of the master password reprompt popout.
+   * @returns {boolean}
+   * @private
+   */
+  private isDebouncingPasswordRepromptPopout() {
+    if (this.currentlyOpeningPasswordRepromptPopout) {
+      return true;
+    }
+
+    this.currentlyOpeningPasswordRepromptPopout = true;
+    clearTimeout(this.openPasswordRepromptPopoutDebounce);
+
+    this.openPasswordRepromptPopoutDebounce = setTimeout(() => {
+      this.currentlyOpeningPasswordRepromptPopout = false;
+    }, 100);
+
+    return false;
   }
 }

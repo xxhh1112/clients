@@ -43,7 +43,10 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { FileUploadService } from "@bitwarden/common/platform/abstractions/file-upload/file-upload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
+import {
+  LogService,
+  LogService as LogServiceAbstraction,
+} from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import {
@@ -90,6 +93,7 @@ import { AutofillService } from "../../autofill/services/abstractions/autofill.s
 import MainBackground from "../../background/main.background";
 import { Account } from "../../models/account";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { BrowserStateService as StateServiceAbstraction } from "../../platform/services/abstractions/browser-state.service";
 import { BrowserConfigService } from "../../platform/services/browser-config.service";
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
@@ -106,11 +110,11 @@ import { VaultFilterService } from "../../vault/services/vault-filter.service";
 
 import { DebounceNavigationService } from "./debounceNavigationService";
 import { InitService } from "./init.service";
+import { PopupCloseWarningService } from "./popup-close-warning.service";
 import { PopupSearchService } from "./popup-search.service";
-import { PopupUtilsService } from "./popup-utils.service";
 
-const needsBackgroundInit = BrowserApi.getBackgroundPage() == null;
-const isPrivateMode = needsBackgroundInit && BrowserApi.manifestVersion !== 3;
+const needsBackgroundInit = BrowserPopupUtils.backgroundInitializationRequired();
+const isPrivateMode = BrowserPopupUtils.inPrivateMode();
 const mainBackground: MainBackground = needsBackgroundInit
   ? createLocalBgService()
   : BrowserApi.getBackgroundPage().bitwardenMain;
@@ -146,7 +150,7 @@ function getBgService<T>(service: keyof MainBackground) {
       multi: true,
     },
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
-    { provide: PopupUtilsService, useFactory: () => new PopupUtilsService(isPrivateMode) },
+    { provide: PopupCloseWarningService, useFactory: () => new PopupCloseWarningService() },
     {
       provide: MessagingService,
       useFactory: () => {
@@ -502,6 +506,7 @@ function getBgService<T>(service: keyof MainBackground) {
         ConfigApiServiceAbstraction,
         AuthServiceAbstraction,
         EnvironmentService,
+        LogService,
       ],
     },
   ],

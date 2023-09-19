@@ -120,7 +120,6 @@ import { Account } from "../models/account";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { flagEnabled } from "../platform/flags";
 import { UpdateBadge } from "../platform/listeners/update-badge";
-import BrowserPopoutWindowService from "../platform/popup/browser-popout-window.service";
 import { BrowserStateService as StateServiceAbstraction } from "../platform/services/abstractions/browser-state.service";
 import { BrowserConfigService } from "../platform/services/browser-config.service";
 import { BrowserCryptoService } from "../platform/services/browser-crypto.service";
@@ -206,7 +205,6 @@ export default class MainBackground {
   devicesService: DevicesServiceAbstraction;
   deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction;
   authRequestCryptoService: AuthRequestCryptoServiceAbstraction;
-  browserPopoutWindowService: BrowserPopoutWindowService;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -542,9 +540,9 @@ export default class MainBackground {
       this.configApiService,
       this.authService,
       this.environmentService,
+      this.logService,
       true
     );
-    this.browserPopoutWindowService = new BrowserPopoutWindowService();
 
     const systemUtilsServiceReloadCallback = () => {
       const forceWindowReload =
@@ -576,8 +574,7 @@ export default class MainBackground {
       this.environmentService,
       this.messagingService,
       this.logService,
-      this.configService,
-      this.browserPopoutWindowService
+      this.configService
     );
     this.nativeMessagingBackground = new NativeMessagingBackground(
       this.cryptoService,

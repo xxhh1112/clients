@@ -17,11 +17,35 @@ export class BrowserApi {
     return chrome.runtime.getManifest().manifest_version;
   }
 
-  static getWindow(windowId?: number): Promise<chrome.windows.Window> | void {
+  /**
+   * Gets the current window or the window with the given id.
+   * @param {number} windowId
+   * @returns {Promise<chrome.windows.Window>}
+   */
+  static async getWindow(windowId?: number): Promise<chrome.windows.Window> {
     if (!windowId) {
-      return;
+      return BrowserApi.getCurrentWindow();
     }
 
+    return await BrowserApi.getWindowById(windowId);
+  }
+
+  /**
+   * Gets the currently active browser window
+   * @returns {Promise<chrome.windows.Window>}
+   */
+  static async getCurrentWindow(): Promise<chrome.windows.Window> {
+    return new Promise((resolve) =>
+      chrome.windows.getCurrent({ populate: true }, (window) => resolve(window))
+    );
+  }
+
+  /**
+   * Gets the window with the given id.
+   * @param {number} windowId
+   * @returns {Promise<chrome.windows.Window>}
+   */
+  static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
     return new Promise((resolve) =>
       chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
     );
@@ -33,6 +57,32 @@ export class BrowserApi {
         resolve(window);
       })
     );
+  }
+
+  /**
+   * Updates the properties of the window with the given id.
+   * @param {number} windowId
+   * @param {chrome.windows.UpdateInfo} options
+   * @returns {Promise<void>}
+   */
+  static async updateWindowProperties(
+    windowId: number,
+    options: chrome.windows.UpdateInfo
+  ): Promise<void> {
+    return new Promise((resolve) =>
+      chrome.windows.update(windowId, options, () => {
+        resolve();
+      })
+    );
+  }
+
+  /**
+   * Focuses the window with the given id.
+   * @param {number} windowId
+   * @returns {Promise<void>}
+   */
+  static async focusWindow(windowId: number) {
+    await BrowserApi.updateWindowProperties(windowId, { focused: true });
   }
 
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
@@ -166,39 +216,6 @@ export class BrowserApi {
     );
   }
 
-  static async focusWindow(windowId: number) {
-    await chrome.windows.update(windowId, { focused: true });
-  }
-
-  static async openBitwardenExtensionTab(relativeUrl: string, active = true) {
-    let url = relativeUrl;
-    if (!relativeUrl.includes("uilocation=tab")) {
-      const fullUrl = chrome.extension.getURL(relativeUrl);
-      const parsedUrl = new URL(fullUrl);
-      parsedUrl.searchParams.set("uilocation", "tab");
-      url = parsedUrl.toString();
-    }
-
-    const createdTab = await this.createNewTab(url, active);
-    this.focusWindow(createdTab.windowId);
-  }
-
-  static async closeBitwardenExtensionTab() {
-    const tabs = await BrowserApi.tabsQuery({
-      active: true,
-      title: "Bitwarden",
-      windowType: "normal",
-      currentWindow: true,
-    });
-
-    if (tabs.length === 0) {
-      return;
-    }
-
-    const tabToClose = tabs[tabs.length - 1];
-    BrowserApi.removeTab(tabToClose.id);
-  }
-
   private static registeredMessageListeners: any[] = [];
 
   static messageListener(
@@ -281,9 +298,15 @@ export class BrowserApi {
     if (BrowserApi.isWebExtensionsApi) {
       return browser.permissions.request(permission);
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       chrome.permissions.request(permission, resolve);
     });
+  }
+
+  static async permissionsGranted(permissions: string[]): Promise<boolean> {
+    return new Promise((resolve) =>
+      chrome.permissions.contains({ permissions }, (result) => resolve(result))
+    );
   }
 
   static getPlatformInfo(): Promise<browser.runtime.PlatformInfo | chrome.runtime.PlatformInfo> {
@@ -334,5 +357,26 @@ export class BrowserApi {
         resolve(result);
       });
     });
+  }
+
+  static async browserAutofillSettingsOverridden(): Promise<boolean> {
+    const autofillAddressOverridden: boolean = await new Promise((resolve) =>
+      chrome.privacy.services.autofillAddressEnabled.get({}, (details) =>
+        resolve(details.levelOfControl === "controlled_by_this_extension" && !details.value)
+      )
+    );
+
+    const autofillCreditCardOverridden: boolean = await new Promise((resolve) =>
+      chrome.privacy.services.autofillCreditCardEnabled.get({}, (details) =>
+        resolve(details.levelOfControl === "controlled_by_this_extension" && !details.value)
+      )
+    );
+
+    return autofillAddressOverridden && autofillCreditCardOverridden;
+  }
+
+  static async updateDefaultBrowserAutofillSettings(value: boolean) {
+    chrome.privacy.services.autofillAddressEnabled.set({ value });
+    chrome.privacy.services.autofillCreditCardEnabled.set({ value });
   }
 }

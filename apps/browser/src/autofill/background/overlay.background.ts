@@ -13,8 +13,13 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 
+import { openUnlockPopout } from "../../auth/popup/utils/auth-popout-window";
 import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import {
+  openViewVaultItemPopout,
+  openAddEditVaultItemPopout,
+} from "../../vault/popup/utils/vault-popout-window";
 import { AutofillService, PageDetail } from "../services/abstractions/autofill.service";
 import { AutofillOverlayElement, AutofillOverlayPort } from "../utils/autofill-overlay.enum";
 
@@ -30,7 +35,7 @@ import {
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
-  private overlayAppearance: number;
+  private overlayVisibility: number;
   private overlayLoginCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
   private userAuthStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;
@@ -43,7 +48,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     openAutofillOverlay: () => this.openOverlay(false),
     autofillOverlayElementClosed: ({ message }) => this.overlayElementClosed(message),
     autofillOverlayAddNewVaultItem: ({ message, sender }) => this.addNewVaultItem(message, sender),
-    getAutofillOverlayAppearance: () => this.getOverlayAppearance(),
+    getAutofillOverlayVisibility: () => this.getOverlayVisibility(),
     checkAutofillOverlayFocused: () => this.checkOverlayFocused(),
     focusAutofillOverlayList: () => this.focusOverlayList(),
     updateAutofillOverlayPosition: ({ message }) => this.updateOverlayPosition(message),
@@ -119,7 +124,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   private async initOverlayBackground() {
     this.setupExtensionMessageListeners();
-    await this.getOverlayAppearance();
+    await this.getOverlayVisibility();
     await this.getAuthStatus();
   }
 
@@ -338,10 +343,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return domain ? `${obscureName}@${domain}` : obscureName;
   }
 
-  private async getOverlayAppearance(): Promise<number> {
-    this.overlayAppearance = await this.settingsService.getAutoFillOverlayAppearance();
+  private async getOverlayVisibility(): Promise<number> {
+    this.overlayVisibility = await this.settingsService.getAutoFillOverlayVisibility();
 
-    return this.overlayAppearance;
+    return this.overlayVisibility;
   }
 
   private async getAuthStatus() {
@@ -388,7 +393,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       "addToLockedVaultPendingNotifications",
       retryMessage
     );
-    await BrowserApi.tabSendMessageData(sender.tab, "promptForLogin", { skipNotification: true });
+    await openUnlockPopout(sender.tab, { skipNotification: true });
   }
 
   private async viewSelectedCipher(
@@ -400,7 +405,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    await BrowserApi.tabSendMessageData(sender.tab, "openViewCipher", {
+    await openViewVaultItemPopout(sender.tab, {
       cipherId: cipher.id,
       action: "show-autofill-button",
     });
@@ -486,9 +491,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
       collectionIds: cipherView.collectionIds,
     });
 
-    await BrowserApi.tabSendMessageData(sender.tab, "openAddEditCipher", {
-      cipherId: cipherView.id,
-    });
+    await openAddEditVaultItemPopout(sender.tab.windowId, cipherView.id);
   }
 
   private setupExtensionMessageListeners() {

@@ -62,7 +62,7 @@ type OverlayBackgroundExtensionMessageHandlers = {
     message: OverlayBackgroundExtensionMessage;
     sender: chrome.runtime.MessageSender;
   }) => void;
-  getAutofillOverlayAppearance: () => void;
+  getAutofillOverlayVisibility: () => void;
   checkAutofillOverlayFocused: () => void;
   focusAutofillOverlayList: () => void;
   updateAutofillOverlayPosition: ({

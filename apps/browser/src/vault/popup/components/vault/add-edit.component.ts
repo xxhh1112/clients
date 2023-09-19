@@ -23,7 +23,13 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
-import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
+import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
+import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
+import {
+  VaultPopoutType,
+  closeAddEditVaultItemPopout,
+  openCurrentPagePopout,
+} from "../../utils/vault-popout-window";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -50,7 +56,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     private location: Location,
     eventCollectionService: EventCollectionService,
     policyService: PolicyService,
-    private popupUtilsService: PopupUtilsService,
+    private popupCloseWarningService: PopupCloseWarningService,
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
@@ -110,14 +116,14 @@ export class AddEditComponent extends BaseAddEditComponent {
 
       if (!this.editMode || this.cloneMode) {
         if (
-          !this.popupUtilsService.inPopout(window) &&
+          !BrowserPopupUtils.inPopout(window) &&
           params.name &&
           (this.cipher.name == null || this.cipher.name === "")
         ) {
           this.cipher.name = params.name;
         }
         if (
-          !this.popupUtilsService.inPopout(window) &&
+          !BrowserPopupUtils.inPopout(window) &&
           params.uri &&
           (this.cipher.login.uris[0].uri == null || this.cipher.login.uris[0].uri === "")
         ) {
@@ -125,7 +131,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         }
       }
 
-      this.openAttachmentsInPopup = this.popupUtilsService.inPopup(window);
+      this.openAttachmentsInPopup = BrowserPopupUtils.inPopup(window);
     });
 
     if (!this.editMode) {
@@ -138,8 +144,8 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     this.setFocus();
 
-    if (this.popupUtilsService.inTab(window)) {
-      this.popupUtilsService.enableCloseTabWarning();
+    if (BrowserPopupUtils.inPopout(window)) {
+      this.popupCloseWarningService.enable();
     }
   }
 
@@ -156,10 +162,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       return false;
     }
 
-    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
-      this.popupUtilsService.disableCloseTabWarning();
+    if (BrowserPopupUtils.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
+      this.popupCloseWarningService.disable();
       this.messagingService.send("addEditCipherSubmitted");
-      this.messagingService.send("closeAddEditCipher", { delay: 1000 });
+      await closeAddEditVaultItemPopout(1000);
       return true;
     }
 
@@ -179,7 +185,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         .createUrlTree(["/attachments"], { queryParams: { cipherId: this.cipher.id } })
         .toString();
       const currentBaseUrl = window.location.href.replace(this.router.url, "");
-      this.popupUtilsService.popOut(window, currentBaseUrl + destinationUrl);
+      openCurrentPagePopout(window, currentBaseUrl + destinationUrl);
     } else {
       this.router.navigate(["/attachments"], { queryParams: { cipherId: this.cipher.id } });
     }
@@ -195,8 +201,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   cancel() {
     super.cancel();
 
-    if (this.popupUtilsService.inSingleActionPopout(window, "addEditCipher")) {
-      this.messagingService.send("closeAddEditCipher");
+    if (BrowserPopupUtils.inSingleActionPopout(window, VaultPopoutType.addEditVaultItem)) {
+      closeAddEditVaultItemPopout();
       return;
     }
 
