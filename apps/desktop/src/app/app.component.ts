@@ -94,8 +94,6 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("premium", { read: ViewContainerRef, static: true }) premiumRef: ViewContainerRef;
   @ViewChild("passwordHistory", { read: ViewContainerRef, static: true })
   passwordHistoryRef: ViewContainerRef;
-  @ViewChild("exportVault", { read: ViewContainerRef, static: true })
-  exportVaultModalRef: ViewContainerRef;
   @ViewChild("appFolderAddEdit", { read: ViewContainerRef, static: true })
   folderAddEditModalRef: ViewContainerRef;
   @ViewChild("appGenerator", { read: ViewContainerRef, static: true })
@@ -410,23 +408,24 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async openExportVault() {
-    this.modalService.closeAll();
+    // this.modalService.closeAll();
 
-    const [modal, childComponent] = await this.modalService.openViewRef(
-      ExportComponent,
-      this.exportVaultModalRef
-    );
-    this.modal = modal;
+    this.dialogService.open(ExportComponent);
+    // const [modal, childComponent] = await this.modalService.openViewRef(
+    //   ExportComponent,
+    //   this.exportVaultModalRef
+    // );
+    // this.modal = modal;
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    childComponent.onSaved.subscribe(() => {
-      this.modal.close();
-    });
+    // // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    // childComponent.onSaved.subscribe(() => {
+    //   this.modal.close();
+    // });
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.modal.onClosed.subscribe(() => {
-      this.modal = null;
-    });
+    // // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    // this.modal.onClosed.subscribe(() => {
+    //   this.modal = null;
+    // });
   }
 
   async addFolder() {

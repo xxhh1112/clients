@@ -1,4 +1,44 @@
-<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+<form [formGroup]="exportForm" [bitSubmit]="submit">
+  <bit-dialog>
+    <span bitDialogTitle>{{ "exportVault" | i18n }}</span>
+    <ng-container bitDialogContent>
+      <bit-callout
+        type="warning"
+        title="{{ 'vaultExportDisabled' | i18n }}"
+        *ngIf="disabledByPolicy"
+      >
+        {{ "personalVaultExportPolicyInEffect" | i18n }}
+      </bit-callout>
+      <app-export-scope-callout *ngIf="!disabledByPolicy"></app-export-scope-callout>
+      <bit-form-field>
+        <bit-label>{{ "fileFormat" | i18n }}</bit-label>
+        <bit-select id="format" formControlName="format" placeholder="abc">
+          <!-- <option value="value1">value1</option> /> -->
+          <!-- <option value="value2" label="value2" />
+          <option value="value3" label="value3" /> -->
+          <bit-option
+            *ngFor="let f of formatOptions"
+            [value]="f.value"
+            [label]="f.name"
+          ></bit-option>
+        </bit-select>
+      </bit-form-field>
+      <app-user-verification ngDefaultControl formControlName="secret" name="secret">
+      </app-user-verification>
+    </ng-container>
+    <ng-container bitDialogFooter>
+      <button type="submit" bitButton bitFormButton buttonType="primary">
+        {{ "submit" | i18n }}
+        <i class="bwi bwi-download bwi-lg bwi-fw" aria-hidden="true"></i>
+      </button>
+      <button type="button" bitButton bitFormButton buttonType="secondary" bitDialogClose>
+        {{ "cancel" | i18n }}
+      </button>
+    </ng-container>
+  </bit-dialog>
+</form>
+
+<!-- <div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
   <div class="modal-dialog" role="document">
     <form class="modal-content" #form (ngSubmit)="submit()" [formGroup]="exportForm">
       <div class="modal-body">
@@ -42,4 +82,4 @@
       </div>
     </form>
   </div>
-</div>
+</div> -->

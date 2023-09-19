@@ -27,7 +27,7 @@ export class ExportComponent implements OnInit, OnDestroy {
   }
 
   exportForm = this.formBuilder.group({
-    format: ["json"],
+    format: ["", Validators.required],
     secret: [""],
     filePassword: ["", Validators.required],
     confirmFilePassword: ["", Validators.required],
