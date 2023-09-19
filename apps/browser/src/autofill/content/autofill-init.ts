@@ -26,7 +26,7 @@ class AutofillInit implements AutofillInitInterface {
     redirectOverlayFocusOut: ({ message }) => this.redirectOverlayFocusOut(message),
     updateIsOverlayCiphersPopulated: ({ message }) => this.updateIsOverlayCiphersPopulated(message),
     bgUnlockPopoutOpened: () => this.blurAndRemoveOverlay(),
-    bgVaultItemRepromptOpened: () => this.blurAndRemoveOverlay(),
+    bgVaultItemRepromptPopoutOpened: () => this.blurAndRemoveOverlay(),
   };
 
   /**
