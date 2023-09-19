@@ -39,11 +39,11 @@ function generateRandomCustomElementName(): string {
   return randomString;
 }
 
-function buildSvgDomElement(svgString: string, ariaHidden: "true" | "false" = "true"): HTMLElement {
+function buildSvgDomElement(svgString: string, ariaHidden = true): HTMLElement {
   const domParser = new DOMParser();
   const svgDom = domParser.parseFromString(svgString, "image/svg+xml");
   const domElement = svgDom.documentElement;
-  domElement.setAttribute("aria-hidden", ariaHidden);
+  domElement.setAttribute("aria-hidden", `${ariaHidden}`);
 
   return domElement;
 }
@@ -51,7 +51,7 @@ function buildSvgDomElement(svgString: string, ariaHidden: "true" | "false" = "t
 async function sendExtensionMessage(
   command: string,
   options: Record<string, any> = {}
-): Promise<any> {
+): Promise<any | void> {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage(Object.assign({ command }, options), (response) => {
       if (chrome.runtime.lastError) {
@@ -66,9 +66,9 @@ async function sendExtensionMessage(
 function setElementStyles(
   element: HTMLElement,
   styles: Partial<CSSStyleDeclaration>,
-  priority: "important" | "" = ""
+  priority?: boolean
 ) {
-  if (!element) {
+  if (!element || !styles || !Object.keys(styles).length) {
     return;
   }
 
@@ -76,7 +76,7 @@ function setElementStyles(
     element.style.setProperty(
       styleProperty.replace(/([a-z])([A-Z])/g, "$1-$2"), // Convert camelCase to kebab-case
       styles[styleProperty],
-      priority
+      priority ? "important" : undefined
     );
   }
 }
