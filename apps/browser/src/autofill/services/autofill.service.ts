@@ -1802,7 +1802,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
   /**
    * Handles debouncing the opening of the master password reprompt popout.
-   * @returns {boolean}
    * @private
    */
   private isDebouncingPasswordRepromptPopout() {
