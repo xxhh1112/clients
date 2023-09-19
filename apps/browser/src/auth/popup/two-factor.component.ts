@@ -23,7 +23,6 @@ import { DialogService } from "@bitwarden/components";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
-import { openCurrentPagePopout } from "../../vault/popup/utils/vault-popout-window";
 
 import { closeTwoFactorAuthPopout } from "./utils/auth-popout-window";
 
@@ -123,7 +122,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
         type: "warning",
       });
       if (confirmed) {
-        openCurrentPagePopout(window);
+        BrowserPopupUtils.openCurrentPagePopout(window);
       }
     }
 
