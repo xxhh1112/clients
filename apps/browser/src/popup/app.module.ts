@@ -41,7 +41,6 @@ import { ActionButtonsComponent } from "../vault/popup/components/action-buttons
 import { CipherRowComponent } from "../vault/popup/components/cipher-row.component";
 import { Fido2CipherRowComponent } from "../vault/popup/components/fido2/fido2-cipher-row.component";
 import { Fido2Component } from "../vault/popup/components/fido2/fido2.component";
-import { FocusModule } from "../vault/popup/components/fido2/focus.module";
 import { PasswordRepromptComponent } from "../vault/popup/components/password-reprompt.component";
 import { AddEditCustomFieldsComponent } from "../vault/popup/components/vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
@@ -100,7 +99,6 @@ import "../platform/popup/locales";
     ScrollingModule,
     ServicesModule,
     DialogModule,
-    FocusModule,
   ],
   declarations: [
     ActionButtonsComponent,
