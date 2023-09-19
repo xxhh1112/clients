@@ -117,12 +117,8 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
   }
 
   private loadPageOfCiphers() {
-    const cipherPage = this.ciphers.slice(
-      this.currentCipherIndex,
-      this.currentCipherIndex + this.showCiphersPerPage
-    );
-
-    for (let cipherIndex = 0; cipherIndex < cipherPage.length; cipherIndex++) {
+    const lastIndex = this.currentCipherIndex + this.showCiphersPerPage;
+    for (let cipherIndex = this.currentCipherIndex; cipherIndex < lastIndex; cipherIndex++) {
       this.ciphersList.appendChild(this.buildOverlayActionsListItem(this.ciphers[cipherIndex]));
       this.currentCipherIndex++;
     }
