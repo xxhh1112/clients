@@ -118,43 +118,49 @@ export class Fido2Component implements OnInit, OnDestroy {
     this.data$ = this.message$.pipe(
       filter((message) => message != undefined),
       concatMap(async (message) => {
-        if (message.type === "ConfirmNewCredentialRequest") {
-          const activeTabs = await BrowserApi.getActiveTabs();
-          this.url = activeTabs[0].url;
-          const equivalentDomains = this.settingsService.getEquivalentDomains(this.url);
+        switch (message.type) {
+          case "ConfirmNewCredentialRequest": {
+            const activeTabs = await BrowserApi.getActiveTabs();
+            this.url = activeTabs[0].url;
+            const equivalentDomains = this.settingsService.getEquivalentDomains(this.url);
 
-          this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
-            (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
-          );
+            this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
+              (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted
+            );
+            this.displayedCiphers = this.ciphers.filter((cipher) =>
+              cipher.login.matchesUri(this.url, equivalentDomains)
+            );
 
-          this.displayedCiphers = this.ciphers.filter((cipher) =>
-            cipher.login.matchesUri(this.url, equivalentDomains)
-          );
-
-          if (this.displayedCiphers.length > 0) {
-            this.selectedPasskey(this.displayedCiphers[0]);
+            if (this.displayedCiphers.length > 0) {
+              this.selectedPasskey(this.displayedCiphers[0]);
+            }
+            break;
           }
-        } else if (message.type === "PickCredentialRequest") {
-          this.ciphers = await Promise.all(
-            message.cipherIds.map(async (cipherId) => {
-              const cipher = await this.cipherService.get(cipherId);
-              return cipher.decrypt();
-            })
-          );
 
-          this.displayedCiphers = [...this.ciphers];
-        } else if (message.type === "InformExcludedCredentialRequest") {
-          this.ciphers = await Promise.all(
-            message.existingCipherIds.map(async (cipherId) => {
-              const cipher = await this.cipherService.get(cipherId);
-              return cipher.decrypt();
-            })
-          );
+          case "PickCredentialRequest": {
+            this.ciphers = await Promise.all(
+              message.cipherIds.map(async (cipherId) => {
+                const cipher = await this.cipherService.get(cipherId);
+                return cipher.decrypt();
+              })
+            );
+            this.displayedCiphers = [...this.ciphers];
+            break;
+          }
 
-          this.displayedCiphers = [...this.ciphers];
+          case "InformExcludedCredentialRequest": {
+            this.ciphers = await Promise.all(
+              message.existingCipherIds.map(async (cipherId) => {
+                const cipher = await this.cipherService.get(cipherId);
+                return cipher.decrypt();
+              })
+            );
+            this.displayedCiphers = [...this.ciphers];
 
-          if (this.displayedCiphers.length > 0) {
-            this.selectedPasskey(this.displayedCiphers[0]);
+            if (this.displayedCiphers.length > 0) {
+              this.selectedPasskey(this.displayedCiphers[0]);
+            }
+            break;
           }
         }
 
@@ -222,7 +228,6 @@ export class Fido2Component implements OnInit, OnDestroy {
     this.loading = true;
   }
 
-  //TODO: Confirm if search field should allowed when a passkey already exists
   async saveNewLogin() {
     const data = this.message$.value;
     if (data?.type === "ConfirmNewCredentialRequest") {
@@ -237,7 +242,7 @@ export class Fido2Component implements OnInit, OnDestroy {
 
       this.send({
         sessionId: this.sessionId,
-        cipherId: this.cipher.id,
+        cipherId: this.cipher?.id,
         type: "ConfirmNewCredentialResponse",
         userVerified,
       });
