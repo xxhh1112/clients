@@ -19,8 +19,7 @@ export class BrowserApi {
 
   /**
    * Gets the current window or the window with the given id.
-   * @param {number} windowId
-   * @returns {Promise<chrome.windows.Window>}
+   * @param windowId The id of the window to get. If not provided, the current window is returned.
    */
   static async getWindow(windowId?: number): Promise<chrome.windows.Window> {
     if (!windowId) {
@@ -31,24 +30,18 @@ export class BrowserApi {
   }
 
   /**
-   * Gets the currently active browser window
-   * @returns {Promise<chrome.windows.Window>}
+   * Gets the currently active browser window.
    */
   static async getCurrentWindow(): Promise<chrome.windows.Window> {
-    return new Promise((resolve) =>
-      chrome.windows.getCurrent({ populate: true }, (window) => resolve(window))
-    );
+    return new Promise((resolve) => chrome.windows.getCurrent({ populate: true }, resolve));
   }
 
   /**
    * Gets the window with the given id.
-   * @param {number} windowId
-   * @returns {Promise<chrome.windows.Window>}
+   * @param windowId The id of the window to get.
    */
   static async getWindowById(windowId: number): Promise<chrome.windows.Window> {
-    return new Promise((resolve) =>
-      chrome.windows.get(windowId, { populate: true }, (window) => resolve(window))
-    );
+    return new Promise((resolve) => chrome.windows.get(windowId, { populate: true }, resolve));
   }
 
   static async createWindow(options: chrome.windows.CreateData): Promise<chrome.windows.Window> {
@@ -61,9 +54,8 @@ export class BrowserApi {
 
   /**
    * Updates the properties of the window with the given id.
-   * @param {number} windowId
-   * @param {chrome.windows.UpdateInfo} options
-   * @returns {Promise<void>}
+   * @param windowId The id of the window to update.
+   * @param options The window properties to update.
    */
   static async updateWindowProperties(
     windowId: number,
@@ -78,8 +70,7 @@ export class BrowserApi {
 
   /**
    * Focuses the window with the given id.
-   * @param {number} windowId
-   * @returns {Promise<void>}
+   * @param windowId The id of the window to focus.
    */
   static async focusWindow(windowId: number) {
     await BrowserApi.updateWindowProperties(windowId, { focused: true });

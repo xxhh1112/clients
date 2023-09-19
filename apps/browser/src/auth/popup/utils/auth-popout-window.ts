@@ -9,9 +9,8 @@ const AuthPopoutType = {
 
 /**
  * Opens a window that facilitates unlocking / logging into the extension.
- * @param {chrome.tabs.Tab} senderTab
- * @param data
- * @returns {Promise<void>}
+ * @param senderTab Used to determine the windowId of the sender.
+ * @param data Used to determine whether to show the unlock notification.
  */
 async function openUnlockPopout(senderTab: chrome.tabs.Tab, data?: Record<string, any>) {
   await BrowserPopupUtils.openPopout("popup/index.html", {
@@ -23,7 +22,6 @@ async function openUnlockPopout(senderTab: chrome.tabs.Tab, data?: Record<string
 
 /**
  * Closes the unlock popout window.
- * @returns {Promise<void>}
  */
 async function closeUnlockPopout() {
   await BrowserPopupUtils.closeSingleActionPopout(AuthPopoutType.unlockExtension);
@@ -31,8 +29,7 @@ async function closeUnlockPopout() {
 
 /**
  * Opens a window that facilitates presenting the results for SSO authentication.
- * @param {{code: string, state: string}} resultData
- * @returns {Promise<void>}
+ * @param resultData The result data from the SSO authentication.
  */
 async function openSsoAuthResultPopout(resultData: { code: string; state: string }) {
   const { code, state } = resultData;
@@ -47,8 +44,7 @@ async function openSsoAuthResultPopout(resultData: { code: string; state: string
 
 /**
  * Opens a window that facilitates two-factor authentication.
- * @param {{data: string, remember: string}} twoFactorAuthData
- * @returns {Promise<void>}
+ * @param twoFactorAuthData The data from the two-factor authentication.
  */
 async function openTwoFactorAuthPopout(twoFactorAuthData: { data: string; remember: string }) {
   const { data, remember } = twoFactorAuthData;
@@ -63,7 +59,6 @@ async function openTwoFactorAuthPopout(twoFactorAuthData: { data: string; rememb
 
 /**
  * Closes the two-factor authentication popout window.
- * @returns {Promise<void>}
  */
 async function closeTwoFactorAuthPopout() {
   await BrowserPopupUtils.closeSingleActionPopout(AuthPopoutType.twoFactorAuth);

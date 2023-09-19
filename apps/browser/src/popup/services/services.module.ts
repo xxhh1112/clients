@@ -138,6 +138,7 @@ function getBgService<T>(service: keyof MainBackground) {
     InitService,
     DebounceNavigationService,
     DialogService,
+    PopupCloseWarningService,
     {
       provide: LOCALE_ID,
       useFactory: () => getBgService<I18nServiceAbstraction>("i18nService")().translationLocale,
@@ -150,7 +151,6 @@ function getBgService<T>(service: keyof MainBackground) {
       multi: true,
     },
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
-    { provide: PopupCloseWarningService, useFactory: () => new PopupCloseWarningService() },
     {
       provide: MessagingService,
       useFactory: () => {
