@@ -63,11 +63,11 @@ const renderer = {
   mode: NODE_ENV,
   devtool: "source-map",
   // TODO: Replace this with web.
+  // target: "web",
   target: "electron-renderer",
   node: {
     __dirname: false,
   },
-  // target: "web",
   entry: {
     "app/main": "./src/app/main.ts",
   },
