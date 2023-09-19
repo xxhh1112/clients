@@ -154,6 +154,26 @@ class BrowserPopupUtils {
   }
 
   /**
+   * Opens a popout window for the current page.
+   * If the current page is set for the current tab, then the
+   * popout window will be set for the vault items listing tab.
+   */
+  static async openCurrentPagePopout(win: Window, href: string = null) {
+    const popoutUrl = href || win.location.href;
+    const parsedUrl = new URL(popoutUrl);
+    let hashRoute = parsedUrl.hash;
+    if (hashRoute.startsWith("#/tabs/current")) {
+      hashRoute = "#/tabs/vault";
+    }
+
+    await BrowserPopupUtils.openPopout(`${parsedUrl.pathname}${hashRoute}`);
+
+    if (BrowserPopupUtils.inPopup(win)) {
+      BrowserApi.closePopup(win);
+    }
+  }
+
+  /**
    * Identifies if a single action window is open based on the passed popoutKey.
    * Will focus the existing window, and close any other windows that might exist
    * with the same popout key.

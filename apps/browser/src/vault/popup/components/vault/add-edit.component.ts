@@ -25,11 +25,7 @@ import { DialogService } from "@bitwarden/components";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
-import {
-  VaultPopoutType,
-  closeAddEditVaultItemPopout,
-  openCurrentPagePopout,
-} from "../../utils/vault-popout-window";
+import { VaultPopoutType, closeAddEditVaultItemPopout } from "../../utils/vault-popout-window";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -184,7 +180,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         .createUrlTree(["/attachments"], { queryParams: { cipherId: this.cipher.id } })
         .toString();
       const currentBaseUrl = window.location.href.replace(this.router.url, "");
-      openCurrentPagePopout(window, currentBaseUrl + destinationUrl);
+      BrowserPopupUtils.openCurrentPagePopout(window, currentBaseUrl + destinationUrl);
     } else {
       this.router.navigate(["/attachments"], { queryParams: { cipherId: this.cipher.id } });
     }

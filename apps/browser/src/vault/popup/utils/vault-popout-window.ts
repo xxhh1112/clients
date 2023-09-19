@@ -1,33 +1,9 @@
-import { BrowserApi } from "../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 
 const VaultPopoutType = {
   vaultItemPasswordReprompt: "vault_PasswordReprompt",
   addEditVaultItem: "vault_AddEditVaultItem",
 } as const;
-
-/**
- * Opens a popout window for the current page.
- * If the current page is set for the current tab, then the
- * popout window will be set for the vault items listing tab.
- * @param {Window} win
- * @param {string} href
- * @returns {Promise<void>}
- */
-async function openCurrentPagePopout(win: Window, href: string = null) {
-  const popoutUrl = href || win.location.href;
-  const parsedUrl = new URL(popoutUrl);
-  let hashRoute = parsedUrl.hash;
-  if (hashRoute.startsWith("#/tabs/current")) {
-    hashRoute = "#/tabs/vault";
-  }
-
-  await BrowserPopupUtils.openPopout(`${parsedUrl.pathname}${hashRoute}`);
-
-  if (BrowserPopupUtils.inPopup(win)) {
-    BrowserApi.closePopup(win);
-  }
-}
 
 /**
  * Opens a popout window that facilitates re-prompting for
@@ -86,7 +62,6 @@ async function closeAddEditVaultItemPopout(delayClose = 0) {
 
 export {
   VaultPopoutType,
-  openCurrentPagePopout,
   openVaultItemPasswordRepromptPopout,
   openAddEditVaultItemPopout,
   closeAddEditVaultItemPopout,

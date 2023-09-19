@@ -1,9 +1,7 @@
-import { BrowserApi } from "../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 
 import {
   VaultPopoutType,
-  openCurrentPagePopout,
   openVaultItemPasswordRepromptPopout,
   openAddEditVaultItemPopout,
   closeAddEditVaultItemPopout,
@@ -14,41 +12,9 @@ describe("VaultPopoutWindow", () => {
   const closeSingleActionPopoutSpy = jest
     .spyOn(BrowserPopupUtils, "closeSingleActionPopout")
     .mockImplementation();
-  const closePopupSpy = jest.spyOn(BrowserApi, "closePopup").mockImplementation();
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe("openCurrentPagePopout", () => {
-    it("opens a popout window for the current page", async () => {
-      const win = { location: { href: "https://example.com#/tabs/current" } } as Window;
-      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(false);
-
-      await openCurrentPagePopout(win);
-
-      expect(openPopoutSpy).toHaveBeenCalledWith("/#/tabs/vault");
-      expect(closePopupSpy).not.toHaveBeenCalled();
-    });
-
-    it("opens a popout window for the specified URL", async () => {
-      const win = {} as Window;
-      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(false);
-
-      await openCurrentPagePopout(win, "https://example.com#/settings");
-
-      expect(openPopoutSpy).toHaveBeenCalledWith("/#/settings");
-    });
-
-    it("opens a popout window for the current page and closes the popup window", async () => {
-      const win = { location: { href: "https://example.com/#/tabs/vault" } } as Window;
-      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(true);
-
-      await openCurrentPagePopout(win);
-
-      expect(openPopoutSpy).toHaveBeenCalledWith("/#/tabs/vault");
-      expect(closePopupSpy).toHaveBeenCalledWith(win);
-    });
   });
 
   describe("openVaultItemPasswordRepromptPopout", () => {

@@ -244,6 +244,42 @@ describe("BrowserPopupUtils", () => {
     });
   });
 
+  describe("openCurrentPagePopout", () => {
+    it("opens a popout window for the current page", async () => {
+      const win = { location: { href: "https://example.com#/tabs/current" } } as Window;
+      jest.spyOn(BrowserPopupUtils, "openPopout").mockImplementation();
+      jest.spyOn(BrowserApi, "closePopup").mockImplementation();
+      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(false);
+
+      await BrowserPopupUtils.openCurrentPagePopout(win);
+
+      expect(BrowserPopupUtils.openPopout).toHaveBeenCalledWith("/#/tabs/vault");
+      expect(BrowserApi.closePopup).not.toHaveBeenCalled();
+    });
+
+    it("opens a popout window for the specified URL", async () => {
+      const win = {} as Window;
+      jest.spyOn(BrowserPopupUtils, "openPopout").mockImplementation();
+      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(false);
+
+      await BrowserPopupUtils.openCurrentPagePopout(win, "https://example.com#/settings");
+
+      expect(BrowserPopupUtils.openPopout).toHaveBeenCalledWith("/#/settings");
+    });
+
+    it("opens a popout window for the current page and closes the popup window", async () => {
+      const win = { location: { href: "https://example.com/#/tabs/vault" } } as Window;
+      jest.spyOn(BrowserPopupUtils, "openPopout").mockImplementation();
+      jest.spyOn(BrowserApi, "closePopup").mockImplementation();
+      jest.spyOn(BrowserPopupUtils, "inPopup").mockReturnValue(true);
+
+      await BrowserPopupUtils.openCurrentPagePopout(win);
+
+      expect(BrowserPopupUtils.openPopout).toHaveBeenCalledWith("/#/tabs/vault");
+      expect(BrowserApi.closePopup).toHaveBeenCalledWith(win);
+    });
+  });
+
   describe("closeSingleActionPopout", () => {
     it("closes any existing single action popouts", async () => {
       const url = "popup/index.html";
