@@ -19,7 +19,13 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
   private overlayListContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
   private eventHandlersMemo: { [key: string]: EventListener } = {};
-  private overlayListWindowMessageHandlers: OverlayListWindowMessageHandlers = {
+  private ciphers: OverlayCipherData[] = [];
+  private ciphersList: HTMLUListElement;
+  private cipherListScrollIsDebounced = false;
+  private cipherListScrollDebounceTimeout: NodeJS.Timeout;
+  private currentCipherIndex = 0;
+  private readonly showCiphersPerPage = 6;
+  private readonly overlayListWindowMessageHandlers: OverlayListWindowMessageHandlers = {
     initAutofillOverlayList: ({ message }) => this.initAutofillOverlayList(message),
     checkOverlayListFocused: () => this.checkOverlayListFocused(),
     updateOverlayListCiphers: ({ message }) => this.updateListItems(message.ciphers),
@@ -92,6 +98,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
   };
 
   private updateListItems(ciphers: OverlayCipherData[]) {
+    this.ciphers = ciphers;
     this.resetOverlayListContainer();
 
     if (!ciphers?.length) {
@@ -99,16 +106,51 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
       return;
     }
 
-    const ciphersList = globalThis.document.createElement("ul");
-    ciphersList.classList.add("overlay-actions-list");
-    ciphersList.setAttribute("role", "list");
+    this.ciphersList = globalThis.document.createElement("ul");
+    this.ciphersList.classList.add("overlay-actions-list");
+    this.ciphersList.setAttribute("role", "list");
+    globalThis.addEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent);
 
-    for (let cipherIndex = 0; cipherIndex < ciphers.length; cipherIndex++) {
-      ciphersList.appendChild(this.buildOverlayActionsListItem(ciphers[cipherIndex]));
+    this.loadPageOfCiphers();
+
+    this.overlayListContainer.appendChild(this.ciphersList);
+  }
+
+  private loadPageOfCiphers() {
+    const cipherPage = this.ciphers.slice(
+      this.currentCipherIndex,
+      this.currentCipherIndex + this.showCiphersPerPage
+    );
+
+    for (let cipherIndex = 0; cipherIndex < cipherPage.length; cipherIndex++) {
+      this.ciphersList.appendChild(this.buildOverlayActionsListItem(this.ciphers[cipherIndex]));
+      this.currentCipherIndex++;
     }
 
-    this.overlayListContainer.appendChild(ciphersList);
+    if (this.currentCipherIndex >= this.ciphers.length) {
+      globalThis.removeEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent);
+    }
   }
+
+  private handleCiphersListScrollEvent = () => {
+    if (this.cipherListScrollIsDebounced) {
+      return;
+    }
+
+    this.cipherListScrollIsDebounced = true;
+    if (this.cipherListScrollDebounceTimeout) {
+      clearTimeout(this.cipherListScrollDebounceTimeout);
+    }
+    this.cipherListScrollDebounceTimeout = setTimeout(this.handleDebouncedScrollEvent, 300);
+  };
+
+  private handleDebouncedScrollEvent = () => {
+    this.cipherListScrollIsDebounced = false;
+
+    if (globalThis.scrollY + globalThis.innerHeight >= this.ciphersList.clientHeight - 150) {
+      this.loadPageOfCiphers();
+    }
+  };
 
   private buildOverlayActionsListItem(cipher: any) {
     const fillCipherElement = this.buildFillCipherElement(cipher);
