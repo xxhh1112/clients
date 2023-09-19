@@ -9,8 +9,9 @@ const AuthPopoutType = {
 
 /**
  * Opens a window that facilitates unlocking / logging into the extension.
- * @param senderTab Used to determine the windowId of the sender.
- * @param data Used to determine whether to show the unlock notification.
+ *
+ * @param senderTab - Used to determine the windowId of the sender.
+ * @param data - Used to determine whether to show the unlock notification.
  */
 async function openUnlockPopout(senderTab: chrome.tabs.Tab, data?: Record<string, any>) {
   await BrowserPopupUtils.openPopout("popup/index.html", {
@@ -29,7 +30,8 @@ async function closeUnlockPopout() {
 
 /**
  * Opens a window that facilitates presenting the results for SSO authentication.
- * @param resultData The result data from the SSO authentication.
+ *
+ * @param resultData - The result data from the SSO authentication.
  */
 async function openSsoAuthResultPopout(resultData: { code: string; state: string }) {
   const { code, state } = resultData;
@@ -44,7 +46,8 @@ async function openSsoAuthResultPopout(resultData: { code: string; state: string
 
 /**
  * Opens a window that facilitates two-factor authentication.
- * @param twoFactorAuthData The data from the two-factor authentication.
+ *
+ * @param twoFactorAuthData - The data from the two-factor authentication.
  */
 async function openTwoFactorAuthPopout(twoFactorAuthData: { data: string; remember: string }) {
   const { data, remember } = twoFactorAuthData;
