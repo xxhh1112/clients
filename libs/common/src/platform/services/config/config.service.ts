@@ -26,10 +26,13 @@ import { ServerConfigData } from "../../models/data/server-config.data";
 const ONE_HOUR_IN_MILLISECONDS = 1000 * 3600;
 
 export class ConfigService implements ConfigServiceAbstraction {
+  private inited = false;
+
   protected _serverConfig = new ReplaySubject<ServerConfig | null>(1);
   serverConfig$ = this._serverConfig.asObservable();
+
   private _forceFetchConfig = new Subject<void>();
-  private inited = false;
+  protected refreshTimer$ = timer(ONE_HOUR_IN_MILLISECONDS, ONE_HOUR_IN_MILLISECONDS); // after 1 hour, then every hour
 
   cloudRegion$ = this.serverConfig$.pipe(
     map((config) => config?.environment?.cloudRegion ?? Region.US)
@@ -63,7 +66,7 @@ export class ConfigService implements ConfigServiceAbstraction {
 
     // If you need to fetch a new config when an event occurs, add an observable that emits on that event here
     merge(
-      timer(ONE_HOUR_IN_MILLISECONDS, ONE_HOUR_IN_MILLISECONDS), // after 1 hour, then every hour
+      this.refreshTimer$, // after 1 hour, then every hour
       this.environmentService.urls, // when environment URLs change (including when app is started)
       this._forceFetchConfig // manual
     )

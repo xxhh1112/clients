@@ -32,7 +32,6 @@ import { GlobalState } from "@bitwarden/common/platform/models/domain/global-sta
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { BroadcasterService } from "@bitwarden/common/platform/services/broadcaster.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
-import { ConfigService } from "@bitwarden/common/platform/services/config/config.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
@@ -78,6 +77,7 @@ import {
 } from "@bitwarden/importer";
 import { NodeCryptoFunctionService } from "@bitwarden/node/services/node-crypto-function.service";
 
+import { CliConfigService } from "./platform/services/cli-config.service";
 import { CliPlatformUtilsService } from "./platform/services/cli-platform-utils.service";
 import { ConsoleLogService } from "./platform/services/console-log.service";
 import { I18nService } from "./platform/services/i18n.service";
@@ -151,7 +151,7 @@ export class Main {
   deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction;
   authRequestCryptoService: AuthRequestCryptoServiceAbstraction;
   configApiService: ConfigApiServiceAbstraction;
-  configService: ConfigService;
+  configService: CliConfigService;
 
   constructor() {
     let p = null;
@@ -336,7 +336,7 @@ export class Main {
 
     this.configApiService = new ConfigApiService(this.apiService, this.authService);
 
-    this.configService = new ConfigService(
+    this.configService = new CliConfigService(
       this.stateService,
       this.configApiService,
       this.authService,
