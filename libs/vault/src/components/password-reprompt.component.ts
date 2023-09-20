@@ -46,8 +46,14 @@ export class PasswordRepromptComponent {
   ) {}
 
   submit = async () => {
+    const storedMasterKey = await this.cryptoService.getOrDeriveMasterKey(
+      this.formGroup.value.masterPassword
+    );
     if (
-      !(await this.cryptoService.compareAndUpdateKeyHash(this.formGroup.value.masterPassword, null))
+      !(await this.cryptoService.compareAndUpdateKeyHash(
+        this.formGroup.value.masterPassword,
+        storedMasterKey
+      ))
     ) {
       this.platformUtilsService.showToast(
         "error",
