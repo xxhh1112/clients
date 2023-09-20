@@ -183,7 +183,7 @@ jobs:
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ steps.retrieve-secrets.outputs.snapcraft-store-token }}
         run: |
-          snapcraft push bw_${{ env._PKG_VERSION }}_amd64.snap --release stable
+          snapcraft upload bw_${{ env._PKG_VERSION }}_amd64.snap --release stable
           snapcraft logout
 
   choco:

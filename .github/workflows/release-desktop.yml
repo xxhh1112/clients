@@ -300,8 +300,8 @@ jobs:
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ steps.retrieve-secrets.outputs.snapcraft-store-token }}
         run: |
-          /snap/bin/snapcraft upload bitwarden_${{ env._PKG_VERSION }}_amd64.snap --release stable
-          /snap/bin/snapcraft logout
+          snapcraft upload bitwarden_${{ env._PKG_VERSION }}_amd64.snap --release stable
+          snapcraft logout
         working-directory: apps/desktop/dist
 
   choco:
