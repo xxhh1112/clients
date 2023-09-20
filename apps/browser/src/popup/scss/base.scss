@@ -780,6 +780,17 @@ app-fido2 {
             }
           }
         }
+
+        .row-main-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .detail {
+            min-height: 15px;
+            display: block;
+          }
+        }
       }
 
       .box-content-row.selected-item {
