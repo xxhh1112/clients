@@ -722,6 +722,12 @@ app-fido2 {
           background-image: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
         }
       }
+
+      #passkey-icon-wrapper {
+        @include themify($themes) {
+          fill: themed("primaryColor");
+        }
+      }
     }
 
     .auth-flow {
