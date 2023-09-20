@@ -1,2 +1,2 @@
 export * from "./search";
-export * from "./noAccess";
+export * from "./no-access";
