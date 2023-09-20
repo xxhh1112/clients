@@ -115,9 +115,7 @@ export const Indeterminate: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <label>
-        <input type="checkbox" bitCheckbox [indeterminate]="true">
-      </label>
+      <input type="checkbox" bitCheckbox [indeterminate]="true">
     `,
   }),
 };
