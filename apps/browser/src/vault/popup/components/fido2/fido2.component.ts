@@ -81,7 +81,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     private dialogService: DialogService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
 
     const queryParams$ = this.activatedRoute.queryParamMap.pipe(
@@ -93,25 +93,48 @@ export class Fido2Component implements OnInit, OnDestroy {
     );
 
     combineLatest([queryParams$, BrowserApi.messageListener$() as Observable<BrowserFido2Message>])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([queryParams, message]) => {
-        this.sessionId = queryParams.sessionId;
-        this.senderTabId = queryParams.senderTabId;
-        if (
-          message.type === "NewSessionCreatedRequest" &&
-          message.sessionId !== queryParams.sessionId
-        ) {
-          return this.abort(false);
-        }
+      .pipe(
+        concatMap(async ([queryParams, message]) => {
+          this.sessionId = queryParams.sessionId;
+          this.senderTabId = queryParams.senderTabId;
 
-        if (message.sessionId !== queryParams.sessionId) {
-          return;
-        }
+          if (
+            message.type === "NewSessionCreatedRequest" &&
+            message.sessionId !== queryParams.sessionId
+          ) {
+            this.abort(false);
+            return;
+          }
 
-        if (message.type === "AbortRequest") {
-          return this.abort(false);
-        }
+          if (message.sessionId !== queryParams.sessionId) {
+            return;
+          }
 
+          if (message.type === "AbortRequest") {
+            this.abort(false);
+            return;
+          }
+
+          // Show dialog if user account does not have master password
+          if (!(await this.passwordRepromptService.enabled())) {
+            await this.dialogService.openSimpleDialog({
+              title: { key: "featureNotSupported" },
+              content: { key: "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" },
+              acceptButtonText: { key: "ok" },
+              cancelButtonText: null,
+              type: "info",
+            });
+
+            this.abort(true);
+            return;
+          }
+
+          return message;
+        }),
+        filter((message) => !!message),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((message) => {
         this.message$.next(message);
       });
 

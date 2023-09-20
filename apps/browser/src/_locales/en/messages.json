@@ -2479,6 +2479,9 @@
   "overwritePasskeyAlert": {
     "message": "This item already contains a passkey. Are you sure you want to overwrite the current passkey?"
   },
+  "featureNotSupported": {
+    "message": "Feature not yet supported"
+  },
   "useBrowserName": {
     "message": "Use $browserName$",
     "placeholders": {

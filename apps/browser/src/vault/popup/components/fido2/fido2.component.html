@@ -26,9 +26,6 @@
       </ng-container>
     </div>
 
-    <ng-container *ngIf="data.showUnsupportedVerification">
-      {{ "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword" | i18n }}
-    </ng-container>
     <ng-container *ngIf="!data.showUnsupportedVerification">
       <ng-container
         *ngIf="
