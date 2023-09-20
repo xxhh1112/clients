@@ -69,7 +69,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     checkAutofillOverlayButtonFocused: () => this.checkAutofillOverlayButtonFocused(),
     overlayPageBlurred: () => this.checkAutofillOverlayButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port),
-    autofillSelectedListItem: ({ message, port }) => this.autofillOverlayListItem(message, port),
+    fillSelectedListItem: ({ message, port }) => this.fillSelectedOverlayListItem(message, port),
     addNewVaultItem: ({ port }) => this.getNewVaultItemDetails(port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
     redirectOverlayFocusOut: ({ message, port }) => this.redirectOverlayFocusOut(message, port),
@@ -186,6 +186,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return overlayCipherData;
   }
 
+  /**
+   * Handles aggregation of page details for a tab. Stores the page details
+   * in association with the tabId of the tab that sent the message.
+   *
+   * @param message - Message received from the `collectPageDetailsResponse` command
+   * @param sender - The sender of the message
+   */
   private storePageDetails(
     message: OverlayBackgroundExtensionMessage,
     sender: chrome.runtime.MessageSender
@@ -204,7 +211,14 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.pageDetailsForTab[sender.tab.id] = [pageDetails];
   }
 
-  private async autofillOverlayListItem(
+  /**
+   * Triggers autofill for the selected cipher in the overlay list. Also places
+   * the selected cipher at the top of the list of ciphers.
+   *
+   * @param overlayCipherId - Cipher ID corresponding to the overlayLoginCiphers map. Does not correspond to the actual cipher's ID.
+   * @param sender - The sender of the port message
+   */
+  private async fillSelectedOverlayListItem(
     { overlayCipherId }: OverlayBackgroundExtensionMessage,
     { sender }: chrome.runtime.Port
   ) {

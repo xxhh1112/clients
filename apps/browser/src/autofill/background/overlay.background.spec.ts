@@ -5,13 +5,18 @@ import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { EnvironmentService } from "@bitwarden/common/platform/services/environment.service";
 import { I18nService } from "@bitwarden/common/platform/services/i18n.service";
 import { SettingsService } from "@bitwarden/common/services/settings.service";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserStateService } from "../../platform/services/browser-state.service";
-import { createChromeTabMock, createPageDetailMock } from "../jest/autofill-mocks";
+import {
+  createAutofillPageDetailsMock,
+  createChromeTabMock,
+  createPageDetailMock,
+} from "../jest/autofill-mocks";
 import AutofillService from "../services/autofill.service";
 
 import OverlayBackground from "./overlay.background";
@@ -214,12 +219,20 @@ describe("OverlayBackground", () => {
       type: CipherType.Card,
       card: { number: "123456789", brand: "visa" },
     });
+    const cipher4 = mock<CipherView>({
+      id: "id-4",
+      localData: { lastUsedDate: 444 },
+      name: "name-4",
+      type: CipherType.Card,
+      card: { number: null, brand: "mastercard" },
+    });
 
     it("will return an array of formatted cipher data", () => {
       overlayBackground["overlayLoginCiphers"] = new Map([
         ["overlay-cipher-0", cipher2],
         ["overlay-cipher-1", cipher1],
         ["overlay-cipher-2", cipher3],
+        ["overlay-cipher-3", cipher4],
       ]);
 
       const overlayCipherData = overlayBackground["getOverlayCipherData"]();
@@ -277,7 +290,179 @@ describe("OverlayBackground", () => {
           reprompt: cipher3.reprompt,
           type: 3,
         },
+        {
+          card: {
+            brand: "mastercard",
+            partialNumber: "*undefined",
+          },
+          favorite: cipher4.favorite,
+          icon: {
+            fallbackImage: "",
+            icon: "bwi-credit-card",
+            image: undefined,
+            imageEnabled: true,
+          },
+          id: "overlay-cipher-3",
+          login: null,
+          name: "name-4",
+          reprompt: cipher4.reprompt,
+          type: 3,
+        },
       ]);
+    });
+  });
+
+  describe("storePageDetails", () => {
+    it("will store the page details provided by the message by the tab id of the sender", () => {
+      const message = {
+        command: "storePageDetails",
+        details: createAutofillPageDetailsMock({
+          login: { username: "username", password: "password" },
+        }),
+      };
+      const sender = mock<chrome.runtime.MessageSender>({
+        tab: {
+          id: 1,
+        },
+      });
+
+      overlayBackground["storePageDetails"](message, sender);
+
+      expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual([
+        {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: message.details,
+        },
+      ]);
+    });
+
+    it("will store page details for a tab that already has a set of page details stored ", () => {
+      const details1 = createAutofillPageDetailsMock({
+        login: { username: "username1", password: "password1" },
+      });
+      const details2 = createAutofillPageDetailsMock({
+        login: { username: "username2", password: "password2" },
+      });
+      const message = {
+        command: "storePageDetails",
+        details: details2,
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+
+      overlayBackground["pageDetailsForTab"][sender.tab.id] = [
+        {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: details1,
+        },
+      ];
+      overlayBackground["storePageDetails"](message, sender);
+
+      expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual([
+        {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: details1,
+        },
+        {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: details2,
+        },
+      ]);
+    });
+  });
+
+  describe("fillSelectedOverlayListItem", () => {
+    it("returns early if the overlay cipher id is not provided", async () => {
+      const message = {
+        command: "fillSelectedOverlayListItem",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      jest.spyOn(overlayBackground["overlayLoginCiphers"], "get");
+      jest.spyOn(overlayBackground["autofillService"], "isPasswordRepromptRequired");
+      jest.spyOn(overlayBackground["autofillService"], "doAutoFill");
+
+      await overlayBackground["fillSelectedOverlayListItem"](message, port);
+
+      expect(overlayBackground["overlayLoginCiphers"].get).not.toHaveBeenCalled();
+      expect(
+        overlayBackground["autofillService"].isPasswordRepromptRequired
+      ).not.toHaveBeenCalled();
+      expect(overlayBackground["autofillService"].doAutoFill).not.toHaveBeenCalled();
+    });
+
+    it("returns early if a master password reprompt is required", async () => {
+      const message = {
+        command: "fillSelectedOverlayListItem",
+        overlayCipherId: "overlay-cipher-1",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      const cipher = mock<CipherView>({
+        reprompt: CipherRepromptType.Password,
+        type: CipherType.Login,
+      });
+      overlayBackground["overlayLoginCiphers"] = new Map([["overlay-cipher-1", cipher]]);
+      jest.spyOn(overlayBackground["overlayLoginCiphers"], "get");
+      jest
+        .spyOn(overlayBackground["autofillService"], "isPasswordRepromptRequired")
+        .mockResolvedValue(true);
+      jest.spyOn(overlayBackground["autofillService"], "doAutoFill");
+
+      await overlayBackground["fillSelectedOverlayListItem"](message, port);
+
+      expect(overlayBackground["overlayLoginCiphers"].get).toHaveBeenCalled();
+      expect(overlayBackground["autofillService"].isPasswordRepromptRequired).toHaveBeenCalledWith(
+        cipher,
+        sender.tab
+      );
+      expect(overlayBackground["autofillService"].doAutoFill).not.toHaveBeenCalled();
+    });
+
+    it("will do the autofill of the selected cipher and move it to the top of the front of the ciphers map", async () => {
+      const cipher1 = mock<CipherView>({ id: "overlay-cipher-1" });
+      const cipher2 = mock<CipherView>({ id: "overlay-cipher-2" });
+      const cipher3 = mock<CipherView>({ id: "overlay-cipher-3" });
+      const message = {
+        command: "fillSelectedOverlayListItem",
+        overlayCipherId: "overlay-cipher-2",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      overlayBackground["overlayLoginCiphers"] = new Map([
+        ["overlay-cipher-1", cipher1],
+        ["overlay-cipher-2", cipher2],
+        ["overlay-cipher-3", cipher3],
+      ]);
+      jest.spyOn(overlayBackground["overlayLoginCiphers"], "get");
+      jest
+        .spyOn(overlayBackground["autofillService"], "isPasswordRepromptRequired")
+        .mockResolvedValue(false);
+      jest.spyOn(overlayBackground["autofillService"], "doAutoFill");
+
+      await overlayBackground["fillSelectedOverlayListItem"](message, port);
+
+      expect(overlayBackground["autofillService"].isPasswordRepromptRequired).toHaveBeenCalledWith(
+        cipher2,
+        sender.tab
+      );
+      expect(overlayBackground["autofillService"].doAutoFill).toHaveBeenCalledWith({
+        tab: sender.tab,
+        cipher: cipher2,
+        pageDetails: undefined,
+        fillNewPassword: true,
+        allowTotpAutofill: true,
+      });
+      expect(overlayBackground["overlayLoginCiphers"].entries()).toStrictEqual(
+        new Map([
+          ["overlay-cipher-2", cipher2],
+          ["overlay-cipher-1", cipher1],
+          ["overlay-cipher-3", cipher3],
+        ]).entries()
+      );
     });
   });
 });

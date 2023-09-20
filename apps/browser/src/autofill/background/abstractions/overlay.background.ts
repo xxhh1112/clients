@@ -4,7 +4,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import AutofillPageDetails from "../../models/autofill-page-details";
 
 type OverlayAddNewItemMessage = {
-  login: {
+  login?: {
     uri?: string;
     hostname: string;
     username: string;
@@ -107,7 +107,7 @@ type OverlayListPortMessageHandlers = {
   checkAutofillOverlayButtonFocused: () => void;
   overlayPageBlurred: () => void;
   unlockVault: ({ port }: { port: chrome.runtime.Port }) => void;
-  autofillSelectedListItem: ({
+  fillSelectedListItem: ({
     message,
     port,
   }: {

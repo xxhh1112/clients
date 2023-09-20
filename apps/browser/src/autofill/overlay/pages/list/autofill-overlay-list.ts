@@ -193,7 +193,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
     return this.useEventHandlersMemo(
       () =>
         this.postMessageToParent({
-          command: "autofillSelectedListItem",
+          command: "fillSelectedListItem",
           overlayCipherId: cipher.id,
         }),
       `${cipher.id}-fill-cipher-button-click-handler`
