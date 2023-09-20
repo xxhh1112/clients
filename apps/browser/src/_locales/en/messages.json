@@ -2482,6 +2482,9 @@
   "featureNotSupported": {
     "message": "Feature not yet supported"
   },
+  "searchLogins": {
+    "message": "Search all logins"
+  },
   "useBrowserName": {
     "message": "Use $browserName$",
     "placeholders": {
