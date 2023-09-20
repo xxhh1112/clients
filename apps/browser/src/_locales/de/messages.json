@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Persönlicher Tresor wird exportiert"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Nur die einzelnen Tresor-Einträge, die mit $EMAIL$ verbunden sind, werden exportiert. Tresor-Einträge der Organisation werden nicht berücksichtigt.",
+  "exportingIndividualVaultDescription": {
+    "message": "Es werden nur persönliche Tresoreinträge exportiert, die mit $EMAIL$ verbunden sind. Tresoreinträge der Organisation werden nicht berücksichtigt. Es werden nur Informationen der Tresoreinträge exportiert. Diese enthalten nicht die zugehörigen Anhänge.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Server-Version"
   },
-  "selfHosted": {
-    "message": "Selbst gehostet"
+  "selfHostedServer": {
+    "message": "selbst gehostet"
   },
   "thirdParty": {
     "message": "Drittanbieter"

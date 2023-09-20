@@ -1078,7 +1078,7 @@
     "message": "1ГБ шифровано складиште за прилоге."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "Приоритарне опције пријаве у два корака као што су YubiKey и Duo."
   },
   "premiumSignUpReports": {
     "message": "Извештаји о хигијени лозинки, здравственом стању налога и кршењу података да бисте заштитили сеф."
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Извоз личног сефа"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Само предмети личног сефа повезани са $EMAIL$ биће извезени. Ставке организационог сефа неће бити укључене.",
+  "exportingIndividualVaultDescription": {
+    "message": "Само појединачне ставке сефа повезане са $EMAIL$ ће бити извењене. Ставке организационог сефа неће бити укључене. Само информације о ставкама из сефа ће бити извезене и неће укључивати повезане прилоге.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHosted": {
-    "message": "Личан хостинг"
+  "selfHostedServer": {
+    "message": "личан хостинг"
   },
   "accessDenied": {
     "message": "Одбијен приступ. Немате дозволу да видите ову страницу."

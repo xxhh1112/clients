@@ -33,7 +33,6 @@ import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { SendListComponent } from "../tools/popup/send/components/send-list.component";
-import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/popup/send/efflux-dates.component";
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
@@ -62,7 +61,6 @@ import { PrivateModeWarningComponent } from "./components/private-mode-warning.c
 import { SetPinComponent } from "./components/set-pin.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
-import { AboutComponent } from "./settings/about.component";
 import { AutofillComponent } from "./settings/autofill.component";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { FoldersComponent } from "./settings/folders.component";
@@ -133,7 +131,6 @@ import "../platform/popup/locales";
     PrivateModeWarningComponent,
     RegisterComponent,
     SendAddEditComponent,
-    SendEffluxDatesComponent,
     SendGroupingsComponent,
     SendListComponent,
     SendTypeComponent,
@@ -153,7 +150,6 @@ import "../platform/popup/locales";
     ViewCustomFieldsComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
-    AboutComponent,
     HelpAndFeedbackComponent,
     AutofillComponent,
     EnvironmentSelectorComponent,

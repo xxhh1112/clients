@@ -226,9 +226,9 @@ export class SsoComponent {
         return await this.handleChangePasswordRequired(orgIdentifier);
       }
 
-      // Users can be forced to reset their password via an admin or org policy
-      // disallowing weak passwords
-      if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+      // Users enrolled in admin acct recovery can be forced to set a new password after
+      // having the admin set a temp password for them
+      if (authResult.forcePasswordReset == ForceResetPasswordReason.AdminForcePasswordReset) {
         return await this.handleForcePasswordReset(orgIdentifier);
       }
 
@@ -242,7 +242,7 @@ export class SsoComponent {
   private async isTrustedDeviceEncEnabled(
     trustedDeviceOption: TrustedDeviceUserDecryptionOption
   ): Promise<boolean> {
-    const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlagBool(
+    const trustedDeviceEncryptionFeatureActive = await this.configService.getFeatureFlag<boolean>(
       FeatureFlag.TrustedDeviceEncryption
     );
 

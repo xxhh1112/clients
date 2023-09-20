@@ -14,6 +14,7 @@ import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trus
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
+import { ForceResetPasswordReason } from "../models/domain/force-reset-password-reason";
 import { SsoLogInCredentials } from "../models/domain/log-in-credentials";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
@@ -73,6 +74,11 @@ export class SsoLogInStrategy extends LogInStrategy {
     this.email = ssoAuthResult.email;
     this.ssoEmail2FaSessionToken = ssoAuthResult.ssoEmail2FaSessionToken;
 
+    // Auth guard currently handles redirects for this.
+    if (ssoAuthResult.forcePasswordReset == ForceResetPasswordReason.AdminForcePasswordReset) {
+      await this.stateService.setForcePasswordResetReason(ssoAuthResult.forcePasswordReset);
+    }
+
     return ssoAuthResult;
   }
 
@@ -101,16 +107,22 @@ export class SsoLogInStrategy extends LogInStrategy {
   private shouldSetMasterKeyFromKeyConnector(tokenResponse: IdentityTokenResponse): boolean {
     const userDecryptionOptions = tokenResponse?.userDecryptionOptions;
 
-    // If the user has a master password, this means that they need to migrate to Key Connector, so we won't set the key here.
-    // We default to false here because old server versions won't have hasMasterPassword and in that case we want to rely solely on the keyConnectorUrl.
-    // TODO: remove null default after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3537)
-    const userHasMasterPassword = userDecryptionOptions?.hasMasterPassword ?? false;
+    if (userDecryptionOptions != null) {
+      const userHasMasterPassword = userDecryptionOptions.hasMasterPassword;
+      const userHasKeyConnectorUrl =
+        userDecryptionOptions.keyConnectorOption?.keyConnectorUrl != null;
 
-    const keyConnectorUrl = this.getKeyConnectorUrl(tokenResponse);
-
-    // In order for us to set the master key from Key Connector, we need to have a Key Connector URL
-    // and the user must not have a master password.
-    return keyConnectorUrl != null && !userHasMasterPassword;
+      // In order for us to set the master key from Key Connector, we need to have a Key Connector URL
+      // and the user must not have a master password.
+      return userHasKeyConnectorUrl && !userHasMasterPassword;
+    } else {
+      // In pre-TDE versions of the server, the userDecryptionOptions will not be present.
+      // In this case, we can determine if the user has a master password and has a Key Connector URL by
+      // just checking the keyConnectorUrl property. This is because the server short-circuits on the response
+      // and will not pass back the URL in the response if the user has a master password.
+      // TODO: remove compatibility check after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3537)
+      return tokenResponse.keyConnectorUrl != null;
+    }
   }
 
   private getKeyConnectorUrl(tokenResponse: IdentityTokenResponse): string {

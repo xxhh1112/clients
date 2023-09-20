@@ -143,9 +143,7 @@ export abstract class LogInStrategy {
           },
         },
         keys: accountKeys,
-        decryptionOptions: AccountDecryptionOptions.fromResponse(
-          tokenResponse.userDecryptionOptions
-        ),
+        decryptionOptions: AccountDecryptionOptions.fromResponse(tokenResponse),
         adminAuthRequest: adminAuthRequest?.toJSON(),
       })
     );
@@ -155,6 +153,7 @@ export abstract class LogInStrategy {
     const result = new AuthResult();
     result.resetMasterPassword = response.resetMasterPassword;
 
+    // Convert boolean to enum
     if (response.forcePasswordReset) {
       result.forcePasswordReset = ForceResetPasswordReason.AdminForcePasswordReset;
     }

@@ -285,7 +285,7 @@
     "message": "Змінити"
   },
   "view": {
-    "message": "Перегляд"
+    "message": "Переглянути"
   },
   "noItemsInList": {
     "message": "Немає записів."
@@ -321,7 +321,7 @@
     "message": "Видалити запис"
   },
   "viewItem": {
-    "message": "Перегляд запису"
+    "message": "Переглянути запис"
   },
   "launch": {
     "message": "Перейти"
@@ -796,7 +796,7 @@
     "message": "1 ГБ зашифрованого сховища для файлів."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "Додаткові можливості двоетапної авторизації, як-от YubiKey та Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Гігієна паролів, здоров'я облікового запису, а також звіти про вразливості даних, щоб зберігати ваше сховище в безпеці."
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Експортування особистого сховища"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено.",
+  "exportingIndividualVaultDescription": {
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без пов'язаних вкладень.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Версія сервера"
   },
-  "selfHosted": {
-    "message": "Власне розміщення"
+  "selfHostedServer": {
+    "message": "власне розміщення"
   },
   "thirdParty": {
     "message": "Сторонній"

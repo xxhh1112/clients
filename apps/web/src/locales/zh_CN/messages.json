@@ -142,7 +142,7 @@
     "message": "文件夹"
   },
   "newCustomField": {
-    "message": "新建自定义字段"
+    "message": "新增自定义字段"
   },
   "value": {
     "message": "值"
@@ -582,7 +582,7 @@
     "message": "访问权限"
   },
   "loggedOut": {
-    "message": "已登出"
+    "message": "已注销"
   },
   "loginExpired": {
     "message": "您的登录会话已过期。"
@@ -606,13 +606,13 @@
     "message": "登录或者创建一个账户来访问您的安全密码库。"
   },
   "loginWithDevice": {
-    "message": "使用设备登录"
+    "message": "设备登录"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "设备登录必须在 Bitwarden 应用程序的设置中设启用。需要其他选项吗？"
+    "message": "设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？"
   },
   "loginWithMasterPassword": {
-    "message": "使用主密码登录"
+    "message": "主密码登录"
   },
   "createAccount": {
     "message": "创建账户"
@@ -791,7 +791,7 @@
     "message": "请输入验证器应用程序中的 6 位验证码。"
   },
   "enterVerificationCodeEmail": {
-    "message": "请输入发送给电子邮件 $EMAIL$ 的 6 位验证码。",
+    "message": "请输入发送给电子邮件 $EMAIL$ 的 6 位数验证码。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -812,7 +812,7 @@
     "message": "记住我"
   },
   "sendVerificationCodeEmailAgain": {
-    "message": "重发验证码电子邮件"
+    "message": "再次发送验证码电子邮件"
   },
   "useAnotherTwoStepMethod": {
     "message": "使用其他两步登录方式"
@@ -872,7 +872,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "使用任何 WebAuthn 兼容的安全钥匙访问您的帐户。"
+    "message": "使用任何 WebAuthn 兼容的安全钥匙访问您的账户。"
   },
   "webAuthnMigrated": {
     "message": "（迁移自 FIDO）"
@@ -1104,7 +1104,7 @@
     "message": "继续操作将更改您的账户电子邮件地址。这不会更改用于双重身份验证的电子邮件地址。您可以在两步登录设置中更改它。"
   },
   "newEmail": {
-    "message": "新电子邮件"
+    "message": "新电子邮件地址"
   },
   "code": {
     "message": "代码"
@@ -1225,7 +1225,7 @@
     "message": "接下来的操作会删除组织密码库中的所有项目。"
   },
   "purgeVaultWarning": {
-    "message": "清空密码库是永久性的。不能被撤消。"
+    "message": "清空密码库是永久性操作，无法撤销！"
   },
   "vaultPurged": {
     "message": "密码库已清空。"
@@ -1237,7 +1237,7 @@
     "message": "接下来的操作会删除您的账户和所有密码库数据。"
   },
   "deleteAccountWarning": {
-    "message": "删除账户是永久性的。不能被撤消。"
+    "message": "删除账户是永久性操作，无法撤销！"
   },
   "accountDeleted": {
     "message": "账户已删除"
@@ -1425,7 +1425,10 @@
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "为您的组织启用两步登录。"
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "要为成员实施 Bitwarden 两步登录选项，请使用 ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1531,7 +1534,7 @@
     "message": "此两步登录提供程序已停用。"
   },
   "twoFactorYubikeyAdd": {
-    "message": "添加一个新的 YubiKey 到您的帐户"
+    "message": "添加一个新的 YubiKey 到您的账户"
   },
   "twoFactorYubikeyPlugIn": {
     "message": "将 YubiKey 插入您电脑的 USB 端口。"
@@ -1660,7 +1663,7 @@
     "message": "单击下面的「保存」按钮，以启用此安全钥匙用于两步登录。"
   },
   "twoFactorU2fProblemReadingTryAgain": {
-    "message": "读取安全钥匙时出现问题，请再试一次。"
+    "message": "读取安全钥匙时出现问题，请重试。"
   },
   "twoFactorWebAuthnWarning": {
     "message": "由于平台限制，无法在所有 Bitwarden 应用程序中使用 WebAuthn。您应该启用另一个两步登录提供程序，以便在 WebAuthn 无法使用时可以访问您的账户。支持的平台有："
@@ -1909,7 +1912,7 @@
     "message": "请确保您的账户有足够的信用额度来用于此购买。如果您的账户信用额度不足，您的默认付款方式将用于补足差额。您可以从计费页面向您的账户添加信用额度。"
   },
   "creditAppliedDesc": {
-    "message": "您帐户的信用额度可用于进行消费。任何可用的信用额度将用于自动支付此帐户的账单。"
+    "message": "您账户的信用额度可用于进行消费。任何可用的信用额度将用于自动支付此账户的账单。"
   },
   "goPremium": {
     "message": "升级高级会员",
@@ -1925,7 +1928,7 @@
     "message": "1 GB 文件附件加密存储。"
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "专有的两步登录选项，如 YubiKey 和 Duo。"
   },
   "premiumSignUpEmergency": {
     "message": "紧急访问"
@@ -1965,7 +1968,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bitwarden 家庭计划。"
+    "message": "Bitwarden 家庭版计划。"
   },
   "addons": {
     "message": "附加项目"
@@ -2301,7 +2304,7 @@
     }
   },
   "planNameFamilies": {
-    "message": "家庭"
+    "message": "家庭版"
   },
   "planDescFamilies": {
     "message": "适用于个人使用，与家人和朋友共享。"
@@ -2496,7 +2499,7 @@
     "message": "群组"
   },
   "newGroup": {
-    "message": "新建群组"
+    "message": "新增群组"
   },
   "addGroup": {
     "message": "添加群组"
@@ -2550,7 +2553,7 @@
     "message": "只读"
   },
   "newCollection": {
-    "message": "新建集合"
+    "message": "新增集合"
   },
   "addCollection": {
     "message": "添加集合"
@@ -3252,7 +3255,7 @@
     "message": "删除后用户账户仍可用，但不再与此组织关联。"
   },
   "deletingOrganizationIsPermanentWarning": {
-    "message": "删除 $ORGANIZATION$ 是永久操作，不可撤销！",
+    "message": "删除 $ORGANIZATION$ 是永久性操作，无法撤销！",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -3354,10 +3357,10 @@
     "message": "输入您的安装 ID"
   },
   "limitSubscriptionDesc": {
-    "message": "为您的订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
+    "message": "为您的订阅设置一个席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "limitSmSubscriptionDesc": {
-    "message": "为您的机密管理器订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
+    "message": "为您的机密管理器订阅设置一个席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "maxSeatLimit": {
     "message": "席位限制（可选）",
@@ -3649,7 +3652,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备匹配。"
+    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。"
   },
   "fingerprintPhraseHeader": {
     "message": "指纹短语"
@@ -3666,7 +3669,7 @@
     "message": "API 密钥"
   },
   "apiKeyDesc": {
-    "message": "您的 API 密钥可用于认证 Bitwarden 公共 API。"
+    "message": "您的 API 密钥可用于验证 Bitwarden 公共 API。"
   },
   "apiKeyRotateDesc": {
     "message": "轮换 API 密钥将使前一个密钥无效。如果你认为当前密钥不再安全，你可以轮换您的 API 密钥。"
@@ -4149,7 +4152,7 @@
     "message": "紧急访问已批准"
   },
   "viewDesc": {
-    "message": "可以查看您拥有的密码库中的所有项目。"
+    "message": "可以查看您的密码库中的所有项目。"
   },
   "takeover": {
     "message": "接管"
@@ -4261,7 +4264,7 @@
     "message": "组织的所有者和管理员豁免此策略。"
   },
   "personalOwnershipSubmitError": {
-    "message": "由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
+    "message": "由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
   },
   "disableSend": {
     "message": "禁用 Send"
@@ -4278,7 +4281,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "由于企业策略，您只能删除现有的 Send。",
+    "message": "由于某个企业策略，您只能删除现有的 Send。",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptions": {
@@ -4532,7 +4535,7 @@
     "message": "注册账户恢复"
   },
   "enrolledAccountRecovery": {
-    "message": "注册了账户恢复"
+    "message": "已注册账户恢复"
   },
   "withdrawAccountRecovery": {
     "message": "撤销账户恢复"
@@ -4619,7 +4622,7 @@
     "message": "基于加密方式，当主密码或受信任设备被遗忘或丢失时恢复账户。"
   },
   "accountRecoveryPolicyWarning": {
-    "message": "对于具有主密码的现有账户，需要他们自行注册后，管理员才可以恢复他们的账户。对于新的成员，将自动注册以打开账户恢复功能。"
+    "message": "对于具有主密码的现有账户，需要成员自行注册后，管理员才可以恢复他们的账户。对于新的成员，自动注册后将打开账户恢复功能。"
   },
   "accountRecoverySingleOrgRequirementDesc": {
     "message": "激活此策略前，需先开启「单一组织」企业策略。"
@@ -4640,13 +4643,13 @@
     "message": "重置密码详细信息响应为空"
   },
   "trashCleanupWarning": {
-    "message": "回收站中超过 30 天的项目将会被自动删除。"
+    "message": "回收站中超过 30 天的条目将会被自动删除。"
   },
   "trashCleanupWarningSelfHosted": {
-    "message": "回收站中超过一定时间的项目将会被自动删除。"
+    "message": "回收站中超过一定时间的条目将会被自动删除。"
   },
   "passwordPrompt": {
-    "message": "重新询问主密码"
+    "message": "主密码重新提示"
   },
   "passwordConfirmation": {
     "message": "确认主密码"
@@ -4727,7 +4730,7 @@
     "message": "错误"
   },
   "accountRecoveryManageUsers": {
-    "message": "管理用户也必须被授予管理账户恢复的权限"
+    "message": "授予「管理账户恢复」的权限，同时必须授予「管理用户」的权限"
   },
   "setupProvider": {
     "message": "提供商设置"
@@ -4984,7 +4987,7 @@
     "message": "权威机构"
   },
   "clientId": {
-    "message": "客户 ID"
+    "message": "客户端 ID"
   },
   "clientSecret": {
     "message": "客户端机密"
@@ -5053,7 +5056,7 @@
     "message": "单点登录服务 URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "单点登出服务 URL"
+    "message": "单点注销服务 URL"
   },
   "idpX509PublicCert": {
     "message": "X509 公共证书"
@@ -5077,7 +5080,7 @@
     "message": "免费 Bitwarden 家庭"
   },
   "sponsoredFamiliesEligible": {
-    "message": "您和您的家人可使用免费的 Bitwarden 家庭版计划。即使您不在公司上班，您也可以使用个人电子邮件兑换此计划，以保护您的数据安全。"
+    "message": "您和您的家人有资格享受免费的 Bitwarden 家庭版计划。即使您不在公司上班，您也可以使用个人电子邮件兑换此计划，以保护您的数据安全。"
   },
   "sponsoredFamiliesEligibleCard": {
     "message": "立即兑换免费的 Bitwarden 家庭版计划，即使您不在公司上班也能确保您的数据安全。"
@@ -5275,10 +5278,10 @@
     "message": "「SSO 登录和 Key Connector 解密」已启用。此策略仅适用于所有者和管理员。"
   },
   "enabledSso": {
-    "message": "SSO 已启用"
+    "message": "启用了 SSO"
   },
   "disabledSso": {
-    "message": "SSO 已停用"
+    "message": "停用了 SSO"
   },
   "enabledKeyConnector": {
     "message": "Key Connector 已启用"
@@ -5371,19 +5374,19 @@
     "message": "计费同步令牌"
   },
   "active": {
-    "message": "生效中"
+    "message": "已生效"
   },
   "inactive": {
     "message": "已失效"
   },
   "sentAwaitingSync": {
-    "message": "已发送（正在等待同步）"
+    "message": "已发送（等待同步）"
   },
   "sent": {
-    "message": "发送"
+    "message": "已发送"
   },
   "requestRemoved": {
-    "message": "已移除（正在等待同步）"
+    "message": "已移除（等待同步）"
   },
   "requested": {
     "message": "已请求"
@@ -5425,7 +5428,7 @@
     "message": "如果实体 ID 不是一个 URL，则必填。"
   },
   "openIdOptionalCustomizations": {
-    "message": "自定义（可选）"
+    "message": "个性化（可选）"
   },
   "openIdAuthorityRequired": {
     "message": "如果授权无效，则必填。"
@@ -5611,7 +5614,7 @@
     "message": "启用设备验证"
   },
   "deviceVerificationDesc": {
-    "message": "登录未识别的设备时，验证码会发送到您的电子邮件地址"
+    "message": "登录未识别的设备时，验证码会发送到您的电子邮箱"
   },
   "updatedDeviceVerification": {
     "message": "已更新设备验证"
@@ -5982,7 +5985,7 @@
     "description": "Action to view the details of a service account."
   },
   "deleteServiceAccountDialogMessage": {
-    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久性的，无法撤销！",
+    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久性操作，无法撤销！",
     "placeholders": {
       "service_account": {
         "content": "$1",
@@ -5991,7 +5994,7 @@
     }
   },
   "deleteServiceAccountsDialogMessage": {
-    "message": "删除服务账户是永久性的，无法撤销！"
+    "message": "删除服务账户是永久性操作，无法撤销！"
   },
   "deleteServiceAccountsConfirmMessage": {
     "message": "删除 $COUNT$ 个服务账户",
@@ -6094,7 +6097,7 @@
     "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "删除工程 $PROJECT$ 是永久性的，无法撤销！",
+    "message": "删除工程 $PROJECT$ 是永久性操作，无法撤销！",
     "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
@@ -6134,7 +6137,7 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "删除工程是永久性的，无法撤销！",
+    "message": "删除工程是永久性操作，无法撤销！",
     "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
@@ -6220,14 +6223,14 @@
     "message": "吊销访问令牌"
   },
   "revokeAccessTokenDesc": {
-    "message": "吊销访问令牌是永久性的，无法撤销！"
+    "message": "吊销访问令牌是永久性操作，无法撤销！"
   },
   "accessTokenRevoked": {
     "message": "访问令牌已吊销",
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "noAccessTokenSelected": {
-    "message": "未选中任何要撤销的访问令牌",
+    "message": "未选中任何要吊销的访问令牌",
     "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
@@ -6351,7 +6354,7 @@
     "message": "自动域验证"
   },
   "automaticDomainVerificationProcess": {
-    "message": "Bitwarden 将尝试在 72 小时内验证此域 3 次。如果无法验证此域，请检查您的主机中的 DNS 记录并手动验证。如果此域无法验证，7 天内将从您的组织中移除。"
+    "message": "Bitwarden 将尝试在 72 小时内验证此域 3 次。如果此域无法验证，请检查您的主机中的 DNS 记录并手动验证。如果此域未通过验证，7 天内将从您的组织中移除。"
   },
   "invalidDomainNameMessage": {
     "message": "输入格式不正确。格式：mydomain.com。子域需要单独的条目进行验证。"
@@ -6384,7 +6387,7 @@
     }
   },
   "domainNotVerified": {
-    "message": "$DOMAIN$ 无法验证。请检查您的 DNS 记录。",
+    "message": "$DOMAIN$ 未通过验证。请检查您的 DNS 记录。",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6396,7 +6399,7 @@
     "message": "已验证"
   },
   "domainStatusUnverified": {
-    "message": "无法验证"
+    "message": "未验证"
   },
   "domainNameTh": {
     "message": "域名"
@@ -6414,7 +6417,7 @@
     "message": "表单错误需要您注意"
   },
   "addedDomain": {
-    "message": "已添加域 $DOMAIN$",
+    "message": "添加了域 $DOMAIN$",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6441,7 +6444,7 @@
     }
   },
   "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ 无法验证",
+    "message": "$DOMAIN$ 未通过验证",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6863,10 +6866,10 @@
     "message": "使用主密码批准"
   },
   "trustedDeviceEncryption": {
-    "message": "受信任的设备加密"
+    "message": "受信任设备加密"
   },
   "trustedDevices": {
-    "message": "受信任的设备"
+    "message": "受信任设备"
   },
   "memberDecryptionOptionTdeDescriptionPartOne": {
     "message": "验证后，成员将使用存储在他们设备上的密钥解密密码库数据。使用此选项后，",
@@ -7016,12 +7019,6 @@
   "next": {
     "message": "下一步"
   },
-  "usFlag": {
-    "message": "美国旗帜"
-  },
-  "euFlag": {
-    "message": "欧盟旗帜"
-  },
   "selectedRegionFlag": {
     "message": "选择的区域旗帜"
   },
@@ -7127,7 +7124,7 @@
     }
   },
   "addAdditionalServiceAccounts": {
-    "message": "您可以以 $COST$ 每月购买附加服务账户。",
+    "message": "您也可以以 $COST$ 每月购买附加服务账户。",
     "placeholders": {
       "cost": {
         "content": "$1",
