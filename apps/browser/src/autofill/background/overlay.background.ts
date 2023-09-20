@@ -128,22 +128,30 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
+  /**
+   * Sets up the extension message listeners and gets the settings for the
+   * overlay's visibility and the user's authentication status.
+   */
   private async initOverlayBackground() {
     this.setupExtensionMessageListeners();
     await this.getOverlayVisibility();
     await this.getAuthStatus();
   }
 
+  /**
+   * Strips out unnecessary data from the ciphers and returns an array of
+   * objects that contain the cipher data needed for the overlay list.
+   */
   private getOverlayCipherData(): OverlayCipherData[] {
     const isFaviconDisabled = this.settingsService.getDisableFavicon();
     const overlayCiphersArray = Array.from(this.overlayLoginCiphers);
     const overlayCipherData = [];
-    let cipherIconData: WebsiteIconData;
+    let loginCipherIcon: WebsiteIconData;
 
     for (let cipherIndex = 0; cipherIndex < overlayCiphersArray.length; cipherIndex++) {
       const [overlayCipherId, cipher] = overlayCiphersArray[cipherIndex];
-      if (!cipherIconData) {
-        cipherIconData = WebsiteIconService.buildCipherIconData(
+      if (!loginCipherIcon && cipher.type === CipherType.Login) {
+        loginCipherIcon = WebsiteIconService.buildCipherIconData(
           this.iconsServerUrl,
           cipher,
           isFaviconDisabled
@@ -156,7 +164,14 @@ class OverlayBackground implements OverlayBackgroundInterface {
         type: cipher.type,
         reprompt: cipher.reprompt,
         favorite: cipher.favorite,
-        icon: cipherIconData,
+        icon:
+          cipher.type === CipherType.Login
+            ? loginCipherIcon
+            : WebsiteIconService.buildCipherIconData(
+                this.iconsServerUrl,
+                cipher,
+                isFaviconDisabled
+              ),
         login:
           cipher.type === CipherType.Login
             ? { username: this.getObscureName(cipher.login.username) }

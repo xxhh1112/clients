@@ -176,4 +176,108 @@ describe("OverlayBackground", () => {
       );
     });
   });
+
+  describe("initOverlayBackground", () => {
+    it("will set up the extension message listeners, get the overlay's visibility settings, and get the user's auth status", async () => {
+      overlayBackground["setupExtensionMessageListeners"] = jest.fn();
+      overlayBackground["getOverlayVisibility"] = jest.fn();
+      overlayBackground["getAuthStatus"] = jest.fn();
+
+      await overlayBackground["initOverlayBackground"]();
+
+      expect(overlayBackground["setupExtensionMessageListeners"]).toHaveBeenCalled();
+      expect(overlayBackground["getOverlayVisibility"]).toHaveBeenCalled();
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("getOverlayCipherData", () => {
+    const url = "https://tacos.com";
+    const cipher1 = mock<CipherView>({
+      id: "id-1",
+      localData: { lastUsedDate: 222 },
+      name: "name-1",
+      type: CipherType.Login,
+      login: { username: "username-1", uri: url },
+    });
+    const cipher2 = mock<CipherView>({
+      id: "id-2",
+      localData: { lastUsedDate: 111 },
+      name: "name-2",
+      type: CipherType.Login,
+      login: { username: "username-2", uri: url },
+    });
+    const cipher3 = mock<CipherView>({
+      id: "id-3",
+      localData: { lastUsedDate: 333 },
+      name: "name-3",
+      type: CipherType.Card,
+      card: { number: "123456789", brand: "visa" },
+    });
+
+    it("will return an array of formatted cipher data", () => {
+      overlayBackground["overlayLoginCiphers"] = new Map([
+        ["overlay-cipher-0", cipher2],
+        ["overlay-cipher-1", cipher1],
+        ["overlay-cipher-2", cipher3],
+      ]);
+
+      const overlayCipherData = overlayBackground["getOverlayCipherData"]();
+
+      expect(overlayCipherData).toStrictEqual([
+        {
+          card: null,
+          favorite: cipher2.favorite,
+          icon: {
+            fallbackImage: "images/bwi-globe.png",
+            icon: "bwi-globe",
+            image: "https://icons.bitwarden.com//tacos.com/icon.png",
+            imageEnabled: true,
+          },
+          id: "overlay-cipher-0",
+          login: {
+            username: "us*******2",
+          },
+          name: "name-2",
+          reprompt: cipher2.reprompt,
+          type: 1,
+        },
+        {
+          card: null,
+          favorite: cipher1.favorite,
+          icon: {
+            fallbackImage: "images/bwi-globe.png",
+            icon: "bwi-globe",
+            image: "https://icons.bitwarden.com//tacos.com/icon.png",
+            imageEnabled: true,
+          },
+          id: "overlay-cipher-1",
+          login: {
+            username: "us*******1",
+          },
+          name: "name-1",
+          reprompt: cipher1.reprompt,
+          type: 1,
+        },
+        {
+          card: {
+            brand: "visa",
+            partialNumber: "*6789",
+          },
+          favorite: cipher3.favorite,
+          icon: {
+            fallbackImage: "",
+            icon: "bwi-credit-card",
+            image: undefined,
+            imageEnabled: true,
+          },
+          id: "overlay-cipher-2",
+          login: null,
+          name: "name-3",
+          reprompt: cipher3.reprompt,
+          type: 3,
+        },
+      ]);
+    });
+  });
 });
