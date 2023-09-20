@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, Optional, Self } from "@angular/core";
+import { Component, HostBinding, HostListener, Input, Optional, Self } from "@angular/core";
 import { NgControl, Validators } from "@angular/forms";
 
 import { BitFormControlAbstraction } from "../form-control";
@@ -42,29 +42,43 @@ export class CheckboxComponent implements BitFormControlAbstraction {
     "disabled:tw-border",
     "disabled:tw-bg-secondary-100",
 
-    "checked:tw-bg-primary-500",
-    "checked:tw-border-primary-500",
+    "[&:is(:checked,:indeterminate)]:tw-bg-primary-500",
+    "[&:is(:checked,:indeterminate)]:tw-border-primary-500",
 
-    "checked:hover:tw-bg-primary-700",
-    "checked:hover:tw-border-primary-700",
-    "[&>label:hover]:checked:tw-bg-primary-700",
-    "[&>label:hover]:checked:tw-border-primary-700",
+    "[&:is(:checked,:indeterminate)]:hover:tw-bg-primary-700",
+    "[&:is(:checked,:indeterminate)]:hover:tw-border-primary-700",
+    "[&>label:hover]:[&:is(:checked,:indeterminate)]:tw-bg-primary-700",
+    "[&>label:hover]:[&:is(:checked,:indeterminate)]:tw-border-primary-700",
 
-    "checked:before:tw-bg-text-contrast",
-    "checked:before:tw-mask-image-[var(--mask-image)]",
-    "checked:before:tw-mask-position-[center]",
-    "checked:before:tw-mask-repeat-[no-repeat]",
+    "[&:is(:checked,:indeterminate)]:before:tw-bg-text-contrast",
+    "[&:is(:checked,:indeterminate)]:before:tw-mask-position-[center]",
+    "[&:is(:checked,:indeterminate)]:before:tw-mask-repeat-[no-repeat]",
 
-    "checked:disabled:tw-border-secondary-100",
-    "checked:disabled:tw-bg-secondary-100",
+    "[&:is(:checked):not(:indeterminate)]:before:tw-mask-image-[var(--mask-image)]",
+    "indeterminate:before:tw-mask-image-[var(--indeterminate-mask-image)]",
 
-    "checked:disabled:before:tw-bg-text-muted",
+    "[&:is(:checked,:indeterminate)]:disabled:tw-border-secondary-100",
+    "[&:is(:checked,:indeterminate)]:disabled:tw-bg-secondary-100",
+
+    "[&:is(:checked,:indeterminate)]:disabled:before:tw-bg-text-muted",
   ];
 
   constructor(@Optional() @Self() private ngControl?: NgControl) {}
 
   @HostBinding("style.--mask-image")
   protected maskImage = `url('data:image/svg+xml,%3Csvg class="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="8" viewBox="0 0 10 10"%3E%3Cpath d="M0.5 6.2L2.9 8.6L9.5 1.4" fill="none" stroke="white" stroke-width="2"%3E%3C/path%3E%3C/svg%3E')`;
+
+  @HostBinding("style.--indeterminate-mask-image")
+  protected indeterminateImage = `url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 13 13"%3E%3Cpath stroke="%23fff" stroke-width="2" d="M2.5 6.5h8"/%3E%3C/svg%3E%0A')`;
+
+  @HostBinding()
+  @Input()
+  indeterminate: boolean;
+
+  @HostListener("click")
+  protected handleClick() {
+    this.indeterminate = false;
+  }
 
   @HostBinding()
   @Input()
