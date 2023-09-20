@@ -12,51 +12,26 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
   templateUrl: "org-switcher.component.html",
 })
 export class OrgSwitcherComponent {
-  protected allOrganizations$: Observable<Organization[]> =
-    this.organizationService.organizations$.pipe(
-      map((orgs) =>
-        orgs.filter((org) => this.filter(org)).sort((a, b) => a.name.localeCompare(b.name))
-      )
-    );
-
   protected organizations$: Observable<Organization[]> =
     this.organizationService.organizations$.pipe(
       map((orgs) =>
         orgs
-          .filter((org) => this.filter(org) && org.enabled == true)
+          .filter((org) => this.filter(org))
           .sort((a, b) => a.name.localeCompare(b.name))
+          .sort((a, b) => (a.enabled ? -1 : 1))
       )
     );
 
   protected activeOrganization$: Observable<Organization> = combineLatest([
     this.route.paramMap,
-    this.allOrganizations$,
+    this.organizations$,
   ]).pipe(
     switchMap(([params, orgs]) => {
       const selectedOrg = orgs.find((org) => org.id === params.get("organizationId"));
-
-      if (selectedOrg && selectedOrg.enabled) {
-        return of(selectedOrg);
-      } else {
-        const nextEnabledOrg = orgs.find((org) => org.enabled);
-
-        if (nextEnabledOrg != null) {
-          return of(nextEnabledOrg);
-        } else {
-          return of(selectedOrg);
-        }
-      }
+      return of(selectedOrg);
     })
   );
 
-  protected inactiveOrganizations$: Observable<Organization[]> =
-    this.organizationService.organizations$.pipe(
-      map((orgs) =>
-        orgs
-          .filter((org) => this.filter(org) && org.enabled == false)
-          .sort((a, b) => a.name.localeCompare(b.name))
-      )
-    );
   /**
    * Filter function for displayed organizations in the `org-switcher`
    * @example

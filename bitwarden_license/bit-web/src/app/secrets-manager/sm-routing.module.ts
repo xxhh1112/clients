@@ -1,5 +1,10 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  createUrlTreeFromSnapshot,
+  RouterModule,
+  Routes,
+} from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -13,6 +18,7 @@ import { ProjectsModule } from "./projects/projects.module";
 import { SecretsModule } from "./secrets/secrets.module";
 import { ServiceAccountsModule } from "./service-accounts/service-accounts.module";
 import { SettingsModule } from "./settings/settings.module";
+import { OrgDisabledComponent } from "./shared/org-suspended.component";
 import { canActivateSM } from "./sm.guard";
 import { TrashModule } from "./trash/trash.module";
 
@@ -29,10 +35,7 @@ const routes: Routes = [
       {
         path: ":organizationId",
         component: LayoutComponent,
-        canActivate: [AuthGuard, OrganizationPermissionsGuard],
-        data: {
-          organizationPermissions: (org: Organization) => org.canAccessSecretsManager,
-        },
+        canActivate: [AuthGuard],
         children: [
           {
             path: "",
@@ -40,41 +43,68 @@ const routes: Routes = [
             outlet: "sidebar",
           },
           {
-            path: "secrets",
-            loadChildren: () => SecretsModule,
-            data: {
-              titleId: "secrets",
-            },
-          },
-          {
-            path: "projects",
-            loadChildren: () => ProjectsModule,
-            data: {
-              titleId: "projects",
-            },
-          },
-          {
-            path: "service-accounts",
-            loadChildren: () => ServiceAccountsModule,
-            data: {
-              titleId: "serviceAccounts",
-            },
-          },
-          {
-            path: "trash",
-            loadChildren: () => TrashModule,
-            data: {
-              titleId: "trash",
-            },
-          },
-          {
-            path: "settings",
-            loadChildren: () => SettingsModule,
-          },
-          {
             path: "",
-            loadChildren: () => OverviewModule,
-            pathMatch: "full",
+            canActivate: [OrganizationPermissionsGuard],
+            data: {
+              organizationPermissions: (org: Organization, route: ActivatedRouteSnapshot) => {
+                if (!org.canAccessSecretsManager) {
+                  return false;
+                }
+
+                if (!org.enabled) {
+                  return createUrlTreeFromSnapshot(route, [
+                    "/sm",
+                    org.id,
+                    "organization-suspended",
+                  ]);
+                }
+
+                return true;
+              },
+            },
+            children: [
+              {
+                path: "secrets",
+                loadChildren: () => SecretsModule,
+                data: {
+                  titleId: "secrets",
+                },
+              },
+              {
+                path: "projects",
+                loadChildren: () => ProjectsModule,
+                data: {
+                  titleId: "projects",
+                },
+              },
+              {
+                path: "service-accounts",
+                loadChildren: () => ServiceAccountsModule,
+                data: {
+                  titleId: "serviceAccounts",
+                },
+              },
+              {
+                path: "trash",
+                loadChildren: () => TrashModule,
+                data: {
+                  titleId: "trash",
+                },
+              },
+              {
+                path: "settings",
+                loadChildren: () => SettingsModule,
+              },
+              {
+                path: "",
+                loadChildren: () => OverviewModule,
+                pathMatch: "full",
+              },
+            ],
+          },
+          {
+            path: "organization-suspended",
+            component: OrgDisabledComponent,
           },
         ],
       },

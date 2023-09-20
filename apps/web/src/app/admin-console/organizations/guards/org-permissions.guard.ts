@@ -1,5 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from "@angular/router";
 
 import {
   canAccessOrgAdmin,
@@ -42,9 +48,12 @@ export class OrganizationPermissionsGuard implements CanActivate {
       return this.router.createUrlTree(["/"]);
     }
 
-    const permissionsCallback: (organization: Organization) => boolean =
-      route.data?.organizationPermissions;
-    const hasPermissions = permissionsCallback == null || permissionsCallback(org);
+    const permissionsCallback: (
+      organization: Organization,
+      route: ActivatedRouteSnapshot,
+      state: RouterStateSnapshot
+    ) => boolean | UrlTree = route.data?.organizationPermissions;
+    const hasPermissions = permissionsCallback == null || permissionsCallback(org, route, state);
 
     if (!hasPermissions) {
       // Handle linkable ciphers for organizations the user only has view access to
@@ -65,6 +74,6 @@ export class OrganizationPermissionsGuard implements CanActivate {
         : this.router.createUrlTree(["/"]);
     }
 
-    return true;
+    return hasPermissions;
   }
 }

@@ -10,7 +10,7 @@
   <i
     slot="end"
     *ngIf="!activeOrganization.enabled"
-    class="bwi bwi-exclamation-triangle text-danger pt-1 pr-1"
+    class="bwi bwi-exclamation-triangle pt-1 pr-1 !tw-text-danger"
   ></i>
   <ng-container *ngIf="organizations$ | async as organizations">
     <bit-nav-item
@@ -21,20 +21,10 @@
       (mainContentClicked)="toggle()"
       [hideActiveStyles]="true"
     >
-    </bit-nav-item>
-  </ng-container>
-  <ng-container *ngIf="inactiveOrganizations$ | async as organizations">
-    <bit-nav-item
-      *ngFor="let org of organizations"
-      [text]="org.name"
-      [ariaLabel]="['organization' | i18n, org.name].join(' ')"
-      (mainContentClicked)="inactiveOrganizationError()"
-      [hideActiveStyles]="true"
-    >
       <i
         slot="end"
         *ngIf="org.enabled == false"
-        class="bwi bwi-exclamation-triangle text-danger"
+        class="bwi bwi-exclamation-triangle !tw-text-danger"
       ></i>
     </bit-nav-item>
   </ng-container>

@@ -68,7 +68,7 @@ export class ProjectDialogComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("secretsAccessSuspended")
+        this.i18nService.t("projectsCannotCreate")
       );
       return;
     }
