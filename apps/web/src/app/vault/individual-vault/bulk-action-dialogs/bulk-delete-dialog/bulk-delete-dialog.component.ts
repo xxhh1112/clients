@@ -3,7 +3,6 @@ import { Component, Inject } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { CollectionBulkDeleteRequest } from "@bitwarden/common/models/request/collection-bulk-delete.request";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -127,8 +126,7 @@ export class BulkDeleteDialogComponent {
       );
       return;
     }
-    const deleteRequest = new CollectionBulkDeleteRequest(this.collectionIds, this.organization.id);
-    return await this.apiService.deleteManyCollections(deleteRequest);
+    return await this.apiService.deleteManyCollections(this.organization.id, this.collectionIds);
   }
 
   private close(result: BulkDeleteDialogResult) {
