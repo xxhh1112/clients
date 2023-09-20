@@ -96,9 +96,8 @@ export class Fido2Component implements OnInit, OnDestroy {
         concatMap(async ([queryParams, message]) => {
           this.sessionId = queryParams.sessionId;
           this.senderTabId = queryParams.senderTabId;
-          /**
-           * For a 'NewSessionCreatedRequest', abort if it doesn't belong to the current session.
-           */
+
+          // For a 'NewSessionCreatedRequest', abort if it doesn't belong to the current session.
           if (
             message.type === "NewSessionCreatedRequest" &&
             message.sessionId !== queryParams.sessionId
@@ -106,9 +105,8 @@ export class Fido2Component implements OnInit, OnDestroy {
             this.abort(false);
             return;
           }
-          /**
-           * Ignore messages that don't belong to the current session.
-           */
+
+          // Ignore messages that don't belong to the current session.
           if (message.sessionId !== queryParams.sessionId) {
             return;
           }
