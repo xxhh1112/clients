@@ -21,7 +21,6 @@ import {
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserPopoutWindowService } from "../../platform/popup/abstractions/browser-popout-window.service";
-import { PopupUtilsService } from "../../popup/services/popup-utils.service";
 
 const BrowserFido2MessageName = "BrowserFido2UserInterfaceServiceMessage";
 
@@ -87,10 +86,7 @@ export type BrowserFido2Message = { sessionId: string } & (
 );
 
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  constructor(
-    private popupUtilsService: PopupUtilsService,
-    private browserPopoutWindowService: BrowserPopoutWindowService
-  ) {}
+  constructor(private browserPopoutWindowService: BrowserPopoutWindowService) {}
 
   async newSession(
     fallbackSupported: boolean,
@@ -98,7 +94,6 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
     abortController?: AbortController
   ): Promise<Fido2UserInterfaceSession> {
     return await BrowserFido2UserInterfaceSession.create(
-      this.popupUtilsService,
       this.browserPopoutWindowService,
       fallbackSupported,
       tab,
@@ -109,14 +104,12 @@ export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServi
 
 export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSession {
   static async create(
-    popupUtilsService: PopupUtilsService,
     browserPopoutWindowService: BrowserPopoutWindowService,
     fallbackSupported: boolean,
     tab: chrome.tabs.Tab,
     abortController?: AbortController
   ): Promise<BrowserFido2UserInterfaceSession> {
     return new BrowserFido2UserInterfaceSession(
-      popupUtilsService,
       browserPopoutWindowService,
       fallbackSupported,
       tab,
@@ -136,7 +129,6 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
   private destroy$ = new Subject<void>();
 
   private constructor(
-    private readonly popupUtilsService: PopupUtilsService,
     private readonly browserPopoutWindowService: BrowserPopoutWindowService,
     private readonly fallbackSupported: boolean,
     private readonly tab: chrome.tabs.Tab,
