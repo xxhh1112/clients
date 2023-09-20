@@ -15,9 +15,8 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 
-import { RouterService, StateService } from "../core";
+import { StateService } from "../core";
 
 import { TwoFactorOptionsComponent } from "./two-factor-options.component";
 
@@ -42,7 +41,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     logService: LogService,
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
-    private routerService: RouterService,
     loginService: LoginService,
     stateService: StateService,
     configService: ConfigServiceAbstraction,
@@ -88,16 +86,10 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
   goAfterLogIn = async () => {
     this.loginService.clearValues();
-    const previousUrl = await this.routerService.getAndClearPersistedPreviousUrl();
-
-    if (!Utils.isNullOrEmpty(previousUrl)) {
-      this.router.navigateByUrl(previousUrl);
-    } else {
-      this.router.navigate([this.successRoute], {
-        queryParams: {
-          identifier: this.orgIdentifier,
-        },
-      });
-    }
+    this.router.navigate([this.successRoute], {
+      queryParams: {
+        identifier: this.orgIdentifier,
+      },
+    });
   };
 }

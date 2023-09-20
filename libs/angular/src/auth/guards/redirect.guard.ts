@@ -5,8 +5,6 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 export interface RedirectRoutes {
   loggedIn: string;
@@ -32,7 +30,6 @@ export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActiv
     const cryptoService = inject(CryptoService);
     const deviceTrustCryptoService = inject(DeviceTrustCryptoServiceAbstraction);
     const router = inject(Router);
-    const stateService = inject(StateService);
 
     const authStatus = await authService.getAuthStatus();
 
@@ -41,13 +38,7 @@ export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActiv
     }
 
     if (authStatus === AuthenticationStatus.Unlocked) {
-      const persistedUrl = await stateService.getPreviousUrl();
-      if (Utils.isNullOrEmpty(persistedUrl)) {
-        return router.createUrlTree([routes.loggedIn], { queryParams: route.queryParams });
-      } else {
-        await stateService.setPreviousUrl(null);
-        return router.navigateByUrl(persistedUrl);
-      }
+      return router.createUrlTree([routes.loggedIn], { queryParams: route.queryParams });
     }
 
     // If locked, TDE is enabled, and the user hasn't decrypted yet, then redirect to the

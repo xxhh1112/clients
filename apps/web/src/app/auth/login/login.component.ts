@@ -94,7 +94,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
      * clear `persistedUrl` to handle flows when SSO login were interrupted.
      * Ensures the user is navigated to the correct location.
      */
-    this.routerService.clearPersistedUrl();
+    this.routerService.clearPersistedPreLoginDeepLinkUrl();
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -183,13 +183,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       }
     }
 
-    const previousUrl = await this.routerService.getAndClearPersistedPreviousUrl();
-    if (previousUrl) {
-      this.router.navigateByUrl(previousUrl);
-    } else {
-      this.loginService.clearValues();
-      this.router.navigate([this.successRoute]);
-    }
+    this.loginService.clearValues();
+    this.router.navigate([this.successRoute]);
   }
 
   goToHint() {

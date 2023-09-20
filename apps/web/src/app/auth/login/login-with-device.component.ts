@@ -16,10 +16,9 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
-import { RouterService, StateService } from "../../core";
+import { StateService } from "../../core";
 
 @Component({
   selector: "app-login-with-device",
@@ -45,7 +44,6 @@ export class LoginWithDeviceComponent
     validationService: ValidationService,
     stateService: StateService,
     loginService: LoginService,
-    private routerService: RouterService,
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     authReqCryptoService: AuthRequestCryptoServiceAbstraction
   ) {
@@ -68,12 +66,5 @@ export class LoginWithDeviceComponent
       deviceTrustCryptoService,
       authReqCryptoService
     );
-    this.onSuccessfulLogin = this.goAfterLogIn;
-  }
-
-  async goAfterLogIn() {
-    this.loginService.clearValues();
-    const previousUrl = await this.routerService.getAndClearPersistedPreviousUrl();
-    this.router.navigateByUrl(Utils.isNullOrEmpty(previousUrl) ? this.successRoute : previousUrl);
   }
 }
