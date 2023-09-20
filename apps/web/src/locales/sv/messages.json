@@ -1425,8 +1425,11 @@
   "twoStepLoginDesc": {
     "message": "Säkra ditt konto genom att kräva ett ytterligare steg vid inloggning."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Kräv att medlemmar använder tvåstegsverifiering genom att använda ",
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -1924,8 +1927,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB krypterad lagring."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Ytterligare alternativ för tvåstegsverifiering såsom YubiKey, FIDO U2F och Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Nödåtkomst"
@@ -2039,6 +2042,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Din betalningsmetod kommer att debiteras för eventuella obetalda prenumerationer."
   },
   "paymentChargedWithTrial": {
     "message": "Din plan kommer med en kostnadsfri 7-dagars provperiod. Din betalningsmetod kommer inte att debiteras förrän provperioden har upphört. Du kan avbryta när som helst."
@@ -7012,12 +7018,6 @@
   },
   "next": {
     "message": "Nästa"
-  },
-  "usFlag": {
-    "message": "US flag"
-  },
-  "euFlag": {
-    "message": "EU flag"
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"

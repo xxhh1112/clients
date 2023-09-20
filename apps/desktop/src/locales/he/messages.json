@@ -1077,8 +1077,8 @@
   "premiumSignUpStorage": {
     "message": "1 ג'יגה של מקום אחסון מוצפן עבור קבצים מצורפים."
   },
-  "premiumSignUpTwoStep": {
-    "message": "אפשרויות כניסה דו שלבית מתקדמות כמו YubiKey, FIDO U2F, וDuo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "אפשרויות כניסה דו שלבית קנייניות כמו YubiKey ו־Duo."
   },
   "premiumSignUpReports": {
     "message": "היגיינת סיסמאות, מצב בריאות החשבון, ודיווחים מעודכנים על פרצות חדשות בכדי לשמור על הכספת שלך בטוחה."
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "הכספת האישית מיוצאת"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "רק פריטי הכספת האישית שמשויכת עם $EMAIL$ ייוצאו. פריטי הכספת הארגוניים לא יהיו חלק מהייצוא.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHosted": {
-    "message": "Self-hosted"
+  "selfHostedServer": {
+    "message": "self-hosted"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."

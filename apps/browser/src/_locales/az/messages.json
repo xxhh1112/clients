@@ -795,8 +795,8 @@
   "ppremiumSignUpStorage": {
     "message": "Fayl qoşmaları üçün 1 GB şifrələnmiş saxlama sahəsi"
   },
-  "ppremiumSignUpTwoStep": {
-    "message": "YubiKey, FIDO U2F və Duo kimi iki mərhələli giriş seçimləri"
+  "premiumSignUpTwoStepOptions": {
+    "message": "YubiKey və Duo kimi mülkiyyətçi iki addımlı giriş seçimləri."
   },
   "ppremiumSignUpReports": {
     "message": "Anbarınızın təhlükəsiyini təmin etmək üçün parol gigiyenası, hesab sağlamlığı və verilənlərin pozulması hesabatları."
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Şəxsi anbarın ixracı"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Yalnız $EMAIL$ ilə əlaqəli şəxsi anbar elementləri ixrac ediləcək. Təşkilat anbar elementləri daxil edilmir.",
+  "exportingIndividualVaultDescription": {
+    "message": "Yalnız $EMAIL$ ilə əlaqələndirilmiş fərdi anbar elementləri xaricə köçürüləcək. Təşkilat anbar elementləri daxil edilməyəcək. Yalnız anbar element məlumatları xaricə köçürüləcək və əlaqələndirilmiş qoşmalar daxil edilməyəcək.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Server Versiyası"
   },
-  "selfHosted": {
-    "message": "Öz-özünə sahiblik edən"
+  "selfHostedServer": {
+    "message": "öz-özünə sahiblik edən"
   },
   "thirdParty": {
     "message": "Üçüncü tərəf"

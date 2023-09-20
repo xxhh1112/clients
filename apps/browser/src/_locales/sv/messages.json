@@ -634,10 +634,10 @@
     "message": "Uppdatera"
   },
   "notificationUnlockDesc": {
-    "message": "Unlock your Bitwarden vault to complete the auto-fill request."
+    "message": "Lås upp ditt Bitwarden-valv för att slutföra begäran om automatisk ifyllnad."
   },
   "notificationUnlock": {
-    "message": "Unlock"
+    "message": "Lås upp"
   },
   "enableContextMenuItem": {
     "message": "Visa alternativ för snabbmenyn"
@@ -795,8 +795,8 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB lagring av krypterade filer."
   },
-  "ppremiumSignUpTwoStep": {
-    "message": "Ytterligare alternativ för tvåstegsverifiering såsom YubiKey, FIDO U2F och Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Lösenordshygien, kontohälsa och dataintrångsrapporter för att hålla ditt valv säkert."
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Exporterar individuellt valv"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Endast de personliga valvobjekt som är associerade med $EMAIL$ kommer att exporteras. Organisationens valvobjekt kommer inte att inkluderas.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Serverversion"
   },
-  "selfHosted": {
-    "message": "Lokalt installerad"
+  "selfHostedServer": {
+    "message": "self-hosted"
   },
   "thirdParty": {
     "message": "Tredje part"

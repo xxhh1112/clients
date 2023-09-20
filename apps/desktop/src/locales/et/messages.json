@@ -1077,8 +1077,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB ulatuses krüpteeritud salvestusruum."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Lisavõimalused kaheastmeliseks kinnitamiseks, näiteks YubiKey, FIDO U2F ja Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpReports": {
     "message": "Parooli hügieen, konto seisukord ja andmelekete raportid aitavad hoidlat turvalisena hoida."
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Personaalse hoidla eksportimine"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Ainult personaalsed $EMAIL$ alla kuuluvad kirjed eksportidakse. Organisatsiooni kirjeid ei ekspordita.",
+  "exportingIndividualVaultDescription": {
+    "message": "Ainult e-postiga $EMAIL$ seonduvad kirjed eksporditakse. Organisatsiooni kirjeid ei kaasata. Samuti ei kaasata organisatsiooniga seonduvaid manuseid.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2286,8 +2286,8 @@
   "euDomain": {
     "message": "bitwarden.eu"
   },
-  "selfHosted": {
-    "message": "Self-hosted"
+  "selfHostedServer": {
+    "message": "self-hosted"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."

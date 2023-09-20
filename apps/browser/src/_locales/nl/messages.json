@@ -795,8 +795,8 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB versleutelde opslag voor bijlagen."
   },
-  "ppremiumSignUpTwoStep": {
-    "message": "Extra opties voor tweestapsaanmelding zoals YubiKey, FIDO U2F en Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Eigen opties voor tweestapsaanmelding zoals YubiKey en Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Wachtwoordhygiëne, gezondheid van je account en datalekken om je kluis veilig te houden."
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Persoonlijke kluis exporteren"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Exporteert alleen de persoonlijke kluis-items gerelateerd aan $EMAIL$. Geen kluis-items van de organisatie.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2092,8 +2092,8 @@
   "serverVersion": {
     "message": "Serverversie"
   },
-  "selfHosted": {
-    "message": "Zelfgehost"
+  "selfHostedServer": {
+    "message": "zelfgehost"
   },
   "thirdParty": {
     "message": "van derden"
