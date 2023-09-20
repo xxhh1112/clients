@@ -450,6 +450,13 @@ export default class AutofillService implements AutofillServiceInterface {
       login?.uris?.filter((u) => u.match != UriMatchType.Never).map((u) => u.uri) ?? [];
 
     fillScript.untrustedIframe = this.inUntrustedIframe(pageDetails.url, options);
+    fillScript.equivalentDomains = fillScript.savedUrls.reduce((equivalentCipherDomains, url) => {
+      const additionalEquivalentDomains = Array.from(
+        this.settingsService.getEquivalentDomains(url)
+      );
+
+      return [...equivalentCipherDomains, ...additionalEquivalentDomains];
+    }, [] as string[]);
 
     let passwordFields = AutofillService.loadPasswordFields(
       pageDetails,

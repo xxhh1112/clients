@@ -39,7 +39,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
       this.fillingWithinSandboxedIframe() ||
       this.userCancelledInsecureUrlAutofill(fillScript.savedUrls) ||
       this.userCancelledUntrustedIframeAutofill(fillScript) ||
-      this.tabURLChanged(fillScript.savedUrls)
+      this.tabURLChanged(fillScript.savedUrls, fillScript.equivalentDomains)
     ) {
       return;
     }
@@ -48,13 +48,24 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
   }
 
   /**
-   * Determines if the page URL no longer matches one of the cipher's savedURL domains
-   * @param {string[] | null} savedUrls
+   * Determines if the page URL no longer matches one of the cipher's savedUrls or equivalentDomains
+   * @param {string[]} savedUrls
+   * @param {string[]} equivalentDomains
    * @returns {boolean}
    * @private
    */
-  private tabURLChanged(savedUrls?: AutofillScript["savedUrls"]): boolean {
-    return savedUrls && !savedUrls.some((url) => url.startsWith(window.location.origin));
+  private tabURLChanged(
+    savedUrls: AutofillScript["savedUrls"] = [],
+    equivalentDomains: AutofillScript["equivalentDomains"] = []
+  ): boolean {
+    let tabURLChanged = !savedUrls.some((url) => url.startsWith(window.location.origin));
+
+    // If the page origin doesn't match a savedURL, check the page location against equivalent domains
+    if (tabURLChanged) {
+      tabURLChanged = !equivalentDomains.some((url) => window.location.host.endsWith(url));
+    }
+
+    return tabURLChanged;
   }
 
   /**

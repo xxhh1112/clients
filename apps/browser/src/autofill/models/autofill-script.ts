@@ -21,4 +21,5 @@ export default class AutofillScript {
   savedUrls: string[];
   untrustedIframe: boolean;
   itemType: string; // Appears to be unused, read but not written
+  equivalentDomains: string[];
 }

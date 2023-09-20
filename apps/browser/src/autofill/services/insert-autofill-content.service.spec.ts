@@ -90,6 +90,7 @@ describe("InsertAutofillContentService", () => {
       metadata: {},
       autosubmit: null,
       savedUrls: ["https://bitwarden.com"],
+      equivalentDomains: [],
       untrustedIframe: false,
       itemType: "login",
     };
