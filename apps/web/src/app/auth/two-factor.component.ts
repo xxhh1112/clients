@@ -54,12 +54,12 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       platformUtilsService,
       win,
       environmentService,
+      stateService,
       route,
       logService,
       twoFactorService,
       appIdService,
       loginService,
-      stateService,
       configService
     );
     this.onSuccessfulLoginNavigate = this.goAfterLogIn;

@@ -16,8 +16,8 @@ import { OrganizationPermissionsGuard } from "../../admin-console/organizations/
 import { OrganizationRedirectGuard } from "../../admin-console/organizations/guards/org-redirect.guard";
 import { OrganizationLayoutComponent } from "../../admin-console/organizations/layouts/organization-layout.component";
 import { GroupsComponent } from "../../admin-console/organizations/manage/groups.component";
-import { VaultModule } from "../../vault/org-vault/vault.module";
 import { preLoginDeepLinkGuard } from "../../core/guards/pre-login-deep-link.guard";
+import { VaultModule } from "../../vault/org-vault/vault.module";
 
 const routes: Routes = [
   {

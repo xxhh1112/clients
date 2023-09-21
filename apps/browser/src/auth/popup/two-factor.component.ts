@@ -62,12 +62,12 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       platformUtilsService,
       win,
       environmentService,
+      stateService,
       route,
       logService,
       twoFactorService,
       appIdService,
       loginService,
-      stateService,
       configService
     );
     super.onSuccessfulLogin = async () => {

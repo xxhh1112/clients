@@ -66,12 +66,12 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     protected platformUtilsService: PlatformUtilsService,
     @Inject(WINDOW) protected win: Window,
     protected environmentService: EnvironmentService,
+    protected stateService: StateService,
     protected route: ActivatedRoute,
     protected logService: LogService,
     protected twoFactorService: TwoFactorService,
     protected appIdService: AppIdService,
     protected loginService: LoginService,
-    protected stateService: StateService,
     protected configService: ConfigServiceAbstraction
   ) {
     super(environmentService, i18nService, platformUtilsService);
