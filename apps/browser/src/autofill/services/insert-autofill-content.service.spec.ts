@@ -90,9 +90,9 @@ describe("InsertAutofillContentService", () => {
       metadata: {},
       autosubmit: null,
       savedUrls: ["https://bitwarden.com"],
-      equivalentDomains: [],
       untrustedIframe: false,
       itemType: "login",
+      pageIsQualifiedURL: () => true,
     };
   });
 
@@ -109,7 +109,6 @@ describe("InsertAutofillContentService", () => {
       jest.spyOn(insertAutofillContentService as any, "fillingWithinSandboxedIframe");
       jest.spyOn(insertAutofillContentService as any, "userCancelledInsecureUrlAutofill");
       jest.spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill");
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged");
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -121,7 +120,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).not.toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).not.toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
@@ -131,7 +129,6 @@ describe("InsertAutofillContentService", () => {
         .mockReturnValue(true);
       jest.spyOn(insertAutofillContentService as any, "userCancelledInsecureUrlAutofill");
       jest.spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill");
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged");
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -143,7 +140,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).not.toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).not.toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
@@ -155,7 +151,6 @@ describe("InsertAutofillContentService", () => {
         .spyOn(insertAutofillContentService as any, "userCancelledInsecureUrlAutofill")
         .mockReturnValue(true);
       jest.spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill");
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged");
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -165,7 +160,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).not.toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).not.toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
@@ -179,7 +173,6 @@ describe("InsertAutofillContentService", () => {
       jest
         .spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill")
         .mockReturnValue(true);
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged").mockReturnValue(false);
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -189,7 +182,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).not.toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
@@ -203,7 +195,6 @@ describe("InsertAutofillContentService", () => {
       jest
         .spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill")
         .mockReturnValue(false);
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged").mockReturnValue(true);
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -213,7 +204,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).not.toHaveBeenCalled();
     });
 
@@ -227,7 +217,6 @@ describe("InsertAutofillContentService", () => {
       jest
         .spyOn(insertAutofillContentService as any, "userCancelledUntrustedIframeAutofill")
         .mockReturnValue(false);
-      jest.spyOn(insertAutofillContentService as any, "tabURLChanged").mockReturnValue(false);
       jest.spyOn(insertAutofillContentService as any, "runFillScriptAction");
 
       insertAutofillContentService.fillForm(fillScript);
@@ -237,7 +226,6 @@ describe("InsertAutofillContentService", () => {
       expect(
         insertAutofillContentService["userCancelledUntrustedIframeAutofill"]
       ).toHaveBeenCalled();
-      expect(insertAutofillContentService["tabURLChanged"]).toHaveBeenCalled();
       expect(insertAutofillContentService["runFillScriptAction"]).toHaveBeenCalledTimes(3);
       expect(insertAutofillContentService["runFillScriptAction"]).toHaveBeenNthCalledWith(
         1,

@@ -993,15 +993,8 @@
       function fillTheElement(el, op) {
           var shouldCheck;
           if (el && null !== op && void 0 !== op && !(el.disabled || el.a || el.readOnly)) {
-              let tabURLChanged = !fillScript.savedUrls?.some(url => url.startsWith(window.location.origin));
-
-              // If the page origin doesn't match a savedURL, check the page location against equivalent domains
-              if (tabURLChanged) {
-                tabURLChanged = !fillScript.equivalentDomains.some(url => window.location.host.endsWith(url));
-              }
-
               // Check to make sure the page location didn't change
-              if (tabURLChanged) {
+              if (!fillScript.pageIsQualifiedURL(window.location.href)) {
                 return;
               }
 

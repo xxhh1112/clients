@@ -115,10 +115,10 @@ function createAutofillScriptMock(
       delay_between_operations: 20,
     },
     savedUrls: [],
-    equivalentDomains: [],
     script,
     itemType: "",
     untrustedIframe: false,
+    pageIsQualifiedURL: (url: string) => true,
     ...customFields,
   };
 }

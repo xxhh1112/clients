@@ -450,13 +450,7 @@ export default class AutofillService implements AutofillServiceInterface {
       login?.uris?.filter((u) => u.match != UriMatchType.Never).map((u) => u.uri) ?? [];
 
     fillScript.untrustedIframe = this.inUntrustedIframe(pageDetails.url, options);
-    fillScript.equivalentDomains = fillScript.savedUrls.reduce((equivalentCipherDomains, url) => {
-      const additionalEquivalentDomains = Array.from(
-        this.settingsService.getEquivalentDomains(url)
-      );
-
-      return [...equivalentCipherDomains, ...additionalEquivalentDomains];
-    }, [] as string[]);
+    fillScript.pageIsQualifiedURL = (pageUrl: string) => this.isQualifiedURL(pageUrl, options);
 
     let passwordFields = AutofillService.loadPasswordFields(
       pageDetails,
@@ -955,13 +949,18 @@ export default class AutofillService implements AutofillServiceInterface {
     // Check the pageUrl against cipher URIs using the configured match detection.
     // Remember: if we are in this function, the tabUrl already matches a saved URI for the login.
     // We need to verify the pageUrl also matches.
+    return !this.isQualifiedURL(pageUrl, options);
+  }
+
+  isQualifiedURL(pageUrl: string, options: GenerateFillScriptOptions): boolean {
     const equivalentDomains = this.settingsService.getEquivalentDomains(pageUrl);
     const matchesUri = options.cipher.login.matchesUri(
       pageUrl,
       equivalentDomains,
       options.defaultUriMatch
     );
-    return !matchesUri;
+
+    return matchesUri;
   }
 
   /**

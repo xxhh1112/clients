@@ -386,7 +386,6 @@ describe("AutofillService", () => {
               delay_between_operations: 20,
             },
             savedUrls: [],
-            equivalentDomains: [],
             script: [
               ["click_on_opid", "username-field"],
               ["focus_by_opid", "username-field"],
@@ -397,6 +396,7 @@ describe("AutofillService", () => {
               ["focus_by_opid", "password-field"],
             ],
             untrustedIframe: false,
+            pageIsQualifiedURL: () => true,
           },
           url: currentAutofillPageDetails.tab.url,
         },
@@ -1245,13 +1245,6 @@ describe("AutofillService", () => {
     });
 
     describe("given a list of login uri views", () => {
-      beforeEach(() => {
-        const equivalentDomains = new Set([]);
-        jest
-          .spyOn(settingsService as any, "getEquivalentDomains")
-          .mockReturnValue(equivalentDomains);
-      });
-
       it("returns an empty array of saved login uri views if the login cipher has no login uri views", async () => {
         options.cipher.login.uris = [];
 
@@ -1397,12 +1390,8 @@ describe("AutofillService", () => {
           usernameField.readonly = true;
           totpField.viewable = false;
           totpField.readonly = true;
-          const equivalentDomains = new Set(["example.com"]);
           jest.spyOn(autofillService as any, "findUsernameField");
           jest.spyOn(autofillService as any, "findTotpField");
-          jest
-            .spyOn(settingsService as any, "getEquivalentDomains")
-            .mockReturnValue(equivalentDomains);
         });
 
         it("will attempt to find a username field from hidden fields if no visible username fields are found", async () => {
@@ -1893,7 +1882,6 @@ describe("AutofillService", () => {
         );
         expect(value).toStrictEqual({
           autosubmit: null,
-          equivalentDomains: ["example.com"],
           metadata: {},
           properties: { delay_between_operations: 20 },
           savedUrls: ["https://www.example.com"],
@@ -1982,10 +1970,10 @@ describe("AutofillService", () => {
         metadata: {},
         properties: { delay_between_operations: 20 },
         savedUrls: [],
-        equivalentDomains: [],
         script: [],
         itemType: "",
         untrustedIframe: false,
+        pageIsQualifiedURL: () => true,
       };
 
       it("returns an unmodified fill script when the field is a `span` field", () => {
@@ -2174,7 +2162,6 @@ describe("AutofillService", () => {
         expect(autofillService["makeScriptActionWithValue"]).toHaveBeenCalledTimes(4);
         expect(value).toStrictEqual({
           autosubmit: null,
-          equivalentDomains: [],
           itemType: "",
           metadata: {},
           properties: {
