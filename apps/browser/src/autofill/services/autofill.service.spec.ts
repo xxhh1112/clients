@@ -77,7 +77,7 @@ describe("AutofillService", () => {
     const autofillV2BootstrapScript = "bootstrap-autofill.js";
     const autofillOverlayBootstrapScript = "bootstrap-autofill-overlay.js";
     const defaultAutofillScripts = ["autofiller.js", "notificationBar.js", "contextMenuHandler.js"];
-    const defaultExecuteScriptOptions = { allFrames: true, runAt: "document_start" };
+    const defaultExecuteScriptOptions = { runAt: "document_start" };
     let tabMock: chrome.tabs.Tab;
     let sender: chrome.runtime.MessageSender;
 
@@ -93,11 +93,13 @@ describe("AutofillService", () => {
       [autofillV1Script, ...defaultAutofillScripts].forEach((scriptName) => {
         expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
           file: `content/${scriptName}`,
+          frameId: sender.frameId,
           ...defaultExecuteScriptOptions,
         });
       });
       expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillV2BootstrapScript}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
     });
@@ -107,10 +109,12 @@ describe("AutofillService", () => {
 
       expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillV2BootstrapScript}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
       expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillV1Script}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
     });
@@ -124,14 +128,17 @@ describe("AutofillService", () => {
 
       expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillOverlayBootstrapScript}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
       expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillV1Script}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
       expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
         file: `content/${autofillV2BootstrapScript}`,
+        frameId: sender.frameId,
         ...defaultExecuteScriptOptions,
       });
     });
