@@ -35,6 +35,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     i18nService: I18nService,
     apiService: ApiService,
     platformUtilsService: PlatformUtilsService,
+    stateService: StateService,
     environmentService: EnvironmentService,
     private modalService: ModalService,
     route: ActivatedRoute,
@@ -42,7 +43,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
-    stateService: StateService,
     configService: ConfigServiceAbstraction,
     @Inject(WINDOW) protected win: Window
   ) {
