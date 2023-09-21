@@ -21,14 +21,18 @@ export class Fido2CipherRowComponent implements OnChanges {
   @Input() cipher: CipherView;
   @Input() last: boolean;
   @Input() title: string;
-  @Input() isFirst: boolean;
   @Input() isSearching: boolean;
+  @Input() selectedCipher: CipherView;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.isFirst && !this.isSearching) {
+    if (this.cipher.id === this.selectedCipher.id && !this.isSearching) {
       setTimeout(() => {
-        this.cipherRow.nativeElement.focus();
-      }, 500);
+        this.cipherRow.nativeElement.classList.add("row-selected");
+      });
+    } else {
+      setTimeout(() => {
+        this.cipherRow.nativeElement.classList.remove("row-selected");
+      });
     }
   }
 

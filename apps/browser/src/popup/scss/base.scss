@@ -755,6 +755,12 @@ app-fido2 {
 
           &:focus {
             @include themify($themes) {
+              border: 2px solid themed("headerInputBackgroundFocusColor");
+            }
+          }
+
+          &.row-selected {
+            @include themify($themes) {
               outline: none;
               border-left: 5px solid themed("headerInputBackgroundFocusColor");
               background-color: themed("headerBackgroundHoverColor");

@@ -37,8 +37,8 @@
     <ng-container>
       <ng-container
         *ngIf="
-          data.message.type == 'PickCredentialRequest' ||
-          data.message.type == 'ConfirmNewCredentialRequest'
+          data.message.type === 'PickCredentialRequest' ||
+          data.message.type === 'ConfirmNewCredentialRequest'
         "
       >
         <div class="auth-flow">
@@ -55,12 +55,12 @@
             <div class="box list">
               <div class="box-content">
                 <app-fido2-cipher-row
-                  *ngFor="let cipherItem of displayedCiphers; let isFirst = first"
+                  *ngFor="let cipherItem of displayedCiphers"
                   [cipher]="cipherItem"
-                  [isFirst]="isFirst"
                   [isSearching]="searchPending"
                   title="{{ 'fido2Item' | i18n }}"
                   (onSelected)="selectedPasskey($event)"
+                  [selectedCipher]="cipher"
                 ></app-fido2-cipher-row>
               </div>
             </div>
@@ -101,9 +101,8 @@
           <div class="box list">
             <div class="box-content">
               <app-fido2-cipher-row
-                *ngFor="let cipherItem of displayedCiphers; let isFirst = first"
+                *ngFor="let cipherItem of displayedCiphers"
                 [cipher]="cipherItem"
-                [isFirst]="isFirst"
               ></app-fido2-cipher-row>
             </div>
           </div>
