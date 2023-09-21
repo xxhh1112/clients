@@ -101,7 +101,7 @@ export class CipherService implements CipherServiceAbstraction {
         originalCipher = await this.get(model.id);
       }
       if (originalCipher != null) {
-        await this.updateExistingCipherFromModel(model, originalCipher);
+        await this.updateModelFromExistingCipher(model, originalCipher);
       }
       this.adjustPasswordHistoryLength(model);
     }
@@ -116,21 +116,25 @@ export class CipherService implements CipherServiceAbstraction {
     cipher.revisionDate = model.revisionDate;
     cipher.reprompt = model.reprompt;
     cipher.edit = model.edit;
-
-    if (key == null && cipher.organizationId != null) {
-      key = await this.cryptoService.getOrgKey(cipher.organizationId);
-      if (key == null) {
-        throw new Error("Cannot encrypt cipher for organization. No key.");
-      }
-    }
+    cipher.key = null;
 
     if (await this.getCipherKeyEncryptionEnabled()) {
-      cipher.key = originalCipher?.key ?? null;
-      return this.encryptCipherWithCipherKey(model, cipher, key);
+      if (key == null) {
+        key = await this.getKeyForCipherKeyDecryption(cipher);
+      }
+      const decryptedCipherKey = await this.cryptoService.makeCipherKey();
+      cipher.key = await this.encryptService.encrypt(decryptedCipherKey.key, key);
+      return this.encryptCipher(model, cipher, decryptedCipherKey);
     } else {
       // We want to ensure that the cipher key is null if cipher key encryption is disabled
       // so that decryption uses the proper key.
       cipher.key = null;
+      if (key == null && cipher.organizationId != null) {
+        key = await this.cryptoService.getOrgKey(cipher.organizationId);
+        if (key == null) {
+          throw new Error("Cannot encrypt cipher for organization. No key.");
+        }
+      }
       return this.encryptCipher(model, cipher, key);
     }
   }
@@ -934,7 +938,7 @@ export class CipherService implements CipherServiceAbstraction {
 
   // Helpers
 
-  private async updateExistingCipherFromModel(
+  private async updateModelFromExistingCipher(
     model: CipherView,
     originalCipher: Cipher
   ): Promise<void> {
@@ -1251,32 +1255,19 @@ export class CipherService implements CipherServiceAbstraction {
     return cipher;
   }
 
-  private async encryptCipherWithCipherKey(
-    model: CipherView,
+  private async getDecryptedCipherKey(
     cipher: Cipher,
-    key: SymmetricCryptoKey
-  ): Promise<Cipher> {
-    // First, we get the key for cipher key encryption, in its decrypted form
+    keyForCipherKeyDecryption: SymmetricCryptoKey
+  ): Promise<SymmetricCryptoKey> {
     let decryptedCipherKey: SymmetricCryptoKey;
     if (cipher.key == null) {
       decryptedCipherKey = await this.cryptoService.makeCipherKey();
     } else {
-      const keyForCipherKeyDecryption = await this.getKeyForCipherKeyDecryption(cipher);
       decryptedCipherKey = new SymmetricCryptoKey(
         await this.encryptService.decryptToBytes(cipher.key, keyForCipherKeyDecryption)
       );
     }
-
-    // Then, we have to encrypt the cipher key itself with the proper key
-    // If a key is provided as a parameter, we use it, otherwise we use the user key from state.
-    // The key is provided as a parameter during operations in which the key is changing (e.g. rotation)
-    const keyForCipherKeyEncryption = key ?? (await this.getKeyForCipherKeyDecryption(cipher));
-    cipher.key = await this.encryptService.encrypt(
-      decryptedCipherKey.key,
-      keyForCipherKeyEncryption
-    );
-
-    return this.encryptCipher(model, cipher, decryptedCipherKey);
+    return decryptedCipherKey;
   }
 
   private async getCipherKeyEncryptionEnabled(): Promise<boolean> {
