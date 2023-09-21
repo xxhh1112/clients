@@ -2807,20 +2807,20 @@ export class StateService<
     );
   }
 
-  async getPreviousUrl(options?: StorageOptions): Promise<string> {
+  async getPreLoginDeepLinkUrl(options?: StorageOptions): Promise<string> {
     return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.previousUrl;
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
+    )?.preLoginDeepLinkUrl;
   }
 
-  async setPreviousUrl(url: string, options?: StorageOptions): Promise<void> {
+  async setPreLoginDeepLinkUrl(url: string, options?: StorageOptions): Promise<void> {
     const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
-    globals.previousUrl = url;
+    globals.preLoginDeepLinkUrl = url;
     await this.saveGlobals(
       globals,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskOptions())
     );
   }
 

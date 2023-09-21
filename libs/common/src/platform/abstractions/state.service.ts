@@ -529,16 +529,16 @@ export abstract class StateService<T extends Account = Account> {
     options?: StorageOptions
   ) => Promise<void>;
   /**
-   * fetches string value of the URL stored here, usually only called after SSO flows.
+   * fetches string value of URL user tried to navigate to while unauthenticated.
    * @param options Defines the storage options for the URL; Defaults to Local Storage.
-   * @returns route called prior to SSO routing to organizations configured IdP.
+   * @returns route called prior to successful login.
    */
-  getPreviousUrl: (options?: StorageOptions) => Promise<string>;
+  getPreLoginDeepLinkUrl: (options?: StorageOptions) => Promise<string>;
   /**
    * Store URL in local storage by default, but can be configured. Developed to handle
-   * SSO routing to organizations configured IdP.
+   * deeplink routing during login flows.
    * @param url URL of route
    * @param options Defines the storage options for the URL; Defaults to Local Storage.
    */
-  setPreviousUrl: (url: string, options?: StorageOptions) => Promise<void>;
+  setPreLoginDeepLinkUrl: (url: string, options?: StorageOptions) => Promise<void>;
 }

@@ -7,7 +7,6 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain-api.service.abstraction";
 import { OrganizationDomainSsoDetailsResponse } from "@bitwarden/common/abstractions/organization-domain/responses/organization-domain-sso-details.response";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { HttpStatusCode } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
@@ -19,8 +18,6 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-
-import { RouterService } from "../core";
 
 @Component({
   selector: "app-sso",
@@ -41,9 +38,7 @@ export class SsoComponent extends BaseSsoComponent {
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     logService: LogService,
     private orgDomainApiService: OrgDomainApiServiceAbstraction,
-    private loginService: LoginService,
     private validationService: ValidationService,
-    private routerService: RouterService,
     configService: ConfigServiceAbstraction
   ) {
     super(
@@ -66,10 +61,6 @@ export class SsoComponent extends BaseSsoComponent {
 
   async ngOnInit() {
     super.ngOnInit();
-
-    this.onSuccessfulLoginNavigate = async () => {
-      this.router.navigateByUrl(await this.routerService.getAndClearPersistedPreviousUrl());
-    };
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -125,7 +116,6 @@ export class SsoComponent extends BaseSsoComponent {
   }
 
   async submit() {
-    await this.routerService.persistPreviousUrl();
     await this.stateService.setSsoOrganizationIdentifier(this.identifier);
     if (this.clientId === "browser") {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;

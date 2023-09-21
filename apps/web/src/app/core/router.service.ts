@@ -54,7 +54,7 @@ export class RouterService {
       });
   }
 
-  getPreviousUrl(): string {
+  getPreviousUrl(): string | undefined {
     return this.previousUrl;
   }
 
@@ -63,41 +63,31 @@ export class RouterService {
   }
 
   /**
-   * Save URL to Global State. This service should only be used when there is navigation that
-   * causes the App to be destroyed, ie: SSO routing to IdP.
+   * Save URL to Global State. This service is used during the login process
    * @param url URL being saved to the Global State
    */
-  async persistPreviousUrl(): Promise<void> {
-    await this.stateService.setPreviousUrl(this.previousUrl);
+  async persistPreLoginUrl(url: string): Promise<void> {
+    await this.stateService.setPreLoginDeepLinkUrl(url);
   }
 
   /**
-   * Set GlobalState.PreviousUrl to null
+   * Set GlobalState.preLoginDeepLinkUrl to null
    */
-  async clearPersistedUrl(): Promise<void> {
-    await this.stateService.setPreviousUrl(null);
+  async clearPersistedPreLoginDeepLinkUrl(): Promise<void> {
+    await this.stateService.setPreLoginDeepLinkUrl(null);
   }
 
   /**
-   * Fetch GlobalState.PreviousUrl
-   * @returns GlobalState.PreviousUrl
+   * Fetch and clear persisted preLoginDeepLinkUrl URL if present in state
    */
-  async getPersistedUrl(): Promise<string> {
-    return await this.stateService.getPreviousUrl();
-  }
+  async getAndClearPersistedPreLoginDeepLinkUrl(): Promise<string> | undefined {
+    const persistedPreLoginUrl = await this.stateService.getPreLoginDeepLinkUrl();
 
-  /**
-   * Fetch and clear persisted URL if present in state, otherwise return
-   * router `previousUrl`
-   */
-  async getAndClearPersistedPreviousUrl(): Promise<string> {
-    const persisted = await this.stateService.getPreviousUrl();
-
-    if (!Utils.isNullOrEmpty(persisted)) {
-      await this.clearPersistedUrl();
-      return persisted;
+    if (!Utils.isNullOrEmpty(persistedPreLoginUrl)) {
+      await this.clearPersistedPreLoginDeepLinkUrl();
+      return persistedPreLoginUrl;
     }
 
-    return this.getPreviousUrl();
+    return;
   }
 }

@@ -17,12 +17,13 @@ import { OrganizationRedirectGuard } from "../../admin-console/organizations/gua
 import { OrganizationLayoutComponent } from "../../admin-console/organizations/layouts/organization-layout.component";
 import { GroupsComponent } from "../../admin-console/organizations/manage/groups.component";
 import { VaultModule } from "../../vault/org-vault/vault.module";
+import { preLoginDeepLinkGuard } from "../../core/guards/pre-login-deep-link.guard";
 
 const routes: Routes = [
   {
     path: ":organizationId",
     component: OrganizationLayoutComponent,
-    canActivate: [AuthGuard, OrganizationPermissionsGuard],
+    canActivate: [preLoginDeepLinkGuard(), AuthGuard, OrganizationPermissionsGuard],
     data: {
       organizationPermissions: canAccessOrgAdmin,
     },
