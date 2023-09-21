@@ -50,6 +50,7 @@ export class OrganizationData {
   familySponsorshipToDelete?: boolean;
   accessSecretsManager: boolean;
   limitCollectionCdOwnerAdmin: boolean;
+  canCreateNewCollections: boolean;
 
   constructor(
     response: ProfileOrganizationResponse,
@@ -102,6 +103,7 @@ export class OrganizationData {
     this.familySponsorshipToDelete = response.familySponsorshipToDelete;
     this.accessSecretsManager = response.accessSecretsManager;
     this.limitCollectionCdOwnerAdmin = response.limitCollectionCdOwnerAdmin;
+    this.canCreateNewCollections = response.canCreateNewCollections;
 
     this.isMember = options.isMember;
     this.isProviderUser = options.isProviderUser;
