@@ -127,6 +127,7 @@ const routes: Routes = [
       {
         path: "accept-emergency",
         component: AcceptEmergencyComponent,
+        canActivate: [preLoginDeepLinkGuard()],
         data: { titleId: "acceptEmergency", doNotSaveUrl: false },
       },
       {
