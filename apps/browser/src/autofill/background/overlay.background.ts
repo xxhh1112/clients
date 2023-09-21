@@ -468,6 +468,9 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return this.userAuthStatus;
   }
 
+  /**
+   * Sends a message to the overlay button to update its authentication status.
+   */
   private updateAutofillOverlayButtonAuthStatus() {
     this.overlayButtonPort?.postMessage({
       command: "updateAutofillOverlayButtonAuthStatus",
@@ -475,6 +478,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
+  /**
+   * Handles the overlay button being clicked. If the user is not authenticated,
+   * the vault will be unlocked. If the user is authenticated, the overlay will
+   * be opened.
+   *
+   * @param port - The port of the overlay button
+   */
   private handleOverlayButtonClicked(port: chrome.runtime.Port) {
     if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
       this.unlockVault(port);

@@ -868,4 +868,42 @@ describe("OverlayBackground", () => {
       expect(overlayBackground["userAuthStatus"]).toBe(authStatus);
     });
   });
+
+  describe("updateAutofillOverlayButtonAuthStatus", () => {
+    it("will send a message to the button port with the user's auth status", () => {
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+
+      overlayBackground["updateAutofillOverlayButtonAuthStatus"]();
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillOverlayButtonAuthStatus",
+        authStatus: overlayBackground["userAuthStatus"],
+      });
+    });
+  });
+
+  describe("handleOverlayButtonClicked", () => {
+    it("will unlock the vault if the user is not authenticated", () => {
+      const port = mock<chrome.runtime.Port>();
+      overlayBackground["overlayButtonPort"] = port;
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.LoggedOut;
+      jest.spyOn(overlayBackground as any, "unlockVault").mockImplementation();
+
+      overlayBackground["handleOverlayButtonClicked"](port);
+
+      expect(overlayBackground["unlockVault"]).toHaveBeenCalled();
+    });
+
+    it("will open the autofill overlay if the user is authenticated", () => {
+      const port = mock<chrome.runtime.Port>();
+      overlayBackground["overlayButtonPort"] = port;
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.Unlocked;
+      jest.spyOn(overlayBackground as any, "openOverlay").mockImplementation();
+
+      overlayBackground["handleOverlayButtonClicked"](port);
+
+      expect(overlayBackground["openOverlay"]).toHaveBeenCalled();
+    });
+  });
 });
