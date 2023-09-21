@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { tap } from "rxjs";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Icon, Icons } from "@bitwarden/components";
@@ -14,14 +14,24 @@ export class OrgDisabledComponent implements OnInit {
   protected organizationName: string;
   protected organizationId: string;
   protected NoAccess: Icon = Icons.NoAccess;
+  private destroy$ = new Subject<void>();
 
   async ngOnInit() {
-    this.route.params.pipe(
-      tap((params) => {
-        this.organizationId = params.organizationId;
-      })
-    );
+    this.route.params
+      .pipe(
+        concatMap(async (params) => {
+          this.organizationId = params.organizationId;
+          this.organizationName = await this.organizationService.get(this.organizationId)?.name;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
 
     this.organizationName = this.organizationService.get(this.organizationId)?.name;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
