@@ -58,13 +58,24 @@ class BrowserPopupUtils {
    *
    * @param win - The passed window object.
    * @param scrollY - The amount to scroll the popup.
+   * @param delay - The amount of time to wait before scrolling the popup.
    * @param scrollingContainer - Element tag name of the container to scroll.
    */
-  static setContentScrollY(win: Window, scrollY: number, scrollingContainer = "main"): void {
-    if (scrollY != null) {
-      const content = win.document.getElementsByTagName(scrollingContainer)[0];
-      content.scrollTop = scrollY;
-    }
+  static async setContentScrollY(
+    win: Window,
+    scrollY: number,
+    delay = 0,
+    scrollingContainer = "main"
+  ) {
+    return new Promise<void>((resolve) =>
+      win.setTimeout(() => {
+        if (scrollY != null) {
+          const content = win.document.getElementsByTagName(scrollingContainer)[0];
+          content.scrollTop = scrollY;
+        }
+        resolve();
+      }, delay)
+    );
   }
 
   /**

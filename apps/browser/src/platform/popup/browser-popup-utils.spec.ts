@@ -81,26 +81,26 @@ describe("BrowserPopupUtils", () => {
   });
 
   describe("setContentScrollY", () => {
-    it("should set the scroll position of the popup", () => {
+    it("should set the scroll position of the popup", async () => {
       window.document.body.innerHTML = `
         <main>
           <div></div>
         </main>
       `;
 
-      BrowserPopupUtils.setContentScrollY(window, 200);
+      await BrowserPopupUtils.setContentScrollY(window, 200);
 
       expect(window.document.getElementsByTagName("main")[0].scrollTop).toBe(200);
     });
 
-    it("should not set the scroll position of the popup if the scrollY is null", () => {
+    it("should not set the scroll position of the popup if the scrollY is null", async () => {
       window.document.body.innerHTML = `
         <main>
           <div></div>
         </main>
       `;
 
-      BrowserPopupUtils.setContentScrollY(window, null);
+      await BrowserPopupUtils.setContentScrollY(window, null);
 
       expect(window.document.getElementsByTagName("main")[0].scrollTop).toBe(0);
     });
