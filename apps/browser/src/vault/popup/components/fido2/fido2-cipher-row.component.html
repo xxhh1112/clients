@@ -21,7 +21,7 @@
             <span class="truncate">{{ cipher.name }}</span>
           </span>
         </span>
-        <span class="detail">{{ cipher.subTitle }}</span>
+        <span class="detail" *ngIf="cipher.subTitle">{{ cipher.subTitle }}</span>
       </div>
     </button>
   </div>

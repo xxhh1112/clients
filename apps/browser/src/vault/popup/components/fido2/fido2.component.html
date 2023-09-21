@@ -1,15 +1,14 @@
-<!-- TODO: Rewrite and refactor this component when implementing the new design -->
 <ng-container *ngIf="data$ | async as data">
   <div class="auth-wrapper">
     <div class="auth-header">
       <div class="left">
-        <ng-container *ngIf="data.message.type == 'InformExcludedCredentialRequest'">
-          <svg id="passkey-icon-wrapper" xmlns="http://www.w3.org/2000/svg" height="30" width="30">
+        <ng-container *ngIf="data.message.type != 'PickCredentialRequest'">
+          <svg id="passkey-icon-wrapper" xmlns="http://www.w3.org/2000/svg" height="35" width="32">
             <use xlink:href="../../../../popup/images/shield.svg#passkey-icon"></use>
           </svg>
         </ng-container>
-        <ng-container *ngIf="data.message.type == 'ConfirmNewCredentialRequest'">
-          <svg id="passkey-icon-wrapper" xmlns="http://www.w3.org/2000/svg" height="30" width="197">
+        <ng-container *ngIf="data.message.type == 'PickCredentialRequest'">
+          <svg id="passkey-icon-wrapper" xmlns="http://www.w3.org/2000/svg" height="32" width="197">
             <use xlink:href="../../../../popup/images/shield+logo.svg#passkey-icon"></use>
           </svg>
         </ng-container>
@@ -34,10 +33,7 @@
         </div>
       </ng-container>
     </div>
-    <div>
-      <h1>HELLO WORLD</h1>
-      {{ data | json }}
-    </div>
+
     <ng-container>
       <ng-container
         *ngIf="

@@ -635,23 +635,15 @@ app-fido2 {
     .auth-header {
       display: flex;
       justify-content: space-between;
-
-      .left,
-      .right {
-        flex: 1;
-        display: flex;
-        min-width: -webkit-min-content; /* Workaround to Chrome bug */
-      }
+      align-items: center;
 
       .left {
-        align-items: center;
         padding-right: 10px;
       }
 
       .right {
         justify-content: flex-end;
         align-items: center;
-        padding-left: 10px;
       }
 
       .search {
@@ -683,18 +675,12 @@ app-fido2 {
             outline: none;
           }
 
-          /** make the cancel button visible in both dark/light themes **/
           &[type="search"]::-webkit-search-cancel-button {
             -webkit-appearance: none;
             appearance: none;
-            height: 15px;
-            width: 15px;
             background-repeat: no-repeat;
-            mask-image: url("../images/close-button-white.svg");
-            -webkit-mask-image: url("../images/close-button-white.svg");
-            @include themify($themes) {
-              background-color: themed("headerInputColor");
-            }
+            mask-image: none;
+            -webkit-mask-image: none;
           }
         }
       }
@@ -708,24 +694,10 @@ app-fido2 {
         }
       }
 
-      .search + .right {
-        margin-left: -10px;
-      }
-
-      .logo-image {
-        margin: 0;
-        width: 197px;
-        height: 30px;
-        background-size: 197px 30px;
-        background-repeat: no-repeat;
-        @include themify($themes) {
-          background-image: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
-        }
-      }
-
       #passkey-icon-wrapper {
+        padding-top: 2px;
         @include themify($themes) {
-          fill: themed("primaryColor");
+          fill: themed("headerBackgroundColor");
         }
       }
     }
@@ -773,6 +745,10 @@ app-fido2 {
         padding: 0px;
         margin-bottom: 12px;
 
+        button {
+          min-height: 44px;
+        }
+
         .row-main {
           border-radius: 6px;
           padding: 5px 0px 5px 12px;
@@ -796,14 +772,6 @@ app-fido2 {
             min-height: 15px;
             display: block;
           }
-        }
-      }
-
-      .box-content-row.selected-item {
-        @include themify($themes) {
-          border-left: 5px solid themed("headerInputBackgroundFocusColor");
-          background-color: themed("headerBackgroundHoverColor");
-          color: themed("headerColor");
         }
       }
 
