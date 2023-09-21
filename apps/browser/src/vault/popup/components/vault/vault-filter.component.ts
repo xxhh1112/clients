@@ -135,7 +135,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       }
 
       if (!this.syncService.syncInProgress || restoredScopeState) {
-        await BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY);
+        BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY);
       }
     });
   }

@@ -152,12 +152,10 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       }
 
       if (this.applySavedState && this.state != null) {
-        await BrowserPopupUtils.setContentScrollY(
-          window,
-          this.state.scrollY,
-          0,
-          this.scrollingContainer
-        );
+        BrowserPopupUtils.setContentScrollY(window, this.state.scrollY, {
+          delay: 0,
+          containerSelector: this.scrollingContainer,
+        });
       }
       await this.stateService.setBrowserVaultItemsComponentState(null);
     });

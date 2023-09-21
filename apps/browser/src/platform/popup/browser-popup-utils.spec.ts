@@ -104,6 +104,22 @@ describe("BrowserPopupUtils", () => {
 
       expect(window.document.getElementsByTagName("main")[0].scrollTop).toBe(0);
     });
+
+    it("will set the scroll position of the popup after the provided delay", async () => {
+      jest.useRealTimers();
+      window.document.body.innerHTML = `
+        <div class="scrolling-container">
+          <div></div>
+        </div>
+      `;
+
+      await BrowserPopupUtils.setContentScrollY(window, 300, {
+        delay: 200,
+        containerSelector: ".scrolling-container",
+      });
+
+      expect(window.document.querySelector(".scrolling-container").scrollTop).toBe(300);
+    });
   });
 
   describe("backgroundInitializationRequired", () => {
