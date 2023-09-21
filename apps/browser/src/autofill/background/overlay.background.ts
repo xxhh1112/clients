@@ -35,6 +35,8 @@ import {
 } from "./abstractions/overlay.background";
 
 class OverlayBackground implements OverlayBackgroundInterface {
+  private readonly openUnlockPopout = openUnlockPopout;
+  private readonly openViewVaultItemPopout = openViewVaultItemPopout;
   private overlayVisibility: number;
   private overlayLoginCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
@@ -494,6 +496,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.openOverlay(false, true);
   }
 
+  /**
+   * Facilitates opening the unlock popout window.
+   *
+   * @param port
+   * @private
+   */
   private async unlockVault(port: chrome.runtime.Port) {
     const { sender } = port;
 
@@ -507,9 +515,16 @@ class OverlayBackground implements OverlayBackgroundInterface {
       "addToLockedVaultPendingNotifications",
       retryMessage
     );
-    await openUnlockPopout(sender.tab, { skipNotification: true });
+    await this.openUnlockPopout(sender.tab, { skipNotification: true });
   }
 
+  /**
+   * Triggers the opening of a vault item popout window associated
+   * with the passed cipher ID.
+   * @param overlayCipherId - Cipher ID corresponding to the overlayLoginCiphers map. Does not correspond to the actual cipher's ID.
+   * @param sender - The sender of the port message
+   * @private
+   */
   private async viewSelectedCipher(
     { overlayCipherId }: OverlayBackgroundExtensionMessage,
     { sender }: chrome.runtime.Port
@@ -519,20 +534,25 @@ class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    await openViewVaultItemPopout(sender.tab, {
+    await this.openViewVaultItemPopout(sender.tab, {
       cipherId: cipher.id,
       action: "show-autofill-button",
     });
   }
 
+  /**
+   * Facilitates redirecting focus to the overlay list.
+   */
   private focusOverlayList() {
-    if (!this.overlayListPort) {
-      return;
-    }
-
-    this.overlayListPort.postMessage({ command: "focusOverlayList" });
+    this.overlayListPort?.postMessage({ command: "focusOverlayList" });
   }
 
+  /**
+   * Updates the authentication status for the user and opens the overlay if
+   * a followup command is present in the message.
+   *
+   * @param message - Extension message received from the `unlockCompleted` command
+   */
   private async unlockCompleted(message: OverlayBackgroundExtensionMessage) {
     await this.getAuthStatus();
 
@@ -541,6 +561,9 @@ class OverlayBackground implements OverlayBackgroundInterface {
     }
   }
 
+  /**
+   * Gets the translations for the overlay page.
+   */
   private getTranslations() {
     if (!this.overlayPageTranslations) {
       this.overlayPageTranslations = {

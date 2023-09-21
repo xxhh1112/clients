@@ -906,4 +906,167 @@ describe("OverlayBackground", () => {
       expect(overlayBackground["openOverlay"]).toHaveBeenCalled();
     });
   });
+
+  describe("unlockVault", () => {
+    it("will close the autofill overlay and open the unlock popout", async () => {
+      const tab = createChromeTabMock();
+      const sender = mock<chrome.runtime.MessageSender>({ tab: tab });
+      const port = mock<chrome.runtime.Port>({ sender });
+      overlayBackground["overlayButtonPort"] = port;
+      jest.spyOn(overlayBackground as any, "closeAutofillOverlay").mockImplementation();
+      jest.spyOn(overlayBackground as any, "openUnlockPopout").mockImplementation();
+      jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
+
+      await overlayBackground["unlockVault"](port);
+
+      expect(overlayBackground["closeAutofillOverlay"]).toHaveBeenCalledWith(port);
+      expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(
+        tab,
+        "addToLockedVaultPendingNotifications",
+        {
+          commandToRetry: { msg: { command: "openAutofillOverlay" }, sender },
+          target: "overlay.background",
+        }
+      );
+      expect(overlayBackground["openUnlockPopout"]).toHaveBeenCalledWith(tab, {
+        skipNotification: true,
+      });
+    });
+  });
+
+  describe("viewSelectedCipher", () => {
+    it("returns early if the passed cipher ID does not match one of the overlay login ciphers", async () => {
+      const message = {
+        command: "viewSelectedCipher",
+        overlayCipherId: "overlay-cipher-1",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      overlayBackground["overlayLoginCiphers"] = new Map([
+        ["overlay-cipher-0", mock<CipherView>({ id: "overlay-cipher-0" })],
+      ]);
+      jest.spyOn(overlayBackground as any, "openViewVaultItemPopout").mockImplementation();
+
+      await overlayBackground["viewSelectedCipher"](message, port);
+
+      expect(overlayBackground["openViewVaultItemPopout"]).not.toHaveBeenCalled();
+    });
+
+    it("will open the view vault item popout with the selected cipher", async () => {
+      const message = {
+        command: "viewSelectedCipher",
+        overlayCipherId: "overlay-cipher-1",
+      };
+      const tab = createChromeTabMock();
+      const sender = mock<chrome.runtime.MessageSender>({ tab });
+      const port = mock<chrome.runtime.Port>({ sender });
+      const cipher = mock<CipherView>({ id: "overlay-cipher-1" });
+      overlayBackground["overlayLoginCiphers"] = new Map([
+        ["overlay-cipher-0", mock<CipherView>({ id: "overlay-cipher-0" })],
+        ["overlay-cipher-1", cipher],
+      ]);
+      jest.spyOn(overlayBackground as any, "openViewVaultItemPopout").mockImplementation();
+
+      await overlayBackground["viewSelectedCipher"](message, port);
+
+      expect(overlayBackground["openViewVaultItemPopout"]).toHaveBeenCalledWith(tab, {
+        cipherId: cipher.id,
+        action: "show-autofill-button",
+      });
+    });
+  });
+
+  describe("focusOverlayList", () => {
+    it("will send a `focusOverlayList` message to the overlay list port", () => {
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+
+      overlayBackground["focusOverlayList"]();
+
+      expect(overlayBackground["overlayListPort"].postMessage).toHaveBeenCalledWith({
+        command: "focusOverlayList",
+      });
+    });
+  });
+
+  describe("unlockCompleted", () => {
+    it("will update the user's auth status but not open the overlay", async () => {
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.LoggedOut;
+      const message = {
+        command: "unlockCompleted",
+        data: {
+          commandToRetry: { msg: { command: "" } },
+        },
+      };
+      jest.spyOn(overlayBackground as any, "getAuthStatus").mockImplementation();
+      jest.spyOn(overlayBackground as any, "openOverlay").mockImplementation();
+
+      await overlayBackground["unlockCompleted"](message);
+
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+      expect(overlayBackground["openOverlay"]).not.toHaveBeenCalled();
+    });
+
+    it("will update the user's auth status and open the overlay if a follow up command is provided", async () => {
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.LoggedOut;
+      const message = {
+        command: "unlockCompleted",
+        data: {
+          commandToRetry: { msg: { command: "openAutofillOverlay" } },
+        },
+      };
+      jest.spyOn(overlayBackground as any, "getAuthStatus").mockImplementation();
+      jest.spyOn(overlayBackground as any, "openOverlay").mockImplementation();
+
+      await overlayBackground["unlockCompleted"](message);
+
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+      expect(overlayBackground["openOverlay"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("getTranslations", () => {
+    it("will query the overlay page translations if they have not been queried", () => {
+      overlayBackground["overlayPageTranslations"] = undefined;
+      jest.spyOn(overlayBackground as any, "getTranslations");
+      jest.spyOn(overlayBackground["i18nService"], "translate").mockImplementation((key) => key);
+      jest.spyOn(BrowserApi, "getUILanguage").mockReturnValue("en");
+
+      const translations = overlayBackground["getTranslations"]();
+
+      expect(overlayBackground["getTranslations"]).toHaveBeenCalled();
+      const translationKeys = [
+        "opensInANewWindow",
+        "bitwardenOverlayButton",
+        "toggleBitwardenVaultOverlay",
+        "bitwardenVault",
+        "unlockYourAccountToViewMatchingLogins",
+        "unlockAccount",
+        "fillCredentialsFor",
+        "partialUsername",
+        "view",
+        "noItemsToShow",
+        "newItem",
+        "addNewVaultItem",
+      ];
+      translationKeys.forEach((key) => {
+        expect(overlayBackground["i18nService"].translate).toHaveBeenCalledWith(key);
+      });
+      expect(translations).toStrictEqual({
+        locale: "en",
+        opensInANewWindow: "opensInANewWindow",
+        buttonPageTitle: "bitwardenOverlayButton",
+        toggleBitwardenVaultOverlay: "toggleBitwardenVaultOverlay",
+        listPageTitle: "bitwardenVault",
+        unlockYourAccount: "unlockYourAccountToViewMatchingLogins",
+        unlockAccount: "unlockAccount",
+        fillCredentialsFor: "fillCredentialsFor",
+        partialUsername: "partialUsername",
+        view: "view",
+        noItemsToShow: "noItemsToShow",
+        newItem: "newItem",
+        addNewVaultItem: "addNewVaultItem",
+      });
+    });
+  });
 });
