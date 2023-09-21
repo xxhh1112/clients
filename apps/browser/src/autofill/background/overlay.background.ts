@@ -281,6 +281,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   /**
    * Handles cleanup when an overlay element is closed. Disconnects
    * the list and button ports and sets them to null.
+   *
    * @param overlayElement - The overlay element that was closed, either the list or button
    */
   private overlayElementClosed({ overlayElement }: OverlayBackgroundExtensionMessage) {
@@ -298,6 +299,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
   /**
    * Updates the position of either the overlay list or button. The position
    * is based on the focused field's position and dimensions.
+   *
    * @param overlayElement - The overlay element to update, either the list or button
    */
   private updateOverlayPosition({ overlayElement }: { overlayElement?: string }) {
@@ -369,6 +371,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   /**
    * Sets the focused field data to the data passed in the extension message.
+   *
    * @param focusedFieldData - Contains the rects and styles of the focused field.
    */
   private setFocusedFieldData({ focusedFieldData }: OverlayBackgroundExtensionMessage) {
@@ -377,6 +380,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
   /**
    * Updates the overlay's visibility based on the display property passed in the extension message.
+   *
    * @param display - The display property of the overlay, either "block" or "none"
    */
   private updateOverlayHidden({ display }: OverlayBackgroundExtensionMessage) {
@@ -390,6 +394,12 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort?.postMessage(portMessage);
   }
 
+  /**
+   * Sends a message to the currently active tab to open the autofill overlay.
+   *
+   * @param isFocusingFieldElement - Identifies whether the field element should be focused when the overlay is opened
+   * @param isOpeningFullOverlay - Identifies whether the full overlay should be forced open regardless of other states
+   */
   private async openOverlay(isFocusingFieldElement = false, isOpeningFullOverlay = false) {
     const currentTab = await BrowserApi.getTabFromCurrentWindowId();
 
@@ -400,6 +410,14 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
+  /**
+   * Obscures the username by replacing all but the first and last characters with asterisks.
+   * If the username is less than 4 characters, only the first character will be shown.
+   * If the username is 6 or more characters, the first and last characters will be shown.
+   * The domain will not be obscured.
+   *
+   * @param name - The username to obscure
+   */
   private getObscureName(name: string): string {
     const [username, domain] = name.split("@");
     const usernameLength = username?.length;
@@ -421,12 +439,20 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return domain ? `${obscureName}@${domain}` : obscureName;
   }
 
+  /**
+   * Gets the overlay's visibility setting from the settings service.
+   */
   private async getOverlayVisibility(): Promise<number> {
     this.overlayVisibility = await this.settingsService.getAutoFillOverlayVisibility();
 
     return this.overlayVisibility;
   }
 
+  /**
+   * Gets the user's authentication status from the auth service. If the user's
+   * authentication status has changed, the overlay button's authentication status
+   * will be updated and the overlay list's ciphers will be updated.
+   */
   private async getAuthStatus() {
     const formerAuthStatus = this.userAuthStatus;
     this.userAuthStatus = await this.authService.getAuthStatus();

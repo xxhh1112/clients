@@ -18,7 +18,7 @@ import {
   createPageDetailMock,
 } from "../jest/autofill-mocks";
 import AutofillService from "../services/autofill.service";
-import { AutofillOverlayElement } from "../utils/autofill-overlay.enum";
+import { AutofillOverlayElement, AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
 
 import { OverlayBackgroundExtensionMessage } from "./abstractions/overlay.background";
 import OverlayBackground from "./overlay.background";
@@ -98,7 +98,7 @@ describe("OverlayBackground", () => {
     });
 
     it("will return early if the tab is undefined", async () => {
-      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValue(undefined);
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(undefined);
       jest.spyOn(cipherService, "getAllDecryptedForUrl");
 
       await overlayBackground.updateAutofillOverlayCiphers();
@@ -108,7 +108,7 @@ describe("OverlayBackground", () => {
     });
 
     it("will query all ciphers for the given url, sort them by last used, and format them for usage in the overlay", async () => {
-      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValue(tab);
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(tab);
       cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
@@ -132,7 +132,7 @@ describe("OverlayBackground", () => {
       overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
       cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
-      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValue(tab);
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(tab);
       jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
 
       await overlayBackground.updateAutofillOverlayCiphers();
@@ -584,7 +584,7 @@ describe("OverlayBackground", () => {
 
       expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
         command: "updateIframePosition",
-        position: newPosition,
+        styles: newPosition,
       });
     });
 
@@ -600,7 +600,7 @@ describe("OverlayBackground", () => {
 
       expect(overlayBackground["overlayListPort"].postMessage).toHaveBeenCalledWith({
         command: "updateIframePosition",
-        position: newPosition,
+        styles: newPosition,
       });
     });
   });
@@ -760,6 +760,112 @@ describe("OverlayBackground", () => {
           display: message.display,
         },
       });
+    });
+  });
+
+  describe("openOverlay", () => {
+    it("will send a message to the current tab to open the autofill overlay", async () => {
+      const tab = createChromeTabMock();
+      jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(tab);
+      jest
+        .spyOn(overlayBackground as any, "getAuthStatus")
+        .mockResolvedValue(AuthenticationStatus.Unlocked);
+      jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
+
+      await overlayBackground["openOverlay"](true);
+
+      expect(BrowserApi.getTabFromCurrentWindowId).toHaveBeenCalled();
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+      expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(tab, "openAutofillOverlay", {
+        isFocusingFieldElement: true,
+        isOpeningFullOverlay: false,
+        authStatus: AuthenticationStatus.Unlocked,
+      });
+    });
+  });
+
+  describe("getObscureName", () => {
+    it("will not attempt to obscure a username that is only a domain", () => {
+      const name = "@domain.com";
+
+      const obscureName = overlayBackground["getObscureName"](name);
+
+      expect(obscureName).toBe(name);
+    });
+
+    it("will obscure all characters of a name that is less than 5 characters expect for the first character", () => {
+      const name = "name@domain.com";
+
+      const obscureName = overlayBackground["getObscureName"](name);
+
+      expect(obscureName).toBe("n***@domain.com");
+    });
+
+    it("will obscure all characters of a name that is greater than 4 characters by less than 6 ", () => {
+      const name = "name1@domain.com";
+
+      const obscureName = overlayBackground["getObscureName"](name);
+
+      expect(obscureName).toBe("na***@domain.com");
+    });
+
+    it("will obscure all characters of a name that is greater than 5 characters except for the first two characters and the last character", () => {
+      const name = "name12@domain.com";
+
+      const obscureName = overlayBackground["getObscureName"](name);
+
+      expect(obscureName).toBe("na***2@domain.com");
+    });
+  });
+
+  describe("getOverlayVisibility", () => {
+    it("will set the overlayVisibility property and return the value found within the settings service", async () => {
+      const overlayVisibility = AutofillOverlayVisibility.OnFieldFocus;
+      jest
+        .spyOn(overlayBackground["settingsService"], "getAutoFillOverlayVisibility")
+        .mockResolvedValue(overlayVisibility);
+
+      const visibility = await overlayBackground["getOverlayVisibility"]();
+
+      expect(overlayBackground["overlayVisibility"]).toBe(overlayVisibility);
+      expect(visibility).toBe(overlayVisibility);
+    });
+  });
+
+  describe("getAuthStatus", () => {
+    it("will update the user's auth status but will not update the overlay ciphers", async () => {
+      const authStatus = AuthenticationStatus.Unlocked;
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.Unlocked;
+      jest.spyOn(overlayBackground["authService"], "getAuthStatus").mockResolvedValue(authStatus);
+      jest
+        .spyOn(overlayBackground as any, "updateAutofillOverlayButtonAuthStatus")
+        .mockImplementation();
+      jest.spyOn(overlayBackground as any, "updateAutofillOverlayCiphers").mockImplementation();
+
+      const status = await overlayBackground["getAuthStatus"]();
+
+      expect(overlayBackground["authService"].getAuthStatus).toHaveBeenCalled();
+      expect(overlayBackground["updateAutofillOverlayButtonAuthStatus"]).not.toHaveBeenCalled();
+      expect(overlayBackground["updateAutofillOverlayCiphers"]).not.toHaveBeenCalled();
+      expect(overlayBackground["userAuthStatus"]).toBe(authStatus);
+      expect(status).toBe(authStatus);
+    });
+
+    it("will update the user's auth status and update the overlay ciphers if the status has been modified", async () => {
+      const authStatus = AuthenticationStatus.Unlocked;
+      overlayBackground["userAuthStatus"] = AuthenticationStatus.LoggedOut;
+      jest.spyOn(overlayBackground["authService"], "getAuthStatus").mockResolvedValue(authStatus);
+      jest
+        .spyOn(overlayBackground as any, "updateAutofillOverlayButtonAuthStatus")
+        .mockImplementation();
+      jest.spyOn(overlayBackground as any, "updateAutofillOverlayCiphers").mockImplementation();
+
+      await overlayBackground["getAuthStatus"]();
+
+      expect(overlayBackground["authService"].getAuthStatus).toHaveBeenCalled();
+      expect(overlayBackground["updateAutofillOverlayButtonAuthStatus"]).toHaveBeenCalled();
+      expect(overlayBackground["updateAutofillOverlayCiphers"]).toHaveBeenCalled();
+      expect(overlayBackground["userAuthStatus"]).toBe(authStatus);
     });
   });
 });
