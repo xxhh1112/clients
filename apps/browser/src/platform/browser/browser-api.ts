@@ -213,7 +213,10 @@ export class BrowserApi {
     chrome.windows.create({ url, focused, type });
   }
 
+  // Keep track of all the events registered in a Safari popup so we can remove
+  // them when the popup gets unloaded, otherwise we cause a memory leak
   private static registeredMessageListeners: any[] = [];
+  private static registeredStorageChangeListeners: any[] = [];
 
   static messageListener(
     name: string,
@@ -232,19 +235,36 @@ export class BrowserApi {
       }
     );
 
-    // Keep track of all the events registered in a Safari popup so we can remove
-    // them when the popup gets unloaded, otherwise we cause a memory leak
     if (BrowserApi.isSafariApi && !BrowserApi.isBackgroundPage(window)) {
       BrowserApi.registeredMessageListeners.push(callback);
-
-      // The MDN recommend using 'visibilitychange' but that event is fired any time the popup window is obscured as well
-      // 'pagehide' works just like 'unload' but is compatible with the back/forward cache, so we prefer using that one
-      window.onpagehide = () => {
-        for (const callback of BrowserApi.registeredMessageListeners) {
-          chrome.runtime.onMessage.removeListener(callback);
-        }
-      };
+      BrowserApi.setupUnloadListeners();
     }
+  }
+
+  static storageChangeListener(
+    callback: Parameters<typeof chrome.storage.onChanged.addListener>[0]
+  ) {
+    chrome.storage.onChanged.addListener(callback);
+
+    if (BrowserApi.isSafariApi && !BrowserApi.isBackgroundPage(window)) {
+      BrowserApi.registeredStorageChangeListeners.push(callback);
+      BrowserApi.setupUnloadListeners();
+    }
+  }
+
+  // Setup the event to destroy all the listeners when the popup gets unloaded in Safari, otherwise we get a memory leak
+  private static setupUnloadListeners() {
+    // The MDN recommend using 'visibilitychange' but that event is fired any time the popup window is obscured as well
+    // 'pagehide' works just like 'unload' but is compatible with the back/forward cache, so we prefer using that one
+    window.onpagehide = () => {
+      for (const callback of BrowserApi.registeredMessageListeners) {
+        chrome.runtime.onMessage.removeListener(callback);
+      }
+
+      for (const callback of BrowserApi.registeredStorageChangeListeners) {
+        chrome.storage.onChanged.removeListener(callback);
+      }
+    };
   }
 
   static messageListener$() {
