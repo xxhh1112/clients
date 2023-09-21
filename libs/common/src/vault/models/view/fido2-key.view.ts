@@ -14,6 +14,7 @@ export class Fido2KeyView extends ItemView {
   rpName: string;
   userDisplayName: string;
   discoverable: boolean;
+  creationDate: Date = null;
 
   get subTitle(): string {
     return this.userDisplayName;

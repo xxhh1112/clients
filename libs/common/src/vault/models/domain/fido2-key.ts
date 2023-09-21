@@ -18,6 +18,7 @@ export class Fido2Key extends Domain {
   rpName: EncString;
   userDisplayName: EncString;
   discoverable: EncString;
+  creationDate: Date;
 
   constructor(obj?: Fido2KeyData) {
     super();
@@ -43,6 +44,7 @@ export class Fido2Key extends Domain {
       },
       []
     );
+    this.creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
   }
 
   async decrypt(orgId: string, encKey?: SymmetricCryptoKey): Promise<Fido2KeyView> {
@@ -84,12 +86,14 @@ export class Fido2Key extends Domain {
       encKey
     );
     view.discoverable = discoverable === "true";
+    view.creationDate = this.creationDate;
 
     return view;
   }
 
   toFido2KeyData(): Fido2KeyData {
     const i = new Fido2KeyData();
+    i.creationDate = this.creationDate.toISOString();
     this.buildDataModel(this, i, {
       credentialId: null,
       keyType: null,
@@ -122,6 +126,7 @@ export class Fido2Key extends Domain {
     const rpName = EncString.fromJSON(obj.rpName);
     const userDisplayName = EncString.fromJSON(obj.userDisplayName);
     const discoverable = EncString.fromJSON(obj.discoverable);
+    const creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
 
     return Object.assign(new Fido2Key(), obj, {
       credentialId,
@@ -135,6 +140,7 @@ export class Fido2Key extends Domain {
       rpName,
       userDisplayName,
       discoverable,
+      creationDate,
     });
   }
 }
