@@ -101,10 +101,7 @@ export class SendTypeComponent extends BaseSendComponent {
 
       // Restore state and remove reference
       if (this.applySavedState && this.state != null) {
-        window.setTimeout(
-          () => BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY),
-          0
-        );
+        await BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY);
       }
       this.stateService.setBrowserSendTypeComponentState(null);
     });

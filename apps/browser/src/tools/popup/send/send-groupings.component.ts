@@ -96,7 +96,7 @@ export class SendGroupingsComponent extends BaseSendComponent {
     }
 
     if (!this.syncService.syncInProgress || restoredScopeState) {
-      window.setTimeout(() => BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY), 0);
+      BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY);
     }
 
     // Load all sends if sync completed in background

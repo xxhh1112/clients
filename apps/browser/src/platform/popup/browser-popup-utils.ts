@@ -1,5 +1,7 @@
 import { BrowserApi } from "../browser/browser-api";
 
+import { ScrollOptions } from "./abstractions/browser-popup-utils.abstractions";
+
 class BrowserPopupUtils {
   /**
    * Identifies if the popup is within the sidebar.
@@ -57,14 +59,28 @@ class BrowserPopupUtils {
    * Sets the scroll position of the popup.
    *
    * @param win - The passed window object.
-   * @param scrollY - The amount to scroll the popup.
-   * @param scrollingContainer - Element tag name of the container to scroll.
+   * @param scrollYAmount - The amount to scroll the popup.
+   * @param options - Allows for setting the delay in ms to wait before scrolling the popup and the scrolling container tag name.
    */
-  static setContentScrollY(win: Window, scrollY: number, scrollingContainer = "main"): void {
-    if (scrollY != null) {
-      const content = win.document.getElementsByTagName(scrollingContainer)[0];
-      content.scrollTop = scrollY;
+  static async setContentScrollY(
+    win: Window,
+    scrollYAmount: number | undefined,
+    options: ScrollOptions = {
+      delay: 0,
+      containerSelector: "main",
     }
+  ) {
+    const { delay, containerSelector } = options;
+    return new Promise<void>((resolve) =>
+      win.setTimeout(() => {
+        const container = win.document.querySelector(containerSelector);
+        if (!isNaN(scrollYAmount) && container) {
+          container.scrollTop = scrollYAmount;
+        }
+
+        resolve();
+      }, delay)
+    );
   }
 
   /**
