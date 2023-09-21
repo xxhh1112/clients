@@ -12,6 +12,7 @@ import { BrowserApi } from "../platform/browser/browser-api";
 import { BrowserPopoutWindowService } from "../platform/popup/abstractions/browser-popout-window.service";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
+import { AbortManager } from "../vault/background/abort-manager";
 
 import MainBackground from "./main.background";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
@@ -21,7 +22,7 @@ export default class RuntimeBackground {
   private pageDetailsToAutoFill: any[] = [];
   private onInstalledReason: string = null;
   private lockedVaultPendingNotifications: LockedVaultPendingNotificationsItem[] = [];
-  private abortControllers = new Map<string, AbortController>();
+  private abortManager = new AbortManager();
 
   constructor(
     private main: MainBackground,
@@ -253,18 +254,18 @@ export default class RuntimeBackground {
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
       case "fido2AbortRequest":
-        this.abortControllers.get(msg.abortedRequestId)?.abort();
+        this.abortManager.abort(msg.abortedRequestId);
         break;
       case "checkFido2FeatureEnabled":
         return await this.main.fido2ClientService.isFido2FeatureEnabled();
       case "fido2RegisterCredentialRequest":
-        return await this.main.fido2ClientService
-          .createCredential(msg.data, this.createAbortController(msg.requestId))
-          .finally(() => this.abortControllers.delete(msg.requestId));
+        return await this.abortManager.runWithAbortController(msg.requestId, (abortController) =>
+          this.main.fido2ClientService.createCredential(msg.data, abortController)
+        );
       case "fido2GetCredentialRequest":
-        return await this.main.fido2ClientService
-          .assertCredential(msg.data, this.createAbortController(msg.requestId))
-          .finally(() => this.abortControllers.delete(msg.requestId));
+        return await this.abortManager.runWithAbortController(msg.requestId, (abortController) =>
+          this.main.fido2ClientService.assertCredential(msg.data, abortController)
+        );
     }
   }
 
@@ -300,11 +301,5 @@ export default class RuntimeBackground {
         this.onInstalledReason = null;
       }
     }, 100);
-  }
-
-  private createAbortController(id: string): AbortController {
-    const abortController = new AbortController();
-    this.abortControllers.set(id, abortController);
-    return abortController;
   }
 }

@@ -207,16 +207,13 @@ describe("FidoAuthenticatorService", () => {
             userVerified: userVerification,
           });
 
-          await authenticator.makeCredential(params, new AbortController());
+          await authenticator.makeCredential(params);
 
-          expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith(
-            {
-              credentialName: params.rpEntity.name,
-              userName: params.userEntity.displayName,
-              userVerification,
-            } as NewCredentialParams,
-            expect.anything()
-          );
+          expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith({
+            credentialName: params.rpEntity.name,
+            userName: params.userEntity.displayName,
+            userVerification,
+          } as NewCredentialParams);
         });
       }
 
