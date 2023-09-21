@@ -21,6 +21,9 @@ export class Fido2KeyView extends ItemView {
   }
 
   static fromJSON(obj: Partial<Jsonify<Fido2KeyView>>): Fido2KeyView {
-    return Object.assign(new Fido2KeyView(), obj);
+    const creationDate = obj.creationDate != null ? new Date(obj.creationDate) : null;
+    return Object.assign(new Fido2KeyView(), obj, {
+      creationDate,
+    });
   }
 }

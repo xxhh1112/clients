@@ -4,7 +4,6 @@ export enum FeatureFlag {
   Fido2VaultCredentials = "fido2-vault-credentials",
   TrustedDeviceEncryption = "trusted-device-encryption",
   AutofillV2 = "autofill-v2",
-  SecretsManagerBilling = "sm-ga-billing",
 }
 
 // Replace this with a type safe lookup of the feature flag values in PM-2282
