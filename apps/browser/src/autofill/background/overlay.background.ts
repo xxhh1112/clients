@@ -242,6 +242,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayLoginCiphers = new Map([[overlayCipherId, cipher], ...this.overlayLoginCiphers]);
   }
 
+  /**
+   * Checks if the overlay is focused. Will check the overlay list
+   * if it is open, otherwise it will check the overlay button.
+   */
   private checkOverlayFocused() {
     if (this.overlayListPort) {
       this.checkOverlayListFocused();
@@ -252,18 +256,33 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.checkAutofillOverlayButtonFocused();
   }
 
+  /**
+   * Posts a message to the overlay button iframe to check if it is focused.
+   */
   private checkAutofillOverlayButtonFocused() {
     this.overlayButtonPort?.postMessage({ command: "checkAutofillOverlayButtonFocused" });
   }
 
+  /**
+   * Posts a message to the overlay list iframe to check if it is focused.
+   */
   private checkOverlayListFocused() {
     this.overlayListPort?.postMessage({ command: "checkOverlayListFocused" });
   }
 
+  /**
+   * Sends a message to the sender tab to close the autofill overlay.
+   * @param sender - The sender of the port message
+   */
   private closeAutofillOverlay({ sender }: chrome.runtime.Port) {
     BrowserApi.tabSendMessage(sender.tab, { command: "closeAutofillOverlay" });
   }
 
+  /**
+   * Handles cleanup when an overlay element is closed. Disconnects
+   * the list and button ports and sets them to null.
+   * @param overlayElement - The overlay element that was closed, either the list or button
+   */
   private overlayElementClosed({ overlayElement }: OverlayBackgroundExtensionMessage) {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.disconnect();
@@ -276,6 +295,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     this.overlayListPort = null;
   }
 
+  /**
+   * Updates the position of either the overlay list or button. The position
+   * is based on the focused field's position and dimensions.
+   * @param overlayElement - The overlay element to update, either the list or button
+   */
   private updateOverlayPosition({ overlayElement }: { overlayElement?: string }) {
     if (!overlayElement) {
       return;
@@ -296,6 +320,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   }
 
+  /**
+   * Gets the position of the focused field and calculates the position
+   * of the overlay button based on the focused field's position and dimensions.
+   */
   private getOverlayButtonPosition() {
     if (!this.focusedFieldData) {
       return;

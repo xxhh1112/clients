@@ -18,7 +18,9 @@ import {
   createPageDetailMock,
 } from "../jest/autofill-mocks";
 import AutofillService from "../services/autofill.service";
+import { AutofillOverlayElement } from "../utils/autofill-overlay.enum";
 
+import { OverlayBackgroundExtensionMessage } from "./abstractions/overlay.background";
 import OverlayBackground from "./overlay.background";
 
 const iconServerUrl = "https://icons.bitwarden.com/";
@@ -463,6 +465,143 @@ describe("OverlayBackground", () => {
           ["overlay-cipher-3", cipher3],
         ]).entries()
       );
+    });
+  });
+
+  describe("checkOverlayFocused", () => {
+    it("will check if the overlay list is focused if the list port is open", () => {
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground as any, "checkOverlayListFocused");
+      jest.spyOn(overlayBackground as any, "checkAutofillOverlayButtonFocused");
+
+      overlayBackground["checkOverlayFocused"]();
+
+      expect(overlayBackground["checkOverlayListFocused"]).toHaveBeenCalled();
+      expect(overlayBackground["checkAutofillOverlayButtonFocused"]).not.toHaveBeenCalled();
+    });
+
+    it("will check if the overlay button is focused if the list port is not open", () => {
+      jest.spyOn(overlayBackground as any, "checkOverlayListFocused");
+      jest.spyOn(overlayBackground as any, "checkAutofillOverlayButtonFocused");
+
+      overlayBackground["checkOverlayFocused"]();
+
+      expect(overlayBackground["checkOverlayListFocused"]).not.toHaveBeenCalled();
+      expect(overlayBackground["checkAutofillOverlayButtonFocused"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("checkAutofillOverlayButtonFocused", () => {
+    it("will post a message to the overlay button if the button port is open", () => {
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+
+      overlayBackground["checkAutofillOverlayButtonFocused"]();
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
+        command: "checkAutofillOverlayButtonFocused",
+      });
+    });
+  });
+
+  describe("checkOverlayListFocused", () => {
+    it("will post a message to the overlay list if the list port is open", () => {
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+
+      overlayBackground["checkOverlayListFocused"]();
+
+      expect(overlayBackground["overlayListPort"].postMessage).toHaveBeenCalledWith({
+        command: "checkOverlayListFocused",
+      });
+    });
+  });
+
+  describe("closeAutofillOverlay", () => {
+    it("will send a `closeAutofillOverlay` message to the sender tab", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      jest.spyOn(BrowserApi, "tabSendMessage");
+
+      overlayBackground["closeAutofillOverlay"](port);
+
+      expect(BrowserApi.tabSendMessage).toHaveBeenCalledWith(port.sender.tab, {
+        command: "closeAutofillOverlay",
+      });
+    });
+  });
+
+  describe("overlayElementClosed", () => {
+    it("will disconnect and nullify the button port if the passed element is the overlay button", () => {
+      const port = mock<chrome.runtime.Port>();
+      overlayBackground["overlayButtonPort"] = port;
+      jest.spyOn(port, "disconnect");
+
+      overlayBackground["overlayElementClosed"]({
+        overlayElement: AutofillOverlayElement.Button,
+      } as OverlayBackgroundExtensionMessage);
+
+      expect(port.disconnect).toHaveBeenCalled();
+      expect(overlayBackground["overlayButtonPort"]).toBeNull();
+    });
+
+    it("will disconnect and nullify the list port if the passed element is the overlay list", () => {
+      const port = mock<chrome.runtime.Port>();
+      overlayBackground["overlayListPort"] = port;
+      jest.spyOn(port, "disconnect");
+
+      overlayBackground["overlayElementClosed"]({
+        overlayElement: AutofillOverlayElement.List,
+      } as OverlayBackgroundExtensionMessage);
+
+      expect(port.disconnect).toHaveBeenCalled();
+      expect(overlayBackground["overlayListPort"]).toBeNull();
+    });
+  });
+
+  describe("updateOverlayPosition", () => {
+    it("will return early if the overlay element type is not provided", () => {
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+
+      overlayBackground["updateOverlayPosition"]({ overlayElement: undefined });
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).not.toHaveBeenCalled();
+      expect(overlayBackground["overlayListPort"].postMessage).not.toHaveBeenCalled();
+    });
+
+    it("will post a message to the overlay button facilitating an update of the button's position", () => {
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      const newPosition = { top: 1, left: 2, height: 3, width: 4 };
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+      jest.spyOn(overlayBackground as any, "getOverlayButtonPosition").mockReturnValue(newPosition);
+
+      overlayBackground["updateOverlayPosition"]({
+        overlayElement: AutofillOverlayElement.Button,
+      });
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
+        command: "updateIframePosition",
+        position: newPosition,
+      });
+    });
+
+    it("will post a message to the overlay list facilitating an update of the list's position", () => {
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      const newPosition = { top: 1, left: 2, height: 3, width: 4 };
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+      jest.spyOn(overlayBackground as any, "getOverlayListPosition").mockReturnValue(newPosition);
+
+      overlayBackground["updateOverlayPosition"]({
+        overlayElement: AutofillOverlayElement.List,
+      });
+
+      expect(overlayBackground["overlayListPort"].postMessage).toHaveBeenCalledWith({
+        command: "updateIframePosition",
+        position: newPosition,
+      });
     });
   });
 });
