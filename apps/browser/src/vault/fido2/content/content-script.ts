@@ -20,10 +20,11 @@ function initializeFido2ContentScript(isFido2FeatureEnabled: boolean) {
   const messenger = Messenger.forDOMCommunication(window);
 
   messenger.handler = async (message, abortController) => {
+    const requestId = Date.now().toString();
     const abortHandler = () =>
       chrome.runtime.sendMessage({
         command: "fido2AbortRequest",
-        abortedRequestId: message.metadata.requestId,
+        abortedRequestId: requestId,
       });
     abortController.signal.addEventListener("abort", abortHandler);
 
@@ -33,7 +34,7 @@ function initializeFido2ContentScript(isFido2FeatureEnabled: boolean) {
           {
             command: "fido2RegisterCredentialRequest",
             data: message.data,
-            requestId: message.metadata.requestId,
+            requestId: requestId,
           },
           (response) => {
             if (response.error !== undefined) {
@@ -55,7 +56,7 @@ function initializeFido2ContentScript(isFido2FeatureEnabled: boolean) {
           {
             command: "fido2GetCredentialRequest",
             data: message.data,
-            requestId: message.metadata.requestId,
+            requestId: requestId,
           },
           (response) => {
             if (response.error !== undefined) {

@@ -1,8 +1,17 @@
+/**
+ * This class represents an abstraction of the WebAuthn Authenticator model as described by W3C:
+ * https://www.w3.org/TR/webauthn-3/#sctn-authenticator-model
+ *
+ * The authenticator provides key management and cryptographic signatures.
+ */
 export abstract class Fido2AuthenticatorService {
   /**
-   * Create and save a new credential
+   * Create and save a new credential as described in:
+   * https://www.w3.org/TR/webauthn-3/#sctn-op-make-cred
    *
-   * @return {Uint8Array} Attestation object
+   * @param params Parameters for creating a new credential
+   * @param abortController An AbortController that can be used to abort the operation.
+   * @returns A promise that resolves with the new credential and an attestation signature.
    **/
   makeCredential: (
     params: Fido2AuthenticatorMakeCredentialsParams,
@@ -10,7 +19,12 @@ export abstract class Fido2AuthenticatorService {
   ) => Promise<Fido2AuthenticatorMakeCredentialResult>;
 
   /**
-   * Generate an assertion using an existing credential
+   * Generate an assertion using an existing credential as describe in:
+   * https://www.w3.org/TR/webauthn-3/#sctn-op-get-assertion
+   *
+   * @param params Parameters for generating an assertion
+   * @param abortController An AbortController that can be used to abort the operation.
+   * @returns A promise that resolves with the asserted credential and an assertion signature.
    */
   getAssertion: (
     params: Fido2AuthenticatorGetAssertionParams,
@@ -46,7 +60,6 @@ export interface PublicKeyCredentialDescriptor {
 /**
  * Parameters for {@link Fido2AuthenticatorService.makeCredential}
  *
- * @note
  * This interface represents the input parameters described in
  * https://www.w3.org/TR/webauthn-3/#sctn-op-make-cred
  */
@@ -97,6 +110,12 @@ export interface Fido2AuthenticatorMakeCredentialResult {
   publicKeyAlgorithm: number;
 }
 
+/**
+ * Parameters for {@link Fido2AuthenticatorService.getAssertion}
+
+ * This interface represents the input parameters described in
+ * https://www.w3.org/TR/webauthn-3/#sctn-op-get-assertion
+ */
 export interface Fido2AuthenticatorGetAssertionParams {
   /** The caller’s RP ID, as determined by the user agent and the client. */
   rpId: string;

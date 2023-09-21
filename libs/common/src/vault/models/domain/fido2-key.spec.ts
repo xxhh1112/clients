@@ -6,6 +6,12 @@ import { Fido2KeyData } from "../data/fido2-key.data";
 import { Fido2Key } from "./fido2-key";
 
 describe("Fido2Key", () => {
+  let mockDate: Date;
+
+  beforeEach(() => {
+    mockDate = new Date("2023-01-01T12:00:00.000Z");
+  });
+
   describe("constructor", () => {
     it("returns all fields null when given empty data parameter", () => {
       const data = new Fido2KeyData();
@@ -23,10 +29,11 @@ describe("Fido2Key", () => {
         userDisplayName: null,
         counter: null,
         discoverable: null,
+        creationDate: null,
       });
     });
 
-    it("returns all fields as EncStrings when given full Fido2KeyData", () => {
+    it("returns all fields as EncStrings except creationDate when given full Fido2KeyData", () => {
       const data: Fido2KeyData = {
         credentialId: "credentialId",
         keyType: "public-key",
@@ -39,6 +46,7 @@ describe("Fido2Key", () => {
         rpName: "rpName",
         userDisplayName: "userDisplayName",
         discoverable: "discoverable",
+        creationDate: mockDate.toISOString(),
       };
       const fido2Key = new Fido2Key(data);
 
@@ -54,6 +62,7 @@ describe("Fido2Key", () => {
         rpName: { encryptedString: "rpName", encryptionType: 0 },
         userDisplayName: { encryptedString: "userDisplayName", encryptionType: 0 },
         discoverable: { encryptedString: "discoverable", encryptionType: 0 },
+        creationDate: mockDate,
       });
     });
 
@@ -80,6 +89,7 @@ describe("Fido2Key", () => {
       fido2Key.rpName = mockEnc("rpName");
       fido2Key.userDisplayName = mockEnc("userDisplayName");
       fido2Key.discoverable = mockEnc("true");
+      fido2Key.creationDate = mockDate;
 
       const fido2KeyView = await fido2Key.decrypt(null);
 
@@ -95,6 +105,7 @@ describe("Fido2Key", () => {
         userDisplayName: "userDisplayName",
         counter: 2,
         discoverable: true,
+        creationDate: mockDate,
       });
     });
   });
@@ -113,6 +124,7 @@ describe("Fido2Key", () => {
         rpName: "rpName",
         userDisplayName: "userDisplayName",
         discoverable: "true",
+        creationDate: mockDate.toISOString(),
       };
 
       const fido2Key = new Fido2Key(data);
@@ -136,6 +148,7 @@ describe("Fido2Key", () => {
       fido2Key.rpName = createEncryptedEncString("rpName");
       fido2Key.userDisplayName = createEncryptedEncString("userDisplayName");
       fido2Key.discoverable = createEncryptedEncString("discoverable");
+      fido2Key.creationDate = mockDate;
 
       const json = JSON.stringify(fido2Key);
       const result = Fido2Key.fromJSON(JSON.parse(json));

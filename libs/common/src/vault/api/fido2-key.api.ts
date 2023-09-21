@@ -12,6 +12,7 @@ export class Fido2KeyApi extends BaseResponse {
   rpName: string;
   userDisplayName: string;
   discoverable: string;
+  creationDate: string;
 
   constructor(data: any = null) {
     super(data);
@@ -30,5 +31,6 @@ export class Fido2KeyApi extends BaseResponse {
     this.rpName = this.getResponseProperty("RpName");
     this.userDisplayName = this.getResponseProperty("UserDisplayName");
     this.discoverable = this.getResponseProperty("Discoverable");
+    this.creationDate = this.getResponseProperty("CreationDate");
   }
 }

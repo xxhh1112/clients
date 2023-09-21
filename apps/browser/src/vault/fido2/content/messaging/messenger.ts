@@ -1,127 +1,130 @@
-import { concatMap, filter, firstValueFrom, Observable } from "rxjs";
-
 import { Message, MessageType } from "./message";
 
 const SENDER = "bitwarden-webauthn";
 
-type PostMessageFunction = (message: MessageWithMetadata) => void;
+type PostMessageFunction = (message: MessageWithMetadata, remotePort: MessagePort) => void;
 
 export type Channel = {
-  messages$: Observable<MessageWithMetadata>;
+  addEventListener: (listener: (message: MessageEvent<MessageWithMetadata>) => void) => void;
   postMessage: PostMessageFunction;
 };
 
-export type Metadata = { SENDER: typeof SENDER; requestId: string };
-export type MessageWithMetadata = Message & { metadata: Metadata };
+export type Metadata = { SENDER: typeof SENDER };
+export type MessageWithMetadata = Message & Metadata;
 type Handler = (
   message: MessageWithMetadata,
   abortController?: AbortController
 ) => Promise<Message | undefined>;
 
-// TODO: This class probably duplicates functionality but I'm not especially familiar with
-// the inner workings of the browser extension yet.
-// If you see this in a code review please comment on it!
-
+/**
+ * A class that handles communication between the page and content script. It converts
+ * the browser's broadcasting API into a request/response API with support for seamlessly
+ * handling aborts and exceptions across separate execution contexts.
+ */
 export class Messenger {
+  /**
+   * Creates a messenger that uses the browser's `window.postMessage` API to initiate
+   * requests in the content script. Every request will then create it's own
+   * `MessageChannel` through which all subsequent communication will be sent through.
+   *
+   * @param window the window object to use for communication
+   * @returns a `Messenger` instance
+   */
   static forDOMCommunication(window: Window) {
     const windowOrigin = window.location.origin;
 
     return new Messenger({
-      postMessage: (message) => window.postMessage(message, windowOrigin),
-      messages$: new Observable((subscriber) => {
-        const eventListener = (event: MessageEvent<MessageWithMetadata>) => {
+      postMessage: (message, port) => window.postMessage(message, windowOrigin, [port]),
+      addEventListener: (listener) =>
+        window.addEventListener("message", (event: MessageEvent<unknown>) => {
           if (event.origin !== windowOrigin) {
             return;
           }
 
-          subscriber.next(event.data);
-        };
-
-        window.addEventListener("message", eventListener);
-
-        return () => window.removeEventListener("message", eventListener);
-      }),
+          listener(event as MessageEvent<MessageWithMetadata>);
+        }),
     });
   }
 
+  /**
+   * The handler that will be called when a message is recieved. The handler should return
+   * a promise that resolves to the response message. If the handler throws an error, the
+   * error will be sent back to the sender.
+   */
   handler?: Handler;
-  private abortControllers = new Map<string, AbortController>();
 
-  constructor(private channel: Channel) {
-    this.channel.messages$
-      .pipe(
-        filter((message) => message?.metadata?.SENDER === SENDER),
-        concatMap(async (message) => {
-          if (this.handler === undefined) {
-            return;
-          }
-
-          const abortController = new AbortController();
-          this.abortControllers.set(message.metadata.requestId, abortController);
-
-          try {
-            const handlerResponse = await this.handler(message, abortController);
-
-            if (handlerResponse === undefined) {
-              return;
-            }
-
-            const metadata: Metadata = { SENDER, requestId: message.metadata.requestId };
-            this.channel.postMessage({ ...handlerResponse, metadata });
-          } catch (error) {
-            const metadata: Metadata = { SENDER, requestId: message.metadata.requestId };
-            this.channel.postMessage({
-              type: MessageType.ErrorResponse,
-              metadata,
-              error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
-            });
-          } finally {
-            this.abortControllers.delete(message.metadata.requestId);
-          }
-        })
-      )
-      .subscribe();
-
-    this.channel.messages$.subscribe((message) => {
-      if (message.type !== MessageType.AbortRequest) {
+  constructor(private broadcastChannel: Channel) {
+    this.broadcastChannel.addEventListener(async (event) => {
+      if (this.handler === undefined) {
         return;
       }
 
-      this.abortControllers.get(message.abortedRequestId)?.abort();
+      const message = event.data;
+      const port = event.ports?.[0];
+      if (message?.SENDER !== SENDER || message == null || port == null) {
+        return;
+      }
+
+      const abortController = new AbortController();
+      port.onmessage = (event: MessageEvent<MessageWithMetadata>) => {
+        if (event.data.type === MessageType.AbortRequest) {
+          abortController.abort();
+        }
+      };
+
+      try {
+        const handlerResponse = await this.handler(message, abortController);
+        port.postMessage({ ...handlerResponse, SENDER });
+      } catch (error) {
+        port.postMessage({
+          SENDER,
+          type: MessageType.ErrorResponse,
+          error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+        });
+      } finally {
+        port.close();
+      }
     });
   }
 
+  /**
+   * Sends a request to the content script and returns the response.
+   * AbortController signals will be forwarded to the content script.
+   *
+   * @param request data to send to the content script
+   * @param abortController the abort controller that might be used to abort the request
+   * @returns the response from the content script
+   */
   async request(request: Message, abortController?: AbortController): Promise<Message> {
-    const requestId = Date.now().toString();
-    const metadata: Metadata = { SENDER, requestId };
+    const requestChannel = new MessageChannel();
+    const { port1: localPort, port2: remotePort } = requestChannel;
 
-    const promise = firstValueFrom(
-      this.channel.messages$.pipe(
-        filter(
-          (m) => m != undefined && m.metadata?.requestId === requestId && m.type !== request.type
-        )
-      )
-    );
-
-    const abortListener = () =>
-      this.channel.postMessage({
-        metadata: { SENDER, requestId: `${requestId}-abort` },
-        type: MessageType.AbortRequest,
-        abortedRequestId: requestId,
+    try {
+      const promise = new Promise<Message>((resolve) => {
+        localPort.onmessage = (event: MessageEvent<MessageWithMetadata>) => resolve(event.data);
       });
-    abortController?.signal.addEventListener("abort", abortListener);
 
-    this.channel.postMessage({ ...request, metadata });
+      const abortListener = () =>
+        localPort.postMessage({
+          metadata: { SENDER },
+          type: MessageType.AbortRequest,
+        });
+      abortController?.signal.addEventListener("abort", abortListener);
 
-    const response = await promise;
-    abortController?.signal.removeEventListener("abort", abortListener);
+      this.broadcastChannel.postMessage({ ...request, SENDER }, remotePort);
+      const response = await promise;
 
-    if (response.type === MessageType.ErrorResponse) {
-      const error = new Error();
-      Object.assign(error, JSON.parse(response.error));
-      throw error;
+      abortController?.signal.removeEventListener("abort", abortListener);
+
+      if (response.type === MessageType.ErrorResponse) {
+        const error = new Error();
+        Object.assign(error, JSON.parse(response.error));
+        throw error;
+      }
+
+      return response;
+    } finally {
+      localPort.close();
     }
-
-    return response;
   }
 }

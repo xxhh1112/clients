@@ -1,6 +1,6 @@
 import { FallbackRequestedError } from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
 
-import { WebauthnUtils } from "../../../browser/webauthn-utils";
+import { WebauthnUtils } from "../webauthn-utils";
 
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";

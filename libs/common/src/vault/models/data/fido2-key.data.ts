@@ -12,6 +12,7 @@ export class Fido2KeyData {
   rpName: string;
   userDisplayName: string;
   discoverable: string;
+  creationDate: string;
 
   constructor(data?: Fido2KeyApi) {
     if (data == null) {
@@ -29,5 +30,6 @@ export class Fido2KeyData {
     this.rpName = data.rpName;
     this.userDisplayName = data.userDisplayName;
     this.discoverable = data.discoverable;
+    this.creationDate = data.creationDate;
   }
 }

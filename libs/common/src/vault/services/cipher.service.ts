@@ -1115,6 +1115,7 @@ export class CipherService implements CipherServiceAbstraction {
                 String(viewKey.discoverable),
                 key
               );
+              domainKey.creationDate = viewKey.creationDate;
               return domainKey;
             })
           );
