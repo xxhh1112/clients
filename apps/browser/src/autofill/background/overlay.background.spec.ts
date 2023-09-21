@@ -604,4 +604,162 @@ describe("OverlayBackground", () => {
       });
     });
   });
+
+  describe("getOverlayButtonPosition", () => {
+    it("will return early if the focused field data is not populated", () => {
+      overlayBackground["focusedFieldData"] = undefined;
+
+      const position = overlayBackground["getOverlayButtonPosition"]();
+
+      expect(position).toBeUndefined();
+    });
+
+    it("will return the overlay button position if the focused field data is populated", () => {
+      overlayBackground["focusedFieldData"] = {
+        focusedFieldRects: {
+          top: 1,
+          left: 2,
+          height: 3,
+          width: 4,
+        },
+        focusedFieldStyles: {
+          paddingRight: "6px",
+          paddingLeft: "6px",
+        },
+      };
+
+      const position = overlayBackground["getOverlayButtonPosition"]();
+
+      expect(position).toStrictEqual({
+        height: "1.8900000000000001px",
+        left: "3.5549999999999997px",
+        top: "1.555px",
+        width: "1.8900000000000001px",
+      });
+    });
+
+    it("will take into account the right padding of the focused field in positioning the button if the right padding of the field is larger than the left padding", () => {
+      overlayBackground["focusedFieldData"] = {
+        focusedFieldRects: {
+          top: 1,
+          left: 2,
+          height: 3,
+          width: 4,
+        },
+        focusedFieldStyles: {
+          paddingRight: "20px",
+          paddingLeft: "6px",
+        },
+      };
+
+      const position = overlayBackground["getOverlayButtonPosition"]();
+
+      expect(position).toStrictEqual({
+        height: "1.8900000000000001px",
+        left: "-17.89px",
+        top: "1.555px",
+        width: "1.8900000000000001px",
+      });
+    });
+  });
+
+  describe("getOverlayListPosition", () => {
+    it("will return early if the focused field data is not populated ", () => {
+      overlayBackground["focusedFieldData"] = undefined;
+
+      const position = overlayBackground["getOverlayListPosition"]();
+
+      expect(position).toBeUndefined();
+    });
+
+    it("will return the overlay list position if the focused field data is populated", () => {
+      overlayBackground["focusedFieldData"] = {
+        focusedFieldRects: {
+          top: 1,
+          left: 2,
+          height: 3,
+          width: 4,
+        },
+        focusedFieldStyles: {
+          paddingRight: "6px",
+          paddingLeft: "6px",
+        },
+      };
+
+      const position = overlayBackground["getOverlayListPosition"]();
+
+      expect(position).toStrictEqual({
+        left: "2px",
+        top: "4px",
+        width: "4px",
+      });
+    });
+  });
+
+  describe("setFocusedFieldData", () => {
+    it("will set the focused field data", () => {
+      const message = {
+        command: "setFocusedFieldData",
+        focusedFieldData: {
+          focusedFieldRects: {
+            top: 1,
+            left: 2,
+            height: 3,
+            width: 4,
+          },
+          focusedFieldStyles: {
+            paddingRight: "6px",
+            paddingLeft: "6px",
+          },
+        },
+      };
+
+      overlayBackground["setFocusedFieldData"](message);
+
+      expect(overlayBackground["focusedFieldData"]).toStrictEqual(message.focusedFieldData);
+    });
+  });
+
+  describe("updateOverlayHidden", () => {
+    it("returns early if the display value is not provided", () => {
+      const message = {
+        command: "updateOverlayHidden",
+      };
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+
+      overlayBackground["updateOverlayHidden"](message);
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).not.toHaveBeenCalled();
+      expect(overlayBackground["overlayListPort"].postMessage).not.toHaveBeenCalled();
+    });
+
+    it("posts a message to the overlay button and list with the display value", () => {
+      const message = {
+        command: "updateOverlayHidden",
+        display: "none",
+      };
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+      overlayBackground["overlayListPort"] = mock<chrome.runtime.Port>();
+      jest.spyOn(overlayBackground["overlayButtonPort"], "postMessage");
+      jest.spyOn(overlayBackground["overlayListPort"], "postMessage");
+
+      overlayBackground["updateOverlayHidden"](message);
+
+      expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
+        command: "updateOverlayHidden",
+        styles: {
+          display: message.display,
+        },
+      });
+      expect(overlayBackground["overlayListPort"].postMessage).toHaveBeenCalledWith({
+        command: "updateOverlayHidden",
+        styles: {
+          display: message.display,
+        },
+      });
+    });
+  });
 });

@@ -308,7 +308,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
     if (overlayElement === AutofillOverlayElement.Button) {
       this.overlayButtonPort?.postMessage({
         command: "updateIframePosition",
-        position: this.getOverlayButtonPosition(),
+        styles: this.getOverlayButtonPosition(),
       });
 
       return;
@@ -316,7 +316,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 
     this.overlayListPort?.postMessage({
       command: "updateIframePosition",
-      position: this.getOverlayListPosition(),
+      styles: this.getOverlayListPosition(),
     });
   }
 
@@ -350,9 +350,16 @@ class OverlayBackground implements OverlayBackgroundInterface {
     };
   }
 
+  /**
+   * Gets the position of the focused field and calculates the position
+   * of the overlay list based on the focused field's position and dimensions.
+   */
   private getOverlayListPosition() {
-    const { top, left, width, height } = this.focusedFieldData.focusedFieldRects;
+    if (!this.focusedFieldData) {
+      return;
+    }
 
+    const { top, left, width, height } = this.focusedFieldData.focusedFieldRects;
     return {
       width: `${width}px`,
       top: `${top + height}px`,
@@ -360,16 +367,24 @@ class OverlayBackground implements OverlayBackgroundInterface {
     };
   }
 
+  /**
+   * Sets the focused field data to the data passed in the extension message.
+   * @param focusedFieldData - Contains the rects and styles of the focused field.
+   */
   private setFocusedFieldData({ focusedFieldData }: OverlayBackgroundExtensionMessage) {
     this.focusedFieldData = focusedFieldData;
   }
 
+  /**
+   * Updates the overlay's visibility based on the display property passed in the extension message.
+   * @param display - The display property of the overlay, either "block" or "none"
+   */
   private updateOverlayHidden({ display }: OverlayBackgroundExtensionMessage) {
     if (!display) {
       return;
     }
 
-    const portMessage = { command: "updateOverlayHidden", display: { display } };
+    const portMessage = { command: "updateOverlayHidden", styles: { display } };
 
     this.overlayButtonPort?.postMessage(portMessage);
     this.overlayListPort?.postMessage(portMessage);

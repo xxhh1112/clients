@@ -1,7 +1,6 @@
 type AutofillOverlayIframeExtensionMessage = {
   command: string;
-  position?: Partial<CSSStyleDeclaration>;
-  display?: Partial<CSSStyleDeclaration>;
+  styles?: Partial<CSSStyleDeclaration>;
 };
 
 type BackgroundPortMessageHandlers = {

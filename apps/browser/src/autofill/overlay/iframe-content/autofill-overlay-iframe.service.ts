@@ -30,8 +30,8 @@ class AutofillOverlayIframeService implements AutofillOverlayIframeServiceInterf
     opacity: "0",
   };
   private readonly backgroundPortMessageHandlers: BackgroundPortMessageHandlers = {
-    updateIframePosition: ({ message }) => this.updateIframePosition(message.position),
-    updateOverlayHidden: ({ message }) => this.updateElementStyles(this.iframe, message.display),
+    updateIframePosition: ({ message }) => this.updateIframePosition(message.styles),
+    updateOverlayHidden: ({ message }) => this.updateElementStyles(this.iframe, message.styles),
   };
 
   constructor(private iframePath: string, private portName: string, private shadow: ShadowRoot) {
