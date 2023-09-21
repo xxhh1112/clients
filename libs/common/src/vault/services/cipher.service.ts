@@ -119,16 +119,9 @@ export class CipherService implements CipherServiceAbstraction {
     cipher.key = null;
 
     if (await this.getCipherKeyEncryptionEnabled()) {
-      if (key == null) {
-        key = await this.getKeyForCipherKeyDecryption(cipher);
-      }
-      const decryptedCipherKey = await this.cryptoService.makeCipherKey();
-      cipher.key = await this.encryptService.encrypt(decryptedCipherKey.key, key);
-      return this.encryptCipher(model, cipher, decryptedCipherKey);
+      return this.encryptCipherWithCipherKey(model, cipher, key);
     } else {
-      // We want to ensure that the cipher key is null if cipher key encryption is disabled
-      // so that decryption uses the proper key.
-      cipher.key = null;
+      // TODO: Remove this when cipher key encryption is enabled and supported on all supported server versions
       if (key == null && cipher.organizationId != null) {
         key = await this.cryptoService.getOrgKey(cipher.organizationId);
         if (key == null) {
@@ -1255,19 +1248,17 @@ export class CipherService implements CipherServiceAbstraction {
     return cipher;
   }
 
-  private async getDecryptedCipherKey(
+  private async encryptCipherWithCipherKey(
+    model: CipherView,
     cipher: Cipher,
-    keyForCipherKeyDecryption: SymmetricCryptoKey
-  ): Promise<SymmetricCryptoKey> {
-    let decryptedCipherKey: SymmetricCryptoKey;
-    if (cipher.key == null) {
-      decryptedCipherKey = await this.cryptoService.makeCipherKey();
-    } else {
-      decryptedCipherKey = new SymmetricCryptoKey(
-        await this.encryptService.decryptToBytes(cipher.key, keyForCipherKeyDecryption)
-      );
+    key: SymmetricCryptoKey
+  ): Promise<Cipher> {
+    if (key == null) {
+      key = await this.getKeyForCipherKeyDecryption(cipher);
     }
-    return decryptedCipherKey;
+    const decryptedCipherKey = await this.cryptoService.makeCipherKey();
+    cipher.key = await this.encryptService.encrypt(decryptedCipherKey.key, key);
+    return this.encryptCipher(model, cipher, decryptedCipherKey);
   }
 
   private async getCipherKeyEncryptionEnabled(): Promise<boolean> {

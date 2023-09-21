@@ -283,10 +283,6 @@ describe("Cipher Service", () => {
     });
 
     describe("encryptWithCipherKey", () => {
-      beforeEach(() => {
-        jest.spyOn<any, string>(cipherService, "encryptCipherWithCipherKey");
-      });
-
       it("is not called when enableCipherKeyEncryption is false", async () => {
         process.env.FLAGS = JSON.stringify({
           enableCipherKeyEncryption: false,
