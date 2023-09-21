@@ -1,3 +1,6 @@
+/**
+ * Generates a random string of characters that formatted as a custom element name.
+ */
 function generateRandomCustomElementName(): string {
   const generateRandomChars = (length: number): string => {
     const chars = "abcdefghijklmnopqrstuvwxyz";
@@ -39,6 +42,12 @@ function generateRandomCustomElementName(): string {
   return randomString;
 }
 
+/**
+ * Builds a DOM element from an SVG string.
+ *
+ * @param svgString - The SVG string to build the DOM element from.
+ * @param ariaHidden - Determines whether the SVG should be hidden from screen readers.
+ */
 function buildSvgDomElement(svgString: string, ariaHidden = true): HTMLElement {
   const domParser = new DOMParser();
   const svgDom = domParser.parseFromString(svgString, "image/svg+xml");
@@ -48,6 +57,12 @@ function buildSvgDomElement(svgString: string, ariaHidden = true): HTMLElement {
   return domElement;
 }
 
+/**
+ * Sends a message to the extension.
+ *
+ * @param command - The command to send.
+ * @param options - The options to send with the command.
+ */
 async function sendExtensionMessage(
   command: string,
   options: Record<string, any> = {}
@@ -63,6 +78,13 @@ async function sendExtensionMessage(
   });
 }
 
+/**
+ * Sets CSS styles on an element.
+ *
+ * @param element - The element to set the styles on.
+ * @param styles - The styles to set on the element.
+ * @param priority - Determines whether the styles should be set as important.
+ */
 function setElementStyles(
   element: HTMLElement,
   styles: Partial<CSSStyleDeclaration>,
