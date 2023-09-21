@@ -697,7 +697,7 @@ app-fido2 {
       #passkey-icon-wrapper {
         padding-top: 2px;
         @include themify($themes) {
-          fill: themed("headerBackgroundColor");
+          fill: themed("primaryColor");
         }
       }
     }
