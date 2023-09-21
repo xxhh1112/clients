@@ -83,7 +83,7 @@ export class LoginWithDeviceComponent
     private anonymousHubService: AnonymousHubService,
     private validationService: ValidationService,
     private stateService: StateService,
-    protected loginService: LoginService,
+    private loginService: LoginService,
     private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     private authReqCryptoService: AuthRequestCryptoServiceAbstraction
   ) {

@@ -40,12 +40,12 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     syncService: SyncService,
     environmentService: EnvironmentService,
     private modalService: ModalService,
+    stateService: StateService,
     route: ActivatedRoute,
     logService: LogService,
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
-    stateService: StateService,
     configService: ConfigServiceAbstraction,
     @Inject(WINDOW) protected win: Window
   ) {

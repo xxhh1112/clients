@@ -15,8 +15,7 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-
-import { StateService } from "../core";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { TwoFactorOptionsComponent } from "./two-factor-options.component";
 
@@ -35,6 +34,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     i18nService: I18nService,
     apiService: ApiService,
     platformUtilsService: PlatformUtilsService,
+    stateService: StateService,
     environmentService: EnvironmentService,
     private modalService: ModalService,
     route: ActivatedRoute,
@@ -42,7 +42,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     twoFactorService: TwoFactorService,
     appIdService: AppIdService,
     loginService: LoginService,
-    stateService: StateService,
     configService: ConfigServiceAbstraction,
     @Inject(WINDOW) protected win: Window
   ) {
