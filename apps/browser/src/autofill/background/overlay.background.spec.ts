@@ -18,7 +18,12 @@ import {
   createPageDetailMock,
 } from "../jest/autofill-mocks";
 import AutofillService from "../services/autofill.service";
-import { AutofillOverlayElement, AutofillOverlayVisibility } from "../utils/autofill-overlay.enum";
+import {
+  AutofillOverlayElement,
+  AutofillOverlayPort,
+  AutofillOverlayVisibility,
+  RedirectFocusDirection,
+} from "../utils/autofill-overlay.enum";
 
 import { OverlayBackgroundExtensionMessage } from "./abstractions/overlay.background";
 import OverlayBackground from "./overlay.background";
@@ -1067,6 +1072,236 @@ describe("OverlayBackground", () => {
         newItem: "newItem",
         addNewVaultItem: "addNewVaultItem",
       });
+    });
+  });
+
+  describe("redirectOverlayFocusOut", () => {
+    it("will not send the redirect message if the direction is not provided", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      jest.spyOn(BrowserApi, "tabSendMessageData");
+
+      overlayBackground["redirectOverlayFocusOut"](
+        { direction: "" } as OverlayBackgroundExtensionMessage,
+        port
+      );
+
+      expect(BrowserApi.tabSendMessageData).not.toHaveBeenCalled();
+    });
+
+    it("will send the redirect message if the direction is provided", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      jest.spyOn(BrowserApi, "tabSendMessageData");
+
+      overlayBackground["redirectOverlayFocusOut"](
+        { direction: RedirectFocusDirection.Next } as OverlayBackgroundExtensionMessage,
+        port
+      );
+
+      expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(
+        sender.tab,
+        "redirectOverlayFocusOut",
+        {
+          direction: RedirectFocusDirection.Next,
+        }
+      );
+    });
+  });
+
+  describe("getNewVaultItemDetails", () => {
+    it("will send an addNewVaultItemFromOverlay message", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const port = mock<chrome.runtime.Port>({ sender });
+      jest.spyOn(BrowserApi, "tabSendMessage");
+
+      overlayBackground["getNewVaultItemDetails"](port);
+
+      expect(BrowserApi.tabSendMessage).toHaveBeenCalledWith(sender.tab, {
+        command: "addNewVaultItemFromOverlay",
+      });
+    });
+  });
+
+  describe("addNewVaultItem", () => {
+    it("will not open the add edit popout window if the message does not have a login cipher provided", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      jest.spyOn(overlayBackground["stateService"], "setAddEditCipherInfo");
+      jest.spyOn(overlayBackground as any, "openAddEditVaultItemPopout");
+
+      overlayBackground["addNewVaultItem"](
+        { command: "addNewVaultItemFromOverlay" } as OverlayBackgroundExtensionMessage,
+        sender
+      );
+
+      expect(overlayBackground["stateService"].setAddEditCipherInfo).not.toHaveBeenCalled();
+      expect(overlayBackground["openAddEditVaultItemPopout"]).not.toHaveBeenCalled();
+    });
+
+    it("will open the add edit popout window after creating a new cipher", async () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const message = {
+        command: "addNewVaultItemFromOverlay",
+        login: {
+          uri: "https://tacos.com",
+          hostname: "",
+          username: "username",
+          password: "password",
+        },
+      };
+      jest.spyOn(overlayBackground["stateService"], "setAddEditCipherInfo").mockImplementation();
+      jest.spyOn(overlayBackground as any, "openAddEditVaultItemPopout").mockImplementation();
+
+      await overlayBackground["addNewVaultItem"](message, sender);
+
+      expect(overlayBackground["stateService"].setAddEditCipherInfo).toHaveBeenCalled();
+      expect(overlayBackground["openAddEditVaultItemPopout"]).toHaveBeenCalled();
+    });
+  });
+
+  describe("setupExtensionMessageListeners", () => {
+    it("will set up onMessage and onConnect listeners", () => {
+      overlayBackground["setupExtensionMessageListeners"]();
+
+      expect(chrome.runtime.onMessage.addListener).toHaveBeenCalled();
+      expect(chrome.runtime.onConnect.addListener).toHaveBeenCalled();
+    });
+  });
+
+  describe("handleExtensionMessage", () => {
+    it("will return early if the message command is not present within the extensionMessageHandlers", () => {
+      const message = {
+        command: "not-a-command",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const sendResponse = jest.fn();
+
+      const returnValue = overlayBackground["handleExtensionMessage"](
+        message,
+        sender,
+        sendResponse
+      );
+
+      expect(returnValue).toBe(undefined);
+      expect(sendResponse).not.toHaveBeenCalled();
+    });
+
+    it("will trigger the message handler and return undefined if the message does not have a response", () => {
+      const message = {
+        command: "autofillOverlayElementClosed",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const sendResponse = jest.fn();
+      jest.spyOn(overlayBackground as any, "overlayElementClosed");
+
+      const returnValue = overlayBackground["handleExtensionMessage"](
+        message,
+        sender,
+        sendResponse
+      );
+
+      expect(returnValue).toBe(undefined);
+      expect(sendResponse).not.toHaveBeenCalled();
+      expect(overlayBackground["overlayElementClosed"]).toHaveBeenCalledWith(message);
+    });
+
+    it("will return a response if the message handler returns a response", async () => {
+      const message = {
+        command: "openAutofillOverlay",
+      };
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      const sendResponse = jest.fn();
+      jest.spyOn(overlayBackground as any, "getTranslations").mockReturnValue("translations");
+
+      const returnValue = overlayBackground["handleExtensionMessage"](
+        message,
+        sender,
+        sendResponse
+      );
+
+      expect(returnValue).toBe(true);
+    });
+  });
+
+  describe("handlePortOnConnect", () => {
+    it("will set up the overlay list port if the port connection is for the overlay list", async () => {
+      const port = mock<chrome.runtime.Port>({
+        name: AutofillOverlayPort.List,
+        onMessage: {
+          addListener: jest.fn(),
+        },
+        postMessage: jest.fn(),
+      });
+      jest.spyOn(overlayBackground as any, "updateOverlayPosition").mockImplementation();
+      jest.spyOn(overlayBackground as any, "getAuthStatus").mockImplementation();
+      jest.spyOn(overlayBackground as any, "getTranslations").mockImplementation();
+      jest.spyOn(overlayBackground as any, "getOverlayCipherData").mockImplementation();
+
+      await overlayBackground["handlePortOnConnect"](port);
+
+      expect(overlayBackground["overlayListPort"]).toEqual(port);
+      expect(overlayBackground["overlayButtonPort"]).toBeUndefined();
+      expect(port.onMessage.addListener).toHaveBeenCalled();
+      expect(port.postMessage).toHaveBeenCalled();
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+      expect(chrome.runtime.getURL).toHaveBeenCalledWith("overlay/list.css");
+      expect(overlayBackground["getTranslations"]).toHaveBeenCalled();
+      expect(overlayBackground["getOverlayCipherData"]).toHaveBeenCalled();
+      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith({
+        overlayElement: AutofillOverlayElement.List,
+      });
+    });
+
+    it("will set up the overlay button port if the port connection is for the overlay button", async () => {
+      const port = mock<chrome.runtime.Port>({
+        name: AutofillOverlayPort.Button,
+        onMessage: {
+          addListener: jest.fn(),
+        },
+        postMessage: jest.fn(),
+      });
+      jest.spyOn(overlayBackground as any, "updateOverlayPosition").mockImplementation();
+      jest.spyOn(overlayBackground as any, "getAuthStatus").mockImplementation();
+      jest.spyOn(overlayBackground as any, "getTranslations").mockImplementation();
+
+      await overlayBackground["handlePortOnConnect"](port);
+
+      expect(overlayBackground["overlayButtonPort"]).toEqual(port);
+      expect(overlayBackground["overlayListPort"]).toBeUndefined();
+      expect(port.onMessage.addListener).toHaveBeenCalled();
+      expect(port.postMessage).toHaveBeenCalled();
+      expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
+      expect(chrome.runtime.getURL).toHaveBeenCalledWith("overlay/button.css");
+      expect(overlayBackground["getTranslations"]).toHaveBeenCalled();
+      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith({
+        overlayElement: AutofillOverlayElement.Button,
+      });
+    });
+  });
+
+  describe("handleOverlayElementPortMessage", () => {
+    it("will handle messages from the overlay button", () => {
+      const port = mock<chrome.runtime.Port>({ name: AutofillOverlayPort.Button });
+      const message = {
+        command: "overlayButtonClicked",
+      };
+      jest.spyOn(overlayBackground as any, "handleOverlayButtonClicked").mockImplementation();
+
+      overlayBackground["handleOverlayElementPortMessage"](message, port);
+
+      expect(overlayBackground["handleOverlayButtonClicked"]).toHaveBeenCalledWith(port);
+    });
+
+    it("will handle messages from the overlay list", () => {
+      const port = mock<chrome.runtime.Port>({ name: AutofillOverlayPort.List });
+      const message = {
+        command: "viewSelectedCipher",
+      };
+      jest.spyOn(overlayBackground as any, "viewSelectedCipher").mockImplementation();
+
+      overlayBackground["handleOverlayElementPortMessage"](message, port);
+
+      expect(overlayBackground["viewSelectedCipher"]).toHaveBeenCalledWith(message, port);
     });
   });
 });

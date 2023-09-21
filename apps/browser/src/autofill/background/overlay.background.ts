@@ -37,6 +37,7 @@ import {
 class OverlayBackground implements OverlayBackgroundInterface {
   private readonly openUnlockPopout = openUnlockPopout;
   private readonly openViewVaultItemPopout = openViewVaultItemPopout;
+  private readonly openAddEditVaultItemPopout = openAddEditVaultItemPopout;
   private overlayVisibility: number;
   private overlayLoginCiphers: Map<string, CipherView> = new Map();
   private pageDetailsForTab: Record<number, PageDetail[]> = {};
@@ -586,6 +587,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
     return this.overlayPageTranslations;
   }
 
+  /**
+   * Facilitates redirecting focus out of one of the
+   *  overlay elements to elements on the page.
+   *
+   * @param direction - The direction to redirect focus to (either "next", "previous" or "current)
+   * @param sender - The sender of the port message
+   */
   private redirectOverlayFocusOut(
     { direction }: OverlayBackgroundExtensionMessage,
     { sender }: chrome.runtime.Port
@@ -597,10 +605,23 @@ class OverlayBackground implements OverlayBackgroundInterface {
     BrowserApi.tabSendMessageData(sender.tab, "redirectOverlayFocusOut", { direction });
   }
 
+  /**
+   * Triggers adding a new vault item from the overlay. Gathers data
+   * input by the user before calling to open the add/edit window.
+   *
+   * @param sender - The sender of the port message
+   */
   private getNewVaultItemDetails({ sender }: chrome.runtime.Port) {
     BrowserApi.tabSendMessage(sender.tab, { command: "addNewVaultItemFromOverlay" });
   }
 
+  /**
+   * Handles adding a new vault item from the overlay. Gathers data login
+   * data captured in the extension message.
+   * @param login
+   * @param sender
+   * @private
+   */
   private async addNewVaultItem(
     { login }: OverlayAddNewItemMessage,
     sender: chrome.runtime.MessageSender
@@ -628,14 +649,24 @@ class OverlayBackground implements OverlayBackgroundInterface {
       collectionIds: cipherView.collectionIds,
     });
 
-    await openAddEditVaultItemPopout(sender.tab.windowId, cipherView.id);
+    await this.openAddEditVaultItemPopout(sender.tab.windowId, cipherView.id);
   }
 
+  /**
+   * Sets up the extension message listeners for the overlay.
+   */
   private setupExtensionMessageListeners() {
     chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
     chrome.runtime.onConnect.addListener(this.handlePortOnConnect);
   }
 
+  /**
+   * Handles extension messages sent to the extension background.
+   *
+   * @param message - The message received from the extension
+   * @param sender - The sender of the message
+   * @param sendResponse - The response to send back to the sender
+   */
   private handleExtensionMessage = (
     message: OverlayBackgroundExtensionMessage,
     sender: chrome.runtime.MessageSender,
@@ -643,18 +674,23 @@ class OverlayBackground implements OverlayBackgroundInterface {
   ) => {
     const handler: CallableFunction | undefined = this.extensionMessageHandlers[message?.command];
     if (!handler) {
-      return false;
+      return;
     }
 
     const messageResponse = handler({ message, sender });
     if (!messageResponse) {
-      return false;
+      return;
     }
 
     Promise.resolve(messageResponse).then((response) => sendResponse(response));
     return true;
   };
 
+  /**
+   * Handles the connection of a port to the extension background.
+   *
+   * @param port - The port that connected to the extension background
+   */
   private handlePortOnConnect = async (port: chrome.runtime.Port) => {
     const isOverlayListPort = port.name === AutofillOverlayPort.List;
 
@@ -679,6 +715,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
     });
   };
 
+  /**
+   * Handles messages sent to the overlay list or button ports.
+   * @param message - The message received from the port
+   * @param port - The port that sent the message
+   */
   private handleOverlayElementPortMessage = (
     message: OverlayBackgroundExtensionMessage,
     port: chrome.runtime.Port

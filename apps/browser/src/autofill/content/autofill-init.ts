@@ -203,12 +203,12 @@ class AutofillInit implements AutofillInitInterface {
     const command: string = message.command;
     const handler: CallableFunction | undefined = this.extensionMessageHandlers[command];
     if (!handler) {
-      return false;
+      return;
     }
 
     const messageResponse = handler({ message, sender });
     if (!messageResponse) {
-      return false;
+      return;
     }
 
     Promise.resolve(messageResponse).then((response) => sendResponse(response));

@@ -56,6 +56,14 @@ const windows = {
   update: jest.fn(),
 };
 
+const port = {
+  onMessage: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+  postMessage: jest.fn(),
+};
+
 // set chrome
 global.chrome = {
   i18n,
@@ -65,4 +73,5 @@ global.chrome = {
   tabs,
   scripting,
   windows,
+  port,
 } as any;
