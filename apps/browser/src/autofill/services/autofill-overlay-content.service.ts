@@ -223,7 +223,7 @@ class AutofillOverlayContentService implements AutofillOverlayContentServiceInte
       return;
     }
 
-    if (eventCode === "Enter") {
+    if (eventCode === "Enter" && !this.isCurrentlyFilling) {
       this.handleOverlayRepositionEvent();
       return;
     }
