@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { Observable, Subject, takeUntil, concatMap } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -85,31 +85,31 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private personalOwnershipPolicyAppliesToActiveUser: boolean;
   private previousCipherId: string;
 
-  constructor(
-    protected cipherService: CipherService,
-    protected folderService: FolderService,
-    protected i18nService: I18nService,
-    protected platformUtilsService: PlatformUtilsService,
-    protected auditService: AuditService,
-    protected stateService: StateService,
-    protected collectionService: CollectionService,
-    protected messagingService: MessagingService,
-    protected eventCollectionService: EventCollectionService,
-    protected policyService: PolicyService,
-    private logService: LogService,
-    protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService,
-    protected sendApiService: SendApiService,
-    protected dialogService: DialogService
-  ) {
+  protected cipherService = inject(CipherService);
+  protected folderService = inject(FolderService);
+  protected i18nService = inject(I18nService);
+  protected platformUtilsService = inject(PlatformUtilsService);
+  protected auditService = inject(AuditService);
+  protected stateService = inject(StateService);
+  protected collectionService = inject(CollectionService);
+  protected messagingService = inject(MessagingService);
+  protected eventCollectionService = inject(EventCollectionService);
+  protected policyService = inject(PolicyService);
+  private logService = inject(LogService);
+  protected passwordRepromptService = inject(PasswordRepromptService);
+  private organizationService = inject(OrganizationService);
+  protected sendApiService = inject(SendApiService);
+  protected dialogService = inject(DialogService);
+
+  constructor() {
     this.typeOptions = [
-      { name: i18nService.t("typeLogin"), value: CipherType.Login },
-      { name: i18nService.t("typeCard"), value: CipherType.Card },
-      { name: i18nService.t("typeIdentity"), value: CipherType.Identity },
-      { name: i18nService.t("typeSecureNote"), value: CipherType.SecureNote },
+      { name: this.i18nService.t("typeLogin"), value: CipherType.Login },
+      { name: this.i18nService.t("typeCard"), value: CipherType.Card },
+      { name: this.i18nService.t("typeIdentity"), value: CipherType.Identity },
+      { name: this.i18nService.t("typeSecureNote"), value: CipherType.SecureNote },
     ];
     this.cardBrandOptions = [
-      { name: "-- " + i18nService.t("select") + " --", value: null },
+      { name: "-- " + this.i18nService.t("select") + " --", value: null },
       { name: "Visa", value: "Visa" },
       { name: "Mastercard", value: "Mastercard" },
       { name: "American Express", value: "Amex" },
@@ -119,44 +119,44 @@ export class AddEditComponent implements OnInit, OnDestroy {
       { name: "Maestro", value: "Maestro" },
       { name: "UnionPay", value: "UnionPay" },
       { name: "RuPay", value: "RuPay" },
-      { name: i18nService.t("other"), value: "Other" },
+      { name: this.i18nService.t("other"), value: "Other" },
     ];
     this.cardExpMonthOptions = [
-      { name: "-- " + i18nService.t("select") + " --", value: null },
-      { name: "01 - " + i18nService.t("january"), value: "1" },
-      { name: "02 - " + i18nService.t("february"), value: "2" },
-      { name: "03 - " + i18nService.t("march"), value: "3" },
-      { name: "04 - " + i18nService.t("april"), value: "4" },
-      { name: "05 - " + i18nService.t("may"), value: "5" },
-      { name: "06 - " + i18nService.t("june"), value: "6" },
-      { name: "07 - " + i18nService.t("july"), value: "7" },
-      { name: "08 - " + i18nService.t("august"), value: "8" },
-      { name: "09 - " + i18nService.t("september"), value: "9" },
-      { name: "10 - " + i18nService.t("october"), value: "10" },
-      { name: "11 - " + i18nService.t("november"), value: "11" },
-      { name: "12 - " + i18nService.t("december"), value: "12" },
+      { name: "-- " + this.i18nService.t("select") + " --", value: null },
+      { name: "01 - " + this.i18nService.t("january"), value: "1" },
+      { name: "02 - " + this.i18nService.t("february"), value: "2" },
+      { name: "03 - " + this.i18nService.t("march"), value: "3" },
+      { name: "04 - " + this.i18nService.t("april"), value: "4" },
+      { name: "05 - " + this.i18nService.t("may"), value: "5" },
+      { name: "06 - " + this.i18nService.t("june"), value: "6" },
+      { name: "07 - " + this.i18nService.t("july"), value: "7" },
+      { name: "08 - " + this.i18nService.t("august"), value: "8" },
+      { name: "09 - " + this.i18nService.t("september"), value: "9" },
+      { name: "10 - " + this.i18nService.t("october"), value: "10" },
+      { name: "11 - " + this.i18nService.t("november"), value: "11" },
+      { name: "12 - " + this.i18nService.t("december"), value: "12" },
     ];
     this.identityTitleOptions = [
-      { name: "-- " + i18nService.t("select") + " --", value: null },
-      { name: i18nService.t("mr"), value: i18nService.t("mr") },
-      { name: i18nService.t("mrs"), value: i18nService.t("mrs") },
-      { name: i18nService.t("ms"), value: i18nService.t("ms") },
-      { name: i18nService.t("mx"), value: i18nService.t("mx") },
-      { name: i18nService.t("dr"), value: i18nService.t("dr") },
+      { name: "-- " + this.i18nService.t("select") + " --", value: null },
+      { name: this.i18nService.t("mr"), value: this.i18nService.t("mr") },
+      { name: this.i18nService.t("mrs"), value: this.i18nService.t("mrs") },
+      { name: this.i18nService.t("ms"), value: this.i18nService.t("ms") },
+      { name: this.i18nService.t("mx"), value: this.i18nService.t("mx") },
+      { name: this.i18nService.t("dr"), value: this.i18nService.t("dr") },
     ];
     this.uriMatchOptions = [
-      { name: i18nService.t("defaultMatchDetection"), value: null },
-      { name: i18nService.t("baseDomain"), value: UriMatchType.Domain },
-      { name: i18nService.t("host"), value: UriMatchType.Host },
-      { name: i18nService.t("startsWith"), value: UriMatchType.StartsWith },
-      { name: i18nService.t("regEx"), value: UriMatchType.RegularExpression },
-      { name: i18nService.t("exact"), value: UriMatchType.Exact },
-      { name: i18nService.t("never"), value: UriMatchType.Never },
+      { name: this.i18nService.t("defaultMatchDetection"), value: null },
+      { name: this.i18nService.t("baseDomain"), value: UriMatchType.Domain },
+      { name: this.i18nService.t("host"), value: UriMatchType.Host },
+      { name: this.i18nService.t("startsWith"), value: UriMatchType.StartsWith },
+      { name: this.i18nService.t("regEx"), value: UriMatchType.RegularExpression },
+      { name: this.i18nService.t("exact"), value: UriMatchType.Exact },
+      { name: this.i18nService.t("never"), value: UriMatchType.Never },
     ];
     this.autofillOnPageLoadOptions = [
-      { name: i18nService.t("autoFillOnPageLoadUseDefault"), value: null },
-      { name: i18nService.t("autoFillOnPageLoadYes"), value: true },
-      { name: i18nService.t("autoFillOnPageLoadNo"), value: false },
+      { name: this.i18nService.t("autoFillOnPageLoadUseDefault"), value: null },
+      { name: this.i18nService.t("autoFillOnPageLoadYes"), value: true },
+      { name: this.i18nService.t("autoFillOnPageLoadNo"), value: false },
     ];
   }
 

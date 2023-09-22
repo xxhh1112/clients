@@ -1,26 +1,13 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/vault/components/add-edit.component";
-import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { EventType, ProductType } from "@bitwarden/common/enums";
-import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
-import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
-import { DialogService } from "@bitwarden/components";
 
 @Component({
   selector: "app-vault-add-edit",
@@ -42,43 +29,10 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
   protected totpInterval: number;
   protected override componentName = "app-vault-add-edit";
 
-  constructor(
-    cipherService: CipherService,
-    folderService: FolderService,
-    i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService,
-    auditService: AuditService,
-    stateService: StateService,
-    collectionService: CollectionService,
-    protected totpService: TotpService,
-    protected passwordGenerationService: PasswordGenerationServiceAbstraction,
-    protected messagingService: MessagingService,
-    eventCollectionService: EventCollectionService,
-    protected policyService: PolicyService,
-    organizationService: OrganizationService,
-    logService: LogService,
-    passwordRepromptService: PasswordRepromptService,
-    sendApiService: SendApiService,
-    dialogService: DialogService
-  ) {
-    super(
-      cipherService,
-      folderService,
-      i18nService,
-      platformUtilsService,
-      auditService,
-      stateService,
-      collectionService,
-      messagingService,
-      eventCollectionService,
-      policyService,
-      logService,
-      passwordRepromptService,
-      organizationService,
-      sendApiService,
-      dialogService
-    );
-  }
+  protected totpService = inject(TotpService);
+  protected passwordGenerationService = inject(PasswordGenerationServiceAbstraction);
+  protected messagingService = inject(MessagingService);
+  protected policyService = inject(PolicyService);
 
   async ngOnInit() {
     await super.ngOnInit();
