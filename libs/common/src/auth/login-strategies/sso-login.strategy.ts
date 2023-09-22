@@ -14,7 +14,7 @@ import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trus
 import { KeyConnectorService } from "../abstractions/key-connector.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
-import { ForceResetPasswordReason } from "../models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "../models/domain/force-set-password-reason";
 import { SsoLogInCredentials } from "../models/domain/log-in-credentials";
 import { SsoTokenRequest } from "../models/request/identity-token/sso-token.request";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
@@ -75,7 +75,7 @@ export class SsoLogInStrategy extends LogInStrategy {
     this.ssoEmail2FaSessionToken = ssoAuthResult.ssoEmail2FaSessionToken;
 
     // Auth guard currently handles redirects for this.
-    if (ssoAuthResult.forcePasswordReset == ForceResetPasswordReason.AdminForcePasswordReset) {
+    if (ssoAuthResult.forcePasswordReset == ForceSetPasswordReason.AdminForcePasswordReset) {
       await this.stateService.setForcePasswordResetReason(ssoAuthResult.forcePasswordReset);
     }
 

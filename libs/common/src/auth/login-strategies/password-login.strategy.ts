@@ -14,7 +14,7 @@ import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { AuthResult } from "../models/domain/auth-result";
-import { ForceResetPasswordReason } from "../models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "../models/domain/force-set-password-reason";
 import { PasswordLogInCredentials } from "../models/domain/log-in-credentials";
 import { PasswordTokenRequest } from "../models/request/identity-token/password-token.request";
 import { TokenTwoFactorRequest } from "../models/request/identity-token/token-two-factor.request";
@@ -42,7 +42,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
    * Options to track if the user needs to update their password due to a password that does not meet an organization's
    * master password policy.
    */
-  private forcePasswordResetReason: ForceResetPasswordReason = ForceResetPasswordReason.None;
+  private forcePasswordResetReason: ForceSetPasswordReason = ForceSetPasswordReason.None;
 
   constructor(
     cryptoService: CryptoService,
@@ -82,7 +82,7 @@ export class PasswordLogInStrategy extends LogInStrategy {
     if (
       !result.requiresTwoFactor &&
       !result.requiresCaptcha &&
-      this.forcePasswordResetReason != ForceResetPasswordReason.None
+      this.forcePasswordResetReason != ForceSetPasswordReason.None
     ) {
       await this.stateService.setForcePasswordResetReason(this.forcePasswordResetReason);
       result.forcePasswordReset = this.forcePasswordResetReason;
@@ -128,13 +128,13 @@ export class PasswordLogInStrategy extends LogInStrategy {
       if (!meetsRequirements) {
         if (authResult.requiresCaptcha || authResult.requiresTwoFactor) {
           // Save the flag to this strategy for later use as the master password is about to pass out of scope
-          this.forcePasswordResetReason = ForceResetPasswordReason.WeakMasterPassword;
+          this.forcePasswordResetReason = ForceSetPasswordReason.WeakMasterPassword;
         } else {
           // Authentication was successful, save the force update password options with the state service
           await this.stateService.setForcePasswordResetReason(
-            ForceResetPasswordReason.WeakMasterPassword
+            ForceSetPasswordReason.WeakMasterPassword
           );
-          authResult.forcePasswordReset = ForceResetPasswordReason.WeakMasterPassword;
+          authResult.forcePasswordReset = ForceSetPasswordReason.WeakMasterPassword;
         }
       }
     }

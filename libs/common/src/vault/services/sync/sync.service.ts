@@ -8,7 +8,7 @@ import { PolicyData } from "../../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
-import { ForceResetPasswordReason } from "../../../auth/models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "../../../auth/models/domain/force-set-password-reason";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
   SyncCipherNotification,
@@ -319,7 +319,7 @@ export class SyncService implements SyncServiceAbstraction {
     // The `forcePasswordReset` flag indicates an admin has reset the user's password and must be updated
     if (response.forcePasswordReset) {
       await this.stateService.setForcePasswordResetReason(
-        ForceResetPasswordReason.AdminForcePasswordReset
+        ForceSetPasswordReason.AdminForcePasswordReset
       );
     }
 
@@ -335,7 +335,7 @@ export class SyncService implements SyncServiceAbstraction {
       // TDE user w/out MP went from having no password reset permission to having it.
       // Must set the force password reset reason so the auth guard will redirect to the set password page.
       await this.stateService.setForcePasswordResetReason(
-        ForceResetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission
+        ForceSetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission
       );
     }
 

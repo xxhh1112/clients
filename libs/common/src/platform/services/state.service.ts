@@ -8,7 +8,7 @@ import { ProviderData } from "../../admin-console/models/data/provider.data";
 import { Policy } from "../../admin-console/models/domain/policy";
 import { AdminAuthRequestStorable } from "../../auth/models/domain/admin-auth-req-storable";
 import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
-import { ForceResetPasswordReason } from "../../auth/models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "../../auth/models/domain/force-set-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { BiometricKey } from "../../auth/types/biometric-key";
 import {
@@ -2034,18 +2034,18 @@ export class StateService<
     );
   }
 
-  async getForcePasswordResetReason(options?: StorageOptions): Promise<ForceResetPasswordReason> {
+  async getForcePasswordResetReason(options?: StorageOptions): Promise<ForceSetPasswordReason> {
     return (
       (
         await this.getAccount(
           this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions())
         )
-      )?.profile?.forcePasswordResetReason ?? ForceResetPasswordReason.None
+      )?.profile?.forcePasswordResetReason ?? ForceSetPasswordReason.None
     );
   }
 
   async setForcePasswordResetReason(
-    value: ForceResetPasswordReason,
+    value: ForceSetPasswordReason,
     options?: StorageOptions
   ): Promise<void> {
     const account = await this.getAccount(

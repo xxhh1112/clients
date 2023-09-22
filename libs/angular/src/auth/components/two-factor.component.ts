@@ -11,7 +11,7 @@ import { LoginService } from "@bitwarden/common/auth/abstractions/login.service"
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
-import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { TrustedDeviceUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/identity-token/token-two-factor.request";
 import { TwoFactorEmailRequest } from "@bitwarden/common/auth/models/request/two-factor-email.request";
@@ -261,7 +261,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
 
     // Users can be forced to reset their password via an admin or org policy
     // disallowing weak passwords
-    if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+    if (authResult.forcePasswordReset !== ForceSetPasswordReason.None) {
       return await this.handleForcePasswordReset(this.orgIdentifier);
     }
 
@@ -301,7 +301,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     // Note: this is different from SSO component login flow as a user can
     // login with MP and then have to pass 2FA to finish login and we can actually
     // evaluate if they have a weak password at this time.
-    if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+    if (authResult.forcePasswordReset !== ForceSetPasswordReason.None) {
       return await this.handleForcePasswordReset(orgIdentifier);
     }
 

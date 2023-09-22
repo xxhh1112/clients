@@ -8,7 +8,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
-import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { KeyConnectorUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/key-connector-user-decryption-option";
 import { TrustedDeviceUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
@@ -336,10 +336,10 @@ describe("SsoComponent", () => {
 
       describe("Given Trusted Device Encryption is enabled, user doesn't need to set a MP, and forcePasswordReset is required", () => {
         [
-          ForceResetPasswordReason.AdminForcePasswordReset,
+          ForceSetPasswordReason.AdminForcePasswordReset,
           // ForceResetPasswordReason.WeakMasterPassword, -- not possible in SSO flow as set client side
         ].forEach((forceResetPasswordReason) => {
-          const reasonString = ForceResetPasswordReason[forceResetPasswordReason];
+          const reasonString = ForceSetPasswordReason[forceResetPasswordReason];
           let authResult;
           beforeEach(() => {
             mockStateService.getAccountDecryptionOptions.mockResolvedValue(
@@ -347,7 +347,7 @@ describe("SsoComponent", () => {
             );
 
             authResult = new AuthResult();
-            authResult.forcePasswordReset = ForceResetPasswordReason.AdminForcePasswordReset;
+            authResult.forcePasswordReset = ForceSetPasswordReason.AdminForcePasswordReset;
             mockAuthService.logIn.mockResolvedValue(authResult);
           });
 
@@ -364,7 +364,7 @@ describe("SsoComponent", () => {
           );
 
           authResult = new AuthResult();
-          authResult.forcePasswordReset = ForceResetPasswordReason.None;
+          authResult.forcePasswordReset = ForceSetPasswordReason.None;
           mockAuthService.logIn.mockResolvedValue(authResult);
         });
 
@@ -433,10 +433,10 @@ describe("SsoComponent", () => {
 
     describe("Force Master Password Reset scenarios", () => {
       [
-        ForceResetPasswordReason.AdminForcePasswordReset,
+        ForceSetPasswordReason.AdminForcePasswordReset,
         // ForceResetPasswordReason.WeakMasterPassword, -- not possible in SSO flow as set client side
       ].forEach((forceResetPasswordReason) => {
-        const reasonString = ForceResetPasswordReason[forceResetPasswordReason];
+        const reasonString = ForceSetPasswordReason[forceResetPasswordReason];
 
         beforeEach(() => {
           // use standard user with MP because this test is not concerned with password reset.
@@ -462,7 +462,7 @@ describe("SsoComponent", () => {
         mockStateService.getAccountDecryptionOptions.mockResolvedValue(
           mockAcctDecryptionOpts.withMasterPassword
         );
-        authResult.forcePasswordReset = ForceResetPasswordReason.None;
+        authResult.forcePasswordReset = ForceSetPasswordReason.None;
         mockAuthService.logIn.mockResolvedValue(authResult);
       });
 

@@ -5,7 +5,7 @@ import { first } from "rxjs/operators";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
-import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { SsoLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { TrustedDeviceUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
@@ -228,7 +228,7 @@ export class SsoComponent {
 
       // Users enrolled in admin acct recovery can be forced to set a new password after
       // having the admin set a temp password for them
-      if (authResult.forcePasswordReset == ForceResetPasswordReason.AdminForcePasswordReset) {
+      if (authResult.forcePasswordReset == ForceSetPasswordReason.AdminForcePasswordReset) {
         return await this.handleForcePasswordReset(orgIdentifier);
       }
 
@@ -281,7 +281,7 @@ export class SsoComponent {
     //   return await this.handleChangePasswordRequired(orgIdentifier);
     // }
 
-    if (authResult.forcePasswordReset !== ForceResetPasswordReason.None) {
+    if (authResult.forcePasswordReset !== ForceSetPasswordReason.None) {
       return await this.handleForcePasswordReset(orgIdentifier);
     }
 

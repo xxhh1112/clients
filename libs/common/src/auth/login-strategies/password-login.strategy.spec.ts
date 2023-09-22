@@ -24,7 +24,7 @@ import { AuthService } from "../abstractions/auth.service";
 import { TokenService } from "../abstractions/token.service";
 import { TwoFactorService } from "../abstractions/two-factor.service";
 import { TwoFactorProviderType } from "../enums/two-factor-provider-type";
-import { ForceResetPasswordReason } from "../models/domain/force-reset-password-reason";
+import { ForceSetPasswordReason } from "../models/domain/force-set-password-reason";
 import { PasswordLogInCredentials } from "../models/domain/log-in-credentials";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../models/response/identity-two-factor.response";
@@ -154,7 +154,7 @@ describe("PasswordLogInStrategy", () => {
     const result = await passwordLogInStrategy.logIn(credentials);
 
     expect(policyService.evaluateMasterPassword).not.toHaveBeenCalled();
-    expect(result.forcePasswordReset).toEqual(ForceResetPasswordReason.None);
+    expect(result.forcePasswordReset).toEqual(ForceSetPasswordReason.None);
   });
 
   it("does not force the user to update their master password when it meets requirements", async () => {
@@ -164,7 +164,7 @@ describe("PasswordLogInStrategy", () => {
     const result = await passwordLogInStrategy.logIn(credentials);
 
     expect(policyService.evaluateMasterPassword).toHaveBeenCalled();
-    expect(result.forcePasswordReset).toEqual(ForceResetPasswordReason.None);
+    expect(result.forcePasswordReset).toEqual(ForceSetPasswordReason.None);
   });
 
   it("forces the user to update their master password on successful login when it does not meet master password policy requirements", async () => {
@@ -175,9 +175,9 @@ describe("PasswordLogInStrategy", () => {
 
     expect(policyService.evaluateMasterPassword).toHaveBeenCalled();
     expect(stateService.setForcePasswordResetReason).toHaveBeenCalledWith(
-      ForceResetPasswordReason.WeakMasterPassword
+      ForceSetPasswordReason.WeakMasterPassword
     );
-    expect(result.forcePasswordReset).toEqual(ForceResetPasswordReason.WeakMasterPassword);
+    expect(result.forcePasswordReset).toEqual(ForceSetPasswordReason.WeakMasterPassword);
   });
 
   it("forces the user to update their master password on successful 2FA login when it does not meet master password policy requirements", async () => {
@@ -210,12 +210,12 @@ describe("PasswordLogInStrategy", () => {
     );
 
     // First login attempt should not save the force password reset options
-    expect(firstResult.forcePasswordReset).toEqual(ForceResetPasswordReason.None);
+    expect(firstResult.forcePasswordReset).toEqual(ForceSetPasswordReason.None);
 
     // Second login attempt should save the force password reset options and return in result
     expect(stateService.setForcePasswordResetReason).toHaveBeenCalledWith(
-      ForceResetPasswordReason.WeakMasterPassword
+      ForceSetPasswordReason.WeakMasterPassword
     );
-    expect(secondResult.forcePasswordReset).toEqual(ForceResetPasswordReason.WeakMasterPassword);
+    expect(secondResult.forcePasswordReset).toEqual(ForceSetPasswordReason.WeakMasterPassword);
   });
 });

@@ -1,9 +1,8 @@
-// TODO: rename to ForceSetPasswordReason
 /*
- * This enum is used to determine if a user should be forced to reset their password
+ * This enum is used to determine if a user should be forced to initially set or reset their password
  * on login (server flag) or unlock via MP (client evaluation).
  */
-export enum ForceResetPasswordReason {
+export enum ForceSetPasswordReason {
   /**
    * A password reset should not be forced.
    */
