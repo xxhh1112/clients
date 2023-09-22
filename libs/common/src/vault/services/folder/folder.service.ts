@@ -1,9 +1,9 @@
-import { concatMap, firstValueFrom } from "rxjs";
+import { concatMap, firstValueFrom, Observable } from "rxjs";
 
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { I18nService } from "../../../platform/abstractions/i18n.service";
 import { StateService } from "../../../platform/abstractions/state.service";
-import { BitSubject } from "../../../platform/misc/bit-subject";
+import { ClearableBitSubject } from "../../../platform/misc/clearable-bit-subject";
 import { Utils } from "../../../platform/misc/utils";
 import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
@@ -13,9 +13,17 @@ import { FolderData } from "../../../vault/models/data/folder.data";
 import { Folder } from "../../../vault/models/domain/folder";
 import { FolderView } from "../../../vault/models/view/folder.view";
 
+interface SyncService {
+  sync$: Observable<void>;
+}
+
+interface AccountSwitchService {
+  sync$: Observable<void>;
+}
+
 export class FolderService implements InternalFolderServiceAbstraction {
-  protected _folders = new BitSubject<Folder[]>();
-  protected _folderViews = new BitSubject<FolderView[]>();
+  protected _folders = new ClearableBitSubject<Folder[]>();
+  protected _folderViews = new ClearableBitSubject<FolderView[]>();
 
   get folders$() {
     return this._folders.asObservable();
@@ -28,8 +36,20 @@ export class FolderService implements InternalFolderServiceAbstraction {
     private cryptoService: CryptoService,
     private i18nService: I18nService,
     private cipherService: CipherService,
-    private stateService: StateService
+    private stateService: StateService,
+    private syncService: SyncService,
+    private accountSwitchService: AccountSwitchService
   ) {
+    this.syncService.sync$.subscribe(() => {
+      this._folders.reset();
+      this._folderViews.reset();
+    });
+
+    this.accountSwitchService.sync$.subscribe(() => {
+      this._folders.reset();
+      this._folderViews.reset();
+    });
+
     this.stateService.activeAccountUnlocked$
       .pipe(
         concatMap(async (unlocked) => {
