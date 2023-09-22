@@ -126,10 +126,13 @@
       </ng-container>
     </ng-container>
 
-    <div class="footer-link">
-      <a [routerLink]="[]" *ngIf="data.fallbackSupported" (click)="abort(true)">
-        {{ "useBrowserName" | i18n }} browser
-      </a>
-    </div>
+    <a
+      class="useBrowserlink"
+      [routerLink]="[]"
+      *ngIf="data.fallbackSupported"
+      (click)="abort(true)"
+    >
+      {{ "useBrowserName" | i18n }} browser
+    </a>
   </div>
 </ng-container>
