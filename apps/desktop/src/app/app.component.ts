@@ -250,7 +250,7 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           }
           case "deleteAccount":
-            this.modalService.open(DeleteAccountComponent, { replaceTopModal: true });
+            this.dialogService.open(DeleteAccountComponent);
             break;
           case "openPasswordHistory":
             await this.openModal<PasswordGeneratorHistoryComponent>(
