@@ -1,6 +1,6 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnInit } from "@angular/core";
 import { Observable, map } from "rxjs";
 
 import { CheckboxModule } from "../checkbox";
@@ -17,7 +17,7 @@ import { TableComponent } from "./table.component";
   template: `
     <label
       *ngIf="selection"
-      class="!tw-mb-0 tw-flex tw-h-full tw-w-full tw-cursor-pointer tw-select-none tw-items-center !tw-font-bold !tw-text-muted"
+      class="!tw-mb-0 tw-flex tw-h-full tw-w-full tw-cursor-pointer tw-select-none tw-items-center tw-p-3 !tw-font-bold !tw-text-muted"
     >
       <div class="tw-min-w-max">
         <input
@@ -40,6 +40,10 @@ export class HeaderRowSelectorComponent implements OnInit {
   protected dataIsEmpty$: Observable<boolean>;
 
   @Input() disabled = false;
+
+  @HostBinding("class") get classList() {
+    return ["!tw-p-0"];
+  }
 
   constructor(private table: TableComponent) {}
 
@@ -80,7 +84,7 @@ export class HeaderRowSelectorComponent implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <label
-      class="!tw-mb-0 tw-flex tw-h-full tw-w-full tw-cursor-pointer tw-select-none tw-items-center"
+      class="!tw-mb-0 tw-flex tw-h-full tw-w-full tw-cursor-pointer tw-select-none tw-items-center tw-p-3"
     >
       <input
         bitCheckbox
@@ -95,6 +99,10 @@ export class HeaderRowSelectorComponent implements OnInit {
 })
 export class RowSelectorComponent {
   @Input() disabled = false;
+
+  @HostBinding("class") get classList() {
+    return ["!tw-p-0"];
+  }
 
   protected selection: SelectionModel<unknown>;
 
