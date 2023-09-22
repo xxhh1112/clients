@@ -217,16 +217,15 @@ export const SelectableRows: Story = {
   render: (args) => ({
     props: {
       dataSource: data,
-      sortFn: (a: any, b: any) => a.id - b.id,
     },
     template: `
       <bit-table [dataSource]="dataSource">
         <ng-container header>
           <tr>
             <th bitCell bit-row-selector></th>
-            <th bitCell bitSortable="id" default>Id</th>
-            <th bitCell bitSortable="name">Name</th>
-            <th bitCell bitSortable="other" [fn]="sortFn">Other</th>
+            <th bitCell>Id</th>
+            <th bitCell>Name</th>
+            <th bitCell>Other</th>
           </tr>
         </ng-container>
         <ng-template body let-rows$>
