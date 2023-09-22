@@ -21,6 +21,7 @@ import { LogService } from "../../../platform/abstractions/log.service";
 import { MessagingService } from "../../../platform/abstractions/messaging.service";
 import { StateService } from "../../../platform/abstractions/state.service";
 import { sequentialize } from "../../../platform/misc/sequentialize";
+import { AccountDecryptionOptions } from "../../../platform/models/domain/account";
 import { SendData } from "../../../tools/send/models/data/send.data";
 import { SendResponse } from "../../../tools/send/models/response/send.response";
 import { SendApiService } from "../../../tools/send/services/send-api.service.abstraction";
@@ -314,10 +315,27 @@ export class SyncService implements SyncServiceAbstraction {
     await this.stateService.setHasPremiumFromOrganization(response.premiumFromOrganization);
     await this.keyConnectorService.setUsesKeyConnector(response.usesKeyConnector);
 
+    // TODO: consider encapsulating set password logic in a separate method
     // The `forcePasswordReset` flag indicates an admin has reset the user's password and must be updated
     if (response.forcePasswordReset) {
       await this.stateService.setForcePasswordResetReason(
         ForceResetPasswordReason.AdminForcePasswordReset
+      );
+    }
+
+    const acctDecryptionOpts: AccountDecryptionOptions =
+      await this.stateService.getAccountDecryptionOptions();
+
+    if (
+      acctDecryptionOpts.trustedDeviceOption !== undefined &&
+      !acctDecryptionOpts.hasMasterPassword &&
+      !acctDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission &&
+      response.hasManageResetPasswordPermission
+    ) {
+      // TDE user w/out MP went from having no password reset permission to having it.
+      // Must set the force password reset reason so the auth guard will redirect to the set password page.
+      await this.stateService.setForcePasswordResetReason(
+        ForceResetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission
       );
     }
 
