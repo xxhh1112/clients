@@ -4,6 +4,12 @@ import { Directive, HostBinding, Input } from "@angular/core";
   selector: "tr[bitRow]",
 })
 export class RowDirective {
+  /**
+   * Data used for row selection.
+   * Should match the type of the table's DataSource.
+   */
+  @Input("bitRow") rowData: unknown;
+
   @Input() alignContent: "top" | "middle" | "bottom" | "baseline" = "middle";
 
   get alignmentClass(): string {
@@ -27,6 +33,7 @@ export class RowDirective {
       "tw-border-solid",
       "hover:tw-bg-background-alt",
       "last:tw-border-0",
+      "tw-h-full",
       this.alignmentClass,
     ];
   }
