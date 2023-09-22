@@ -169,6 +169,10 @@ export class TaxInfoComponent {
     this.onCountryChanged.emit();
   }
 
+  showAdditionalTaxOptions(countryCode: string) {
+    return this.taxEnabledCountryCodes.includes(countryCode);
+  }
+
   private hasChanged(): boolean {
     for (const key in this.taxInfo) {
       // eslint-disable-next-line
@@ -178,4 +182,81 @@ export class TaxInfoComponent {
     }
     return false;
   }
+
+  private taxEnabledCountryCodes: string[] = [
+    "US",
+    "CN",
+    "FR",
+    "DE",
+    "CA",
+    "GB",
+    "AU",
+    "IN",
+    "AD",
+    "AR",
+    "AT",
+    "BE",
+    "BO",
+    "BR",
+    "BG",
+    "CL",
+    "CO",
+    "CR",
+    "HR",
+    "CY",
+    "CZ",
+    "DK",
+    "DO",
+    "EC",
+    "EG",
+    "SV",
+    "EE",
+    "FI",
+    "GE",
+    "GR",
+    "HK",
+    "HU",
+    "IS",
+    "ID",
+    "IQ",
+    "IE",
+    "IL",
+    "IT",
+    "JP",
+    "KE",
+    "KR",
+    "LV",
+    "LI",
+    "LT",
+    "LU",
+    "MY",
+    "MT",
+    "MX",
+    "NL",
+    "NZ",
+    "NO",
+    "PE",
+    "PH",
+    "PL",
+    "PT",
+    "RO",
+    "RU",
+    "SA",
+    "RS",
+    "SG",
+    "SK",
+    "SI",
+    "ZA",
+    "ES",
+    "SE",
+    "CH",
+    "TW",
+    "TH",
+    "TR",
+    "UA",
+    "AE",
+    "UY",
+    "VE",
+    "VN",
+  ];
 }
