@@ -98,6 +98,7 @@ export class LockComponent extends BaseLockComponent {
 
   async ngOnInit() {
     await super.ngOnInit();
+    // Get's the sessionId from the query params. The sessionId is sent from the passkeys popout.
     this.sessionId = this.route.snapshot.queryParams.sessionId;
     const disableAutoBiometricsPrompt =
       (await this.stateService.getDisableAutoBiometricsPrompt()) ?? true;

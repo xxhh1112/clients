@@ -90,10 +90,13 @@
       <i class="bwi bwi-spinner bwi-spin" aria-hidden="true"></i> {{ "awaitDesktop" | i18n }}
     </p>
 
-    <div class="footer-link" *ngIf="isPasskeysPopout">
-      <a [routerLink]="[]" (click)="abortFido2Popout(true)">
-        {{ "useBrowserName" | i18n }} browser
-      </a>
-    </div>
+    <a
+      class="useBrowserlink"
+      *ngIf="isPasskeysPopout"
+      [routerLink]="[]"
+      (click)="abortFido2Popout(true)"
+    >
+      {{ "useBrowserName" | i18n }} browser
+    </a>
   </main>
 </form>

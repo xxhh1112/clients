@@ -2488,6 +2488,9 @@
   "yourPasskeyIsLocked": {
     "message": "Authentication required to fill passkey. Verify your identity to continue."
   },
+  "loginToSavePasskey": {
+    "message": "Log in to save [access] this passkey"
+  },
   "useBrowserName": {
     "message": "Use $browserName$",
     "placeholders": {

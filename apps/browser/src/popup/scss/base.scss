@@ -356,6 +356,7 @@ header {
 }
 
 .content {
+  width: 100%;
   padding: 15px 5px;
 }
 
@@ -470,14 +471,6 @@ main {
     &.tab-page {
       height: calc(100% - 99px);
     }
-  }
-
-  .footer-link {
-    padding: 0 10px 5px 10px;
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    right: 0;
   }
 }
 
