@@ -3,7 +3,7 @@
     "message": "Kāda veida vienums tas ir?"
   },
   "name": {
-    "message": "Nosaukums"
+    "message": "Vārds"
   },
   "uri": {
     "message": "URI"
@@ -415,7 +415,7 @@
     "message": "Pārvietot uz apvienību"
   },
   "valueCopied": {
-    "message": "$VALUE$ ievietota starpliktuvē",
+    "message": "$VALUE$ ir starpliktuvē",
     "description": "Value has been copied to the clipboard.",
     "placeholders": {
       "value": {
@@ -507,9 +507,6 @@
   },
   "maxFileSize": {
     "message": "Lielākais pieļaujamais datnes izmērs ir 500 MB."
-  },
-  "updateKey": {
-    "message": "Šo iespēju nevar izmantot, kamēr nav atjaunināta šifrēšanas atslēga."
   },
   "addedItem": {
     "message": "Vienums pievienots"
@@ -830,7 +827,7 @@
     "message": "Šim kontam ir iespējota divpakāpju pieteikšanās, bet šajā pārlūkā netiek atbalstīts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem."
   },
   "noTwoStepProviders2": {
-    "message": "Lūgums izmantot atbalstītu tīmekļa pārlūku (piemēram Chrome) un/vai pievienot papildus nodrošinātājus, kas tiek labāk atbalstīti dažādos pārlūkos (piemēram autentificētāja lietotni)."
+    "message": "Lūgums izmantot atbalstītu tīmekļa pārlūku (piemēram Chrome) un/vai pievienot papildu nodrošinātājus, kas tiek labāk atbalstīti dažādos pārlūkos (piemēram autentificētāja lietotni)."
   },
   "twoStepOptions": {
     "message": "Divpakāpju pieteikšanās iespējas"
@@ -852,10 +849,10 @@
     "message": "YubiKey OTP drošības atslēga"
   },
   "yubiKeyDesc": {
-    "message": "Izmantojiet YubiKey, lai piekļūtu savam kontam. Darbojas ar YubiKey 4. sēriju, 5. sēriju un NEO ierīcēm."
+    "message": "YubiKey ir izmantojams, lai piekļūtu savam kontam. Darbojas ar YubiKey 4. un 5. sēriju un NEO ierīcēm."
   },
   "duoDesc": {
-    "message": "Apstiprini ar Duo Security, izmantojot Duo Mobile lietotni, īsziņu, tālruņa zvanu vai U2F drošības atslēgu!",
+    "message": "Ar Duo Security apliecināšanu var veikt ar Duo Mobile lietotni, īsziņu, tālruņa zvanu vai U2F drošības atslēgu.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -863,7 +860,7 @@
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "u2fDesc": {
-    "message": "Lai piekļūtu savam kontam, izmantojiet jebkuru ar FIDO U2F saderīgu drošības atslēgu."
+    "message": "Ir izmantojama jebkura ar FIDO U2F saderīga drošības atslēga, lai piekļūtu savam kontam."
   },
   "u2fTitle": {
     "message": "FIDO U2F drošības atslēga"
@@ -872,7 +869,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Izmantot jebkuru WebAuthn atbalstošu drošības atslēgu, lai piekļūtu kontam."
+    "message": "Ir izmantojama jebkura WebAuthn atbalstošu drošības atslēgu, lai piekļūtu kontam."
   },
   "webAuthnMigrated": {
     "message": "(Pārgājis no FIDO)"
@@ -1231,19 +1228,19 @@
     "message": "Glabātava tika iztīrīta."
   },
   "deleteAccount": {
-    "message": "Dzēst kontu"
+    "message": "Izdzēst kontu"
   },
   "deleteAccountDesc": {
     "message": "Turpināt zemāk, lai izdzēstu kontu un visus saistītos datus."
   },
   "deleteAccountWarning": {
-    "message": "Konta dzēšana ir paliekoša. To nevar atsaukt."
+    "message": "Konta izdzēšana ir neatgriezeniska. To nevar atsaukt."
   },
   "accountDeleted": {
     "message": "Konts izdzēsts"
   },
   "accountDeletedDesc": {
-    "message": "Konts ir slēgts, un visi saistītie dati ir izdzēsti."
+    "message": "Konts tika slēgts, un visi saistītie dati tika izdzēsti."
   },
   "myAccount": {
     "message": "Mans konts"
@@ -1516,7 +1513,7 @@
     "message": "Šīs ir ieteicamās lietotnes, bet darbosies arī citas autentificētāja lietotnes."
   },
   "twoStepAuthenticatorScanCode": {
-    "message": "Nolasīt šo kvadrātkodu ar autentificētāja lietotni"
+    "message": "Šis kvadrātkods ir jānolasa ar autentificētāja lietotni"
   },
   "key": {
     "message": "Atslēga"
@@ -1919,10 +1916,10 @@
     "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
-    "message": "Tu esi pārgājis uz Premium."
+    "message": "Konts tika uzlabots uz Premium."
   },
   "premiumUpgradeUnlockFeatures": {
-    "message": "Jauniniet savu kontu uz Premium abonementu un atbloķējiet dažas lieliskas papildu funkcijas."
+    "message": "Uzlabo savu kontu ar Premium dalību un atslēdz dažas lieliskas papildu iespējas!"
   },
   "premiumSignUpStorage": {
     "message": "1 GB šifrētas krātuves datņu pielikumiem."
@@ -1990,13 +1987,13 @@
     }
   },
   "additionalStorageGb": {
-    "message": "Papildus krātuve (GB)"
+    "message": "Papildu krātuve (GB)"
   },
   "additionalStorageGbDesc": {
-    "message": "# papildus GB"
+    "message": "# papildu GB"
   },
   "additionalStorageIntervalDesc": {
-    "message": "Pašreizējais plāns iever $SIZE$ šifrētas datņu krātuves. Ir iespējams pievienot papildus krātuvi par $PRICE$ GB / $INTERVAL$.",
+    "message": "Pašreizējais plāns iever $SIZE$ šifrētas datņu krātuves. Ir iespējams pievienot papildu krātuvi par $PRICE$ GB / $INTERVAL$.",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -2269,13 +2266,13 @@
     "message": "Lietotāju vietas"
   },
   "additionalUserSeats": {
-    "message": "Papildus lietotāju vietas"
+    "message": "Papildu lietotāju vietas"
   },
   "userSeatsDesc": {
     "message": "# lietotāju vietas"
   },
   "userSeatsAdditionalDesc": {
-    "message": "Pašreizējā plānā ir iekļauta(s) $BASE_SEATS$ lietotāju vieta(s). Papildus lietotājus var pievienot par $SEAT_PRICE$ mēnesī par katru.",
+    "message": "Pašreizējā plānā ir iekļauta(s) $BASE_SEATS$ lietotāju vieta(s). Papildu lietotājus var pievienot par $SEAT_PRICE$ mēnesī par katru.",
     "placeholders": {
       "base_seats": {
         "content": "$1",
@@ -2288,7 +2285,7 @@
     }
   },
   "userSeatsHowManyDesc": {
-    "message": "Cik daudz lietotāju vietas ir nepieciešamas? Vēlāk ir iespējams pievienot papildus vietas, ja nepieciešams."
+    "message": "Cik daudz lietotāju vietas ir nepieciešamas? Vēlāk ir iespējams pievienot papildu vietas, ja nepieciešams."
   },
   "planNameFree": {
     "message": "Bezmaksas",
@@ -2334,7 +2331,7 @@
     }
   },
   "additionalUsers": {
-    "message": "Papildus lietotāji"
+    "message": "Papildu lietotāji"
   },
   "costPerUser": {
     "message": "$COST$ par lietotāju",
@@ -3225,13 +3222,13 @@
     "message": "Uzzināt vairāk"
   },
   "deleteRecoverDesc": {
-    "message": "Ievadīt e-pasta adresi zemāk esošajā laukā, lai atkoptu un izdzēstu kontu."
+    "message": "Jāievada e-pasta adrese zemāk esošajā laukā, lai atkoptu un izdzēstu savu kontu."
   },
   "deleteRecoverEmailSent": {
     "message": "Ja konts pastāv, tika nosūtīts e-pasta ziņojums ar turpmākām norādēm."
   },
   "deleteRecoverConfirmDesc": {
-    "message": "Tika pieprasīts dzēst Bitwarden kontu. Nospiest zemāk esošo pogu, lai apstiprinātu."
+    "message": "Tika pieprasīts izdzēst Bitwarden kontu. Jānospiež zemāk esošā poga, lai apstiprinātu."
   },
   "myOrganization": {
     "message": "Mana apvienība"
@@ -3476,17 +3473,11 @@
   "keyUpdated": {
     "message": "Atslēga atjaunināta"
   },
-  "updateKeyTitle": {
-    "message": "Atjaunināt atslēgu"
-  },
   "updateEncryptionKey": {
     "message": "Atjaunināt šifrēšanas atslēgu"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Pašreiz tiek izmantots novecojis šifrēšanas veids."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Tiek izmantotas garākas šifrēšanas atslēgas, kas nodrošina labāku drošību un piekļuvi jaunākām iespējām. Šifrēšanas atslēgas atjaunināšana ir ātra un vienkārša. Zemāk ir tikai jāievada galvenā parole. Ar laiku šis atjauninājums kļūs nepieciešams."
+  "updateEncryptionSchemeDesc": {
+    "message": "Mēs esam mainījuši šifrēšanas veidu, lai nodrošinātu labāku drošību. Savu šifrēšanas atslēgu var atjaunināt tagad, zemāk ievadot savu galveno paroli."
   },
   "updateEncryptionKeyWarning": {
     "message": "Pēc šifrēšanas atslēgas atjaunināšanas ir nepieciešams atteikties un tad pieteikties visās Bitwarden lietotnēs, kas pašreiz tiek izmantotas (piemēram, tālruņa lietotnē vai pārlūku paplašinājumā). Ja tas netiks darīts (tā tiek lejupielādēta jaunā šifrēšanas atslēga), dati var tikt bojāti. Tiks veikts automātisks atteikšanās mēģinājums, tomēr tas var notikt ar aizkavi."
@@ -3522,7 +3513,7 @@
     "message": "Nekas nav atlasīts."
   },
   "acceptPolicies": {
-    "message": "Atzīmējot šo rūtiņu, Tu piekrīti sekojošajam:"
+    "message": "Ar šīs rūtiņas atzīmēšanu tiek piekrists sekojošajam:"
   },
   "acceptPoliciesRequired": {
     "message": "Nav apstiprināti izmantošanas noteikumi un privātuma nosacījumi."
@@ -3681,7 +3672,7 @@
     "message": "API atslēga var tikt izmantota, lai autentificētos Bitwarden CLI."
   },
   "userApiKeyWarning": {
-    "message": "API atslēga ir papildus autentificēšanās risinājums. To vajadzētu glabāt noslēpumā."
+    "message": "API atslēga ir papildu autentificēšanās risinājums. To vajadzētu glabāt noslēpumā."
   },
   "oauth2ClientCredentials": {
     "message": "OAuth 2.0 klienta akreditācijas dati",
@@ -5446,7 +5437,7 @@
     "message": "Izdod apvienības glabātavu"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Tiks izgūti tikai atsevišķi glabātavas vienumi, kas ir saistīti ar $EMAIL$. Apvienīgas glabātavas vienumi netiks iekļauti. Tiks izgūta tikai glabātavas vienuma informācija, un saistītie pielikumi netiks iekļauti.",
+    "message": "Tiks izgūti tikai atsevišķi glabātavas vienumi, kas ir saistīti ar $EMAIL$. Apvienības glabātavas vienumi netiks iekļauti. Tiks izgūta tikai glabātavas vienumu informācija, un saistītie pielikumi netiks iekļauti.",
     "placeholders": {
       "email": {
         "content": "$1",

@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "Maksimaalne faili suurus on 500 MB."
   },
-  "updateKey": {
-    "message": "Seda funktsiooni ei saa enne krüpteerimise võtme uuendamist kasutada."
+  "encryptionKeyMigrationRequired": {
+    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
   },
   "editedFolder": {
     "message": "Kaust on muudetud"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Personaalse hoidla eksportimine"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Ainult personaalsed $EMAIL$ alla kuuluvad kirjed eksportidakse. Organisatsiooni kirjeid ei ekspordita.",
+  "exportingIndividualVaultDescription": {
+    "message": "Ainult e-postiga $EMAIL$ seonduvad kirjed eksporditakse. Organisatsiooni kirjeid ei kaasata. Samuti ei kaasata organisatsiooniga seonduvaid manuseid.",
     "placeholders": {
       "email": {
         "content": "$1",

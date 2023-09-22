@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "Funktion ikke tilgængelig"
   },
-  "updateKey": {
-    "message": "Du kan ikke bruge denne funktion, før du opdaterer din krypteringsnøgle."
+  "encryptionKeyMigrationRequired": {
+    "message": "Krypteringsnøglemigrering nødvendig. Log ind gennem web-boksen for at opdatere krypteringsnøglen."
   },
   "premiumMembership": {
     "message": "Premium-medlemskab"
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Eksporterer personlig boks"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Kun de personlige bokselementer tilknyttet $EMAIL$ vil blive eksporteret. Organisationsbokseelementer vil ikke være inkluderet.",
+  "exportingIndividualVaultDescription": {
+    "message": "Kun individuelle Boksemner tilknyttet $EMAIL$ eksporteres. Organisationsboksemner medtages ikke. Kun Boksemneinformation uden tilhørende vedhæftninger eksporteres.",
     "placeholders": {
       "email": {
         "content": "$1",

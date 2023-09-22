@@ -508,9 +508,6 @@
   "maxFileSize": {
     "message": "Максимальний розмір файлу 500 Мб."
   },
-  "updateKey": {
-    "message": "Ви не можете використовувати цю функцію доки не оновите свій ключ шифрування."
-  },
   "addedItem": {
     "message": "Запис додано"
   },
@@ -1426,10 +1423,10 @@
     "message": "Захистіть обліковий запис, вимагаючи додатковий крок перевірки під час входу."
   },
   "twoStepLoginTeamsDesc": {
-    "message": "Enable two-step login for your organization."
+    "message": "Увімкніть двоетапну перевірку для вашої організації."
   },
   "twoStepLoginEnterpriseDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "message": "Зобов'язувати учасників використовувати двоетапну перевірку Bitwarden за допомогою ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -3476,17 +3473,11 @@
   "keyUpdated": {
     "message": "Ключ оновлено"
   },
-  "updateKeyTitle": {
-    "message": "Оновити ключ"
-  },
   "updateEncryptionKey": {
     "message": "Оновити ключ шифрування"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Зараз ви використовуєте застарілу схему шифрування."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Ми перейшли на більші ключі шифрування, що гарантує кращу безпеку і доступ до новіших функцій. Оновлення вашого ключа шифрування є швидким і простим процесом. Просто введіть свій головний пароль внизу. Це оновлення невдовзі стане обов'язковою вимогою."
+  "updateEncryptionSchemeDesc": {
+    "message": "Ми змінили схему шифрування для кращої безпеки. Введіть головний пароль нижче, щоб оновити свій ключ шифрування."
   },
   "updateEncryptionKeyWarning": {
     "message": "Після оновлення вашого ключа шифрування вам необхідно вийти з системи і потім виконати повторний вхід у всіх програмах Bitwarden, які ви використовуєте. Збій при виході та повторному вході може призвести до пошкодження даних. Ми спробуємо завершити ваші сеанси автоматично, однак, цей процес може відбутися із затримкою."

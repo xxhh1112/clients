@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "Funkce je nedostupná"
   },
-  "updateKey": {
-    "message": "Dokud neaktualizujete svůj šifrovací klíč, nemůžete tuto funkci použít."
+  "encryptionKeyMigrationRequired": {
+    "message": "Vyžaduje se migrace šifrovacího klíče. Pro aktualizaci šifrovacího klíče se přihlaste přes webový trezor."
   },
   "premiumMembership": {
     "message": "Prémiové členství"
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Exportování osobního trezoru"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Budou exportovány jen osobní položky trezoru spojené s účtem $EMAIL$. Nebudou zahrnuty položky trezoru v organizaci.",
+  "exportingIndividualVaultDescription": {
+    "message": "Budou exportovány jen osobní položky trezoru spojené s $EMAIL$. Položky trezoru organizace nebudou zahrnuty. Budou exportovány jen informace o položkách trezoru a nebudou zahrnuty související přílohy.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2093,7 +2093,7 @@
     "message": "Verze serveru"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "vlastní hosting"
   },
   "thirdParty": {
     "message": "Tretí strana"

@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "La taille maximale du fichier est de 500 Mo."
   },
-  "updateKey": {
-    "message": "Vous ne pouvez pas utiliser cette fonctionnalité tant que vous ne mettez pas à jour votre clé de chiffrement."
+  "encryptionKeyMigrationRequired": {
+    "message": "Migration de la clé de chiffrement nécessaire. Veuillez vous connecter sur le coffre web pour mettre à jour votre clé de chiffrement."
   },
   "editedFolder": {
     "message": "Dossier enregistré"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Export du coffre personnel"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
+  "exportingIndividualVaultDescription": {
+    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus. Seules les informations sur les éléments du coffre seront exportées et n'incluront pas les pièces jointes associées.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2287,7 +2287,7 @@
     "message": "bitwarden.eu"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "auto-hébergé"
   },
   "accessDenied": {
     "message": "Accès refusé. Vous n'avez pas l'autorisation de voir cette page."

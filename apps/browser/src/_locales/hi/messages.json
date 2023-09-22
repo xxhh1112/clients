@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "Feature Unavailable"
   },
-  "updateKey": {
-    "message": "जब तक आप अपनी एन्क्रिप्शन कुंजी को अपडेट नहीं करते, तब तक आप इस सुविधा का उपयोग नहीं कर सकते हैं।"
+  "encryptionKeyMigrationRequired": {
+    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
   },
   "premiumMembership": {
     "message": "Premium Membership"
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Exporting individual vault"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+  "exportingIndividualVaultDescription": {
+    "message": "केवल $EMAIL$ से संबद्ध, व्यक्तिगत वॉल्ट वस्तुएँ निर्यात की जाएंगी. संगठन वॉल्ट वस्तुएँ शामिल नहीं की जाएंगी. केवल वॉल्ट वस्तुओं की जानकारी निर्यात की जाएगी और इसमें संबंधित अनुलग्नक शामिल नहीं होंगे.",
     "placeholders": {
       "email": {
         "content": "$1",

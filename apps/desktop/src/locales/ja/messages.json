@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "最大ファイルサイズは500MBです。"
   },
-  "updateKey": {
-    "message": "暗号キーを更新するまでこの機能は使用できません。"
+  "encryptionKeyMigrationRequired": {
+    "message": "暗号化キーの移行が必要です。暗号化キーを更新するには、ウェブ保管庫からログインしてください。"
   },
   "editedFolder": {
     "message": "フォルダーを編集しました"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "個人保管庫のエクスポート"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "$EMAIL$ に関連付けられた個人用保管庫アイテムのみがエクスポートされます。組織用保管庫アイテムは含まれません。",
+  "exportingIndividualVaultDescription": {
+    "message": "$EMAIL$ に関連付けられた個人の保管庫アイテムのみがエクスポートされます。組織の保管庫アイテムは含まれません。 保管庫アイテム情報のみがエクスポートされ、関連する添付ファイルはエクスポートされません。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2287,7 +2287,7 @@
     "message": "bitwarden.eu"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "自己ホスト型"
   },
   "accessDenied": {
     "message": "アクセスが拒否されました。このページを表示する権限がありません。"

@@ -41,7 +41,7 @@
     "message": "主密码是您访问密码库的唯一密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。"
   },
   "masterPassHintDesc": {
-    "message": "主密码提示可以在你忘记密码时帮你回忆起来。"
+    "message": "主密码提示可以在您忘记密码时帮您回忆起来。"
   },
   "reTypeMasterPass": {
     "message": "再次输入主密码"
@@ -480,13 +480,13 @@
     "message": "无法在此页面上自动填充所选项目。请改为手工复制并粘贴。"
   },
   "loggedOut": {
-    "message": "已退出账户"
+    "message": "已注销"
   },
   "loginExpired": {
     "message": "您的登录会话已过期。"
   },
   "logOutConfirmation": {
-    "message": "您确定要退出账户吗？"
+    "message": "您确定要注销吗？"
   },
   "yes": {
     "message": "是"
@@ -751,7 +751,7 @@
     "message": "附件已删除"
   },
   "newAttachment": {
-    "message": "添加新的附件"
+    "message": "添加新附件"
   },
   "noAttachments": {
     "message": "没有附件。"
@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "功能不可用"
   },
-  "updateKey": {
-    "message": "在您更新加密密钥前，您不能使用此功能。"
+  "encryptionKeyMigrationRequired": {
+    "message": "需要迁移加密密钥。请登录网页版密码库来更新您的加密密钥。"
   },
   "premiumMembership": {
     "message": "高级会员"
@@ -853,7 +853,7 @@
     "message": "请输入您的验证器应用中的 6 位验证码。"
   },
   "enterVerificationCodeEmail": {
-    "message": "请输入通过电子邮件发送给 $EMAIL$ 的 6 位验证码。",
+    "message": "请输入发送给电子邮件 $EMAIL$ 的 6 位数验证码。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1036,7 +1036,7 @@
     "message": "值"
   },
   "newCustomField": {
-    "message": "新建自定义字段"
+    "message": "新增自定义字段"
   },
   "dragToSort": {
     "message": "拖动排序"
@@ -1059,7 +1059,7 @@
     "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
-    "message": "如果您点击弹窗外的任何区域，将导致弹窗关闭。您想在新窗口中打开此弹窗，以便它不会关闭吗？"
+    "message": "如果您点击弹窗外的区域以检查您的验证码电子邮件，将导致弹窗关闭。您想在新窗口中打开此弹窗，以便它不会关闭吗？"
   },
   "popupU2fCloseMessage": {
     "message": "此浏览器无法处理此弹出窗口中的 U2F 请求。您想要在新窗口中打开此弹出窗口吗？"
@@ -1182,7 +1182,7 @@
     "message": "许可证号码"
   },
   "email": {
-    "message": "Email"
+    "message": "电子邮件"
   },
   "phone": {
     "message": "电话"
@@ -1391,7 +1391,7 @@
     "message": "使用 PIN 码解锁"
   },
   "setYourPinCode": {
-    "message": "设置您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您退出账户时被重置。"
+    "message": "设定您用来解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您完全注销此应用程序时被重置。"
   },
   "pinRequired": {
     "message": "需要 PIN 码。"
@@ -1453,7 +1453,7 @@
     "message": "项目已恢复"
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "超时后退出账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？"
+    "message": "超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "超时动作确认"
@@ -1615,7 +1615,7 @@
     "message": "未提供权限"
   },
   "nativeMessaginPermissionErrorDesc": {
-    "message": "没有与 Bitwarden 桌面应用程序通信的权限，我们无法在浏览器扩展中提供生物识别。请再试一次。"
+    "message": "没有与 Bitwarden 桌面应用程序通信的权限，我们无法在浏览器扩展中提供生物识别。请重试。"
   },
   "nativeMessaginPermissionSidebarTitle": {
     "message": "权限请求错误"
@@ -1624,7 +1624,7 @@
     "message": "此操作不能在侧边栏中完成，请在弹出窗口或弹出对话框中重试。"
   },
   "personalOwnershipSubmitError": {
-    "message": "由于某个企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，然后从可用的集合中选择。"
+    "message": "由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
   },
   "personalOwnershipPolicyInEffect": {
     "message": "一个组织策略正影响您的所有权选项。"
@@ -1796,14 +1796,14 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
-    "message": "新建密码"
+    "message": "新密码"
   },
   "sendDisabled": {
     "message": "Send 已禁用",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "由于企业策略，您只能删除现有的 Send。",
+    "message": "由于某个企业策略，您只能删除现有的 Send。",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
@@ -1860,7 +1860,7 @@
     "message": "一个或多个组织策略正在影响您的 Send 选项。"
   },
   "passwordPrompt": {
-    "message": "重新询问主密码"
+    "message": "主密码重新提示"
   },
   "passwordConfirmation": {
     "message": "确认主密码"
@@ -1896,7 +1896,7 @@
     "message": "选择文件夹..."
   },
   "ssoCompleteRegistration": {
-    "message": "要完成 SSO 登陆配置，请设置一个主密码以访问和保护您的密码库。"
+    "message": "要完成 SSO 登录配置，请设置一个主密码以访问和保护您的密码库。"
   },
   "hours": {
     "message": "小时"
@@ -1986,13 +1986,13 @@
     "message": "字符计数开关"
   },
   "sessionTimeout": {
-    "message": "您的会话已超时。请返回并尝试重新登录。"
+    "message": "您的会话已超时。请返回然后尝试重新登录。"
   },
   "exportingPersonalVaultTitle": {
     "message": "导出个人密码库"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "仅会导出与 $EMAIL$ 关联的个人密码库项目。组织密码库的项目不会导出。",
+  "exportingIndividualVaultDescription": {
+    "message": "仅会导出与 $EMAIL$ 关联的个人密码库项目，不包括组织密码库项目。仅会导出密码库项目信息，不包括关联的附件。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2093,7 +2093,7 @@
     "message": "服务器版本"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "自托管"
   },
   "thirdParty": {
     "message": "第三方"
@@ -2117,7 +2117,7 @@
     }
   },
   "loginWithMasterPassword": {
-    "message": "使用主密码登录"
+    "message": "主密码登录"
   },
   "loggingInAs": {
     "message": "正登录为"

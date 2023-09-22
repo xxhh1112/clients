@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "Maksimum filstørrelse er 500 MB."
   },
-  "updateKey": {
-    "message": "Denne funktion kan ikke bruges, før din krypteringsnøgle opdateres."
+  "encryptionKeyMigrationRequired": {
+    "message": "Krypteringsnøglemigrering nødvendig. Log ind gennem web-boksen for at opdatere krypteringsnøglen."
   },
   "editedFolder": {
     "message": "Mappe gemt"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Eksporterer individuel boks"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Kun de individuelle boksemner tilknyttet $EMAIL$ eksporteres. Organisationsboksemner medtages ikke.",
+  "exportingIndividualVaultDescription": {
+    "message": "Kun individuelle Boksemner tilknyttet $EMAIL$ eksporteres. Organisationsboksemner medtages ikke. Kun Boksemneinformation uden tilhørende vedhæftninger eksporteres.",
     "placeholders": {
       "email": {
         "content": "$1",

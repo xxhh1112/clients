@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "O tamanho máximo do ficheiro é de 500 MB."
   },
-  "updateKey": {
-    "message": "Não pode utilizar esta funcionalidade até atualizar a sua chave de encriptação."
+  "encryptionKeyMigrationRequired": {
+    "message": "É necessária a migração da chave de encriptação. Inicie sessão através do cofre Web para atualizar a sua chave de encriptação."
   },
   "editedFolder": {
     "message": "Pasta guardada"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "A exportar o cofre pessoal"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Apenas os itens do cofre pessoal associado a $EMAIL$ serão exportados. Os itens do cofre da organização não serão incluídos.",
+  "exportingIndividualVaultDescription": {
+    "message": "Apenas os itens de cofre individuais associados a $EMAIL$ serão exportados. Os itens do cofre da organização não serão incluídos. Apenas serão exportadas as informações do item do cofre e não serão incluídos os anexos associados.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2287,7 +2287,7 @@
     "message": "bitwarden.eu"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "auto-hospedado"
   },
   "accessDenied": {
     "message": "Acesso negado. Não tem permissão para visualizar esta página."

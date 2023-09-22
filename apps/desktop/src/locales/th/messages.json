@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "ขนาดไฟล์สูงสุดคือ 500 MB"
   },
-  "updateKey": {
-    "message": "คุณไม่สามารถใช้คุณลักษณะนี้ได้จนกว่าคุณปรับปรุงคีย์การเข้ารหัสลับของคุณ"
+  "encryptionKeyMigrationRequired": {
+    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
   },
   "editedFolder": {
     "message": "แก้​ไข​โฟลเดอร์แล้ว"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Exporting individual vault"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",

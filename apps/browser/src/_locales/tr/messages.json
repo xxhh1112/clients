@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "Özellik kullanılamıyor"
   },
-  "updateKey": {
-    "message": "Şifreleme anahtarınızı güncellemeden bu özelliği kullanamazsınız."
+  "encryptionKeyMigrationRequired": {
+    "message": "Şifreleme anahtarınızın güncellenmesi gerekiyor. Şifreleme anahtarınızı güncellemek için lütfen web kasasına giriş yapın."
   },
   "premiumMembership": {
     "message": "Premium üyelik"
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Kişisel kasa dışa aktarılıyor"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Yalnızca $EMAIL$ ile ilişkili kişisel kasadaki kayıtlar dışa aktarılacaktır. Kuruluş kasasındaki kayıtlar dahil edilmeyecektir.",
+  "exportingIndividualVaultDescription": {
+    "message": "Yalnızca $EMAIL$ ile ilişkili kasa kayıtları dışa aktarılacaktır. Kuruluş kasasındaki kayıtlar dahil edilmeyecektir. Yalnızca kasa kayıt bilgileri dışa aktarılacak, kayıtlara eklenen dosyalar aktarılmayacaktır.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2093,7 +2093,7 @@
     "message": "Sunucu sürümü"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "şirket içinde barındırılan"
   },
   "thirdParty": {
     "message": "Üçüncü taraf"

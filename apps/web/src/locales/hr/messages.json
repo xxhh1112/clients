@@ -508,9 +508,6 @@
   "maxFileSize": {
     "message": "Najveća veličina datoteke je 500 MB."
   },
-  "updateKey": {
-    "message": "Ne možeš koristiti ovu značajku prije nego ažuriraš ključ za šifriranje."
-  },
   "addedItem": {
     "message": "Stavka dodana"
   },
@@ -609,7 +606,7 @@
     "message": "Prijava uređajem"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije. Trebaš drugu opciju?"
   },
   "loginWithMasterPassword": {
     "message": "Prijava glavnom lozinkom"
@@ -712,7 +709,7 @@
     "message": "Došlo je do neočekivane pogreške."
   },
   "expirationDateError": {
-    "message": "Please select an expiration date that is in the future."
+    "message": "Odaberi datum isteka u budućnosti."
   },
   "emailAddress": {
     "message": "Adresa e-pošte"
@@ -955,7 +952,7 @@
     "message": "Kopiraj kôd za provjeru"
   },
   "copyUuid": {
-    "message": "Copy UUID"
+    "message": "Kopiraj UUID"
   },
   "warning": {
     "message": "Upozorenje"
@@ -1300,10 +1297,10 @@
     "message": "Learn about your import options"
   },
   "selectImportFolder": {
-    "message": "Select a folder"
+    "message": "Odaberi mapu"
   },
   "selectImportCollection": {
-    "message": "Select a collection"
+    "message": "Odaberi zbirku"
   },
   "importTargetHint": {
     "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
@@ -2068,7 +2065,7 @@
     "message": "Otkaži pretplatu"
   },
   "subscriptionExpiration": {
-    "message": "Subscription expiration"
+    "message": "Istek pretplate"
   },
   "subscriptionCanceled": {
     "message": "Pretplata otkazana."
@@ -2676,7 +2673,7 @@
     "message": "Web trezor"
   },
   "bitWebVault": {
-    "message": "Bitwarden Web vault"
+    "message": "Bitwarden Web trezor"
   },
   "bitSecretsManager": {
     "message": "Bitwarden Secrets Manager"
@@ -2703,7 +2700,7 @@
     "message": "Prijava neuspješna zbog pogrešne dvostruke autentifikacije."
   },
   "incorrectPassword": {
-    "message": "Incorrect password"
+    "message": "Netočna lozinka"
   },
   "incorrectCode": {
     "message": "Incorrect code"
@@ -2802,7 +2799,7 @@
     }
   },
   "viewCollectionWithName": {
-    "message": "View collection - $NAME$",
+    "message": "Prikaži zbirku - $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -2811,7 +2808,7 @@
     }
   },
   "editItemWithName": {
-    "message": "Edit item - $NAME$",
+    "message": "Uredi stavku - $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -3476,17 +3473,11 @@
   "keyUpdated": {
     "message": "Ključ ažuriran"
   },
-  "updateKeyTitle": {
-    "message": "Ažuriraj ključ"
-  },
   "updateEncryptionKey": {
     "message": "Ažuriraj ključ za šifriranje"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Trenutno koristiš zastarjeli način šifriranja."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Prešli smo na korištenje duljih ključeva za šifriranje koji pružaju bolju zaštitu kao i pristup novim uslugama. Ažuriranje ključa za šifriranje je brzo i jednostavno. Samo unesi svoju glavnu lozinku. Ova nadogradnja će uskoro postati obavezna."
+  "updateEncryptionSchemeDesc": {
+    "message": "We've changed the encryption scheme to provide better security. Update your encryption key now by entering your master password below."
   },
   "updateEncryptionKeyWarning": {
     "message": "Nakon ažuriranja svojeg ključa za šifriranje, obavezno se trebaš odjaviti i ponovno prijaviti u sve Bitwarden aplikacije koje trenutno koristiš (npr. mobilna aplikacija, proširenje preglednika, ...). Ako se ne odjaviš i ponovno prijaviš (čime se preuzima tvoj novi ključ za šifriranje) može doći do oštećenja spremljenih podataka. Pokušati ćemo te automatski odjaviti, no, to bi možda moglo potrajati."
@@ -3793,10 +3784,10 @@
     "message": "Nakon isteka trezora"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Potrebno je ponovno unijeti glavnu lozinku ili na drugi način otključati za pristup tvom trezoru."
+    "message": "Za pristup tvom trezoru, potrebno je ponovno unijeti glavnu lozinku ili ga na drugi način otključati."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Potrebno je ponovno unijeti korisničko ime i glavnu lozinku za pristup tvom trezoru."
+    "message": "Za pristup tvom trezoru, potrebno je ponovno unijeti korisničko ime i glavnu lozinku."
   },
   "lock": {
     "message": "Zaključaj",
@@ -3870,7 +3861,7 @@
     "message": "Odjava će ukloniti pristup tvojem trezoru i zahtijeva mrežnu potvrdu identiteta nakon isteka vremenske neaktivnosti. Sigurno želiš koristiti ovu postavku?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Potvrda akcije vremenske neaktivnosti"
+    "message": "Potvrda radnje nakon vremenske neaktivnosti"
   },
   "hidePasswords": {
     "message": "Sakrij lozinke"
@@ -4901,7 +4892,7 @@
     }
   },
   "vaultTimeoutPolicyWithActionInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "message": "Pravilo tvoje organizacije utječe na istek trezora. Najveće dozvoljeno vrijeme isteka je $HOURS$:$MINUTES$ h. Tvoja radnja nakon isteka trezora je: $ACTION$.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4918,7 +4909,7 @@
     }
   },
   "vaultTimeoutActionPolicyInEffect": {
-    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "message": "Pravilo tvoje organizacije podesilo je radnju nakon isteka trezora na: $ACTION$.",
     "placeholders": {
       "action": {
         "content": "$1",

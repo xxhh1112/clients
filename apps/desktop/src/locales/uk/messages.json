@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "Максимальний розмір файлу 500 Мб."
   },
-  "updateKey": {
-    "message": "Ви не можете використовувати цю функцію доки не оновите свій ключ шифрування."
+  "encryptionKeyMigrationRequired": {
+    "message": "Потрібно перенести ключ шифрування. Увійдіть у вебсховище та оновіть свій ключ шифрування."
   },
   "editedFolder": {
     "message": "Теку збережено"
@@ -1984,8 +1984,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Експортування особистого сховища"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено.",
+  "exportingIndividualVaultDescription": {
+    "message": "Будуть експортовані лише записи особистого сховища, пов'язані з $EMAIL$. Записи сховища організації не буде включено. Експортуються лише дані записів сховища без пов'язаних вкладень.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2287,7 +2287,7 @@
     "message": "bitwarden.eu"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "власне розміщення"
   },
   "accessDenied": {
     "message": "Доступ заборонено. У вас немає дозволу на перегляд цієї сторінки."

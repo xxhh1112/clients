@@ -38,12 +38,23 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
       !fillScript.script?.length ||
       this.fillingWithinSandboxedIframe() ||
       this.userCancelledInsecureUrlAutofill(fillScript.savedUrls) ||
-      this.userCancelledUntrustedIframeAutofill(fillScript)
+      this.userCancelledUntrustedIframeAutofill(fillScript) ||
+      this.tabURLChanged(fillScript.savedUrls)
     ) {
       return;
     }
 
     fillScript.script.forEach(this.runFillScriptAction);
+  }
+
+  /**
+   * Determines if the page URL no longer matches one of the cipher's savedURL domains
+   * @param {string[] | null} savedUrls
+   * @returns {boolean}
+   * @private
+   */
+  private tabURLChanged(savedUrls?: AutofillScript["savedUrls"]): boolean {
+    return savedUrls && !savedUrls.some((url) => url.startsWith(window.location.origin));
   }
 
   /**
@@ -71,7 +82,7 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     if (
       !savedUrls?.some((url) => url.startsWith(`https://${window.location.hostname}`)) ||
       window.location.protocol !== "http:" ||
-      !document.querySelectorAll("input[type=password]")?.length
+      !this.isPasswordFieldWithinDocument()
     ) {
       return false;
     }
@@ -82,6 +93,22 @@ class InsertAutofillContentService implements InsertAutofillContentServiceInterf
     ].join("\n\n");
 
     return !confirm(confirmationWarning);
+  }
+
+  /**
+   * Checks if there is a password field within the current document. Includes
+   * password fields that are present within the shadow DOM.
+   * @returns {boolean}
+   * @private
+   */
+  private isPasswordFieldWithinDocument(): boolean {
+    return Boolean(
+      this.collectAutofillContentService.queryAllTreeWalkerNodes(
+        document.documentElement,
+        (node: Node) => node instanceof HTMLInputElement && node.type === "password",
+        false
+      )?.length
+    );
   }
 
   /**

@@ -771,8 +771,8 @@
   "featureUnavailable": {
     "message": "기능 사용할 수 없음"
   },
-  "updateKey": {
-    "message": "이 기능을 사용하려면 암호화 키를 업데이트해야 합니다."
+  "encryptionKeyMigrationRequired": {
+    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
   },
   "premiumMembership": {
     "message": "프리미엄 멤버십"
@@ -1991,8 +1991,8 @@
   "exportingPersonalVaultTitle": {
     "message": "개인 보관함을 내보내는 중"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "오직 $EMAIL$와 연관된 개인 보관함의 항목만 내보내집니다. 조직 보관함의 항목은 포함되지 않습니다.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
