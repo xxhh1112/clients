@@ -6,6 +6,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { ImportServiceAbstraction } from "@bitwarden/importer";
 
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
@@ -33,7 +35,9 @@ export default class RuntimeBackground {
     private messagingService: MessagingService,
     private logService: LogService,
     private configService: ConfigServiceAbstraction,
-    private browserPopoutWindowService: BrowserPopoutWindowService
+    private browserPopoutWindowService: BrowserPopoutWindowService,
+    private importService: ImportServiceAbstraction,
+    private syncService: SyncService
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -234,6 +238,9 @@ export default class RuntimeBackground {
       case "getClickedElementResponse":
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
         break;
+      case "startLpImport":
+        this.StartLpImport(msg.data, sender);
+        break;
       default:
         break;
     }
@@ -271,5 +278,32 @@ export default class RuntimeBackground {
         this.onInstalledReason = null;
       }
     }, 100);
+  }
+
+  private async StartLpImport(data: string, sender: chrome.runtime.MessageSender) {
+    if (!data) {
+      return;
+    }
+
+    const promptForPassword_callback = async () => {
+      return "";
+    };
+    const importer = this.importService.getImporter(
+      "lastpasscsv",
+      promptForPassword_callback,
+      null
+    );
+
+    try {
+      const result = await this.importService.import(importer, data, null, null, false);
+      if (result.success) {
+        chrome.tabs.sendMessage(sender.tab.id, {
+          command: "lpImportCompleted",
+        });
+        await this.syncService.fullSync(true);
+      }
+    } catch (error) {
+      alert(error);
+    }
   }
 }

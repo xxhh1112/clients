@@ -162,6 +162,7 @@ const mainConfig = {
     "content/message_handler": "./src/autofill/content/message_handler.ts",
     "notification/bar": "./src/autofill/notification/bar.ts",
     "encrypt-worker": "../../libs/common/src/platform/services/cryptography/encrypt.worker.ts",
+    "content/lp-importer": "./src/tools/content/lp-importer.ts",
   },
   optimization: {
     minimize: ENV !== "development",

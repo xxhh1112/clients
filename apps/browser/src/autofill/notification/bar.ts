@@ -81,6 +81,18 @@ function load() {
 
   unlockTemplate.content.getElementById("unlock-text").textContent = i18n.notificationUnlockDesc;
 
+  // PM-4033 - Display Import Prompt to User
+  const lpImportTemplate = document.getElementById("template-lp-import") as HTMLTemplateElement;
+
+  const startLpImportButton = lpImportTemplate.content.getElementById("start-lp-import");
+  startLpImportButton.textContent = "Yes";
+
+  const cancelLpImportButton = lpImportTemplate.content.getElementById("cancel-lp-import");
+  cancelLpImportButton.textContent = "No";
+
+  lpImportTemplate.content.getElementById("import-text").textContent =
+    "Do you want to import your data to Bitwarden?";
+
   // i18n for body content
   const closeButton = document.getElementById("close-button");
   closeButton.title = i18n.close;
@@ -91,6 +103,8 @@ function load() {
     handleTypeChange();
   } else if (getQueryVariable("type") === "unlock") {
     handleTypeUnlock();
+  } else if (getQueryVariable("type") === "lpImport") {
+    handleTypeLpImport();
   }
 
   closeButton.addEventListener("click", (e) => {
@@ -190,6 +204,35 @@ function handleTypeUnlock() {
   unlockButton.addEventListener("click", (e) => {
     sendPlatformMessage({
       command: "bgReopenPromptForLogin",
+    });
+  });
+}
+
+function handleTypeLpImport() {
+  setContent(document.getElementById("template-lp-import") as HTMLTemplateElement);
+
+  const updateImportButtons = (msg: any) => {
+    if (msg.command === "lpImportCompleted") {
+      document.getElementById("import-buttons").innerHTML = "Data successfully imported!";
+      document.getElementById("import-buttons").style.color = "green";
+      chrome.runtime.onMessage.removeListener(updateImportButtons);
+      return;
+    }
+  };
+  chrome.runtime.onMessage.addListener(updateImportButtons);
+
+  const startLpImportButton = document.getElementById("start-lp-import");
+  startLpImportButton.addEventListener("click", () => {
+    sendPlatformMessage({
+      command: "bgStartLpImport",
+    });
+    document.getElementById("import-buttons").innerHTML = "Importing...";
+  });
+
+  const cancelLpImportButton = document.getElementById("cancel-lp-import");
+  cancelLpImportButton.addEventListener("click", (e) => {
+    sendPlatformMessage({
+      command: "bgCancelLpImport",
     });
   });
 }

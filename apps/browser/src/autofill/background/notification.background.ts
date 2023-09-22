@@ -12,6 +12,7 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import AddRequestLastPassImportQueueMessage from "../../background/models/add-request-last-pass-import-queue-message";
 import AddUnlockVaultQueueMessage from "../../background/models/add-unlock-vault-queue-message";
 import AddChangePasswordQueueMessage from "../../background/models/addChangePasswordQueueMessage";
 import AddLoginQueueMessage from "../../background/models/addLoginQueueMessage";
@@ -28,6 +29,7 @@ export default class NotificationBackground {
     | AddLoginQueueMessage
     | AddChangePasswordQueueMessage
     | AddUnlockVaultQueueMessage
+    | AddRequestLastPassImportQueueMessage
   )[] = [];
 
   constructor(
@@ -121,6 +123,16 @@ export default class NotificationBackground {
       case "promptForLogin":
         await this.unlockVault(sender.tab);
         break;
+      case "bgRequestLastPassImport":
+        await this.requestLastPassImport(sender.tab);
+        break;
+      case "bgStartLpImport":
+        await BrowserApi.tabSendMessageData(sender.tab, "startLpImport");
+        break;
+      case "bgCancelLpImport":
+        await BrowserApi.tabSendMessageData(sender.tab, "cancelLpImport");
+        await BrowserApi.tabSendMessageData(sender.tab, "closeNotificationBar");
+        break;
       default:
         break;
     }
@@ -194,6 +206,17 @@ export default class NotificationBackground {
           typeData: {
             isVaultLocked: this.notificationQueue[i].wasVaultLocked,
             theme: await this.getCurrentTheme(),
+          },
+        });
+      } else if (
+        this.notificationQueue[i].type === NotificationQueueMessageType.RequestLastPassImport
+      ) {
+        BrowserApi.tabSendMessageData(tab, "openNotificationBar", {
+          type: "lpImport",
+          typeData: {
+            isVaultLocked: this.notificationQueue[i].wasVaultLocked,
+            theme: await this.getCurrentTheme(),
+            webVaultURL: await this.environmentService.getWebVaultUrl(),
           },
         });
       }
@@ -334,6 +357,20 @@ export default class NotificationBackground {
     this.pushUnlockVaultToQueue(loginDomain, tab);
   }
 
+  private async requestLastPassImport(tab: chrome.tabs.Tab) {
+    const currentAuthStatus = await this.authService.getAuthStatus();
+    if (currentAuthStatus !== AuthenticationStatus.Unlocked || this.notificationQueue.length) {
+      return;
+    }
+
+    const loginDomain = Utils.getDomain(tab.url);
+    if (!loginDomain) {
+      return;
+    }
+
+    this.pushRequestLastPassImportToQueue(loginDomain, tab);
+  }
+
   private async pushChangePasswordToQueue(
     cipherId: string,
     loginDomain: string,
@@ -364,6 +401,20 @@ export default class NotificationBackground {
       tabId: tab.id,
       expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
       wasVaultLocked: true,
+    };
+    this.notificationQueue.push(message);
+    await this.checkNotificationQueue(tab);
+    this.removeTabFromNotificationQueue(tab);
+  }
+
+  private async pushRequestLastPassImportToQueue(loginDomain: string, tab: chrome.tabs.Tab) {
+    this.removeTabFromNotificationQueue(tab);
+    const message: AddRequestLastPassImportQueueMessage = {
+      type: NotificationQueueMessageType.RequestLastPassImport,
+      domain: loginDomain,
+      tabId: tab.id,
+      expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
+      wasVaultLocked: false,
     };
     this.notificationQueue.push(message);
     await this.checkNotificationQueue(tab);

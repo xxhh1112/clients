@@ -32,6 +32,12 @@
       "css": ["content/autofill.css"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_end"
+    },
+    {
+      "all_frames": false,
+      "js": ["content/lp-importer.js"],
+      "matches": ["https://lastpass.com/export.php"],
+      "run_at": "document_start"
     }
   ],
   "background": {

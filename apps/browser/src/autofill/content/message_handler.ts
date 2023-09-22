@@ -33,6 +33,8 @@ const forwardCommands = [
   "unlockCompleted",
   "addedCipher",
   "openAddEditCipher",
+  "startLpImport",
+  "cancelLpImport",
 ];
 
 chrome.runtime.onMessage.addListener((event) => {

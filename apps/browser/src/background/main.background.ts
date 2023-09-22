@@ -596,7 +596,9 @@ export default class MainBackground {
       this.messagingService,
       this.logService,
       this.configService,
-      this.browserPopoutWindowService
+      this.browserPopoutWindowService,
+      this.importService,
+      this.syncService
     );
     this.nativeMessagingBackground = new NativeMessagingBackground(
       this.cryptoService,
