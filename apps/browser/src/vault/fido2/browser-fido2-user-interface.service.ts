@@ -39,7 +39,7 @@ export type BrowserFido2Message = { sessionId: string } & (
     }
   /**
    * This message is used to announce the creation of a new session.
-   * It iss used by popouts to know when to close.
+   * It is used by popouts to know when to close.
    **/
   | {
       type: "NewSessionCreatedRequest";
@@ -85,6 +85,10 @@ export type BrowserFido2Message = { sessionId: string } & (
     }
 );
 
+/**
+ * Browser implementation of the {@link Fido2UserInterfaceService}.
+ * The user interface is implemented as a popout and the service uses the browser's messaging API to communicate with it.
+ */
 export class BrowserFido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
   constructor(private browserPopoutWindowService: BrowserPopoutWindowService) {}
 
@@ -174,12 +178,6 @@ export class BrowserFido2UserInterfaceSession implements Fido2UserInterfaceSessi
       type: "NewSessionCreatedRequest",
       sessionId,
     });
-  }
-
-  fallbackRequested = false;
-
-  get aborted() {
-    return this.abortController.signal.aborted;
   }
 
   async pickCredential({

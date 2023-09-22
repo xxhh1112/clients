@@ -3,11 +3,12 @@ import {
   Fido2UserInterfaceSession,
 } from "../../abstractions/fido2/fido2-user-interface.service.abstraction";
 
+/**
+ * Noop implementation of the {@link Fido2UserInterfaceService}.
+ * This implementation does not provide any user interface.
+ */
 export class Fido2UserInterfaceService implements Fido2UserInterfaceServiceAbstraction {
-  newSession(
-    fallbackSupported: boolean,
-    abortController?: AbortController
-  ): Promise<Fido2UserInterfaceSession> {
+  newSession(): Promise<Fido2UserInterfaceSession> {
     throw new Error("Not implemented exception");
   }
 }

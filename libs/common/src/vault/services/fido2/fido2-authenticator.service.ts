@@ -31,8 +31,10 @@ export const AAGUID = new Uint8Array([
 const KeyUsages: KeyUsage[] = ["sign"];
 
 /**
- * Bitwarden implementation of the WebAuthn Authenticator Model described by W3C
+ * Bitwarden implementation of the WebAuthn Authenticator Model as described by W3C
  * https://www.w3.org/TR/webauthn-3/#sctn-authenticator-model
+ *
+ * It is highly recommended that the W3C specification is used a reference when reading this code.
  */
 export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstraction {
   constructor(
@@ -41,6 +43,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
     private syncService: SyncService,
     private logService?: LogService
   ) {}
+
   async makeCredential(
     params: Fido2AuthenticatorMakeCredentialsParams,
     tab: chrome.tabs.Tab,
@@ -95,7 +98,7 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
         this.logService?.info(
           `[Fido2Authenticator] Aborting due to excluded credential found in vault.`
         );
-        await userInterfaceSession.informExcludedCredential(existingCipherIds, abortController);
+        await userInterfaceSession.informExcludedCredential(existingCipherIds);
         throw new Fido2AutenticatorError(Fido2AutenticatorErrorCode.NotAllowed);
       }
 
@@ -104,14 +107,11 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       let keyPair: CryptoKeyPair;
       let userVerified = false;
       let credentialId: string;
-      const response = await userInterfaceSession.confirmNewCredential(
-        {
-          credentialName: params.rpEntity.name,
-          userName: params.userEntity.displayName,
-          userVerification: params.requireUserVerification,
-        },
-        abortController
-      );
+      const response = await userInterfaceSession.confirmNewCredential({
+        credentialName: params.rpEntity.name,
+        userName: params.userEntity.displayName,
+        userVerification: params.requireUserVerification,
+      });
       const cipherId = response.cipherId;
       userVerified = response.userVerified;
 
@@ -389,6 +389,7 @@ async function createKeyView(
   fido2Key.rpName = params.rpEntity.name;
   fido2Key.userDisplayName = params.userEntity.displayName;
   fido2Key.discoverable = params.requireResidentKey;
+  fido2Key.creationDate = new Date();
 
   return fido2Key;
 }

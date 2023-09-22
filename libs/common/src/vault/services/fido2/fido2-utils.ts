@@ -20,7 +20,7 @@ export class Fido2Utils {
   }
 
   /** Utility function to identify type of bufferSource. Necessary because of differences between runtimes */
-  static isArrayBuffer(bufferSource: BufferSource): bufferSource is ArrayBuffer {
+  private static isArrayBuffer(bufferSource: BufferSource): bufferSource is ArrayBuffer {
     return bufferSource instanceof ArrayBuffer || bufferSource.buffer === undefined;
   }
 }

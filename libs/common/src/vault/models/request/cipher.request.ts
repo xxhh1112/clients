@@ -83,6 +83,7 @@ export class CipherRequest {
               key.userDisplayName != null ? key.userDisplayName.encryptedString : null;
             keyApi.discoverable =
               key.discoverable != null ? key.discoverable.encryptedString : null;
+            keyApi.creationDate = key.creationDate != null ? key.creationDate.toISOString() : null;
             return keyApi;
           });
         }

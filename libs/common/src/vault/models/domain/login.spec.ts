@@ -120,6 +120,7 @@ describe("Login DTO", () => {
       jest.spyOn(EncString, "fromJSON").mockImplementation(mockFromJson);
       jest.spyOn(LoginUri, "fromJSON").mockImplementation(mockFromJson);
       const passwordRevisionDate = new Date("2022-01-31T12:00:00.000Z");
+      const fido2CreationDate = new Date("2023-01-01T12:00:00.000Z");
 
       const actual = Login.fromJSON({
         uris: ["loginUri1", "loginUri2"] as any,
@@ -140,6 +141,7 @@ describe("Login DTO", () => {
             rpName: "rpName" as EncryptedString,
             userDisplayName: "userDisplayName" as EncryptedString,
             discoverable: "discoverable" as EncryptedString,
+            creationDate: fido2CreationDate.toISOString(),
           },
         ],
       });
@@ -163,6 +165,7 @@ describe("Login DTO", () => {
             rpName: "rpName_fromJSON",
             userDisplayName: "userDisplayName_fromJSON",
             discoverable: "discoverable_fromJSON",
+            creationDate: fido2CreationDate,
           },
         ],
       });
@@ -188,6 +191,7 @@ function initializeFido2Key<T extends Fido2KeyLike>(key: T): T {
   key.rpName = "rpName";
   key.userDisplayName = "userDisplayName";
   key.discoverable = "discoverable";
+  key.creationDate = "2023-01-01T12:00:00.000Z";
   return key;
 }
 
@@ -207,5 +211,8 @@ function encryptFido2Key(key: Fido2KeyLike): Fido2Key {
     encryptionType: 0,
   } as EncString;
   encrypted.discoverable = { encryptedString: key.discoverable, encryptionType: 0 } as EncString;
+
+  // not encrypted
+  encrypted.creationDate = new Date(key.creationDate);
   return encrypted;
 }
