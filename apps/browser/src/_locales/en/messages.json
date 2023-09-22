@@ -2485,6 +2485,9 @@
   "searchLogins": {
     "message": "Search all logins"
   },
+  "yourPasskeyIsLocked": {
+    "message": "Authentication required to fill passkey. Verify your identity to continue."
+  },
   "useBrowserName": {
     "message": "Use $browserName$",
     "placeholders": {

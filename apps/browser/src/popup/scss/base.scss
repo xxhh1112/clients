@@ -471,6 +471,14 @@ main {
       height: calc(100% - 99px);
     }
   }
+
+  .footer-link {
+    padding: 0 10px 5px 10px;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+  }
 }
 
 .tab-page {

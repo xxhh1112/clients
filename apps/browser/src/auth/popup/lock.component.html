@@ -62,7 +62,9 @@
         </div>
       </div>
       <div id="masterPasswordHelp" class="box-footer">
-        <p>{{ "yourVaultIsLocked" | i18n }}</p>
+        <p>
+          {{ isPasskeysPopout ? ("yourPasskeyIsLocked" | i18n) : ("yourVaultIsLocked" | i18n) }}
+        </p>
         {{ "loggedInAsOn" | i18n : email : webVaultHostname }}
       </div>
     </div>
@@ -87,5 +89,11 @@
     <p class="text-center text-muted" *ngIf="pendingBiometric">
       <i class="bwi bwi-spinner bwi-spin" aria-hidden="true"></i> {{ "awaitDesktop" | i18n }}
     </p>
+
+    <div class="footer-link" *ngIf="isPasskeysPopout">
+      <a [routerLink]="[]" (click)="abortFido2Popout(true)">
+        {{ "useBrowserName" | i18n }} browser
+      </a>
+    </div>
   </main>
 </form>
