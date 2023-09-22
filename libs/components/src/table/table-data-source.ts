@@ -1,5 +1,5 @@
 import { _isNumberValue } from "@angular/cdk/coercion";
-import { DataSource } from "@angular/cdk/collections";
+import { DataSource, SelectionModel } from "@angular/cdk/collections";
 import { BehaviorSubject, combineLatest, map, Observable, Subscription } from "rxjs";
 
 export type SortDirection = "asc" | "desc";
@@ -26,6 +26,8 @@ export class TableDataSource<T> extends DataSource<T> {
    * shown to the user rather than all the data.
    */
   filteredData: T[];
+
+  selectionModel = new SelectionModel<T>(true, [], true);
 
   constructor() {
     super();
