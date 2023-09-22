@@ -508,9 +508,6 @@
   "maxFileSize": {
     "message": "Tiedoston enimmäiskoko on 500 Mt."
   },
-  "updateKey": {
-    "message": "Et voi käyttää tätä toimintoa ennen kuin päivität salausavaimesi."
-  },
   "addedItem": {
     "message": "Kohde lisättiin"
   },
@@ -1426,10 +1423,10 @@
     "message": "Suojaa tilisi vaatimalla sisäänkirjautumiseen toinen todennusvaihe."
   },
   "twoStepLoginTeamsDesc": {
-    "message": "Enable two-step login for your organization."
+    "message": "Ota kaksivaiheinen kirjautuminen käyttöön organisaatiollesi."
   },
   "twoStepLoginEnterpriseDescStart": {
-    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
+    "message": "Pakota jäsenille Bitwardenin kaksivaiheisen kirjautumisen valinnat käytännöllä: ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
@@ -3476,17 +3473,11 @@
   "keyUpdated": {
     "message": "Avain päivitettiin"
   },
-  "updateKeyTitle": {
-    "message": "Päivitä avain"
-  },
   "updateEncryptionKey": {
     "message": "Päivitä salausavain"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Käytät tällä hetkellä vanhentunutta salausjärjestelmää."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Olemme siirtyneet suurempiin salausavaimiin, jotka tarjoavat parempaa suojausta sekä uudempia toimintoja. Salausavaimesi päivitys on helppoa: syötä vain pääsalasanasi alle. Tästä päivityksestä tulee myöhemmin pakollinen."
+  "updateEncryptionSchemeDesc": {
+    "message": "Olemme muuttaneet salausmallia tarjotaksemme paremman tietoturvan. Päivitä salausavaimesi syöttämällä alle pääsalasanasi."
   },
   "updateEncryptionKeyWarning": {
     "message": "Salausavaimesi päivityksen jälkeen, sinun tulee kirjautua ulos ja sitten takaisin sisään kaikissa Bitwarden-sovelluksissa, jotka ovat käytössäsi (esim. mobiilisovellus ja selainlaajennukset). Uudelleenkirjautumisen (joka lataa uuden salausavaimen) suorittamatta jättäminen saattaa johtaa tietojen vaurioitumiseen. Yritämme kirjata sinut ulos autmaattisesti, mutta tämä voi tapahtua vasta jonkin ajan kuluttua."
@@ -5446,7 +5437,7 @@
     "message": "Organisaation holvin vienti"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Vain tunnukseen $EMAIL$ liitetyt yksityisen holvin kohteet viedään. Organisaation holvin kohteita ei sisällytetä. Vain holvin kohteiden tiedot viedään ilman niihin liittyviä liitteitä.",
+    "message": "Vain tunnukseen $EMAIL$ liitetyt yksityisen holvin kohteet viedään. Organisaation holvin kohteita ei sisällytetä. Vain holvin kohteiden tiedot viedään ilman niiden sisältämiä liitteitä.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -7157,7 +7148,7 @@
     "message": "Palvelutilin mahdollinen enimmäiskustannus"
   },
   "loggedInExclamation": {
-    "message": "Kirjautuminen onnistui!"
+    "message": "Kirjautuminen onnistui."
   },
   "smBetaEndedDesc": {
     "message": "Salaisuushallinnan beta päättyi $BETA_ENDING_DATE$. Sinulla on $DAYS$ päivää aikaa lisätä Salaisuushallinta maksulliseen tilaukseesi säilyttääksesi Salaisuushallinnassa olevien tietojesi käyttöoikeuden. Lisää Salaisuushallinta tilaukseesi olemalla yhteydessä asiakaspalveluun.",
