@@ -169,6 +169,9 @@ export class Fido2Component implements OnInit, OnDestroy {
               })
             );
             this.displayedCiphers = [...this.ciphers];
+            if (this.displayedCiphers.length > 0) {
+              this.selectedPasskey(this.displayedCiphers[0]);
+            }
             break;
           }
 

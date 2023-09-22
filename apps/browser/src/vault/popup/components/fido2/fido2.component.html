@@ -103,6 +103,9 @@
               <app-fido2-cipher-row
                 *ngFor="let cipherItem of displayedCiphers"
                 [cipher]="cipherItem"
+                title="{{ 'fido2Item' | i18n }}"
+                (onSelected)="selectedPasskey($event)"
+                [selectedCipher]="cipher"
               ></app-fido2-cipher-row>
             </div>
           </div>
