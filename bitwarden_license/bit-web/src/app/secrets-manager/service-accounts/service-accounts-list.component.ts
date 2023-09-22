@@ -1,4 +1,3 @@
-import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
@@ -37,12 +36,12 @@ export class ServiceAccountsListComponent implements OnDestroy {
 
   @Output() newServiceAccountEvent = new EventEmitter();
   @Output() deleteServiceAccountsEvent = new EventEmitter<ServiceAccountView[]>();
-  @Output() onServiceAccountCheckedEvent = new EventEmitter<string[]>();
+  @Output() onServiceAccountCheckedEvent = new EventEmitter<ServiceAccountView[]>();
   @Output() editServiceAccountEvent = new EventEmitter<string>();
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  selection = new SelectionModel<string>(true, []);
+  private selection = this.dataSource.selectionModel;
 
   constructor(
     private i18nService: I18nService,
@@ -58,32 +57,13 @@ export class ServiceAccountsListComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  isAllSelected() {
-    if (this.selection.selected?.length > 0) {
-      const numSelected = this.selection.selected.length;
-      const numRows = this.dataSource.filteredData.length;
-      return numSelected === numRows;
-    }
-    return false;
-  }
-
-  toggleAll() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-    } else {
-      this.selection.select(...this.dataSource.filteredData.map((s) => s.id));
-    }
-  }
-
   delete(serviceAccount: ServiceAccountSecretsDetailsView) {
     this.deleteServiceAccountsEvent.emit([serviceAccount as ServiceAccountView]);
   }
 
   bulkDeleteServiceAccounts() {
     if (this.selection.selected.length >= 1) {
-      this.deleteServiceAccountsEvent.emit(
-        this.serviceAccounts.filter((sa) => this.selection.isSelected(sa.id))
-      );
+      this.deleteServiceAccountsEvent.emit(this.selection.selected);
     } else {
       this.platformUtilsService.showToast(
         "error",
