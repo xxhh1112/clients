@@ -2406,5 +2406,11 @@
   "toggleCollapse": {
     "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
+  },
+  "all": {
+    "message": "All"
+  },
+  "toggleRow": {
+    "message": "Toggle row"
   }
 }

@@ -80,7 +80,7 @@ export class HeaderRowSelectorComponent implements OnInit {
 @Component({
   selector: "td[bit-row-selector]",
   standalone: true,
-  imports: [CommonModule, CheckboxModule],
+  imports: [CommonModule, SharedModule, CheckboxModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <label
@@ -93,7 +93,7 @@ export class HeaderRowSelectorComponent implements OnInit {
         [checked]="isSelected | async"
         [disabled]="disabled"
       />
-      <span class="sr-only">Select Row</span>
+      <span class="sr-only">{{ "toggleRow" | i18n }}</span>
     </label>
   `,
 })
