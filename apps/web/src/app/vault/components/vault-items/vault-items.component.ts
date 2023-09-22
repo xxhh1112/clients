@@ -1,4 +1,3 @@
-import { SelectionModel } from "@angular/cdk/collections";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -64,16 +63,13 @@ export class VaultItemsComponent {
 
   protected editableItems: VaultItem[] = [];
   protected dataSource = new TableDataSource<VaultItem>();
-  protected selection = new SelectionModel<VaultItem>(true, [], true);
+
+  get selected() {
+    return this.dataSource.selectionModel.selected.slice(0, MaxSelectionCount);
+  }
 
   get showExtraColumn() {
     return this.showCollections || this.showGroups || this.showOwner;
-  }
-
-  get isAllSelected() {
-    return this.editableItems
-      .slice(0, MaxSelectionCount)
-      .every((item) => this.selection.isSelected(item));
   }
 
   get isEmpty() {
@@ -120,12 +116,6 @@ export class VaultItemsComponent {
     );
   }
 
-  protected toggleAll() {
-    this.isAllSelected
-      ? this.selection.clear()
-      : this.selection.select(...this.editableItems.slice(0, MaxSelectionCount));
-  }
-
   protected event(event: VaultItemEvent) {
     this.onEvent.emit(event);
   }
@@ -133,34 +123,28 @@ export class VaultItemsComponent {
   protected bulkMoveToFolder() {
     this.event({
       type: "moveToFolder",
-      items: this.selection.selected
-        .filter((item) => item.cipher !== undefined)
-        .map((item) => item.cipher),
+      items: this.selected.filter((item) => item.cipher !== undefined).map((item) => item.cipher),
     });
   }
 
   protected bulkMoveToOrganization() {
     this.event({
       type: "moveToOrganization",
-      items: this.selection.selected
-        .filter((item) => item.cipher !== undefined)
-        .map((item) => item.cipher),
+      items: this.selected.filter((item) => item.cipher !== undefined).map((item) => item.cipher),
     });
   }
 
   protected bulkRestore() {
     this.event({
       type: "restore",
-      items: this.selection.selected
-        .filter((item) => item.cipher !== undefined)
-        .map((item) => item.cipher),
+      items: this.selected.filter((item) => item.cipher !== undefined).map((item) => item.cipher),
     });
   }
 
   protected bulkDelete() {
     this.event({
       type: "delete",
-      items: this.selection.selected,
+      items: this.selected,
     });
   }
 
@@ -169,7 +153,7 @@ export class VaultItemsComponent {
     const ciphers: VaultItem[] = this.ciphers.map((cipher) => ({ cipher }));
     const items: VaultItem[] = [].concat(collections).concat(ciphers);
 
-    this.selection.clear();
+    this.dataSource.selectionModel.clear();
     this.editableItems = items.filter(
       (item) =>
         item.cipher !== undefined ||
