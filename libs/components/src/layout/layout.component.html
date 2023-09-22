@@ -1,7 +1,13 @@
-<ng-container *ngIf="{ open: sidebarService.open$ | async } as data">
+<ng-container
+  *ngIf="{
+    open: sidebarService.open$ | async,
+    isOverlay: sidebarService.isOverlay$ | async
+  } as data"
+>
   <div class="tw-group tw-flex tw-w-full" [ngClass]="data.open ? 'sidebar-open' : 'sidebar-closed'">
     <aside
       class="tw-fixed tw-inset-y-0 tw-left-0 tw-z-20 tw-flex tw-h-screen tw-flex-col tw-overflow-auto tw-bg-background-alt3 tw-pt-7 group-[.sidebar-open]:tw-w-60 md:tw-sticky"
+      [cdkTrapFocus]="data.isOverlay"
     >
       <ng-content select="[slot=sidebar]"></ng-content>
       <bit-nav-item

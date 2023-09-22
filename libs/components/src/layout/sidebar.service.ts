@@ -1,13 +1,16 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, fromEvent, map, startWith } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class SidebarService {
-  private _isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
-  private _open$ = new BehaviorSubject<boolean>(!this._isSmallScreen);
+  private _open$ = new BehaviorSubject<boolean>(!window.matchMedia("(max-width: 768px)").matches);
   open$ = this._open$.asObservable();
+
+  isOverlay$ = combineLatest([this.open$, media("(max-width: 768px)")]).pipe(
+    map(([open, isSmallScreen]) => open && isSmallScreen)
+  );
 
   get open() {
     return this._open$.getValue();
@@ -30,3 +33,11 @@ export class SidebarService {
     }
   }
 }
+
+export const media = (query: string): Observable<boolean> => {
+  const mediaQuery = window.matchMedia(query);
+  return fromEvent<MediaQueryList>(mediaQuery, "change").pipe(
+    startWith(mediaQuery),
+    map((list: MediaQueryList) => list.matches)
+  );
+};
