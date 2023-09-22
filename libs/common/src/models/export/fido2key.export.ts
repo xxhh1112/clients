@@ -84,7 +84,6 @@ export class Fido2KeyExport {
       this.rpName = o.rpName;
       this.userDisplayName = o.userDisplayName;
       this.discoverable = String(o.discoverable);
-      this.creationDate = o.creationDate;
     } else {
       this.credentialId = o.credentialId?.encryptedString;
       this.keyType = o.keyType?.encryptedString;
@@ -97,7 +96,7 @@ export class Fido2KeyExport {
       this.rpName = o.rpName?.encryptedString;
       this.userDisplayName = o.userDisplayName?.encryptedString;
       this.discoverable = o.discoverable?.encryptedString;
-      this.creationDate = o.creationDate;
     }
+    this.creationDate = o.creationDate;
   }
 }
