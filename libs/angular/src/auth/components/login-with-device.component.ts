@@ -28,6 +28,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
@@ -63,6 +64,7 @@ export class LoginWithDeviceComponent
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
+  protected setPasswordRoute = "set-password";
   private resendTimeout = 12000;
 
   private authRequestKeyPair: { publicKey: Uint8Array; privateKey: Uint8Array };
@@ -468,6 +470,20 @@ export class LoginWithDeviceComponent
     if (this.onSuccessfulLogin != null) {
       this.onSuccessfulLogin();
     }
+
+    // For TDE users without MP who have permissions elevated to be able to perform acct recovery,
+    // we require that they set a password before continuing to the vault:
+    const acctDecryptionOpts: AccountDecryptionOptions =
+      await this.stateService.getAccountDecryptionOptions();
+    if (
+      acctDecryptionOpts.trustedDeviceOption !== undefined &&
+      !acctDecryptionOpts.hasMasterPassword &&
+      acctDecryptionOpts.trustedDeviceOption?.hasManageResetPasswordPermission
+    ) {
+      this.router.navigate([this.setPasswordRoute]);
+      return;
+    }
+
     if (this.onSuccessfulLoginNavigate != null) {
       this.onSuccessfulLoginNavigate();
     } else {

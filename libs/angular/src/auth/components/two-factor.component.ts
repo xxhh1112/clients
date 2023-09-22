@@ -289,13 +289,13 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     acctDecryptionOpts: AccountDecryptionOptions
   ): Promise<void> {
     // If user doesn't have a MP, but has reset password permission, they must set a MP
-    if (
-      !acctDecryptionOpts.hasMasterPassword &&
-      acctDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
-    ) {
-      // Change implies going no password -> password in this case
-      return await this.handleChangePasswordRequired(orgIdentifier);
-    }
+    // if (
+    //   !acctDecryptionOpts.hasMasterPassword &&
+    //   acctDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
+    // ) {
+    //   // Change implies going no password -> password in this case
+    //   return await this.handleChangePasswordRequired(orgIdentifier);
+    // }
 
     // Users can be forced to reset their password via an admin or org policy disallowing weak passwords
     // Note: this is different from SSO component login flow as a user can

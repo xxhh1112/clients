@@ -1,3 +1,4 @@
+// TODO: rename to ForceSetPasswordReason
 /*
  * This enum is used to determine if a user should be forced to reset their password
  * on login (server flag) or unlock via MP (client evaluation).
@@ -20,4 +21,10 @@ export enum ForceResetPasswordReason {
    * Only set client side b/c server can't evaluate MP.
    */
   WeakMasterPassword,
+
+  /**
+   * Occurs when a TDE user without a password obtains the password reset permission.
+   * Set post login & decryption client side and by server in sync (to catch logged in users).
+   */
+  TdeUserWithoutPasswordHasPasswordResetPermission,
 }

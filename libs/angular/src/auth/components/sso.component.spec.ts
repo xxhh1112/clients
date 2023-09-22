@@ -334,21 +334,6 @@ describe("SsoComponent", () => {
         mockConfigService.getFeatureFlag.mockResolvedValue(true); // TDE enabled
       });
 
-      describe("Given Trusted Device Encryption is enabled and user needs to set a master password", () => {
-        let authResult;
-        beforeEach(() => {
-          mockStateService.getAccountDecryptionOptions.mockResolvedValue(
-            mockAcctDecryptionOpts.noMasterPasswordWithTrustedDeviceWithManageResetPassword
-          );
-
-          authResult = new AuthResult();
-          mockAuthService.logIn.mockResolvedValue(authResult);
-        });
-
-        testChangePasswordOnSuccessfulLogin();
-        testOnSuccessfulLoginChangePasswordNavigate();
-      });
-
       describe("Given Trusted Device Encryption is enabled, user doesn't need to set a MP, and forcePasswordReset is required", () => {
         [
           ForceResetPasswordReason.AdminForcePasswordReset,

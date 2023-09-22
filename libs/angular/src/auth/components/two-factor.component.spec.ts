@@ -379,19 +379,6 @@ describe("TwoFactorComponent", () => {
           mockConfigService.getFeatureFlag.mockResolvedValue(true);
         });
 
-        describe("Given Trusted Device Encryption is enabled and user needs to set a master password", () => {
-          beforeEach(() => {
-            mockStateService.getAccountDecryptionOptions.mockResolvedValue(
-              mockAcctDecryptionOpts.noMasterPasswordWithTrustedDeviceWithManageResetPassword
-            );
-
-            const authResult = new AuthResult();
-            mockAuthService.logInTwoFactor.mockResolvedValue(authResult);
-          });
-
-          testChangePasswordOnSuccessfulLogin();
-        });
-
         describe("Given Trusted Device Encryption is enabled, user doesn't need to set a MP, and forcePasswordReset is required", () => {
           [
             ForceResetPasswordReason.AdminForcePasswordReset,

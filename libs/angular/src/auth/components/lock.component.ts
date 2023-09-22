@@ -24,6 +24,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
@@ -46,6 +47,7 @@ export class LockComponent implements OnInit, OnDestroy {
 
   protected successRoute = "vault";
   protected forcePasswordResetRoute = "update-temp-password";
+  protected setPasswordRoute = "set-password";
   protected onSuccessfulSubmit: () => Promise<void>;
 
   private invalidPinAttempts = 0;
@@ -333,6 +335,28 @@ export class LockComponent implements OnInit, OnDestroy {
         // Do not prevent unlock if there is an error evaluating policies
         this.logService.error(e);
       }
+    }
+
+    // TODO: we have to have the guard so that users can't navigate away from the set password screen
+    // TODO: add flag to sync
+    // TOOD: try to log TDE user out when obtains elevated permission
+
+    // For TDE users without MP who have permissions elevated to be able to perform acct recovery,
+    // we require that they set a password before continuing to the vault:
+    const acctDecryptionOpts: AccountDecryptionOptions =
+      await this.stateService.getAccountDecryptionOptions();
+    if (
+      acctDecryptionOpts.trustedDeviceOption !== undefined &&
+      !acctDecryptionOpts.hasMasterPassword &&
+      acctDecryptionOpts.trustedDeviceOption?.hasManageResetPasswordPermission
+    ) {
+      // Must set this flag so that if the user attempts to leave the set password screen,
+      // the auth guard will redirect them back to the set password screen
+      await this.stateService.setForcePasswordResetReason(
+        ForceResetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission
+      );
+      this.router.navigate([this.setPasswordRoute]);
+      return;
     }
 
     if (this.onSuccessfulSubmit != null) {
