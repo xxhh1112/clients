@@ -1,9 +1,11 @@
 html {
   font-size: 14px;
+  overscroll-behavior: none;
 }
 
 body {
   min-width: 1010px;
+  overscroll-behavior: none;
 
   &.layout_frontend {
     @media (prefers-color-scheme: dark) {
