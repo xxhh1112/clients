@@ -33,7 +33,7 @@ export class Fido2KeyExport {
     view.rpName = req.rpName;
     view.userDisplayName = req.userDisplayName;
     view.discoverable = req.discoverable === "true";
-    view.creationDate = req.creationDate;
+    view.creationDate = new Date(req.creationDate);
     return view;
   }
 
