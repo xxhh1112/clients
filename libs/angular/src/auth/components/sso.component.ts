@@ -4,6 +4,7 @@ import { first } from "rxjs/operators";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceResetPasswordReason } from "@bitwarden/common/auth/models/domain/force-reset-password-reason";
 import { SsoLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
@@ -81,7 +82,9 @@ export class SsoComponent {
           // on the TDE login decryption options component
           const ssoOrganizationIdentifier = this.getOrgIdentifierFromState(qParams.state);
           await this.logIn(qParams.code, codeVerifier, ssoOrganizationIdentifier);
-          await this.stateService.setUserSsoOrganizationIdentifier(ssoOrganizationIdentifier);
+          if ((await this.authService.getAuthStatus()) > AuthenticationStatus.LoggedOut) {
+            await this.stateService.setUserSsoOrganizationIdentifier(ssoOrganizationIdentifier);
+          }
         }
       } else if (
         qParams.clientId != null &&
